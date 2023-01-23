@@ -1,0 +1,9 @@
+.VPImage.logo {
+  height: 34px;
+}
+
+:root {
+  --vp-c-brand: #d97706;
+  --vp-c-brand-light: #EF8206;
+  --vp-c-brand-dark: #C76C05;
+}
