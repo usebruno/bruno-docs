@@ -8,7 +8,7 @@ export default defineConfig({
     sidebar: sidebar(),
     nav: [
       { text: 'Website', link: 'https://www.usebruno.com' },
-      { text: 'Downloads', link: '/downloads' }
+      { text: 'Download', link: 'https://www.usebruno.com/downloads' }
     ],
     socialLinks: [
       { icon: 'github', link: 'https://github.com/usebruno/bruno' }
@@ -22,18 +22,19 @@ function sidebar() {
       text: 'Introduction',
       collapsible: true,
       items: [
-        { text: 'What is Bruno?', link: '/introduction/what-is-bruno' },
-        { text: 'Our Mainfesto', link: '/introduction/manifesto' },
-        { text: 'Support', link: '/downloads' },
-        { text: 'Downloads', link: '/downloads' }
+        { text: 'What is Bruno?', link: '/what-is-bruno' },
+        { text: 'Mainfesto', link: '/manifesto' },
+        { text: 'Support', link: '/support' }
       ]
     },
     {
-      text: 'Bru Language',
+      text: 'Bru Lang',
       collapsible: true,
       items: [
-        { text: 'Bru', link: '/guide/markdown' },
-        { text: 'Extensions', link: '/guide/asset-handling' }
+        { text: 'Overview', link: '/bru-lang-overview' },
+        { text: 'Language', link: '/bru-language-design' },
+        { text: 'Tag Reference', link: '/bru-language-tag-reference' },
+        { text: 'Syntax Highlighting', link: '/bru-lang-extensions.md' }
       ]
     },
     {
@@ -41,7 +42,7 @@ function sidebar() {
       collapsible: true,
       items: [
         { text: 'Getting Started', link: '/guide/theme-introduction' },
-        { text: 'Javascript reference', link: '/guide/theme-introduction' },
+        { text: 'Scripting Apis', link: '/guide/theme-introduction' },
       ]
     }
   ];

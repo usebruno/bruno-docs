@@ -1,0 +1,13 @@
+# Manifesto
+
+It's time for a revolution in API client technology. The status quo, represented by Postman, has become bloated and unwieldy. We refuse to be shoehorned into a proprietary version control system for collaborating on API collections.
+
+We are the rebels, rising up against the monolith of bloated and closed systems. We believe that API collections should be colocated within your source code repository, serving as a living set of examples on how to use the API.
+
+But we realized that the current tools on the market export collections as giant JSON files (a.k.a ugly blobs), difficult to version control and diff. So we created the Bru Markup language, saving information about your API requests using plain text files.
+
+With Bruno, collections become first-class citizens, co-located with related information and easily version controlled. We say goodbye to bloated workspaces and global environments, and embrace the benefits of colocation.
+
+We dream of a world where developers can clone a code repo, get it up and running, use bruno to browse the examples on how to use the api and start playing with it. No more horror stories of "Tim had the collections for the payment-api service, but he left the company last month."
+
+Join us in our mission to create a better API client for developers. Say goodbye to bloatware and hello to simplicity, efficiency and freedom. Try Bruno today and experience the difference for yourself.
