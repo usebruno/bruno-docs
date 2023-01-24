@@ -8,6 +8,6 @@ This allows you to save your API collections in a folder within your code reposi
 
 Below is a sample of a Bru file for a get request with some query params
 
-![bru lang sample](images/github-collection.png)
+![bru lang sample](public/images/github-collection.png)
 
 You can checkout the sample repository which contains github rest api collection [here](https://github.com/usebruno/github-rest-api-collection)
