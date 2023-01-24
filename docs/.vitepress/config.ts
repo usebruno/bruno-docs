@@ -22,7 +22,6 @@ function sidebar() {
       text: 'Introduction',
       collapsible: true,
       items: [
-        { text: 'What is Bruno?', link: '/what-is-bruno' },
         { text: 'Mainfesto', link: '/manifesto' },
         { text: 'Support', link: '/support' }
       ]
@@ -35,14 +34,6 @@ function sidebar() {
         { text: 'Language', link: '/bru-language-design' },
         { text: 'Tag Reference', link: '/bru-language-tag-reference' },
         { text: 'Syntax Highlighting', link: '/bru-lang-extensions.md' }
-      ]
-    },
-    {
-      text: 'Scripting',
-      collapsible: true,
-      items: [
-        { text: 'Getting Started', link: '/guide/theme-introduction' },
-        { text: 'Scripting Apis', link: '/guide/theme-introduction' },
       ]
     }
   ];
