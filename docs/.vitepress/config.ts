@@ -35,6 +35,14 @@ function sidebar() {
         { text: 'Tag Reference', link: '/bru-language-tag-reference' },
         { text: 'Syntax Highlighting', link: '/bru-lang-extensions.md' }
       ]
+    },
+    {
+      text: 'Scripting',
+      collapsible: true,
+      items: [
+        { text: 'Getting Started', link: '/scripting/introduction' },
+        { text: 'Javascript Reference', link: '/scripting/javascript-reference' },
+      ]
     }
   ];
 }
