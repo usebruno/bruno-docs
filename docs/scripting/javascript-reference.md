@@ -2,8 +2,8 @@
 
 Here is the complete set of API reference for the scripting feature in Bruno.
 
-## `onRequest`
-This function is used to make changes to requests before they are sent. You can add custom logic here.
+## Before Request
+This `onRequest` function is used to make changes to requests before they are sent. You can add custom logic here.
 
 ### request
 Below is the api documentation for the methods available on the `request` object that gets passed in to the `onRequest` method
@@ -113,8 +113,8 @@ function onRequest(request) {
   });
 }
 ```
-## `onResponse`
-This function is used to make changes to requests before they are sent. You can add custom logic here.
+## After Response
+This `onResponse` function is used to parse the received response add add additional logic as per your workflow.
 
 ### response
 Below is the api documentation for the methods available on the `response` object that gets passed in to the `onResponse` method
@@ -156,5 +156,28 @@ Get the response data
 ```javascript
 function onResponse(response) {
   let data = response.getData();
+}
+```
+
+## Environments
+Bruno allows you to get and set env variables on the fly.
+
+### `getEnvVar`
+Get the environment variable
+
+**Example:**
+```javascript
+function onRequest(request) {
+  let token = request.getEnvVar("access_token");
+}
+```
+### `setEnvVar`
+Set the environment variable
+
+**Example:**
+```javascript
+function onResponse(response) {
+  let data = response.getData();
+  let token = response.setEnvVar("access_token", data.token);
 }
 ```
