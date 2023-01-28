@@ -5,14 +5,6 @@ Here is the complete set of API reference for the scripting feature in Bruno.
 ## `onRequest`
 This function is used to make changes to requests before they are sent. You can add custom logic here.
 
-**Example:**
-```javascript
-function onRequest(request) {
-  let token = bru.getEnvVar("access_token");
-  request.setHeader("Authorization", "Bearer " + token);
-}
-```
-
 ### request
 Below is the api documentation for the methods available on the `request` object that gets passed in to the `onRequest` method
 
@@ -119,5 +111,50 @@ function onRequest(request) {
     "username": "john nash",
     "password": "governingdynamics"
   });
+}
+```
+## `onResponse`
+This function is used to make changes to requests before they are sent. You can add custom logic here.
+
+### response
+Below is the api documentation for the methods available on the `response` object that gets passed in to the `onResponse` method
+
+### `getStatus`
+Get the response status
+
+**Example:**
+```javascript
+function onResponse(response) {
+  let status = response.getStatus();
+}
+```
+
+### `getHeader`
+Get the response header by name
+
+**Example:**
+```javascript
+function onResponse(response) {
+  let transactionId = response.getHeader("transaction-id");
+}
+```
+
+### `getHeaders`
+Get the response headers
+
+**Example:**
+```javascript
+function onResponse(response) {
+  let headers = response.getHeaders();
+}
+```
+
+### `getData`
+Get the response data
+
+**Example:**
+```javascript
+function onResponse(response) {
+  let data = response.getData();
 }
 ```
