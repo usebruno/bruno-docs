@@ -41,6 +41,7 @@ function sidebar() {
       collapsible: true,
       items: [
         { text: 'Getting Started', link: '/scripting/introduction' },
+        { text: 'Inbuilt Libraries', link: '/scripting/inbuilt-libraries' },
         { text: 'Javascript Reference', link: '/scripting/javascript-reference' },
       ]
     }
