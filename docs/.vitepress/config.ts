@@ -45,6 +45,14 @@ function sidebar() {
         { text: 'External Libraries', link: '/scripting/external-libraries' },
         { text: 'Javascript Reference', link: '/scripting/javascript-reference' },
       ]
+    },
+    {
+      text: 'Testing',
+      collapsible: true,
+      items: [
+        { text: 'Getting Started', link: '/testing/introduction' },
+        { text: 'Javascript Reference', link: '/testing/javascript-reference' },
+      ]
     }
   ];
 }
