@@ -2,8 +2,8 @@ import { defineConfig } from 'vitepress';
 
 // https://vitepress.vuejs.org/config/app-configs
 export default defineConfig({
+  title: 'Bruno',
   themeConfig: {
-    siteTitle: 'Bruno',
     logo: '/bruno.svg',
     sidebar: sidebar(),
     nav: [
@@ -13,6 +13,10 @@ export default defineConfig({
     socialLinks: [
       { icon: 'github', link: 'https://github.com/usebruno/bruno' }
     ],
+    editLink: {
+      pattern: 'https://github.com/usebruno/bruno-docs/edit/main/docs/:path',
+      text: 'Suggest changes to this page',
+    },
   }
 });
 
