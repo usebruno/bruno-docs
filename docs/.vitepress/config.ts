@@ -42,6 +42,7 @@ function sidebar() {
       items: [
         { text: 'Getting Started', link: '/scripting/introduction' },
         { text: 'Inbuilt Libraries', link: '/scripting/inbuilt-libraries' },
+        { text: 'External Libraries', link: '/scripting/external-libraries' },
         { text: 'Javascript Reference', link: '/scripting/javascript-reference' },
       ]
     }
