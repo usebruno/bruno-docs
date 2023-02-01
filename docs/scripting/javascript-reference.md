@@ -181,3 +181,26 @@ function onResponse(res) {
   let token = bru.setEnvVar("access_token", data.token);
 }
 ```
+
+## Collection Variables
+Bruno allows you to get and set collection variables on the fly. The collection variables take precendence over environment variables.
+
+### `getVar`
+Get the collection variable
+
+**Example:**
+```javascript
+function onRequest(req) {
+  let token = bru.getVar("petId");
+}
+```
+### `setVar`
+Set the collection variable
+
+**Example:**
+```javascript
+function onResponse(res) {
+  let data = res.getData();
+  let token = bru.setVar("petId", data.id);
+}
+```
