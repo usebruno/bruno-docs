@@ -13,9 +13,7 @@ Below are the list of inbuilt libraries that you can use you in your scripts. Yo
 
 **Example:**
 ```javascript
-function onRequest(request) {
-  const { nanoid } = bru.require("nanoid");
+const { nanoid } = require("nanoid");
 
-  request.setHeader("transaction-id", nanoid());
-}
+req.setHeader("transaction-id", nanoid());
 ```

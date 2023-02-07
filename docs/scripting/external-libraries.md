@@ -23,15 +23,13 @@ npm install
 And then you can require the node module in your script as usual.
 **Example:**
 ```javascript
-function onRequest(request) {
-  const { faker } = require('@faker-js/faker');
+const { faker } = require('@faker-js/faker');
 
-  const randomName = faker.name.fullName();
-  const randomEmail = faker.internet.email();
-  
-  request.setData({
-    name: randomName,
-    email: randomEmail
-  });
-}
+const randomName = faker.name.fullName();
+const randomEmail = faker.internet.email();
+
+request.setData({
+  name: randomName,
+  email: randomEmail
+});
 ```

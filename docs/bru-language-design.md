@@ -1,35 +1,39 @@
 # Language Design
 
-The language has been designed to store information about your api requests.<br />
+A Bru file is made up of blocks.
+There are two kinds of blocks
+- Dictionary block
+- Text blocks
 
+### Dictionary block
+A dictionary block contains of a set of key value pairs. <br />
+```bash
+get {
+  url: https://api.textlocal.in/send
+}
 
-There are two kind of tags in bru
-- Inline Tags
-- Block Tags
-
-Inline Tags start with a tag name (ex: name, method, url) followed by the value. <br />
-```yaml
-name Search Repos
-method GET
-url {{baseUrl}}/search/repositories?q=react&order=desc&per_page=10
+headers {
+  content-type: application/json
+  Authorization: Bearer 123
+  ~transaction-id: {{transactionId}}
+}
 ```
+Any key in the dictionary block can be prefixed with `~` to indicate that it is disabled.
 
-Block Tags are multiline tags within begin and end tags
-```javascript
-headers
-  1 content-type application/json
-  1 transaction-id 9988776655
-/headers
-```
-
-Certain block tags like can be annotated with additional metadata for increased fidelity.
-```javascript
-body(type=json)
+### Text block
+A text block is a set of lines
+```bash
+body {
   {
-    name: "John",
-    age: 21
+    "hello": "world"
   }
-/body
+}
+
+tests {
+  function onResponse(request, response) {
+    expect(response.status).to.equal(200);
+  }
+}
 ```
 
 

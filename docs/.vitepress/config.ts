@@ -35,6 +35,7 @@ function sidebar() {
       collapsible: true,
       items: [
         { text: 'Overview', link: '/bru-lang-overview' },
+        { text: 'Samples', link: '/bru-language-samples' },
         { text: 'Language', link: '/bru-language-design' },
         { text: 'Tag Reference', link: '/bru-language-tag-reference' },
         { text: 'Syntax Highlighting', link: '/bru-lang-extensions.md' }

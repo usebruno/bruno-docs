@@ -24,7 +24,7 @@ The `test` method allows you to write assertions for your api behavior.
 **Example:**
 ```javascript
 test("should be able to login", function() {
-  const data = res.getData();
+  const data = res.getBody();
   expect(res.getStatus()).to.equal(200);
 });
 ```

@@ -12,12 +12,12 @@ Some of the benefits include
 **Example:**
 ```javascript
 test("should be able to login", function() {
-  const data = res.getData();
+  const data = res.getBody();
   expect(res.getStatus()).to.equal(200);
 });
 
 test("should receive the token", function() {
-  const data = res.getData();
+  const data = res.getBody();
   expect(data.token).to.be.a('string');
 });
 ```
