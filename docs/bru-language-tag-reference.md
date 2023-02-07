@@ -183,7 +183,7 @@ script:pre-request {
 ## script:post-response
 The request body as graphql vars
 ```
-body:script:post-response {
+script:post-response {
   bru.setVar("token", res.body.token);
 }
 ```
