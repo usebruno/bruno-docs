@@ -30,7 +30,7 @@ body {
 }
 
 tests {
-expect(res.status).to.equal(200);
+  expect(res.status).to.equal(200);
 }
 ```
 

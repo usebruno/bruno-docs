@@ -191,6 +191,6 @@ script:post-response {
 The tests
 ```
 body:test {
-expect(res.status).to.equal(200);
+  expect(res.status).to.equal(200);
 }
 ```
