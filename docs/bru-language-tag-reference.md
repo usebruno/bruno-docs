@@ -191,8 +191,6 @@ script:post-response {
 The tests
 ```
 body:test {
-  function onResponse(request, response) {
-    expect(response.status).to.equal(200);
-  }
+expect(res.status).to.equal(200);
 }
 ```
