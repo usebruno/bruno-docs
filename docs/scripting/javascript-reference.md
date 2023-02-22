@@ -92,9 +92,17 @@ req.setBody({
 });
 ```
 ## Response
-This `req` variable is available inside your scripting and testing context.
+This `res` variable is available inside your scripting and testing context.
 
-Below is the api documentation for the methods available on the `res` object.
+Below are the properties available on the `res` object.
+| Property | Description |
+|----------|-------------|
+| status | The response status code|
+| statusText | The response status text|
+| headers | The response headers|
+| body | The response body|
+
+Below are the methods available on the `res` object.
 
 ### `getStatus`
 Get the response status

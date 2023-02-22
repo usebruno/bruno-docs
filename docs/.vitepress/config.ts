@@ -46,6 +46,8 @@ function sidebar() {
       collapsible: true,
       items: [
         { text: 'Getting Started', link: '/scripting/introduction' },
+        { text: 'Vars', link: '/scripting/vars' },
+        { text: 'Response Query', link: '/scripting/response-query' },
         { text: 'Inbuilt Libraries', link: '/scripting/inbuilt-libraries' },
         { text: 'External Libraries', link: '/scripting/external-libraries' },
         { text: 'Javascript Reference', link: '/scripting/javascript-reference' },
@@ -56,6 +58,7 @@ function sidebar() {
       collapsible: true,
       items: [
         { text: 'Getting Started', link: '/testing/introduction' },
+        { text: 'Assertions', link: '/testing/assertions' },
         { text: 'Javascript Reference', link: '/testing/javascript-reference' },
       ]
     }
