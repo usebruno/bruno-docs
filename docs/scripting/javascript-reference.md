@@ -15,7 +15,7 @@ let url = req.getUrl();
 ```
 
 ### `setUrl`
-Get the current request url
+Set the current request url
 
 **Example:**
 ```javascript
@@ -154,6 +154,7 @@ Set the environment variable
 function onResponse(res) {
 let data = res.getBody();
 let token = bru.setEnvVar("access_token", data.token);
+}
 ```
 
 ## Collection Variables
