@@ -7,11 +7,11 @@ Bruno currently has 6 globals that are available in your test script environment
 
 ### `req`
 The request that was sent. <br/>
-You can refer [here](../scripting/javascript-reference.html#req) for the complete set of api's available for `req`
+You can refer [here](../scripting/javascript-reference.html#request) for the complete set of api's available for `req`
 
 ### `res`
 The response that was received. <br/>
-You can refer [here](../scripting/javascript-reference.html#res) for the complete set of api's available for `res`
+You can refer [here](../scripting/javascript-reference.html#response) for the complete set of api's available for `res`
 
 ### `bru`
 `bru` allows you to load inbuilt libraries as well as set and get environment variables.<br/>
