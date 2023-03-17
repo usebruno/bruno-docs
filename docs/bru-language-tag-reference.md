@@ -25,7 +25,7 @@ get {
 
 Make a post http call
 ```
-get {
+post {
   url: https://api.github.com/users/usebruno
 }
 ```
