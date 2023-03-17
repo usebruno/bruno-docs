@@ -142,7 +142,7 @@ body:form-urlencoded {
 }
 ```
 ## body:multipart-form
-The request body as xml
+The request body as multipart-form
 ```
 body:multipart-form {
   apikey: secret
@@ -174,14 +174,14 @@ body:graphql:vars {
 }
 ```
 ## script:pre-request
-The request body as graphql vars
+The request body as pre-request
 ```
 script:pre-request {
   req.setHeader("Authorization", "{{token}}");
 }
 ```
 ## script:post-response
-The request body as graphql vars
+The request body as post-response
 ```
 script:post-response {
   bru.setVar("token", res.body.token);
