@@ -26,7 +26,7 @@ function sidebar() {
       text: 'Introduction',
       collapsible: true,
       items: [
-        { text: 'Mainfesto', link: '/manifesto' },
+        { text: 'Manifesto', link: '/manifesto' },
         { text: 'Support', link: '/support' }
       ]
     },
@@ -50,7 +50,7 @@ function sidebar() {
         { text: 'Response Query', link: '/scripting/response-query' },
         { text: 'Inbuilt Libraries', link: '/scripting/inbuilt-libraries' },
         { text: 'External Libraries', link: '/scripting/external-libraries' },
-        { text: 'Javascript Reference', link: '/scripting/javascript-reference' },
+        { text: 'JavaScript Reference', link: '/scripting/javascript-reference' },
       ]
     },
     {
@@ -59,7 +59,7 @@ function sidebar() {
       items: [
         { text: 'Getting Started', link: '/testing/introduction' },
         { text: 'Assertions', link: '/testing/assertions' },
-        { text: 'Javascript Reference', link: '/testing/javascript-reference' },
+        { text: 'JavaScript Reference', link: '/testing/javascript-reference' },
       ]
     }
   ];
