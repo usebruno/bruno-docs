@@ -42,6 +42,13 @@ function sidebar() {
       ]
     },
     {
+      text: 'Bru CLI',
+      collapsible: true,
+      items: [
+        { text: 'Overview', link: '/cli/overview' },
+      ]
+    },
+    {
       text: 'Scripting',
       collapsible: true,
       items: [
