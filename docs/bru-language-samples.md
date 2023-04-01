@@ -1,6 +1,6 @@
 # Samples
 
-Here are a few sample bru files.
+Here are a few sample Bru files.
 
 ## GET
 ```bash
@@ -82,5 +82,3 @@ tests {
   });
 }
 ```
-
-

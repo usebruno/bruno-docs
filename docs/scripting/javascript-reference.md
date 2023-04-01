@@ -1,11 +1,11 @@
-# Javascript API Reference
+# JavaScript API Reference
 
 Here is the complete set of API reference for the scripting feature in Bruno.
 
 ## Request
 This `req` variable is available inside your scripting and testing context.
 
-Below is the api documentation for the methods available on `req` 
+Below is the API documentation for the methods available on `req` 
 ### `getUrl`
 Get the current request url
 

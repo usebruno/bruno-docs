@@ -1,6 +1,6 @@
 # Testing
 
-Bruno supports writing automation test scripts in javaScript for your api requests to assert its behaviour.
+Bruno supports writing automation test scripts in JavaScript for your API requests to assert its behaviour.
 
 Some of the benefits include
 - Increased efficiency: The tests can be run repeatedly, reducing the time and effort required for manual testing.

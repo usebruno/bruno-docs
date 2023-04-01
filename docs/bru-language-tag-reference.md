@@ -15,7 +15,7 @@ The `type` can be either `http` or `graphql`
 
 ## get
 
-Make a get http call
+Make a `GET` http call
 ```
 get {
   url: https://api.github.com/users/usebruno
@@ -23,7 +23,7 @@ get {
 ```
 ## post
 
-Make a post http call
+Make a `POST` http call
 ```
 post {
   url: https://api.github.com/users/usebruno
@@ -31,7 +31,7 @@ post {
 ```
 ## put
 
-Make a put http call
+Make a `PUT` http call
 ```
 put {
   url: https://api.github.com/users/usebruno
@@ -39,7 +39,7 @@ put {
 ```
 ## delete
 
-Make a delete http call
+Make a `DELETE` http call
 ```
 delete {
   url: https://api.github.com/users/usebruno
@@ -47,7 +47,7 @@ delete {
 ```
 ## options
 
-Make a get options call
+Make a get `OPTIONS` call
 ```
 options {
   url: https://api.github.com/users/usebruno
@@ -55,7 +55,7 @@ options {
 ```
 ## trace
 
-Make a trace http call
+Make a `TRACE` http call
 ```
 trace {
   url: https://api.github.com/users/usebruno
@@ -63,7 +63,7 @@ trace {
 ```
 ## connect
 
-Make a connect http call
+Make a `CONNECT` http call
 ```
 connect {
   url: https://api.github.com/users/usebruno
@@ -71,7 +71,7 @@ connect {
 ```
 ## head
 
-Make a head http call
+Make a `HEAD` http call
 ```
 head {
   url: https://api.github.com/users/usebruno
