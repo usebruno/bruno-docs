@@ -57,6 +57,7 @@ function sidebar() {
         { text: 'Response Query', link: '/scripting/response-query' },
         { text: 'Inbuilt Libraries', link: '/scripting/inbuilt-libraries' },
         { text: 'External Libraries', link: '/scripting/external-libraries' },
+        { text: 'Sync Requests', link: '/scripting/sync-requests' },
         { text: 'JavaScript Reference', link: '/scripting/javascript-reference' },
       ]
     },
