@@ -136,18 +136,28 @@ Get the response data
 let data = res.getBody();
 ```
 
+## Node process environment
+Bruno allows you to get Node process environment variables on the fly.
+
+### `getProcessEnv`
+Get the Node process environment variable.  This allows secret token usage without committing secrets to version control.
+
+**Example:**
+```javascript
+let secret_token = bru.getProcessEnv("secret_access_token");
+```
 ## Environments
-Bruno allows you to get and set env variables on the fly.
+Bruno allows you to get and set Bruno environment variables on the fly.
 
 ### `getEnvVar`
-Get the environment variable
+Get the Bruno environment variable
 
 **Example:**
 ```javascript
 let token = bru.getEnvVar("access_token");
 ```
 ### `setEnvVar`
-Set the environment variable
+Set the Bruno environment variable
 
 **Example:**
 ```javascript
