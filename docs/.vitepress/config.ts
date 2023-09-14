@@ -3,11 +3,11 @@ import { defineConfig } from 'vitepress';
 // https://vitepress.vuejs.org/config/app-configs
 export default defineConfig({
   title: 'Bruno',
+  head: [
+    ['link', { rel: 'icon', href: `/bruno.svg` }]
+  ],
   themeConfig: {
     logo: '/bruno.svg',
-    head: [
-      ['link', { rel: 'icon', href: `/bruno.svg` }]
-    ],
     sidebar: sidebar(),
     nav: [
       { text: 'Website', link: 'https://www.usebruno.com' },
