@@ -5,6 +5,9 @@ export default defineConfig({
   title: 'Bruno',
   themeConfig: {
     logo: '/bruno.svg',
+    head: [
+      ['link', { rel: 'icon', href: `/bruno.svg` }]
+    ],
     sidebar: sidebar(),
     nav: [
       { text: 'Website', link: 'https://www.usebruno.com' },
