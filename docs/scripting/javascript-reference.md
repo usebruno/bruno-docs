@@ -91,6 +91,15 @@ req.setBody({
   "password": "governingdynamics"
 });
 ```
+
+### `setMaxRedirects`
+Set the maximum number of redirects to follow
+
+**Example:**
+```javascript
+req.setMaxRedirects(5);
+```
+
 ## Response
 This `res` variable is available inside your scripting and testing context.
 
