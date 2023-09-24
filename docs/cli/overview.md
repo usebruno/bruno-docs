@@ -31,6 +31,11 @@ If you need to use an environment, you can specify it with the --env option:
 bru run folder --env Local
 ```
 
+Pass Environment variables to your collection using the --env-var option:
+```bash
+bru run folder --env Local --env-var JWT_TOKEN=1234
+```
+
 ## Demo
 ![bru cli](../public/images/cli-demo.png)
 

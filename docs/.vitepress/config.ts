@@ -29,6 +29,7 @@ function sidebar() {
       text: 'Introduction',
       collapsible: true,
       items: [
+        { text: 'Index', link: '/table-of-contents' },
         { text: 'Manifesto', link: '/manifesto' },
         { text: 'Support', link: '/support' }
       ]
@@ -72,6 +73,15 @@ function sidebar() {
         { text: 'Assertions', link: '/testing/assertions' },
         { text: 'JavaScript Reference', link: '/testing/javascript-reference' },
       ]
-    }
+    },
+    {
+      text: 'Secrets Management',
+      collapsible: true,
+      items: [
+        { text: 'Overview', link: '/secrets-management/overview' },
+        { text: 'DotEnv File', link: '/secrets-management/dotenv-file' },
+        { text: 'Secret Variables', link: '/secrets-management/secret-variables' }
+      ]
+    },
   ];
 }
