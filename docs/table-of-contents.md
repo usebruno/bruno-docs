@@ -17,6 +17,11 @@
 
 - [Overview](/cli/overview)
 
+## Secrets Management
+- [Overview](/secrets-management/overview)
+- [DotEnv File](/secrets-management/dotenv-file)
+- [Secret Variables](/secrets-management/secret-variables)
+
 ## Scripting
 
 - [Getting Started](/scripting/introduction)

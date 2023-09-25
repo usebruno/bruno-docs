@@ -53,6 +53,15 @@ function sidebar() {
       ]
     },
     {
+      text: 'Secrets Management',
+      collapsible: true,
+      items: [
+        { text: 'Overview', link: '/secrets-management/overview' },
+        { text: 'DotEnv File', link: '/secrets-management/dotenv-file' },
+        { text: 'Secret Variables', link: '/secrets-management/secret-variables' }
+      ]
+    },
+    {
       text: 'Scripting',
       collapsible: true,
       items: [
@@ -73,15 +82,6 @@ function sidebar() {
         { text: 'Assertions', link: '/testing/assertions' },
         { text: 'JavaScript Reference', link: '/testing/javascript-reference' },
       ]
-    },
-    {
-      text: 'Secrets Management',
-      collapsible: true,
-      items: [
-        { text: 'Overview', link: '/secrets-management/overview' },
-        { text: 'DotEnv File', link: '/secrets-management/dotenv-file' },
-        { text: 'Secret Variables', link: '/secrets-management/secret-variables' }
-      ]
-    },
+    }
   ];
 }
