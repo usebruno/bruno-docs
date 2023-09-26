@@ -36,6 +36,11 @@ Pass Environment variables to your collection using the --env-var option:
 bru run folder --env Local --env-var JWT_TOKEN=1234
 ```
 
+If you need to collect the results of your API tests, you can specify the --output option:
+```bash
+bru run folder --output results.json
+```
+
 ## Demo
 ![bru cli](../public/images/cli-demo.png)
 
