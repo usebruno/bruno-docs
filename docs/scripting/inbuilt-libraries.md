@@ -1,6 +1,6 @@
 # Inbuilt Libraries
 
-Below are the list of inbuilt libraries that you can use you in your scripts. You can be access them using the `bru.require()` method
+Below are the list of inbuilt libraries that you can `require`  in your scripts.
 
 - [ajv](https://www.npmjs.com/package/ajv) - Ajv JSON schema validator
 - [axios](https://www.npmjs.com/package/axios) - Promise based HTTP client for the browser and node.js
