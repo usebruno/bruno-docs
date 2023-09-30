@@ -1,9 +1,10 @@
 # Language Design
 
 A Bru file is made up of blocks.
-There are two kinds of blocks
+There are three kinds of blocks
 - Dictionary block
 - Text blocks
+- Array blocks
 
 ### Dictionary block
 A dictionary block contains of a set of key value pairs. <br />
@@ -32,6 +33,15 @@ body {
 tests {
   expect(res.status).to.equal(200);
 }
+```
+
+### Array block
+An array block is a list of strings
+```bash
+vars:secret [
+  access_key,
+  access_secret
+]
 ```
 
 
