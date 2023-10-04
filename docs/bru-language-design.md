@@ -40,9 +40,12 @@ An array block is a list of strings
 ```bash
 vars:secret [
   access_key,
-  access_secret
+  access_secret,
+  ~transactionId
 ]
 ```
+Any key in the array block can be prefixed with `~` to indicate that it is disabled.
+
 
 
 
