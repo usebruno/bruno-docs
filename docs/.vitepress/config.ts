@@ -10,6 +10,7 @@ export default defineConfig({
     logo: '/bruno.svg',
     sidebar: sidebar(),
     nav: [
+      { text: 'Roadmap', link: 'https://github.com/usebruno/bruno/discussions/384' },
       { text: 'Testimonials', link: 'https://github.com/usebruno/bruno/discussions/343' },
       { text: 'Website', link: 'https://www.usebruno.com' },
       { text: 'Download', link: 'https://www.usebruno.com/downloads' }
