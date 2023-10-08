@@ -1,6 +1,6 @@
 # Sync requests
 
-You can make synchronous requests in your pre/post scripts. By synchronus, we mean that you can synchronusly await a request in your scripting code.
+You can make synchronous requests in your pre/post scripts. By synchronous, we mean that you can await a request in your scripting code.
 
 Below is an inbuilt example of using `axios` library to 
 ```javascript
