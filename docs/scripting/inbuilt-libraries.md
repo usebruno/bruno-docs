@@ -9,6 +9,7 @@ Below are the list of inbuilt libraries that you can `require`  in your scripts.
 - [btoa](https://www.npmjs.com/package/btoa) -  Turn binary data to base64-encoded ascii.
 - [chai](https://www.npmjs.com/package/chai) -  BDD/TDD assertion library for node.js and the browser.
 - [lodash](https://lodash.com) -  A modern JavaScript utility library delivering modularity, performance & extras.
+- [moment](https://momentjs.com) -  Parse, validate, manipulate, and display dates and times in JavaScript.
 - [uuid](https://www.npmjs.com/package/uuid) -  For the creation of RFC4122 UUIDs
 - [nanoid](https://www.npmjs.com/package/nanoid) - A tiny, secure, URL-friendly, unique string ID generator for JavaScript.
 - [crypto-js](https://www.npmjs.com/package/crypto-js) - JavaScript library of crypto standards.
