@@ -29,8 +29,8 @@ post {
 
 body {
   {
-    "apiKey": "secret"
-    "numbers": "9988776655"
+    "apiKey": "secret",
+    "numbers": "9988776655",
     "message": "Woof! lets play with some apis"
   }
 }
@@ -49,7 +49,7 @@ post {
 
 body {
   {
-    "username": "johnnash"
+    "username": "johnnash",
     "password": "governingdynamics"
   }
 }
@@ -67,7 +67,7 @@ post {
 
 body {
   {
-    "username": "johnnash"
+    "username": "johnnash",
     "password": "governingdynamics"
   }
 }
