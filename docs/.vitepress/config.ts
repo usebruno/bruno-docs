@@ -3,6 +3,7 @@ import { defineConfig } from 'vitepress';
 // https://vitepress.vuejs.org/config/app-configs
 export default defineConfig({
   title: 'Bruno',
+  description: 'An Opensource IDE for exploring and testing APIs',
   head: [
     ['link', { rel: 'icon', href: `/bruno.svg` }]
   ],
