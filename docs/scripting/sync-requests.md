@@ -2,7 +2,8 @@
 
 You can make synchronous requests in your pre/post scripts. By synchronous, we mean that you can await a request in your scripting code.
 
-Below is an inbuilt example of using `axios` library to 
+Below is an inbuilt example of using `axios` library to
+
 ```javascript
 const axios = require("axios");
 
@@ -12,6 +13,5 @@ bru.setVar("avatarUrl", response.data.avatar_url);
 ```
 
 **Example:**
-![sync requests](../public/images/sync-requests.png)
 
 ![sync requests](../assets/images/sync-requests.png)

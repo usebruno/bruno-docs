@@ -11,6 +11,7 @@ Bruno will automatically load the secrets from this file and make them available
 ![dot env vars](../assets/images/dot-env-vars.png)
 
 Your environment file at `environments/Local.bru` would look like
+
 ```groovy
 vars {
   host: http://localhost:5005

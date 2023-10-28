@@ -9,6 +9,7 @@ Bruno will manage your secrets internally and will not write them into the envir
 ![secret variables](../assets/images/secret-variables.png)
 
 Your environment file at `environments/Local.bru` would look like
+
 ```groovy
 vars {
   host: http://localhost:5005

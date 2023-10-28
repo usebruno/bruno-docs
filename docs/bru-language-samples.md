@@ -3,6 +3,7 @@
 Here are a few sample Bru files.
 
 ## GET
+
 ```bash
 get {
   url: https://api.github.com/users/usebruno
@@ -10,6 +11,7 @@ get {
 ```
 
 ## GET with headers
+
 ```
 get {
   url: https://api.textlocal.in/send?apiKey=secret&numbers=9988776655&message=hello
@@ -22,6 +24,7 @@ headers {
 ```
 
 ## POST with body
+
 ```
 post {
   url: https://api.textlocal.in/send
@@ -42,6 +45,7 @@ headers {
 ```
 
 ## Scripting
+
 ```
 post {
   url: https://api.textlocal.in/login
@@ -60,6 +64,7 @@ script-post-response {
 ```
 
 ## Testing
+
 ```
 post {
   url: https://api.textlocal.in/login

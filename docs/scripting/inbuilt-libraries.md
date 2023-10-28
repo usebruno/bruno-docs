@@ -14,8 +14,8 @@ Below are the list of inbuilt libraries that you can `require`  in your scripts.
 - [nanoid](https://www.npmjs.com/package/nanoid) - A tiny, secure, URL-friendly, unique string ID generator for JavaScript.
 - [crypto-js](https://www.npmjs.com/package/crypto-js) - JavaScript library of crypto standards.
 
-
 **Example:**
+
 ```javascript
 const { nanoid } = require("nanoid");
 

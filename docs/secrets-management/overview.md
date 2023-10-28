@@ -7,6 +7,7 @@ In any collection, there are secrets that need to be managed. These secrets can 
 A common practice is to store these secrets in environment variables.
 
 There are two ways in which developers share bruno collections:
+
 * Check in the collection folder to source control (like git)
 * Export the collection to a file and share it
 

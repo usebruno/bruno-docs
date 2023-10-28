@@ -9,4 +9,5 @@ In the *Post Response Variables* section, you can write any valid JavaScript exp
 For parsing the response, you can checkout the [response query](response-query.md) that allows you to easily query your response.
 
 **Example:**
+
 ![bru vars](../assets/images/vars.png)

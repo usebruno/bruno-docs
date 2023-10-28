@@ -13,4 +13,3 @@ Below is a sample of a Bru file for a `GET` request with some query params
 You can checkout the sample repository which contains GitHub rest API collection [here](https://github.com/usebruno/github-rest-api-collection)
 
 If you are wondering why had to design a DSL instead of just using JSON/YAML, you can checkout this [github discussion](https://github.com/usebruno/bruno/discussions/360)
-

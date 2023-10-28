@@ -9,6 +9,7 @@ res('order.total')
 ```
 
 ## Examples
+
 ```javascript
 const data = {
   customer: {
@@ -34,6 +35,7 @@ const data = {
   },
 };
 ```
+
 | Query | Output |
 |-------|--------|
 | res("customer.address.city") | bangalore |
@@ -55,6 +57,7 @@ const data = {
 ### Standard dot notation
 
 **Example:**
+
 ```javascript
 res('customer.orders.items.amount')
 ```
@@ -62,6 +65,7 @@ res('customer.orders.items.amount')
 ### Deep navigation .. double dots
 
 **Example:**
+
 ```javascript
 res('..items.amount')
 ```
@@ -69,6 +73,7 @@ res('..items.amount')
 ### Array indexing
 
 **Example:**
+
 ```javascript
 res('..items[0].amount')
 ```
@@ -76,16 +81,15 @@ res('..items[0].amount')
 ### Array filtering [?] with corresponding filter function
 
 **Example:**
+
 ```javascript
 res('..items[?].amount', i => i.amount > 20)
 ```
 
-
 ### Array mapping [?] with corresponding mapper function
 
 **Example:**
+
 ```javascript
 res('..items[?].amount', i => i.amount + 10)
 ```
-
-
