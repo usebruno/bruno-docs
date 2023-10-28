@@ -27,7 +27,7 @@ Below setup steps are for `Ubuntu Linux` operating systems.
 4. Create a Python Virtual Environment  
    `python3 -m venv .venv`
 5. Active the Python Virtual Environment  
-   `source .venv/bin/active`
+   `source .venv/bin/activate`
 6. Install Python Package - MkDocs  
    `python -m install mkdocs`
 7. Install Python Package - MkDocs Material  
