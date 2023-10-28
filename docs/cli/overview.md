@@ -42,7 +42,7 @@ bru run folder --output results.json
 ```
 
 ## Demo
-![bru cli](../public/images/cli-demo.png)
+![bru cli](../assets/images/cli-demo.png)
 
 ## Support
 If you encounter any issues or have any feedback or suggestions, please raise them on our [GitHub repository](https://github.com/usebruno/bruno)

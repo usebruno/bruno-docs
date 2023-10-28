@@ -24,4 +24,4 @@ test("should receive the token", function() {
 
 **Screenshot:**
 
-![bru lang sample](../public/images/testing.png)
+![bru lang sample](../assets/images/testing.png)

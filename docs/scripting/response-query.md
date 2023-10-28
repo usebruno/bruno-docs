@@ -1,6 +1,6 @@
 # Response Query
 
-The `res` object that is available inside the [vars](./vars.html), [assertions](../testing/assertions.html) and [scripting](./introduction.html) contexts can be queried for data by invoking it like below.
+The `res` object that is available inside the [vars](./vars.md), [assertions](../testing/assertions.md) and [scripting](./introduction.md) contexts can be queried for data by invoking it like below.
 
 Think of it as `lodash.get()` on steroids
 

@@ -16,5 +16,5 @@ In both these cases we want to ensure that the secrets are stripped out of the c
 
 Bruno offers two approaches to manage secrets in collections.
 
-- [DotEnv File](/secrets-management/dotenv-file)
-- [Secret Variables](/secrets-management/secret-variables)
+* [DotEnv File](dotenv-file.md)
+* [Secret Variables](secret-variables.md)

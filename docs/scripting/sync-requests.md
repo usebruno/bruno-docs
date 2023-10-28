@@ -14,3 +14,4 @@ bru.setVar("avatarUrl", response.data.avatar_url);
 **Example:**
 ![sync requests](../public/images/sync-requests.png)
 
+![sync requests](../assets/images/sync-requests.png)

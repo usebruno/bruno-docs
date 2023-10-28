@@ -8,7 +8,7 @@ In this approach, you can store all your secrets in a `.env` file at the root of
 
 Bruno will automatically load the secrets from this file and make them available to your collection via `process.env.<secret-name>`.
 
-![dot env vars](../public/images/dot-env-vars.png)
+![dot env vars](../assets/images/dot-env-vars.png)
 
 Your environment file at `environments/Local.bru` would look like
 ```groovy
