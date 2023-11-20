@@ -28,7 +28,7 @@ const { faker } = require('@faker-js/faker');
 const randomName = faker.name.fullName();
 const randomEmail = faker.internet.email();
 
-request.setData({
+req.setBody({
   name: randomName,
   email: randomEmail
 });
