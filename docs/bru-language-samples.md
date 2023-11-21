@@ -54,7 +54,7 @@ body {
   }
 }
 
-script-post-response {
+script:post-response {
   bru.setVar("token", res.body.token);
 }
 ```
