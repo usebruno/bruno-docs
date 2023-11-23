@@ -10,6 +10,9 @@ export default defineConfig({
   themeConfig: {
     logo: '/bruno.svg',
     sidebar: sidebar(),
+    search: {
+      provider: 'local',
+    },
     nav: [
       { text: 'Roadmap', link: 'https://github.com/usebruno/bruno/discussions/384' },
       { text: 'Testimonials', link: 'https://github.com/usebruno/bruno/discussions/343' },
