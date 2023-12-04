@@ -176,6 +176,9 @@ let token = bru.setEnvVar("access_token", data.token);
 }
 ```
 
+### Unset an Enviroment variable
+// TODO:
+
 ## Collection Variables
 Bruno allows you to get and set collection variables on the fly. The collection variables take precendence over environment variables.
 
@@ -188,6 +191,9 @@ let petId = bru.getVar("petId");
 ```
 ### `setVar`
 Set the collection variable
+
+### Unset a collection variable
+// TODO:
 
 **Example:**
 ```javascript
