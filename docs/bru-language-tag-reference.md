@@ -4,7 +4,7 @@
 Store metadata about your request
 ```
 meta {
-  name: Get users,
+  name: Get users
   type: http
   seq: 1
 }
