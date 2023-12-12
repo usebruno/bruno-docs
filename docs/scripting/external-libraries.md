@@ -10,7 +10,7 @@ You need to add a `package.json` file where your collection is stored.
   "main": "index.js",
   "homepage": "https://github.com/usebruno/github-rest-api-collection#readme",
   "dependencies": {
-    "date-fns": "2.29.3"
+    "@faker-js/faker": "8.3.1"
   }
 }
 ```
