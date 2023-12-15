@@ -110,6 +110,7 @@ Below are the properties available on the `res` object.
 | statusText | The response status text|
 | headers | The response headers|
 | body | The response body|
+| responseTime | The API response time|
 
 Below are the methods available on the `res` object.
 
@@ -143,6 +144,14 @@ Get the response data
 **Example:**
 ```javascript
 let data = res.getBody();
+```
+
+### `getResponseTime`
+Get the response time
+
+**Example:**
+```javascript
+let responseTime = res.getResponseTime();
 ```
 
 ## Node process environment
