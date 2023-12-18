@@ -41,6 +41,19 @@ If you need to collect the results of your API tests, you can specify the --outp
 bru run folder --output results.json
 ```
 
+## Options
+| Option | Details |
+|----------|-------------|
+| -h, --help |  	Show help|
+| --version | Show version number|
+| -r | Indicates a recursive run (default: false)|
+| --cacert [string] | CA certificate to verify peer against|
+| --env [string] | Environment variables|
+| --env-var [string] | Overwrite a single environment variable, multiple usages possible|
+| -o, --output [string] | Path to write JSON results to|
+| -f, --format [string] | Format for the file results (default: "json")|
+| --insecure | Allow insecure server connections|
+
 ## Demo
 ![bru cli](../public/images/cli-demo.png)
 
