@@ -50,8 +50,8 @@ bru run folder --output results.json
 | --cacert [string] | CA certificate to verify peer against|
 | --env [string] | Environment variables|
 | --env-var [string] | Overwrite a single environment variable, multiple usages possible|
-| -o, --output [string] | Path to write JSON results to|
-| -f, --format [string] | Format for the file results (default: "json")|
+| -o, --output [string] | Path to write file results to|
+| -f, --format [string] | Format of the file results; available formats are "json" (default) or "junit"|
 | --insecure | Allow insecure server connections|
 
 ## Demo
