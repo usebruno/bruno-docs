@@ -3,6 +3,7 @@
 Bruno supports loading any npm module to use in your scripting workflows.
 
 You need to add a `package.json` file where your collection is stored.
+
 ```javascript
 {
   "name": "github-rest-api-collection",
@@ -16,12 +17,14 @@ You need to add a `package.json` file where your collection is stored.
 ```
 
 And then run npm install inside your collection folder
+
 ```bash
 npm install
 ```
 
 And then you can require the node module in your script as usual.
 **Example:**
+
 ```javascript
 const { faker } = require('@faker-js/faker');
 

@@ -2,12 +2,15 @@
 
 A Bru file is made up of blocks.
 There are three kinds of blocks
+
 - Dictionary block
 - Text blocks
 - Array blocks
 
-### Dictionary block
-A dictionary block contains of a set of key value pairs. <br />
+## Dictionary block
+
+A dictionary block contains of a set of key value pairs.
+
 ```bash
 get {
   url: https://api.textlocal.in/send
@@ -19,10 +22,13 @@ headers {
   ~transaction-id: {{transactionId}}
 }
 ```
+
 Any key in the dictionary block can be prefixed with `~` to indicate that it is disabled.
 
-### Text block
+## Text block
+
 A text block is a set of lines
+
 ```bash
 body {
   {
@@ -35,8 +41,10 @@ tests {
 }
 ```
 
-### Array block
+## Array block
+
 An array block is a list of strings
+
 ```bash
 vars:secret [
   access_key,
@@ -44,10 +52,5 @@ vars:secret [
   ~transactionId
 ]
 ```
+
 Any key in the array block can be prefixed with `~` to indicate that it is disabled.
-
-
-
-
-
-
