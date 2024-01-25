@@ -10,3 +10,5 @@ For parsing the response, you can checkout the [response query](./response-query
 
 **Example:**
 ![bru vars](../public/images/vars.png)
+
+![Screenshot showing how to use defined variables in the request body](../public/images/set_vars.png)
