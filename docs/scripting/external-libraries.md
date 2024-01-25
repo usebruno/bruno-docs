@@ -33,3 +33,21 @@ req.setBody({
   email: randomEmail
 });
 ```
+
+If you encounter an error message like this:
+```javascript
+Error invoking remote method 'send-http-request': VMError: Module '/bruno/packages/bruno-electron/fs' is not allowed to be required. The path is outside the border!
+```
+You will have to whitelist it in bruno.json
+```json
+{
+  "version": "1",
+  "name": "bruno-testbench",
+  "type": "collection",
+  "scripts": {
+    "filesystemAccess": {
+      "allow": true
+    }
+  }
+}
+```
