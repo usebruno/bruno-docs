@@ -154,27 +154,36 @@ Get the response time
 let responseTime = res.getResponseTime();
 ```
 
-## Node process environment
+
+## bru
+The `bru` variable is available inside your scripting and testing context. 
+It exposes methods that allow you to interact with, e.g., process variables,
+environment variables and collection variables.
+
+Below is the API documentation for the methods available on `bru` 
+
+
+### Node process environment
 Bruno allows you to get Node process environment variables on the fly.
 
-### `getProcessEnv`
+#### `getProcessEnv`
 Get the Node process environment variable.  This allows secret token usage without committing secrets to version control.
 
 **Example:**
 ```javascript
 let secret_token = bru.getProcessEnv("secret_access_token");
 ```
-## Environments
+### Environments
 Bruno allows you to get and set Bruno environment variables on the fly.
 
-### `getEnvVar`
+#### `getEnvVar`
 Get the Bruno environment variable
 
 **Example:**
 ```javascript
 let token = bru.getEnvVar("access_token");
 ```
-### `setEnvVar`
+#### `setEnvVar`
 Set the Bruno environment variable
 
 **Example:**
@@ -185,21 +194,40 @@ let token = bru.setEnvVar("access_token", data.token);
 }
 ```
 
-## Collection Variables
+### Collection Variables
 Bruno allows you to get and set collection variables on the fly. The collection variables take precendence over environment variables.
 
-### `getVar`
+#### `getVar`
 Get the collection variable
 
 **Example:**
 ```javascript
 let petId = bru.getVar("petId");
 ```
-### `setVar`
+#### `setVar`
 Set the collection variable
 
 **Example:**
 ```javascript
 let data = res.getBody();
 bru.setVar("petId", data.id);
+```
+
+### Request Order
+You can influence the order in which requests are being run by the request-runner (UI) or the CLI.
+
+#### `setNextRequest`
+By default, the collection runner (UI) and the CLI run requests in order.
+You can change the order by calling `setNextRequest` with the name of the next request to be run.
+This works only in a post-request script or test-script. 
+
+**Example:**
+```javascript
+bru.setNextRequest("Get process status");
+```
+
+You can also abort the run by explicitly setting the next request to `null`
+**Example:**
+```javascript
+bru.setNextRequest(null);  // aborts the run gracefully
 ```
