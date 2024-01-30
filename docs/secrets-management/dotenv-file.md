@@ -18,6 +18,12 @@ vars {
 }
 ```
 
+Your `.env` file at `/` would look like
+```groovy
+JWT_TOKEN = # JWT token value
+SECRET_2 = # Value of secret 2
+```
+
 And now you can safely checkin your collection to source control without worrying about exposing your secrets.
 Don't forget to add `.env` to your `.gitignore` file.
 
