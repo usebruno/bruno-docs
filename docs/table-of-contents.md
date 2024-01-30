@@ -31,6 +31,7 @@
 - [External Libraries](/scripting/external-libraries)
 - [Sync Requests](/scripting/sync-requests)
 - [JavaScript Reference](/scripting/javascript-reference)
+- [XML Post Examle](/scripting/xml-example)
 
 ## Testing
 

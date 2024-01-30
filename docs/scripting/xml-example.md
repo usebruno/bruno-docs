@@ -1,0 +1,31 @@
+# Posting an XML body
+
+If you are posting against XML APIs it might be easier for you to get the XML directly from an XML file instead of posting its content into the _Form URL Encoded_ fields.
+
+To enable file system access with bruno, you have to enable a setting within the collections `bruno.json` file:
+
+```json
+{
+  "version": "1",
+  "name": "my-collection",
+  "type": "collection",
+  "scripts": {
+    "filesystemAccess": {
+      "allow": true
+    }
+  }
+}
+```
+
+Besides that, just use a similar script like this one to pull data from your XML file that resides right next to your _.bru_ file:
+
+```javascript
+const fs = require("fs");
+const path = require("path");
+
+const attachmentFilename = "some.xml";
+const attachmentPath = path.join(bru.cwd(), attachmentFilename);
+const attachment = fs.readFileSync(attachmentPath);
+
+req.setBody({"MyServiceXmlrequest": attachment.toString()});
+```
