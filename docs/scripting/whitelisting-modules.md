@@ -1,0 +1,21 @@
+# Whitelisting Modules
+
+Not all built-in modules are accessible in scripts out of the box in Bruno for security reasons. You can manually enable/whitelist these modules by modifying your `bruno.json`.
+
+**Example:**
+
+To enable the `child_process` module, you can put the following in your `bruno.json` file:
+
+```json
+{
+  "scripts": {
+    "moduleWhitelist": ["child_process"],
+    "filesystemAccess": {
+      "allow": true
+    }
+  }
+}
+```
+
+Note that `filesystemAccess` is required for `child_process` to work as expected. This may be required for other built-in modules as well
+

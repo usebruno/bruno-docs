@@ -75,6 +75,7 @@ function sidebar() {
         { text: 'External Libraries', link: '/scripting/external-libraries' },
         { text: 'Sync Requests', link: '/scripting/sync-requests' },
         { text: 'JavaScript Reference', link: '/scripting/javascript-reference' },
+        { text: 'Whitelisting Modules', link: '/scripting/whitelisting-modules' },
       ]
     },
     {
