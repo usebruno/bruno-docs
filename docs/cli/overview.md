@@ -53,6 +53,8 @@ bru run folder --output results.json
 | -o, --output [string] | Path to write file results to|
 | -f, --format [string] | Format of the file results; available formats are "json" (default) or "junit"|
 | --insecure | Allow insecure server connections|
+| --tests-only | Only run requests that have a test|
+| --bail | Stop execution after a failure of a request, test, or assertion|
 
 ## Demo
 ![bru cli](../public/images/cli-demo.png)
