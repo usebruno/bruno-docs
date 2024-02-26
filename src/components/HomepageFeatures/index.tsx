@@ -1,6 +1,8 @@
 import clsx from 'clsx';
 import Heading from '@theme/Heading';
 import styles from './styles.module.css';
+import { Button } from "@site/src/components/ui/button";
+import React from "react";
 
 type FeatureItem = {
   title: string;
@@ -43,7 +45,7 @@ const FeatureList: FeatureItem[] = [
 
 function Feature({title, Svg, description}: FeatureItem) {
   return (
-    <div className={clsx('col col--4 bg-red-300')}>
+    <div className={clsx('col col-4')}>
       <div className="text--center">
         <Svg className={styles.featureSvg} role="img" />
       </div>
@@ -55,7 +57,7 @@ function Feature({title, Svg, description}: FeatureItem) {
   );
 }
 
-export default function HomepageFeatures(): JSX.Element {
+export const HomepageFeatures: React.FC = () =>  {
   return (
     <section className={styles.features}>
       <div className="container">
