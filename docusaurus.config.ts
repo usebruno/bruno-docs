@@ -50,7 +50,7 @@ const config: Config = {
             'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
         },
         theme: {
-          customCss: './src/global.css',
+          customCss: './src/custom.css',
         },
       } satisfies Preset.Options,
     ],
@@ -76,6 +76,7 @@ const config: Config = {
         {
           href: 'https://github.com/usebruno/bruno',
           label: 'GitHub',
+          className: 'tw-text-slate-900 dark:tw-text-slate-100',
           position: 'right',
         },
       ],
