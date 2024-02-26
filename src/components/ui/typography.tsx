@@ -1,4 +1,4 @@
-import { cn } from "@site/src/lib/utils";
+import { cn } from "@/lib/utils";
 import React, {ReactNode} from "react";
 
 interface TypoProps {
@@ -7,7 +7,7 @@ interface TypoProps {
 }
 export const TypoH1: React.FC<TypoProps> = ({titleClasses, children}) => {
   return (
-    <h1 className={cn("tw-scroll-m-20 tw-text-4xl tw-font-extrabold tw-tracking-tight lg:tw-text-5xl", titleClasses)}>
+    <h1 className={cn("scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl", titleClasses)}>
       {children}
     </h1>
   )
@@ -15,7 +15,7 @@ export const TypoH1: React.FC<TypoProps> = ({titleClasses, children}) => {
 
 export const TypoH2: React.FC<TypoProps> = ({titleClasses, children}) => {
   return (
-    <h2 className={cn("tw-scroll-m-20 tw-border-b tw-pb-1 tw-text-3xl tw-font-semibold tw-tracking-tight first:tw-mt-0", titleClasses)}>
+    <h2 className={cn("scroll-m-20 border-b pb-1 text-3xl font-semibold tracking-tight first:mt-0", titleClasses)}>
       {children}
     </h2>
   )
@@ -23,7 +23,7 @@ export const TypoH2: React.FC<TypoProps> = ({titleClasses, children}) => {
 
 export const TypoH3: React.FC<TypoProps> = ({titleClasses, children}) => {
   return (
-    <h3 className={cn("tw-scroll-m-20 tw-text-2xl tw-font-semibold tw-tracking-tight", titleClasses)}>
+    <h3 className={cn("scroll-m-20 text-2xl font-semibold tracking-tight", titleClasses)}>
       {children}
     </h3>
   )
@@ -31,7 +31,7 @@ export const TypoH3: React.FC<TypoProps> = ({titleClasses, children}) => {
 
 export const TypoH4: React.FC<TypoProps> = ({titleClasses, children}) => {
   return (
-    <h4 className={cn("tw-scroll-m-20 tw-text-xl tw-font-semibold tw-tracking-tight", titleClasses)}>
+    <h4 className={cn("scroll-m-20 text-xl font-semibold tracking-tight", titleClasses)}>
       {children}
     </h4>
   )
@@ -39,7 +39,7 @@ export const TypoH4: React.FC<TypoProps> = ({titleClasses, children}) => {
 
 export const TypoP: React.FC<TypoProps> = ({titleClasses, children}) => {
   return (
-    <p className={cn("tw-leading-7 [&:not(:first-child)]:tw-mt-6", titleClasses)}>
+    <p className={cn("leading-7 [&:not(:first-child)]:mt-6", titleClasses)}>
       {children}
     </p>
   )
@@ -47,25 +47,25 @@ export const TypoP: React.FC<TypoProps> = ({titleClasses, children}) => {
 
 export const TypoLarge: React.FC<TypoProps> = ({titleClasses, children}) => {
   return (
-    <div className={cn("tw-text-lg tw-font-semibold", titleClasses)}>{children}</div>
+    <div className={cn("text-lg font-semibold", titleClasses)}>{children}</div>
   )
 }
 
 export const TypoSmall: React.FC<TypoProps> = ({titleClasses, children}) => {
   return (
-    <small className={cn("tw-text-sm tw-font-medium tw-leading-none", titleClasses)}>{children}</small>
+    <small className={cn("text-sm font-medium leading-none", titleClasses)}>{children}</small>
   )
 }
 
 export const TypoMuted: React.FC<TypoProps> = ({titleClasses, children}) => {
   return (
-    <p className={cn("tw-text-sm tw-text-muted-foreground", titleClasses)}>{children}</p>
+    <p className={cn("text-sm text-muted-foreground", titleClasses)}>{children}</p>
   )
 }
 
 export const TypoLead: React.FC<TypoProps> = ({titleClasses, children}) => {
   return (
-    <p className={cn("tw-text-xl tw-text-muted-foreground", titleClasses)}>
+    <p className={cn("text-xl text-muted-foreground", titleClasses)}>
       {children}
     </p>
   )
