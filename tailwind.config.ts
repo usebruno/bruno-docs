@@ -5,7 +5,7 @@ const config = {
   darkMode: ["class"],
   content: [
     './src/**/*.{ts,tsx}',
-    './theme.config.jsx'
+    './theme.config.tsx'
 	],
   fontFamily: {
     sans: ["var(--font-sans)", ...fontFamily.sans],
