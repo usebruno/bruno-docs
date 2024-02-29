@@ -4,7 +4,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Github } from "lucide-react";
-import { CommandMenuTrigger } from "@/components/command-menu";
+import { CommandMenuTrigger } from "@/components/command-menu/command-menu";
 
 export const Navbar = () => {
   return (

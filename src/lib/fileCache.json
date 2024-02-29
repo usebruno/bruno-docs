@@ -1,0 +1,44 @@
+{
+  "bru_lang/language": {
+    "name": "language",
+    "content": "Language Design\n\n\nA Bru file is made up of blocks.\nThere are three kinds of blocks\n- Dictionary block\n- Text blocks\n- Array blocks\n\nDictionary block\n\nA dictionary block contains of a set of key value pairs. \n```bash\nget {\n  url: https://api.textlocal.in/send\n}\n\nheaders {\n  content-type: application/json\n  Authorization: Bearer 123\n  ~transaction-id: {{transactionId}}\n}\n```\nAny key in the dictionary block can be prefixed with `~` to indicate that it is disabled.\n\nText block\n\nA text block is a set of lines\n```bash\nbody {\n  {\n    \"hello\": \"world\"\n  }\n}\n\ntests {\n  expect(res.status).to.equal(200);\n}\n```\n\nArray block\n\nAn array block is a list of strings\n```bash\nvars:secret [\n  access_key,\n  access_secret,\n  ~transactionId\n]\n```\nAny key in the array block can be prefixed with `~` to indicate that it is disabled.\n\n\n\n\n\n",
+    "parentName": "bru_lang",
+    "path": "bru_lang/language"
+  },
+  "bru_lang/overview": {
+    "name": "overview",
+    "content": "Bru Markup Language\n\n\nBru is a simple markup language that utilizes plain text files to document and organize information for your API requests.\n\nThe api requests in your collections are stored as plain text files using this language.\n\nThis allows you to save your API collections in a folder within your code repository, and use your preferred version control system to manage and share them with your team. Collaboration on your API collections can be done through pull requests, as the human-readable file format makes it easy for developers to understand the changes made to the API collection.\n\nBelow is a sample of a Bru file for a `GET` request with some query params\n\n![bru lang sample](../../../public/screenshots/github-collection.png)\n\nYou can checkout the sample repository which contains GitHub rest API collection [here](https://github.com/usebruno/github-rest-api-collection)\n\nIf you are wondering why had to design a DSL instead of just using JSON/YAML, you can checkout this [github discussion](https://github.com/usebruno/bruno/discussions/360)\n",
+    "parentName": "bru_lang",
+    "path": "bru_lang/overview"
+  },
+  "bru_lang/samples": {
+    "name": "samples",
+    "content": "Samples\n\n\nHere are a few sample Bru files.\n\nGET\n\n```bash\nget {\n  url: https://api.github.com/users/usebruno\n}\n```\n\nGET with headers\n\n```\nget {\n  url: https://api.textlocal.in/send?apiKey=secret&numbers=9988776655&message=hello\n}\n\nheaders {\n  content-type: application/json\n  Authorization: Bearer topsecret\n}\n```\n\nPOST with body\n\n```\npost {\n  url: https://api.textlocal.in/send\n}\n\nbody {\n  {\n    \"apiKey\": \"secret\",\n    \"numbers\": \"9988776655\",\n    \"message\": \"Woof! lets play with some apis\"\n  }\n}\n\nheaders {\n  content-type: application/json\n  Authorization: Bearer topsecret\n}\n```\n\nScripting\n\n```\npost {\n  url: https://api.textlocal.in/login\n}\n\nbody {\n  {\n    \"username\": \"johnnash\",\n    \"password\": \"governingdynamics\"\n  }\n}\n\nscript:post-response {\n  bru.setVar(\"token\", res.body.token);\n}\n```\n\nTesting\n\n```\npost {\n  url: https://api.textlocal.in/login\n}\n\nbody {\n  {\n    \"username\": \"johnnash\",\n    \"password\": \"governingdynamics\"\n  }\n}\n\ntests {\n  test(\"should be able to login\", function() {\n    expect(res.status).to.equal(201);\n  });\n\n  test(\"should receive the token\", function() {\n    expect(res.body.token).to.be.a('string');\n  });\n}\n```",
+    "parentName": "bru_lang",
+    "path": "bru_lang/samples"
+  },
+  "introduction/index": {
+    "name": "index",
+    "content": "",
+    "parentName": "introduction",
+    "path": "introduction/index"
+  },
+  "introduction/manifesto": {
+    "name": "manifesto",
+    "content": "Manifesto\n\n\nIt's time for a revolution in API client technology. The status quo, represented by Postman, has become bloated and unwieldy. We refuse to be shoehorned into a proprietary version control system for collaborating on API collections.\n\nWe are an opensource project, rising up against the monopoly of bloated and closed systems. We believe that API collections should be co-located within your source code repository, serving as a living set of examples on how to use the API.\n\nBut we realized that the current tools on the market export collections as giant JSON files (a.k.a. ugly blobs), difficult to version control and diff. So we created the *Bru Markup language*, saving information about your API requests using plain text files.\n\nWith Bruno, collections become first-class citizens, co-located with related information and easily version controlled. We say goodbye to bloated workspaces and global environments, and embrace the benefits of co-location.\n\nWe dream of a world where developers can clone a code repo, get it up and running, use Bruno to browse the examples on how to use the API and start playing with it. No more horror stories of *\"Tim had the collections for the payment-api service, but he left the company last month.\"*\n\nJoin us in our mission to create a better API client for developers. Say goodbye to bloatware and hello to simplicity, efficiency and freedom. Try Bruno today and experience the difference for yourself.",
+    "parentName": "introduction",
+    "path": "introduction/manifesto"
+  },
+  "introduction/pity/manifesto": {
+    "name": "manifesto",
+    "content": "Manifesto\n\n\nIt's time for a revolution in API client technology. The status quo, represented by Postman, has become bloated and unwieldy. We refuse to be shoehorned into a proprietary version control system for collaborating on API collections.\n\nWe are an opensource project, rising up against the monopoly of bloated and closed systems. We believe that API collections should be co-located within your source code repository, serving as a living set of examples on how to use the API.\n\nBut we realized that the current tools on the market export collections as giant JSON files (a.k.a. ugly blobs), difficult to version control and diff. So we created the *Bru Markup language*, saving information about your API requests using plain text files.\n\nWith Bruno, collections become first-class citizens, co-located with related information and easily version controlled. We say goodbye to bloated workspaces and global environments, and embrace the benefits of co-location.\n\nWe dream of a world where developers can clone a code repo, get it up and running, use Bruno to browse the examples on how to use the API and start playing with it. No more horror stories of *\"Tim had the collections for the payment-api service, but he left the company last month.\"*\n\nJoin us in our mission to create a better API client for developers. Say goodbye to bloatware and hello to simplicity, efficiency and freedom. Try Bruno today and experience the difference for yourself.",
+    "parentName": "introduction",
+    "path": "introduction/pity/manifesto"
+  },
+  "introduction/support": {
+    "name": "support",
+    "content": "Support\n\n\nPlease use [GitHub Issues](https://www.github.com/usebruno/bruno/issues) to provide feedback and raise defects or feature requests.\n\nWe are also on [Twitter](https://twitter.com/use_bruno), [LinkedIn](https://www.linkedin.com/company/usebruno) and [Discord](https://discord.com/invite/KgcZUncpjq)",
+    "parentName": "introduction",
+    "path": "introduction/support"
+  }
+}

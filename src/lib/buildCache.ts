@@ -3,7 +3,6 @@ const path = require("path");
 
 // Function to read Markdown file and extract pure text
 function extractTextFromMarkdown(markdownContent: string): string {
-  // Read the content of the Markdown fil
   // Regular expression to match Markdown headings and HTML tags
   const headingRegex = /^#+\s+(.*)/gm; // Matches Markdown headings
   const htmlTagRegex = /<[^>]*>/gm; // Matches HTML tags
@@ -12,37 +11,27 @@ function extractTextFromMarkdown(markdownContent: string): string {
   let plainText = markdownContent.replace(headingRegex, "$1\n");
 
   // Remove HTML tags
-  plainText = plainText.replace(htmlTagRegex, "").replace(/\n/g, " ");
+  plainText = plainText.replace(htmlTagRegex, "");
 
   return plainText;
 }
 
-// @ts-ignore
-
 interface FileData {
-  path: string;
   name: string;
   content: string;
+  parentName: string | null;
+  path: string;
 }
 
-interface DirectoryData {
-  name: string;
-  files: FileData[];
-  directories?: DirectoryData[];
-}
-let directoryData: DirectoryData | null = null;
-let directoryPath = path.join(__dirname, "../pages");
-let outputFilePath = path.join(__dirname, "empty.json");
+// Read and flatten directory structure into an object of objects
 
-function initializeFileCache(): void {
-  directoryData = readDirectory(directoryPath);
-  writeDataToFile(directoryData, outputFilePath);
-}
+let parentName: null | string = null;
 
-function readDirectory(directoryPath: string): DirectoryData {
-  const directoryName = path.basename(directoryPath);
-  const files: FileData[] = [];
-  const directories: DirectoryData[] = [];
+function readAndFlattenDirectory(
+  directoryPath: string,
+  parentName: string | null = null,
+): Record<string, FileData> {
+  const files: Record<string, FileData> = {};
 
   const items = fs.readdirSync(directoryPath);
 
@@ -53,36 +42,49 @@ function readDirectory(directoryPath: string): DirectoryData {
       return; // Skip processing _meta.json file
     }
     if (stats.isDirectory()) {
-      directories.push(readDirectory(itemPath));
+      const actualParentName = itemPath.split("pages/").pop().split("/")?.[0];
+      const nextParentName =
+        parentName === null || actualParentName !== parentName
+          ? actualParentName
+          : parentName;
+      const nestedFiles = readAndFlattenDirectory(itemPath, nextParentName);
+      Object.assign(files, nestedFiles);
     } else {
       const content = fs.readFileSync(itemPath, "utf-8");
-      const fileData: FileData = {
-        path: itemPath
-          .split("pages/")
-          .pop()
-          .replace(/\.[^.]+$/, ""),
+      const path = itemPath
+        .split("pages/")
+        .pop()
+        .replace(/\.[^.]+$/, "");
+      files[path] = {
         name: itemPath
           .split("/")
           .pop()
           .replace(/\.[^.]+$/, ""),
         content: extractTextFromMarkdown(content),
+        parentName: parentName,
+        path,
       };
-      files.push(fileData);
+      // parentName = null;
     }
   });
-  return directories.length === 0
-    ? { name: directoryName, files }
-    : { name: directoryName, files, directories };
+
+  return files;
 }
 
+// Entry point
+function initializeFileCache() {
+  const directoryPath = path.join(__dirname, "../pages");
+  const outputFilePath = path.join(__dirname, "fileCache.json");
+
+  const files = readAndFlattenDirectory(directoryPath, parentName);
+  writeDataToFile(files, outputFilePath);
+}
+
+// Write data to file
 function writeDataToFile(data: any, outputFilePath: string): void {
   const jsonData = JSON.stringify(data, null, 2); // Pretty-print JSON
 
   fs.writeFileSync(outputFilePath, jsonData);
-}
-
-function getDirectoryData(): DirectoryData | null {
-  return directoryData;
 }
 
 initializeFileCache();

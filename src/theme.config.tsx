@@ -1,7 +1,8 @@
 // imports have to start with "./src" instead of "src"
 import { Logo } from "@/components/logo";
 import { ModeToggle } from "@/components/theme-switch";
-import { CommandMenuTrigger } from "@/components/command-menu";
+import { CommandMenuTrigger } from "@/components/command-menu/command-menu";
+import { Navbar } from "@/components/navbar";
 
 const themeConfig = {
   useNextSeoProps() {
@@ -30,9 +31,6 @@ const themeConfig = {
   chat: {
     link: "https://discord.com/invite/KgcZUncpjq",
   },
-  navbar: {
-    extraContent: <ModeToggle className="ml-1" />,
-  },
   docsRepositoryBase: "https://github.com/usebruno/bruno-docs",
   head: (
     <>
@@ -41,8 +39,8 @@ const themeConfig = {
       <meta property="og:description" content="The open-source API Client" />
     </>
   ),
-  search: {
-    component: CommandMenuTrigger,
+  navbar: {
+    component: <Navbar />,
   },
 };
 

@@ -1,12 +1,9 @@
-import type { Config } from "tailwindcss"
-import { fontFamily } from "tailwindcss/defaultTheme"
+import type { Config } from "tailwindcss";
+import { fontFamily } from "tailwindcss/defaultTheme";
 
 const config = {
   darkMode: ["class"],
-  content: [
-    './src/**/*.{ts,tsx}',
-    './theme.config.tsx'
-	],
+  content: ["./src/**/*.{ts,tsx}", "./theme.config.tsx"],
   fontFamily: {
     sans: ["var(--font-sans)", ...fontFamily.sans],
   },
@@ -20,6 +17,9 @@ const config = {
       },
     },
     extend: {
+      spacing: {
+        "18": "72px",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -77,6 +77,6 @@ const config = {
     },
   },
   plugins: [require("tailwindcss-animate")],
-} satisfies Config
+} satisfies Config;
 
-export default config
+export default config;
