@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 import { CommandDialog, CommandList } from "@/components/ui/command";
 import { Button } from "@/components/ui/button";
