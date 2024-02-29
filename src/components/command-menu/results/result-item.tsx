@@ -57,8 +57,6 @@ export const ResultItem = ({
   });
   const computedHeight = sentence ? "h-20" : "h-12";
   const namePath = result.path?.split("/").slice(1).join(" > ");
-  // {result.name?.replace("_", " ")}
-  // a function to set the local storage and write path and name inside it
   const handleHistory = () => {
     const history = JSON.parse(localStorage.getItem("history") || "{}");
     history[result.path] = {
