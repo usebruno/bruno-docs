@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "prebuild": "ts-node ./src/lib/buildCache.ts",
+    "cachedata": "ts-node ./src/lib/buildCache.ts",
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --check .",
