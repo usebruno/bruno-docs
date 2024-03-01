@@ -1,10 +1,8 @@
-import { FileData } from "@/lib/types/fileCache";
 import React from "react";
-import { cn, displaySentenceWithKeyword } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ChevronRight, FileText } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { Typography } from "@/components/ui/typography";
 import { HistoryType } from "@/lib/types/history";
 

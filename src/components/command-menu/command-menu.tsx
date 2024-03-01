@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { CommandIcon, Search } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import jsonFileCache from "@/lib/fileCache.json";
+import jsonFileCache from "@/lib/cache/file-cache/fileCache.json";
 import { FileCache, FileData } from "@/lib/types/fileCache";
 import { Input } from "@/components/ui/input";
 import { Typography } from "@/components/ui/typography";
@@ -53,6 +53,7 @@ export const CommandMenu = ({
     const localHistory = JSON.parse(localStorage.getItem("history") || "{}");
     setHistory(localHistory);
   }, []);
+
   return (
     <CommandDialog open={open} onOpenChange={setOpen}>
       <div className="flex items-center border-b-2 pl-3">
@@ -67,7 +68,7 @@ export const CommandMenu = ({
 
       <CommandList className="p-2">
         {searchValue.length === 0 ? (
-          Object.keys(history).length > 0 ? (
+          Object.keys(history || {}).length > 0 ? (
             <div className="flex flex-col w-full">
               <History history={history} setOpen={setOpen} />
             </div>
@@ -76,8 +77,8 @@ export const CommandMenu = ({
               <Typography variant="muted">No recent searches</Typography>
             </div>
           )
-        ) : Object.keys(results).length === 0 ? (
-          Object.keys(results).length === 0 && (
+        ) : Object.keys(results || {}).length === 0 ? (
+          Object.keys(results || {}).length === 0 && (
             <div className="flex items-center justify-center w-full h-20">
               <Typography variant="muted">
                 No results for &quot;<strong>{searchValue}</strong>&quot;

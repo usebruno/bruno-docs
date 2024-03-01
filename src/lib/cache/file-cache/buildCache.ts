@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-// Function to read Markdown file and extract pure text
+// Function to read Markdown file-cache and extract pure text
 function extractTextFromMarkdown(markdownContent: string): string {
   // Regular expression to match Markdown headings and HTML tags
   const headingRegex = /^#+\s+(.*)/gm; // Matches Markdown headings
@@ -38,8 +38,8 @@ function readAndFlattenDirectory(
   items.forEach((item: any) => {
     const itemPath = path.join(directoryPath, item);
     const stats = fs.statSync(itemPath);
-    if (item === "_meta.json" || item === "_app.mdx") {
-      return; // Skip processing _meta.json file
+    if (item === "_meta.json" || item === "_app.mdx" || item === "index.mdx") {
+      return; // Skip processing _meta.json file-cache
     }
     if (stats.isDirectory()) {
       const actualParentName = itemPath.split("pages/").pop().split("/")?.[0];
@@ -71,16 +71,14 @@ function readAndFlattenDirectory(
   return files;
 }
 
-// Entry point
 function initializeFileCache() {
-  const directoryPath = path.join(__dirname, "../pages");
+  const directoryPath = path.join(__dirname, "../../../pages");
   const outputFilePath = path.join(__dirname, "fileCache.json");
 
   const files = readAndFlattenDirectory(directoryPath, parentName);
   writeDataToFile(files, outputFilePath);
 }
 
-// Write data to file
 function writeDataToFile(data: any, outputFilePath: string): void {
   const jsonData = JSON.stringify(data, null, 2); // Pretty-print JSON
 

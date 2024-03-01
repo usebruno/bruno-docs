@@ -17,11 +17,11 @@
     "parentName": "bru_lang",
     "path": "bru_lang/samples"
   },
-  "introduction/index": {
-    "name": "index",
+  "introduction/hehehe/wesh": {
+    "name": "wesh",
     "content": "",
     "parentName": "introduction",
-    "path": "introduction/index"
+    "path": "introduction/hehehe/wesh"
   },
   "introduction/manifesto": {
     "name": "manifesto",

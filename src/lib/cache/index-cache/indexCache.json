@@ -1,0 +1,36 @@
+[
+  {
+    "name": "Introduction",
+    "children": [
+      {
+        "name": "index",
+        "path": "introduction/index"
+      },
+      {
+        "name": "manifesto",
+        "path": "introduction/manifesto"
+      },
+      {
+        "name": "support",
+        "path": "introduction/support"
+      }
+    ]
+  },
+  {
+    "name": "Bru Lang",
+    "children": [
+      {
+        "name": "overview",
+        "path": "bru_lang/overview"
+      },
+      {
+        "name": "samples",
+        "path": "bru_lang/samples"
+      },
+      {
+        "name": "language",
+        "path": "bru_lang/language"
+      }
+    ]
+  }
+]

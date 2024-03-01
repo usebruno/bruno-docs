@@ -1,7 +1,4 @@
 // imports have to start with "./src" instead of "src"
-import { Logo } from "@/components/logo";
-import { ModeToggle } from "@/components/theme-switch";
-import { CommandMenuTrigger } from "@/components/command-menu/command-menu";
 import { Navbar } from "@/components/navbar";
 
 const themeConfig = {
@@ -24,7 +21,6 @@ const themeConfig = {
       ],
     };
   },
-  logo: <Logo />,
   project: {
     link: "https://github.com/usebruno/bruno",
   },
