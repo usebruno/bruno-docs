@@ -1,4 +1,6 @@
+// @ts-ignore
 const fs = require("fs");
+// @ts-ignore
 const path = require("path");
 
 interface FileData {
@@ -32,10 +34,13 @@ function buildIndexCache(directoryPath: string): IndexCache[] {
 
     if (stats.isDirectory()) {
       const meta = readMetaFile(itemPath);
-      const children = Object.keys(meta).map((child) => ({
-        name: child,
-        path: path.join(folder, child),
-      }));
+      const children = Object.keys(meta).map(
+        (child) =>
+          ({
+            name: child,
+            path: path.join(folder, child) as string,
+          }) as FileData,
+      );
 
       indexCache.push({
         name: folderName,
@@ -48,13 +53,17 @@ function buildIndexCache(directoryPath: string): IndexCache[] {
 }
 
 function initializeIndexCache() {
-  const directoryPath = path.join(__dirname, "../../../pages");
-  const outputFilePath = path.join(__dirname, "indexCache.json");
+  const directoryPath = path.join(__dirname, "../../src/pages");
+  const outputFilePath = path.join(
+    __dirname,
+    "../../src/lib/cache/indexCache.json",
+  );
 
   const indexCache = buildIndexCache(directoryPath);
   writeDataToFile(indexCache, outputFilePath);
 }
 
+// @ts-ignore
 function writeDataToFile(data: any, outputFilePath: string): void {
   const jsonData = JSON.stringify(data, null, 2); // Pretty-print JSON
 

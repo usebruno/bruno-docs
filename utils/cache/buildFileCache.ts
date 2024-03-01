@@ -1,4 +1,6 @@
+// @ts-ignore
 const fs = require("fs");
+// @ts-ignore
 const path = require("path");
 
 // Function to read Markdown file-cache and extract pure text
@@ -72,13 +74,17 @@ function readAndFlattenDirectory(
 }
 
 function initializeFileCache() {
-  const directoryPath = path.join(__dirname, "../../../pages");
-  const outputFilePath = path.join(__dirname, "fileCache.json");
+  const directoryPath = path.join(__dirname, "../../src/pages");
+  const outputFilePath = path.join(
+    __dirname,
+    "../../src/lib/cache/fileCache.json",
+  );
 
   const files = readAndFlattenDirectory(directoryPath, parentName);
   writeDataToFile(files, outputFilePath);
 }
 
+// @ts-ignore
 function writeDataToFile(data: any, outputFilePath: string): void {
   const jsonData = JSON.stringify(data, null, 2); // Pretty-print JSON
 

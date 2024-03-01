@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { CommandIcon, Search } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import jsonFileCache from "@/lib/cache/file-cache/fileCache.json";
+import jsonFileCache from "@/lib/cache/fileCache.json";
 import { FileCache, FileData } from "@/lib/types/fileCache";
 import { Input } from "@/components/ui/input";
 import { Typography } from "@/components/ui/typography";
