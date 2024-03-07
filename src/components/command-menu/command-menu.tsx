@@ -90,7 +90,7 @@ export const CommandMenu = ({
             <ResultGroup
               results={fileGroup}
               key={`result_group_${key}_${searchValue}`}
-              className="mt-4"
+              className="mt-2 sm:mt-4"
               keyword={searchValue}
               setOpen={setOpen}
             />
@@ -126,14 +126,19 @@ export const CommandMenuTrigger = ({
         key="command_menu"
       />
       <Button
-        className={cn(className, "pr-1.5")}
+        className={cn(
+          className,
+          "pr-1.5 h-8 sm:h-10 py-1 sm:py-2 px-2 sm:px-4",
+        )}
         variant="outline"
         onClick={() => setOpen((open) => !open)}
       >
         <div className="flex items-center">
-          Search documentation
-          <Badge className="ml-6 rounded px-1" variant="secondary">
-            <CommandIcon size={12} className="mr-0.5" />K
+          <Typography variant="small" className="text-xs sm:text-sm">
+            Search <span className="hidden sm:inline-flex">documentation</span>
+          </Typography>
+          <Badge className="ml-3 sm:ml-6 rounded px-1" variant="secondary">
+            <CommandIcon className="mr-0.5 h-3 w-3" />K
           </Badge>
         </div>
       </Button>

@@ -21,15 +21,49 @@
     "children": [
       {
         "name": "overview",
-        "path": "bru_lang/overview"
+        "path": "bru-lang/overview"
       },
       {
         "name": "samples",
-        "path": "bru_lang/samples"
+        "path": "bru-lang/samples"
       },
       {
         "name": "language",
-        "path": "bru_lang/language"
+        "path": "bru-lang/language"
+      },
+      {
+        "name": "tag-reference",
+        "path": "bru-lang/tag-reference"
+      },
+      {
+        "name": "syntax-highlighting",
+        "path": "bru-lang/syntax-highlighting"
+      }
+    ]
+  },
+  {
+    "name": "Bru CLI",
+    "children": [
+      {
+        "name": "overview",
+        "path": "bru-cli/overview"
+      }
+    ]
+  },
+  {
+    "name": "Secrets Management",
+    "children": [
+      {
+        "name": "overview",
+        "path": "secrets-management/overview"
+      },
+      {
+        "name": "dotenv-file",
+        "path": "secrets-management/dotenv-file"
+      },
+      {
+        "name": "secret-variables",
+        "path": "secrets-management/secret-variables"
       }
     ]
   }

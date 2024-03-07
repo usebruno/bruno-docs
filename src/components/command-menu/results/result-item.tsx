@@ -21,19 +21,33 @@ const FormattedSentence = ({
 }) => {
   const regex = new RegExp(keyword, "gi");
   const splitted = sentence.split(regex);
+  const transformed =
+    splitted[1]?.length > 10
+      ? splitted[0].length > 10
+        ? "..." + splitted[0].slice(-10)
+        : splitted[0]
+      : splitted[0].length > 20
+        ? "..." + splitted[0].slice(-20)
+        : splitted[0];
   return splitted ? (
     <Typography
       variant="muted"
-      className={cn("mt-2 line-clamp-1 truncate", className)}
+      className={cn(
+        "max-sm:text-xs mt-1 sm:mt-2 line-clamp-1 truncate",
+        className,
+      )}
     >
-      {splitted[0]}
+      {transformed}
       <strong className="text-amber-500">{keyword}</strong>
       {splitted[1]}
     </Typography>
   ) : (
     <Typography
       variant="muted"
-      className={cn("mt-2 line-clamp-1 truncate", className)}
+      className={cn(
+        "max-sm:text-xs mt-1 sm:mt-2 line-clamp-1 truncate",
+        className,
+      )}
     >
       {sentence}
     </Typography>
@@ -55,7 +69,7 @@ export const ResultItem = ({
     text: result.content,
     keyword,
   });
-  const computedHeight = sentence ? "h-20" : "h-12";
+  const computedHeight = sentence ? "h-16 sm:h-20" : "h-10 sm:h-12";
   const namePath = result.path?.split("/").slice(1).join(" > ");
   const handleHistory = () => {
     const history = JSON.parse(localStorage.getItem("history") || "{}");
@@ -72,14 +86,14 @@ export const ResultItem = ({
       <div
         className={cn(
           computedHeight,
-          "min-w-[2px] bg-slate-100 dark:bg-slate-600 mr-4",
+          "min-w-[2px] bg-slate-100 dark:bg-slate-600 mr-2 sm:mr-4 max-sm:hidden",
         )}
       />
       <Button
         asChild
         variant="secondary"
         className={cn(
-          sentence ? "h-18" : "h-10",
+          sentence ? "h-14 sm:h-18" : "h-8 sm:h-10",
           "overflow-hidden flex items-center justify-start w-full px-3 my-1 rounded-lg bg-slate-50 hover:bg-slate-100 dark:bg-slate-900 dark:hover:bg-slate-800 group",
           className,
         )}
