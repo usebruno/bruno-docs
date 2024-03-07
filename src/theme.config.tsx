@@ -38,6 +38,9 @@ const themeConfig = {
   navbar: {
     component: <Navbar />,
   },
+  sidebar: {
+    toggleButton: true,
+  },
 };
 
 export default themeConfig;

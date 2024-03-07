@@ -66,5 +66,22 @@
         "path": "secrets-management/secret-variables"
       }
     ]
+  },
+  {
+    "name": "Scripting",
+    "children": [
+      {
+        "name": "getting-started",
+        "path": "scripting/getting-started"
+      },
+      {
+        "name": "vars",
+        "path": "scripting/vars"
+      },
+      {
+        "name": "response-query",
+        "path": "scripting/response-query"
+      }
+    ]
   }
 ]

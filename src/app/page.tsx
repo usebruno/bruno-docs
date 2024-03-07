@@ -7,8 +7,10 @@ import { Github } from "lucide-react";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center p-24">
-      <Typography variant="h1">Re-Inventing the API Client</Typography>
+    <main className="flex min-h-screen flex-col items-center p-8 sm:p-24">
+      <Typography variant="h1" className="text-center">
+        Re-Inventing the API Client
+      </Typography>
       <Typography variant="lead" className="mt-4 max-w-[750px] text-center">
         Bruno is a Fast and Git-Friendly Opensource API client, aimed at
         revolutionizing the status quo represented by Postman, Insomnia and
