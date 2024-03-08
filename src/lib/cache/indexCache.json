@@ -81,6 +81,39 @@
       {
         "name": "response-query",
         "path": "scripting/response-query"
+      },
+      {
+        "name": "inbuilt-libraries",
+        "path": "scripting/inbuilt-libraries"
+      },
+      {
+        "name": "external-libraries",
+        "path": "scripting/external-libraries"
+      },
+      {
+        "name": "sync-requests",
+        "path": "scripting/sync-requests"
+      },
+      {
+        "name": "javascript-reference",
+        "path": "scripting/javascript-reference"
+      }
+    ]
+  },
+  {
+    "name": "Testing",
+    "children": [
+      {
+        "name": "introduction",
+        "path": "testing/introduction"
+      },
+      {
+        "name": "assertions",
+        "path": "testing/assertions"
+      },
+      {
+        "name": "javascript-reference",
+        "path": "testing/javascript-reference"
       }
     ]
   }

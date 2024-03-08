@@ -3,5 +3,6 @@
   "bru-lang": "Bru Lang",
   "bru-cli": "Bru CLI",
   "secrets-management": "Secrets Management",
-  "scripting": "Scripting"
+  "scripting": "Scripting",
+  "testing": "Testing"
 }
