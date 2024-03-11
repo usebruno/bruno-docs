@@ -1,5 +1,6 @@
 // imports have to start with "./src" instead of "src"
 import { Navbar } from "@/components/navbar";
+import { SidebarTitle } from "@/components/sidebar-title";
 
 const themeConfig = {
   useNextSeoProps() {

@@ -79,8 +79,8 @@
         "path": "scripting/vars"
       },
       {
-        "name": "response-query",
-        "path": "scripting/response-query"
+        "name": "response-object",
+        "path": "scripting/response-object"
       },
       {
         "name": "inbuilt-libraries",
