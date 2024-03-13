@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { CommandDialog, CommandList } from "@/components/ui/command";
 import { Button } from "@/components/ui/button";
-import { CommandIcon, Search } from "lucide-react";
+import { CommandIcon, Expand, Search, Shrink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import jsonFileCache from "@/lib/cache/fileCache.json";
@@ -53,9 +53,9 @@ export const CommandMenu = ({
     const localHistory = JSON.parse(localStorage.getItem("history") || "{}");
     setHistory(localHistory);
   }, []);
-
+  const [expanded, setExpanded] = useState(false);
   return (
-    <CommandDialog open={open} onOpenChange={setOpen}>
+    <CommandDialog open={open} onOpenChange={setOpen} expanded={expanded}>
       <div className="flex items-center border-b-2 pl-3">
         <Search height={16} width={16} />
         <Input
@@ -64,13 +64,34 @@ export const CommandMenu = ({
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
         />
+        <Button
+          variant="ghost"
+          className="mr-12 px-2"
+          size="icon"
+          onClick={() => setExpanded((expanded) => !expanded)}
+        >
+          {expanded ? (
+            <Shrink height={16} width={16} />
+          ) : (
+            <Expand height={16} width={16} />
+          )}
+        </Button>
       </div>
 
-      <CommandList className="p-2">
+      <CommandList className={cn("p-2 h-full", expanded ? "" : "h-full")}>
         {searchValue.length === 0 ? (
           Object.keys(history || {}).length > 0 ? (
-            <div className="flex flex-col w-full">
-              <History history={history} setOpen={setOpen} />
+            <div
+              className={cn(
+                "flex flex-col w-full px-2 sm:px-3",
+                expanded && "px-2 sm:px-10",
+              )}
+            >
+              <History
+                history={history}
+                setOpen={setOpen}
+                expanded={expanded}
+              />
             </div>
           ) : (
             <div className="flex flex-col w-full justify-center py-6">
@@ -90,7 +111,7 @@ export const CommandMenu = ({
             <ResultGroup
               results={fileGroup}
               key={`result_group_${key}_${searchValue}`}
-              className="mt-2 sm:mt-4"
+              className={cn("mt-2 sm:mt-4", expanded && "px-2 sm:px-10")}
               keyword={searchValue}
               setOpen={setOpen}
             />

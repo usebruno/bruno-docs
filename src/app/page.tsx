@@ -1,56 +1,19 @@
-import Image from "next/image";
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Typography } from "@/components/ui/typography";
 import Link from "next/link";
-import { Github, Info } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { BetaCard } from "@/components/beta-card";
+import { Github } from "lucide-react";
 
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center p-8 sm:p-24">
-      <Card className="flex items-center p-2 rounded-xl">
-        <CardTitle className="flex items-center">
-          <Badge variant="default">Beta</Badge>
-          <Typography variant="small" className="ml-2">
-            This is a beta version of the Bruno documentation.
-          </Typography>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger>
-                <Info size={16} className="ml-2" />
-              </TooltipTrigger>
-              <TooltipContent>
-                <Typography variant="small">
-                  This is a beta version of the Bruno documentation. Some
-                  features might not work as expected. <br />
-                  You can contribute to the documentation by submitting an issue
-                  or a pull request on{" "}
-                  <Button
-                    variant="default"
-                    asChild
-                    className="py-0.5 px-1 h-fit"
-                  >
-                    <Link
-                      href="https://github.com/usebruno/bruno-docs"
-                      target="_blank"
-                    >
-                      GitHub
-                    </Link>
-                  </Button>
-                </Typography>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </CardTitle>
-      </Card>
+      <BetaCard
+        title="This is a beta version of the Bruno documentation."
+        badge="Beta"
+        tooltip="This is a beta version of the Bruno documentation. Some features might not work as expected. You can contribute to the documentation by submitting an issue or a pull request on GitHub."
+        includeGithubLink
+      />
       <Typography variant="h1" className="text-center mt-10">
         Re-Inventing the API Client
       </Typography>

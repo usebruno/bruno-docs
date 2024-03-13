@@ -9,10 +9,14 @@ import { Typography } from "@/components/ui/typography";
 
 export const Navbar = () => {
   return (
-    <div className="flex w-full py-2 sm:py-4 justify-center border-b pl-0 pr-2 sm:px-8 top-0 sticky bg-white dark:bg-slate-950">
+    <div className="flex w-full py-2 sm:py-4 justify-center border-b pl-0 pr-2 sm:px-8 top-0 z-30 sticky bg-transparent backdrop-blur">
       <nav className="flex items-center max-w-[1400px] w-full justify-between">
         <div className="flex items-center grow">
-          <Button className="flex items-center" asChild variant="link">
+          <Button
+            className="flex items-center group !no-underline"
+            asChild
+            variant="link"
+          >
             <Link href="/">
               <div className="flex items-center">
                 <Image
@@ -20,7 +24,7 @@ export const Navbar = () => {
                   alt="Bruno Logo"
                   height={40}
                   width={40}
-                  className="h-8 w-8 sm:h-10 sm:w-10"
+                  className="h-8 w-8 sm:h-10 sm:w-10 group-hover:animate-infinite group-hover:animate-wiggle"
                 />
                 <Typography variant="h3" className="ml-1">
                   Bruno

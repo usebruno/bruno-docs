@@ -20,13 +20,13 @@ const HistoryItem = ({
       asChild
       variant="secondary"
       className={cn(
-        "overflow-hidden flex items-center justify-start w-full p-2 my-1 rounded-lg bg-slate-50 hover:bg-slate-100 dark:bg-slate-900 dark:hover:bg-slate-800 group",
+        "overflow-hidden flex items-center justify-start w-full p-2 my-1 rounded-lg bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-900 dark:hover:bg-zinc-800 group",
         className,
       )}
     >
       <Link href={`/${path}`}>
         <div className="flex items-center w-full">
-          <div className="flex items-center p-1 rounded-lg border bg-white dark:bg-slate-900">
+          <div className="flex items-center p-1 rounded-lg border bg-white dark:bg-zinc-900">
             <FileText height={20} width={20} strokeWidth={1} />
           </div>
           <div className="flex flex-col mx-4 items-start justify-center overflow-hidden grow">
@@ -42,17 +42,22 @@ const HistoryItem = ({
 export const History = ({
   history,
   setOpen,
+  className,
+  expanded,
 }: {
   history: HistoryType;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  className?: string;
+  expanded?: boolean;
 }) => {
   return (
-    <div className="flex flex-col w-full mt-2">
+    <div className={cn("flex flex-col w-full mt-2", className)}>
       {Object.entries(history || {}).map(([key, item]) => (
         <HistoryItem
           name={item.name?.replace("_", " ")}
           path={item.path}
           key={`history_item_${key}`}
+          className={cn(expanded && "mt-2 py-3 h-auto")}
         />
       ))}
     </div>

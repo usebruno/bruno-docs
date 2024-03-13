@@ -1,7 +1,7 @@
 {
   "getting-started": "Getting Started",
   "vars": "Variables",
-  "response-object": "Response Object",
+  "response-query": "Response Query",
   "inbuilt-libraries": "Inbuilt Libraries",
   "external-libraries": "External Libraries",
   "sync-requests": "Sync Requests",

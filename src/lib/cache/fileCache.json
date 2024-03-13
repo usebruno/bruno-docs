@@ -71,11 +71,11 @@
     "parentName": "scripting",
     "path": "scripting/javascript-reference"
   },
-  "scripting/response-object": {
-    "name": "response-object",
-    "content": "Response Query\n\n\nThe `res` object that is available inside the [vars](/scripting/vars), [assertions](/testing/assertions), [scripting](/scripting/getting-started) and [testing](/testing/introduction) contexts can be queried for data by invoking it like below.\n\n```js\nres('order.total')\n```\n\n\n",
+  "scripting/response-query": {
+    "name": "response-query",
+    "content": "import {BetaCard} from \"@/components/beta-card\";\n\n\nResponse Query\n\n\nThe `res` object that is available inside the [vars](./vars.html), [assertions](../testing/assertions.html) and [scripting](./introduction.html) contexts can be queried for data by invoking it like below.\n\nThink of it as `lodash.get()` on steroids\n\n```javascript\nres('order.total')\n```\n\nExamples\n\n```javascript\nconst data = {\n  customer: {\n    address: {\n      city: \"bangalore\"\n    },\n    orders: [\n      {\n        id: \"order-1\",\n        items: [\n          { id: 1, amount: 10 },\n          { id: 2, amount: 20 },\n        ]\n      },\n      {\n        id: \"order-2\",\n        items: [\n          { id: 3, amount: 30, },\n          { id: 4, amount: 40 }\n        ]\n      }\n    ]\n  },\n};\n```\n| Query | Output |\n|-------|--------|\n| res(\"customer.address.city\") | bangalore |\n| res(\"customer.orders.items.amount\") | [10, 20, 30, 40] |\n| res(\"\"customer.orders.items.amount[0]\") | 10 |\n| res(\"..items.amount\") | [10, 20, 30, 40] | |\n| res(\"..amount\") | [10, 20, 30, 40] |\n| res(\"..items.amount[0]\") | 10 |\n| res(\"..items[0].amount\") | 10 |\n| res(\"..items[5].amount\") | undefined |\n| res(\"..id\") | [\"order-1\", 1, 2, \"order-2\", 3, 4] |\n| res(\"customer.orders.foo\") | undefined |\n| res(\"..customer.foo\") | undefined |\n| res(\"..address\") | [{ city: \"bangalore\" }] |\n| res(\"..address[0]\") | { city: \"bangalore\" \\} |\n\nAPI\n\n\nStandard dot notation\n\n\n**Example:**\n```javascript\nres('customer.orders.items.amount')\n```\n\nDeep navigation .. double dots\n\n\n**Example:**\n```javascript\nres('..items.amount')\n```\n\nArray indexing\n\n\n**Example:**\n```javascript\nres('..items[0].amount')\n```\n\nArray filtering [?] with corresponding filter function\n\n\n**Example:**\n```javascript\nres('..items[?].amount', i => i.amount > 20)\n```\n\n\nArray mapping [?] with corresponding mapper function\n\n\n**Example:**\n```javascript\nres('..items[?].amount', i => i.amount + 10)\n```\n\n\n\n\n\n\n\n\n",
     "parentName": "scripting",
-    "path": "scripting/response-object"
+    "path": "scripting/response-query"
   },
   "scripting/sync-requests": {
     "name": "sync-requests",

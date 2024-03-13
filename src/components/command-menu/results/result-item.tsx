@@ -86,7 +86,7 @@ export const ResultItem = ({
       <div
         className={cn(
           computedHeight,
-          "min-w-[2px] bg-slate-100 dark:bg-slate-600 mr-2 sm:mr-4 max-sm:hidden",
+          "min-w-[2px] bg-zinc-100 dark:bg-zinc-600 mr-2 sm:mr-4 max-sm:hidden",
         )}
       />
       <Button
@@ -94,19 +94,19 @@ export const ResultItem = ({
         variant="secondary"
         className={cn(
           sentence ? "h-14 sm:h-18" : "h-8 sm:h-10",
-          "overflow-hidden flex items-center justify-start w-full px-3 my-1 rounded-lg bg-slate-50 hover:bg-slate-100 dark:bg-slate-900 dark:hover:bg-slate-800 group",
+          "overflow-hidden flex items-center justify-start w-full px-3 my-1 rounded-lg bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-900 dark:hover:bg-zinc-800 group",
           className,
         )}
         onClick={handleHistory}
       >
         <Link href={`/${result.path}`}>
-          <div className="flex items-center p-1 rounded-lg border bg-white dark:bg-slate-900 shadow-lg">
+          <div className="flex items-center p-1 rounded-lg border bg-white dark:bg-zinc-900 shadow-lg">
             <FileText height={20} width={20} strokeWidth={1} />
           </div>
           <div className="flex flex-col mx-4 items-start justify-center overflow-hidden grow">
             <Badge
               variant="secondary"
-              className="bg-slate-200 dark:bg-slate-700 capitalize"
+              className="bg-zinc-200 dark:bg-zinc-700 capitalize"
             >
               {namePath}
             </Badge>

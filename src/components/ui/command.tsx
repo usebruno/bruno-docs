@@ -25,11 +25,26 @@ Command.displayName = CommandPrimitive.displayName;
 
 interface CommandDialogProps extends DialogProps {}
 
-const CommandDialog = ({ children, ...props }: CommandDialogProps) => {
+const CommandDialog = ({
+  children,
+  expanded,
+  ...props
+}: CommandDialogProps & { expanded?: boolean }) => {
   return (
     <Dialog {...props}>
-      <DialogContent className="overflow-hidden p-0 shadow-lg max-sm:max-w-[calc(100vw-32px)] max-sm:mr-2 max-sm:mt-4 rounded-lg max-sm:absolute max-sm:top-0 max-sm:translate-y-0">
-        <Command className="max-sm:[&_[cmdk-list]]:!max-h-[calc(100dvh-80px)] [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5">
+      <DialogContent
+        className={cn(
+          "overflow-hidden transition-all p-0 shadow-lg max-sm:max-w-[calc(100vw-34px)] max-sm:mr-2 max-sm:mt-4 rounded-lg max-sm:absolute max-sm:top-0 max-sm:translate-y-0",
+          expanded
+            ? "max-w-[calc(60dvw)] max-h-[calc(100dvh-36px)] sm:max-h-[calc(80dvh)] h-full"
+            : "max-h-[calc(50dvh)] sm:max-h-[500px] h-full",
+        )}
+      >
+        <Command
+          className={cn(
+            "max-sm:[&_[cmdk-list]]:!max-h-[calc(100dvh-80px)] [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5",
+          )}
+        >
           {children}
         </Command>
       </DialogContent>
@@ -62,7 +77,7 @@ const CommandList = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <CommandPrimitive.List
     ref={ref}
-    className={cn("max-h-[300px] overflow-y-auto overflow-x-hidden", className)}
+    className={cn("overflow-y-auto overflow-x-hidden", className)}
     {...props}
   />
 ));
