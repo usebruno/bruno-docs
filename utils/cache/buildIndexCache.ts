@@ -7,10 +7,14 @@ interface FileData {
   name: string;
   path: string;
 }
+interface SubDirectory {
+  name: string;
+  children: (FileData | SubDirectory)[];
+}
 
 interface IndexCache {
   name: string;
-  children: FileData[];
+  children: (FileData | SubDirectory)[];
 }
 
 function readMetaFile(directoryPath: string): { [key: string]: string } {
@@ -22,29 +26,41 @@ function readMetaFile(directoryPath: string): { [key: string]: string } {
   return {};
 }
 
-function buildIndexCache(directoryPath: string): IndexCache[] {
+function isDirectory(directoryPath: string): boolean {
+  const metaPath = path.join(directoryPath, "_meta.json");
+  return fs.existsSync(metaPath) && fs.statSync(metaPath).isFile();
+}
+
+function buildIndexCache(
+  directoryPath: string,
+  relativePath = "",
+): IndexCache[] {
   const indexCache: IndexCache[] = [];
+  if (!fs.existsSync(directoryPath)) {
+    return indexCache; // Return empty cache if directory doesn't exist
+  }
 
-  const rootMeta = readMetaFile(directoryPath);
-  const metaEntries = Object.entries(rootMeta);
-
-  metaEntries.forEach(([folder, folderName]: [string, string]) => {
-    const itemPath = path.join(directoryPath, folder);
-    const stats = fs.statSync(itemPath);
-
-    if (stats.isDirectory()) {
-      const meta = readMetaFile(itemPath);
-      const children = Object.keys(meta).map(
-        (child) =>
-          ({
-            name: child,
-            path: path.join(folder, child) as string,
-          }) as FileData,
+  const meta = readMetaFile(directoryPath);
+  // Iterate over the entries in the meta file to maintain order
+  Object.entries(meta).forEach(([itemName, itemDisplayName]) => {
+    const itemPath = path.join(directoryPath, itemName);
+    if (isDirectory(itemPath)) {
+      const children = buildIndexCache(
+        itemPath,
+        path.join(relativePath, itemName),
       );
-
       indexCache.push({
-        name: folderName,
+        name: itemDisplayName,
         children: children,
+      });
+    } else {
+      // Assuming it's a file if it's not a directory
+      const fileName = path.basename(itemName, path.extname(itemName));
+      if (fileName === "_meta" || fileName === "_app") return;
+      indexCache.push({
+        name: itemDisplayName,
+        // @ts-ignore
+        path: path.join(relativePath, fileName === "index" ? "" : fileName),
       });
     }
   });

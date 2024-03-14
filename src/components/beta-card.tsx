@@ -28,16 +28,25 @@ const GithubLink = () => (
 export const BetaCard: React.FC<{
   className?: string;
   badge?: string;
+  color?: "default" | "destructive" | "warning";
   title: React.ReactNode | string;
   tooltip?: React.ReactNode;
   trigger?: React.ReactNode | string;
   includeGithubLink?: boolean;
-}> = ({ className, badge, title, tooltip, trigger, includeGithubLink }) => {
+}> = ({
+  className,
+  badge,
+  color = "default",
+  title,
+  tooltip,
+  trigger,
+  includeGithubLink,
+}) => {
   return (
     <Card className={cn("flex items-center p-2 rounded-xl w-fit", className)}>
       <CardTitle className="flex items-center">
         {badge && (
-          <Badge variant="default" className="rounded-lg">
+          <Badge variant={color} className="rounded-lg">
             {badge}
           </Badge>
         )}

@@ -10,7 +10,7 @@ Below is the API documentation for the methods available on `req`
 Get the current request url
 
 **Example:**
-```js
+```javascript
 let url = req.getUrl();
 ```
 
@@ -18,7 +18,7 @@ let url = req.getUrl();
 Set the current request url
 
 **Example:**
-```js
+```javascript
 req.setUrl("https://api.github.com/search/repositories?q=vue");
 ```
 
@@ -26,7 +26,7 @@ req.setUrl("https://api.github.com/search/repositories?q=vue");
 Get the current request method
 
 **Example:**
-```js
+```javascript
 const method = req.getMethod();
 ```
 
@@ -34,7 +34,7 @@ const method = req.getMethod();
 Set the current request method
 
 **Example:**
-```js
+```javascript
 req.setMethod("POST");
 ```
 
@@ -42,7 +42,7 @@ req.setMethod("POST");
 Get the request header by name
 
 **Example:**
-```js
+```javascript
 req.getHeader("transaction-id");
 ```
 
@@ -50,7 +50,7 @@ req.getHeader("transaction-id");
 Get the current request headers
 
 **Example:**
-```js
+```javascript
 const headers = req.getHeaders();
 ```
 
@@ -58,7 +58,7 @@ const headers = req.getHeaders();
 Set the request header by name
 
 **Example:**
-```js
+```javascript
 req.setHeader( "content-type", "application/json");
 ```
 
@@ -66,7 +66,7 @@ req.setHeader( "content-type", "application/json");
 Set the current request headers
 
 **Example:**
-```js
+```javascript
 req.setHeaders({
   "content-type": "application/json",
   "transaction-id": "foobar"
@@ -77,7 +77,7 @@ req.setHeaders({
 Get the current request body/payload
 
 **Example:**
-```js
+```javascript
 const body = req.getBody();
 ```
 
@@ -85,7 +85,7 @@ const body = req.getBody();
 Set the request body/payload
 
 **Example:**
-```js
+```javascript
 req.setBody({
   "username": "john nash",
   "password": "governingdynamics"
@@ -96,7 +96,7 @@ req.setBody({
 Set the maximum number of redirects to follow
 
 **Example:**
-```js
+```javascript
 req.setMaxRedirects(5);
 ```
 
@@ -118,7 +118,7 @@ Below are the methods available on the `res` object.
 Get the response status
 
 **Example:**
-```js
+```javascript
 let status = res.getStatus();
 ```
 
@@ -126,7 +126,7 @@ let status = res.getStatus();
 Get the response header by name
 
 **Example:**
-```js
+```javascript
 let transactionId = res.getHeader("transaction-id");
 ```
 
@@ -134,7 +134,7 @@ let transactionId = res.getHeader("transaction-id");
 Get the response headers
 
 **Example:**
-```js
+```javascript
 let headers = res.getHeaders();
 ```
 
@@ -142,7 +142,7 @@ let headers = res.getHeaders();
 Get the response data
 
 **Example:**
-```js
+```javascript
 let data = res.getBody();
 ```
 
@@ -150,56 +150,84 @@ let data = res.getBody();
 Get the response time
 
 **Example:**
-```js
+```javascript
 let responseTime = res.getResponseTime();
 ```
 
-## Node process environment
+
+## bru
+The `bru` variable is available inside your scripting and testing context.
+It exposes methods that allow you to interact with, e.g., process variables,
+environment variables and collection variables.
+
+Below is the API documentation for the methods available on `bru`
+
+
+### Node process environment
 Bruno allows you to get Node process environment variables on the fly.
 
-### `getProcessEnv`
+#### `getProcessEnv`
 Get the Node process environment variable.  This allows secret token usage without committing secrets to version control.
 
 **Example:**
-```js
+```javascript
 let secret_token = bru.getProcessEnv("secret_access_token");
 ```
-## Environments
+### Environments
 Bruno allows you to get and set Bruno environment variables on the fly.
 
-### `getEnvVar`
+#### `getEnvVar`
 Get the Bruno environment variable
 
 **Example:**
-```js
+```javascript
 let token = bru.getEnvVar("access_token");
 ```
-### `setEnvVar`
+#### `setEnvVar`
 Set the Bruno environment variable
 
 **Example:**
-```js
+```javascript
 function onResponse(res) {
 let data = res.getBody();
 let token = bru.setEnvVar("access_token", data.token);
 }
 ```
 
-## Collection Variables
+### Collection Variables
 Bruno allows you to get and set collection variables on the fly. The collection variables take precendence over environment variables.
 
-### `getVar`
+#### `getVar`
 Get the collection variable
 
 **Example:**
-```js
+```javascript
 let petId = bru.getVar("petId");
 ```
-### `setVar`
+#### `setVar`
 Set the collection variable
 
 **Example:**
-```js
+```javascript
 let data = res.getBody();
 bru.setVar("petId", data.id);
+```
+
+### Request Order
+You can influence the order in which requests are being run by the request-runner (UI) or the CLI.
+
+#### `setNextRequest`
+By default, the collection runner (UI) and the CLI run requests in order.
+You can change the order by calling `setNextRequest` with the name of the next request to be run.
+This works only in a post-request script or test-script.
+
+**Example:**
+```javascript
+bru.setNextRequest("Get process status");
+```
+
+You can also abort the run by explicitly setting the next request to `null`
+**Example:**
+```javascript
+bru.setNextRequest(null);  // aborts the run gracefully
 ```

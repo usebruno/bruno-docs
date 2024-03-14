@@ -42,20 +42,22 @@ bru run folder --output results.json
 ```
 
 ## Options
-| Option | Details |
-|----------|-------------|
-| -h, --help |  	Show help|
-| --version | Show version number|
-| -r | Indicates a recursive run (default: false)|
-| --cacert [string] | CA certificate to verify peer against|
-| --env [string] | Environment variables|
-| --env-var [string] | Overwrite a single environment variable, multiple usages possible|
-| -o, --output [string] | Path to write file results to|
-| -f, --format [string] | Format of the file results; available formats are "json" (default) or "junit"|
-| --insecure | Allow insecure server connections|
+| Option                | Details                                                                       |
+|-----------------------|-------------------------------------------------------------------------------|
+| -h, --help            | 	Show help                                                                    |
+| --version             | Show version number                                                           |
+| -r                    | Indicates a recursive run (default: false)                                    |
+| --cacert [string]     | CA certificate to verify peer against                                         |
+| --env [string]        | Environment variables                                                         |
+| --env-var [string]    | Overwrite a single environment variable, multiple usages possible             |
+| -o, --output [string] | Path to write file results to                                                 |
+| -f, --format [string] | Format of the file results; available formats are "json" (default) or "junit" |
+| --insecure            | Allow insecure server connections                                             |
+| --tests-only          | Only run requests that have a test                                            |
+| --bail                | Stop execution after a failure of a request, test, or assertion               |
 
 ## Demo
-![bru cli](/screenshots/cli-demo.png)
+![bru cli](/screenshots/cli-demo.webp)
 
 ## Support
 If you encounter any issues or have any feedback or suggestions, please raise them on our [GitHub repository](https://github.com/usebruno/bruno)

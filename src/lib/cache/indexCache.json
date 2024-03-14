@@ -3,15 +3,15 @@
     "name": "Introduction",
     "children": [
       {
-        "name": "index",
-        "path": "introduction/index"
+        "name": "Index",
+        "path": "introduction"
       },
       {
-        "name": "manifesto",
+        "name": "Manifesto",
         "path": "introduction/manifesto"
       },
       {
-        "name": "support",
+        "name": "Support",
         "path": "introduction/support"
       }
     ]
@@ -20,23 +20,23 @@
     "name": "Bru Lang",
     "children": [
       {
-        "name": "overview",
+        "name": "Overview",
         "path": "bru-lang/overview"
       },
       {
-        "name": "samples",
+        "name": "Samples",
         "path": "bru-lang/samples"
       },
       {
-        "name": "language",
+        "name": "Language",
         "path": "bru-lang/language"
       },
       {
-        "name": "tag-reference",
+        "name": "Tag Reference",
         "path": "bru-lang/tag-reference"
       },
       {
-        "name": "syntax-highlighting",
+        "name": "Syntax Highlighting",
         "path": "bru-lang/syntax-highlighting"
       }
     ]
@@ -45,7 +45,7 @@
     "name": "Bru CLI",
     "children": [
       {
-        "name": "overview",
+        "name": "Overview",
         "path": "bru-cli/overview"
       }
     ]
@@ -54,15 +54,15 @@
     "name": "Secrets Management",
     "children": [
       {
-        "name": "overview",
+        "name": "Overview",
         "path": "secrets-management/overview"
       },
       {
-        "name": "dotenv-file",
+        "name": "Dotenv File",
         "path": "secrets-management/dotenv-file"
       },
       {
-        "name": "secret-variables",
+        "name": "Secret Variables",
         "path": "secrets-management/secret-variables"
       }
     ]
@@ -71,31 +71,53 @@
     "name": "Scripting",
     "children": [
       {
-        "name": "getting-started",
+        "name": "Getting Started",
         "path": "scripting/getting-started"
       },
       {
-        "name": "vars",
+        "name": "Variables",
         "path": "scripting/vars"
       },
       {
-        "name": "response-query",
-        "path": "scripting/response-query"
+        "name": "Response",
+        "children": [
+          {
+            "name": "Response Query",
+            "path": "scripting/response/response-query"
+          },
+          {
+            "name": "Response Object",
+            "path": "scripting/response/response-object"
+          }
+        ]
       },
       {
-        "name": "inbuilt-libraries",
+        "name": "Request",
+        "children": [
+          {
+            "name": "Request Object",
+            "path": "scripting/request/request-object"
+          },
+          {
+            "name": "Sync Requests",
+            "path": "scripting/request/sync-requests"
+          }
+        ]
+      },
+      {
+        "name": "Inbuilt Libraries",
         "path": "scripting/inbuilt-libraries"
       },
       {
-        "name": "external-libraries",
+        "name": "External Libraries",
         "path": "scripting/external-libraries"
       },
       {
-        "name": "sync-requests",
-        "path": "scripting/sync-requests"
+        "name": "Whitelisting Modules",
+        "path": "scripting/whitelisting-modules"
       },
       {
-        "name": "javascript-reference",
+        "name": "Javascript Reference",
         "path": "scripting/javascript-reference"
       }
     ]
@@ -104,15 +126,15 @@
     "name": "Testing",
     "children": [
       {
-        "name": "introduction",
+        "name": "Introduction",
         "path": "testing/introduction"
       },
       {
-        "name": "assertions",
+        "name": "Assertions",
         "path": "testing/assertions"
       },
       {
-        "name": "javascript-reference",
+        "name": "JavaScript Reference",
         "path": "testing/javascript-reference"
       }
     ]

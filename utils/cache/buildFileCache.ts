@@ -3,18 +3,13 @@ const fs = require("fs");
 // @ts-ignore
 const path = require("path");
 
-// Function to read Markdown file-cache and extract pure text
 function extractTextFromMarkdown(markdownContent: string): string {
-  // Regular expression to match Markdown headings and HTML tags
   const headingRegex = /^#+\s+(.*)/gm; // Matches Markdown headings
   const htmlTagRegex = /<[^>]*>/gm; // Matches HTML tags
-
-  // Replace Markdown headings with their content
+  const urlRegex = /(https?:\/\/\S+)/gm; // Matches URLs starting with "http://" or "https://"
   let plainText = markdownContent.replace(headingRegex, "$1\n");
-
-  // Remove HTML tags
   plainText = plainText.replace(htmlTagRegex, "");
-
+  plainText = plainText.replace(urlRegex, "");
   return plainText;
 }
 

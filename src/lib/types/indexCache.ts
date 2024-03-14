@@ -1,6 +1,6 @@
-export type Folder = {
+export type SubDirectory = {
   name: string;
-  children: FileData[];
+  children: (FileData | SubDirectory)[];
 };
 
 export type FileData = {
@@ -8,4 +8,7 @@ export type FileData = {
   path: string;
 };
 
-export type IndexCache = Folder[];
+export type IndexCache = {
+  name: string;
+  children: (FileData | SubDirectory)[];
+};
