@@ -97,7 +97,7 @@
   },
   "scripting/vars": {
     "name": "vars",
-    "content": "Vars\n\n\nVars allow you to set variables before request, and after your receive the response.\n\nIn the *Pre Request Variables* section, you can write any Strings, Numbers or any valid JavaScript literal.\n\nIn the *Post Response Variables* section, you can write any valid JavaScript expression. The res object is available, allowing you to declaratively parse the [response](./javascript-reference.html#response) and set variables, instead of writing scripts to do the same.\n\nFor parsing the response, you can checkout the [response query](./response-object) that allows you to easily query your response.\n\n**Example:**\n![bru vars](/screenshots/vars.webp)\n\n![Screenshot showing how to use defined variables in the request body](/screenshots/set-vars.png)\n",
+    "content": "Vars\n\n\nVars allow you to set variables before request, and after your receive the response.\n\nIn the *Pre Request Variables* section, you can write any Strings, Numbers or any valid JavaScript literal.\n\nIn the *Post Response Variables* section, you can write any valid JavaScript expression. The res object is available, allowing you to declaratively parse the [response](./javascript-reference.html#response) and set variables, instead of writing scripts to do the same.\n\nFor parsing the response, you can checkout the [response query](./response-object) that allows you to easily query your response.\n\n**Example:**\n![bru vars](/screenshots/vars.webp)\n\n![Screenshot showing how to use defined variables in the request body](/screenshots/set-vars.webp)\n",
     "parentName": "scripting",
     "path": "scripting/vars"
   },
@@ -109,7 +109,7 @@
   },
   "secrets-management/dotenv-file": {
     "name": "dotenv-file",
-    "content": "Secrets Management\n\n\nDotEnv File\n\n\nThis approach is inspired by how usually developers manage secrets in their source code.\n\nIn this approach, you can store all your secrets in a `.env` file at the root of your collection folder.\n\nBruno will automatically load the secrets from this file and make them available to your collection via `process.env.`.\n\n![dot env vars](/screenshots/dot-env-vars.png)\n\nYour environment file at `environments/local.bru` would look like\n```bash filename=\"local.bru\"\nvars {\n  host: \n  jwtToken: {{process.env.JWT_TOKEN}}\n}\n```\n\nAnd now you can safely check in your collection to source control without worrying about exposing your secrets.\nDon't forget to add `.env` to your `.gitignore` file.\n\nYou can store a `.env.sample` file in your collection folder to help other developers get started with the collection.\n",
+    "content": "Secrets Management\n\n\nDotEnv File\n\n\nThis approach is inspired by how usually developers manage secrets in their source code.\n\nIn this approach, you can store all your secrets in a `.env` file at the root of your collection folder.\n\nBruno will automatically load the secrets from this file and make them available to your collection via `process.env.`.\n\n![dot env vars](/screenshots/dot-env-vars.webp)\n\nYour environment file at `environments/local.bru` would look like\n```bash filename=\"local.bru\"\nvars {\n  host: \n  jwtToken: {{process.env.JWT_TOKEN}}\n}\n```\n\nAnd now you can safely check in your collection to source control without worrying about exposing your secrets.\nDon't forget to add `.env` to your `.gitignore` file.\n\nYou can store a `.env.sample` file in your collection folder to help other developers get started with the collection.\n",
     "parentName": "secrets-management",
     "path": "secrets-management/dotenv-file"
   },
@@ -121,19 +121,19 @@
   },
   "secrets-management/secret-variables": {
     "name": "secret-variables",
-    "content": "Secrets Management\n\n\nSecret Variables\n\n\nIn this approach, you can check the `secret` checkbox for any variable in your environment.\n\nBruno will manage your secrets internally and will not write them into the environment file.\n\n![secret variables](/screenshots/secret-variables.png)\n\nYour environment file at `environments/local.bru` would look like\n```bash filename=\"local.bru\"\nvars {\n  host: \n}\nvars:secret [\n  jwtToken\n]\n\n```\n\nAnd now you can safely check in your collection to source control without worrying about exposing your secrets.\n\nWhen you export your collection as a file, Bruno will not export the secret variables.\n",
+    "content": "Secrets Management\n\n\nSecret Variables\n\n\nIn this approach, you can check the `secret` checkbox for any variable in your environment.\n\nBruno will manage your secrets internally and will not write them into the environment file.\n\n![secret variables](/screenshots/secret-variables.webp)\n\nYour environment file at `environments/local.bru` would look like\n```bash filename=\"local.bru\"\nvars {\n  host: \n}\nvars:secret [\n  jwtToken\n]\n\n```\n\nAnd now you can safely check in your collection to source control without worrying about exposing your secrets.\n\nWhen you export your collection as a file, Bruno will not export the secret variables.\n",
     "parentName": "secrets-management",
     "path": "secrets-management/secret-variables"
   },
   "testing/assertions": {
     "name": "assertions",
-    "content": "Assertions\n\n\nAssertions allow you to declaratively write tests.\n\nThis should cover most of your testing needs. For complex tests, you can write test scripts.\n\n**Example:**\n![bru assertions](/screenshots/assertions.png)",
+    "content": "Assertions\n\n\nAssertions allow you to declaratively write tests.\n\nThis should cover most of your testing needs. For complex tests, you can write test scripts.\n\n**Example:**\n![bru assertions](/screenshots/assertions.webp)",
     "parentName": "testing",
     "path": "testing/assertions"
   },
   "testing/introduction": {
     "name": "introduction",
-    "content": "Scripting\n\n\nBruno offers scripting support to help you to add additional functionality to the tool such as data generation, validation and integration with other tools and systems, including sending intermediate requests, parsing response data, updating environment variables, etc.\n\n![bru lang sample](/screenshots/scripting.png)\n",
+    "content": "Scripting\n\n\nBruno offers scripting support to help you to add additional functionality to the tool such as data generation, validation and integration with other tools and systems, including sending intermediate requests, parsing response data, updating environment variables, etc.\n\n![bru lang sample](/screenshots/scripting.webp)\n",
     "parentName": "testing",
     "path": "testing/introduction"
   },
