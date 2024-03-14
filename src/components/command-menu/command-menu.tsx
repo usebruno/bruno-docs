@@ -94,8 +94,13 @@ export const CommandMenu = ({
               />
             </div>
           ) : (
-            <div className="flex flex-col w-full justify-center py-6">
-              <Typography variant="muted">No recent searches</Typography>
+            <div className="flex flex-col w-full justify-center py-6 text-center">
+              <Typography variant="muted">
+                No recent searches. <br />
+              </Typography>
+              <Typography variant="small" className="mt-4">
+                We will add suggestions here in the future !
+              </Typography>
             </div>
           )
         ) : Object.keys(results || {}).length === 0 ? (
