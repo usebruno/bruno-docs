@@ -179,10 +179,7 @@ Set the Bruno environment variable
 
 **Example:**
 ```javascript
-function onResponse(res) {
-let data = res.getBody();
-let token = bru.setEnvVar("access_token", data.token);
-}
+bru.setEnvVar("access_token", res.body.token)
 ```
 
 ## Collection Variables
