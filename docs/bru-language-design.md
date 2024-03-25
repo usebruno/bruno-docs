@@ -7,7 +7,7 @@ There are three kinds of blocks
 - Array blocks
 
 ### Dictionary block
-A dictionary block contains of a set of key value pairs. <br />
+A dictionary block consists of a set of key-value pairs. <br />
 ```bash
 get {
   url: https://api.textlocal.in/send
