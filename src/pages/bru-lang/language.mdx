@@ -1,0 +1,52 @@
+# Language Design
+
+A Bru file is made up of blocks.
+There are three kinds of blocks
+- Dictionary block
+- Text blocks
+- Array blocks
+
+### Dictionary block
+A dictionary block contains of a set of key value pairs. <br />
+```bash
+get {
+  url: https://api.textlocal.in/send
+}
+
+headers {
+  content-type: application/json
+  Authorization: Bearer 123
+  ~transaction-id: {{transactionId}}
+}
+```
+Any key in the dictionary block can be prefixed with `~` to indicate that it is disabled.
+
+### Text block
+A text block is a set of lines
+```bash
+body {
+  {
+    "hello": "world"
+  }
+}
+
+tests {
+  expect(res.status).to.equal(200);
+}
+```
+
+### Array block
+An array block is a list of strings
+```bash
+vars:secret [
+  access_key,
+  access_secret,
+  ~transactionId
+]
+```
+Any key in the array block can be prefixed with `~` to indicate that it is disabled.
+
+
+
+
+
