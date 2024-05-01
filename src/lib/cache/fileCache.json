@@ -47,6 +47,24 @@
     "parentName": "introduction",
     "path": "introduction/support"
   },
+  "license-management/organization/activate-license": {
+    "name": "activate-license",
+    "content": "Activate Organization License\n\n\nBelow are the steps to activate an organization license.\n\nStep 1: Click on the key icon in Bruno\n\nThe key icon is located at the bottom left corner of the Bruno window. Click on the key icon to open the license management window.\n\n![login](/screenshots/license-management/organization/click-license-icon.png)\n\nStep 2: Select Organization License\n\nSelect the organization option to continue with the organization license activation.\n\n![login-otp](/screenshots/license-management/organization/select-org-license.png)\n\nStep 3: Enter License details\n\nEnter the license key and your email and click on the `Activate` button to activate the license.\n\n![login-otp](/screenshots/license-management/organization/enter-license-details.png)\n\nStep 4: License Activated\n\nOnce the license is activated, you will see a success message.\n\n![login-otp](/screenshots/license-management/organization/license-activated.png)",
+    "parentName": "license-management",
+    "path": "license-management/organization/activate-license"
+  },
+  "license-management/organization/manage-licenses": {
+    "name": "manage-licenses",
+    "content": "Manage Organization Licenses\n\n\nYou can manage your organization's licenses by visiting [Bruno License Manager](\n\nBelow are the steps to manage your organization's licenses:\n\nStep 1: Login to Bruno License Manager\n\nPlease enter your email to login to Bruno License Manager.\n\n![login](/screenshots/license-management/organization/login.png)\n\nStep 2: Enter the OTP\n\nPlease enter the OTP sent to your email.\n\n![login-otp](/screenshots/license-management/organization/login-otp.png)\n\nStep 3: Manage Licenses\n\nYou can view and manage your organization's licenses here.\n\n![login-otp](/screenshots/license-management/organization/user-licenses.png)\n\nPlease note that you need manually share the license key with your team members. \nIn the upcoming releases, we will add the ability to send the license key to your team members via email.\n",
+    "parentName": "license-management",
+    "path": "license-management/organization/manage-licenses"
+  },
+  "license-management/overview": {
+    "name": "overview",
+    "content": "License Management\n\n\nOrganization License\n\n  * [Managing License](/license-management/organization/manage-licenses)\n  * [Activating License](/secrets-management/secret-variables)\n",
+    "parentName": "license-management",
+    "path": "license-management/overview"
+  },
   "scripting/external-libraries": {
     "name": "external-libraries",
     "content": "External Libraries\n\n\nBruno supports loading any npm module to use in your scripting workflows.\n\nYou need to add a `package.json` file where your collection is stored.\n```js\n{\n  \"name\": \"github-rest-api-collection\",\n  \"version\": \"1.0.0\",\n  \"main\": \"index.js\",\n  \"homepage\": \"\n  \"dependencies\": {\n    \"@faker-js/faker\": \"8.3.1\"\n  }\n}\n```\n\nAnd then run npm install inside your collection folder\n```bash\nnpm install\n```\n\nAnd then you can require the node module in your script as usual.\n**Example:**\n```js\nconst { faker } = require('@faker-js/faker');\n\nconst randomName = faker.name.fullName();\nconst randomEmail = faker.internet.email();\n\nreq.setBody({\n  name: randomName,\n  email: randomEmail\n});\n```\n",
@@ -97,7 +115,7 @@
   },
   "scripting/vars": {
     "name": "vars",
-    "content": "Vars\n\n\nVars allow you to set variables before request, and after your receive the response.\n\nIn the *Pre Request Variables* section, you can write any Strings, Numbers or any valid JavaScript literal.\n\nIn the *Post Response Variables* section, you can write any valid JavaScript expression. The res object is available, allowing you to declaratively parse the [response](./javascript-reference.html#response) and set variables, instead of writing scripts to do the same.\n\nFor parsing the response, you can checkout the [response query](./response-object) that allows you to easily query your response.\n\n**Example:**\n![bru vars](/screenshots/vars.webp)\n\n![Screenshot showing how to use defined variables in the request body](/screenshots/set-vars.webp)\n",
+    "content": "Vars\n\n\nVars allow you to set variables before request, and after you receive the response.\n\nVars are available **both at collection and request level**.\n\nIn the *Pre Request Variables* section, you can write any Strings, Numbers or any valid JavaScript literal.\n\nIn the *Post Response Variables* section, you can write any valid JavaScript expression. The res object is available, allowing you to declaratively parse the [response](./javascript-reference.html#response) and set variables, instead of writing scripts to do the same.\n\nFor parsing the response, you can checkout the [response query](./response-object) that allows you to easily query your response.\n\n**Example:**\n![bru vars](/screenshots/vars.webp)\n\n![Screenshot showing how to use defined variables in the request body](/screenshots/set-vars.webp)\n",
     "parentName": "scripting",
     "path": "scripting/vars"
   },
@@ -133,7 +151,7 @@
   },
   "testing/introduction": {
     "name": "introduction",
-    "content": "Scripting\n\n\nBruno offers scripting support to help you to add additional functionality to the tool such as data generation, validation and integration with other tools and systems, including sending intermediate requests, parsing response data, updating environment variables, etc.\n\n![bru lang sample](/screenshots/scripting.webp)\n",
+    "content": "Testing\n\n\nBruno supports writing automation test scripts in JavaScript for your API requests to assert its behaviour.\n\nSome of the benefits include\n- Increased efficiency: The tests can be run repeatedly, reducing the time and effort required for manual testing.\n- Increased coverage: Automated tests can cover a larger range of scenarios and edge cases compared to manual testing.\n- Continuous integration/continuous delivery (CI/CD): Automated API tests can be integrated into a CI/CD pipeline, ensuring that API changes are thoroughly tested before deployment.\n- Easier maintenance: Automated tests can be easily updated as the API evolves, reducing the maintenance burden compared to manual tests.\n- Easier regression testing: Automated tests can be easily repeated after changes are made to the API, reducing the time required for regression testing.\n\n**Example:**\n```javascript\ntest(\"should be able to login\", function() {\n  const data = res.getBody();\n  expect(res.getStatus()).to.equal(200);\n});\n\ntest(\"should receive the token\", function() {\n  const data = res.getBody();\n  expect(data.token).to.be.a('string');\n});\n```\n\n**Screenshot:**\n\n![bru lang sample](/screenshots/testing.webp)\n",
     "parentName": "testing",
     "path": "testing/introduction"
   },

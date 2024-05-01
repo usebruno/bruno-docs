@@ -138,5 +138,27 @@
         "path": "testing/javascript-reference"
       }
     ]
+  },
+  {
+    "name": "License Management",
+    "children": [
+      {
+        "name": "Overview",
+        "path": "license-management/overview"
+      },
+      {
+        "name": "Organization",
+        "children": [
+          {
+            "name": "Manage Organization Licenses",
+            "path": "license-management/organization/manage-licenses"
+          },
+          {
+            "name": "Activate Organization License",
+            "path": "license-management/organization/activate-license"
+          }
+        ]
+      }
+    ]
   }
 ]

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build --output dist",
+    "build": "next build",
     "buildCache": "ts-node utils/cache/buildFileCache.ts && ts-node utils/cache/buildIndexCache.ts",
     "start": "next start",
     "lint": "next lint",
