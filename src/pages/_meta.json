@@ -4,5 +4,6 @@
   "bru-cli": "Bru CLI",
   "secrets-management": "Secrets Management",
   "scripting": "Scripting",
-  "testing": "Testing"
+  "testing": "Testing",
+  "license-management": "License Management"
 }
