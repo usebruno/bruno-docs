@@ -1,20 +1,27 @@
-# Getting Started with Bruno
+import {
+  Button
+} from "../../components/ui/button";
+import Link from "next/link";
+
+# Importing existing collections
 
 You can import collections from various sources such as Postman, Bruno, OpenAPI, or Insomnia:
+Currently, the following sources are supported:
+- Postman
+- Bruno
+- OpenAPI v3
+- Insomnia
 
-1. Export the desired collection from your tool of choice, such as Postman, using the export feature.
-2. In Bruno, navigate to the import features and select "Import Postman Collection."
-3. After selecting the collection, choose a location on your computer to store it, and proceed with the import.
+Here are our guides on how to import collections from some of these sources:
 
-Congratulations! You have successfully imported your first collection into Bruno!
+<div className="flex items-center mt-4">
+  <Button asChild className="mr-2">
+    <Link href="/migration-imports/postman">
+        Postman
+    </Link>
+  </Button>
+  <Button disabled className="mr-2">Bruno</Button>
+  <Button disabled className="mr-2">OpenAPI</Button>
+  <Button disabled className="mr-2">Insomnia</Button>
+</div>
 
-### Importing Environments
-
-You can also import environments into Bruno, if available:
-
-1. In Postman, navigate to the environment tab on the left side.
-2. Export the environment from Postman.
-
-Then, follow similar steps to import the environment into Bruno.
-
-This enables you to seamlessly transition your existing collections and environments into Bruno for further use and management.
