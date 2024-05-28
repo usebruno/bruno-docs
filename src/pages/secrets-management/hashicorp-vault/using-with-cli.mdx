@@ -21,7 +21,7 @@ secrets.json
 {
   "type": "vault",
   "cli": {
-    "provider": "vault-server",
+    "type": "vault-server",
     "vaultServerConfig": {
       "url": "http://localhost:8200",
       "namespace": "bruno",
@@ -62,7 +62,7 @@ secrets.json
 {
   "type": "vault",
   "cli": {
-    "provider": "vault-server",
+    "type": "vault-server",
     "vaultServerConfig": {
       "url": "http://localhost:8200",
       "namespace": "bruno",
@@ -104,7 +104,7 @@ secrets.json
 {
   "type": "vault",
   "cli": {
-    "provider": "vault-cloud",
+    "type": "vault-cloud",
     "vaultCloudConfig": {
       "auth": {
         "method": "client-credentials",
@@ -115,7 +115,7 @@ secrets.json
           "clientSecret": "{{clientSecret}}"
         }
       },
-      "projects": {
+      "project": {
         "name": "{{projectName}}",
         "projectId": "{{projectId}}",
         "organizationId": "{{organizationId}}"
