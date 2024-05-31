@@ -3,7 +3,7 @@ import { Translator } from "../../components/translator/translator";
 export async function getStaticProps() {
   const fs = require('fs');
   const path = require('path');
-  const themesDir = path.join(process.cwd(), 'node_modules/monaco-themes/themes');
+  const themesDir = path.join(process.cwd(), 'src/components/translator/themes');
   const themeFiles = fs.readdirSync(themesDir);
   const themes = themeFiles
     .filter(file => file.endsWith('.json'))

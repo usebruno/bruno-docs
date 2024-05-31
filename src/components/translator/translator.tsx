@@ -1,5 +1,5 @@
 "use client";
-import { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import { useData } from 'nextra/data'
 import { Editor, useMonaco } from "@monaco-editor/react";
 import { postmanTranslation } from "@/components/translator/postman-translation";
@@ -59,7 +59,7 @@ const ToolBar = ({ copyClipboard, openDialog, setOpenDialog, editorTheme, setEdi
       setEditorBg(theme === 'vs-dark' ? '#1E1E1E' : '#fff')
       return;
     }
-    const { default: themeData } = await import(`monaco-themes/themes/${theme}.json`);
+    const { default: themeData } = await import(`./themes/${theme}.json`);
     console.log('dynamically imported theme : ', transformThemeName(theme), themeData)
     monaco?.editor.defineTheme(transformThemeName(theme), themeData);
     monaco?.editor.setTheme(theme);
