@@ -1,0 +1,25 @@
+import { Translator } from "../../components/translator/translator";
+
+export async function getStaticProps() {
+  const fs = require('fs');
+  const path = require('path');
+  const themesDir = path.join(process.cwd(), 'node_modules/monaco-themes/themes');
+  const themeFiles = fs.readdirSync(themesDir);
+  const themes = themeFiles
+    .filter(file => file.endsWith('.json'))
+    .map(file => file.replace('.json', ''));
+  return {
+    props: {
+      ssg: {
+        themes
+      }
+    }
+  };
+}
+
+# Scripts Translator
+
+Welcome to the **Postman** to **Bruno** scripts translator. \
+This is the same function that runs behind the **Import Postman Collection** feature in Bruno
+
+<Translator />

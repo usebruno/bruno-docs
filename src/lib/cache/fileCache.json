@@ -73,7 +73,7 @@
   },
   "migration-imports/introduction": {
     "name": "introduction",
-    "content": "Getting Started with Bruno\n\n\nYou can import collections from various sources such as Postman, Bruno, OpenAPI, or Insomnia:\n\n1. Export the desired collection from your tool of choice, such as Postman, using the export feature.\n2. In Bruno, navigate to the import features and select \"Import Postman Collection.\"\n3. After selecting the collection, choose a location on your computer to store it, and proceed with the import.\n\nCongratulations! You have successfully imported your first collection into Bruno!\n\nImporting Environments\n\n\nYou can also import environments into Bruno, if available:\n\n1. In Postman, navigate to the environment tab on the left side.\n2. Export the environment from Postman.\n\nThen, follow similar steps to import the environment into Bruno.\n\nThis enables you to seamlessly transition your existing collections and environments into Bruno for further use and management.\n",
+    "content": "import {\n  Button\n} from \"../../components/ui/button\";\nimport Link from \"next/link\";\n\nImporting existing collections\n\n\nYou can import collections from various sources such as Postman, Bruno, OpenAPI, or Insomnia:\nCurrently, the following sources are supported:\n- Postman\n- Bruno\n- OpenAPI v3\n- Insomnia\n\nHere are our guides on how to import collections from some of these sources:\n\n\n  \n    \n        Postman\n    \n  \n  Bruno\n  OpenAPI\n  Insomnia\n\n\n",
     "parentName": "migration-imports",
     "path": "migration-imports/introduction"
   },

@@ -1,6 +1,10 @@
 import '@/app/globals.css'
 import {useConfig} from "nextra-theme-docs";
+import { Toaster } from "@/components/ui/sonner";
 
 export default function App({ Component, pageProps }) {
-  return <Component {...pageProps} />
+  return <>
+    <Component {...pageProps} />
+    <Toaster />
+  </>
 }
