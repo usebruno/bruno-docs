@@ -59,8 +59,8 @@ const ToolBar = ({ copyClipboard, openDialog, setOpenDialog, editorTheme, setEdi
       setEditorBg(theme === 'vs-dark' ? '#1E1E1E' : '#fff')
       return;
     }
-    const { default: themeData } = await import(`./themes/${theme}.json`);
-    console.log('dynamically imported theme : ', transformThemeName(theme), themeData)
+    const { default: themeData } = await import(`@/components/translator/themes/${theme}.json`);
+    console.log('dynamically imported theme : ', transformThemeName(theme), theme, themeData)
     monaco?.editor.defineTheme(transformThemeName(theme), themeData);
     monaco?.editor.setTheme(theme);
     setEditorTheme(transformThemeName(theme));
