@@ -21,7 +21,7 @@ const compiledReplacements = Object.entries(replacements).map(([pattern, replace
   replacement
 }));
 
-export const postmanTranslation = (script: string) => {
+export const utils = (script: string) => {
   try {
     let modifiedScript = script;
     for (const { regex, replacement } of compiledReplacements) {
@@ -37,3 +37,20 @@ export const postmanTranslation = (script: string) => {
     return script;
   }
 };
+
+export const transformThemeName = (name: string) => {
+  return name
+    .replace(/ /g, '-')
+    .replace(/[()]/g, "")
+    .toLowerCase()
+}
+
+export const prettifyName = (name: string) => {
+  return name
+    .replace(/-/g, ' ')
+    .replace(/vs/g, 'VS')
+    .replace(/dark/g, 'Dark')
+    .replace(/light/g, 'Light')
+    // capitalize the first letter of each word
+    .replace(/\b\w/g, (char) => char.toUpperCase())
+}
