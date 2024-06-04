@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { utils } from "@/components/translator/utils";
 import {
   Dialog,
@@ -31,14 +31,23 @@ export const Translator = () => {
       toast('Copied to clipboard !')
     })
   }
+  const savePmCode = (code: string[]) => {
+    localStorage.setItem('pmCode', JSON.stringify(code));
+    setPmCode(code);
+  }
+  useEffect(() => {
+    const savedPmCode = localStorage.getItem('pmCode');
+    if (savedPmCode) {
+      setPmCode(JSON.parse(savedPmCode));
+    }
+  }, []);
   return (
     <div className="flex flex-col items-start w-full mt-2">
       <div className="flex items-center justify-between w-full">
         <Dialog open={openDialog} onOpenChange={() => setOpenDialog(!openDialog)}>
-          <DialogContent className="max-w-[calc(100dvw-64px)] w-full h-full max-h-[calc(100dvh-64px)]">
+          <DialogContent className="max-w-[calc(100dvw-64px)] w-full h-full max-h-[calc(100dvh-64px)] bg-transparent p-0 border-0">
             <DialogHeader>
-              <DialogTitle>Postman to Bruno translator</DialogTitle>
-              <DialogDescription>
+              <DialogDescription className="p-0">
                 <ToolBar
                   copyClipboard={copyClipboard}
                   openDialog={openDialog}
@@ -48,12 +57,12 @@ export const Translator = () => {
                   setEditorBg={setEditorBg}
                   layoutMode={layoutMode}
                   setLayoutMode={setLayoutMode}
-                  className="mt-4"
+                  className="bg-white dark:bg-zinc-900 -mt-1 rounded-md p-2"
                 />
                 <EditorLayout
                   pmCode={pmCode}
                   computedTranslation={computedTranslation}
-                  setPmCode={setPmCode}
+                  setPmCode={savePmCode}
                   layoutMode={layoutMode}
                   editorTheme={editorTheme}
                   editorBg={editorBg}
@@ -80,7 +89,7 @@ export const Translator = () => {
           <EditorLayout
             pmCode={pmCode}
             computedTranslation={computedTranslation}
-            setPmCode={setPmCode}
+            setPmCode={savePmCode}
             layoutMode={layoutMode}
             editorTheme={editorTheme}
             editorBg={editorBg}

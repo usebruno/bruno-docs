@@ -49,7 +49,7 @@ export const EditorLayout = ({ pmCode, computedTranslation, setPmCode, layoutMod
         direction={
           rowMode ? "horizontal" : "vertical"
         }
-        className={cn('w-full rounded-lg border min-h-[500px] max-w-[calc(100dvw-112px)]', computedHeightClasses)}
+        className={cn('w-full rounded-lg border min-h-[500px] max-w-[calc(100dvw-64px)]', computedHeightClasses)}
       >
         <ResizablePanel
           defaultSize={50}
@@ -64,7 +64,7 @@ export const EditorLayout = ({ pmCode, computedTranslation, setPmCode, layoutMod
           <Editor
             options={editorOptions}
             className={cn(editorClasses, "pl-2", rowMode ? "pr-1 py-2" : "pr-2 pt-2 pb-1")}
-            height={openDialog ? rowMode ? "75dvh" : "37.5dvh" : rowMode ? 500 : 300}
+            height={openDialog ? rowMode ? "80dvh" : "37.5dvh" : rowMode ? 500 : 300}
             defaultLanguage="javascript"
             defaultValue={pmCode.join("\n")}
             onChange={(value) => setPmCode(value?.split("\n") || [])}
@@ -79,7 +79,7 @@ export const EditorLayout = ({ pmCode, computedTranslation, setPmCode, layoutMod
           <Editor
             options={editorOptions}
             className={cn(editorClasses, "pr-2", rowMode ? "pl-1 py-2" : "pl-2 pt-1 pb-2")}
-            height={openDialog ? rowMode ? "75dvh" : "37.5dvh" : rowMode ? 500 : 300}
+            height={openDialog ? rowMode ? "calc(80dvh" : "37.5dvh" : rowMode ? 500 : 300}
             defaultLanguage="javascript"
             value={computedTranslation.join("\n")}
             theme={transformThemeName(editorTheme ?? "vs-dark")}
