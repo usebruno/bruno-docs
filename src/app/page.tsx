@@ -24,7 +24,7 @@ export default function Home() {
       </Typography>
       <div className="flex items-center mt-6">
         <Button asChild>
-          <Link href="/introduction">Get started</Link>
+          <Link href="/introduction/getting-started">Get started</Link>
         </Button>
         <Button variant="outline" asChild>
           <Link href="https://github.com/usebruno/bruno" className="ml-4">

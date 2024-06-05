@@ -14,10 +14,7 @@ There are 3 different CLI configurations that can be used.
 
 #### Vault server with token authentication
 
-```json
-secrets.json
-
-
+```json filename="secrets.json"
 {
   "type": "vault",
   "cli": {
@@ -55,9 +52,7 @@ bru run folder --env Prod --env-var authToken=your-vault-token
 <br />
 #### Vault server with appRole authentication
 
-```json
-secrets.json
-
+```json filename="secrets.json"
 
 {
   "type": "vault",
@@ -97,9 +92,7 @@ bru run folder --env Prod --env-var roleId=your-role-id --env-var secretId=your-
 <br />
 #### Vault cloud with client credentials authentication
 
-```json
-secrets.json
-
+```json filename="secrets.json"
 
 {
   "type": "vault",
