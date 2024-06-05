@@ -1,0 +1,164 @@
+[
+  {
+    "name": "Introduction",
+    "children": [
+      {
+        "name": "Index",
+        "path": "introduction"
+      },
+      {
+        "name": "Manifesto",
+        "path": "introduction/manifesto"
+      },
+      {
+        "name": "Support",
+        "path": "introduction/support"
+      }
+    ]
+  },
+  {
+    "name": "Bru Lang",
+    "children": [
+      {
+        "name": "Overview",
+        "path": "bru-lang/overview"
+      },
+      {
+        "name": "Samples",
+        "path": "bru-lang/samples"
+      },
+      {
+        "name": "Language",
+        "path": "bru-lang/language"
+      },
+      {
+        "name": "Tag Reference",
+        "path": "bru-lang/tag-reference"
+      },
+      {
+        "name": "Syntax Highlighting",
+        "path": "bru-lang/syntax-highlighting"
+      }
+    ]
+  },
+  {
+    "name": "Bru CLI",
+    "children": [
+      {
+        "name": "Overview",
+        "path": "bru-cli/overview"
+      }
+    ]
+  },
+  {
+    "name": "Secrets Management",
+    "children": [
+      {
+        "name": "Overview",
+        "path": "secrets-management/overview"
+      },
+      {
+        "name": "Dotenv File",
+        "path": "secrets-management/dotenv-file"
+      },
+      {
+        "name": "Secret Variables",
+        "path": "secrets-management/secret-variables"
+      }
+    ]
+  },
+  {
+    "name": "Scripting",
+    "children": [
+      {
+        "name": "Getting Started",
+        "path": "scripting/getting-started"
+      },
+      {
+        "name": "Variables",
+        "path": "scripting/vars"
+      },
+      {
+        "name": "Response",
+        "children": [
+          {
+            "name": "Response Query",
+            "path": "scripting/response/response-query"
+          },
+          {
+            "name": "Response Object",
+            "path": "scripting/response/response-object"
+          }
+        ]
+      },
+      {
+        "name": "Request",
+        "children": [
+          {
+            "name": "Request Object",
+            "path": "scripting/request/request-object"
+          },
+          {
+            "name": "Sync Requests",
+            "path": "scripting/request/sync-requests"
+          }
+        ]
+      },
+      {
+        "name": "Inbuilt Libraries",
+        "path": "scripting/inbuilt-libraries"
+      },
+      {
+        "name": "External Libraries",
+        "path": "scripting/external-libraries"
+      },
+      {
+        "name": "Whitelisting Modules",
+        "path": "scripting/whitelisting-modules"
+      },
+      {
+        "name": "Javascript Reference",
+        "path": "scripting/javascript-reference"
+      }
+    ]
+  },
+  {
+    "name": "Testing",
+    "children": [
+      {
+        "name": "Introduction",
+        "path": "testing/introduction"
+      },
+      {
+        "name": "Assertions",
+        "path": "testing/assertions"
+      },
+      {
+        "name": "JavaScript Reference",
+        "path": "testing/javascript-reference"
+      }
+    ]
+  },
+  {
+    "name": "License Management",
+    "children": [
+      {
+        "name": "Overview",
+        "path": "license-management/overview"
+      },
+      {
+        "name": "Organization",
+        "children": [
+          {
+            "name": "Manage Organization Licenses",
+            "path": "license-management/organization/manage-licenses"
+          },
+          {
+            "name": "Activate Organization License",
+            "path": "license-management/organization/activate-license"
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,196 @@
+# Bru Tag Reference
+
+## meta
+Store metadata about your request
+```bash
+meta {
+  name: Get users,
+  type: http
+  seq: 1
+}
+```
+
+The `seq` is used to store the sequence number. This decides the sort position of your request in the UI.
+The `type` can be either `http` or `graphql`
+
+## get
+
+Make a `GET` http call
+```bash
+get {
+  url: https://api.github.com/users/usebruno
+}
+```
+## post
+
+Make a `POST` http call
+```bash
+post {
+  url: https://api.github.com/users/usebruno
+}
+```
+## put
+
+Make a `PUT` http call
+```bash
+put {
+  url: https://api.github.com/users/usebruno
+}
+```
+## delete
+
+Make a `DELETE` http call
+```bash
+delete {
+  url: https://api.github.com/users/usebruno
+}
+```
+## options
+
+Make a get `OPTIONS` call
+```bash
+options {
+  url: https://api.github.com/users/usebruno
+}
+```
+## trace
+
+Make a `TRACE` http call
+```bash
+trace {
+  url: https://api.github.com/users/usebruno
+}
+```
+## connect
+
+Make a `CONNECT` http call
+```bash
+connect {
+  url: https://api.github.com/users/usebruno
+}
+```
+## head
+
+Make a `HEAD` http call
+```bash
+head {
+  url: https://api.github.com/users/usebruno
+}
+```
+## query
+
+The request query params
+```bash
+get {
+  url: https://api.textlocal.in/send?apiKey=secret&numbers=9988776655&message=hello
+}
+
+query {
+  apiKey: secret
+  numbers: 9988776655
+  message: hello
+}
+```
+## headers
+
+The request query headers
+```bash
+get {
+  url: https://api.textlocal.in/send?apiKey=secret&numbers=9988776655&message=hello
+}
+
+headers {
+  content-type: application/json
+  Authorization: Bearer topsecret
+}
+```
+
+## body
+The request body (defaults to json)
+```bash
+body {
+  {
+    username: 'john',
+    password: 'governingdynamics'
+  }
+}
+```
+## body:text
+The request body as text
+```bash
+body:text {
+  This is a text body
+}
+```
+## body:xml
+The request body as xml
+```bash
+body:xml {
+  <xml>
+    <name>John</name>
+    <age>30</age>
+  </xml>
+}
+```
+## body:form-urlencoded
+The request body as form-urlencoded
+```bash
+body:form-urlencoded {
+  apikey: secret
+  numbers: +91998877665
+  ~message: hello
+}
+```
+## body:multipart-form
+The request body as multipart-form
+```bash
+body:multipart-form {
+  apikey: secret
+  numbers: +91998877665
+  ~message: hello
+}
+```
+## body:graphql
+The request body as graphql
+```bash
+body:graphql {
+  {
+    launchesPast {
+      launch_site {
+        site_name
+      }
+      launch_success
+    }
+  }
+}
+```
+## body:graphql:vars
+The request body as graphql vars
+```bash
+body:graphql:vars {
+  {
+    "limit": 5
+  }
+}
+```
+## script:pre-request
+The request body as pre-request
+```bash
+script:pre-request {
+  req.setHeader("Authorization", "{{token}}");
+}
+```
+## script:post-response
+The request body as post-response
+```bash
+script:post-response {
+  bru.setVar("token", res.body.token);
+}
+```
+## test
+The tests
+```bash
+body:test {
+  expect(res.status).to.equal(200);
+}
+```
