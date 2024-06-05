@@ -35,7 +35,11 @@ function readAndFlattenDirectory(
   items.forEach((item: any) => {
     const itemPath = path.join(directoryPath, item);
     const stats = fs.statSync(itemPath);
-    if (item === "_meta.json" || item === "_app.mdx" || item === "index.mdx") {
+    if (
+      item === "_meta.json" ||
+      item === "_app.mdx" ||
+      item === "getting-started.mdx"
+    ) {
       return; // Skip processing _meta.json file-cache
     }
     if (stats.isDirectory()) {

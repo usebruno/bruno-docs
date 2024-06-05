@@ -35,6 +35,12 @@
     "parentName": "bru-lang",
     "path": "bru-lang/tag-reference"
   },
+  "introduction/index": {
+    "name": "index",
+    "content": "import jsonIndexCache from \"@/lib/cache/indexCache.json\";\nimport {Typography} from \"@/components/ui/typography\";\nimport {Button} from \"@/components/ui/button\";\nimport Link from \"next/link\";\nimport {Separator} from \"@/components/ui/separator\";\nimport {cn} from \"@/lib/utils\";\nimport {Component, Dot, FolderDot} from \"lucide-react\";\n\nexport default function Index() {\n  const ListNode = ({ item, depth }) => {\n    const headingLevel = depth > 0 ? \"h4\" : \"h2\"\n\n    return (\n      \n        {depth === 0 && (\n          \n        )}\n        \n          \n          \n            {item.name}\n          \n        \n        \n          {/* Map over children and render each one */}\n          {item.children?.map((child) => (\n            \n              {child.children ? (\n                \n              ) : (\n                \n                  \n                  \n                    \n                      {child.name}\n                    \n                  \n                \n\n              )}\n            \n          ))}\n        \n      \n    );\n  };\n\n  return (\n    \n      {jsonIndexCache?.map((item, index) => (\n        \n      ))}\n    \n  );\n}\n\n",
+    "parentName": "introduction",
+    "path": "introduction/index"
+  },
   "introduction/manifesto": {
     "name": "manifesto",
     "content": "Manifesto\n\n\nIt's time for a revolution in API client technology. The status quo, represented by Postman, has become bloated and unwieldy. We refuse to be shoehorned into a proprietary version control system for collaborating on API collections.\n\nWe are an opensource project, rising up against the monopoly of bloated and closed systems. We believe that API collections should be co-located within your source code repository, serving as a living set of examples on how to use the API.\n\nBut we realized that the current tools on the market export collections as giant JSON files (a.k.a. ugly blobs), difficult to version control and diff. So we created the *Bru Markup language*, saving information about your API requests using plain text files.\n\nWith Bruno, collections become first-class citizens, co-located with related information and easily version controlled. We say goodbye to bloated workspaces and global environments, and embrace the benefits of co-location.\n\nWe dream of a world where developers can clone a code repo, get it up and running, use Bruno to browse the examples on how to use the API and start playing with it. No more horror stories of *\"Tim had the collections for the payment-api service, but he left the company last month.\"*\n\nJoin us in our mission to create a better API client for developers. Say goodbye to bloatware and hello to simplicity, efficiency and freedom. Try Bruno today and experience the difference for yourself.",
@@ -61,21 +67,27 @@
   },
   "license-management/overview": {
     "name": "overview",
-    "content": "License Management\n\n\nOrganization License\n\n  * [Managing License](/license-management/organization/manage-licenses)\n  * [Activating License](/secrets-management/secret-variables)\n",
+    "content": "License Management\n\n\nOrganization License\n\n  * [Managing License](/license-management/organization/manage-licenses)\n  * [Activating License](/license-management/organization/activate-license)\n",
     "parentName": "license-management",
     "path": "license-management/overview"
+  },
+  "migration-imports/introduction": {
+    "name": "introduction",
+    "content": "import {\n  Button\n} from \"../../components/ui/button\";\nimport Link from \"next/link\";\n\nImporting existing collections\n\n\nYou can import collections from various sources such as Postman, Bruno, OpenAPI, or Insomnia:\nCurrently, the following sources are supported:\n- Postman\n- Bruno\n- OpenAPI v3\n- Insomnia\n\nHere are our guides on how to import collections from some of these sources:\n\n\n  \n    \n        Postman\n    \n  \n  Bruno\n  OpenAPI\n  Insomnia\n\n\n",
+    "parentName": "migration-imports",
+    "path": "migration-imports/introduction"
+  },
+  "migration-imports/postman": {
+    "name": "postman",
+    "content": "import Image from 'next/image'\n\nMigrating from Postman\n\n\nCollection Import\n\nOpen Postman and select the collection you want to migrate. Click on the `···` followed by `View more actions` to open the dropdown menu and scroll down until you find `Export`, then click on it.\n\n\n  \n  \n\n\nA popup dialog will appear, select either `Collection v2` or `Collection v2.1` format and click on the `Export` button.\n\n\n\nThe collection will be downloaded as a JSON file. Now open Bruno and select `···` followed by `Import Collection` in the dropdown menu.\\\nA popup dialog will appear, asking you to select the API client you want to import from. Select `Postman Collection` and provide your previously exported collection file.\n\n\n\nYou will then be prompted to select the location where you want to save the imported collection. Select the desired location and click on the `Import` button.\n\n\n\nCongratulations! You have successfully migrated your collection from Postman to Bruno.\\\nYour scripts and tests will be automatically converted to Bruno's syntax.\n\nEnvironment Import\n\n\nOpen Postman and select the environment you want to migrate. Click on the `···` to open the dropdown menu, followed by `Export` and eventually choose a location to save the environment file.\n\n\n\nNow open Bruno and open a collection by clicking on any request.\nA button in the upper right corner will appear, click on it and select `Configure`.\n\n\n\nA dialog will appear, displaying your previously exported environment file. Select the `Import` button in the bottom left corner to proceed.\nSelect `Postman Environment`, provide the environment file and that's it!",
+    "parentName": "migration-imports",
+    "path": "migration-imports/postman"
   },
   "scripting/external-libraries": {
     "name": "external-libraries",
     "content": "External Libraries\n\n\nBruno supports loading any npm module to use in your scripting workflows.\n\nYou need to add a `package.json` file where your collection is stored.\n```js\n{\n  \"name\": \"github-rest-api-collection\",\n  \"version\": \"1.0.0\",\n  \"main\": \"index.js\",\n  \"homepage\": \"\n  \"dependencies\": {\n    \"@faker-js/faker\": \"8.3.1\"\n  }\n}\n```\n\nAnd then run npm install inside your collection folder\n```bash\nnpm install\n```\n\nAnd then you can require the node module in your script as usual.\n**Example:**\n```js\nconst { faker } = require('@faker-js/faker');\n\nconst randomName = faker.name.fullName();\nconst randomEmail = faker.internet.email();\n\nreq.setBody({\n  name: randomName,\n  email: randomEmail\n});\n```\n",
     "parentName": "scripting",
     "path": "scripting/external-libraries"
-  },
-  "scripting/getting-started": {
-    "name": "getting-started",
-    "content": "Scripting\n\n\nBruno offers scripting support to help you to add additional functionality to the tool such as data generation, validation and integration with other tools and systems, including sending intermediate requests, parsing response data, updating environment variables, etc.\n\n![bru lang sample](/screenshots/scripting.webp)\n",
-    "parentName": "scripting",
-    "path": "scripting/getting-started"
   },
   "scripting/inbuilt-libraries": {
     "name": "inbuilt-libraries",

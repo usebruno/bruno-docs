@@ -3,8 +3,8 @@
     "name": "Introduction",
     "children": [
       {
-        "name": "Index",
-        "path": "introduction"
+        "name": "Getting Started",
+        "path": "introduction/getting-started"
       },
       {
         "name": "Manifesto",
@@ -13,6 +13,10 @@
       {
         "name": "Support",
         "path": "introduction/support"
+      },
+      {
+        "name": "Index",
+        "path": "introduction"
       }
     ]
   },
@@ -136,6 +140,19 @@
       {
         "name": "JavaScript Reference",
         "path": "testing/javascript-reference"
+      }
+    ]
+  },
+  {
+    "name": "Migration & Imports",
+    "children": [
+      {
+        "name": "Introduction",
+        "path": "migration-imports/introduction"
+      },
+      {
+        "name": "Postman",
+        "path": "migration-imports/postman"
       }
     ]
   },
