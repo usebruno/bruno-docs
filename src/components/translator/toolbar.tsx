@@ -43,8 +43,8 @@ export const ToolBar = ({ copyClipboard, openDialog, setOpenDialog, editorTheme,
     <Suspense fallback={<Badge color="slate">Loading themes...</Badge>}>
       <div
         className={cn(
-        "flex w-full justify-between items-center",
-        openDialog && 'bg-white dark:bg-zinc-900 -mt-1 p-2',
+        "flex w-full justify-between items-center relative z-20",
+        openDialog && 'bg-white dark:bg-zinc-900 p-2',
         className
       )}>
         <div className="flex items-center">
@@ -73,7 +73,7 @@ export const ToolBar = ({ copyClipboard, openDialog, setOpenDialog, editorTheme,
             </ToggleGroup>
           </div>
         </div>
-        <div className={cn('flex items-center', openDialog && 'mr-10')}>
+        <div className={cn('flex items-center')}>
           <Button
             variant="outline"
             className="mr-2 h-10 w-10 p-0"
