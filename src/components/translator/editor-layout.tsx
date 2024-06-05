@@ -15,7 +15,7 @@ export const EditorLayout = ({ pmCode, computedTranslation, setPmCode, layoutMod
   className?: string,
   editorBg?: string
 }) => {
-  const editorClasses = "flex border-zinc-200 dark:border-zinc-700 [&>div]:py-1 [&>div]:!rounded-md [&>div]:overflow-hidden";
+  const editorClasses = `flex [&>div]:py-1 [&>div]:!rounded-md [&>div]:overflow-hidden ${!openDialog && 'border-zinc-200 dark:border-zinc-700'}`;
   const editorOptions = {
     lineDecorationsWidth: 0,
     lineNumbersMinChars: 3,
@@ -34,12 +34,12 @@ export const EditorLayout = ({ pmCode, computedTranslation, setPmCode, layoutMod
   } as any;
   const rowMode = useMemo(() => (layoutMode === "row"), [layoutMode]);
   const computedHeightClasses = useMemo(() => {
-    return openDialog ? "min-h-[calc(75dvh)] h-[calc(75dvh)]" : rowMode ? 'h-[500px]' : 'h-[600px]'
+    return openDialog ? "min-h-[calc(100dvh-52px)] h-[calc(100dvh-52px)]" : rowMode ? 'h-[500px]' : 'h-[600px]'
   }, [openDialog, rowMode]);
   return (
     <div className={cn(
-      "flex items-center w-full rounded-lg",
-      openDialog && 'min-h-[calc(75dvh)]',
+      "flex items-center w-full",
+      openDialog ? 'min-h-[calc(100dvh-52px)]' : 'rounded-lg',
       rowMode ? "flex-row" : "flex-col",
       className
     )}
@@ -49,7 +49,7 @@ export const EditorLayout = ({ pmCode, computedTranslation, setPmCode, layoutMod
         direction={
           rowMode ? "horizontal" : "vertical"
         }
-        className={cn('w-full rounded-lg border min-h-[500px] max-w-[calc(100dvw-64px)]', computedHeightClasses)}
+        className={cn('w-full min-h-[500px] max-w-[calc(100dvw)]', !openDialog && 'border rounded-lg', computedHeightClasses)}
       >
         <ResizablePanel
           defaultSize={50}

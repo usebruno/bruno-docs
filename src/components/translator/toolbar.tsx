@@ -9,7 +9,7 @@ import { Columns2, Copy, Expand, Rows2, Shrink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { prettifyName, transformThemeName } from "./utils";
 
-export const ToolBar = ({ copyClipboard, openDialog, setOpenDialog, editorTheme, setEditorTheme, layoutMode, setLayoutMode, className, setEditorBg }: {
+export const ToolBar = ({ copyClipboard, openDialog, setOpenDialog, editorTheme, setEditorTheme, layoutMode, setLayoutMode, className, editorBg, setEditorBg }: {
   copyClipboard: () => void,
   openDialog: boolean,
   setOpenDialog: (open: boolean) => void,
@@ -18,11 +18,13 @@ export const ToolBar = ({ copyClipboard, openDialog, setOpenDialog, editorTheme,
   layoutMode: "col" | "row",
   setLayoutMode: (mode: "col" | "row") => void,
   className?: string,
+  editorBg: string,
   setEditorBg: (color: string) => void
 }) => {
   const { themes } = useData()
   const monaco = useMonaco();
   const [selectedTheme, setSelectedTheme] = useState(editorTheme);
+
   const handleThemeChange = async (theme: string) => {
     setSelectedTheme(theme);
     if (theme === 'vs-dark' || theme === 'vs-light') {
@@ -32,7 +34,6 @@ export const ToolBar = ({ copyClipboard, openDialog, setOpenDialog, editorTheme,
       return;
     }
     const themeData = await fetch(`/static/themes/${theme}.json`).then(res => res.json());
-    console.log('dynamically imported theme : ', transformThemeName(theme), theme, themeData)
     monaco?.editor.defineTheme(transformThemeName(theme), themeData);
     monaco?.editor.setTheme(theme);
     setEditorTheme(transformThemeName(theme));
@@ -40,7 +41,12 @@ export const ToolBar = ({ copyClipboard, openDialog, setOpenDialog, editorTheme,
   };
   return (
     <Suspense fallback={<Badge color="slate">Loading themes...</Badge>}>
-      <div className={cn("flex w-full justify-between items-center", className)}>
+      <div
+        className={cn(
+        "flex w-full justify-between items-center",
+        openDialog && 'bg-white dark:bg-zinc-900 -mt-1 p-2',
+        className
+      )}>
         <div className="flex items-center">
           <Select onValueChange={handleThemeChange}>
             <SelectTrigger className="mr-2">

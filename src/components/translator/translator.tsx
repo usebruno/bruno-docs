@@ -11,9 +11,12 @@ import {
 import { toast } from "sonner"
 import { ToolBar } from "@/components/translator/toolbar";
 import { EditorLayout } from "@/components/translator/editor-layout";
+import { useTheme } from "next-themes";
 
 
 export const Translator = () => {
+  const { theme, setTheme } = useTheme()
+  const [defaultTheme, setDefaultTheme] = useState(theme);
   const [layoutMode, setLayoutMode] = useState<"col" | "row">("col");
   const [openDialog, setOpenDialog] = useState(false)
   const [editorTheme, setEditorTheme] = useState('vs-dark');
@@ -41,11 +44,18 @@ export const Translator = () => {
       setPmCode(JSON.parse(savedPmCode));
     }
   }, []);
+  useEffect(() => {
+    if (openDialog) {
+      setTheme('dark')
+    } else {
+      setTheme(defaultTheme ?? 'system')
+    }
+  }, [defaultTheme, openDialog, setTheme]);
   return (
     <div className="flex flex-col items-start w-full mt-2">
       <div className="flex items-center justify-between w-full">
         <Dialog open={openDialog} onOpenChange={() => setOpenDialog(!openDialog)}>
-          <DialogContent className="max-w-[calc(100dvw-64px)] w-full h-full max-h-[calc(100dvh-64px)] bg-transparent p-0 border-0">
+          <DialogContent className="max-w-[calc(100dvw)] w-full h-full max-h-[calc(100dvh)] bg-transparent p-0 border-0">
             <DialogHeader>
               <DialogDescription className="p-0">
                 <ToolBar
@@ -54,10 +64,10 @@ export const Translator = () => {
                   setOpenDialog={setOpenDialog}
                   editorTheme={editorTheme}
                   setEditorTheme={setEditorTheme}
+                  editorBg={editorBg}
                   setEditorBg={setEditorBg}
                   layoutMode={layoutMode}
                   setLayoutMode={setLayoutMode}
-                  className="bg-white dark:bg-zinc-900 -mt-1 rounded-md p-2"
                 />
                 <EditorLayout
                   pmCode={pmCode}
@@ -67,7 +77,6 @@ export const Translator = () => {
                   editorTheme={editorTheme}
                   editorBg={editorBg}
                   openDialog
-                  className="mt-4"
                 />
               </DialogDescription>
             </DialogHeader>
@@ -81,6 +90,7 @@ export const Translator = () => {
             openDialog={openDialog}
             setOpenDialog={setOpenDialog}
             editorTheme={editorTheme}
+            editorBg={editorBg}
             setEditorBg={setEditorBg}
             setEditorTheme={setEditorTheme}
             layoutMode={layoutMode}
