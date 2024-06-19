@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import { utils } from "@/components/translator/utils";
+import { postmanTranslation } from "@/components/translator/utils";
 import {
   Dialog,
   DialogContent,
@@ -26,7 +26,7 @@ export const Translator = () => {
   ]);
   const computedTranslation = useMemo(() => {
     return pmCode.map((line, index) => {
-      return utils(line);
+      return postmanTranslation(line);
     });
   }, [pmCode]);
   const copyClipboard = () => {
