@@ -13,15 +13,24 @@ const replacements = {
   'pm\\.expect\\(': 'expect(',
   'pm\\.environment\\.has\\(([^)]+)\\)': 'bru.getEnvVar($1) !== undefined && bru.getEnvVar($1) !== null',
   'pm\\.response\\.code': 'res.getStatus()',
-  'pm\\.response\\.text\\(': 'res.getBody()?.toString('
-};
+  'pm\\.response\\.text\\(': 'res.getBody()?.toString(',
+  'pm\\.expect\\.fail\\(': 'expect.fail(',
+  'pm\\.response\\.responseTime': 'res.getResponseTime()'
+} as Record<string, string>;
 
-const compiledReplacements = Object.entries(replacements).map(([pattern, replacement]) => ({
+const extendedReplacements = Object.keys(replacements).reduce((acc, key) => {
+  const newKey = key.replace(/^pm\\\./, 'postman\\.');
+  acc[key] = replacements[key];
+  acc[newKey] = replacements[key];
+  return acc;
+}, {} as Record<string, string>);
+
+const compiledReplacements = Object.entries(extendedReplacements).map(([pattern, replacement]) => ({
   regex: new RegExp(pattern, 'g'),
   replacement
 }));
 
-export const utils = (script: string) => {
+export const postmanTranslation = (script: string, logCallback?: () => void) => {
   try {
     let modifiedScript = script;
     for (const { regex, replacement } of compiledReplacements) {
@@ -29,8 +38,9 @@ export const utils = (script: string) => {
         modifiedScript = modifiedScript.replace(regex, replacement);
       }
     }
-    if (modifiedScript.includes('pm.')) {
-      modifiedScript = modifiedScript.replace(/^(.*pm\..*)$/gm, '// $1');
+    if (modifiedScript.includes('pm.') || modifiedScript.includes('postman.')) {
+      modifiedScript = modifiedScript.replace(/^(.*(pm\.|postman\.).*)$/gm, '// $1');
+      logCallback?.();
     }
     return modifiedScript;
   } catch (e) {
