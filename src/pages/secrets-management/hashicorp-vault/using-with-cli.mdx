@@ -61,12 +61,15 @@ bru run folder --env Prod --env-var authToken=your-vault-token
       "url": "http://localhost:8200",
       "namespace": "bruno",
       "auth": {
-        "method": "appRole",
-        "roleId": "{{roleId}}",
-        "secretId": "{{secretId}}"
+        "method": "app_role",
+        "appRole": {
+          "role": "bruno",
+          "roleId": "{{roleId}}",
+          "secretId": "{{secretId}}"
+        }
       }
     }
-  },
+  }
   "data": [
     {
       "environment": "Prod",

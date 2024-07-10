@@ -41,6 +41,11 @@ If you need to collect the results of your API tests, you can specify the --outp
 bru run folder --output results.json
 ```
 
+If you need to run a collection with a csv file, you can specify the --csv-file-path option:
+```bash copy
+bru run folder --csv-file-path /path/to/csv/file.csv
+```
+
 ## Options
 | Option                | Details                                                                       |
 |-----------------------|-------------------------------------------------------------------------------|
@@ -55,6 +60,7 @@ bru run folder --output results.json
 | --insecure            | Allow insecure server connections                                             |
 | --tests-only          | Only run requests that have a test                                            |
 | --bail                | Stop execution after a failure of a request, test, or assertion               |
+| --csv-file-path       | CSV file to run the collection with                                           |
 
 ## Demo
 ![bru cli](/screenshots/cli-demo.webp)
