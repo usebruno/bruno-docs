@@ -2,7 +2,9 @@
 
 Vars allow you to set variables before request, and after you receive the response.
 
-Vars are available **both at collection and request level**.
+Vars are scoped within the request and cannot be accessed outside of it.
+
+> Note: Prior to v1.20.0, request vars were accessible at the collection scope, but this is no longer the case.
 
 In the *Pre Request Variables* section, you can write any Strings, Numbers or any valid JavaScript literal.
 
