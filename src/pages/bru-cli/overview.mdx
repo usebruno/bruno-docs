@@ -26,41 +26,41 @@ Or run all requests in a folder:
 bru run folder
 ```
 
-If you need to use an environment, you can specify it with the --env option:
+If you need to use an environment, you can specify it with the `--env` option:
 ```bash copy
 bru run folder --env Local
 ```
 
-Pass Environment variables to your collection using the --env-var option:
+Pass Environment variables to your collection using the `--env-var` option:
 ```bash copy
 bru run folder --env Local --env-var JWT_TOKEN=1234
 ```
 
-If you need to collect the results of your API tests, you can specify the --output option:
+If you need to collect the results of your API tests, you can specify the `--output` option:
 ```bash copy
 bru run folder --output results.json
 ```
 
-If you need to run a collection with a csv file, you can specify the --csv-file-path option:
+If you need to run a collection with a csv file, you can specify the `--csv-file-path` option:
 ```bash copy
 bru run folder --csv-file-path /path/to/csv/file.csv
 ```
 
 ## Options
-| Option                | Details                                                                       |
-|-----------------------|-------------------------------------------------------------------------------|
-| -h, --help            | 	Show help                                                                    |
-| --version             | Show version number                                                           |
-| -r                    | Indicates a recursive run (default: false)                                    |
-| --cacert [string]     | CA certificate to verify peer against                                         |
-| --env [string]        | Environment variables                                                         |
-| --env-var [string]    | Overwrite a single environment variable, multiple usages possible             |
-| -o, --output [string] | Path to write file results to                                                 |
-| -f, --format [string] | Format of the file results; available formats are "json" (default) or "junit" |
-| --insecure            | Allow insecure server connections                                             |
-| --tests-only          | Only run requests that have a test                                            |
-| --bail                | Stop execution after a failure of a request, test, or assertion               |
-| --csv-file-path       | CSV file to run the collection with                                           |
+| Option                    | Details                                                                                         |
+|---------------------------|-------------------------------------------------------------------------------------------------|
+| `-h`, `--help`            | 	Show help                                                                                     |
+| `--version`               | Show version number                                                                             |
+| `-r`                      | Indicates a recursive run (default: `false`)                                                    |
+| `--cacert [string]`       | CA certificate to verify peer against                                                           |
+| `--env [string]`          | Environment name, for example `local`                                                           |
+| `--env-var [string]`      | Overwrite a single environment variable, for example `JWT_TOKEN=1234`                           |
+| `-o [string]`,<br/>`--output [string]` | Path to write file results to, for example `results.json`                          |
+| `-f [string]`,<br/>`--format [string]` | Format of the file results, available formats are JSON (default) or JUnit          |
+| `--insecure`              | Allow insecure server connections                                                               |
+| `--tests-only`            | Only run requests that have a test                                                              |
+| `--bail`                  | Stop execution after a failure of a request, test, or assertion                                 |
+| `--csv-file-path`         | CSV file to run the collection with, for example `/path/to/csv/file.csv`                        |
 
 ## Demo
 ![bru cli](/screenshots/cli-demo.webp)
