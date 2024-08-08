@@ -1,0 +1,71 @@
+# Collaborating using CLI
+
+In the open-source version of Bruno, users need to manually perform GIT operations using the terminal or tools like VS Code's GIT features. This includes initializing a GIT repository, adding changes, committing, pushing, and pulling updates. Below is a step-by-step guide on how to use GIT with Bruno in the open-source version.
+
+### Initializing GIT in Bruno collection
+
+To begin version controlling your Bruno collection, you need to initialize a GIT repository in the directory where your `.bru` files are stored using the following steps:
+
+1. **Navigate to the Bruno Collection Location:**
+
+   - Navigate to the location on your PC where you created the Bruno collection, and copy the path. [^1]
+
+2. **Change directory in Terminal:**
+
+   - Run the following command in the terminal:
+
+     ```bash
+     cd path/to/your/bruno/collection
+     ```
+
+3. **Initialize Git:**
+   - Run the following command to initialize Git in the Bruno collection directory:
+
+     ```bash
+     git init
+     ```
+
+### Adding and Committing Changes
+
+After initializing the GIT repository, you can add and commit changes to your collection.
+
+1. **Creating a New HTTP Request in Bruno App**
+
+    - Hover over the collection name in the Bruno app.
+    - Click on the three dots, then click on "New Request."
+    - Type in the name of the request and populate the URL field with `https://example.com`.
+    - After populating the fields with appropriate values, click on the "Create" button, or you can press ENTER/RETURN on your keyboard to create the request. This will create a new `.bru` file with the name that you just specified.
+
+2. **Adding and committing the changes**
+   - Stage all the changes made inside the collection:
+
+     ```bash
+     git add .
+     ```
+   - Commit the changes:
+
+     ```bash
+     git commit -m "Created my first Bruno request 🐶"
+     ```
+
+### Pushing and Pulling Changes
+
+To share your changes with others, you can push and pull your commits to/from a remote repository.
+
+1. **Pushing changes**
+
+   ```bash
+   git push -u origin main
+   ```
+
+2. **Pulling changes**
+
+   ```bash
+   git pull origin main
+   ```
+
+----
+
+[^1]: To reveal the location of your Bruno collection, hover over the collection name on the left side of the screen. Once the three dots appear, click on them, then select "Settings." Under the info tab, you will be able to see the location where your Bruno collection resides.
+
+[^5]: A repository is nothing but a folder; in this case, it is the Bruno collection.
