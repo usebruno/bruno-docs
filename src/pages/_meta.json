@@ -3,6 +3,7 @@
   "bru-lang": "Bru Lang",
   "bru-cli": "Bru CLI",
   "secrets-management": "Secrets Management",
+  "git-integration": "Git Integration",
   "scripting": "Scripting",
   "testing": "Testing",
   "migration-imports": "Migration & Imports",
