@@ -1,8 +1,8 @@
 {
   "introduction": "Introduction",
   "get-started": "Getting Started",
+  "bru-cli": "Bruno's CLI",
   "bru-lang": "Bru Lang",
-  "bru-cli": "Bru CLI",
   "secrets-management": "Secrets Management",
   "scripting": "Scripting",
   "testing": "API Testing",
