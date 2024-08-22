@@ -45,6 +45,7 @@ function buildIndexCache(
   Object.entries(meta).forEach(([itemName, itemDisplayName]) => {
     const itemPath = path.join(directoryPath, itemName);
     if (isDirectory(itemPath)) {
+      // If it is a dir then recursively build the cache
       const children = buildIndexCache(
         itemPath,
         path.join(relativePath, itemName),
