@@ -41,6 +41,8 @@ const themeConfig = {
   },
   sidebar: {
     toggleButton: true,
+    autoCollapse : true,
+    defaultMenuCollapseLevel: 1,
   },
 };
 
