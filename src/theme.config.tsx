@@ -41,9 +41,10 @@ const themeConfig = {
   },
   sidebar: {
     toggleButton: true,
-    autoCollapse : true,
+    autoCollapse: true,
     defaultMenuCollapseLevel: 1,
   },
+  footer: false,
 };
 
 export default themeConfig;
