@@ -1,11 +1,13 @@
 {
   "introduction": "Introduction",
+  "get-started": "Getting Started",
+  "bru-cli": "Bruno's CLI",
   "bru-lang": "Bru Lang",
-  "bru-cli": "Bru CLI",
   "secrets-management": "Secrets Management",
+  "git-integration": "Git Integration",
   "scripting": "Scripting",
-  "testing": "Testing",
-  "migration-imports": "Migration & Imports",
+  "testing": "API Testing",
   "tools": "Tools",
   "license-management": "License Management"
-}
+  }
+
