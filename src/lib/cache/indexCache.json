@@ -20,13 +20,12 @@
       }
     ]
   },
- {
+  {
     "name": "Getting Started",
-    "children": [ 
-          {
-          "name": "Bruno Basics",
-          "path": "get-started/bruno-basics"
-          },
+    "children": [
+      {
+        "name": "Bruno Basics",
+        "children": [
           {
             "name": "Download",
             "path": "get-started/bruno-basics/download"
@@ -43,57 +42,58 @@
             "name": "Create a Test",
             "path": "get-started/bruno-basics/create-a-test"
           }
-         ]      
-        },
-        {
-          "name": "Import & Export Data",
-          "children": [
-            {
-              "name": "Importing Collections",
-              "path": "get-started/import-export-data/import-collections"
-            },
-            {
-              "name": "Exporting Collections",
-              "path": "get-started/import-export-data/export-collections"
-            },
-            {
-              "name": "Postman Migration",
-              "path": "get-started/import-export-data/postman-migration"
-            }
-          ]
-        },
-      
-  {
-    "name": "Bru Lang",
-    "children": [
-      {
-        "name": "Overview",
-        "path": "bru-lang/overview"
+        ]
       },
       {
-        "name": "Samples",
-        "path": "bru-lang/samples"
-      },
-      {
-        "name": "Language",
-        "path": "bru-lang/language"
-      },
-      {
-        "name": "Tag Reference",
-        "path": "bru-lang/tag-reference"
-      },
-      {
-        "name": "Syntax Highlighting",
-        "path": "bru-lang/syntax-highlighting"
+        "name": "Import or Export Data",
+        "children": [
+          {
+            "name": "Exporting Collections",
+            "path": "get-started/import-export-data/export-collections"
+          },
+          {
+            "name": "Importing Collections",
+            "path": "get-started/import-export-data/import-collections"
+          },
+          {
+            "name": "Migrating from Postman",
+            "path": "get-started/import-export-data/postman-migration"
+          }
+        ]
       }
     ]
   },
   {
-    "name": "Bru CLI",
+    "name": "Git Integration",
     "children": [
       {
         "name": "Overview",
-        "path": "bru-cli/overview"
+        "path": "git-integration/overview"
+      },
+      {
+        "name": "Collaboration via CLI",
+        "path": "git-integration/using-cli"
+      },
+      {
+        "name": "Collaboration via GUI",
+        "path": "git-integration/using-gui"
+      }
+    ]
+  },
+  {
+    "name": "API Testing",
+    "children": [
+      {
+        "name": "Introduction",
+        "path": "testing/introduction"
+      },
+      {
+        "name": "Assertions",
+        "path": "testing/assertions"
+      },
+      {
+        "name": "JavaScript Reference",
+        "path": "testing/javascript-reference"
       }
     ]
   },
@@ -111,6 +111,40 @@
       {
         "name": "Secret Variables",
         "path": "secrets-management/secret-variables"
+      },
+      {
+        "name": "Hashicorp Vault",
+        "children": [
+          {
+            "name": "Overview",
+            "path": "secrets-management/hashicorp-vault/overview"
+          },
+          {
+            "name": "Adding a Secret Provider",
+            "path": "secrets-management/hashicorp-vault/adding-a-secret-provider"
+          },
+          {
+            "name": "Configuring and Fetching secrets",
+            "path": "secrets-management/hashicorp-vault/configuring-and-fetching-secrets"
+          },
+          {
+            "name": "Using Secrets",
+            "path": "secrets-management/hashicorp-vault/using-secrets"
+          },
+          {
+            "name": "Using with CLI",
+            "path": "secrets-management/hashicorp-vault/using-with-cli"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Bruno's CLI",
+    "children": [
+      {
+        "name": "Overview",
+        "path": "bru-cli/overview"
       }
     ]
   },
@@ -170,52 +204,78 @@
     ]
   },
   {
-    "name": "Testing",
+    "name": "Bru Lang",
     "children": [
       {
-        "name": "Introduction",
-        "path": "testing/introduction"
+        "name": "Overview",
+        "path": "bru-lang/overview"
       },
       {
-        "name": "Assertions",
-        "path": "testing/assertions"
+        "name": "Samples",
+        "path": "bru-lang/samples"
       },
       {
-        "name": "JavaScript Reference",
-        "path": "testing/javascript-reference"
+        "name": "Language",
+        "path": "bru-lang/language"
+      },
+      {
+        "name": "Tag Reference",
+        "path": "bru-lang/tag-reference"
+      },
+      {
+        "name": "Syntax Highlighting",
+        "path": "bru-lang/syntax-highlighting"
       }
     ]
   },
   {
-    "name": "Migration & Imports",
-    "children": [
-      {
-        "name": "Introduction",
-        "path": "migration-imports/introduction"
-      },
-      {
-        "name": "Postman",
-        "path": "migration-imports/postman"
-      }
-    ]
+    "name": "Tools",
+    "path": "tools"
   },
   {
     "name": "License Management",
     "children": [
       {
-        "name": "Overview",
-        "path": "license-management/overview"
+        "name": "License Management",
+        "path": "license-management/license-management"
       },
       {
-        "name": "Organization",
+        "name": "Golden Edition",
         "children": [
           {
-            "name": "Manage Organization Licenses",
-            "path": "license-management/organization/manage-licenses"
+            "name": "Individuals",
+            "children": [
+              {
+                "name": "Activate License",
+                "path": "license-management/golden-edition/individual/activate-license"
+              }
+            ]
           },
           {
-            "name": "Activate Organization License",
-            "path": "license-management/organization/activate-license"
+            "name": "Organizations",
+            "children": [
+              {
+                "name": "Manage Licenses",
+                "path": "license-management/golden-edition/organization/manage-licenses"
+              },
+              {
+                "name": "Activate License",
+                "path": "license-management/golden-edition/organization/activate-license"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Ultimate Edition",
+        "children": [
+          {
+            "name": "Manage Licenses",
+            "path": "license-management/ultimate-edition/manage-licenses"
+          },
+          {
+            "name": "Activate License",
+            "path": "license-management/ultimate-edition/activate-license"
           }
         ]
       }
