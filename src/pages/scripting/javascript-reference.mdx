@@ -194,23 +194,31 @@ let token = bru.setEnvVar("access_token", data.token);
 }
 ```
 
-### Collection Variables
-Bruno allows you to get and set collection variables on the fly. The collection variables take precendence over environment variables.
+### Runtime Variables
+Bruno allows you to get, set and delete runtime variables on the fly.
 
 #### `getVar`
-Get the collection variable
+Get the runtime variable
 
 **Example:**
 ```javascript
 let petId = bru.getVar("petId");
 ```
 #### `setVar`
-Set the collection variable
+Set the runtime variable
 
 **Example:**
 ```javascript
 let data = res.getBody();
 bru.setVar("petId", data.id);
+```
+
+#### `deleteVar`
+Delete the runtime variable
+
+**Example:**
+```javascript
+bru.deleteVar("petId");
 ```
 
 ### Request Order
