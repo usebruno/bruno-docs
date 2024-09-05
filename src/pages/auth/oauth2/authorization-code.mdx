@@ -38,7 +38,7 @@ This script assigns the `access_token` value from the response body to a runtime
 
 <br />
 
-<a href="/files/oauth2-authorization-code-collection-level.json" download="oauth2-authorization-code-collection-level.json" className="mt-2">
+<a href="/files/oauth2/authorization-code-collection-level.json" download="oauth2-authorization-code-collection-level.json" className="mt-2">
   <div className="hover:underline w-fit border border-slate-500 rounded-md py-1 px-2 flex flex-row justify-center items-center gap-2">
     <div className="mt-1 w-fit">Download</div>
     <svg
@@ -77,7 +77,7 @@ This script assigns the `access_token` value from the response body to a runtime
 
 <br />
 
-1. Create a new request and navigate to the **Auth** tab.
+1. Create a new empty request and navigate to the **Auth** tab.
 
 2. Select `Oauth 2.0` as the authentication method and set the grant type to `Authorization Code`. Fill in the necessary fields with the relevant information.
 
@@ -89,7 +89,7 @@ bru.setVar('access_token_set_by_post_response_script', res.body.access_token);
 
 This script assigns the `access_token` value from the response body to a runtime varaible named `access_token_set_by_post_response_script`, making it available for use in all requests within the collection. You can adjust this script to suit your needs.
 
-4. Return to the **Auth** tab and click the 'Get Access Token' button. You are now free to use the token stored in the `access_token_set_by_collection_script` runtime variable in your requests as needed.
+4. Return to the **Auth** tab and click the 'Get Access Token' button. You are now free to use the token stored in the `access_token_set_by_post_response_script` runtime variable in your requests as needed.
 
 <br />
 
@@ -97,7 +97,7 @@ This script assigns the `access_token` value from the response body to a runtime
 
 <br />
 
-<a href="/files/oauth2-authorization-code-request-level.json" download="oauth2-authorization-code-request-level.json" className="mt-2">
+<a href="/files/oauth2/authorization-code-request-level.json" download="oauth2-authorization-code-request-level.json" className="mt-2">
   <div className="hover:underline w-fit border border-slate-500 rounded-md py-1 px-2 flex flex-row justify-center items-center gap-2">
     <div className="mt-1 w-fit">Download</div>
     <svg
