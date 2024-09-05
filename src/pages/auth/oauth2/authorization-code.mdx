@@ -1,0 +1,122 @@
+# How to Use OAuth2 for the Authorization Code Grant Type
+
+OAuth2 authentication can be implemented in various ways, depending on the collection structure and specific requirements. Below are two basic examples of its usage.
+
+## Collection level
+
+<br />
+
+<video controls className="mt-10">
+  <source
+    src="/screenrecordings/oauth2/authorization-code-collection-level.mp4"
+    type="video/mp4"
+  />
+  Your browser does not support the video tag.
+</video>
+
+<br />
+
+1. Open the collection settings and navigate to the **Auth** tab.
+
+2. Select `Oauth 2.0` as the authentication method and set the grant type to `Authorization Code`. Fill in the necessary fields with the relevant information.
+
+3. In the **Scripts** tab, add the following script to the post-response section:
+
+```javascript"
+if(req.getAuthMode() == 'oauth2' && res.body.access_token) {
+    bru.setVar('access_token_set_by_collection_script', res.body.access_token);
+}
+```
+
+This script assigns the `access_token` value from the response body to a runtime varaible named `access_token_set_by_collection_script`, making it available for use in all requests within the collection. You can adjust this script to suit your needs.
+
+4. Return to the **Auth** tab and click the 'Get Access Token' button. You are now free to use the token stored in the `access_token_set_by_collection_script` runtime variable in your requests as needed.
+
+<br />
+
+#### the collection used in the above video
+
+<br />
+
+<a href="/files/oauth2-authorization-code-collection-level.json" download="oauth2-authorization-code-collection-level.json" className="mt-2">
+  <div className="hover:underline w-fit border border-slate-500 rounded-md py-1 px-2 flex flex-row justify-center items-center gap-2">
+    <div className="mt-1 w-fit">Download</div>
+    <svg
+        width={20}
+        height={20}
+        viewBox="0 0 32 32"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <g fill="none" fillRule="evenodd">
+        <path d="M0 0h32v32H0z" />
+        <path
+            d="M22.01 0 30 10.018V32H2V0zm-.964 2H4v28h24V10.718zM17 9l-.001 10.085 3.269-3.267 1.414 1.414-5.657 5.657-.025-.025-.025.025-5.657-5.657 1.414-1.414L15 19.084V9z"
+            fill="#fff5"
+            fillRule="nonzero"
+        />
+        </g>
+    </svg>
+  </div>
+</a>
+
+<br />
+<br />
+<br />
+
+## Request level
+
+<br />
+
+<video controls className="mt-10">
+  <source
+    src="/screenrecordings/oauth2/authorization-code-request-level.mp4"
+    type="video/mp4"
+  />
+  Your browser does not support the video tag.
+</video>
+
+<br />
+
+1. Create a new request and navigate to the **Auth** tab.
+
+2. Select `Oauth 2.0` as the authentication method and set the grant type to `Authorization Code`. Fill in the necessary fields with the relevant information.
+
+3. In the **Scripts** tab, add the following script to the post-response section:
+
+```javascript"
+bru.setVar('access_token_set_by_post_response_script', res.body.access_token);
+```
+
+This script assigns the `access_token` value from the response body to a runtime varaible named `access_token_set_by_post_response_script`, making it available for use in all requests within the collection. You can adjust this script to suit your needs.
+
+4. Return to the **Auth** tab and click the 'Get Access Token' button. You are now free to use the token stored in the `access_token_set_by_collection_script` runtime variable in your requests as needed.
+
+<br />
+
+#### the collection used in the above video
+
+<br />
+
+<a href="/files/oauth2-authorization-code-request-level.json" download="oauth2-authorization-code-request-level.json" className="mt-2">
+  <div className="hover:underline w-fit border border-slate-500 rounded-md py-1 px-2 flex flex-row justify-center items-center gap-2">
+    <div className="mt-1 w-fit">Download</div>
+    <svg
+        width={20}
+        height={20}
+        viewBox="0 0 32 32"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <g fill="none" fillRule="evenodd">
+        <path d="M0 0h32v32H0z" />
+        <path
+            d="M22.01 0 30 10.018V32H2V0zm-.964 2H4v28h24V10.718zM17 9l-.001 10.085 3.269-3.267 1.414 1.414-5.657 5.657-.025-.025-.025.025-5.657-5.657 1.414-1.414L15 19.084V9z"
+            fill="#fff5"
+            fillRule="nonzero"
+        />
+        </g>
+    </svg>
+  </div>
+</a>
+
+<br />
+<br />

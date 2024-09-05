@@ -4,10 +4,10 @@
   "git-integration": "Git Integration",
   "testing": "API Testing",
   "secrets-management": "Secrets Management",
+  "auth": "Authentication",
   "bru-cli": "Bruno's CLI",
   "scripting": "Scripting",
   "bru-lang": "Bru Lang",
   "tools": "Tools",
   "license-management": "License Management"
-  }
-
+}
