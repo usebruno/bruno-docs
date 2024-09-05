@@ -4,7 +4,7 @@
   "git-integration": "Git Integration",
   "testing": "API Testing",
   "secrets-management": "Secrets Management",
-  "auth": "Authentication",
+  "auth": "Authentication and Authorization",
   "bru-cli": "Bruno's CLI",
   "scripting": "Scripting",
   "bru-lang": "Bru Lang",
