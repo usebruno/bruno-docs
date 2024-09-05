@@ -1,0 +1,68 @@
+# How to Use OAuth2 for the Authorization Code Grant Type
+
+OAuth2 authentication can be implemented in various ways, depending on the collection structure and specific requirements. Below are two basic examples of its usage.
+
+## Collection level
+
+<br />
+
+<video controls className="mt-10">
+  <source
+    src="/screenrecordings/oauth2/authorization-code-collection-level.mp4"
+    type="video/mp4"
+  />
+  Your browser does not support the video tag.
+</video>
+
+<br />
+
+1. Open the collection settings and navigate to the **Auth** tab.
+
+2. Select `Oauth 2.0` as the authentication method and set the grant type to `Authorization Code`. Fill in the necessary fields with the relevant information.
+
+3. In the **Scripts** tab, add the following script to the post-response section:
+
+```javascript"
+if(req.getAuthMode() == 'oauth2' && res.body.access_token) {
+    bru.setVar('access_token_set_by_collection_script', res.body.access_token);
+}
+```
+
+This script assigns the `access_token` value from the response body to a runtime variable named `access_token_set_by_collection_script`, making it available for use in all requests within the collection. You can adjust this script to suit your needs.
+
+4. Return to the **Auth** tab and click the 'Get Access Token' button. You are now free to use the token stored in the `access_token_set_by_collection_script` runtime variable in your requests as needed.
+
+<br />
+<br />
+<br />
+
+## Request level
+
+<br />
+
+<video controls className="mt-10">
+  <source
+    src="/screenrecordings/oauth2/authorization-code-request-level.mp4"
+    type="video/mp4"
+  />
+  Your browser does not support the video tag.
+</video>
+
+<br />
+
+1. Create a new empty request and navigate to the **Auth** tab.
+
+2. Select `Oauth 2.0` as the authentication method and set the grant type to `Authorization Code`. Fill in the necessary fields with the relevant information.
+
+3. In the **Scripts** tab, add the following script to the post-response section:
+
+```javascript"
+bru.setVar('access_token_set_by_post_response_script', res.body.access_token);
+```
+
+This script assigns the `access_token` value from the response body to a runtime variable named `access_token_set_by_post_response_script`, making it available for use in all requests within the collection. You can adjust this script to suit your needs.
+
+4. Return to the **Auth** tab and click the 'Get Access Token' button. You are now free to use the token stored in the `access_token_set_by_post_response_script` runtime variable in your requests as needed.
+
+<br />
+<br />
