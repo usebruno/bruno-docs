@@ -155,13 +155,21 @@ let responseTime = res.getResponseTime();
 ```
 
 
-## bru
+## Bru
 The `bru` variable is available inside your scripting and testing context.
 It exposes methods that allow you to interact with, e.g., process variables,
 environment variables and collection variables.
 
 Below is the API documentation for the methods available on `bru`
 
+### Helpers
+#### `sleep`
+Pauses execution for the specified duration. This is useful for introducing delays or waiting for a specific amount of time before proceeding with the next operation.
+
+**Example:**
+```javascript
+await bru.sleep(3000);
+```
 
 ### Node process environment
 Bruno allows you to get Node process environment variables on the fly.
@@ -195,7 +203,7 @@ let token = bru.setEnvVar("access_token", data.token);
 ```
 
 ### Runtime Variables
-Bruno allows you to get and set runtime variables on the fly. The runtime variables take precendence over environment variables.
+Bruno allows you to get, set and delete runtime variables on the fly.
 
 #### `getVar`
 Get the runtime variable
@@ -213,10 +221,12 @@ let data = res.getBody();
 bru.setVar("petId", data.id);
 ```
 
-### Request Variables
+#### `deleteVar`
+Delete the runtime variable
 
-#### `getRequestVar`
-Get the request variable (set in the pre-request vars section)
+**Example:**
+```javascript
+bru.deleteVar("petId");
 
 ### Request Order
 You can influence the order in which requests are being run by the request-runner (UI) or the CLI.
