@@ -1,0 +1,9 @@
+# Using Basic authentication
+
+Basic authentication involves sending a verified username and password with your request. In the request `Auth` tab, select `Basic Auth` from the Auth Type dropdown list.
+
+Enter your API username and password in the Username and Password fields. For extra security, store these in variables.
+
+![Basic](/screenshots/auth/basic.webp)
+
+In the request Headers, the Authorization header passes the API a Base64 encoded string representing your username and password values, appended to the text `Basic`.

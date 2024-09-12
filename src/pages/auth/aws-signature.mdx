@@ -1,0 +1,25 @@
+# Authenticate using AWS Signature 
+
+AWS Signature is the authorization workflow for Amazon Web Services requests. AWS uses a custom HTTP scheme based on a keyed-HMAC (Hash Message Authentication Code) for authentication.
+
+The official AWS Signature documentation provides more detail:
+
+- [Signing and Authenticating Requests](https://docs.aws.amazon.com/AmazonS3/latest/userguide/RESTAuthentication.html)
+
+- [How to call an API](https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-call-api.html) 
+
+To use AWS Signature, do the following:
+
+1. In the `Auth` tab for a request, select `AWS Sig V4` from  dropdown list.
+
+2. Enter your *AccessKeyID* and *SecretKey* values. 
+
+> For extra security, integrate Bruno with your secret manager to store these values in a single location. Learn more (here) [../secrets-management/hashicorp-vault/overview].
+
+The AWS Signature parameters are as follows:
+
+- Session Token - Required only when using temporary security credentials.
+- Service Name - The service receiving the request.
+- AWS Region - The region receiving the request.
+- Profile Name - name of your AWS signing profile
+
