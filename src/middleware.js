@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 const redirects = {
   "/introduction/getting-started": "/introduction/what-is-bruno",
+  "/license-management/license-management": "/license-management/overview",
 };
 
 export function middleware(request) {
