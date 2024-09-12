@@ -1,0 +1,32 @@
+# Variables
+
+> **Note**: With the release of v1.28.0, we’ve shifted to treating all Request Variables as strings instead of inferring the data type from the value. See [discussion](https://github.com/usebruno/bruno/discussions/3072) for more information.
+
+### Overview
+Variables in the Bruno allow you to store dynamic values that can be reused across multiple API requests, environments, and workflows. This feature enhances flexibility, maintainability, and efficiency by enabling you to manage frequently changing data points such as tokens, environment-specific URLs, or user-defined values in one place.
+
+### Types
+
+There are 5 types of variables you can create:
+
+- [Collection Variables](./collection-variables.mdx)
+- Environment Variables
+- [Folder Variables](./folder-variables.mdx)
+- [Request Variables](./request-variables.mdx)
+- [Runtime Variables](./runtime-variables.mdx)
+- Process Environment Variables
+
+### Variable Precedence
+
+When a variable is accessed, the following precedence is used to determine which value is used:
+
+1. Collection Variables
+2. Environment Variables
+3. Folder Variables
+4. Request Variables
+5. Runtime Variables
+
+Runtime variables get the highest precedence. Process Environment Variables are accessed using the `{{process.env.VAR_NAME}}` syntax and hence don't compete with the above.
+
+### Variable Data Type
+All variables are stored as strings. Bruno does not infer or change the data type of the variable based on the value you set.

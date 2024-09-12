@@ -13,10 +13,6 @@
       {
         "name": "Feedback and Community",
         "path": "introduction/feedback-community"
-      },
-      {
-        "name": "Index",
-        "path": "introduction"
       }
     ]
   },
@@ -41,6 +37,10 @@
           {
             "name": "Create a Test",
             "path": "get-started/bruno-basics/create-a-test"
+          },
+          {
+            "name": "Run a Collection",
+            "path": "get-started/bruno-basics/run-a-collection"
           }
         ]
       },
@@ -58,6 +58,35 @@
           {
             "name": "Migrating from Postman",
             "path": "get-started/import-export-data/postman-migration"
+          },
+          {
+            "name": "Safe Mode",
+            "path": "get-started/import-export-data/safe-mode"
+          }
+        ]
+      },
+      {
+        "name": "Variables",
+        "children": [
+          {
+            "name": "Overview",
+            "path": "get-started/variables/overview"
+          },
+          {
+            "name": "Collection Variables",
+            "path": "get-started/variables/collection-variables"
+          },
+          {
+            "name": "Folder Variables",
+            "path": "get-started/variables/folder-variables"
+          },
+          {
+            "name": "Request Variables",
+            "path": "get-started/variables/request-variables"
+          },
+          {
+            "name": "Runtime Variables",
+            "path": "get-started/variables/runtime-variables"
           }
         ]
       }
@@ -136,6 +165,56 @@
             "path": "secrets-management/hashicorp-vault/using-with-cli"
           }
         ]
+      }
+    ]
+  },
+  {
+    "name": "Authentication and Authorization",
+    "children": [
+      {
+        "name": "Overview",
+        "path": "auth/overview"
+      },
+      {
+        "name": "OAuth 2.0",
+        "children": [
+          {
+            "name": "Overview",
+            "path": "auth/oauth2/overview"
+          },
+          {
+            "name": "Authorization Code",
+            "path": "auth/oauth2/authorization-code"
+          },
+          {
+            "name": "Client Credentials",
+            "path": "auth/oauth2/client-credentials"
+          },
+          {
+            "name": "Password Credentials",
+            "path": "auth/oauth2/password-credentials"
+          }
+        ]
+      },
+      {
+        "name": "AWS Signature",
+        "path": "auth/aws-signature"
+      },
+      {
+        "name": "Basic",
+        "path": "auth/basic"
+      },
+      {
+        "name": "Bearer",
+        "path": "auth/bearer"
+      },
+      {
+        "name": "Digest",
+        "path": "auth/digest"
+      },
+      {
+        "name": "Add and Manage Certificates",
+        "path": "auth/add-and-manage-certs"
       }
     ]
   },
@@ -237,7 +316,7 @@
     "children": [
       {
         "name": "License Management",
-        "path": "license-management/license-management"
+        "path": "license-management/overview"
       },
       {
         "name": "Golden Edition",

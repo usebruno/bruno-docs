@@ -1,0 +1,18 @@
+# Request Variables
+
+Request variables are variables that are scoped to a specific request. They are useful for storing variables that is used in a specific request.
+
+> **Note**: With the release of v1.28.0, we’ve shifted to treating all Request Variables as strings instead of inferring the data type from the value. See [discussion](https://github.com/usebruno/bruno/discussions/3072) for more information.
+
+## Creating a Request Variable
+* Go to the Request 
+* Go to Vars Tab
+* Add your variable name, value in the Pre Request Vars section
+* Save your changes
+
+![Request Variables](/screenshots/variables/request-variables.png)
+
+## Using a Request Variable
+You can use the `{{varName}}` syntax to use a request variable in a request.
+
+![Request Variables Usage](/screenshots/variables/request-variables-usage.png)
