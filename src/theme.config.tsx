@@ -28,7 +28,7 @@ const themeConfig = {
   chat: {
     link: "https://discord.com/invite/KgcZUncpjq",
   },
-  docsRepositoryBase: "https://github.com/usebruno/bruno-docs",
+  docsRepositoryBase: "https://github.com/usebruno/bruno-docs/tree/main",
   head: (
     <>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
