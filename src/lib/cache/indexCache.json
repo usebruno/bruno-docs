@@ -58,10 +58,6 @@
           {
             "name": "Migrating from Postman",
             "path": "get-started/import-export-data/postman-migration"
-          },
-          {
-            "name": "Safe Mode",
-            "path": "get-started/import-export-data/safe-mode"
           }
         ]
       },
@@ -89,6 +85,10 @@
             "path": "get-started/variables/runtime-variables"
           }
         ]
+      },
+      {
+        "name": "JavaScript Sandbox",
+        "path": "get-started/javascript-sandbox"
       }
     ]
   },
@@ -315,7 +315,7 @@
     "name": "License Management",
     "children": [
       {
-        "name": "License Management",
+        "name": "Overview",
         "path": "license-management/overview"
       },
       {

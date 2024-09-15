@@ -1,5 +1,6 @@
 {
   "bruno-basics": "Bruno Basics",
   "import-export-data": "Import or Export Data",
-  "variables": "Variables"
+  "variables": "Variables",
+  "javascript-sandbox": "JavaScript Sandbox"
 }
