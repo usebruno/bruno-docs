@@ -14,3 +14,10 @@ Folder variables are variables that are scoped to a specific folder. They are us
 You can use the `{{varName}}` syntax to use a folder variable in a request.
 
 ![Folder Variables Usage](/screenshots/variables/folder-variables-usage.png)
+
+#### Access Folder Variable inside scripts
+You can also use the `bru.getFolderVar()` function to get the value of a folder variable and use it inside your scripts.
+
+```javascript
+let bearerToken = bru.getFolderVar("bearerToken");
+```

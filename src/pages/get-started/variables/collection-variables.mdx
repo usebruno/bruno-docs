@@ -14,3 +14,10 @@ Collection variables are variables that are scoped to a specific collection. The
 You can use the `{{varName}}` syntax to use a collection variable in a request.
 
 ![Collection Variables Usage](/screenshots/variables/collection-variables-usage.png)
+
+#### Access Collection Variable inside scripts
+You can also use the `bru.getCollectionVar()` function to get the value of a runtime variable and use it inside your pre request scripts.
+
+```javascript
+let namespace = bru.getCollectionVar("namespace");
+```

@@ -16,3 +16,11 @@ Request variables are variables that are scoped to a specific request. They are 
 You can use the `{{varName}}` syntax to use a request variable in a request.
 
 ![Request Variables Usage](/screenshots/variables/request-variables-usage.png)
+
+#### Access Request Variable inside scripts
+You can also use the `bru.getRequestVar()` function to get the value of a request variable and use it inside your scripts.
+
+```javascript
+let source = bru.getRequestVar("source");
+let destination = bru.getRequestVar("destination");
+```
