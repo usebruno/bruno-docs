@@ -171,6 +171,14 @@ Pauses execution for the specified duration. This is useful for introducing dela
 await bru.sleep(3000);
 ```
 
+#### `disableParsingResponseJson`
+To prevent the automatic parsing of the JSON response body and work directly with the raw data, you can use the expression below in the pre-request script of the request.
+
+**Example:**
+```javascript
+bru.disableParsingResponseJson();
+```
+
 ### Node process environment
 Bruno allows you to get Node process environment variables on the fly.
 
