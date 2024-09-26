@@ -100,6 +100,17 @@ Set the maximum number of redirects to follow
 req.setMaxRedirects(5);
 ```
 
+### `getExecutionMode`
+Get's the current active execution mode.
+
+Returns `runner` or `standalone`
+
+**Example**
+```javascript
+const mode = req.getExecutionMode();
+```
+
+
 ## Response
 This `res` variable is available inside your scripting and testing context.
 
