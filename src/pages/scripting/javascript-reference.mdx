@@ -101,13 +101,23 @@ req.setMaxRedirects(5);
 ```
 
 ### `getExecutionMode`
-Get's the current active execution mode.
+Get the current active execution mode
 
 Returns `runner` or `standalone`
 
 **Example**
 ```javascript
 const mode = req.getExecutionMode();
+```
+
+### `getExecutionPlatform`
+Get the plattform the current request is ran on
+
+Returns `app` or `cli`
+
+**Example**
+```javascript
+const mode = req.getExecutionPlatform();
 ```
 
 
