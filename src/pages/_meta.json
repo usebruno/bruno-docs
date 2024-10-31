@@ -1,10 +1,10 @@
 {
   "introduction": "Introduction",
   "get-started": "Getting Started",
-  "git-integration": "Git Integration",
+  "git-integration": "Git Integration & Collaboration",
   "testing": "API Testing",
-  "secrets-management": "Secrets Management",
-  "auth": "Authentication and Authorization",
+  "secrets-management": "Secret Management",
+  "auth": "Authentication & Authorization",
   "bru-cli": "Bruno's CLI",
   "scripting": "Scripting",
   "bru-lang": "Bru Lang",
