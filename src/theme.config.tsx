@@ -39,6 +39,9 @@ const themeConfig = {
   navbar: {
     component: <Navbar />,
   },
+  editlink: {
+    component: null
+  }
   sidebar: {
     toggleButton: true,
     autoCollapse: true,
