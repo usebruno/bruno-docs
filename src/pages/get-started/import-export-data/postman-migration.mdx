@@ -1,8 +1,11 @@
 import Image from 'next/image'
+import PremiumBadge from "@/components/premium-badge";
 
 # Migrating from Postman
 
-## Collection Import
+Bruno makes migrating from Postman easy. All you need to do is export your collections and environments and import them to Bruno. 
+
+## Collection Export
 Open Postman and select the collection you want to migrate. Click on the `···` followed by `View more actions` to open the dropdown menu and scroll down until you find `Export`, then click on it.
 
 <div className="flex flex-wrap items-center mt-4">
@@ -14,19 +17,36 @@ A popup dialog will appear, select either `Collection v2` or `Collection v2.1` f
 
 <Image src="/screenshots/migration/postman/postman-export-dialog.webp" alt="Export collection dialog" width={400} height={400} className="rounded mt-4" />
 
-The collection will be downloaded as a JSON file. Now open Bruno and select `···` followed by `Import Collection` in the dropdown menu.\
-A popup dialog will appear, asking you to select the API client you want to import from. Select `Postman Collection` and provide your previously exported collection file.
+The collection will be downloaded as a JSON file. 
 
-<Image src="/screenshots/migration/import-dialog.webp" alt="Import collection dialog" width={400} height={400} className="rounded mt-4" />
+Now simply follow the instructions for [Importing Collections](https://docs.usebruno.com/get-started/import-export-data/postman-migration#collection-import) and you're done! 
 
-You will then be prompted to select the location where you want to save the imported collection. Select the desired location and click on the `Import` button.
+## Export Data Dump<PremiumBadge />
+You can export a data dump of all your collections and environments in Postman. You can then import the data into any Bruno.
 
-<Image src="/screenshots/migration/location-dialog.webp" alt="Collection Location dialog" width={300} height={300} className="rounded mt-4" />
+**To [export a data dump](https://learning.postman.com/docs/getting-started/importing-and-exporting/exporting-data/#export-data-dumps), do the following in Postman:**
 
-Congratulations! You have successfully migrated your collection from Postman to Bruno.\
-Your scripts and tests will be automatically converted to Bruno's syntax.
+- Select the settings icon in the header, then select `Settings`.
 
-## Environment Import
+- Select the Data tab, then select `Request Data Export`.
+
+- Select `Export Data`, then select the data types you want to export. You can export collections, environments, or both.
+
+- Select `Request Data Export`.
+
+**To import your Data Dump to Bruno:**
+
+- Open the import menu and select `Postman Data Export`
+
+- Select the zip file where the export was saved
+
+- You will now see a list of all collections available for import. By default, all collections will be selected. You can chose to omit any from the import that you'd like. 
+
+- Designate a location for the collections and press `import` 
+
+> Although we have a translator for Postman scripts, it's always good practice to review the collections after import, especially if you are using deprecated Postman syntax in your scripts. 
+
+## Environment Export
 
 Open Postman and select the environment you want to migrate. Click on the `···` to open the dropdown menu, followed by `Export` and eventually choose a location to save the environment file.
 
