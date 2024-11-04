@@ -85,7 +85,7 @@ res('..items[?].amount', i => i.amount > 20)
 
 **Example:**
 ```javascript
-res('..items[?].amount', i => i.amount + 10)
+res('..items.amount[?]', amt => amt + 10)
 ```
 
 
