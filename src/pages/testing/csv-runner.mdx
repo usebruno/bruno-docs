@@ -1,30 +1,38 @@
-# CSV Runner 
+import Video from "../../components/Video"
 
-The CSV Runner feature allows you to iterate over files, making it easy to manage and manipulate data inputs. Bruno support both CSV and JSON files for running requests.
 
-> CSV Runner is accessible to Golden Edition users.
+# Iterate with CSV 
+
+The Runner feature enables you to iterate over files, making it easy to manage and manipulate data inputs. Bruno support both **CSV** and **JSON** files for running requests.
+
 
 ## CSV Runner in the Bruno App
 
 1. Click on the runner icon in the right-hand navbar.
 2. Check the **Run with Parameters** option.
-3. Enter the desired number of iterations.
-4. Select the file type: CSV or JSON.
-5. Click **Run Collection**.
+3. Select the file type: CSV or JSON.
+4. Click **Run Collection**.
 
 Once the execution is complete, you can review the results for each individual request and check their statuses.
+
+<Video src="/assets/demo-csv-runner-gui.mp4" />
 
 ## CSV Runner in Bruno CLI
 
 1. Navigate to the root directory of your Bruno collection.
 2. Run the following command:
 
-   ```bash
+   ```bash copy
    bru run --output results.html --format html --csv-file-path /path/to/csv/file.csv --env Prod
+
+
+<Video src="/assets/demo-csv-runner-cli.mp4" />
+
+It will create a `results.html` file in your Bruno collection's root directory. You can view this file in your browser.
 
 ### Command Overview 
 1. `bash --output results.html` : Specifies the output file for the results of your API tests.
 2. `bash --format [string]` : Defines the format of the output file.
 3. `bash --csv-file-path /path/to/csv/file.csv` : Indicates the path to the CSV file you want to use. 
 
-[Bruno CLI]("")
+[Bruno CLI Overview](../bru-cli/overview)
