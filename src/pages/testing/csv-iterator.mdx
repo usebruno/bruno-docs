@@ -1,0 +1,64 @@
+import Video from "../../components/Video"
+
+
+# Iterate with CSV 
+
+The Runner feature enables you to iterate over files, making it easy to manage and manipulate data inputs. Bruno support both **CSV** and **JSON** files for running requests.
+
+# Introduction 
+
+In this tutorial, we'll explore the bruno-runner feature, which allows users to iterate over multiple files. We’ll be using the [reqres](https://reqreq.in) API to make requests, but you can use any API you prefer.
+
+## Steps to Get Started
+
+1. **Open the Bruno app.**
+2. **Create a collection** called runner-example.
+3. **Create a POST request** and name it runner-request.
+4. **Use the URL**: https://reqres.in/api/users.
+
+> **Optional**: You can choose the JSON option in the body and provide any JSON data that suits your API.
+
+You need csv file with some dumy data.
+
+## Using bruno-runner
+
+Now you're ready to use bruno-runner. You can access it in two ways:
+
+- **From the Bruno GUI app**
+- **Using the Command Line Interface (CLI)**
+
+ 
+
+
+## CSV Runner in the Bruno App
+
+1. Click on the runner icon in the right-hand navbar.
+2. Check the **Run with Parameters** option.
+3. Select the file type: CSV or JSON.
+4. Click **Run Collection**.
+
+Once the execution is complete, you can review the results for each individual request and check their statuses.
+
+<Video src="/assets/demo-csv-runner-gui.mp4" />
+
+## CSV Runner in Bruno CLI
+
+1. Navigate to the root directory of your Bruno collection.
+2. Run the following command:
+
+   
+bash copy
+   bru run --output results.html --format html --csv-file-path /path/to/csv/file.csv 
+   
+
+
+<Video src="/assets/demo-csv-runner-cli.mp4" />
+
+It will create a `results.html` file in your Bruno collection's root directory. You can view this file in your browser.
+
+### Command Overview 
+1. ` --output results.html` : Specifies the output file for the results of your API tests.
+2. ` --format [string]` : Defines the format of the output file.
+3. ` --csv-file-path /path/to/csv/file.csv` : Indicates the path to the CSV file you want to use. 
+
+[Bruno CLI Overview](../bru-cli/overview)
