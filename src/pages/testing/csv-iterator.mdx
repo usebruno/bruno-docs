@@ -3,22 +3,28 @@ import Video from "../../components/Video"
 
 # Iterate with CSV 
 
-The Runner feature enables you to iterate over files, making it easy to manage and manipulate data inputs. Bruno support both **CSV** and **JSON** files for running requests.
+The **Bruno Runner** feature allows you to iterate over data files, making it easy to automate and manage data-driven requests. Bruno supports both CSV and JSON files for running requests, so you can efficiently run tests or process multiple data inputs.
 
 # Introduction 
 
-In this tutorial, we'll explore the bruno-runner feature, which allows users to iterate over multiple files. We’ll be using the [reqres](https://reqreq.in) API to make requests, but you can use any API you prefer.
-
+  In this tutorial, we'll explore the Bruno Runner feature, which enables you to iterate over multiple files. We'll be using the [ReqRes](https://reqreq.in) API to demonstrate how it works, but you can use any API of your choice.
 ## Steps to Get Started
 
 1. **Open the Bruno app.**
-2. **Create a collection** called runner-example.
-3. **Create a POST request** and name it runner-request.
-4. **Use the URL**: https://reqres.in/api/users.
+2. **Create a collection** called `runner-example`
+3. **Create a POST request** and name it `runner-request`
+4. **Use the URL**: `https://reqres.in/api/users`
+5. **Select the JSON format for the request body** and add the following data:
 
-> **Optional**: You can choose the JSON option in the body and provide any JSON data that suits your API.
+```bash
+{
+    "name": "morpheus",
+    "job": "leader"
+}
+```
 
-You need csv file with some dumy data.
+> Selecting the JSON option for the request body and adding JSON data is optional.
+
 
 ## Using bruno-runner
 
@@ -27,7 +33,8 @@ Now you're ready to use bruno-runner. You can access it in two ways:
 - **From the Bruno GUI app**
 - **Using the Command Line Interface (CLI)**
 
- 
+ > You will need a CSV or JSON file with sample data. 
+
 
 
 ## CSV Runner in the Bruno App
@@ -47,8 +54,9 @@ Once the execution is complete, you can review the results for each individual r
 2. Run the following command:
 
    
-bash copy
+```bash copy
    bru run --output results.html --format html --csv-file-path /path/to/csv/file.csv 
+```
    
 
 
