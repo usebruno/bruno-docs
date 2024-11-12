@@ -79,6 +79,11 @@ Once the execution is complete, you can review the results for each individual r
 
    
 ```bash copy
+   bru run --reporter-html results.html --csv-file-path /path/to/csv/file.csv 
+```
+or 
+
+```bash copy
    bru run --output results.html --format html --csv-file-path /path/to/csv/file.csv 
 ```
    
@@ -90,8 +95,8 @@ It will create a `results.html` file in your Bruno collection's root directory. 
 
 
 ### Command Overview 
-1. ` --output results.html` : Specifies the output file for the results of your API tests.
-2. ` --format [string]` : Defines the format of the output file.
-3. ` --csv-file-path /path/to/csv/file.csv` : Indicates the path to the CSV file you want to use. 
+1. `--reporter-html results.html`: Generates a human-readable HTML report.
+2. `--csv-file-path /path/to/csv/file.csv`: Specifies the path to the CSV file you want to use.
+
 
 [Bruno CLI Overview](../bru-cli/overview)
