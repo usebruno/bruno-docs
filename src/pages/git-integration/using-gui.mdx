@@ -4,19 +4,40 @@ import PremiumBadge from "@/components/premium-badge";
 # Collaboration using GUI<PremiumBadge />
 > GUI-based Git collaboration is available in Golden and Ultimate Editions of Bruno.
 
-Initializing GIT is simpler in the Golden edition of Bruno. Simply click on the "initialize" button in the Git modal dialogue to initialize the Collection with Git.
+Git Integration in Bruno allows users to seamlessly connect their API collections to version-controlled Git repositories. This feature is designed to help teams collaborate more effectively by tracking changes to API collections, managing version histories, and ensuring consistency across different environments.
+
+Initializing GIT is simpler in the Golden edition of Bruno. 
+1. Click on the "initialize" button 
+2. The Git modal dialogue box will appear 
+3. Click on initialize option.
 
 <Video src="/assets/demo-git-initialise.mov" />
 
-#### Adding and Committing the Changes
+Once the repository is initialized, your API collection is linked to Git. You can now commit changes, push updates, and pull from the remote repository for version control and collaboration.
 
-Once you make the changes, you can click on the Git UI button and include the changes you made to be committed.
 
+### Adding and Committing Changes
+
+After making changes to your API collection, you can add and commit them to your Git repository directly from Bruno:
+
+1. Click the **Git** button in the UI.
+2. Review the changes you've made.
+3. Click **Add** to stage the changes.
+4. Write a commit message and click **Commit** to save your changes to the repository.
+
+This allows you to track and document changes to your API collection with clear version histories.
 <Video src="/assets/demo-adding-and-committing-changes.mov" />
 
-#### Pushing and pulling the Changes
+### Pushing and Pulling Changes
 
-Leveraging Bruno's GUI-based Git integration allows both engineering and non-engineering teammates work in an easy, efficient, and quick manner to ensure there is confidence in the accuracy of your Collections. 
+To keep your API collection in sync with the remote Git repository, you can push and pull changes:
+
+- **Push Changes**: After committing changes locally, click the **Push** button to upload them to the remote repository.
+
+This ensures that your collection stays up-to-date and that team members can collaborate seamlessly.
 
 <Video src="/assets/demo-git-push.mov" />
+
+- **Pull Changes**: To get the latest changes from the remote repository, click the **Pull** button.
+
 <Video src="/assets/demo-git-pull.mov" />
