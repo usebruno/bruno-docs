@@ -34,14 +34,12 @@ bru run folder
 ## Using Environments
 If you need to use a specific environment, you can pass it with the --env option:
 
-
 ```bash copy
 bru run folder --env Local
 ```
 
 ## Passing Environment Variables
 You can pass environment variables directly to your collection with the --env-var option:
-
 
 ```bash copy
 bru run folder --env Local --env-var JWT_TOKEN=1234
@@ -57,9 +55,55 @@ bru run folder --csv-file-path /path/to/csv/file.csv
 ## Outputting Results
 To save the results of your API tests to a file, use the --output option:
 
-
 ```bash copy
 bru run folder --output results.json
+```
+
+## Skipping Specific Headers in the Report
+
+If you want to exclude certain headers from the report, use the `--reporter-skip-headers` option. You can list multiple headers to skip, separated by spaces.
+
+```bash
+bru run --reporter-skip-headers "Authorization" "Content-Type"
+```
+
+## Skip All Headers in the Report
+
+To exclude all headers from the report, use the `--reporter-skip-all-headers` option. This will remove all headers from the output report, ensuring a cleaner result.
+
+```bash copy
+bru run --reporter-skip-all-headers
+```
+
+## Using Client Certificates for API Requests
+
+If your API requests require client certificates for authentication, you can specify using the `--client-cert-config` option. The configuration should be provided in a JSON file. Here's an example of how to use this option:
+
+```bash copy
+bru run folder --client-cert-config /path/to/client-cert-config.json
+```
+
+The client-cert-config.json file should contain the following fields:
+
+```json
+{
+  "enabled": true,
+  "certs": [
+    {
+      "domain": "usebruno.com",
+      "type": "cert",
+      "certFilePath": "certs/server_1.crt",
+      "keyFilePath": "private/server_1.key",
+      "passphrase": "Iu$eBrun0_#Secure!"
+    },
+    {
+      "domain": "the-example.com",
+      "type": "pfx",
+      "pfxFilePath": "pfx/server_3.pfx",
+      "passphrase": "L!ghT_Y@g@mi_2024!"
+    }
+  ]
+}
 ```
 
 ## Generating Reports
@@ -111,23 +155,27 @@ This command will create three files: results.json, results.xml, and results.htm
 
 
 ## Options
-| Option                    | Details                                                                       |
-|---------------------------|-------------------------------------------------------------------------------|
-| -h, --help                | Show help                                                                     |
-| --version                 | Show version number                                                           |
-| -r                        | Indicates a recursive run (default: false)                                    |
-| --cacert [string]         | CA certificate to verify peer against                                         |
-| --env [string]            | Specify environment to run with                                               |
-| --env-var [string]        | Overwrite a single environment variable, multiple usages possible             |
-| -o, --output [string]     | Path to write file results to                                                 |
-| -f, --format [string]     | Format of the file results; available formats are "json" (default) or "junit" |
-| --reporter-json [string]  | Path to generate a JSON report                                                |
-| --reporter-junit [string] | Path to generate a JUnit report                                               |
-| --reporter-html [string]  | Path to generate an HTML report                                               |
-| --insecure                | Allow insecure server connections                                             |
-| --tests-only              | Only run requests that have tests                                             |
-| --bail                    | Stop execution after a failure of a request, test, or assertion               |
-| --csv-file-path           | CSV file to run the collection with                                           |
+
+| Option                       | Details                                                                       |
+| ---------------------------- | ----------------------------------------------------------------------------- |
+| -h, --help                   | Show help                                                                     |
+| --version                    | Show version number                                                           |
+| -r                           | Indicates a recursive run (default: false)                                    |
+| --cacert [string]            | CA certificate to verify peer against                                         |
+| --env [string]               | Specify environment to run with                                               |
+| --env-var [string]           | Overwrite a single environment variable, multiple usages possible             |
+| -o, --output [string]        | Path to write file results to                                                 |
+| -f, --format [string]        | Format of the file results; available formats are "json" (default) or "junit" |
+| --reporter-json [string]     | Path to generate a JSON report                                                |
+| --reporter-junit [string]    | Path to generate a JUnit report                                               |
+| --reporter-html [string]     | Path to generate an HTML report                                               |
+| --insecure                   | Allow insecure server connections                                             |
+| --tests-only                 | Only run requests that have tests                                             |
+| --bail                       | Stop execution after a failure of a request, test, or assertion               |
+| --csv-file-path              | CSV file to run the collection with                                           |
+| --reporter--skip-all-headers | Skip all headers in the report                                                |
+| --reporter-skip-headers      | Skip specific headers in the report                                           |
+| --client-cert-config         | Client certificate configuration by passing a JSON file                       |
 
 ## Demo
 ![bru cli](/screenshots/cli-demo.webp)
