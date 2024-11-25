@@ -3,9 +3,9 @@
   "license-administrators": "License Administrators",
   "end-users": "License Activation",
   "ultimate-edition": {
-    display: 'hidden'
-  }
+    "display": "hidden"
+  },
   "golden-edition": {
-    display: 'hidden'
+    "display": "hidden"
   }
 }
