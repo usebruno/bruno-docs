@@ -1,22 +1,121 @@
 import Video from "@/components/Video"
 import PremiumBadge from "@/components/premium-badge";
 
-# Collaboration using GUI<PremiumBadge />
-> GUI-based Git collaboration is available in Golden and Ultimate Editions of Bruno.
+# **Collaboration via GUI**
 
-Initializing GIT is simpler in the Golden edition of Bruno. Simply click on the "initialize" button in the Git modal dialogue to initialize the Collection with Git.
+Bruno offers an intuitive **GUI-based Git collaboration** feature, available in the **Pro** and **Ultimate Editions**. This feature makes it easier for both engineering and non-engineering teams to collaborate seamlessly on collections.
+
+This feature includes following actions:
+
+- [Initializing Git in a Collection](#initializing-git)
+- [Adding and Committing Changes](#adding-and-committing-changes)
+- [Pushing and Pulling Changes](#pushing-and-pulling-changes)
+- [Branch Creation and Checkout](#creating-branch)
+- [Cloning a Repository](#cloning-repository)
+
+## **Initializing Git**
+
+Initializing Git in Bruno is the first step towards managing your API collections with version control. It’s easy and quick to set up. Follow the steps below to initialize Git:
+
+1. Launch the **Bruno app**.
+2. Navigate to the collection you want to initialize with Git.
+3. Click on the **Git icon** to open the **Git modal dialog**.
+4. Click the **Initialize** button to set up your collection with Git.
+
+ This allows you to perform other Git operations such as adding, committing, pushing, pulling changes, and more.
+
 
 <Video src="/assets/demo-git-initialise.mov" />
 
-#### Adding and Committing the Changes
 
-Once you make the changes, you can click on the Git UI button and include the changes you made to be committed.
+
+---
+
+## **Adding and Committing Changes**
+
+Once you’ve made changes to your collection in Bruno, you can easily commit those changes using the Git UI. This allows you to track changes and collaborate with your team efficiently.
+
+Follow these steps to add and commit changes:
+
+1. Navigate to Your Collection and Access **Git UI** 
+2. Go to the **Changes Tab**. 
+3. Click on **add icon** for the changes you want to commit.
+4. Click on **Commit Changes** button. 
+5. Write a Commit Message and click **Commit**. 
+
+> You can commit all changes in single click by pressing **Add All Changes** button.
+
+By following these steps, your changes are now committed and tracked in Git, ready to be pushed or shared with others.
 
 <Video src="/assets/demo-adding-and-committing-changes.mov" />
 
-#### Pushing and pulling the Changes
 
-Leveraging Bruno's GUI-based Git integration allows both engineering and non-engineering teammates work in an easy, efficient, and quick manner to ensure there is confidence in the accuracy of your Collections. 
+
+
+---
+
+## **Branch Creation and Checkout**
+
+With branches in **Bruno**, you can manage your code effectively by isolating different features or tasks.
+
+1. Open to the **Collection**.
+  
+
+2. Click on the **Main** Button and Create a **New Branch**.
+
+3. Enter **Branch Name**.
+
+5. Click on **Save** button.
+   
+Once the branch is created, you can start making changes to the branch.
+You can **push** changes from your local environment to the remote repository or **pull** changes from the remote to your local branch.
+
+
+## **Pushing and Pulling Changes**
+
+>  Before you can push or pull changes, ensure that the **remote repository** is linked to your project. 
+
+With the GUI-based Git integration in Bruno, both engineering and non-engineering teams can work in a fast, efficient, and accurate manner. This integration ensures your collections are always up-to-date, and you can confidently collaborate.
+
+
+### **Pushing Changes**
+Push your local commits to the remote repository with just a few clicks.
 
 <Video src="/assets/demo-git-push.mov" />
+
+### **Pulling Changes**
+Pull the latest changes from the remote repository to stay synchronized with your team.
+
 <Video src="/assets/demo-git-pull.mov" />
+
+---
+
+## **Cloning Collections from GitHub**
+To clone a collection from GitHub into **Bruno**, you need to have a pre-existing collection repository on GitHub. Follow these steps to clone a collection:
+
+
+> You must have an existing collection repository hosted on GitHub.
+
+
+1. Open Bruno
+
+2. Click on the '...' Menu Icon
+   
+
+3. Click on 'Import Collection'
+4. Select 'Clone Git Repository'
+
+5. Enter the Repository URL
+
+6. Select Location for Cloned Collection and Click on Clone
+   
+
+7. Select the Collection and Click 'Open'.
+   
+
+
+---
+
+
+
+
