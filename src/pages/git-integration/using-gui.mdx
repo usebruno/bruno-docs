@@ -1,9 +1,12 @@
 import Video from "@/components/Video"
 import PremiumBadge from "@/components/premium-badge";
 
-# **Collaboration via GUI**
+# **Collaboration via GUI** <PremiumBadge />
 
 Bruno offers an intuitive **GUI-based Git collaboration** feature, available in the **Pro** and **Ultimate Editions**. This feature makes it easier for both engineering and non-engineering teams to collaborate seamlessly on collections.
+
+> You need to have Git installed on your machine to use these feature.
+
 
 This feature includes following actions:
 
@@ -11,9 +14,8 @@ This feature includes following actions:
 - [Adding and Committing Changes](#adding-and-committing-changes)
 - [Pushing and Pulling Changes](#pushing-and-pulling-changes)
 - [Branch Creation and Checkout](#branch-creation-and-checkout)
-- [Cloning a Repository](#cloning-repository)
+- [Cloning a Repository](#cloning-collections-from-github)
 
-> You need to have Git installed on your machine to use these features.
 
 ## **Initializing Git**
 
@@ -39,7 +41,7 @@ Once you’ve made changes to your collection in Bruno, you can easily commit th
 
 Follow these steps to add and commit changes:
 
-1. Navigate to Your Collection and Access **Git UI** 
+1. Navigate to Your Collection and Access **Git UI**.
 2. Go to the **Changes Tab**. 
 3. Click on **add icon** for the changes you want to commit.
 4. Click on **Commit Changes** button. 
@@ -57,17 +59,18 @@ By following these steps, your changes are now committed and tracked in Git, rea
 
 With branches in **Bruno**, you can manage your code effectively by isolating different features or tasks.
 
-> You need to commit some changes to the main branch before you can create a new branch.
+> You need to commit some changes to the **main** branch before you can create a new branch.
 
 
 1. Open to the **Collection**.
 
-2. Click on the **Main** Button and Create a **New Branch**.
+2. Click on the **Main** and Create a **New Branch**.
 
 3. Enter **Branch Name**.
 
 5. Click on **Save** button.
 
+<Video src="/assets/branch-and-checkout.mp4" />
    
 Once the branch is created, you can start making changes to the branch.
 You can **push** changes from your local environment to the remote repository or **pull** changes from the remote to your local branch.
@@ -75,18 +78,31 @@ You can **push** changes from your local environment to the remote repository or
 
 ## **Pushing and Pulling Changes**
 
->  Before you can push or pull changes, ensure that the **remote repository** is linked to your project. 
+The GUI-based Git integration in Bruno allows both engineering and non-engineering teams to work together in a fast, efficient, and accurate manner. This integration ensures that your collections remain consistently up-to-date across all team members.
 
-With the GUI-based Git integration in Bruno, both engineering and non-engineering teams can work in a fast, efficient, and accurate manner. This integration ensures your collections are always up-to-date, and you can confidently collaborate.
+>  Before you can push or pull changes, ensure that the **remote repository** is linked to your project. 
 
 
 ### **Pushing Changes**
-Push your local commits to the remote repository with just a few clicks.
+Push your local changes to the remote repository with just a few clicks.
+
+1. Click on **main** and Select **Push**.
+2. Confirm the **Remote Server** configurations.
+3. Click on **Push** button.
+
+Now you can see all your local changes pushed to the remote repository.
 
 <Video src="/assets/demo-git-push.mov" />
 
 ### **Pulling Changes**
 Pull the latest changes from the remote repository to stay synchronized with your team.
+
+1. Click on **main** and Select **Pull**.
+2. Confirm the **Remote Server** configurations.
+3. Click on **Pull** button.
+
+Now you can see all your remote changes pulled in your collection.
+
 
 <Video src="/assets/demo-git-pull.mov" />
 
@@ -111,9 +127,10 @@ To clone a collection from GitHub into **Bruno**, you need to have a pre-existin
 6. Select the **Collection** you want to clone and Click **Open**.
 
 
+
+<Video src="/assets/clone-github-repo.mp4" />
+
 You'll see your collection will be open in **Bruno**.
-
-
 
 
 
