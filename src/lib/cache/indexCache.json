@@ -27,12 +27,12 @@
             "path": "get-started/bruno-basics/download"
           },
           {
-            "name": "Create a Request",
-            "path": "get-started/bruno-basics/create-a-request"
-          },
-          {
             "name": "Create a Collection",
             "path": "get-started/bruno-basics/create-a-collection"
+          },
+          {
+            "name": "Create a Request",
+            "path": "get-started/bruno-basics/create-a-request"
           },
           {
             "name": "Create a Test",
@@ -87,13 +87,13 @@
         ]
       },
       {
-        "name": "JavaScript Sandbox",
+        "name": "Safe Mode vs Developer Mode",
         "path": "get-started/javascript-sandbox"
       }
     ]
   },
   {
-    "name": "Git Integration",
+    "name": "Git Integration & Collaboration",
     "children": [
       {
         "name": "Overview",
@@ -121,13 +121,13 @@
         "path": "testing/assertions"
       },
       {
-        "name": "JavaScript Reference",
-        "path": "testing/javascript-reference"
+        "name": "Data Driven Testing",
+        "path": "testing/data-driven-testing"
       }
     ]
   },
   {
-    "name": "Secrets Management",
+    "name": "Secret Management",
     "children": [
       {
         "name": "Overview",
@@ -169,7 +169,7 @@
     ]
   },
   {
-    "name": "Authentication and Authorization",
+    "name": "Authentication & Authorization",
     "children": [
       {
         "name": "Overview",
@@ -317,46 +317,19 @@
       {
         "name": "Overview",
         "path": "license-management/overview"
+      }
+    ]
+  },
+  {
+    "name": "Advanced Guides",
+    "children": [
+      {
+        "name": "Working with BigInt",
+        "path": "advanced-guides/working-with-bigint"
       },
       {
-        "name": "Golden Edition",
-        "children": [
-          {
-            "name": "Individuals",
-            "children": [
-              {
-                "name": "Activate License",
-                "path": "license-management/golden-edition/individual/activate-license"
-              }
-            ]
-          },
-          {
-            "name": "Organizations",
-            "children": [
-              {
-                "name": "Manage Licenses",
-                "path": "license-management/golden-edition/organization/manage-licenses"
-              },
-              {
-                "name": "Activate License",
-                "path": "license-management/golden-edition/organization/activate-license"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "name": "Ultimate Edition",
-        "children": [
-          {
-            "name": "Manage Licenses",
-            "path": "license-management/ultimate-edition/manage-licenses"
-          },
-          {
-            "name": "Activate License",
-            "path": "license-management/ultimate-edition/activate-license"
-          }
-        ]
+        "name": "Visualization",
+        "path": "advanced-guides/visualize"
       }
     ]
   }
