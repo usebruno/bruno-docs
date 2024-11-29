@@ -3,7 +3,7 @@ import PremiumBadge from "@/components/premium-badge";
 
 # **Collaboration via GUI** <PremiumBadge />
 
-Bruno offers an intuitive **GUI-based Git collaboration** feature, available in the **Pro** and **Ultimate Editions**. This feature makes it easier for both engineering and non-engineering teams to collaborate seamlessly on collections.
+Bruno offers an intuitive **GUI-based Git collaboration** feature, available in the [Pro](https://www.usebruno.com/buy?plan=pro) and [Ultimate Editions](https://www.usebruno.com/buy?plan=ultimate). This feature makes it easier for both engineering and non-engineering teams to collaborate seamlessly on collections.
 
 > You need to have Git installed on your machine to use these feature.
 
@@ -14,7 +14,7 @@ This feature includes following actions:
 - [Adding and Committing Changes](#adding-and-committing-changes)
 - [Pushing and Pulling Changes](#pushing-and-pulling-changes)
 - [Branch Creation and Checkout](#branch-creation-and-checkout)
-- [Cloning a Repository](#cloning-collections-from-github)
+- [Cloning a Repository](http://localhost:3000/git-integration/using-gui/consumer)
 
 
 ## **Initializing Git**
@@ -23,7 +23,7 @@ Initializing Git in Bruno is the first step towards managing your API collection
 
 1. Launch the **Bruno app**.
 2. Navigate to the collection you want to initialize with Git.
-3. Click on the **Git icon** to open the **Git modal dialog**.
+3. Click on the **Git Icon** in the top-right corner of the navbar.
 4. Click the **Initialize** button to set up your collection with Git.
 
  This allows you to perform other Git operations such as adding, committing, pushing, pulling changes, and more.
@@ -42,16 +42,31 @@ Once you have initialized your collection, the next step is to connect it to a r
 
 2. **Connect Your Local Collection to the Remote Repository:**
    - Open a terminal and navigate to the folder where your collection is stored.
-   - Run the following commands to initialize Git, commit your changes, and link the local collection to the remote repository.
+   - Run the following commands to add, commit your changes, and link the local collection to the remote repository.
 
-   ```bash
+   Add all the collection changes. 
+
+   ```bash copy
    git add .
-   git commit -m "Initial commit"
-   git branch -M main
-   git remote add origin https://github.com/username/repo-name.git
-   git push -u origin main
+   ```
 
-3. Replace `username` with your GitHub username and `repo-name` with the name of the repository you created.
+   Commit all the changes you have added.
+   ```bash copy
+   git commit -m "commit-message"
+   ```
+
+   Replace `username` with your GitHub username and `repo-name` with the name of the repository you created.
+
+   ```bash copy
+   git remote add origin https://github.com/username/repo-name.git
+   ```
+
+   Push local chnages to remote repository.
+   ```bash copy
+   git push -u origin main
+   ```
+
+
 
 After completing the above steps, your collection will be pushed to GitHub and should be visible in your repository.
 Once your collection is connected to the remote repository, you can manage it directly from the Bruno app.
@@ -62,9 +77,9 @@ Once you’ve made changes to your collection in Bruno, you can easily commit th
 
 Follow these steps to add and commit changes:
 
-1. Navigate to Your Collection and Access **Git UI**.
+1. Open the collection you've initialized with Git and access the **Git UI** from the **main** dropdown in the top-right corner.
 2. Go to the **Changes Tab**. 
-3. Click on **add icon** for the changes you want to commit.
+3. Click on **Add Icon** for the changes you want to commit.
 4. Click on **Commit Changes** button. 
 5. Write a Commit Message and click **Commit**. 
 
@@ -73,29 +88,6 @@ Follow these steps to add and commit changes:
 By following these steps, your changes are now committed and tracked in Git, ready to be pushed or shared with others.
 
 <Video src="/assets/demo-adding-and-committing-changes.mov" />
-
-
-
-## **Branch Creation and Checkout**
-
-With branches in **Bruno**, you can manage your code effectively by isolating different features or tasks.
-
-> You need to commit some changes to the **main** branch before you can create a new branch.
-
-
-1. Open to the **Collection**.
-
-2. Click on the **Main** and Create a **New Branch**.
-
-3. Enter **Branch Name**.
-
-5. Click on **Save** button.
-
-<Video src="/assets/branch-and-checkout.mp4" />
-   
-Once the branch is created, you can start making changes to the branch.
-You can **push** changes from your local environment to the remote repository or **pull** changes from the remote to your local branch.
-
 
 ## **Pushing and Pulling Changes**
 
@@ -107,13 +99,46 @@ The GUI-based Git integration in Bruno allows both engineering and non-engineeri
 ### **Pushing Changes**
 Push your local changes to the remote repository with just a few clicks.
 
-1. Click on **main** and Select **Push**.
+1. Click on **main** from top-right corner and select **Push** from drop-down.
 2. Confirm the **Remote Server** configurations.
 3. Click on **Push** button.
 
 Now you can see all your local changes pushed to the remote repository.
 
 <Video src="/assets/demo-git-push.mov" />
+
+
+
+
+## **Branch Creation and Checkout**
+
+With branches in **Bruno**, you can manage your code effectively by isolating different features or tasks.
+
+### Creating Branches 
+
+Follow the below steps to create branches in Bruno.
+
+1. Navigate to the **Collection** in Bruno.
+
+2. Click on the **main** from the top-right and select **Create New Branch** from dropdown.
+
+3. Enter **Branch Name**.
+
+4. Click on **Save** button.
+
+Once the branch is created, you can start making changes to the branch.
+
+###  Branch Checkout
+
+1. Click on **Checkout Branch** from **main**.
+2. Select the branch you want to switch from **Local** or **Remote**.
+3. Click on **Checkout** button.
+4. Now you're switched to your selected branch.
+
+
+<Video src="/assets/branch-and-checkout.mp4" />
+
+
 
 
 
