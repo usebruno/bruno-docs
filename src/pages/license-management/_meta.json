@@ -1,11 +1,5 @@
 {
   "overview": "Overview",
   "license-administrators": "License Administrators",
-  "end-users": "License Activation",
-  "ultimate-edition": {
-    "display": "hidden"
-  },
-  "golden-edition": {
-    "display": "hidden"
-  }
+  "end-users": "License Activation"
 }
