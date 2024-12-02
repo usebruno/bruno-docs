@@ -40,8 +40,7 @@ bru run folder --env Local
 ```
 
 ## Passing Environment Variables
-You can pass environment variables directly to your collection with the --env-var option:
-
+> Variables marked as secrets in Bruno app are not accessible via the CLI. Pass them directly as command-line arguments.
 
 ```bash copy
 bru run folder --env Local --env-var JWT_TOKEN=1234
