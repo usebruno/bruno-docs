@@ -12,7 +12,7 @@ To create a runtime variable, you can use the `bru.setVar(name, value)` function
 Suppose you receive an authentication token as part of a response body and want to reuse it in subsequent requests. You can capture it using the `bru.setVar()` function in your post response script.
 
 ```javascript
-bru.setVar("token", "res.body.token");
+bru.setVar("token", res.body.token);
 ```
 
 ### Using a Runtime Variable
