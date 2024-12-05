@@ -1,6 +1,6 @@
 {
   "overview": "Overview",
-  "dotenv-file": "Dotenv File",
+  "dotenv-file": "DotEnv File",
   "secret-variables": "Secret Variables",
   "hashicorp-vault": "Hashicorp Vault"
 }
