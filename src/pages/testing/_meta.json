@@ -1,5 +1,4 @@
 {
-  "introduction": "Introduction",
-  "assertions": "Assertions",
-  "data-driven-testing": "Data Driven Testing"
+  "tests": "Tests",
+  "script": "Script"
 }

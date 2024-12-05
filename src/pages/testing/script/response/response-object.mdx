@@ -1,0 +1,56 @@
+# Response Object
+
+The `res` object that is available inside the [vars](../vars), [assertions](../../tests/assertions), [scripting](../getting-started) and [testing](../../tests/introduction)
+contexts can be used to extract values from the response body, headers and status.
+
+*Note that the `res` object is only available in the context of a request.*
+
+You can also access it with [response queries](./response-query).
+
+## Object Structure
+
+The `res` object has the following properties:
+
+- `body`: Represents the response body containing data returned to the client.
+- `headers`: Contains key-value pairs representing HTTP headers associated with the response.
+- `status`: Represents the HTTP status code indicating the outcome of the request.
+
+## Property Descriptions
+
+### `body`
+
+The `body` property of the `res` object contains the response data sent to the client. It can be a string, an object, or a stream, depending on the application's needs.
+
+### `headers`
+
+The `headers` property contains HTTP headers associated with the response. These headers provide metadata about the response, such as content type, encoding, and caching directives.
+
+### `status`
+
+The `status` property represents the HTTP status code of the response. It indicates the outcome of the request, such as success, redirection, client error, or server error.
+
+## Example Usage
+
+```javascript
+// Example response object
+const res = {
+  body: '{"message": "Hello, world!"}',
+  headers: {
+    'Content-Type': 'application/json',
+    'Cache-Control': 'no-cache',
+  },
+  status: 200,
+};
+
+// Accessing response properties
+console.log(res.body); // Output: '{"message": "Hello, world!"}'
+console.log(res.headers['Content-Type']); // Output: 'application/json'
+console.log(res.status); // Output: 200
+```
+
+
+
+
+
+
+

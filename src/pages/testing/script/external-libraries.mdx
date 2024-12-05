@@ -1,0 +1,35 @@
+# External Libraries
+
+Bruno supports loading any npm module to use in your scripting workflows.
+
+You need to add a `package.json` file where your collection is stored.
+```js
+{
+  "name": "github-rest-api-collection",
+  "version": "1.0.0",
+  "main": "index.js",
+  "homepage": "https://github.com/usebruno/github-rest-api-collection#readme",
+  "dependencies": {
+    "@faker-js/faker": "8.3.1"
+  }
+}
+```
+
+And then run npm install inside your collection folder
+```bash
+npm install
+```
+
+And then you can require the node module in your script as usual.
+**Example:**
+```js
+const { faker } = require('@faker-js/faker');
+
+const randomName = faker.name.fullName();
+const randomEmail = faker.internet.email();
+
+req.setBody({
+  name: randomName,
+  email: randomEmail
+});
+```
