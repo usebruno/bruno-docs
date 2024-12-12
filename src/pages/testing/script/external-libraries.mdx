@@ -49,7 +49,7 @@ In this example we're using [Spectral CLI](https://github.com/stoplightio/spectr
 
 You need to have OpenAPI JSON or YAML file to work with spectral or you can download from [here](https://github.com/ganesh-bruno/spectral-example) as example.
 
-### Spectral Setup
+### Spectral CLI Setup
 You can install `spectral-cli` by running following command:
 ```bash
 npm install @stoplight/spectral-cli
@@ -62,9 +62,9 @@ Run this command into your terminal to initialize `.spectral.yml` file which is 
 echo 'extends: ["spectral:oas", "spectral:asyncapi", "spectral:arazzo"]' > .spectral.yaml
 ```
 
-Validate your **openapi.yaml** file from Bruno collection by running follwoing command:
+Validate your **openapi.yaml** file from Bruno collection by running follwoing CLI command:
 ```js copy
-spectral lint openspec.yaml
+spectral lint openspec.yaml --r .spectral.yaml 
 ```
 
 ## Output Overview
