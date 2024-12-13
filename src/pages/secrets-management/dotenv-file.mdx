@@ -10,19 +10,20 @@ In this approach, you can store all your secrets in a `.env` file at the **root*
 
 The folder structure should be arranged as follows:
 
-<FileTree>
-  <FileTree.Folder name="bruno-collection" defaultOpen>
+<FileTree.Folder name="bruno-collection" defaultOpen>
+  <FileTree.Folder name="api-folder" >
     <FileTree.Folder name="customer-api" />
     <FileTree.Folder name="emp-api">
       <FileTree.File name="details.bru" />
     </FileTree.Folder>
+      <FileTree.File name="lib.js" />
+  
   </FileTree.Folder>
-  <FileTree.File name="index.js" />
   <FileTree.File name=".gitignore" />
   <FileTree.File name="bruno.json" />
   <FileTree.File name="package.json" />
    <FileTree.File name=".env" />
-</FileTree>
+</FileTree.Folder>
 
 
 Bruno will automatically load the secrets from this file and make them available to your collection via `process.env.<secret-name>`.
