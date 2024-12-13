@@ -45,7 +45,7 @@ Now you can install any npm package or module to use in your collection.
 
 ## Spectral Integration
 
-In this example we're using [Spectral CLI](https://github.com/stoplightio/spectral?tab=readme-ov-file) as a npm package which help you to valide OpenAPI YAML or JSON document with the built-in ruleset. 
+In this example we're using [Spectral CLI](https://github.com/stoplightio/spectral?tab=readme-ov-file) as a npm package which help you to valide OpenSpec API YAML or JSON files with the built-in ruleset. 
 
 You need to have OpenAPI JSON or YAML file to work with spectral or you can download from [here](https://github.com/ganesh-bruno/spectral-example) as example.
 
@@ -66,12 +66,15 @@ Validate your **openapi.yaml** file from Bruno collection by running follwoing C
 ```js copy
 spectral lint openspec.yaml --r .spectral.yaml 
 ```
-
 ## Output Overview
+After following the process outlined above, warning messages will be displayed on the CLI such as duplicates and empty tags. This is how you can validate your OpenSpec files using Spectral.
 
-After following above process the expected results should be look as follows:
- 
+```bash 
+openspec.yaml:
+ 2:6  warning  info-contact    Info object must have "contact" object.      info
+ 10:9 warning  operation-tags  Operation must have non-empty "tags" array.  paths./pets.get
+ 36:9 warning  operation-tags  Operation must have non-empty "tags" array.  paths./pets/{petId}.get
+```
 
-  
    
 
