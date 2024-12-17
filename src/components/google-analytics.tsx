@@ -5,6 +5,7 @@ import { useEffect } from "react";
 
 const GoogleAnalytics = () => {
   useEffect(() => {
+    if (!window) return;
     window.dataLayer = window.dataLayer || [];
     function gtag() {
       window.dataLayer.push(arguments);
