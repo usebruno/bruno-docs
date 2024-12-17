@@ -1,10 +1,30 @@
+import { FileTree } from 'nextra/components'
+
 # Secrets Management
 
 ## DotEnv File
 
 This approach is inspired by how usually developers manage secrets in their source code.
 
-In this approach, you can store all your secrets in a `.env` file at the root of your collection folder.
+In this approach, you can store all your secrets in a `.env` file at the **root** of your collection folder.
+
+The folder structure should be arranged as follows:
+
+<FileTree.Folder name="bruno-collection" defaultOpen>
+  <FileTree.Folder name="api-folder" >
+    <FileTree.Folder name="customer-api" />
+    <FileTree.Folder name="emp-api">
+      <FileTree.File name="details.bru" />
+    </FileTree.Folder>
+      <FileTree.File name="lib.js" />
+  
+  </FileTree.Folder>
+  <FileTree.File name=".gitignore" />
+  <FileTree.File name="bruno.json" />
+  <FileTree.File name="package.json" />
+   <FileTree.File name=".env" />
+</FileTree.Folder>
+
 
 Bruno will automatically load the secrets from this file and make them available to your collection via `process.env.<secret-name>`.
 
