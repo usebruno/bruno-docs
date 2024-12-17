@@ -10,6 +10,10 @@ const redirects = {
 
   "/scripting/response/response-object":
     "/testing/script/response/response-object",
+
+  "/scripting/whitelisting-modules": "/testing/script/whitelisting-modules",
+  "/license-management/golden-edition/individual/activate-license":
+    "/license-management/overview",
 };
 
 export function middleware(request) {
