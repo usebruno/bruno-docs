@@ -1,26 +1,44 @@
+import { Callout } from 'nextra/components'
+
+
 # Inbuilt Libraries
 
-> Bruno supports **CommonJS** syntax (`require`) for importing libraries. **ES Modules** `(import/export)` are not supported at this time.
+Bruno supports **CommonJS** syntax `require` for importing libraries. ES Modules `import/export` are not supported at this time.
 
-Below are the list of inbuilt libraries that you can `require`  in your scripts.
+Here’s an example demonstrating how to use the **chai** library in Bruno:
 
-- [ajv](https://www.npmjs.com/package/ajv) - Ajv JSON schema validator
+```js copy
+const chai = require('chai');
+
+const { expect } = chai;
+
+function add(a, b) {
+  return a + b;
+}
+
+const result = add(2, 3);
+
+expect(result).to.equal(5);
+
+console.log('Test passed!');
+```
+You can include this code in the pre-request script section of Bruno to test it out.
+
+Below is the list of inbuilt libraries supported by Bruno.
+
 - [axios](https://www.npmjs.com/package/axios) - Promise based HTTP client for the browser and node.js
-- [node-fetch](https://www.npmjs.com/package/node-fetch) - A light-weight module that brings Fetch API to Node.js.
 - [atob](https://www.npmjs.com/package/atob) -  Turn base64-encoded ascii data back to binary.
 - [btoa](https://www.npmjs.com/package/btoa) -  Turn binary data to base64-encoded ascii.
 - [chai](https://www.npmjs.com/package/chai) -  BDD/TDD assertion library for node.js and the browser.
-- [lodash](https://lodash.com) -  A modern JavaScript utility library delivering modularity, performance & extras.
 - [moment](https://momentjs.com) -  Parse, validate, manipulate, and display dates and times in JavaScript.
-- [uuid](https://www.npmjs.com/package/uuid) -  For the creation of RFC4122 UUIDs
+- [uuid](https://www.npmjs.com/package/uuid) -  For the creation of RFC4122 UUIDs.
 - [nanoid](https://www.npmjs.com/package/nanoid) - A tiny, secure, URL-friendly, unique string ID generator for JavaScript.
 - [crypto-js](https://www.npmjs.com/package/crypto-js) - JavaScript library of crypto standards.
 
-> **Note:** `node-fetch` is not available in [Safe Mode](../../get-started/javascript-sandbox).
+<Callout type="warning">
+To use below inbuilt libraries in Bruno, you must be in **Developer Mode**.
+</Callout>
 
-**Example:**
-```js
-const { nanoid } = require("nanoid");
-
-req.setHeader("transaction-id", nanoid());
-```
+- [node-fetch](https://www.npmjs.com/package/node-fetch) - A light-weight module that brings Fetch API to Node.js.
+- [lodash](https://lodash.com) -  A modern JavaScript utility library delivering modularity, performance & extras.
+- [ajv](https://www.npmjs.com/package/ajv) - Ajv JSON schema validator.
