@@ -1,10 +1,10 @@
-import { Callout } from 'nextra/components'
+import { Callout } from "nextra/components";
 
 # Whitelisting Modules
 
 The scripts can use both [external libraries](external-libraries) (via package.json and npm install) and certain [built-in](inbuilt-libraries) modules in Node.js (like fs, path, etc.). However, for security reasons, not all built-in Node.js modules are made accessible by default in Bruno scripts.
 
-## Why Whitelisting 
+## Why Whitelisting
 
 Bruno requires you to explicitly enable (whitelist) modules before they can be used in scripts due to security reasons. The whitelisting process ensures that only the modules you specifically choose to enable will be available to your scripts.
 
@@ -15,36 +15,32 @@ You can manually enable or whitelist these modules by editing your `bruno.json` 
   "version": "1",
   "name": "collection_name",
   "type": "collection",
-  "ignore": [
-    "node_modules",
-    ".git"
-  ],
-    "scripts": {
-      "moduleWhitelist": ["child_process"],
-      "filesystemAccess": {
-        "allow": true
-      }
+  "ignore": ["node_modules", ".git"],
+  "scripts": {
+    "moduleWhitelist": ["child_process"],
+    "filesystemAccess": {
+      "allow": true
     }
+  }
 }
 ```
 
-
 <Callout type="warning" emoji="⚠️">
-filesystemAccess is required for reading and writing files, especially for modules that depend on it.
+  filesystemAccess is required for reading and writing files, especially for
+  modules that depend on it.
 </Callout>
 
 ### Whitelisting Multiple Modules
+
 If you need to use multiple built-in or trusted third-party modules in your Bruno script, you can whitelist them by adding them to the `moduleWhitelist` array. For example:
 
-```json copy filename="bruno.json" showLineNumbers 
+```json copy filename="bruno.json" showLineNumbers
  "scripts": {
-      "moduleWhitelist": ["crypto", "exec", "child_process"],
+      "moduleWhitelist": ["crypto", "jwt", "child_process"],
       "filesystemAccess": {
         "allow": true
       }
     }
 ```
-
-
 
 Only whitelist modules that you trust and that are necessary for your script to function properly.
