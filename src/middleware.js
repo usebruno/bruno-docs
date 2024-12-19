@@ -14,6 +14,11 @@ const redirects = {
   "/scripting/whitelisting-modules": "/testing/script/whitelisting-modules",
   "/license-management/golden-edition/individual/activate-license":
     "/license-management/overview",
+
+  "/scripting/response/response-query":
+    "/testing/script/response/response-query",
+
+  "/scripting/javascript-reference": "/testing/script/javascript-reference",
 };
 
 export function middleware(request) {
