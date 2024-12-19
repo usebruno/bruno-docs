@@ -85,10 +85,22 @@ get {
   url: https://api.textlocal.in/send?apiKey=secret&numbers=9988776655&message=hello
 }
 
-query {
+params:query {
   apiKey: secret
   numbers: 9988776655
   message: hello
+}
+```
+## path
+
+The request path params
+```bash
+get {
+  url: https://api.textlocal.in/user/:userId
+}
+
+params:path {
+  userId: 13
 }
 ```
 ## headers
