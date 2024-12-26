@@ -72,6 +72,9 @@ const redirects = {
 
   "/scripting/response-query": "/testing/script/response/response-query",
 
+  "/scripting/response/response-query":
+    "/testing/script/response/response-query",
+
   "/bru-lang-extensions": "/bru-lang/syntax-highlighting",
 
   "/get-started/import-export-data/safe-mode":
