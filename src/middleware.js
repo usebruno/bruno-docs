@@ -31,8 +31,7 @@ const redirects = {
 
   "/git-integration/using-gui": "/git-integration/using-gui/intro",
 
-  "/scripting/javascript-reference.html":
-    "/testing/script/javascript-reference",
+  "/scripting/javascript-reference": "/testing/script/javascript-reference",
 
   "/cli/overview": "/bru-cli/overview",
 
@@ -88,7 +87,7 @@ const redirects = {
   "/license-management/organization/activate-license":
     "/license-management/overview",
 
-  "/manifesto.html": "/introduction/manifesto",
+  "/manifesto": "/introduction/manifesto",
 };
 
 export function middleware(request) {
