@@ -25,7 +25,7 @@ const redirects = {
 
   "/tools/translator": "/get-started/import-export-data/script-translator",
 
-  "/bru-language-samples.html": "/bru-lang/samples",
+  "/bru-language-samples": "/bru-lang/samples",
 
   "/scripting/getting-started": "/testing/script/getting-started",
 
@@ -34,32 +34,32 @@ const redirects = {
   "/scripting/javascript-reference.html":
     "/testing/script/javascript-reference",
 
-  "/cli/overview.html": "/bru-cli/overview",
+  "/cli/overview": "/bru-cli/overview",
 
-  "/secrets-management/overview.html": "/secrets-management/overview",
+  "/secrets-management/overview": "/secrets-management/overview",
 
-  "/scripting/inbuilt-libraries.html": "/testing/script/inbuilt-libraries",
+  "/scripting/inbuilt-libraries": "/testing/script/inbuilt-libraries",
 
-  "/scripting/external-libraries.html": "/testing/script/external-libraries",
+  "/scripting/external-libraries": "/testing/script/external-libraries",
 
-  "/bru-language-tag-reference.html": "/bru-lang/tag-reference",
+  "/bru-language-tag-reference": "/bru-lang/tag-reference",
 
-  "/secrets-management/secret-variables.html":
+  "/secrets-management/secret-variables":
     "/secrets-management/secret-variables",
 
-  "/testing/assertions.html": "/testing/tests/assertions",
-
-  "/testing/javascript-reference.html": "/testing/script/javascript-reference",
+  "/testing/assertions": "/testing/tests/assertions",
 
   "/testing/javascript-reference": "/testing/script/javascript-reference",
 
-  "/bru-language-design.html": "/bru-lang/language",
+  "/testing/javascript-reference": "/testing/script/javascript-reference",
 
-  "/secrets-management/dotenv-file.html": "/secrets-management/dotenv-file",
+  "/bru-language-design": "/bru-lang/language",
 
-  "/bru-lang-overview.html": "/bru-lang/overview",
+  "/secrets-management/dotenv-file": "/secrets-management/dotenv-file",
 
-  "/scripting/introduction.html": "/testing/script/getting-started",
+  "/bru-lang-overview": "/bru-lang/overview",
+
+  "/scripting/introduction": "/testing/script/getting-started",
 
   "/migration-imports/postman":
     "/get-started/import-export-data/postman-migration",
@@ -67,13 +67,13 @@ const redirects = {
   "/migration-imports/introduction":
     "/get-started/import-export-data/import-collections",
 
-  "/testing/introduction.html": "/testing/tests/introduction",
+  "/testing/introduction": "/testing/tests/introduction",
 
-  "/scripting/sync-requests.html": "/testing/script/request/sync-requests",
+  "/scripting/sync-requests": "/testing/script/request/sync-requests",
 
-  "/scripting/response-query.html": "/testing/script/response/response-query",
+  "/scripting/response-query": "/testing/script/response/response-query",
 
-  "/bru-lang-extensions.html": "/bru-lang/syntax-highlighting",
+  "/bru-lang-extensions": "/bru-lang/syntax-highlighting",
 
   "/get-started/import-export-data/safe-mode":
     "/get-started/javascript-sandbox",
