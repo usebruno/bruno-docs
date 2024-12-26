@@ -5,13 +5,14 @@ import { useEffect } from "react";
 
 const GoogleAnalytics = () => {
   useEffect(() => {
-    if (!window) return;
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-      window.dataLayer.push(arguments);
+    if (typeof window !== "undefined") {
+      window.dataLayer = window.dataLayer || [];
+      const gtag = (...args: any[]) => {
+        window.dataLayer.push(args);
+      };
+      gtag("js", new Date());
+      gtag("config", "G-CH4MNV2D3Z");
     }
-    gtag("js", new Date());
-    gtag("config", "G-CH4MNV2D3Z");
   }, []);
 
   return (
