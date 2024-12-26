@@ -11,14 +11,14 @@ const GoogleAnalytics = () => {
         window.dataLayer.push(args);
       };
       gtag("js", new Date());
-      gtag("config", "G-CH4MNV2D3Z");
+      gtag("config", "G-ZZBSKJSFZ8");
     }
   }, []);
 
   return (
     <Script
       async
-      src="https://www.googletagmanager.com/gtag/js?id=G-CH4MNV2D3Z"
+      src="https://www.googletagmanager.com/gtag/js?id=G-ZZBSKJSFZ8"
     />
   );
 };
