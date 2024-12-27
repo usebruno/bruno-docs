@@ -5,5 +5,5 @@
   "folder-variables": "Folder Variables",
   "request-variables": "Request Variables",
   "runtime-variables": "Runtime Variables",
-  "process-env-variables": "Process Environment Variables"
+  "process-env": "Process Environment Variables"
 }
