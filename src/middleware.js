@@ -35,16 +35,11 @@ const redirects = {
 
   "/cli/overview": "/bru-cli/overview",
 
-  "/secrets-management/overview": "/secrets-management/overview",
-
   "/scripting/inbuilt-libraries": "/testing/script/inbuilt-libraries",
 
   "/scripting/external-libraries": "/testing/script/external-libraries",
 
   "/bru-language-tag-reference": "/bru-lang/tag-reference",
-
-  "/secrets-management/secret-variables":
-    "/secrets-management/secret-variables",
 
   "/testing/assertions": "/testing/tests/assertions",
 
@@ -53,8 +48,6 @@ const redirects = {
   "/testing/javascript-reference": "/testing/script/javascript-reference",
 
   "/bru-language-design": "/bru-lang/language",
-
-  "/secrets-management/dotenv-file": "/secrets-management/dotenv-file",
 
   "/bru-lang-overview": "/bru-lang/overview",
 
