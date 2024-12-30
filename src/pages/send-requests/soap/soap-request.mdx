@@ -1,1 +1,28 @@
-# SOAP API Request
+# SOAP API request
+
+Bruno enables you to make HTTP cals using Simple Object Access Protocol (SOAP), a messaging protocol used for exchanging structured information between systems over a network. SOAP defines a standard for request-response communication and is based on XML data format.
+
+### Key Components of a SOAP Message
+
+1. **Envelope**: The outermost element that defines the start and end of the message.
+2. **Header**: (Optional) Contains meta-information or additional information about the message.
+3. **Body**: The main part of the message that contains the actual data or the request/response payload
+
+## Create SOAP request
+
+1. Create new request inside a collection in Bruno.
+2. Select **HTTP** and add URL and name.
+3. Click on **Create** button.
+
+![create-new-request](/screenshots/send-request/create-soap-req.png)
+
+## Adding body data
+
+1. After creating request, Go to **Body**.
+2. Select **XML** from the dropdown list.
+3. Add your XML data in the textarea section.
+4. Save and Execute the request.
+
+If your request is successful, Bruno will display the response in the **Response** tab.
+
+![create-new-request](/screenshots/send-request/soap-xml-data.png)
