@@ -1,1 +1,17 @@
-# GraphQL Request
+# Overview
+
+Bruno can send requests using GraphQL, an open-source query language and runtime for APIs.
+
+## Graphql request
+
+GraphQL APIs let clients request only the data they need through a single endpoint. It’s schema-driven, allowing clients to introspect and avoid overfetching or underfetching data. Each GraphQL request has a URL (the data endpoint) and a query (defining the data to retrieve or modify).
+
+The API schema defines available fields, and the request may include authentication, headers, and settings as needed.
+
+GraphQL requests support three operations:
+
+- **Query**: Retrieves data, specifying fields and optional arguments for precise results.
+
+- **Mutation**: Modifies data (create, update, delete), with specified fields returned after the operation.
+
+- **Subscription**: Provides real-time updates by listening for changes to specific data fields over a persistent connection.
