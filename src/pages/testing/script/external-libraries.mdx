@@ -1,35 +1,85 @@
+import { Callout } from "nextra/components";
+import { FileTree } from "nextra/components";
+
 # External Libraries
 
-Bruno supports loading any npm module to use in your scripting workflows.
+Bruno allows you to load any npm module for use in your scripting workflows.
 
-You need to add a `package.json` file where your collection is stored.
-```js
-{
-  "name": "github-rest-api-collection",
-  "version": "1.0.0",
-  "main": "index.js",
-  "homepage": "https://github.com/usebruno/github-rest-api-collection#readme",
-  "dependencies": {
-    "@faker-js/faker": "8.3.1"
-  }
-}
-```
+## Prerequisites
 
-And then run npm install inside your collection folder
+Before you begin, ensure that you have the following:
+
+1. Node.js installed on your system.
+2. Bruno installed.
+
+## Project Structure
+
+The folder structure for this example will be:
+
+<FileTree>
+  <FileTree.Folder name="bruno-collection" defaultOpen>
+    <FileTree.Folder name="api-testing" />
+    <FileTree.File name="openspec.yaml" />
+    <FileTree.File name=".spectral.yml" />
+    <FileTree.File name="package.json" />
+    <FileTree.File name="bruno.json" />
+    <FileTree.Folder name="node_modules">
+      <FileTree.File name="spectral-cli" />
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
+
+## Configuration
+
+You need to initialize `package.json` file inside your collection.
+
+Navigate to your Bruno collection directory in the terminal.
+
 ```bash
-npm install
+cd path/to/your/bruno-collection
 ```
 
-And then you can require the node module in your script as usual.
-**Example:**
-```js
-const { faker } = require('@faker-js/faker');
+Initialize `package.json` file inside your collection.
 
-const randomName = faker.name.fullName();
-const randomEmail = faker.internet.email();
+```bash
+npm init -y
+```
 
-req.setBody({
-  name: randomName,
-  email: randomEmail
-});
+Now you can install any npm package or module to use in your collection.
+
+## Spectral Integration
+
+In this example we're using [Spectral CLI](https://github.com/stoplightio/spectral?tab=readme-ov-file) as a npm package which help you to validate OpenSpec API YAML or JSON files with the built-in ruleset.
+
+You need to have OpenAPI JSON or YAML file to work with spectral or you can download from [here](https://github.com/ganesh-bruno/spectral-example) as example.
+
+### Spectral CLI Setup
+
+You can install `spectral-cli` by running following command:
+
+```bash
+npm install @stoplight/spectral-cli
+```
+
+Run this command in your terminal to initialize `.spectral.yml` file which is predefined ruleset.
+
+```js copy
+echo 'extends: ["spectral:oas", "spectral:asyncapi", "spectral:arazzo"]' > .spectral.yaml
+```
+
+Validate your **openapi.yaml** file from Bruno collection by running follwoing CLI command:
+
+```js copy
+spectral lint openspec.yaml --r .spectral.yaml
+```
+
+## Output Overview
+
+After following the process outlined above, warning messages will be displayed on the CLI such as duplicates and empty tags. This is how you can validate your OpenSpec files using Spectral.
+
+```bash
+openspec.yaml:
+ 2:6  warning  info-contact    Info object must have "contact" object.      info
+ 10:9 warning  operation-tags  Operation must have non-empty "tags" array.  paths./pets.get
+ 36:9 warning  operation-tags  Operation must have non-empty "tags" array.  paths./pets/{petId}.get
 ```

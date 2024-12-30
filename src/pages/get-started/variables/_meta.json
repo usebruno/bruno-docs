@@ -1,8 +1,9 @@
 {
-	"overview": "Overview",
-	"collection-variables": "Collection Variables",
-	"environment-variables": "Environment Variables",
-	"folder-variables": "Folder Variables",
-	"request-variables": "Request Variables",
-	"runtime-variables": "Runtime Variables"
+  "overview": "Overview",
+  "environment-variables": "Environment Variables",
+  "collection-variables": "Collection Variables",
+  "folder-variables": "Folder Variables",
+  "request-variables": "Request Variables",
+  "runtime-variables": "Runtime Variables",
+  "process-env": "Process Environment Variables"
 }
