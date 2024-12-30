@@ -106,11 +106,13 @@ const redirects = {
   "/license-management/organization/activate-license":
     "/license-management/overview",
 
-  // - /bru-language
-
-  "/bru-language-samples": "/bru-lang/samples",
+  // - /bru-cli
 
   "/cli/overview": "/bru-cli/overview",
+
+  "/cli/overview.html": "/bru-cli/overview",
+
+  // - /bru-language
 
   "/bru-language-tag-reference": "/bru-lang/tag-reference",
 
@@ -122,7 +124,8 @@ const redirects = {
 
   "/bru-language-samples.html": "/bru-lang/samples",
 
-  "/cli/overview.html": "/bru-cli/overview",
+  "/bru-language-samples": "/bru-lang/samples",
+
   "/bru-language-tag-reference.html": "/bru-lang/tag-reference",
 
   "/bru-language-design.html": "/bru-language-design",
