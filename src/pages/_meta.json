@@ -1,6 +1,7 @@
 {
   "introduction": "Introduction",
   "get-started": "Getting Started",
+  "send-requests": "Send Requests",
   "git-integration": "Git Integration & Collaboration",
   "testing": "Tests and Script",
   "secrets-management": "Secret Management",
