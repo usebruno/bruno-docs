@@ -1,4 +1,9 @@
 {
   "overview": "Overview",
-  "rest-api": "REST API request"
+  "rest-api": "REST API request",
+  "parameters": "Parameters",
+  "req-header": "Request headers",
+  "body-data": "Body Data",
+  "api-docs": "API Documentation",
+  "code-generator": "Code Generator"
 }

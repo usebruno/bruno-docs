@@ -1,0 +1,43 @@
+# Body Data
+
+The **Body** tab in Bruno allows you to send specific data with your API requests. You can choose from various data formats, such as Form, Raw, and others, using the dropdown menu.
+
+## Send Body Data with API Requests
+
+You can select the data type based on your API request requirements. For example, if you're working with a request where you need to send specific details about a particular item, you’ll likely choose JSON as the data type and include the data in the body of the request.
+
+### Form-Data
+
+#### 1. Multipart Form
+
+Used for sending files along with form data, allowing multiple parts with different content types in a single request. In multipart form data, each part of the request is separated by a boundary.
+
+1. Navigate to the **Body** tab.
+2. Select **Multipart Form** from dropdown.
+3. Click on **Add File** and upload your file.
+4. (optional) You can also select **Add Param** for sending key-value pair data.
+5. Save and execute the request.
+
+![multipart-data](/screenshots/send-request/multipart-data.webp)
+
+#### 2. URL Encoded
+
+It is commonly used for simple form submissions where data is sent as key-value pairs. Each key and value are separated by an equal sign (=), and multiple pairs are separated by an ampersand (&).
+
+1. Navigate to the **Body** tab.
+2. Select **Form URL Encoded** from dropdown.
+3. Click on **Add Param** and add key-value pair.
+4. Save and execute the request.
+
+![url-encoded](/screenshots/send-request/url-encoded.webp)
+
+### Raw Data
+
+Raw Data allows you to send data in its raw, unprocessed form in the body of an API request. It doesn’t require a predefined structure like key-value pairs or multi-part boundaries. Instead, you can send data exactly as it is, which is useful when dealing with structured data formats such as **JSON, XML, Sparql or plain text**.
+
+1. Navigate to the **Body** tab.
+2. In the RAW section, select your preferred data format.
+3. Add appropriate data for your API request.
+4. Save and execute the request.
+
+![raw-data](/screenshots/send-request/raw-data.webp)
