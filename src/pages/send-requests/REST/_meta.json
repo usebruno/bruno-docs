@@ -2,7 +2,8 @@
   "overview": "Overview",
   "rest-api": "REST API request",
   "parameters": "Parameters",
+  "req-header": "Request headers",
   "body-data": "Body Data",
-  "request-headers": "Headers",
-  "api-docs": "API Documentation"
+  "api-docs": "API Documentation",
+  "code-generator": "Code Generator"
 }
