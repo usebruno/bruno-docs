@@ -281,6 +281,11 @@ bru.setNextRequest(null);  // aborts the run gracefully
 #### `runRequest`
 You can execute any request in the collection and retrieve the response directly within the script.
 
+**Syntax:**
+```javascript
+const requestResponse = await bru.runRequest('absolute/path/to/a/request/from/collection/root');
+```
+
 **Example:**
 ```javascript
 const requestResponse = await bru.runRequest('echo/echo json');
