@@ -18,17 +18,20 @@ This allows you to perform other Git operations such as adding, committing, push
 Once you have initialized your collection, the next step is to connect it to a remote Git repository.
 You can directly connect to remote repository from Bruno using Git GUI feature.
 
-1. Open **Git initialized** Bruno collection.
-2. Click on **main** (top right corner).
-3. Select **Remotes** from the dropdown.
+To connect Bruno to GitHub, you need to set up either an SSH key or a Personal Access Token (PAT) on GitHub. Follow this [official GitHub guide](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) to set it up.
+
+1. Create empty Git repository on your GtiHub.
+2. Open **Git initialized** Bruno collection.
+3. Click on **main** (top right corner).
+4. Select **Remotes** from the dropdown.
 
 ![remotes](/screenshots/git-integration/git-gui/git-remote-option.webp)
 
-4. Click on **Add Remote** button.
+5. Click on **Add Remote** button.
 
 ![remotes](/screenshots/git-integration/git-gui/add-remote.webp)
 
-5. Enter **Remote Name** and **URL** and click on save.
+6. Enter **Remote Name** and **URL** (Https or SSH) and click on save.
 
 ![remotes](/screenshots/git-integration/git-gui/add-remote-url.webp)
 
