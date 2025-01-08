@@ -277,3 +277,60 @@ You can also abort the run by explicitly setting the next request to `null`
 ```javascript
 bru.setNextRequest(null);  // aborts the run gracefully
 ```
+
+#### `runRequest`
+You can execute any request in the collection and retrieve the response directly within the script.
+
+**Syntax:**
+```javascript
+const requestResponse = await bru.runRequest('absolute/path/to/a/request/from/collection/root');
+```
+
+**Example:**
+```javascript
+const requestResponse = await bru.runRequest('echo/echo json');
+```
+
+### Collection Runner Utility Functions
+
+#### `setNextRequest`
+By default, the collection runner (UI) and CLI execute requests in sequential order. You can alter this order by invoking `bru.runner.setNextRequest` with the name of the next request to execute. This function is applicable only within post-request scripts or test scripts.
+
+**Example:**
+```javascript
+bru.runner.setNextRequest("Get process status");
+```
+
+#### `skipRequest`
+To skip the execution of the current request, use `bru.runner.skipRequest()` in the  pre-request script section. This function is valid only within the context of a collection run.
+
+**Example:**
+```javascript
+bru.runner.skipRequest();
+```
+
+#### `stopExecution`
+You can terminate the collection run by using `bru.runner.stopExecution()` in the pre-request scripts, post-request scripts, or the test scripts. This function is effective only within the context of a collection run.
+
+**Example:**
+```javascript
+bru.runner.stopExecution();
+```
+
+### Test Utility Functions
+
+#### `getTestResults`
+Obtain the test results of a request by calling `bru.getTestResults` within test scripts.
+
+**Example:**
+```javascript
+const testResults = await bru.getTestResults();
+```
+
+#### `getAssertionResults`
+Obtain the assertion results of a request by calling `bru.getAssertionResults` withiin test scripts.
+
+**Example:**
+```javascript
+const assertionResults = await bru.getAssertionResults();
+```
