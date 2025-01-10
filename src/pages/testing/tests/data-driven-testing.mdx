@@ -67,20 +67,14 @@ Once the execution is complete, you can review the results for each individual r
 
 #### How to Use Variables from CSV/JSON Files
 
-When you upload a CSV or JSON file, the variables within the file can be used as runtime variables within your API requests or scripts. You can access these variables dynamically in your requests and use them within Bruno scripts.
+When you upload a CSV or JSON file, the variables within the file can be accessed using the `{{var}}` syntax.
+You can access these variables dynamically in your requests and use them within Bruno.
 
 **Example**:
 
-##### **JSON file uploaded**
+##### Accessing Variables in Request Body
 
-```json
-{
-  "name": "John Doe",
-  "email": "john.doe@example.com"
-}
-```
-
-```json
+```json showLineNumbers filename="request-body"
 {
   "name": "{{name}}",
   "email": "{{email}}"
@@ -88,6 +82,13 @@ When you upload a CSV or JSON file, the variables within the file can be used as
 ```
 
 In this example, `{{name}}` and `{{email}}` will be replaced by the actual values from the uploaded JSON file.
+
+```json showLineNumbers filename="request-with-interpolated-values"
+{
+  "name": "John Doe",
+  "email": "john.doe@example.com"
+}
+```
 
 ##### Accessing Variables in Scripts
 
