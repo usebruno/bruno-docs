@@ -4,6 +4,5 @@
   "parameters": "Parameters",
   "req-header": "Request headers",
   "body-data": "Body Data",
-  "api-docs": "API Documentation",
   "code-generator": "Code Generator"
 }
