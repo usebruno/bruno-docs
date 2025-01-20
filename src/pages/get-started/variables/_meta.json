@@ -1,5 +1,6 @@
 {
   "overview": "Overview",
+  "global-environment-variables": "Global Variables",
   "environment-variables": "Environment Variables",
   "collection-variables": "Collection Variables",
   "folder-variables": "Folder Variables",
