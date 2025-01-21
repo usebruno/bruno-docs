@@ -1,6 +1,13 @@
+import { Callout } from "nextra/components";
+
 # Variables
 
-> **Note**: With the release of v1.28.0, we’ve shifted to treating all Request Variables as strings instead of inferring the data type from the value. See [discussion](https://github.com/usebruno/bruno/discussions/3072) for more information.
+<Callout type="warning" emoji="">
+  With the release of v1.28.0, we’ve shifted to treating all Request Variables
+  as strings instead of inferring the data type from the value. See
+  [discussion](https://github.com/usebruno/bruno/discussions/3072) for more
+  information.
+</Callout>
 
 ### Overview
 
@@ -8,24 +15,29 @@ Variables in the Bruno allow you to store dynamic values that can be reused acro
 
 ### Types
 
-There are 5 types of variables you can create:
+There are 6 types of variables you can create:
 
+- [Global Environments Variables](./global-environment-variables.mdx)
 - [Environment Variables](./environment-variables.mdx)
 - [Collection Variables](./collection-variables.mdx)
 - [Folder Variables](./folder-variables.mdx)
 - [Request Variables](./request-variables.mdx)
 - [Runtime Variables](./runtime-variables.mdx)
+
+Additionally, Process Environment Variables can be defined in an external environment configuration file:
+
 - [Process Environment Variables](./process-env.mdx)
 
 ### Variable Precedence
 
 When a variable is accessed, the following precedence is used to determine which value is used:
 
-1. Collection Variables
-2. Environment Variables
+1. Runtime Variables
+2. Request Variables
 3. Folder Variables
-4. Request Variables
-5. Runtime Variables
+4. Environment Variables
+5. Collection Variables
+6. Global Variables
 
 Runtime variables get the highest precedence. Process Environment Variables are accessed using the `{{process.env.VAR_NAME}}` syntax and hence don't compete with the above.
 
