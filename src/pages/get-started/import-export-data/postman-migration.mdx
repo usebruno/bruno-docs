@@ -1,31 +1,50 @@
-import Image from 'next/image'
+import Image from "next/image";
 import PremiumBadge from "@/components/premium-badge";
-import { Callout } from 'nextra/components'
+import { Callout } from "nextra/components";
 
 # Migrating from Postman
 
-Bruno makes migrating from Postman easy. All you need to do is export your collections and environments and import them to Bruno. 
+Bruno makes migrating from Postman easy. All you need to do is export your collections and environments and import them to Bruno.
 
 ## Collection Export
+
 Open Postman and select the collection you want to migrate. Click on the `···` followed by `View more actions` to open the dropdown menu and scroll down until you find `Export`, then click on it.
 
 <div className="flex flex-wrap items-center mt-4">
-  <Image src="/screenshots/migration/postman/postman-pre-dropdown.webp" alt="Open the collection's dropdown menu" width={500} height={200} className="rounded" />
-  <Image src="/screenshots/migration/postman/postman-dropdown.webp" alt="Find the export button" width={200} height={200} className="ml-10 rounded" />
+  <Image
+    src="/screenshots/migration/postman/postman-pre-dropdown.webp"
+    alt="Open the collection's dropdown menu"
+    width={500}
+    height={200}
+    className="rounded"
+  />
+  <Image
+    src="/screenshots/migration/postman/postman-dropdown.webp"
+    alt="Find the export button"
+    width={200}
+    height={200}
+    className="ml-10 rounded"
+  />
 </div>
 
 A popup dialog will appear, select either `Collection v2` or `Collection v2.1` format and click on the `Export` button.
 
-<Image src="/screenshots/migration/postman/postman-export-dialog.webp" alt="Export collection dialog" width={400} height={400} className="rounded mt-4" />
+<Image
+  src="/screenshots/migration/postman/postman-export-dialog.webp"
+  alt="Export collection dialog"
+  width={400}
+  height={400}
+  className="rounded mt-4"
+/>
 
-The collection will be downloaded as a JSON file. 
+The collection will be downloaded as a JSON file.
 
-Now simply follow the instructions for [Importing Collections](https://docs.usebruno.com/get-started/import-export-data/postman-migration#collection-import) and you're done! 
+Now simply follow the instructions for [Importing Collections](https://docs.usebruno.com/get-started/import-export-data/import-collections) and you're done!
 
 ## Export Data Dump<PremiumBadge />
 
 <Callout type="default">
-Bulk Import from Postman is included in Bruno Ultimate Edition
+  Bulk Import from Postman is included in Bruno Ultimate Edition
 </Callout>
 
 You can export a data dump of all your collections and environments in Postman. You can then import the data into any Bruno.
@@ -46,22 +65,34 @@ You can export a data dump of all your collections and environments in Postman. 
 
 - Select the zip file where the export was saved
 
-- You will now see a list of all collections available for import. By default, all collections will be selected. You can chose to omit any from the import that you'd like. 
+- You will now see a list of all collections available for import. By default, all collections will be selected. You can chose to omit any from the import that you'd like.
 
-- Designate a location for the collections and press `import` 
+- Designate a location for the collections and press `import`
 
-> Although we have a translator for Postman scripts, it's always good practice to review the collections after import, especially if you are using deprecated Postman syntax in your scripts. 
+> Although we have a translator for Postman scripts, it's always good practice to review the collections after import, especially if you are using deprecated Postman syntax in your scripts.
 
 ## Environment Export
 
 Open Postman and select the environment you want to migrate. Click on the `···` to open the dropdown menu, followed by `Export` and eventually choose a location to save the environment file.
 
-<Image src="/screenshots/migration/postman/postman-environment.webp" alt="Open the environment's dropdown menu" width={400} height={200} className="rounded mt-4" />
+<Image
+  src="/screenshots/migration/postman/postman-environment.webp"
+  alt="Open the environment's dropdown menu"
+  width={400}
+  height={200}
+  className="rounded mt-4"
+/>
 
 Now open Bruno and open a collection by clicking on any request.
 A button in the upper right corner will appear, click on it and select `Configure`.
 
-<Image src="/screenshots/migration/postman/bruno-environments.webp" alt="Import environment button" width={400} height={200} className="rounded mt-4" />
+<Image
+  src="/screenshots/migration/postman/bruno-environments.webp"
+  alt="Import environment button"
+  width={400}
+  height={200}
+  className="rounded mt-4"
+/>
 
 A dialog will appear, displaying your previously exported environment file. Select the `Import` button in the bottom left corner to proceed.
 Select `Postman Environment`, provide the environment file and that's it!
