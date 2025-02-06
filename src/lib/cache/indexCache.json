@@ -197,6 +197,15 @@
         ]
       },
       {
+        "name": "OAuth 2.0 (Experimental)",
+        "children": [
+          {
+            "name": "Overview",
+            "path": "auth/oauth2-experimental/overview"
+          }
+        ]
+      },
+      {
         "name": "AWS Signature",
         "path": "auth/aws-signature"
       },
