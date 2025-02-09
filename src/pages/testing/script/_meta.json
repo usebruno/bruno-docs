@@ -6,5 +6,6 @@
   "inbuilt-libraries": "Inbuilt Libraries",
   "external-libraries": "External Libraries",
   "whitelisting-modules": "Whitelisting Modules",
-  "javascript-reference": "Javascript Reference"
+  "javascript-reference": "Javascript Reference",
+  "js-file": "Create JS"
 }
