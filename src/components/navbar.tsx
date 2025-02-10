@@ -34,20 +34,28 @@ export const Navbar = () => {
           </Button>
         </div>
 
-        {/* Nav Links Section: Blog, Support, Changelog */}
         <div className="flex items-center space-x-4 sm:space-x-1">
           <Link href="https://blog.usebruno.com/" target="_blank">
-            <Button variant="link" className="text-sm sm:text-base">
+            <Button
+              variant="link"
+              className="text-sm sm:text-base md:block hidden"
+            >
               Blog
             </Button>
           </Link>
           <Link href="https://www.usebruno.com/support" target="_blank">
-            <Button variant="link" className="text-sm sm:text-base">
+            <Button
+              variant="link"
+              className="text-sm sm:text-base md:block hidden"
+            >
               Support
             </Button>
           </Link>
           <Link href="https://www.usebruno.com/changelog" target="_blank">
-            <Button variant="link" className="text-sm sm:text-base">
+            <Button
+              variant="link"
+              className="text-sm sm:text-base md:block hidden"
+            >
               Changelog
             </Button>
           </Link>
