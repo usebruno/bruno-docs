@@ -7,6 +7,7 @@
   "secrets-management": "Secret Management",
   "auth": "Authentication & Authorization",
   "api-docs": "Create Documentation",
+  "open-api": "OpenAPI",
   "bru-cli": "Bruno's CLI",
   "bru-lang": "Bru Lang",
   "license-management": "License Management",
