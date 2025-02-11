@@ -11,20 +11,22 @@ Some of the benefits include
 
 **Example:**
 ```javascript
-test("should be able to login", function() {
+test("should be able to login", function () {
   const data = res.getBody();
   expect(res.getStatus()).to.equal(200);
 });
-
-test("should receive the token", function() {
+ 
+test("should return json", function () {
   const data = res.getBody();
-  expect(data.token).to.be.a('string');
+  expect(res.getBody()).to.eql({
+    "hello": "Bruno",
+  });
 });
 ```
 
 **Screenshot:**
 
-![bru lang sample](/screenshots/testing.webp)
+![bru lang sample](/screenshots/test-script.webp)
 
 ### Scripting API
 Please see the [Scripting API](../script/javascript-reference) for a comprehensive set of methods that enable you to write custom JavaScript code to automate and test your API requests in Bruno. It allows you to manipulate request variables, modify headers, handle response data, and implement complex logic directly within your test scripts.

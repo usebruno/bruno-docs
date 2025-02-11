@@ -1,3 +1,5 @@
+import { Callout } from "nextra/components";
+
 # Create a Test
 
 To ensure your API is behaving as expected, create a test against it.
@@ -17,7 +19,7 @@ You can then dictate an expression, operator, and value to test against.
 
 ## Testing with JavaScript
 
-Bruno also supports writing automation test scripts in JavaScript for more advanced API testing scenarios. By automating your tests, you can increase efficiency and coverage, streamline regression testing, and integrate testing into CI/CD pipelines.
+Bruno also supports writing automation test scripts in JavaScript for more advanced API testing scenarios. By automating your tests, you can increase efficiency and coverage, and integrate testing into CI/CD pipelines.
 
 #### Example
 
@@ -27,17 +29,22 @@ test("should be able to login", function () {
   expect(res.getStatus()).to.equal(200);
 });
 
-test("should receive the token", function () {
+test("should return json", function () {
   const data = res.getBody();
-  expect(data.token).to.be.a("string");
+  expect(res.getBody()).to.eql({
+    "hello": "Bruno",
+  });
 });
 ```
 
-![bru lang sample](/screenshots/testing.webp)
+![bru lang sample](/screenshots/test-script.webp)
 
 In this example:
 
 1. The first test checks that the response status is 200 (indicating a successful login).
-2. The second test verifies that the response contains a token, and the token is of type `string`.
+2. The second test verifies that the response body is equal to the expected JSON object.
 
-> For more advanced testing scenarios and tips, view the [Scripting](https://docs.usebruno.com/scripting/getting-started) docs
+<Callout emoji="">
+  For more advanced testing scenarios and tips, view the
+  [Scripting](https://docs.usebruno.com/scripting/getting-started) docs.
+</Callout>
