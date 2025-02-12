@@ -4,5 +4,23 @@ Assertions allow you to declaratively write tests.
 
 This should cover most of your testing needs. For complex tests, you can write test scripts.
 
-**Example:**
-![bru assertions](/screenshots/assertions.webp)
+## Getting Started with Assertions
+
+To get started with basic tests using assertions, follow these steps:
+
+1.  **Open a Collection**: Navigate to the Collection containing the request you want to test.
+2.  **Select a Request**: Click on a request within the Collection.
+3.  **Go to the Assertions Tab**: Click on the Assertions tab to access the testing interface.
+4.  **Write Your Test**: You can now specify an **expression**, an **operator**, and the **value** to test against the API response.
+
+![bru assertions](/screenshots/get-started/bruno-basics/create_test/bru_test_assert.webp)
+
+This method allows you to quickly test different conditions and verify that the API returns the expected results.
+
+### Example:
+
+- **Expression**: Verify the body response status (e.g., response.body.status).
+- **Operator**: Choose the operator (e.g., equals, contains).
+- **Value**: Provide the expected value (e.g., 200).
+
+Bruno will then automatically run the test and give you the results, letting you know if the assertion passes or fails.
