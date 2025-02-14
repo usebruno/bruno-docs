@@ -3,7 +3,7 @@
   "dotenv-file": "DotEnv File",
   "secret-variables": "Secret Variables",
   "hashicorp-vault": "Hashicorp Vault",
-  "aws-secret-manager": "AWS Secret Manager",
-  "azure-key-vault": "Azure Key Vault"
+  "aws-secret-manager": "AWS Secret Manager (Beta build)",
+  "azure-key-vault": "Azure Key Vault (Beta build)"
 
 }
