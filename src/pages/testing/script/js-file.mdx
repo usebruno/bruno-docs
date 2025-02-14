@@ -25,6 +25,14 @@ You can generate a JS File by:
 
 Once your JS File has been you can now import the functions into any `Script` tab across your resources.
 
-![import-script](/screenshots/create-js-file/write-js.webp)
+![import-script](/screenshots/create-js-file/js-file.webp)
+
+![import-script](/screenshots/create-js-file/import-js-file.webp)
+
+Here:
+
+1. `getUserById` finds and returns a user object from the users array based on the provided id.
+2. `bru.setVar()` sets the `val` variable to the id of the fetched user.
+3. In the url `{{val}}` is replaced with value (e.g., 2), resulting in `https://reqres.in/api/users/2`.
 
 When the requests are run, you will see the script being invoked.
