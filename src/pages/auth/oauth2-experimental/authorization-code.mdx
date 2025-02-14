@@ -1,0 +1,39 @@
+# How to Use OAuth2 for the Authorization Code Grant Type
+
+OAuth2 authentication can be implemented in various ways, depending on the collection structure and specific requirements. You can configure OAuth2 at either the [collection level](/auth/oauth2-experimental/collection-level-configuration) or [request level](/auth/oauth2-experimental/request-level-configuration).
+
+## OAuth2 Configuration
+
+Select `OAuth 2.0` as the authentication method and set the grant type to `Authorization Code`. Fill in the following fields:
+- **Callback URL**: The URL where you want to receive the authorization code
+- **Authorization URL**: The endpoint for authorization
+- **Access Token URL**: The endpoint to exchange the code for a token
+- **Client ID**: Your application's client identifier
+- **Client Secret**: Your application's client secret
+- **Scope**: The requested scope
+- **State**: An opaque value to maintain state between the request and callback
+- **Add Credentials to**: Choose how to send credentials (Request Body or Basic Auth Header)
+
+Enable **Use PKCE** if your OAuth provider supports and requires PKCE (Proof Key for Code Exchange).
+
+## Token Configuration and Usage
+
+Before getting the access token, configure how you want to use it in your requests:
+
+1. **Token Usage Configuration**:
+   - **Add token to**: Specify how the token should be included in requests:
+     - **Headers**: Adds the token to request headers with a configurable prefix (default: `"Bearer"`).
+     - **URL**: Adds the token as a URL query parameter with a configurable parameter name (default: `"access_token"`).
+
+> **Note**: You may optionally assign a Token ID to your token. If you do, you can reference this token in requests using the format `{{$oauth2.tokenId.access_token}}` (replace `tokenId` with your Token ID).  
+>  
+> If you use the same Token ID in multiple OAuth requests, Bruno will overwrite the existing token data. Make sure to use unique Token IDs for different OAuth configurations.  
+
+
+2. Click **Get Access Token** to obtain and store the token.
+
+> **Note**: You can click the 'Clear Cache' button to remove the stored token and request a new one.
+
+<br />
+<br />
+<br />

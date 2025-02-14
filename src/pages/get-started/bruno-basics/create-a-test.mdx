@@ -1,3 +1,5 @@
+import { Callout } from "nextra/components";
+
 # Create a Test
 
 To ensure your API is behaving as expected, create a test against it.
@@ -7,10 +9,46 @@ Bruno supports writing tests by through either:
 - Assertions to declaratively write tests
 - JavaScript
 
+## Assertion
+
+<Callout emoji="">
+  Bruno uses the Chai library, so you can follow the same syntax for writing assertions in your tests.
+</Callout>
+
 To get familiar with testing, open a Collection, select a request, and click on the `Assertions` tab
 
 You can then dictate an expression, operator, and value to test against.
 
 ![bru assertions](/screenshots/get-started/bruno-basics/create_test/bru_test_assert.webp)
 
-> For more advanced testing scenarios and tips, view the [Scripting](https://docs.usebruno.com/scripting/getting-started) docs
+## Testing with JavaScript
+
+Bruno also supports writing automation test scripts in JavaScript for more advanced API testing scenarios. By automating your tests, you can increase efficiency and coverage, and integrate testing into CI/CD pipelines.
+
+#### Example
+
+```js copy
+test("should be able to login", function () {
+  const data = res.getBody();
+  expect(res.getStatus()).to.equal(200);
+});
+
+test("should return json", function () {
+  const data = res.getBody();
+  expect(res.getBody()).to.eql({
+    "hello": "Bruno",
+  });
+});
+```
+
+![bru lang sample](/screenshots/test-script.webp)
+
+In this example:
+
+1. The first test checks that the response status is 200 (indicating a successful login).
+2. The second test verifies that the response body is equal to the expected JSON object.
+
+<Callout emoji="">
+  For more advanced testing scenarios and tips, view the
+  [Scripting](https://docs.usebruno.com/scripting/getting-started) docs.
+</Callout>

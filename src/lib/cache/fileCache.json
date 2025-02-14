@@ -65,6 +65,12 @@
     "parentName": "auth",
     "path": "auth/oauth2/password-credentials"
   },
+  "auth/oauth2-experimental/overview": {
+    "name": "overview",
+    "content": "Oauth 2.0 authentication in Bruno\n\n\nBruno currently supports OAuth2 authentication for the following three grant types:\n\n- [Authorization Code](/auth/oauth2/authorization-code)\n- [Client Credentials](/auth/oauth2/client-credentials)\n- [Password Credentials](/auth/oauth2/password-credentials)\n",
+    "parentName": "auth",
+    "path": "auth/oauth2-experimental/overview"
+  },
   "auth/overview": {
     "name": "overview",
     "content": "Authentication in Bruno\n\n\nBruno allows you to send authentication details with your API requests.\nAuthentication methods can be set on the request level or collection level, if you want all of your requests to use the same method.\n\n> Some APIs will require a digital certificate to establish a client's identity. You can add your certificate authority (CA) or client certificates to Bruno. \n> See [Add and Manage Certificates](auth/add-and-manage-certs) for more information. \n\nYou can pass auth details along with any request in Bruno in the header, body, or as a parameter. \nIf you enter your auth details to the `Auth` tab of your requests, we will automatically populate the relevant parts of the request for your chosen auth method. \n\nBruno currently supports the following authentication protocols: \n\n- [OAuth 2.0](/auth/oauth2/overview)\n- [AWS Sig v4](/auth/aws-signature)\n- [Basic Auth](/auth/basic)\n- [Bearer Auth](/auth/bearer)\n- [Digest Auth](/auth/digest)",
