@@ -1,0 +1,38 @@
+import Image from "next/image";
+import PremiumBadge from "@/components/premium-badge";
+import { Callout } from "nextra/components";
+
+# Creating a JS File in Bruno <PremiumBadge />
+
+Bruno provides the ability to create JavaScript tests where you can modularize common code and reuse the tests across different requests or collections.
+
+This can be especially helpful in complex scripting scenarios where the same test will be run across multiple requests, or you're looking to leverage data that lays outside of Bruno.
+
+## Create a New Script
+
+You can generate a JS File by:
+
+1. Right clicking on any collection or folder
+2. Select `New Script` from dropdown.
+
+![select-script](/screenshots/create-js-file/new-script.webp)
+
+3. Enter name and select **Create**
+
+![create-script](/screenshots/create-js-file/sample-js.webp)
+
+## Import the Function(s)
+
+Once your JS File has been created, you can now import the functions into any `Script` tab across your resources.
+
+![import-script](/screenshots/create-js-file/js-file.webp)
+
+![import-script](/screenshots/create-js-file/import-js-file.webp)
+
+Here:
+
+1. `getUserById` finds and returns a user object from the users array based on the provided id.
+2. `bru.setVar()` sets the `val` variable to the id of the fetched user.
+3. In the url `{{val}}` is replaced with value (e.g., 2), resulting in `https://reqres.in/api/users/2`.
+
+When the requests are run, you will see the script being invoked.
