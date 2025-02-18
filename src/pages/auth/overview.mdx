@@ -1,15 +1,22 @@
+import { Callout } from 'nextra/components'
+ 
 # Authentication in Bruno
 
 Bruno allows you to send authentication details with your API requests.
 Authentication methods can be set on the request level or collection level, if you want all of your requests to use the same method.
 
-> Some APIs will require a digital certificate to establish a client's identity. You can add your certificate authority (CA) or client certificates to Bruno. 
-> See [Add and Manage Certificates](auth/add-and-manage-certs) for more information. 
+<Callout>
+  Some APIs will require a digital certificate to establish a client's identity.
+  You can add your certificate authority (CA) or client certificates to Bruno.
+  See [Add and Manage Certificates](./add-and-manage-certs) for more
+  information.
+</Callout>
 
-You can pass auth details along with any request in Bruno in the header, body, or as a parameter. 
-If you enter your auth details to the `Auth` tab of your requests, we will automatically populate the relevant parts of the request for your chosen auth method. 
+You can pass auth details along with any request in Bruno in the header, body, or as a parameter.
+If you enter your auth details to the `Auth` tab of your requests, we will automatically populate the relevant parts of the request for your chosen auth method.
 
-### Bruno currently supports the following authentication protocols: 
+### Bruno currently supports the following authentication protocols:
+
 - [OAuth 2.0](/auth/oauth2/overview)
 - [OAuth 2.0 (Experimental)](/auth/oauth2-experimental/overview)
 - [AWS Sig v4](/auth/aws-signature)
