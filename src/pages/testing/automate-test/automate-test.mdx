@@ -1,0 +1,20 @@
+import { Callout } from "nextra/components";
+
+# Run Automated Test
+
+Bru CLI allows you to test APIs from the command line with more control and utility.
+
+1. Create your collection inside Bruno.
+2. Open your command-line terminal and navigate to the root folder of your Bruno collection.
+3. Run the command: `bru run --reporter-html results.html`
+4. This will generate an **HTML document** with all test reports.
+5. Open the HTML document in your browser.
+
+<Callout emoji="">
+  You can generate test reports in various formats, such as HTML, JUnit, and
+  JSON. In this example, we'll use HTML for demonstration.
+</Callout>
+
+After generating the HTML report and opening it in your browser, you'll see the following dashboard:
+
+![test-web-view.webp](/screenshots/testing/test-web-view.webp)
