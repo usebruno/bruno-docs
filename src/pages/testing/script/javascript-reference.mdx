@@ -195,6 +195,31 @@ The `bru` variable is available inside your scripting and testing context.
 It exposes methods that allow you to interact with, e.g., process variables,
 environment variables and collection variables.
 
+Here is a complete table for all available methods with the `bru`.
+
+| Title                            | Description                                               |
+| -------------------------------- | --------------------------------------------------------- |
+| bru.cwd()                        | Returns the current working directory.                    |
+| bru.getEnvName()                 | Retrieves the environment name.                           |
+| bru.getProcessEnv(key)           | Fetches the process environment variable for a given key. |
+| bru.hasEnvVar(key)               | Checks if the environment variable exists.                |
+| bru.getEnvVar(key)               | Retrieves the value of an environment variable.           |
+| bru.getFolderVar(key)            | Fetches a folder-specific variable by key.                |
+| bru.getCollectionVar(key)        | Retrieves the collection-level variable for the key.      |
+| bru.setEnvVar(key, value)        | Sets a new environment variable.                          |
+| bru.deleteEnvVar(key)            | Deletes a specific environment variable.                  |
+| bru.hasVar(key)                  | Checks if a variable exists.                              |
+| bru.getVar(key)                  | Retrieves the value of a variable.                        |
+| bru.setVar(key, value)           | Sets a new variable with a key-value pair.                |
+| bru.deleteVar(key)               | Deletes a specific variable.                              |
+| bru.deleteAllVars()              | Deletes all variables.                                    |
+| bru.setNextRequest(requestName)  | Sets the next request to execute.                         |
+| req.disableParsingResponseJson() | Disables JSON response parsing for the request.           |
+| bru.getRequestVar(key)           | Retrieves the value of a request variable.                |
+| bru.runRequest(requestPathName)  | Executes a request by its path name.                      |
+| bru.getAssertionResults()        | Retrieves the results of assertions.                      |
+| bru.getTestResults()             | Fetches the test                                          |
+
 Below is the API documentation for the methods available on `bru`
 
 ### Helpers
