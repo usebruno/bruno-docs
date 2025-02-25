@@ -59,6 +59,15 @@ export const Navbar = () => {
               Changelog
             </Button>
           </Link>
+
+          <Link href="https://www.usebruno.com/roadmap" target="_blank">
+            <Button
+              variant="link"
+              className="text-sm sm:text-base md:block hidden"
+            >
+              Roadmap
+            </Button>
+          </Link>
         </div>
 
         <div className="flex items-center">
