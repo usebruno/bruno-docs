@@ -2,6 +2,11 @@ import { Callout } from "nextra/components";
 
 # Create a Test
 
+<Callout emoji="">
+  Bruno uses the [Chai library](https://www.chaijs.com/), so you can follow the same syntax for writing
+  assertions in your tests.
+</Callout>
+
 To ensure your API is behaving as expected, create a test against it.
 
 Bruno supports writing tests by through either:
@@ -10,10 +15,6 @@ Bruno supports writing tests by through either:
 - JavaScript
 
 ## Assertion
-
-<Callout emoji="">
-  Bruno uses the Chai library, so you can follow the same syntax for writing assertions in your tests.
-</Callout>
 
 To get familiar with testing, open a Collection, select a request, and click on the `Assertions` tab
 
@@ -36,7 +37,7 @@ test("should be able to login", function () {
 test("should return json", function () {
   const data = res.getBody();
   expect(res.getBody()).to.eql({
-    "hello": "Bruno",
+    hello: "Bruno",
   });
 });
 ```
