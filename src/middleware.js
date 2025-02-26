@@ -83,10 +83,6 @@ const redirects = {
 
   "/testing/introduction": "/testing/tests/introduction",
 
-  "/testing/assertions": "/testing/tests/assertions",
-
-  "/testing/javascript-reference": "/testing/script/javascript-reference",
-
   "/testing/javascript-reference": "/testing/script/javascript-reference",
 
   "/testing/assertions.html": "/testing/tests/assertions",
