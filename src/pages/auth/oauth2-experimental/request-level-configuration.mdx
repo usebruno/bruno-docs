@@ -62,6 +62,10 @@ You can use the OAuth2 token in your request in two ways:
 
 You can manually reference the request's OAuth2 token in your requests using the variable format `{{$oauth2.<tokenId>.access_token}}` in either headers or query parameters.
 
+#### Example
+
+As shown in the video above, the Token ID value will be `{{$oauth2.credentials.access_token}}`
+
 <video controls className="mt-10">
   <source
     src="/screenrecordings/oauth2-experimental/request-level-via-tokenid.mov"

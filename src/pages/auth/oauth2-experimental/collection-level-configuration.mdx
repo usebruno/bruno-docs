@@ -66,6 +66,10 @@ When a collection has OAuth2 configured, individual requests can use the authent
 
 You can manually reference the collection's OAuth2 token in your requests using the variable format `{{$oauth2.<tokenId>.access_token}}` in headers or query parameters.
 
+#### Example
+
+As shown in the video above, the Token ID value will be `{{$oauth2.credentials.access_token}}`
+
 <video controls className="mt-10">
   <source
     src="/screenrecordings/oauth2-experimental/collection-level-via-tokenid.mov"
