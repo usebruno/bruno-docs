@@ -39,7 +39,7 @@ Bruno supports three OAuth2 grant types:
      - Configure the query parameter name (defaults to "access_token")
 3. Click "Get Access Token" to obtain and store the token.
 
-> **Note**: You may optionally assign a Token ID to your token. If you do, you can reference this token in requests using the format `{{$oauth2.credentials.access_token}}` (replace `credentials` with your Token ID).
+> **Note**: You may optionally assign a Token ID to your token. If you do, you can reference this token in requests using the format `{{$oauth2.<tokenId>.access_token}}` (replace `<tokenId>` with your Token ID).
 >
 > If you use the same Token ID in multiple OAuth requests, Bruno will overwrite the existing token data. Make sure to use unique Token IDs for different OAuth configurations.
 
@@ -64,7 +64,7 @@ When a collection has OAuth2 configured, individual requests can use the authent
 
 ### Method 2: Direct Token Reference
 
-You can manually reference the collection's OAuth2 token in your requests using the variable format `{{$oauth2.tokenId.access_token}}` in headers or query parameters.
+You can manually reference the collection's OAuth2 token in your requests using the variable format `{{$oauth2.<tokenId>.access_token}}` in headers or query parameters.
 
 <video controls className="mt-10">
   <source

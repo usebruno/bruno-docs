@@ -23,7 +23,7 @@ Bruno supports OAuth2 authentication at both collection and request levels:
 1. **Simplified Configuration**: You no longer need to separately configure authorization and resource requests
 2. **Automatic Token Management**: No scripting is required to set headers for the resource URL
 3. **Automatic Token Injection**: Bruno automatically adds the token to request headers or parameters based on your configuration
-4. **Token Data Access**: Access token data using variables: `{{$oauth2.credentials.access_token}}` within the collection
+4. **Token Data Access**: Access token data using variables: `{{$oauth2.<tokenId>.access_token}}` within the collection
 
 <br />
 <br />

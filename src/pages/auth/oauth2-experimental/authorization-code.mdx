@@ -26,7 +26,7 @@ Before getting the access token, configure how you want to use it in your reques
      - **Headers**: Adds the token to request headers with a configurable prefix (default: `"Bearer"`).
      - **URL**: Adds the token as a URL query parameter with a configurable parameter name (default: `"access_token"`).
 
-> **Note**: You may optionally assign a Token ID to your token. If you do, you can reference this token in requests using the format `{{$oauth2.credentials.access_token}}` (replace `credentials` with your Token ID).
+> **Note**: You may optionally assign a Token ID to your token. If you do, you can reference this token in requests using the format `{{$oauth2.<tokenId>.access_token}}` (replace `<tokenId>` with your Token ID).
 >
 > If you use the same Token ID in multiple OAuth requests, Bruno will overwrite the existing token data. Make sure to use unique Token IDs for different OAuth configurations.
 
