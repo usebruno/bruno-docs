@@ -1,4 +1,5 @@
 {
   "tests": "Tests",
-  "script": "Script"
+  "script": "Script",
+  "automate-test": "Running and Automation"
 }
