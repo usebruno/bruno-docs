@@ -3,17 +3,18 @@ import { Callout } from "nextra/components";
 ## Oauth 2.0 authentication in Bruno
 
 <Callout type="warning" emoji="">  
-  This OAuth2 implementation is **only available in the experimental build**. You can download it [here](https://github.com/usebruno/bruno-experimental-builds/releases).  
+  This OAuth2 implementation is **only available in the experimental build**. You can download it [here](https://github.com/usebruno/bruno-experimental-builds/releases).
 
-  If you're using a stable version of Bruno, please refer to the [legacy OAuth2 documentation](/auth/oauth2/overview).  
+If you're using a stable version of Bruno, please refer to the [legacy OAuth2 documentation](/auth/oauth2/overview).
+
 </Callout>
-
 
 This document describes the new OAuth2 implementation available in experimental builds of Bruno. This new approach simplifies authentication handling compared to the previous version.
 
 ## Overview
 
 Bruno supports OAuth2 authentication at both collection and request levels:
+
 - **[Collection Level](/auth/oauth2-experimental/collection-level-configuration)**: Configure once and share across multiple requests
 - **[Request Level](/auth/oauth2-experimental/request-level-configuration)**: Configure for specific requests, overriding collection settings if needed
 
@@ -22,7 +23,7 @@ Bruno supports OAuth2 authentication at both collection and request levels:
 1. **Simplified Configuration**: You no longer need to separately configure authorization and resource requests
 2. **Automatic Token Management**: No scripting is required to set headers for the resource URL
 3. **Automatic Token Injection**: Bruno automatically adds the token to request headers or parameters based on your configuration
-4. **Token Data Access**: Access token data using variables: `{{$oauth2.tokenId.access_token}}` within the collection
+4. **Token Data Access**: Access token data using variables: `{{$oauth2.<tokenId>.access_token}}` within the collection
 
 <br />
 <br />
