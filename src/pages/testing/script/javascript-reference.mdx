@@ -124,6 +124,27 @@ Set the maximum number of redirects to follow
 req.setMaxRedirects(5);
 ```
 
+### getTimeout
+
+Gets the current timeout value of the request.
+
+**Example:**
+
+```js
+const timeout = req.getTimeout();
+console.log(timeout); // Logs the current timeout value
+```
+
+### setTimeout
+
+Sets a timeout for the request.
+
+**Example:**
+
+```js
+req.setTimeout(5000); // Sets the timeout to 5000 milliseconds (5 seconds)
+```
+
 ## Response
 
 This `res` variable is available inside your scripting and testing context.
