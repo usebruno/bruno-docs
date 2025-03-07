@@ -1,0 +1,47 @@
+# Script Flow in Bruno
+
+In Bruno, we provide two types of script flows: **Sandwich** and **Sequential (Natural)**. These flows control the order in which the scripts at various levels of your API test collections are executed, allowing for flexibility and control over your automation.
+
+## Flow Types
+
+### 1. Sandwich Flow
+
+In the **Sandwich Flow**, scripts are executed in the following order:
+
+- **Collection Pre Script**
+- **Folder Pre Script**
+- **Request Pre Script**
+- **Request Post Script**
+- **Folder Post Script**
+- **Collection Post Script**
+
+This order allows you to execute actions at multiple levels (collection, folder, and request) before and after each test. It is useful when you need to configure different environments or states before and after running tests at various levels.
+
+### 2. Sequential (Natural) Flow
+
+In the **Sequential Flow**, scripts are executed in this order:
+
+- **Collection Pre Script**
+- **Folder Pre Script**
+- **Request Pre Script**
+- **Collection Post Script**
+- **Folder Post Script**
+- **Request Post Script**
+
+This flow executes scripts in a more natural, linear order. After the **Request Pre Script**, it runs the **Collection Post Script**, followed by **Folder Post Script**, and finally, the **Request Post Script**. This flow may be better suited when you want a clean execution from top to bottom.
+
+## Code Example
+
+You can set the flow type (either `sandwich` or `sequential`) in your `bruno.json` configuration file:
+
+```json showLineNumbers filename="bruno.json" {7}
+{
+  "scripts": {
+    "moduleWhitelist": ["crypto", "buffer", "form-data"],
+    "filesystemAccess": {
+      "allow": true
+    },
+    "flow": "sequential" // Or "sandwich"
+  }
+}
+```
