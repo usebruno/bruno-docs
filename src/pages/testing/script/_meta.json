@@ -7,5 +7,6 @@
   "external-libraries": "External Libraries",
   "whitelisting-modules": "Whitelisting Modules",
   "javascript-reference": "Javascript Reference",
-  "js-file": "Create JS File"
+  "js-file": "Create JS File",
+  "script-flow":"Script Flow"
 }
