@@ -2,10 +2,10 @@
 
 The official [Bruno Documentation](https://docs.usebruno.com/) repository!
 
-## Contribute
+## Contributing
 
-> [!TIP]
-> Please install Node.js (version 19 or higher) before proceeding.
+> [!NOTE]
+> Ensure that Node.js (version 19 or higher) is installed before proceeding.
 
 1. Clone the repository.
 ```
