@@ -7,6 +7,7 @@ Bruno allows you to configure OAuth2 authentication at the collection level, mak
 ## Setting Up OAuth2
 
 1. **Access Collection Settings**
+
    - Open your collection
    - Navigate to Collection Settings
    - Select the "Auth" tab
@@ -27,26 +28,27 @@ Bruno supports three OAuth2 grant types:
 ## Managing Access Tokens
 
 ### Generating Tokens
+
 1. Configure OAuth2 parameters as per grant type.
 2. You can choose where to add this token in the request by selecting the "Add token to" dropdown:
-    - Headers
-        - Adds the token to the request headers
-        - Configure the header prefix (defaults to "Bearer")
-    - URL
-        - Adds the token to the request URL
-        - Configure the query parameter name (defaults to "access_token")
+   - Headers
+     - Adds the token to the request headers
+     - Configure the header prefix (defaults to "Bearer")
+   - URL
+     - Adds the token to the request URL
+     - Configure the query parameter name (defaults to "access_token")
 3. Click "Get Access Token" to obtain and store the token.
 
-> **Note**: You may optionally assign a Token ID to your token. If you do, you can reference this token in requests using the format `{{$oauth2.tokenId.access_token}}` (replace `tokenId` with your Token ID). 
+> **Note**: You may optionally assign a Token ID to your token. If you do, you can reference this token in requests using the format `{{$oauth2.<tokenId>.access_token}}` (replace `<tokenId>` with your Token ID).
 >
 > If you use the same Token ID in multiple OAuth requests, Bruno will overwrite the existing token data. Make sure to use unique Token IDs for different OAuth configurations.
-
 
 ## Using Collection-Level OAuth2 in Requests
 
 When a collection has OAuth2 configured, individual requests can use the authentication in two ways:
 
 ### Method 1: Collection Inheritance (Recommended)
+
 - Open request settings
 - Select "Auth" tab
 - Choose "Inherit from collection"
@@ -61,7 +63,12 @@ When a collection has OAuth2 configured, individual requests can use the authent
 </video>
 
 ### Method 2: Direct Token Reference
-You can manually reference the collection's OAuth2 token in your requests using the variable format `{{$oauth2.tokenId.access_token}}` in headers or query parameters.
+
+You can manually reference the collection's OAuth2 token in your requests using the variable format `{{$oauth2.<tokenId>.access_token}}` in headers or query parameters.
+
+#### Example
+
+As shown in the video above, the Token ID value will be `{{$oauth2.credentials.access_token}}`
 
 <video controls className="mt-10">
   <source
