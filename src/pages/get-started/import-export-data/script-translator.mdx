@@ -1,5 +1,4 @@
-
-import { Translator } from "../../../components/translator/translator";
+import { Translator } from '../../../components/translator/translator';
 
 export async function getStaticProps() {
   const fs = require('fs');
@@ -12,9 +11,9 @@ export async function getStaticProps() {
   return {
     props: {
       ssg: {
-        themes
-      }
-    }
+        themes,
+      },
+    },
   };
 }
 

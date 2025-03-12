@@ -3,6 +3,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 ## Getting Started
 
 ### Install deps
+
 ```bash
 # use npm
 npm i
@@ -13,6 +14,7 @@ pnpm i
 ```
 
 ### Start Dev Server
+
 ```bash
 # use npm
 npm run dev

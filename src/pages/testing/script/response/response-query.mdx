@@ -5,93 +5,91 @@ The `res` object that is available inside the [vars](../vars), [assertions](../.
 Think of it as `lodash.get()` on steroids
 
 ```javascript
-res('order.total')
+res('order.total');
 ```
 
 ## Examples
+
 ```javascript
 const data = {
   customer: {
     address: {
-      city: "bangalore"
+      city: 'bangalore',
     },
     orders: [
       {
-        id: "order-1",
+        id: 'order-1',
         items: [
           { id: 1, amount: 10 },
-          { id: 2, amount: 20 }
-        ]
+          { id: 2, amount: 20 },
+        ],
       },
       {
-        id: "order-2",
+        id: 'order-2',
         items: [
           { id: 3, amount: 30 },
-          { id: 4, amount: 40 }
-        ]
-      }
-    ]
+          { id: 4, amount: 40 },
+        ],
+      },
+    ],
   },
 };
 ```
-| Query                                   | Output                             |
-|-----------------------------------------|------------------------------------|
-| res("customer.address.city")            | bangalore                          |
-| res("customer.orders.items.amount")     | [10, 20, 30, 40]                   |
+
+| Query                                  | Output                             |
+| -------------------------------------- | ---------------------------------- | --- |
+| res("customer.address.city")           | bangalore                          |
+| res("customer.orders.items.amount")    | [10, 20, 30, 40]                   |
 | res("customer.orders.items.amount[0]") | 10                                 |
-| res("..items.amount")                   | [10, 20, 30, 40]                   | |
-| res("..amount")                         | [10, 20, 30, 40]                   |
-| res("..items.amount[0]")                | 10                                 |
-| res("..items[0].amount")                | 10                                 |
-| res("..items[5].amount")                | undefined                          |
-| res("..id")                             | ["order-1", 1, 2, "order-2", 3, 4] |
-| res("customer.orders.foo")              | undefined                          |
-| res("..customer.foo")                   | undefined                          |
-| res("..address")                        | [\{ city: "bangalore" \}]          |
-| res("..address[0]")                     | \{ city: "bangalore" \}            |
+| res("..items.amount")                  | [10, 20, 30, 40]                   |     |
+| res("..amount")                        | [10, 20, 30, 40]                   |
+| res("..items.amount[0]")               | 10                                 |
+| res("..items[0].amount")               | 10                                 |
+| res("..items[5].amount")               | undefined                          |
+| res("..id")                            | ["order-1", 1, 2, "order-2", 3, 4] |
+| res("customer.orders.foo")             | undefined                          |
+| res("..customer.foo")                  | undefined                          |
+| res("..address")                       | [\{ city: "bangalore" \}]          |
+| res("..address[0]")                    | \{ city: "bangalore" \}            |
 
 ## API
 
 ### Standard dot notation
 
 **Example:**
+
 ```javascript
-res('customer.orders.items.amount')
+res('customer.orders.items.amount');
 ```
 
 ### Deep navigation .. double dots
 
 **Example:**
+
 ```javascript
-res('..items.amount')
+res('..items.amount');
 ```
 
 ### Array indexing
 
 **Example:**
+
 ```javascript
-res('..items[0].amount')
+res('..items[0].amount');
 ```
 
 ### Array filtering [?] with corresponding filter function
 
 **Example:**
-```javascript
-res('..items[?].amount', i => i.amount > 20)
-```
 
+```javascript
+res('..items[?].amount', i => i.amount > 20);
+```
 
 ### Array mapping [?] with corresponding mapper function
 
 **Example:**
+
 ```javascript
-res('..items..amount[?]', amt => amt + 10)
+res('..items..amount[?]', amt => amt + 10);
 ```
-
-
-
-
-
-
-
-

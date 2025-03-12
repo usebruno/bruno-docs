@@ -7,6 +7,7 @@ Bruno allows you to configure OAuth2 authentication at the request level, provid
 ## Setting Up OAuth2
 
 1. **Access Request Settings**
+
    - Open your request
    - Navigate to Request Settings
    - Select the "Auth" tab
@@ -28,15 +29,15 @@ Bruno supports three OAuth2 grant types:
 
 1. Configure OAuth2 parameters
 2. You can choose where to add this token in the request by selecting the "Add token to" dropdown:
-    - Headers
-        - Adds the token to the request headers
-        - Configure the header prefix (defaults to "Bearer")
-    - URL
-        - Adds the token to the request URL
-        - Configure the query parameter name (defaults to "access_token")
+   - Headers
+     - Adds the token to the request headers
+     - Configure the header prefix (defaults to "Bearer")
+   - URL
+     - Adds the token to the request URL
+     - Configure the query parameter name (defaults to "access_token")
 3. Click "Get Access Token" to obtain and store the token.
 
-> **Note**: You may optionally assign a Token ID to your token. If you do, you can reference this token in requests using the format `{{$oauth2.tokenId.access_token}}` (replace `tokenId` with your Token ID). 
+> **Note**: You may optionally assign a Token ID to your token. If you do, you can reference this token in requests using the format `{{$oauth2.tokenId.access_token}}` (replace `tokenId` with your Token ID).
 >
 > If you use the same Token ID in multiple OAuth requests, Bruno will overwrite the existing token data. Make sure to use unique Token IDs for different OAuth configurations.
 
@@ -45,6 +46,7 @@ Bruno supports three OAuth2 grant types:
 You can use the OAuth2 token in your request in two ways:
 
 ### Method 1: Automatic Token Addition
+
 - Configure the token location in the Auth settings (Headers or URL)
 - Bruno will automatically add the token to your request based on your configuration
 
@@ -57,6 +59,7 @@ You can use the OAuth2 token in your request in two ways:
 </video>
 
 ### Method 2: Direct Token Reference
+
 You can manually reference the request's OAuth2 token in your requests using the variable format `{{$oauth2.tokenId.access_token}}` in either headers or query parameters.
 
 <video controls className="mt-10">
@@ -70,6 +73,7 @@ You can manually reference the request's OAuth2 token in your requests using the
 ## Note on Collection-Level OAuth2
 
 If you've configured OAuth2 at the collection level, you can:
+
 - Override it by setting up request-level OAuth2 configuration
 - Inherit it by selecting "Inherit from collection" in the request's Auth settings
 

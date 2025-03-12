@@ -1,27 +1,44 @@
-import { useData } from "nextra/ssg";
-import { useMonaco } from "@monaco-editor/react";
-import { Suspense, useState } from "react";
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Columns2, Copy, Expand, Rows2, Shrink } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { prettifyName, transformThemeName } from "./utils";
+import { useData } from 'nextra/ssg';
+import { useMonaco } from '@monaco-editor/react';
+import { Suspense, useState } from 'react';
+import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { Columns2, Copy, Expand, Rows2, Shrink } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { prettifyName, transformThemeName } from './utils';
 
-export const ToolBar = ({ copyClipboard, openDialog, setOpenDialog, editorTheme, setEditorTheme, layoutMode, setLayoutMode, className, editorBg, setEditorBg }: {
-  copyClipboard: () => void,
-  openDialog: boolean,
-  setOpenDialog: (open: boolean) => void,
-  editorTheme: string,
-  setEditorTheme: (theme: string) => void,
-  layoutMode: "col" | "row",
-  setLayoutMode: (mode: "col" | "row") => void,
-  className?: string,
-  editorBg: string,
-  setEditorBg: (color: string) => void
+export const ToolBar = ({
+  copyClipboard,
+  openDialog,
+  setOpenDialog,
+  editorTheme,
+  setEditorTheme,
+  layoutMode,
+  setLayoutMode,
+  className,
+  editorBg,
+  setEditorBg,
+}: {
+  copyClipboard: () => void;
+  openDialog: boolean;
+  setOpenDialog: (open: boolean) => void;
+  editorTheme: string;
+  setEditorTheme: (theme: string) => void;
+  layoutMode: 'col' | 'row';
+  setLayoutMode: (mode: 'col' | 'row') => void;
+  className?: string;
+  editorBg: string;
+  setEditorBg: (color: string) => void;
 }) => {
-  const { themes } = useData()
+  const { themes } = useData();
   const monaco = useMonaco();
   const [selectedTheme, setSelectedTheme] = useState(editorTheme);
 
@@ -30,7 +47,7 @@ export const ToolBar = ({ copyClipboard, openDialog, setOpenDialog, editorTheme,
     if (theme === 'vs-dark' || theme === 'vs-light') {
       monaco?.editor.setTheme(theme);
       setEditorTheme(theme);
-      setEditorBg(theme === 'vs-dark' ? '#1E1E1E' : '#fff')
+      setEditorBg(theme === 'vs-dark' ? '#1E1E1E' : '#fff');
       return;
     }
     const themeData = await fetch(`/static/themes/${theme}.json`).then(res => res.json());
@@ -43,10 +60,11 @@ export const ToolBar = ({ copyClipboard, openDialog, setOpenDialog, editorTheme,
     <Suspense fallback={<Badge color="slate">Loading themes...</Badge>}>
       <div
         className={cn(
-        "flex w-full justify-between items-center relative z-20",
-        openDialog && 'bg-white dark:bg-zinc-900 p-2',
-        className
-      )}>
+          'flex w-full justify-between items-center relative z-20',
+          openDialog && 'bg-white dark:bg-zinc-900 p-2',
+          className
+        )}
+      >
         <div className="flex items-center">
           <Select onValueChange={handleThemeChange}>
             <SelectTrigger className="mr-2">
@@ -64,21 +82,17 @@ export const ToolBar = ({ copyClipboard, openDialog, setOpenDialog, editorTheme,
           </Select>
           <div className="flex items-center w-fit">
             <ToggleGroup type="single" value={layoutMode}>
-              <ToggleGroupItem value="col" onClick={() => setLayoutMode("col")}>
+              <ToggleGroupItem value="col" onClick={() => setLayoutMode('col')}>
                 <Rows2 size={16} />
               </ToggleGroupItem>
-              <ToggleGroupItem value="row" onClick={() => setLayoutMode("row")}>
+              <ToggleGroupItem value="row" onClick={() => setLayoutMode('row')}>
                 <Columns2 size={16} />
               </ToggleGroupItem>
             </ToggleGroup>
           </div>
         </div>
         <div className={cn('flex items-center')}>
-          <Button
-            variant="outline"
-            className="mr-2 h-10 w-10 p-0"
-            onClick={() => copyClipboard()}
-          >
+          <Button variant="outline" className="mr-2 h-10 w-10 p-0" onClick={() => copyClipboard()}>
             <Copy size={16} />
           </Button>
           <Button
@@ -86,14 +100,10 @@ export const ToolBar = ({ copyClipboard, openDialog, setOpenDialog, editorTheme,
             className="flex items-center"
             onClick={() => setOpenDialog(!openDialog)}
           >
-            {openDialog ? (
-              <Shrink size={16} />
-            ) : (
-              <Expand size={16} />
-            )}
+            {openDialog ? <Shrink size={16} /> : <Expand size={16} />}
           </Button>
         </div>
       </div>
     </Suspense>
-  )
-}
+  );
+};

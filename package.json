@@ -8,7 +8,8 @@
     "buildCache": "ts-node utils/cache/buildFileCache.ts && ts-node utils/cache/buildIndexCache.ts",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --check .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "format:fix": "prettier --write --list-different .",
     "prepare": "husky"
   },

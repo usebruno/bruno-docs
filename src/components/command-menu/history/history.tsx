@@ -1,10 +1,10 @@
-import React from "react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { ChevronRight, FileText } from "lucide-react";
-import { Typography } from "@/components/ui/typography";
-import { HistoryType } from "@/lib/types/history";
+import React from 'react';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { ChevronRight, FileText } from 'lucide-react';
+import { Typography } from '@/components/ui/typography';
+import { HistoryType } from '@/lib/types/history';
 
 const HistoryItem = ({
   className,
@@ -20,8 +20,8 @@ const HistoryItem = ({
       asChild
       variant="secondary"
       className={cn(
-        "overflow-hidden flex items-center justify-start w-full p-2 my-1 rounded-lg bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-900 dark:hover:bg-zinc-800 group",
-        className,
+        'overflow-hidden flex items-center justify-start w-full p-2 my-1 rounded-lg bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-900 dark:hover:bg-zinc-800 group',
+        className
       )}
     >
       <Link href={`/${path}`}>
@@ -51,13 +51,13 @@ export const History = ({
   expanded?: boolean;
 }) => {
   return (
-    <div className={cn("flex flex-col w-full mt-2", className)}>
+    <div className={cn('flex flex-col w-full mt-2', className)}>
       {Object.entries(history || {}).map(([key, item]) => (
         <HistoryItem
-          name={item.name?.replace("_", " ")}
+          name={item.name?.replace('_', ' ')}
           path={item.path}
           key={`history_item_${key}`}
-          className={cn(expanded && "mt-2 py-3 h-auto")}
+          className={cn(expanded && 'mt-2 py-3 h-auto')}
         />
       ))}
     </div>

@@ -6,7 +6,7 @@ The `req` object represents the HTTP request made to the server. It contains var
 
 The `req` sub-object contains detailed information about the request.
 
-- `assertions` : An array containing any assertions associated with the request. *See [assertions](/testing/assertions)*.
+- `assertions` : An array containing any assertions associated with the request. _See [assertions](/testing/assertions)_.
 - `auth` : An object containing authentication credentials, such as username and password.
 - `headers` : A sub-object representing the HTTP headers associated with the request.
 - `method` : The HTTP method used for the request (e.g., "GET", "POST").
@@ -15,7 +15,7 @@ The `req` sub-object contains detailed information about the request.
 - `script` : An object containing script-related information for the request.
 - `signal` : A signal object used to abort the request.
 - `url` : The URL of the request.
-- `vars` : An object containing any variables associated with the request. *See [variables](/scripting/vars)*.
+- `vars` : An object containing any variables associated with the request. _See [variables](/scripting/vars)_.
 
 ## Headers
 
@@ -50,14 +50,16 @@ The `url` property of the `req` object represents the Uniform Resource Locator (
 console.log(req.url); // Output: "{{base.url}}/users/2?queryTest=queryResult"
 ```
 
-
 ## Example Usage
 
 ```javascript
 // Example request object
 const req = {
   assertions: [],
-  auth: { username: 'myUsername', password: 'mySuperPassword' },
+  auth: {
+    username: 'myUsername',
+    password: 'mySuperPassword',
+  },
   headers: {
     authorization: 'Bearer <token>',
     'content-type': 'application/json',
@@ -68,13 +70,12 @@ const req = {
   mode: 'none',
   responseType: 'arraybuffer',
   script: {
-    req: "// Create an array of objects\nconst data = [\n  { i…q);\nconst myVariable = bru.getEnvVar('password');"
+    req: "// Create an array of objects\nconst data = [\n  { i…q);\nconst myVariable = bru.getEnvVar('password');",
   },
   signal: {},
   url: '{{base.url}}/users/2?queryTest=queryResult',
-  vars: {}
+  vars: {},
 };
-
 
 // Accessing request properties
 console.log(req.method); // Output: "GET"

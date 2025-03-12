@@ -1,22 +1,22 @@
-import PremiumBadge from "@/components/premium-badge";
+import PremiumBadge from '@/components/premium-badge';
 
 # Response Visualization<PremiumBadge />
 
 The `bru.visualize` function in the Bruno CLI allows for rendering various types of visualizations such as tables and HTML. It supports different providers for each visualization type, offering flexibility in how data is displayed. Below are examples and details on the supported types and providers.
 
 ```javascript
-bru.visualize(type, config)
+bru.visualize(type, config);
 ```
 
 1. **type**: The type of visualization to render (e.g., 'table', 'html').
 
 2. **config**: A configuration object that includes:
 
-    - **name**: The name of the visualization instance.
+   - **name**: The name of the visualization instance.
 
-    - **provider**: The rendering library or provider used to display the visualization (e.g., 'ag-grid', 'react-table').
+   - **provider**: The rendering library or provider used to display the visualization (e.g., 'ag-grid', 'react-table').
 
-    - **props**: Additional properties required by the provider to configure the visualization.
+   - **props**: Additional properties required by the provider to configure the visualization.
 
 ## Supported Visualization Types and Providers
 
@@ -26,27 +26,53 @@ You can render tables using different providers like `ag-grid` and `react-table`
 
 #### Using **ag-grid**
 
-*Example:*
+_Example:_
 
 ![ag-grid](/screenshots/visualization/ag-grid.png)
 
 ```javascript
 const rowData = [
-  { name: 'John Doe', age: 28, email: 'john@example.com', city: 'New York' },
-  { name: 'Jane Smith', age: 32, email: 'jane@example.com', city: 'London' }
+  {
+    name: 'John Doe',
+    age: 28,
+    email: 'john@example.com',
+    city: 'New York',
+  },
+  {
+    name: 'Jane Smith',
+    age: 32,
+    email: 'jane@example.com',
+    city: 'London',
+  },
 ];
 
 const columnDefinitions = [
-  { field: "name", filter: true, floatingFilter: true },
-  { field: "age", filter: true, floatingFilter: true },
-  { field: "email", filter: true, floatingFilter: true },
-  { field: "city", filter: true, floatingFilter: true }
+  {
+    field: 'name',
+    filter: true,
+    floatingFilter: true,
+  },
+  {
+    field: 'age',
+    filter: true,
+    floatingFilter: true,
+  },
+  {
+    field: 'email',
+    filter: true,
+    floatingFilter: true,
+  },
+  {
+    field: 'city',
+    filter: true,
+    floatingFilter: true,
+  },
 ];
 
 bru.visualize('table', {
   name: 'table1',
   provider: 'ag-grid',
-  props: { rowData, columnDefinitions }
+  props: { rowData, columnDefinitions },
 });
 ```
 
@@ -54,31 +80,46 @@ This will render a table using the ag-grid provider with filters enabled on all 
 
 #### Using **react-table**
 
-*Example:*
+_Example:_
 
 ![react-table](/screenshots/visualization/react-table.png)
 
 ```javascript
 const rowData1 = Array.from({ length: 2500 })
-  .map((_) => [
-    { firstName: 'Tanner', lastName: 'Linsley', age: 24, visits: 100 },
-    { firstName: 'Tandy', lastName: 'Miller', age: 40, visits: 40 },
-    { firstName: 'Joe', lastName: 'Dirte', age: 45, visits: 20 },
-  ]).flat();
-
+  .map(_ => [
+    {
+      firstName: 'Tanner',
+      lastName: 'Linsley',
+      age: 24,
+      visits: 100,
+    },
+    {
+      firstName: 'Tandy',
+      lastName: 'Miller',
+      age: 40,
+      visits: 40,
+    },
+    {
+      firstName: 'Joe',
+      lastName: 'Dirte',
+      age: 45,
+      visits: 20,
+    },
+  ])
+  .flat();
 
 const columnDefinitions1 = [
   {
-    id: "firstName",
-    cell: (info) => info.getValue(),
+    id: 'firstName',
+    cell: info => info.getValue(),
     header: () => `<span className="flex flex-start">First Name</span>`,
-    meta: { filterVariant: "text" },
+    meta: { filterVariant: 'text' },
   },
   {
-    id: "lastName",
-    cell: (info) => info.getValue(),
+    id: 'lastName',
+    cell: info => info.getValue(),
     header: () => `<span className="flex flex-start">Last Name</span>`,
-    meta: { filterVariant: "text" },
+    meta: { filterVariant: 'text' },
   },
   // Additional column definitions here...
 ];
@@ -86,7 +127,10 @@ const columnDefinitions1 = [
 bru.visualize('table', {
   name: 'table2',
   provider: 'react-table',
-  props: { rowData: rowData1, columnDefinitions: columnDefinitions1 }
+  props: {
+    rowData: rowData1,
+    columnDefinitions: columnDefinitions1,
+  },
 });
 ```
 
@@ -98,7 +142,7 @@ You can also render custom HTML content using the html type. This allows for adv
 
 #### Using **HTML** String
 
-*Example:*
+_Example:_
 
 ![html](/screenshots/visualization/html.png)
 
@@ -124,7 +168,7 @@ const htmlString = `
 
 bru.visualize('html', {
   name: 'htmlReport',
-  content: htmlString
+  content: htmlString,
 });
 ```
 
@@ -132,16 +176,16 @@ This example will render an HTML table with predefined data using the html type.
 
 ### Parameters
 
-| Name     | Type     | Description                                                                                     |
-|----------|----------|-------------------------------------------------------------------------------------------------|
-| `type`   | `string` | The type of visualization to render. Supported values: `'table'`, `'html'`.                     |
-| `config` | `object` | Configuration object for the visualization. See below for available properties.                 |
+| Name     | Type     | Description                                                                     |
+| -------- | -------- | ------------------------------------------------------------------------------- |
+| `type`   | `string` | The type of visualization to render. Supported values: `'table'`, `'html'`.     |
+| `config` | `object` | Configuration object for the visualization. See below for available properties. |
 
 ### Config Properties
 
-| Property   | Type     | Description                                                                                     |
-|------------|----------|-------------------------------------------------------------------------------------------------|
-| `name`     | `string` | Name of the visualization instance.                                                             |
+| Property   | Type     | Description                                                                                        |
+| ---------- | -------- | -------------------------------------------------------------------------------------------------- |
+| `name`     | `string` | Name of the visualization instance.                                                                |
 | `provider` | `string` | The provider or rendering engine to use for the visualization. E.g., `'ag-grid'`, `'react-table'`. |
-| `props`    | `object` | Additional properties required by the provider to configure the visualization.                  |
-| `content`  | `string` | (For `html` type only) The HTML content to render.                                             |
+| `props`    | `object` | Additional properties required by the provider to configure the visualization.                     |
+| `content`  | `string` | (For `html` type only) The HTML content to render.                                                 |

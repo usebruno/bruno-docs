@@ -5,5 +5,4 @@
   "hashicorp-vault": "Hashicorp Vault",
   "aws-secrets-manager": "AWS Secrets Manager (Experimental)",
   "azure-key-vault": "Azure Key Vault (Experimental)"
-
 }

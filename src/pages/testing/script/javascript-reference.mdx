@@ -25,7 +25,7 @@ Set the current request url
 **Example:**
 
 ```javascript
-req.setUrl("https://api.github.com/search/repositories?q=vue");
+req.setUrl('https://api.github.com/search/repositories?q=vue');
 ```
 
 ### `getMethod`
@@ -45,7 +45,7 @@ Set the current request method
 **Example:**
 
 ```javascript
-req.setMethod("POST");
+req.setMethod('POST');
 ```
 
 ### `getHeader`
@@ -55,7 +55,7 @@ Get the request header by name
 **Example:**
 
 ```javascript
-req.getHeader("transaction-id");
+req.getHeader('transaction-id');
 ```
 
 ### `getHeaders`
@@ -75,7 +75,7 @@ Set the request header by name
 **Example:**
 
 ```javascript
-req.setHeader("content-type", "application/json");
+req.setHeader('content-type', 'application/json');
 ```
 
 ### `setHeaders`
@@ -86,8 +86,8 @@ Set the current request headers
 
 ```javascript
 req.setHeaders({
-  "content-type": "application/json",
-  "transaction-id": "foobar",
+  'content-type': 'application/json',
+  'transaction-id': 'foobar',
 });
 ```
 
@@ -109,8 +109,8 @@ Set the request body/payload
 
 ```javascript
 req.setBody({
-  username: "john nash",
-  password: "governingdynamics",
+  username: 'john nash',
+  password: 'governingdynamics',
 });
 ```
 
@@ -177,7 +177,7 @@ Get the response header by name
 **Example:**
 
 ```javascript
-let transactionId = res.getHeader("transaction-id");
+let transactionId = res.getHeader('transaction-id');
 ```
 
 ### `getHeaders`
@@ -276,7 +276,7 @@ Get the Node process environment variable. This allows secret token usage withou
 **Example:**
 
 ```javascript
-let secret_token = bru.getProcessEnv("secret_access_token");
+let secret_token = bru.getProcessEnv('secret_access_token');
 ```
 
 ### Environments
@@ -296,7 +296,7 @@ bru.setGlobalEnvVar(key, value);
 **Example:**
 
 ```javascript
-bru.setGlobalEnvVar("val", "bruno");
+bru.setGlobalEnvVar('val', 'bruno');
 ```
 
 #### `getGlobalEnvVar`
@@ -312,7 +312,7 @@ bru.getGlobalEnvVar(key);
 **Example:**
 
 ```javascript
-bru.getGlobalEnvVar("val");
+bru.getGlobalEnvVar('val');
 ```
 
 #### `getEnvVar`
@@ -322,7 +322,7 @@ Get the Bruno environment variable
 **Example:**
 
 ```javascript
-let token = bru.getEnvVar("access_token");
+let token = bru.getEnvVar('access_token');
 ```
 
 #### `setEnvVar`
@@ -334,7 +334,7 @@ Set the Bruno environment variable
 ```javascript
 function onResponse(res) {
   let data = res.getBody();
-  let token = bru.setEnvVar("access_token", data.token);
+  let token = bru.setEnvVar('access_token', data.token);
 }
 ```
 
@@ -349,7 +349,7 @@ Get the collection variable
 **Example:**
 
 ```javascript
-let namespace = bru.getCollectionVar("namespace");
+let namespace = bru.getCollectionVar('namespace');
 ```
 
 ### Folder Variables
@@ -363,7 +363,7 @@ Get the folder variable
 **Example:**
 
 ```javascript
-let company = bru.getFolderVar("company");
+let company = bru.getFolderVar('company');
 ```
 
 ### Runtime Variables
@@ -377,7 +377,7 @@ Get the runtime variable
 **Example:**
 
 ```javascript
-let petId = bru.getVar("petId");
+let petId = bru.getVar('petId');
 ```
 
 #### `setVar`
@@ -388,7 +388,7 @@ Set the runtime variable
 
 ```javascript
 let data = res.getBody();
-bru.setVar("petId", data.id);
+bru.setVar('petId', data.id);
 ```
 
 #### `deleteVar`
@@ -398,7 +398,7 @@ Delete the runtime variable
 **Example:**
 
 ```javascript
-bru.deleteVar("petId");
+bru.deleteVar('petId');
 ```
 
 ### Request Order
@@ -414,7 +414,7 @@ This works only in a post-request script or test-script.
 **Example:**
 
 ```javascript
-bru.setNextRequest("Get process status");
+bru.setNextRequest('Get process status');
 ```
 
 You can also abort the run by explicitly setting the next request to `null`
@@ -431,15 +431,13 @@ You can execute any request in the collection and retrieve the response directly
 **Syntax:**
 
 ```javascript
-const requestResponse = await bru.runRequest(
-  "absolute/path/to/a/request/from/collection/root"
-);
+const requestResponse = await bru.runRequest('absolute/path/to/a/request/from/collection/root');
 ```
 
 **Example:**
 
 ```javascript
-const requestResponse = await bru.runRequest("echo/echo json");
+const requestResponse = await bru.runRequest('echo/echo json');
 ```
 
 ### Collection Runner Utility Functions
@@ -451,7 +449,7 @@ By default, the collection runner (UI) and CLI execute requests in sequential or
 **Example:**
 
 ```javascript
-bru.runner.setNextRequest("Get process status");
+bru.runner.setNextRequest('Get process status');
 ```
 
 #### `skipRequest`

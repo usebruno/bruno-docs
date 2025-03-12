@@ -1,10 +1,10 @@
-import { Callout } from "nextra/components";
+import { Callout } from 'nextra/components';
 
 # Testing
 
 <Callout emoji="">
-  Bruno uses the [Chai library](https://www.chaijs.com/), so you can follow the
-  same syntax for writing assertions in your tests.
+  Bruno uses the [Chai library](https://www.chaijs.com/), so you can follow the same syntax for
+  writing assertions in your tests.
 </Callout>
 
 Bruno supports writing automation test scripts in JavaScript for your API requests to assert its behaviour.
@@ -20,15 +20,15 @@ Some of the benefits include
 **Example:**
 
 ```javascript
-test("should be able to login", function () {
+test('should be able to login', function () {
   const data = res.getBody();
   expect(res.getStatus()).to.equal(200);
 });
 
-test("should return json", function () {
+test('should return json', function () {
   const data = res.getBody();
   expect(res.getBody()).to.eql({
-    hello: "Bruno",
+    hello: 'Bruno',
   });
 });
 ```

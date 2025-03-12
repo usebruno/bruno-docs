@@ -1,11 +1,10 @@
 # Authenticate with Digest Access
 
 With Digest auth, the client sends a first request to the API, and the server responds back with details.
-Response details include a number that can be used only once (a nonce), a realm value, and a 401 Unauthorized response. 
-You then send back an encrypted array of data, including a username and password combined with the data received from the server in the first request. 
+Response details include a number that can be used only once (a nonce), a realm value, and a 401 Unauthorized response.
+You then send back an encrypted array of data, including a username and password combined with the data received from the server in the first request.
 The server uses the passed data to generate an encrypted string and compares it against what you sent to authenticate your request.
 
-In the Authorization tab for a request, select Digest Auth from the Auth Type dropdown list. 
+In the Authorization tab for a request, select Digest Auth from the Auth Type dropdown list.
 
 ![Digest](/screenshots/auth/digest.webp)
-
