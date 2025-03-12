@@ -36,11 +36,11 @@ function readAndFlattenDirectory(
     const itemPath = path.join(directoryPath, item);
     const stats = fs.statSync(itemPath);
     if (
-      item === "_meta.json" ||
+      item === "_meta.js" ||
       item === "_app.mdx" ||
       item === "getting-started.mdx"
     ) {
-      return; // Skip processing _meta.json file-cache
+      return; // Skip processing _meta.js file-cache
     }
     if (stats.isDirectory()) {
       const actualParentName = itemPath.split("pages/").pop().split("/")?.[0];

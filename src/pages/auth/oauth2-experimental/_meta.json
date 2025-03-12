@@ -1,8 +1,0 @@
-{
-  "overview": "Overview",
-  "collection-level-configuration": "Collection Level",
-  "request-level-configuration": "Request Level",
-  "authorization-code": "Authorization Code",
-  "client-credentials": "Client Credentials",
-  "password-credentials": "Password Credentials"
-}

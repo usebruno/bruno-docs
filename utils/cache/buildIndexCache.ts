@@ -18,17 +18,24 @@ interface IndexCache {
 }
 
 function readMetaFile(directoryPath: string): { [key: string]: string } {
-  const metaPath = path.join(directoryPath, "_meta.json");
-  if (fs.existsSync(metaPath)) {
-    const metaContent = fs.readFileSync(metaPath, "utf-8");
-    return JSON.parse(metaContent);
+  const metaJsPath = path.join(directoryPath, "_meta.js");
+  if (fs.existsSync(metaJsPath)) {
+    const metaContent = fs.readFileSync(metaJsPath, "utf-8");
+    try {
+      // Remove export default and parse the object
+      const cleanContent = metaContent.replace(/export\s+default\s+/, '');
+      return JSON.parse(cleanContent);
+    } catch (error) {
+      console.error(`Error parsing meta file at ${metaJsPath}:`, error);
+      return {};
+    }
   }
   return {};
 }
 
 function isDirectory(directoryPath: string): boolean {
-  const metaPath = path.join(directoryPath, "_meta.json");
-  return fs.existsSync(metaPath) && fs.statSync(metaPath).isFile();
+  const metaJsPath = path.join(directoryPath, "_meta.js");
+  return fs.existsSync(metaJsPath) && fs.statSync(metaJsPath).isFile();
 }
 
 function buildIndexCache(

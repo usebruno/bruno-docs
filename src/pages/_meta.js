@@ -1,0 +1,15 @@
+export default {
+  "introduction": "Introduction",
+  "get-started": "Getting Started",
+  "send-requests": "Send Requests",
+  "git-integration": "Git Integration & Collaboration",
+  "testing": "Tests and Script",
+  "secrets-management": "Secret Management",
+  "auth": "Authentication & Authorization",
+  "api-docs": "Create Documentation",
+  "open-api": "OpenAPI",
+  "bru-cli": "Bruno's CLI",
+  "bru-lang": "Bru Lang",
+  "license-management": "License Management",
+  "advanced-guides": "Advanced Guides"
+} 
