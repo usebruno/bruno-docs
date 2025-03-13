@@ -1,9 +1,13 @@
 export const AVAILABLE_THEMES = [
-  'vs-dark',
-  'vs-light',
   'github-dark',
   'github-light',
   'monokai',
+  'dracula',
+  'nord',
   'solarized-dark',
-  'solarized-light'
+  'solarized-light',
+  'tomorrow-night',
+  'tomorrow',
+  'one-dark',
+  'one-light'
 ]; 

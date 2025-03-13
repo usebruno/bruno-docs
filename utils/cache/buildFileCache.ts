@@ -1,7 +1,9 @@
-// @ts-ignore
-const fs = require("fs");
-// @ts-ignore
-const path = require("path");
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 function extractTextFromMarkdown(markdownContent: string): string {
   const headingRegex = /^#+\s+(.*)/gm; // Matches Markdown headings
@@ -55,17 +57,16 @@ function readAndFlattenDirectory(
       const path = itemPath
         .split("pages/")
         .pop()
-        .replace(/\.[^.]+$/, "");
+        .replace(/\.(md|mdx)$/, "");
       files[path] = {
         name: itemPath
           .split("/")
           .pop()
-          .replace(/\.[^.]+$/, ""),
+          .replace(/\.(md|mdx)$/, ""),
         content: extractTextFromMarkdown(content),
         parentName: parentName,
         path,
       };
-      // parentName = null;
     }
   });
 
@@ -83,10 +84,8 @@ function initializeFileCache() {
   writeDataToFile(files, outputFilePath);
 }
 
-// @ts-ignore
 function writeDataToFile(data: any, outputFilePath: string): void {
   const jsonData = JSON.stringify(data, null, 2); // Pretty-print JSON
-
   fs.writeFileSync(outputFilePath, jsonData);
 }
 

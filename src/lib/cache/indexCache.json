@@ -23,7 +23,7 @@
         "name": "Bruno Basics",
         "children": [
           {
-            "name": "Download",
+            "name": "Download & Install",
             "path": "get-started/bruno-basics/download"
           },
           {
@@ -48,16 +48,20 @@
         "name": "Import or Export Data",
         "children": [
           {
-            "name": "Exporting Collections",
-            "path": "get-started/import-export-data/export-collections"
-          },
-          {
-            "name": "Importing Collections",
+            "name": "Import Collections",
             "path": "get-started/import-export-data/import-collections"
           },
           {
-            "name": "Migrating from Postman",
+            "name": "Export Collections",
+            "path": "get-started/import-export-data/export-collections"
+          },
+          {
+            "name": "Postman Migration",
             "path": "get-started/import-export-data/postman-migration"
+          },
+          {
+            "name": "Script Translator",
+            "path": "get-started/import-export-data/script-translator"
           }
         ]
       },
@@ -67,6 +71,14 @@
           {
             "name": "Overview",
             "path": "get-started/variables/overview"
+          },
+          {
+            "name": "Environment Variables",
+            "path": "get-started/variables/environment-variables"
+          },
+          {
+            "name": "Global Environment Variables",
+            "path": "get-started/variables/global-environment-variables"
           },
           {
             "name": "Collection Variables",
@@ -83,12 +95,119 @@
           {
             "name": "Runtime Variables",
             "path": "get-started/variables/runtime-variables"
+          },
+          {
+            "name": "Process Environment Variables",
+            "path": "get-started/variables/process-env"
           }
         ]
       },
       {
+        "name": "Configure",
+        "children": [
+          {
+            "name": "Settings",
+            "path": "get-started/configure/settings"
+          }
+        ]
+      },
+      {
+        "name": "Request History",
+        "path": "get-started/history"
+      },
+      {
         "name": "Safe Mode vs Developer Mode",
         "path": "get-started/javascript-sandbox"
+      }
+    ]
+  },
+  {
+    "name": "Send Requests",
+    "children": [
+      {
+        "name": "Overview",
+        "path": "send-requests/overview"
+      },
+      {
+        "name": "REST",
+        "children": [
+          {
+            "name": "Overview",
+            "path": "send-requests/REST/overview"
+          },
+          {
+            "name": "REST API",
+            "path": "send-requests/REST/rest-api"
+          },
+          {
+            "name": "Parameters",
+            "path": "send-requests/REST/parameters"
+          },
+          {
+            "name": "Request Headers",
+            "path": "send-requests/REST/req-header"
+          },
+          {
+            "name": "Body Data",
+            "path": "send-requests/REST/body-data"
+          },
+          {
+            "name": "Code Generator",
+            "path": "send-requests/REST/code-generator"
+          }
+        ]
+      },
+      {
+        "name": "GraphQL",
+        "children": [
+          {
+            "name": "Overview",
+            "path": "send-requests/graphql/overview"
+          },
+          {
+            "name": "GraphQL API",
+            "path": "send-requests/graphql/graphql-api"
+          }
+        ]
+      },
+      {
+        "name": "SOAP",
+        "children": [
+          {
+            "name": "SOAP Request",
+            "path": "send-requests/soap/soap-request"
+          }
+        ]
+      },
+      {
+        "name": "Response Data and Cookies",
+        "children": [
+          {
+            "name": "Overview",
+            "path": "send-requests/res-data-cookies/overview"
+          },
+          {
+            "name": "Response Data",
+            "path": "send-requests/res-data-cookies/res-data"
+          },
+          {
+            "name": "Cookies",
+            "path": "send-requests/res-data-cookies/cookies"
+          },
+          {
+            "name": "Debugging",
+            "children": [
+              {
+                "name": "DevTools",
+                "path": "send-requests/res-data-cookies/debugging/devtools"
+              },
+              {
+                "name": "Timeline",
+                "path": "send-requests/res-data-cookies/debugging/timeline"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -105,24 +224,122 @@
       },
       {
         "name": "Collaboration via GUI",
-        "path": "git-integration/using-gui"
+        "children": [
+          {
+            "name": "Introduction",
+            "path": "git-integration/using-gui/intro"
+          },
+          {
+            "name": "Provider",
+            "path": "git-integration/using-gui/provider"
+          },
+          {
+            "name": "Consumer",
+            "path": "git-integration/using-gui/consumer"
+          }
+        ]
       }
     ]
   },
   {
-    "name": "API Testing",
+    "name": "Tests and Script",
     "children": [
       {
-        "name": "Introduction",
-        "path": "testing/introduction"
+        "name": "Tests",
+        "children": [
+          {
+            "name": "Introduction",
+            "path": "testing/tests/introduction"
+          },
+          {
+            "name": "Assertions",
+            "path": "testing/tests/assertions"
+          },
+          {
+            "name": "Data Driven Testing",
+            "path": "testing/tests/data-driven-testing"
+          }
+        ]
       },
       {
-        "name": "Assertions",
-        "path": "testing/assertions"
+        "name": "Script",
+        "children": [
+          {
+            "name": "Getting Started",
+            "path": "testing/script/getting-started"
+          },
+          {
+            "name": "Script Flow",
+            "path": "testing/script/script-flow"
+          },
+          {
+            "name": "JavaScript File",
+            "path": "testing/script/js-file"
+          },
+          {
+            "name": "Variables",
+            "path": "testing/script/vars"
+          },
+          {
+            "name": "Whitelisting Modules",
+            "path": "testing/script/whitelisting-modules"
+          },
+          {
+            "name": "External Libraries",
+            "path": "testing/script/external-libraries"
+          },
+          {
+            "name": "Inbuilt Libraries",
+            "path": "testing/script/inbuilt-libraries"
+          },
+          {
+            "name": "JavaScript Reference",
+            "path": "testing/script/javascript-reference"
+          },
+          {
+            "name": "Request",
+            "children": [
+              {
+                "name": "Request Object",
+                "path": "testing/script/request/request-object"
+              },
+              {
+                "name": "Synchronous Requests",
+                "path": "testing/script/request/sync-requests"
+              }
+            ]
+          },
+          {
+            "name": "Response",
+            "children": [
+              {
+                "name": "Response Object",
+                "path": "testing/script/response/response-object"
+              },
+              {
+                "name": "Response Query",
+                "path": "testing/script/response/response-query"
+              }
+            ]
+          }
+        ]
       },
       {
-        "name": "Data Driven Testing",
-        "path": "testing/data-driven-testing"
+        "name": "Running and Automation",
+        "children": [
+          {
+            "name": "Overview",
+            "path": "testing/automate-test/overview"
+          },
+          {
+            "name": "Automated Testing",
+            "path": "testing/automate-test/automate-test"
+          },
+          {
+            "name": "Manual Testing",
+            "path": "testing/automate-test/manual-test"
+          }
+        ]
       }
     ]
   },
@@ -134,7 +351,7 @@
         "path": "secrets-management/overview"
       },
       {
-        "name": "Dotenv File",
+        "name": "DotEnv File",
         "path": "secrets-management/dotenv-file"
       },
       {
@@ -153,7 +370,7 @@
             "path": "secrets-management/hashicorp-vault/adding-a-secret-provider"
           },
           {
-            "name": "Configuring and Fetching secrets",
+            "name": "Configuring and Fetching Secrets",
             "path": "secrets-management/hashicorp-vault/configuring-and-fetching-secrets"
           },
           {
@@ -163,6 +380,48 @@
           {
             "name": "Using with CLI",
             "path": "secrets-management/hashicorp-vault/using-with-cli"
+          }
+        ]
+      },
+      {
+        "name": "AWS Secrets Manager (Experimental)",
+        "children": [
+          {
+            "name": "Overview",
+            "path": "secrets-management/aws-secrets-manager/overview"
+          },
+          {
+            "name": "Adding a Secret Provider",
+            "path": "secrets-management/aws-secrets-manager/adding-a-secret-provider"
+          },
+          {
+            "name": "Configuring and Fetching Secrets",
+            "path": "secrets-management/aws-secrets-manager/configuring-and-fetching-secrets"
+          },
+          {
+            "name": "Using Secrets",
+            "path": "secrets-management/aws-secrets-manager/using-secrets"
+          }
+        ]
+      },
+      {
+        "name": "Azure Key Vault (Experimental)",
+        "children": [
+          {
+            "name": "Overview",
+            "path": "secrets-management/azure-key-vault/overview"
+          },
+          {
+            "name": "Adding a Secret Provider",
+            "path": "secrets-management/azure-key-vault/adding-a-secret-provider"
+          },
+          {
+            "name": "Configuring and Fetching Secrets",
+            "path": "secrets-management/azure-key-vault/configuring-and-fetching-secrets"
+          },
+          {
+            "name": "Using Secrets",
+            "path": "secrets-management/azure-key-vault/using-secrets"
           }
         ]
       }
@@ -202,6 +461,26 @@
           {
             "name": "Overview",
             "path": "auth/oauth2-experimental/overview"
+          },
+          {
+            "name": "Collection Level Configuration",
+            "path": "auth/oauth2-experimental/collection-level-configuration"
+          },
+          {
+            "name": "Request Level Configuration",
+            "path": "auth/oauth2-experimental/request-level-configuration"
+          },
+          {
+            "name": "Authorization Code",
+            "path": "auth/oauth2-experimental/authorization-code"
+          },
+          {
+            "name": "Client Credentials",
+            "path": "auth/oauth2-experimental/client-credentials"
+          },
+          {
+            "name": "Password Credentials",
+            "path": "auth/oauth2-experimental/password-credentials"
           }
         ]
       },
@@ -228,66 +507,41 @@
     ]
   },
   {
+    "name": "Create Documentation",
+    "children": [
+      {
+        "name": "Overview",
+        "path": "api-docs/overview"
+      },
+      {
+        "name": "Collections",
+        "path": "api-docs/collection-docs"
+      },
+      {
+        "name": "Folders",
+        "path": "api-docs/folder-docs"
+      },
+      {
+        "name": "Requests",
+        "path": "api-docs/request-docs"
+      }
+    ]
+  },
+  {
+    "name": "OpenAPI",
+    "children": [
+      {
+        "name": "Overview",
+        "path": "open-api/overview"
+      }
+    ]
+  },
+  {
     "name": "Bruno's CLI",
     "children": [
       {
         "name": "Overview",
         "path": "bru-cli/overview"
-      }
-    ]
-  },
-  {
-    "name": "Scripting",
-    "children": [
-      {
-        "name": "Getting Started",
-        "path": "scripting/getting-started"
-      },
-      {
-        "name": "Variables",
-        "path": "scripting/vars"
-      },
-      {
-        "name": "Response",
-        "children": [
-          {
-            "name": "Response Query",
-            "path": "scripting/response/response-query"
-          },
-          {
-            "name": "Response Object",
-            "path": "scripting/response/response-object"
-          }
-        ]
-      },
-      {
-        "name": "Request",
-        "children": [
-          {
-            "name": "Request Object",
-            "path": "scripting/request/request-object"
-          },
-          {
-            "name": "Sync Requests",
-            "path": "scripting/request/sync-requests"
-          }
-        ]
-      },
-      {
-        "name": "Inbuilt Libraries",
-        "path": "scripting/inbuilt-libraries"
-      },
-      {
-        "name": "External Libraries",
-        "path": "scripting/external-libraries"
-      },
-      {
-        "name": "Whitelisting Modules",
-        "path": "scripting/whitelisting-modules"
-      },
-      {
-        "name": "Javascript Reference",
-        "path": "scripting/javascript-reference"
       }
     ]
   },
@@ -317,15 +571,29 @@
     ]
   },
   {
-    "name": "Tools",
-    "path": "tools"
-  },
-  {
     "name": "License Management",
     "children": [
       {
         "name": "Overview",
         "path": "license-management/overview"
+      },
+      {
+        "name": "End Users",
+        "children": [
+          {
+            "name": "Activate License",
+            "path": "license-management/end-users/activate-license"
+          }
+        ]
+      },
+      {
+        "name": "License Administrators",
+        "children": [
+          {
+            "name": "License Portal",
+            "path": "license-management/license-administrators/license-portal"
+          }
+        ]
       }
     ]
   },
@@ -337,7 +605,7 @@
         "path": "advanced-guides/working-with-bigint"
       },
       {
-        "name": "Visualization",
+        "name": "Visualize",
         "path": "advanced-guides/visualize"
       }
     ]

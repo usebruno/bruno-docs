@@ -31,9 +31,9 @@ const config: DocsThemeConfig = {
   footer: {
     component: false
   },
-  toc: {
-    float: true,
-    title: "On This Page"
+  search: {
+    placeholder: 'Search documentation...',
+    component: null
   }
 };
 

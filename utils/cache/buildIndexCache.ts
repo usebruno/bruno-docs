@@ -1,12 +1,15 @@
-// @ts-ignore
-const fs = require("fs");
-// @ts-ignore
-const path = require("path");
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 interface FileData {
   name: string;
   path: string;
 }
+
 interface SubDirectory {
   name: string;
   children: (FileData | SubDirectory)[];
@@ -66,7 +69,6 @@ function buildIndexCache(
       if (fileName === "_meta" || fileName === "_app") return;
       indexCache.push({
         name: itemDisplayName,
-        // @ts-ignore
         path: path.join(relativePath, fileName === "index" ? "" : fileName),
       });
     }
@@ -86,10 +88,8 @@ function initializeIndexCache() {
   writeDataToFile(indexCache, outputFilePath);
 }
 
-// @ts-ignore
 function writeDataToFile(data: any, outputFilePath: string): void {
   const jsonData = JSON.stringify(data, null, 2); // Pretty-print JSON
-
   fs.writeFileSync(outputFilePath, jsonData);
 }
 
