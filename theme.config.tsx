@@ -30,6 +30,10 @@ const config: DocsThemeConfig = {
   },
   footer: {
     component: false
+  },
+  toc: {
+    float: true,
+    title: "On This Page"
   }
 };
 
