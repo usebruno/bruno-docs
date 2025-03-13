@@ -1,6 +1,10 @@
 # Configuring Proxy Settings in Bruno
 
-Bruno allows users to configure proxy settings to route API requests through a proxy server. Follow these steps to set up the proxy settings correctly.
+A proxy is an intermediary server that sits between a client application (like Bruno) and the destination server that the client is communicating with (like an API). The proxy server acts as a security barrier, making requests on your behalf to websites and other internet resources, and preventing others from accessing your internal network.
+
+If your machine sits behind a corporate network or firewall, you may need to configure the proxy settings in Bruno in order for requests to be made. By default, Proxy is set to off.
+
+Below are steps for configuring your proxy settings at different levels within Bruno.
 
 ## **1. Accessing Proxy Settings**
 
@@ -49,7 +53,9 @@ If your proxy requires authentication:
 
 ## **6. Configuring Proxy at Collection Level**
 
-You can also configure proxy settings at the collection level:
+There may be instances in which your collection needs to use a different proxy than what you have configured globally. Configuring proxy settings at the collection level will override any configuration you've made in the preferences section.
+
+Below are instructions on proxy settings at the collection level:
 
 1. Open the collection settings.
 2. Navigate to the **Proxy** tab.
