@@ -115,7 +115,13 @@ The client-cert-config.json file should contain the following fields:
   ]
 }
 ```
+## Adding Delay
+If you need to add a delay between requests during the execution of your API collection, you can use the `--delay` option.
 
+Example:
+```bash copy
+bru run . --delay 1000
+```
 ## Generating Reports
 
 Bruno CLI provides built-in support for generating reports in three formats: **JSON**, **JUnit**, and **HTML**. These reports help with analyzing test results and integrating with various CI/CD tools.
@@ -186,6 +192,7 @@ This command will create three files: results.json, results.xml, and results.htm
 | --reporter--skip-all-headers | Skip all headers in the report                                                |
 | --reporter-skip-headers      | Skip specific headers in the report                                           |
 | --client-cert-config         | Client certificate configuration by passing a JSON file                       |
+| --delay                      | Add delay to each request                                                     |
 
 ## Demo
 ![bru cli](/screenshots/cli-demo.webp)
