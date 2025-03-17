@@ -127,6 +127,9 @@ const redirects = {
   "/bru-language-design.html": "/bru-language-design",
   "/bru-lang-overview.html": "/bru-lang-overview",
   "/bru-lang-extensions.html": "/bru-lang/syntax-highlighting",
+
+  // Share Collection
+  "/embed-bruno-collection": "/git-integration/embed-bruno-collection",
 };
 
 export function middleware(request) {
