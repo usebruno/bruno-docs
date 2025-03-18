@@ -1,23 +1,46 @@
-# Cookies
+# Cookies in Bruno
 
-Cookies are used to store user information, session data, and provide personalized content. Bruno allows you to send, view, and delete cookies associated with your requests. After executing the request, you can easily inspect the cookies by clicking on the **Cookies** icon.
+Cookies are used to store user information, session data, and provide personalized content. Bruno allows you to add, send, view, and delete request cookies. After executing the request, you can easily inspect the cookies by clicking on the **Cookies** icon.
 
-### Steps to view and manage cookies:
+## Cookie Attributes
 
-1. **Create a request inside a collection**  
-   Ensure the request contains cookies associated with it.
+- **Domain**: Specifies the domain where the cookie is valid.
+- **Path**: Specifies the URL path where the cookie will be sent.
+- **Key**: The name/identifier of the cookie.
+- **Value**: The data that the cookie will store.
+- **Expiration**: The expiration date and time for the cookie.
+- **Secure**: Ensures the cookie is only sent over HTTPS.
+- **HTTP Only**: Restricts access to the cookie from JavaScript.
 
-2. **Execute the request**  
-   Run the request to trigger the cookies.
+## Configuring Cookies in Bruno
 
-   ![execute-cookie-request](/screenshots/send-request/res-data-and-cookie/devtools/cookies/create-req-cookie.webp)
+### Add Cookie
 
-3. **Click on the Cookies icon**  
-   Navigate to the **Cookies** icon on the bottom-left sidebar.
+1. Go to cookies section (left side bottom).
 
-   ![cookie-request](/screenshots/send-request/res-data-and-cookie/devtools/cookies/cookies.webp)
+![cookie-homepage](/screenshots/send-request/res-data-and-cookie/cookies/1-cookie-homepage.webp)
 
-4. **View and delete cookies**  
-   You can now view the cookies stored for the request and delete any as needed from the panel.
+2. Click on **Add Cookie** button.
 
-   ![view-cookie-request](/screenshots/send-request/res-data-and-cookie/devtools/cookies/view-delete-cookies.webp)
+![add-cookie-btn](/screenshots/send-request/res-data-and-cookie/cookies/2-add-cookie-btn.webp)
+
+3. Add the cookie attributes and select **Secure** or **HTTP Only** according to your preferance.
+
+![cookie-attributes](/screenshots/send-request/res-data-and-cookie/cookies/3-cookie-attributes.webp)
+
+4. Clic on **Save** button.
+
+5. You can enable **Raw Edit** mode to quickly customize and make direct changes to your cookies.
+
+![cookie-attributes](/screenshots/send-request/res-data-and-cookie/cookies/4-raw-edit.webp)
+
+### Update Cookie
+
+You can update and delete cookie by clicking on icons next to it. 
+
+1. Click on (pencil icon) to update cookie. 
+
+
+### Delete Cookie
+
+1. Click on delete icon to delete cookie. 
