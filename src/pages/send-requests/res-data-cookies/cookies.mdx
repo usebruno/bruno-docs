@@ -1,3 +1,5 @@
+import { Callout } from 'nextra/components'
+ 
 # Cookies in Bruno
 
 Cookies are used to store user information, session data, and provide personalized content. Bruno allows you to add, send, view, and delete request cookies. After executing the request, you can easily inspect the cookies by clicking on the **Cookies** icon.
@@ -5,7 +7,7 @@ Cookies are used to store user information, session data, and provide personaliz
 ## Cookie Attributes
 
 - **Domain**: Specifies the domain where the cookie is valid.
-- **Path**: Specifies the URL path where the cookie will be sent.
+- **Path (optional)**: Specifies the URL path where the cookie will be sent.
 - **Key**: The name/identifier of the cookie.
 - **Value**: The data that the cookie will store.
 - **Expiration**: The expiration date and time for the cookie.
@@ -28,19 +30,31 @@ Cookies are used to store user information, session data, and provide personaliz
 
 ![cookie-attributes](/screenshots/send-request/res-data-and-cookie/cookies/3-cookie-attributes.webp)
 
-4. Clic on **Save** button.
+4. Click on **Save** button.
 
 5. You can enable **Raw Edit** mode to quickly customize and make direct changes to your cookies.
 
-![cookie-attributes](/screenshots/send-request/res-data-and-cookie/cookies/4-raw-edit.webp)
+![cookie-raw](/screenshots/send-request/res-data-and-cookie/cookies/4-raw-edit.webp)
 
 ### Update Cookie
 
-You can update and delete cookie by clicking on icons next to it. 
+You can update and delete cookie by clicking on icons next to it.
 
-1. Click on (pencil icon) to update cookie. 
+1. Click on (pencil icon) to update cookie.
 
+![cookie-update](/screenshots/send-request/res-data-and-cookie/cookies/8-update-cookie.webp)
+
+2. Edit values in the cookie panel.
+
+![cookie-update](/screenshots/send-request/res-data-and-cookie/cookies/7-update-cookie.webp)
+
+<Callout emoji="">
+  We restrict editing of values like Domain, Path, and Key once a cookie is
+  created due to security concerns.
+</Callout>
 
 ### Delete Cookie
 
-1. Click on delete icon to delete cookie. 
+1. Click on delete icon (red colour) to delete cookie.
+
+![cookie-delete](/screenshots/send-request/res-data-and-cookie/cookies/6-delete-cookie.webp)
