@@ -1,13 +1,17 @@
 import { Callout } from 'nextra/components'
  
-# Share Collection
+# Fetch in Bruno Button
 
-Bruno allows you to share your collection with anyone on the internet via a single link. This link can be embedded in websites, articles, and documentation, with support for HTML and Markdown formats. This feature helps you to share your collection across your team and streamline your workflow.
+Bruno allows you to share your Git-synchronized collection via an embedded "Fetch in Bruno" (FiB) button turning the import/cloning process into a single click!
+
+This button can be placed in websites, articles, and documentation, with support for HTML and Markdown formats.
+
+This feature helps you to share your collections in an easy and flexible way - meeting the user wherever they are. Once imported, the user now has a Git-synced collection and can seamlessly pull down new changes as updates are made.
 
 ### Things You Need
 
 1. Bruno App installed on your system.
-2. A collection ready to be shared and hosted on GitHub.
+2. A collection that has been initialized as a Git repository [either through the UI](https://docs.usebruno.com/git-integration/using-gui/provider#initializing-git) or from [the CLI](https://docs.usebruno.com/git-integration/using-cli#initializing-git-in-bruno-collection).
 
 <Callout emoji="">
   You can follow this guide to learn more about [Hosting Collection on GitHub
@@ -16,8 +20,8 @@ Bruno allows you to share your collection with anyone on the internet via a sing
 
 ## How to Share Your Collection
 
-1. Open the Bruno app on your system.
-2. Go to the collection **Settings** and select **Share**.
+1. Open Bruno.
+2. Either go to the collection Overview tab or click on the ```...``` and select `Share`. 
 
 ![collection-settings](/screenshots/git-integration/share-collection/1-share-collection-overview.webp)
 
@@ -41,8 +45,7 @@ Bruno allows you to share your collection with anyone on the internet via a sing
   />
 </a>
 
-Once you've shared the link, others will be able to click the Open In Bruno button
-to access the collection.
+The Fetch in Bruno button will now automatically clone the repository and associated collection whenever it is clicked. 
 
 ## How to Open Your Shared Collection in Bruno
 
@@ -51,7 +54,7 @@ to access the collection.
   to use this feature.
 </Callout>
 
-1. Click on the Button embedded in your website or app.
+1. Click on any Fetch in Bruno button.
 2. A popup will appear. Click on **Open In Bruno**.
 
 ![open-in-bruno](/screenshots/git-integration/share-collection/4-open-in-bruno.webp)
