@@ -1,0 +1,65 @@
+import { Callout } from 'nextra/components'
+ 
+# Fetch in Bruno Button
+
+Bruno allows you to share your Git-synchronized collection via an embedded "Fetch in Bruno" (FiB) button turning the import/cloning process into a single click!
+
+This button can be placed in websites, articles, and documentation, with support for HTML and Markdown formats.
+
+This feature helps you to share your collections in an easy and flexible way - meeting the user wherever they are. Once imported, the user now has a Git-synced collection and can seamlessly pull down new changes as updates are made.
+
+### Things You Need
+
+1. Bruno App installed on your system.
+2. A collection that has been initialized as a Git repository [either through the UI](https://docs.usebruno.com/git-integration/using-gui/provider#initializing-git) or from [the CLI](https://docs.usebruno.com/git-integration/using-cli#initializing-git-in-bruno-collection).
+
+## How to Share Your Collection
+
+1. Open Bruno.
+2. Either go to the collection Overview tab or click on the `...` and select `Share`.
+
+![collection-settings](/screenshots/git-integration/share-collection/1-share-collection-overview.webp)
+
+3. Copy the generated link (HTML & Markdown).
+
+![share-option](/screenshots/git-integration/share-collection/2-share-link-html.webp)
+
+4. Embed the link into your website, article, or documentation(e.g. GitHub Readme).
+
+<a
+  href="https://naman-bruno.github.io/temp/index.html?url=https%3A%2F%2Fgithub.com%2Fusebruno%2Fgithub-rest-api-collection.git"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  <img
+    src="https://naman-bruno.github.io/temp/Button.png"
+    alt="Fetch in Bruno"
+    style={{ width: "130px", height: "30px" }}
+    width="128"
+    height="32"
+  />
+</a>
+
+The Fetch in Bruno button will now automatically clone the repository and associated collection whenever it is clicked.
+
+## How to Open Your Shared Collection in Bruno
+
+<Callout emoji="">
+  Make sure you have Bruno version **1.40.0** or above installed on your system
+  to use this feature.
+</Callout>
+
+1. Click on any Fetch in Bruno button.
+2. A popup will appear. Click on **Open In Bruno**.
+
+![open-in-bruno](/screenshots/git-integration/share-collection/4-open-in-bruno.webp)
+
+3. Choose the location where you'd like to store your collection.
+
+![collection-location](/screenshots/git-integration/share-collection/5-save-location.webp)
+
+4. You will see a list of available Bruno collections in the repository.
+
+![clone-collection](/screenshots/git-integration/share-collection/6-cloning-collection.webp)
+
+Once the collection is loaded in Bruno, you'll be able to see the folder, requests, and all associated parameters.
