@@ -4,49 +4,64 @@ import { Callout } from 'nextra/components'
 
 Bruno allows you to share your collection with anyone on the internet via a single link. This link can be embedded in websites, articles, and documentation, with support for HTML and Markdown formats. This feature helps you to share your collection across your team and streamline your workflow.
 
-### Things You Need:
+### Things You Need
 
 1. Bruno App installed on your system.
-2. A collection ready to be shared.
+2. A collection ready to be shared and hosted on GitHub.
 
-## How to Share Your Collection:
+<Callout emoji="">
+  You can follow this guide to learn more about [Hosting Collection on GitHub
+  using Bruno](./using-gui/intro.mdx)
+</Callout>
+
+## How to Share Your Collection
 
 1. Open the Bruno app on your system.
+2. Go to the collection **Settings** and select **Share**.
 
-2. Navigate to the collection **Settings**.
+![collection-settings](/screenshots/git-integration/share-collection/1-share-collection-overview.webp)
 
-![collection-settings](/screenshots/git-integration/share-collection/1-setting-option.webp)
+3. Copy the generated link (HTML & Markdown).
 
-3. Select the **Share collection** option.
+![share-option](/screenshots/git-integration/share-collection/2-share-link-html.webp)
 
-![share-option](/screenshots/git-integration/share-collection/2-share-settings.webp)
+4. Embed the link into your website, article, or documentation(e.g. GitHub Readme).
 
-4. Copy the generated link (HTML & Markdown).
+<a
+  href="https://naman-bruno.github.io/temp/index.html?url=https%3A%2F%2Fgithub.com%2Fusebruno%2Fgithub-rest-api-collection.git"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  <img
+    src="https://naman-bruno.github.io/temp/Button.png"
+    alt="Fetch in Bruno"
+    style={{ width: "130px", height: "30px" }}
+    width="128"
+    height="32"
+  />
+</a>
 
-![generate-links](/screenshots/git-integration/share-collection/3-generate-code-embed.webp)
+Once you've shared the link, others will be able to click the Open In Bruno button
+to access the collection.
 
-5. Embed the link into your website, article, or documentation.
+## How to Open Your Shared Collection in Bruno
 
-![share-button](/screenshots/git-integration/share-collection/4-output.webp)
-
-Now, you can see the button with title **Open In Bruno** at bottom of above screenshot.
-
-Once you share the link, anyone can open and view your collection in Bruno, making it easier to collaborate and share resources.
-
-## How to Open Your Shared Collection in Bruno:
-
-<Callout emoji="👾">
-  You need to download the Bruno app (version 1.40 & above) if it's not already
-  installed on your system.
+<Callout emoji="">
+  Make sure you have Bruno version **1.40.0** or above installed on your system
+  to use this feature.
 </Callout>
 
 1. Click on the Button embedded in your website or app.
 2. A popup will appear. Click on **Open In Bruno**.
 
-![open-in-bruno](/screenshots/git-integration/share-collection/5-open-in-bruno.webp)
+![open-in-bruno](/screenshots/git-integration/share-collection/4-open-in-bruno.webp)
 
-3. Choose the location where you’d like to store your collection.
+3. Choose the location where you'd like to store your collection.
 
-![collection-location](/screenshots/git-integration/share-collection/store-collection.webp)
+![collection-location](/screenshots/git-integration/share-collection/5-save-location.webp)
 
-Once Bruno opens, it will load the specific collection, and you'll be able to view the folder, requests, and all the parameters associated with the collection.
+4. You will see a list of available Bruno collections in the repository.
+
+![clone-collection](/screenshots/git-integration/share-collection/6-cloning-collection.webp)
+
+Once the collection is loaded in Bruno, you'll be able to see the folder, requests, and all associated parameters.

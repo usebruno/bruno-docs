@@ -129,7 +129,7 @@ const redirects = {
   "/bru-lang-extensions.html": "/bru-lang/syntax-highlighting",
 
   // Share Collection
-  "/embed-bruno-collection": "/git-integration/embed-bruno-collection",
+  "/to/embed-bruno-collection": "/git-integration/embed-bruno-collection",
 };
 
 export function middleware(request) {
