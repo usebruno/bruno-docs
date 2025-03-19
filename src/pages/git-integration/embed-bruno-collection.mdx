@@ -1,5 +1,6 @@
 import { Callout } from 'nextra/components'
- 
+import { useEffect } from 'react'
+
 # Fetch in Bruno Button
 
 Bruno allows you to share your Git-synchronized collection via an embedded "Fetch in Bruno" (FiB) button turning the import/cloning process into a single click!
@@ -8,9 +9,9 @@ This button can be placed in websites, articles, and documentation, with support
 
 This feature helps you to share your collections in an easy and flexible way - meeting the user wherever they are. Once imported, the user now has a Git-synced collection and can seamlessly pull down new changes as updates are made.
 
-### Things You Need
+## Things You Need
 
-1. Bruno App installed on your system.
+1. Bruno installed on your system.
 2. A collection that has been initialized as a Git repository [either through the UI](https://docs.usebruno.com/git-integration/using-gui/provider#initializing-git) or from [the CLI](https://docs.usebruno.com/git-integration/using-cli#initializing-git-in-bruno-collection).
 
 ## How to Share Your Collection
@@ -20,25 +21,29 @@ This feature helps you to share your collections in an easy and flexible way - m
 
 ![collection-settings](/screenshots/git-integration/share-collection/1-share-collection-overview.webp)
 
-3. Copy the generated link (HTML & Markdown).
+3. Copy the generated link (HTML or Markdown).
 
 ![share-option](/screenshots/git-integration/share-collection/2-share-link-html.webp)
 
 4. Embed the link into your website, article, or documentation(e.g. GitHub Readme).
 
-<a
-  href="https://naman-bruno.github.io/temp/index.html?url=https%3A%2F%2Fgithub.com%2Fusebruno%2Fgithub-rest-api-collection.git"
-  target="_blank"
-  rel="noopener noreferrer"
->
-  <img
-    src="https://naman-bruno.github.io/temp/Button.png"
-    alt="Fetch in Bruno"
-    style={{ width: "130px", height: "30px" }}
-    width="128"
-    height="32"
-  />
-</a>
+export const BrunoButton = () => (
+  <div style={{ display: 'flex', justifyContent: 'center', width: '100%', margin: '2rem 0' }}>
+    <a href="https://fetch.usebruno.com?url=https%3A%2F%2Fgithub.com%2Fusebruno%2Fgithub-rest-api-collection" 
+       target="_blank" 
+       rel="noopener noreferrer">
+      <img 
+        src="https://fetch.usebruno.com/button.svg" 
+        alt="Fetch in Bruno" 
+        style={{ width: '160px', height: '40px' }} 
+        width="160" 
+        height="40"
+      />
+    </a>
+  </div>
+);
+
+<BrunoButton />
 
 The Fetch in Bruno button will now automatically clone the repository and associated collection whenever it is clicked.
 
