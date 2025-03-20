@@ -3,7 +3,7 @@ import { useConfig } from "nextra-theme-docs";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import GoogleAnalytics from "@/components/google-analytics";
-import Banner from "@/components/ui/banner";
+import { ReleaseBanner } from "@/components/ui/release-banner";
 
 export default function App({ Component, pageProps }) {
   return (
@@ -15,20 +15,7 @@ export default function App({ Component, pageProps }) {
         enableSystem
         disableTransitionOnChange
       >
-        <Banner storageKey="bruno-v1.40.0">
-          <a
-            href="https://www.usebruno.com/downloads"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-blue-400 transition-colors inline-flex items-center gap-2"
-          >
-            🎉{" "}
-            <span>
-              Bruno v1.40.0 is released with Custom Filenames support. Download
-              now →
-            </span>
-          </a>
-        </Banner>
+        <ReleaseBanner />
         <Component {...pageProps} />
         <Toaster />
       </ThemeProvider>
