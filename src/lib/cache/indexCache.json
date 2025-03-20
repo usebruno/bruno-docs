@@ -1,5 +1,12 @@
 [
   {
+    "name": {
+      "title": "Getting Started",
+      "type": "separator"
+    },
+    "path": "getting-started"
+  },
+  {
     "name": "Introduction",
     "children": [
       {
@@ -17,7 +24,7 @@
     ]
   },
   {
-    "name": "Getting Started",
+    "name": "Getting Started Guide",
     "children": [
       {
         "name": "Bruno Basics",
@@ -29,6 +36,10 @@
           {
             "name": "Create a Collection",
             "path": "get-started/bruno-basics/create-a-collection"
+          },
+          {
+            "name": "Create a Folder",
+            "path": "get-started/bruno-basics/create-a-folder"
           },
           {
             "name": "Create a Request",
@@ -108,6 +119,10 @@
           {
             "name": "Settings",
             "path": "get-started/configure/settings"
+          },
+          {
+            "name": "Proxy Config",
+            "path": "get-started/configure/proxy-config"
           }
         ]
       },
@@ -212,6 +227,13 @@
     ]
   },
   {
+    "name": {
+      "title": "Core Features",
+      "type": "separator"
+    },
+    "path": "core-features"
+  },
+  {
     "name": "Git Integration & Collaboration",
     "children": [
       {
@@ -242,7 +264,7 @@
     ]
   },
   {
-    "name": "Tests and Script",
+    "name": "Tests and Scripts",
     "children": [
       {
         "name": "Tests",
@@ -507,6 +529,13 @@
     ]
   },
   {
+    "name": {
+      "title": "API Tools",
+      "type": "separator"
+    },
+    "path": "api-tools"
+  },
+  {
     "name": "Create Documentation",
     "children": [
       {
@@ -535,6 +564,13 @@
         "path": "open-api/overview"
       }
     ]
+  },
+  {
+    "name": {
+      "title": "Developer Tools",
+      "type": "separator"
+    },
+    "path": "developer-tools"
   },
   {
     "name": "Bruno's CLI",
@@ -569,6 +605,13 @@
         "path": "bru-lang/syntax-highlighting"
       }
     ]
+  },
+  {
+    "name": {
+      "title": "Other",
+      "type": "separator"
+    },
+    "path": "other"
   },
   {
     "name": "License Management",

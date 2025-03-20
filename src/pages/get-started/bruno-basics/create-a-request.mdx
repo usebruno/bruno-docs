@@ -1,11 +1,51 @@
+import { Callout } from 'nextra/components'
+ 
 # Creating a Request
 
-Select your Collection from the sidebar, and click on the `···` button followed by `New Request` in the dropdown menu.
+Bruno makes it easy to work with various API protocols - whether you're building RESTful services with HTTP, designing GraphQL APIs, or converting cURL commands into reusable requests. With support for all standard HTTP methods (GET, POST, PUT, DELETE, etc.), you can create, test, and manage your API requests efficiently.
 
-A dialog will appear, asking you choose the **type** of your request (HTTP, GraphQL, or from cURL), the **name** of your request, the **HTTP verb** and the **URL**.
+Let's walk through how to create your first request:
 
-![create request dialog](/screenshots/get-started/bruno-basics/create_request/bru_request.webp)
+## Create a New Request in Bruno
 
-Fill in the details and click `Create`. You have successfully created your first request in Bruno!
+1. Go to your Collection, and click on the `···` button.
+2. Select `New Request` in the dropdown menu.
 
-Feel free to add headers, query parameters, and a request body to your request, or play around with the other options available.
+![create request dialog](/screenshots/get-started/bruno-basics/create_request/1-create-new-request.webp)
+
+3. In the dialog that appears, choose:
+   - Request Type (HTTP, GraphQL, or from cURL)
+   - Request Name
+   - HTTP Method (GET, POST, PUT, etc.)
+   - URL
+
+![create-new-request](/screenshots/get-started/bruno-basics/create_request/2-create-request.webp)
+
+4. Click `Create` to finish.
+
+You have successfully created your first request in Bruno! Feel free to add headers, query parameters, and a request body to your request, or play around with the other options available.
+
+## Custom Request Filenames
+
+<Callout emoji="">
+  Starting with [Bruno v1.40.0 ↗](https://www.usebruno.com/downloads), you can
+  now use special characters in request names and customize how they appear in
+  the filesystem. This gives you more flexibility in organizing your collections
+  while maintaining compatibility.
+</Callout>
+
+You can use any characters in your request names, including special characters like `/`, `[`, `]`, `*`, etc. Bruno automatically handles filesystem compatibility by replacing unsupported characters with `-` in the filenames while preserving your original request name.
+
+### To view or customize the filesystem name
+
+1. Select "Show Filesystem Name."
+
+![file-system-name](/screenshots/get-started/bruno-basics/create_request/3-file-system-option.webp)
+
+2. You can now see how your request name is stored on the filesystem.
+
+![file-system-name](/screenshots/get-started/bruno-basics/create_request/4-file-name-special-char.webp)
+
+3. (Optional) Click the edit icon to customize the filename while keeping your display name intact.
+
+This feature gives you complete freedom in naming your requests while ensuring filesystem compatibility.

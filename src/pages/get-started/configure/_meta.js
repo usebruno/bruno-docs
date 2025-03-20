@@ -1,3 +1,4 @@
 export default {
-  "settings": "Settings"
-} 
+  "settings": "Settings",
+  "proxy-config": "Proxy Config"
+}

@@ -1,0 +1,81 @@
+# Configuring Proxy Settings in Bruno
+
+A proxy is an intermediary server that sits between a client application (like Bruno) and the destination server that the client is communicating with (like an API). The proxy server acts as a security barrier, making requests on your behalf to websites and other internet resources, and preventing others from accessing your internal network.
+
+If your machine sits behind a corporate network or firewall, you may need to configure the proxy settings in Bruno in order for requests to be made. By default, Proxy is set to off.
+
+Below are steps for configuring your proxy settings at different levels within Bruno.
+
+## **1. Accessing Proxy Settings**
+
+1. Open Bruno.
+2. Click on the **Preferences** section.
+
+![preferences](/screenshots/get-started/config/proxy/1-preferences.webp)
+
+3. Navigate to the **Proxy** tab in the sidebar.
+
+![proxy-settings](/screenshots/get-started/config/proxy/2-global-proxy.webp)
+
+## **2. Configuring Proxy Mode**
+
+Bruno provides three options for proxy mode:
+
+- **Off**: Disables proxy usage.
+- **On**: Enables proxy and routes requests through the configured proxy.
+- **System Proxy**: Uses the system-wide proxy settings.
+
+Select **On** if you want to configure a custom proxy.
+
+## **3. Selecting Proxy Protocol**
+
+Bruno supports different proxy protocols. Choose one of the following:
+
+- **HTTP**
+- **HTTPS**
+- **SOCKS4**
+- **SOCKS5**
+
+## **4. Entering Proxy Details**
+
+Fill in the required fields:
+
+- **Hostname**: The proxy server's domain or IP address (e.g., `example.com`).
+- **Port**: The port number for the proxy connection (e.g., `3000`).
+
+## **5. Enabling Authentication (Optional)**
+
+If your proxy requires authentication:
+
+1. Check the **Auth** checkbox.
+2. Enter the **Username**.
+3. Enter the **Password** (Click the eye icon to reveal the password if needed).
+
+## **6. Configuring Proxy at Collection Level**
+
+There may be instances in which your collection needs to use a different proxy than what you have configured globally. Configuring proxy settings at the collection level will override any configuration you've made in the preferences section.
+
+Below are instructions on proxy settings at the collection level:
+
+1. Open the collection settings.
+2. Navigate to the **Proxy** tab.
+
+![collection-proxy](/screenshots/get-started/config/proxy/3-collection-proxy.webp)
+
+### **Choose the Configuration Mode:**
+
+- **Global**: Uses the main proxy settings from Preferences.
+- **Enabled**: Enables a custom proxy for this collection.
+- **Disabled**: Disables the proxy for this collection.
+
+3. Choose **global, enabled, or disabled**.
+4. Enter the **Hostname, Port, Protocol, Username, and Password** if needed.
+5. Click **Save** to apply the settings.
+
+## **7. Saving Proxy Configuration**
+
+After entering the proxy details, click the **Save** button to apply the changes.
+
+---
+
+Your proxy settings are now configured in Bruno.
