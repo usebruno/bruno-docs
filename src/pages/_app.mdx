@@ -3,6 +3,7 @@ import { useConfig } from "nextra-theme-docs";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import GoogleAnalytics from "@/components/google-analytics";
+import { ReleaseBanner } from "@/components/ui/release-banner";
 
 export default function App({ Component, pageProps }) {
   return (
@@ -14,6 +15,7 @@ export default function App({ Component, pageProps }) {
         enableSystem
         disableTransitionOnChange
       >
+        <ReleaseBanner />
         <Component {...pageProps} />
         <Toaster />
       </ThemeProvider>
