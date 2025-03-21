@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "pnpm buildCache && next build",
     "start": "next start",
     "buildCache": "tsx utils/cache/buildFileCache.ts && tsx utils/cache/buildIndexCache.ts",
     "lint": "next lint",
