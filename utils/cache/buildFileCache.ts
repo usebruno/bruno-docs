@@ -45,7 +45,10 @@ function readAndFlattenDirectory(
       return; // Skip processing _meta.js file-cache
     }
     if (stats.isDirectory()) {
-      const actualParentName = itemPath.split("pages/").pop().split("/")?.[0];
+      const pathParts = itemPath.split("pages/");
+      const lastPart = pathParts.pop() || "";
+      const dirParts = lastPart.split("/");
+      const actualParentName = dirParts[0] || "";
       const nextParentName =
         parentName === null || actualParentName !== parentName
           ? actualParentName
@@ -54,15 +57,14 @@ function readAndFlattenDirectory(
       Object.assign(files, nestedFiles);
     } else {
       const content = fs.readFileSync(itemPath, "utf-8");
-      const path = itemPath
-        .split("pages/")
-        .pop()
-        .replace(/\.(md|mdx)$/, "");
+      const pathParts = itemPath.split("pages/");
+      const lastPart = pathParts.pop() || "";
+      const path = lastPart.replace(/\.(md|mdx)$/, "");
       files[path] = {
         name: itemPath
           .split("/")
           .pop()
-          .replace(/\.(md|mdx)$/, ""),
+          ?.replace(/\.(md|mdx)$/, "") || "",
         content: extractTextFromMarkdown(content),
         parentName: parentName,
         path,

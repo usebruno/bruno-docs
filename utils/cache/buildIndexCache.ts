@@ -12,12 +12,14 @@ interface FileData {
 
 interface SubDirectory {
   name: string;
-  children: (FileData | SubDirectory)[];
+  children?: (FileData | SubDirectory)[];
+  path?: string;
 }
 
 interface IndexCache {
   name: string;
-  children: (FileData | SubDirectory)[];
+  children?: (FileData | SubDirectory)[];
+  path?: string;
 }
 
 function readMetaFile(directoryPath: string): { [key: string]: string } {
