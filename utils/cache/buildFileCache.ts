@@ -1,7 +1,9 @@
-// @ts-ignore
-const fs = require("fs");
-// @ts-ignore
-const path = require("path");
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 function extractTextFromMarkdown(markdownContent: string): string {
   const headingRegex = /^#+\s+(.*)/gm; // Matches Markdown headings
@@ -36,14 +38,17 @@ function readAndFlattenDirectory(
     const itemPath = path.join(directoryPath, item);
     const stats = fs.statSync(itemPath);
     if (
-      item === "_meta.json" ||
+      item === "_meta.js" ||
       item === "_app.mdx" ||
       item === "getting-started.mdx"
     ) {
-      return; // Skip processing _meta.json file-cache
+      return; // Skip processing _meta.js file-cache
     }
     if (stats.isDirectory()) {
-      const actualParentName = itemPath.split("pages/").pop().split("/")?.[0];
+      const pathParts = itemPath.split("pages/");
+      const lastPart = pathParts.pop() || "";
+      const dirParts = lastPart.split("/");
+      const actualParentName = dirParts[0] || "";
       const nextParentName =
         parentName === null || actualParentName !== parentName
           ? actualParentName
@@ -52,20 +57,18 @@ function readAndFlattenDirectory(
       Object.assign(files, nestedFiles);
     } else {
       const content = fs.readFileSync(itemPath, "utf-8");
-      const path = itemPath
-        .split("pages/")
-        .pop()
-        .replace(/\.[^.]+$/, "");
+      const pathParts = itemPath.split("pages/");
+      const lastPart = pathParts.pop() || "";
+      const path = lastPart.replace(/\.(md|mdx)$/, "");
       files[path] = {
         name: itemPath
           .split("/")
           .pop()
-          .replace(/\.[^.]+$/, ""),
+          ?.replace(/\.(md|mdx)$/, "") || "",
         content: extractTextFromMarkdown(content),
         parentName: parentName,
         path,
       };
-      // parentName = null;
     }
   });
 
@@ -83,10 +86,8 @@ function initializeFileCache() {
   writeDataToFile(files, outputFilePath);
 }
 
-// @ts-ignore
 function writeDataToFile(data: any, outputFilePath: string): void {
   const jsonData = JSON.stringify(data, null, 2); // Pretty-print JSON
-
   fs.writeFileSync(outputFilePath, jsonData);
 }
 

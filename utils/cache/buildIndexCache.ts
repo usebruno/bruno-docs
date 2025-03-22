@@ -1,34 +1,46 @@
-// @ts-ignore
-const fs = require("fs");
-// @ts-ignore
-const path = require("path");
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 interface FileData {
   name: string;
   path: string;
 }
+
 interface SubDirectory {
   name: string;
-  children: (FileData | SubDirectory)[];
+  children?: (FileData | SubDirectory)[];
+  path?: string;
 }
 
 interface IndexCache {
   name: string;
-  children: (FileData | SubDirectory)[];
+  children?: (FileData | SubDirectory)[];
+  path?: string;
 }
 
 function readMetaFile(directoryPath: string): { [key: string]: string } {
-  const metaPath = path.join(directoryPath, "_meta.json");
-  if (fs.existsSync(metaPath)) {
-    const metaContent = fs.readFileSync(metaPath, "utf-8");
-    return JSON.parse(metaContent);
+  const metaJsPath = path.join(directoryPath, "_meta.js");
+  if (fs.existsSync(metaJsPath)) {
+    const metaContent = fs.readFileSync(metaJsPath, "utf-8");
+    try {
+      // Remove export default and parse the object
+      const cleanContent = metaContent.replace(/export\s+default\s+/, '');
+      return JSON.parse(cleanContent);
+    } catch (error) {
+      console.error(`Error parsing meta file at ${metaJsPath}:`, error);
+      return {};
+    }
   }
   return {};
 }
 
 function isDirectory(directoryPath: string): boolean {
-  const metaPath = path.join(directoryPath, "_meta.json");
-  return fs.existsSync(metaPath) && fs.statSync(metaPath).isFile();
+  const metaJsPath = path.join(directoryPath, "_meta.js");
+  return fs.existsSync(metaJsPath) && fs.statSync(metaJsPath).isFile();
 }
 
 function buildIndexCache(
@@ -59,7 +71,6 @@ function buildIndexCache(
       if (fileName === "_meta" || fileName === "_app") return;
       indexCache.push({
         name: itemDisplayName,
-        // @ts-ignore
         path: path.join(relativePath, fileName === "index" ? "" : fileName),
       });
     }
@@ -79,10 +90,8 @@ function initializeIndexCache() {
   writeDataToFile(indexCache, outputFilePath);
 }
 
-// @ts-ignore
 function writeDataToFile(data: any, outputFilePath: string): void {
   const jsonData = JSON.stringify(data, null, 2); // Pretty-print JSON
-
   fs.writeFileSync(outputFilePath, jsonData);
 }
 

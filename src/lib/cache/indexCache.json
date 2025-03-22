@@ -1,5 +1,12 @@
 [
   {
+    "name": {
+      "title": "Getting Started",
+      "type": "separator"
+    },
+    "path": "getting-started"
+  },
+  {
     "name": "Introduction",
     "children": [
       {
@@ -17,18 +24,22 @@
     ]
   },
   {
-    "name": "Getting Started",
+    "name": "Getting Started Guide",
     "children": [
       {
         "name": "Bruno Basics",
         "children": [
           {
-            "name": "Download",
+            "name": "Download & Install",
             "path": "get-started/bruno-basics/download"
           },
           {
             "name": "Create a Collection",
             "path": "get-started/bruno-basics/create-a-collection"
+          },
+          {
+            "name": "Create a Folder",
+            "path": "get-started/bruno-basics/create-a-folder"
           },
           {
             "name": "Create a Request",
@@ -48,15 +59,15 @@
         "name": "Import or Export Data",
         "children": [
           {
-            "name": "Exporting Collections",
-            "path": "get-started/import-export-data/export-collections"
-          },
-          {
-            "name": "Importing Collections",
+            "name": "Import Collections",
             "path": "get-started/import-export-data/import-collections"
           },
           {
-            "name": "Migrating from Postman",
+            "name": "Export Collections",
+            "path": "get-started/import-export-data/export-collections"
+          },
+          {
+            "name": "Postman Migration",
             "path": "get-started/import-export-data/postman-migration"
           },
           {
@@ -73,12 +84,12 @@
             "path": "get-started/variables/overview"
           },
           {
-            "name": "Global Variables",
-            "path": "get-started/variables/global-environment-variables"
-          },
-          {
             "name": "Environment Variables",
             "path": "get-started/variables/environment-variables"
+          },
+          {
+            "name": "Global Environment Variables",
+            "path": "get-started/variables/global-environment-variables"
           },
           {
             "name": "Collection Variables",
@@ -108,6 +119,10 @@
           {
             "name": "Settings",
             "path": "get-started/configure/settings"
+          },
+          {
+            "name": "Proxy Config",
+            "path": "get-started/configure/proxy-config"
           }
         ]
       },
@@ -136,7 +151,7 @@
             "path": "send-requests/REST/overview"
           },
           {
-            "name": "REST API request",
+            "name": "REST API",
             "path": "send-requests/REST/rest-api"
           },
           {
@@ -144,7 +159,7 @@
             "path": "send-requests/REST/parameters"
           },
           {
-            "name": "Request headers",
+            "name": "Request Headers",
             "path": "send-requests/REST/req-header"
           },
           {
@@ -165,7 +180,7 @@
             "path": "send-requests/graphql/overview"
           },
           {
-            "name": "GraphQL request",
+            "name": "GraphQL API",
             "path": "send-requests/graphql/graphql-api"
           }
         ]
@@ -174,7 +189,7 @@
         "name": "SOAP",
         "children": [
           {
-            "name": "SOAP request",
+            "name": "SOAP Request",
             "path": "send-requests/soap/soap-request"
           }
         ]
@@ -187,7 +202,7 @@
             "path": "send-requests/res-data-cookies/overview"
           },
           {
-            "name": "Response data",
+            "name": "Response Data",
             "path": "send-requests/res-data-cookies/res-data"
           },
           {
@@ -198,18 +213,25 @@
             "name": "Debugging",
             "children": [
               {
-                "name": "Timeline",
-                "path": "send-requests/res-data-cookies/debugging/timeline"
-              },
-              {
                 "name": "DevTools",
                 "path": "send-requests/res-data-cookies/debugging/devtools"
+              },
+              {
+                "name": "Timeline",
+                "path": "send-requests/res-data-cookies/debugging/timeline"
               }
             ]
           }
         ]
       }
     ]
+  },
+  {
+    "name": {
+      "title": "Core Features",
+      "type": "separator"
+    },
+    "path": "core-features"
   },
   {
     "name": "Git Integration & Collaboration",
@@ -242,7 +264,7 @@
     ]
   },
   {
-    "name": "Tests and Script",
+    "name": "Tests and Scripts",
     "children": [
       {
         "name": "Tests",
@@ -269,21 +291,32 @@
             "path": "testing/script/getting-started"
           },
           {
+            "name": "Script Flow",
+            "path": "testing/script/script-flow"
+          },
+          {
+            "name": "JavaScript File",
+            "path": "testing/script/js-file"
+          },
+          {
             "name": "Variables",
             "path": "testing/script/vars"
           },
           {
-            "name": "Response",
-            "children": [
-              {
-                "name": "Response Query",
-                "path": "testing/script/response/response-query"
-              },
-              {
-                "name": "Response Object",
-                "path": "testing/script/response/response-object"
-              }
-            ]
+            "name": "Whitelisting Modules",
+            "path": "testing/script/whitelisting-modules"
+          },
+          {
+            "name": "External Libraries",
+            "path": "testing/script/external-libraries"
+          },
+          {
+            "name": "Inbuilt Libraries",
+            "path": "testing/script/inbuilt-libraries"
+          },
+          {
+            "name": "JavaScript Reference",
+            "path": "testing/script/javascript-reference"
           },
           {
             "name": "Request",
@@ -293,34 +326,23 @@
                 "path": "testing/script/request/request-object"
               },
               {
-                "name": "Sync Requests",
+                "name": "Synchronous Requests",
                 "path": "testing/script/request/sync-requests"
               }
             ]
           },
           {
-            "name": "Inbuilt Libraries",
-            "path": "testing/script/inbuilt-libraries"
-          },
-          {
-            "name": "External Libraries",
-            "path": "testing/script/external-libraries"
-          },
-          {
-            "name": "Whitelisting Modules",
-            "path": "testing/script/whitelisting-modules"
-          },
-          {
-            "name": "Javascript Reference",
-            "path": "testing/script/javascript-reference"
-          },
-          {
-            "name": "Create JS File",
-            "path": "testing/script/js-file"
-          },
-          {
-            "name": "Script Flow",
-            "path": "testing/script/script-flow"
+            "name": "Response",
+            "children": [
+              {
+                "name": "Response Object",
+                "path": "testing/script/response/response-object"
+              },
+              {
+                "name": "Response Query",
+                "path": "testing/script/response/response-query"
+              }
+            ]
           }
         ]
       },
@@ -332,12 +354,12 @@
             "path": "testing/automate-test/overview"
           },
           {
-            "name": "Run Manual Test",
-            "path": "testing/automate-test/manual-test"
+            "name": "Automated Testing",
+            "path": "testing/automate-test/automate-test"
           },
           {
-            "name": "Run Automate Test",
-            "path": "testing/automate-test/automate-test"
+            "name": "Manual Testing",
+            "path": "testing/automate-test/manual-test"
           }
         ]
       }
@@ -370,7 +392,7 @@
             "path": "secrets-management/hashicorp-vault/adding-a-secret-provider"
           },
           {
-            "name": "Configuring and Fetching secrets",
+            "name": "Configuring and Fetching Secrets",
             "path": "secrets-management/hashicorp-vault/configuring-and-fetching-secrets"
           },
           {
@@ -395,7 +417,7 @@
             "path": "secrets-management/aws-secrets-manager/adding-a-secret-provider"
           },
           {
-            "name": "Configuring and Fetching secrets",
+            "name": "Configuring and Fetching Secrets",
             "path": "secrets-management/aws-secrets-manager/configuring-and-fetching-secrets"
           },
           {
@@ -416,7 +438,7 @@
             "path": "secrets-management/azure-key-vault/adding-a-secret-provider"
           },
           {
-            "name": "Configuring and Fetching secrets",
+            "name": "Configuring and Fetching Secrets",
             "path": "secrets-management/azure-key-vault/configuring-and-fetching-secrets"
           },
           {
@@ -463,11 +485,11 @@
             "path": "auth/oauth2-experimental/overview"
           },
           {
-            "name": "Collection Level",
+            "name": "Collection Level Configuration",
             "path": "auth/oauth2-experimental/collection-level-configuration"
           },
           {
-            "name": "Request Level",
+            "name": "Request Level Configuration",
             "path": "auth/oauth2-experimental/request-level-configuration"
           },
           {
@@ -507,6 +529,13 @@
     ]
   },
   {
+    "name": {
+      "title": "API Tools",
+      "type": "separator"
+    },
+    "path": "api-tools"
+  },
+  {
     "name": "Create Documentation",
     "children": [
       {
@@ -535,6 +564,13 @@
         "path": "open-api/overview"
       }
     ]
+  },
+  {
+    "name": {
+      "title": "Developer Tools",
+      "type": "separator"
+    },
+    "path": "developer-tools"
   },
   {
     "name": "Bruno's CLI",
@@ -571,6 +607,13 @@
     ]
   },
   {
+    "name": {
+      "title": "Other",
+      "type": "separator"
+    },
+    "path": "other"
+  },
+  {
     "name": "License Management",
     "children": [
       {
@@ -578,20 +621,20 @@
         "path": "license-management/overview"
       },
       {
+        "name": "End Users",
+        "children": [
+          {
+            "name": "Activate License",
+            "path": "license-management/end-users/activate-license"
+          }
+        ]
+      },
+      {
         "name": "License Administrators",
         "children": [
           {
             "name": "License Portal",
             "path": "license-management/license-administrators/license-portal"
-          }
-        ]
-      },
-      {
-        "name": "License Activation",
-        "children": [
-          {
-            "name": "Activate License",
-            "path": "license-management/end-users/activate-license"
           }
         ]
       }
@@ -605,7 +648,7 @@
         "path": "advanced-guides/working-with-bigint"
       },
       {
-        "name": "Visualization",
+        "name": "Visualize",
         "path": "advanced-guides/visualize"
       }
     ]

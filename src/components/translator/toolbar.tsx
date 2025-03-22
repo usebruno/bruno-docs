@@ -1,4 +1,3 @@
-import { useData } from "nextra/ssg";
 import { useMonaco } from "@monaco-editor/react";
 import { Suspense, useState } from "react";
 import { Badge } from "@/components/ui/badge";
@@ -8,6 +7,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Columns2, Copy, Expand, Rows2, Shrink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { prettifyName, transformThemeName } from "./utils";
+import { AVAILABLE_THEMES } from "./themes";
 
 export const ToolBar = ({ copyClipboard, openDialog, setOpenDialog, editorTheme, setEditorTheme, layoutMode, setLayoutMode, className, editorBg, setEditorBg }: {
   copyClipboard: () => void,
@@ -21,7 +21,6 @@ export const ToolBar = ({ copyClipboard, openDialog, setOpenDialog, editorTheme,
   editorBg: string,
   setEditorBg: (color: string) => void
 }) => {
-  const { themes } = useData()
   const monaco = useMonaco();
   const [selectedTheme, setSelectedTheme] = useState(editorTheme);
 
@@ -39,6 +38,7 @@ export const ToolBar = ({ copyClipboard, openDialog, setOpenDialog, editorTheme,
     setEditorTheme(transformThemeName(theme));
     setEditorBg(themeData.colors['editor.background']);
   };
+
   return (
     <Suspense fallback={<Badge color="slate">Loading themes...</Badge>}>
       <div
@@ -53,7 +53,7 @@ export const ToolBar = ({ copyClipboard, openDialog, setOpenDialog, editorTheme,
               <SelectValue placeholder={prettifyName(selectedTheme)} />
             </SelectTrigger>
             <SelectContent>
-              {themes.map((theme: string) => (
+              {AVAILABLE_THEMES.map((theme: string) => (
                 <SelectItem value={theme} key={theme}>
                   {prettifyName(theme)}
                 </SelectItem>

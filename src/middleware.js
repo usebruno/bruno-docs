@@ -145,5 +145,17 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: Object.keys(redirects),
+  matcher: [
+    '/introduction/:path*',
+    '/tools/:path*',
+    '/migration-imports/:path*',
+    '/get-started/:path*',
+    '/git-integration/:path*',
+    '/scripting/:path*',
+    '/testing/:path*',
+    '/license-management/:path*',
+    '/cli/:path*',
+    '/bru-language/:path*',
+    '/bru-lang/:path*'
+  ]
 };
