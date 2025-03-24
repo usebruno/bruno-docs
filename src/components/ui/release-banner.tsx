@@ -26,7 +26,7 @@ export const ReleaseBanner = () => {
           rel="noopener noreferrer"
           className="text-white hover:text-blue-400 transition-colors inline-flex items-center justify-center gap-2 text-sm"
         >
-          🎉 Bruno v1.40.0 is released with Custom Filenames support. Download
+          🎉 Bruno v2.0.0 is released with an updated OAuth 2 Workflow! Download
           now →
         </a>
         <button

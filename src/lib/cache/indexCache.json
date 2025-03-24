@@ -260,6 +260,10 @@
             "path": "git-integration/using-gui/consumer"
           }
         ]
+      },
+      {
+        "name": "Fetch in Bruno Button",
+        "path": "git-integration/embed-bruno-collection"
       }
     ]
   },
