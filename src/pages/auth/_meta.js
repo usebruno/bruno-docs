@@ -1,7 +1,7 @@
 export default {
   "overview": "Overview",
-  "oauth2": "OAuth 2.0",
-  "oauth2-experimental": "OAuth 2.0 (Experimental)",
+  "oauth2": "OAuth 2.0 (v1.x.x)",
+  "oauth2-experimental": "OAuth 2.0 (v2.x.x)",
   "aws-signature": "AWS Signature",
   "basic": "Basic",
   "bearer": "Bearer",
