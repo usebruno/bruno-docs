@@ -1,11 +1,22 @@
-# Running a Collection with a JSON File
+# Running a Collection 
+
+Bruno CLI allows you to run your API collections with ease, either by directly executing requests or using external data sources. 
+
+You can run collections using data from CSV or JSON files, customize the output of your test results, skip specific headers, and even work with client certificates for secure API communication.
+
+## Running a Collection with a CSV File
+If you need to run a collection using data from a CSV file, specify the path to the file with the `--csv-file-path` option:
+
+```bash copy
+bru run folder --csv-file-path /path/to/csv/file.csv
+```
+## Running a Collection with a JSON File
 To run a collection using data from a JSON file, provide the file path using the `--json-file-path` option:
 
 ```bash copy
 bru run folder --json-file-path /path/to/json/file.json
 ```
 > This feature requires Bruno CLI version 1.35.0 or higher.
-
 
 ## Outputting Results
 To save the results of your API tests to a file, use the --output option:
