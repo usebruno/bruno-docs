@@ -1,0 +1,50 @@
+import { Callout } from 'nextra/components'
+ 
+
+# Installation
+
+<Callout emoji="">
+  Make sure you have Node.js installed on your local system. It is recommended to use the latest LTS version (Node 18 or higher). 
+</Callout>
+
+To install the Bruno CLI, use the node package manager of your choice, such as NPM:
+```bash copy
+npm install -g @usebruno/cli
+```
+
+## Getting Started
+
+Navigate to the directory where your API collection resides, and run the following command:
+
+```bash copy
+bru run
+```
+
+This will run all the requests in your collection. If you want to run a single request, specify its filename:
+
+```bash copy
+bru run request.bru
+```
+
+## Running Requests in a Folder
+To run all the requests within a folder, use:
+
+```bash copy
+bru run folder
+```
+
+## Using Environments
+If you need to use a specific environment, you can pass it with the --env option:
+
+```bash copy
+bru run folder --env Local
+```
+
+## Passing Environment Variables
+
+> Variables marked as secrets in Bruno app are not accessible via the CLI. Pass them directly as command-line arguments.
+
+```bash copy
+bru run folder --env Local --env-var JWT_TOKEN=1234
+```
+
