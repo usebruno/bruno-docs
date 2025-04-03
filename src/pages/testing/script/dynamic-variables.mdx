@@ -1,0 +1,65 @@
+import { Callout } from 'nextra/components'
+
+# Dynamic Variables
+
+Dynamic variables enable you to generate and use random data in your testing workflow. Bruno uses the [faker.js](https://fakerjs.dev/) library to generate random data. You can use these variables like any other variables in Bruno. The syntax to use dynamic variables is `{{$randomData}}`, and you can use them in the request body, authentication, parameters, and other fields.
+
+<Callout emoji="">
+ Dynamic variables are case-sensitive and follow the camelCase convention. 
+</Callout>
+
+## Available Dynamic Variables
+
+The following table provides a comprehensive list of available dynamic variables, their examples, and common use cases:
+
+| Category | Example | Available Methods |
+|----------|---------|------------------|
+| Numbers | `{{$randomNumber}}` | `number.int()`, `number.float()`, `number.bigInt()` |
+| Colors | `{{$randomColor}}` | `color.rgb()`, `color.hex()`, `color.hsl()` |
+| IP Addresses | `{{$randomIp}}` | `internet.ip()`, `internet.ipv4()`, `internet.ipv6()` |
+| Images | `{{$randomImage}}` | `image.url()`, `image.avatar()`, `image.imageUrl()` |
+| Names | `{{$randomName}}` | `person.firstName()`, `person.lastName()`, `person.fullName()` |
+| Professions | `{{$randomJob}}` | `person.jobTitle()`, `person.jobDescriptor()`, `person.jobArea()` |
+| Locations | `{{$randomLocation}}` | `location.city()`, `location.country()`, `location.streetAddress()` |
+| Finance | `{{$randomAmount}}` | `finance.amount()`, `finance.creditCardNumber()`, `finance.currencyCode()` |
+| Businesses | `{{$randomCompany}}` | `company.name()`, `company.catchPhrase()`, `company.bs()` |
+| Databases | `{{$randomDatabase}}` | `database.column()`, `database.type()`, `database.collation()` |
+| Domains | `{{$randomDomain}}` | `internet.domainName()`, `internet.domainSuffix()`, `internet.domainWord()` |
+| Emails | `{{$randomEmail}}` | `internet.email()`, `internet.exampleEmail()`, `internet.freeEmail()` |
+| Usernames | `{{$randomUsername}}` | `internet.userName()`, `internet.displayName()` |
+| Files | `{{$randomFile}}` | `system.fileName()`, `system.filePath()`, `system.directoryPath()` |
+| Stores | `{{$randomStore}}` | `commerce.productName()`, `commerce.price()`, `commerce.department()` |
+| Grammar | `{{$randomWord}}` | `word.adjective()`, `word.noun()`, `word.verb()` |
+| Lorem Ipsum | `{{$randomText}}` | `lorem.words()`, `lorem.sentence()`, `lorem.paragraph()` |
+
+## Usage Examples
+
+Here are some common use cases for dynamic variables:
+
+1. **Test Data Generation**:
+   ```json
+   {
+     "name": "{{$randomName}}",
+     "email": "{{$randomEmail}}",
+     "age": "{{$randomNumber}}"
+   }
+   ```
+
+2. **Authentication**:
+   ```json
+   {
+     "username": "{{$randomUsername}}",
+     "password": "{{$randomPassword}}"
+   }
+   ```
+
+3. **Location-based Testing**:
+   ```json
+   {
+     "address": "{{$randomLocation}}",
+     "city": "{{$randomCity}}",
+     "country": "{{$randomCountry}}"
+   }
+   ```
+
+For a complete list of available methods and their detailed usage, please refer to the [faker.js documentation](https://fakerjs.dev/). 

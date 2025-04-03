@@ -8,5 +8,6 @@ export default {
   "inbuilt-libraries": "Inbuilt Libraries",
   "javascript-reference": "JavaScript Reference",
   "request": "Request",
-  "response": "Response"
+  "response": "Response",
+  "dynamic-variables": "Dynamic Variables",
 } 
