@@ -10,27 +10,28 @@ Dynamic variables enable you to generate and use random data in your testing wor
 
 ## Available Dynamic Variables
 
-The following table provides a comprehensive list of available dynamic variables, their examples, and common use cases:
+The following table provides a comprehensive list of available dynamic variables, their examples, and sample values:
 
-| Category | Example | Available Methods |
-|----------|---------|------------------|
-| Numbers | `{{$randomNumber}}` | `number.int()`, `number.float()`, `number.bigInt()` |
-| Colors | `{{$randomColor}}` | `color.rgb()`, `color.hex()`, `color.hsl()` |
-| IP Addresses | `{{$randomIp}}` | `internet.ip()`, `internet.ipv4()`, `internet.ipv6()` |
-| Images | `{{$randomImage}}` | `image.url()`, `image.avatar()`, `image.imageUrl()` |
-| Names | `{{$randomName}}` | `person.firstName()`, `person.lastName()`, `person.fullName()` |
-| Professions | `{{$randomJob}}` | `person.jobTitle()`, `person.jobDescriptor()`, `person.jobArea()` |
-| Locations | `{{$randomLocation}}` | `location.city()`, `location.country()`, `location.streetAddress()` |
-| Finance | `{{$randomAmount}}` | `finance.amount()`, `finance.creditCardNumber()`, `finance.currencyCode()` |
-| Businesses | `{{$randomCompany}}` | `company.name()`, `company.catchPhrase()`, `company.bs()` |
-| Databases | `{{$randomDatabase}}` | `database.column()`, `database.type()`, `database.collation()` |
-| Domains | `{{$randomDomain}}` | `internet.domainName()`, `internet.domainSuffix()`, `internet.domainWord()` |
-| Emails | `{{$randomEmail}}` | `internet.email()`, `internet.exampleEmail()`, `internet.freeEmail()` |
-| Usernames | `{{$randomUsername}}` | `internet.userName()`, `internet.displayName()` |
-| Files | `{{$randomFile}}` | `system.fileName()`, `system.filePath()`, `system.directoryPath()` |
-| Stores | `{{$randomStore}}` | `commerce.productName()`, `commerce.price()`, `commerce.department()` |
-| Grammar | `{{$randomWord}}` | `word.adjective()`, `word.noun()`, `word.verb()` |
-| Lorem Ipsum | `{{$randomText}}` | `lorem.words()`, `lorem.sentence()`, `lorem.paragraph()` |
+| Category | Variable | Examples |
+|----------|---------|---------------|
+| Timestamp | `{{$timestamp}}` | `1562757107`, `1562757108`, `1562757109` |
+| Numbers | `{{$randomNumber}}` | `42`, `3.14`, `1000` |
+| Colors | `{{$randomColor}}` | `#FF0000`, `rgb(255, 0, 0)`, `hsl(0, 100%, 50%)` |
+| IP Addresses | `{{$randomIp}}` | `192.168.1.1`, `2001:0db8:85a3:0000:0000:8a2e:0370:7334` |
+| Images | `{{$randomImage}}` | `https://picsum.photos/200/300`, `https://i.pravatar.cc/300` |
+| Names | `{{$randomName}}` | `John Doe`, `Jane Smith`, `Robert Johnson` |
+| Professions | `{{$randomJob}}` | `Software Engineer`, `Product Manager`, `Data Scientist` |
+| Locations | `{{$randomLocation}}` | `New York, USA`, `London, UK`, `Tokyo, Japan` |
+| Finance | `{{$randomAmount}}` | `$1,234.56`, `€789.00`, `¥10,000` |
+| Businesses | `{{$randomCompany}}` | `TechCorp Inc.`, `Global Solutions Ltd.` |
+| Databases | `{{$randomDatabase}}` | `users`, `orders`, `products` |
+| Domains | `{{$randomDomain}}` | `example.com`, `test.org`, `demo.net` |
+| Emails | `{{$randomEmail}}` | `john.doe@example.com`, `jane.smith@test.org` |
+| Usernames | `{{$randomUsername}}` | `johndoe123`, `janesmith456` |
+| Files | `{{$randomFile}}` | `document.pdf`, `image.jpg`, `/path/to/file.txt` |
+| Stores | `{{$randomStore}}` | `Electronics`, `Clothing`, `Home & Garden` |
+| Grammar | `{{$randomWord}}` | `quick`, `brown`, `fox` |
+| Lorem Ipsum | `{{$randomText}}` | `Lorem ipsum dolor sit amet`, `Consectetur adipiscing elit` |
 
 ## Usage Examples
 
@@ -41,7 +42,8 @@ Here are some common use cases for dynamic variables:
    {
      "name": "{{$randomName}}",
      "email": "{{$randomEmail}}",
-     "age": "{{$randomNumber}}"
+     "age": "{{$randomNumber}}",
+     "timestamp": "{{$timestamp}}"
    }
    ```
 
@@ -49,7 +51,8 @@ Here are some common use cases for dynamic variables:
    ```json
    {
      "username": "{{$randomUsername}}",
-     "password": "{{$randomPassword}}"
+     "password": "{{$randomPassword}}",
+     "lastLogin": "{{$timestamp}}"
    }
    ```
 
@@ -58,7 +61,11 @@ Here are some common use cases for dynamic variables:
    {
      "address": "{{$randomLocation}}",
      "city": "{{$randomCity}}",
-     "country": "{{$randomCountry}}"
+     "country": "{{$randomCountry}}",
+     "coordinates": {
+       "latitude": "{{$randomLatitude}}",
+       "longitude": "{{$randomLongitude}}"
+     }
    }
    ```
 
