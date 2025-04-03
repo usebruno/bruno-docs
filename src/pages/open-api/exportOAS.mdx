@@ -1,17 +1,70 @@
-import PremiumBadge from "@/components/premium-badge";
+import { Callout } from "nextra/components";
 
-# Export AOS 
+# Export to OpenAPI Specification (OAS)
 
-## Exporting a Collection as an OAS File <PremiumBadge />
+Bruno allows you to export your collections as OpenAPI Specification (OAS) files, enabling you to share your API definitions with other tools and team members. This feature helps maintain consistency across your API documentation and development workflow.
 
-- Right-click on a collection and select Export
+<Callout type="info">
+Bruno exports collections in OpenAPI Specification (OAS) V3 format, which is widely supported by API tools and platforms.
+</Callout>
 
-![select-export](/screenshots/open-api/select-export.webp)
+## Prerequisites
 
-- Choose OpenAPI Specification
+Before exporting a collection, ensure:
+- Your collection is properly organized with clear request structures
+- All endpoints have appropriate HTTP methods defined
+- Request parameters and headers are properly configured
+- Response examples are included where possible
 
-![select-openapi-from-export-menu](/screenshots/open-api/select-open-api-menu.webp)
+## Export Methods
 
-- Name your file and designate a location for it to be stored
+1. **File Export**: Export to a local OpenAPI specification file
 
-![export-open-api](/screenshots/open-api/export-api-spec.webp)
+
+### Exporting to a File
+
+1. Open Bruno and navigate to your collection
+2. Click on the context menu (three dots) in the collections panel
+3. Select **Share** from the dropdown menu
+4. Choose **OpenAPI Specification** option
+5. Enter name of your file and location.
+6. Click **Create**
+
+![export-openapi-file](/screenshots/open-api/export-api-spec.webp)
+
+## Example Exported Structure
+
+```yaml
+openapi: 3.0.0
+info:
+  title: Example API
+  version: 1.0.0
+  description: API documentation exported from Bruno
+paths:
+  /users:
+    get:
+      summary: Get all users
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+```
