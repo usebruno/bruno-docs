@@ -1,14 +1,63 @@
 import { Callout } from "nextra/components";
 
-# Import AOS 
+# Import OpenAPI Specification (OAS)
 
-## Creating a Collection from OAS Import
+Bruno provides seamless integration with OpenAPI Specification (OAS), allowing you to import API definitions through both files and URLs. This feature enables you to quickly create collections in Bruno by leveraging existing OpenAPI documentation.
 
-<Callout type="info">Bruno supports importing OAS V3 files only</Callout>
+<Callout type="info">
+Bruno supports importing OpenAPI Specification (OAS) V3 files only.
+</Callout>
 
-- Select Import
-- Choose OpenAPI V3 File
+## Prerequisites
+
+Before importing an OpenAPI specification, ensure you have:
+- A valid OpenAPI V3 specification file (YAML or JSON format)
+- Or a publicly accessible URL containing the OpenAPI specification
+
+## Import Methods
+
+Bruno offers two ways to import OpenAPI specifications:
+
+1. **File Import**: Import from a local OpenAPI specification file
+2. **URL Import**: Import directly from a publicly accessible OpenAPI specification URL
+
+### Importing from a File
+
+1. Open Bruno and navigate to your collection
+2. Click on the context menu (three dots) in the collections panel
+3. Select **Import** from the dropdown menu
+4. Choose **OpenAPI V3 File** option
 
 ![select-openapi-file](/screenshots/open-api/select-open-api.webp)
 
-- Select the file stored on your machine
+5. Browse and select your OpenAPI specification file (`.yaml` or `.json`)
+6. Click **Import** to create the collection
+
+
+### Importing from a URL
+
+1. Open Bruno and navigate to your workspace
+2. Click on the context menu (three dots) in the collections panel
+3. Select **Import** from the dropdown menu
+4. Choose **OpenAPI V3 URL** option
+5. Enter the URL of your OpenAPI specification
+6. Click **Import** to create the collection
+
+![import-collection-oas](/screenshots/open-api/import-collection-oas.webp)
+
+## Example OpenAPI Specifications
+
+You can test the import functionality using these example OpenAPI specifications:
+
+1. **Petstore API**:
+   - URL: `https://petstore3.swagger.io/api/v3/openapi.json`
+   - Description: A sample API for a pet store
+
+## Post-Import Actions
+
+After successfully importing an OpenAPI specification:
+
+1. Review the generated collection structure
+2. Verify that all endpoints are correctly imported
+3. Check that request parameters and response schemas are properly mapped
+4. Test the imported endpoints to ensure they work as expected
