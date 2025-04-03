@@ -4,60 +4,10 @@ import { Callout } from "nextra/components";
 
 # OpenAPI and Bruno
 
+OpenAPI specification (AOS) is a standard formart for reading and describing the RESTful APIs. It provides a framework for defining apis, endpoints, auth, headers and etc. This format is easy to read and maintain API documentations. 
+
 Bruno allows you to work with OpenAPI Specification (OAS) files in a number of ways:
 
-- Creating a collection from an OAS file import
-- Exporting a collection as an OAS file <PremiumBadge />
-- Viewing and Designing an OAS file <PremiumBadge />
-
-## Creating a Collection from OAS Import
-
-<Callout type="info">Bruno supports importing OAS V3 files only</Callout>
-
-- Select Import
-- Choose OpenAPI V3 File
-
-![select-openapi-file](/screenshots/open-api/select-open-api.webp)
-
-- Select the file stored on your machine
-
-## Exporting a Collection as an OAS File <PremiumBadge />
-
-- Right-click on a collection and select Export
-
-![select-export](/screenshots/open-api/select-export.webp)
-
-- Choose OpenAPI Specification
-
-![select-openapi-from-export-menu](/screenshots/open-api/select-open-api-menu.webp)
-
-- Name your file and designate a location for it to be stored
-
-![export-open-api](/screenshots/open-api/export-api-spec.webp)
-
-## Viewing and Designing an OAS file <PremiumBadge />
-
-If you've saved or otherwise have an OAS file on your machine, you can view the OAS in a SwaggerUI-esque manner by:
-
-- Selecting Open API Spec
-
-![open-open-api](/screenshots/open-api/open-api-spec.webp)
-
-- Choose the file name and location that you want to open
-
-This will then open the spec in a separate section of your Bruno sidebar called APIs.
-
-If you want to create an OAS file, you can:
-
-- Select Create API Spec
-  ![create-open-api](/screenshots/open-api/create-api-spec.webp)
-
-- Designate whether you want to create a Blank Spec, or generate it from an existing Bruno Collection
-
-![location-open-api](/screenshots/open-api/select-api-spec-location.webp)
-
-- Choose a name and location for the spec to be saved under.
-
-You will now have the scaffolding of an OAS that you can continue to design.
-
-![location-open-api](/screenshots/open-api/write-api-spec.webp)
+- [Creating a collection from an OAS file import](./importOAS.mdx)
+- [Exporting a collection as an OAS file](./exportOAS.mdx) <PremiumBadge />
+- [Viewing and Designing an OAS file](./createOAS.mdx) <PremiumBadge />
