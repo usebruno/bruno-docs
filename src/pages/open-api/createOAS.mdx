@@ -1,30 +1,45 @@
+import { Callout } from "nextra/components";
 import PremiumBadge from "@/components/premium-badge";
 
-# Create AOS 
+# Create OpenAPI Specification (OAS)
 
-## Viewing and Designing an OAS file <PremiumBadge />
+Bruno provides a powerful interface for creating and managing OpenAPI Specifications (OAS). You can either design a new specification from scratch and view one as existing Open API spec.
 
-If you've saved or otherwise have an OAS file on your machine, you can view the OAS in a SwaggerUI-esque manner by:
+## Viewing Existing OAS Files
 
-- Selecting Open API Spec
+You can view and interact with existing OAS files in Bruno using a SwaggerUI-like interface:
+
+1. Open Bruno and Go to context menu (three dots)
+2. Select **Open API Spec** from dropdown
 
 ![open-open-api](/screenshots/open-api/open-api-spec.webp)
 
-- Choose the file name and location that you want to open
+3. Browse and select your OAS file (`.yaml` or `.json`)
+4. The specification will open in a dedicated section of your Bruno sidebar
 
-This will then open the spec in a separate section of your Bruno sidebar called APIs.
+![view-open-api](/screenshots/open-api/view-oas-file.webp)
 
-If you want to create an OAS file, you can:
+## Creating New OAS Files
 
-- Select Create API Spec
+1. Open Bruno and Go to context menu (three dots)
+2. Select **Create API Spec**  from dropdown
+
 ![create-open-api](/screenshots/open-api/create-api-spec.webp)
 
-- Designate whether you want to create a Blank Spec, or generate it from an existing Bruno Collection
+3. Choose a name and location for your specification
 
 ![location-open-api](/screenshots/open-api/select-api-spec-location.webp)
 
-- Choose a name and location for the spec to be saved under.
+4. Click on **Create** to generate OAS file.
 
-You will now have the scaffolding of an OAS that you can continue to design.
 
-![location-open-api](/screenshots/open-api/write-api-spec.webp)
+## Editing Your OAS File
+
+Once created, you can edit your OAS file in Bruno's built-in editor:
+
+1. The editor provides syntax highlighting
+2. Use the sidebar to navigate through different sections of your API
+3. Add or modify endpoints, parameters, and responses
+4. Include examples and descriptions for better documentation
+
+![write-api-spec](/screenshots/open-api/write-api-spec.webp)
