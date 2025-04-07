@@ -11,6 +11,85 @@ bru --version
 ```
 This will display the version number of the Bruno CLI you have installed. It's a helpful command for ensuring you're working with the latest version or for troubleshooting version-specific issues.
 
+## Getting Started
+
+Navigate to the directory where your API collection resides, and run the following command:
+
+```bash copy
+bru run
+```
+
+This will run all the requests in your collection. If you want to run a single request, specify its filename:
+
+```bash copy
+bru run request.bru
+```
+
+## Running Requests in a Folder
+To run all the requests within a folder, use:
+
+```bash copy
+bru run folder
+```
+
+## Using Environments
+If you need to use a specific environment, you can pass it with the `--env` option:
+
+```bash copy
+bru run folder --env Local
+```
+
+## Passing Environment Variables
+
+> Variables marked as secrets in Bruno app are not accessible via the CLI. Pass them directly as command-line arguments.
+
+```bash copy
+bru run folder --env Local --env-var JWT_TOKEN=1234
+```
+
+## Outputting Results
+To save the results of your API tests to a file, use the `--output` option:
+
+```bash copy
+bru run folder --output results.json
+```
+## Adding Delay
+If you need to add a delay between requests during the execution of your API collection, you can use the `--delay` option.
+
+Example:
+```bash copy
+bru run  --delay 1000
+```
+## Using Client Certificates for API Requests
+
+If your API requests require client certificates for authentication, you can specify using the `--client-cert-config` option. The configuration should be provided in a JSON file. Here's an example of how to use this option:
+
+```bash copy
+bru run folder --client-cert-config /path/to/client-cert-config.json
+```
+
+The client-cert-config.json file should contain the following fields:
+
+```json
+{
+  "enabled": true,
+  "certs": [
+    {
+      "domain": "usebruno.com",
+      "type": "cert",
+      "certFilePath": "certs/server_1.crt",
+      "keyFilePath": "private/server_1.key",
+      "passphrase": "Iu$eBrun0_#Secure!"
+    },
+    {
+      "domain": "the-example.com",
+      "type": "pfx",
+      "pfxFilePath": "pfx/server_3.pfx",
+      "passphrase": "L!ghT_Y@g@mi_2024!"
+    }
+  ]
+}
+```
 
 ## Options
 
