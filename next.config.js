@@ -21,6 +21,7 @@ export default withNextra({
       { source: '/introduction/support', destination: '/introduction/feedback-community', permanent: true },
       { source: '/manifesto.html', destination: '/introduction/manifesto', permanent: true },
       { source: '/manifesto', destination: '/introduction/manifesto', permanent: true },
+      { source: '/get-started/bruno-basics', destination: '/get-started/bruno-basics/download', permanent: true },
 
       // - /get-started links:
       { source: '/tools/translator', destination: '/get-started/import-export-data/script-translator', permanent: true },
