@@ -1,0 +1,112 @@
+import { Callout } from 'nextra/components'
+
+# Bruno Converters
+
+Bruno converter is a standalone NPM package that provides programmatic conversion of various API specification formats to Bruno collections. This package allows you to convert Postman collections, Insomnia collections, OpenAPI specifications, and Postman environments into Bruno collection format.
+
+## Installation
+
+```bash
+npm install @usebruno/converters
+```
+
+## Usage
+
+### Convert Postman collection to Bruno collection
+
+```javascript
+const { postmanToBruno } = require('@usebruno/converters');
+
+// Convert Postman collection to Bruno collection
+const brunoCollection = postmanToBruno(postmanCollection);
+```
+
+### Convert Postman Environment to Bruno Environment
+
+```javascript
+const { postmanToBrunoEnvironment } = require('@usebruno/converters');
+
+const brunoEnvironment = postmanToBrunoEnvironment(postmanEnvironment);
+```
+
+### Convert Insomnia collection to Bruno collection
+
+```javascript
+import { insomniaToBruno } from '@usebruno/converters';
+
+const brunoCollection = insomniaToBruno(insomniaCollection);
+```
+
+### Convert OpenAPI specification to Bruno collection
+
+```javascript
+import { openApiToBruno } from '@usebruno/converters';
+
+const brunoCollection = openApiToBruno(openApiSpecification);
+```
+
+## API Reference
+
+### `postmanToBruno(postmanCollection: object)`
+
+Converts a Postman collection to a Bruno collection.
+
+**Parameters:**
+- `postmanCollection`: The Postman collection JSON object
+
+
+### `postmanToBrunoEnvironment(postmanEnvironment: object)`
+
+Converts a Postman environment to a Bruno environment.
+
+**Parameters:**
+- `postmanEnvironment`: The Postman environment JSON object
+
+
+### `insomniaToBruno(insomniaCollection: object)`
+
+Converts an Insomnia collection to a Bruno collection.
+
+**Parameters:**
+- `insomniaCollection`: The Insomnia collection JSON object
+
+
+### `openApiToBruno(openApiSpec: object)`
+
+Converts an OpenAPI specification to a Bruno collection.
+
+**Parameters:**
+- `openApiSpec`: The OpenAPI specification JSON object
+
+
+## Example
+
+Here's a complete example showing how to convert a Postman collection to a Bruno collection and save it to a file:
+
+```javascript
+const { postmanToBruno } = require('@usebruno/converters');
+const fs = require('fs/promises');
+
+function convertPostmanToBruno(inputFile, outputFile) {
+  // Read Postman collection file
+  fs.readFile(inputFile, 'utf8')
+    .then(inputData => {
+      // Convert to Bruno collection
+      return postmanToBruno(JSON.parse(inputData));
+    })
+    .then(brunoCollection => {
+      // Save Bruno collection
+      return fs.writeFile(outputFile, JSON.stringify(brunoCollection, null, 2));
+    })
+    .then(() => {
+      console.log('Conversion successful!');
+    })
+    .catch(error => {
+      console.error('Error during conversion:', error);
+    });
+}
+
+// Usage
+convertPostmanToBruno('postman-collection.json', 'bruno-collection.json');
+```
+ 
