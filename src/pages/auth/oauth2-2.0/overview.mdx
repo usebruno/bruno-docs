@@ -23,6 +23,14 @@ Bruno supports OAuth 2 authentication at both collection and request levels:
 3. **Automatic Token Injection**: Bruno automatically adds the token to request headers or parameters based on your configuration
 4. **Token Data Access**: Access token data using variables: `{{$oauth2.<tokenId>.access_token}}` within the collection
 
-<br />
-<br />
-<br />
+## Accessing OAuth2 Tokens in Scripts
+
+You can access OAuth2 tokens in your scripts using the `bru.getOauth2CredentialVar()` function.
+
+### Syntax
+
+```javascript
+bru.getOauth2CredentialVar('$oauth2.<Token ID>.access_token')
+```
+
+
