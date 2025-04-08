@@ -3,7 +3,7 @@ import { Callout } from "nextra/components";
 # Variables
 
 <Callout type="warning" emoji="">
-  With the release of v1.28.0, we’ve shifted to treating all Request Variables
+  With the release of v1.28.0, we've shifted to treating all Request Variables
   as strings instead of inferring the data type from the value. See
   [discussion](https://github.com/usebruno/bruno/discussions/3072) for more
   information.
@@ -44,6 +44,21 @@ Runtime variables get the highest precedence. Process Environment Variables are 
 ### Variable Data Type
 
 All variables are stored as strings. Bruno does not infer or change the data type of the variable based on the value you set.
+
+### Debugging Variables in Console
+
+You can access and debug variables in the console using the following pattern:
+
+The pattern follows `bru.get[Type]Var(key)` where:
+- `[Type]` is the variable type (Runtime, Request, Folder, etc.)
+- `key` is the variable name you want to access
+
+### Example: 
+
+```javascript
+// Basic syntax: console.log(bru.get[Type]Var(key))
+console.log(bru.getVar('myVar'))           // Runtime variables
+```
 
 ### Scripting API
 
