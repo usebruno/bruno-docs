@@ -1,0 +1,239 @@
+import { Callout } from 'nextra/components'
+
+# Dynamic Variables
+
+Dynamic variables enable you to generate and use random data in your testing workflow. Bruno uses the [faker.js](https://fakerjs.dev/) library to generate random data. You can use these variables like any other variables in Bruno. The syntax to use dynamic variables is `{{$randomData}}`, and you can use them in the request body, authentication, parameters, and other fields.
+
+<Callout emoji="">
+ Dynamic variables are case-sensitive and follow the camelCase convention. 
+</Callout>
+
+## Usage Examples
+
+Here are some common use cases for dynamic variables:
+
+1. **Test Data Generation**:
+   ```json
+   {
+     "user": {
+       "id": "{{$randomUUID}}",
+       "name": "{{$randomFullName}}",
+       "email": "{{$randomEmail}}",
+       "phone": "{{$randomPhoneNumber}}",
+       "address": {
+         "street": "{{$randomStreetAddress}}",
+         "city": "{{$randomCity}}",
+         "country": "{{$randomCountry}}"
+       }
+     }
+   }
+   ```
+
+2. **Authentication**:
+   ```json
+   {
+     "credentials": {
+       "username": "{{$randomUsername}}",
+       "password": "{{$randomPassword}}",
+       "lastLogin": "{{$isoTimestamp}}"
+     }
+   }
+   ```
+
+3. **Business Data**:
+   ```json
+   {
+     "company": {
+       "name": "{{$randomCompanyName}}",
+       "catchPhrase": "{{$randomCatchPhrase}}",
+       "department": "{{$randomDepartment}}",
+       "account": {
+         "number": "{{$randomBankAccount}}",
+         "type": "{{$randomTransactionType}}"
+       }
+     }
+   }
+   ```
+
+## Available Dynamic Variables
+
+Bruno provides a comprehensive set of dynamic variables for generating test data. These variables are organized into categories based on their functionality.
+
+### Basic Data Types
+
+| Variable Name | Description | Examples |
+|--------------|-------------|----------|
+| `{{$guid}}` | A random UUID | 550e8400-e29b-41d4-a716-446655440000 |
+| `{{$timestamp}}` | Current timestamp in milliseconds | 1562757107 |
+| `{{$isoTimestamp}}` | Current timestamp in ISO format | 2024-03-20T12:34:56.789Z |
+| `{{$randomUUID}}` | A random UUID | 550e8400-e29b-41d4-a716-446655440000 |
+| `{{$randomAlphaNumeric}}` | A random alpha-numeric character | 6, y, z |
+| `{{$randomBoolean}}` | A random boolean value | true, false |
+| `{{$randomInt}}` | A random integer between 0 and 1000 | 802, 494, 200 |
+| `{{$randomColor}}` | A random color | red, fuchsia, grey |
+| `{{$randomHexColor}}` | A random hex value | #47594a, #431e48, #106f21 |
+| `{{$randomAbbreviation}}` | A random abbreviation | SQL, PCI, JSON |
+| `{{$randomWord}}` | A random word | protocol, interface |
+| `{{$randomWords}}` | Multiple random words | quick brown fox |
+
+### Internet and Network
+
+| Variable Name | Description | Examples |
+|--------------|-------------|----------|
+| `{{$randomIP}}` | A random IPv4 address | 241.102.234.100, 216.7.27.38 |
+| `{{$randomIPV4}}` | A random IPv4 address | 192.168.1.1 |
+| `{{$randomIPV6}}` | A random IPv6 address | dbe2:7ae6:119b:c161:1560:6dda:3a9b:90a9 |
+| `{{$randomMACAddress}}` | A random MAC address | 33:d4:68:5f:b4:c7, 1f:6e:db:3d:ed:fa |
+| `{{$randomPassword}}` | A random 15-character alpha-numeric password | t9iXe7COoDKv8k3, QAzNFQtvR9cg2rq |
+| `{{$randomLocale}}` | A random two-letter language code (ISO 639-1) | ny, sr, si |
+| `{{$randomUserAgent}}` | A random user agent | Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.9.8; rv:15.6) Gecko/20100101 Firefox/15.6.6 |
+| `{{$randomProtocol}}` | A random internet protocol | http, https |
+| `{{$randomSemver}}` | A random semantic version number | 7.0.5, 2.5.8, 6.4.9 |
+| `{{$randomDomainName}}` | A random domain name | example.com |
+| `{{$randomDomainSuffix}}` | A random domain suffix | .com, .org, .net |
+| `{{$randomDomainWord}}` | A random domain word | example, test, demo |
+| `{{$randomExampleEmail}}` | A random example email | user@example.com |
+| `{{$randomEmail}}` | A random email address | john.doe@example.com |
+| `{{$randomUserName}}` | A random username | johndoe123 |
+| `{{$randomUrl}}` | A random URL | https://example.com |
+
+### Names and Personal Information
+
+| Variable Name | Description | Examples |
+|--------------|-------------|----------|
+| `{{$randomFirstName}}` | A random first name | Ethan, Chandler, Megane |
+| `{{$randomLastName}}` | A random last name | Schaden, Schneider, Willms |
+| `{{$randomFullName}}` | A random first and last name | Connie Runolfsdottir, Sylvan Fay, Jonathon Kunze |
+| `{{$randomNamePrefix}}` | A random name prefix | Dr., Ms., Mr. |
+| `{{$randomNameSuffix}}` | A random name suffix | I, MD, DD |
+| `{{$randomJobArea}}` | A random job area | Marketing, Engineering, Sales |
+| `{{$randomJobDescriptor}}` | A random job descriptor | Senior, Lead, Junior |
+| `{{$randomJobTitle}}` | A random job title | Software Engineer, Product Manager |
+| `{{$randomJobType}}` | A random job type | Full-time, Contract, Part-time |
+| `{{$randomPhoneNumber}}` | A random phone number | +1-555-123-4567 |
+| `{{$randomPhoneNumberExt}}` | A random phone number with extension | +1-555-123-4567 ext. 123 |
+
+### Location
+
+| Variable Name | Description | Examples |
+|--------------|-------------|----------|
+| `{{$randomCity}}` | A random city name | New York, London, Tokyo |
+| `{{$randomStreetName}}` | A random street name | Main Street, Park Avenue |
+| `{{$randomStreetAddress}}` | A random street address | 123 Main St, 456 Park Ave |
+| `{{$randomCountry}}` | A random country name | United States, Japan, Germany |
+| `{{$randomCountryCode}}` | A random country code | US, JP, DE |
+| `{{$randomLatitude}}` | A random latitude | 40.7128, 35.6762 |
+| `{{$randomLongitude}}` | A random longitude | -74.0060, 139.6503 |
+
+### Images
+
+| Variable Name | Description | Examples |
+|--------------|-------------|----------|
+| `{{$randomAvatarImage}}` | A random avatar image URL | https://i.pravatar.cc/300 |
+| `{{$randomImageUrl}}` | A random image URL | https://picsum.photos/200/300 |
+| `{{$randomAbstractImage}}` | A random abstract image | https://loremflickr.com/320/240/abstract |
+| `{{$randomAnimalsImage}}` | A random animal image | https://loremflickr.com/320/240/animals |
+| `{{$randomBusinessImage}}` | A random business image | https://loremflickr.com/320/240/business |
+| `{{$randomCatsImage}}` | A random cat image | https://loremflickr.com/320/240/cats |
+| `{{$randomCityImage}}` | A random city image | https://loremflickr.com/320/240/city |
+| `{{$randomFoodImage}}` | A random food image | https://loremflickr.com/320/240/food |
+| `{{$randomNightlifeImage}}` | A random nightlife image | https://loremflickr.com/320/240/nightlife |
+| `{{$randomFashionImage}}` | A random fashion image | https://loremflickr.com/320/240/fashion |
+| `{{$randomPeopleImage}}` | A random people image | https://loremflickr.com/320/240/people |
+| `{{$randomNatureImage}}` | A random nature image | https://loremflickr.com/320/240/nature |
+| `{{$randomSportsImage}}` | A random sports image | https://loremflickr.com/320/240/sports |
+| `{{$randomTransportImage}}` | A random transport image | https://loremflickr.com/320/240/transport |
+| `{{$randomImageDataUri}}` | A random image data URI | data:image/png;base64,... |
+
+### Finance
+
+| Variable Name | Description | Examples |
+|--------------|-------------|----------|
+| `{{$randomBankAccount}}` | A random bank account number | 1234567890 |
+| `{{$randomBankAccountName}}` | A random bank account name | Checking Account |
+| `{{$randomCreditCardMask}}` | A masked credit card number | **** **** **** 1234 |
+| `{{$randomBankAccountBic}}` | A random BIC code | DEUTDEFF |
+| `{{$randomBankAccountIban}}` | A random IBAN | DE89370400440532013000 |
+| `{{$randomTransactionType}}` | A random transaction type | deposit, withdrawal |
+| `{{$randomCurrencyCode}}` | A random currency code | USD, EUR, JPY |
+| `{{$randomCurrencyName}}` | A random currency name | US Dollar, Euro, Yen |
+| `{{$randomCurrencySymbol}}` | A random currency symbol | $, €, ¥ |
+| `{{$randomBitcoin}}` | A random Bitcoin address | 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa |
+
+### Business
+
+| Variable Name | Description | Examples |
+|--------------|-------------|----------|
+| `{{$randomCompanyName}}` | A random company name | TechCorp Inc. |
+| `{{$randomCompanySuffix}}` | A random company suffix | LLC, Inc., Ltd. |
+| `{{$randomBs}}` | A random business buzz phrase | revolutionize end-to-end systems |
+| `{{$randomBsAdjective}}` | A random business adjective | innovative, scalable |
+| `{{$randomBsBuzz}}` | A random business buzz word | synergize, leverage |
+| `{{$randomBsNoun}}` | A random business noun | solutions, platform |
+| `{{$randomCatchPhrase}}` | A random company catch phrase | Innovate. Create. Transform. |
+| `{{$randomCatchPhraseAdjective}}` | A random catch phrase adjective | innovative, revolutionary |
+| `{{$randomCatchPhraseDescriptor}}` | A random catch phrase descriptor | next-generation, cutting-edge |
+| `{{$randomCatchPhraseNoun}}` | A random catch phrase noun | solutions, platform |
+
+### Database
+
+| Variable Name | Description | Examples |
+|--------------|-------------|----------|
+| `{{$randomDatabaseColumn}}` | A random database column name | id, name, created_at |
+| `{{$randomDatabaseType}}` | A random database type | varchar, int, timestamp |
+| `{{$randomDatabaseCollation}}` | A random database collation | utf8_general_ci, latin1_swedish_ci |
+| `{{$randomDatabaseEngine}}` | A random database engine | InnoDB, MyISAM |
+
+### Dates
+
+| Variable Name | Description | Examples |
+|--------------|-------------|----------|
+| `{{$randomDateFuture}}` | A random future date | 2024-12-31T23:59:59.999Z |
+| `{{$randomDatePast}}` | A random past date | 2020-01-01T00:00:00.000Z |
+| `{{$randomDateRecent}}` | A random recent date | 2024-03-15T12:34:56.789Z |
+| `{{$randomWeekday}}` | A random weekday | Monday, Tuesday |
+| `{{$randomMonth}}` | A random month | January, February |
+
+### Files and System
+
+| Variable Name | Description | Examples |
+|--------------|-------------|----------|
+| `{{$randomFileName}}` | A random file name | document.pdf |
+| `{{$randomFileType}}` | A random file type | application/pdf |
+| `{{$randomFileExt}}` | A random file extension | .pdf, .jpg |
+| `{{$randomCommonFileName}}` | A random common file name | document.pdf |
+| `{{$randomCommonFileType}}` | A random common file type | application/pdf |
+| `{{$randomCommonFileExt}}` | A random common file extension | .pdf, .jpg |
+| `{{$randomFilePath}}` | A random file path | /path/to/file.txt |
+| `{{$randomDirectoryPath}}` | A random directory path | /usr/local/bin |
+| `{{$randomMimeType}}` | A random MIME type | application/json |
+
+### Commerce
+
+| Variable Name | Description | Examples |
+|--------------|-------------|----------|
+| `{{$randomPrice}}` | A random price | 99.99, 149.95 |
+| `{{$randomProduct}}` | A random product | Chair, Table |
+| `{{$randomProductAdjective}}` | A random product adjective | Ergonomic, Modern |
+| `{{$randomProductMaterial}}` | A random product material | Wood, Metal |
+| `{{$randomProductName}}` | A random product name | Ergonomic Wooden Chair |
+| `{{$randomDepartment}}` | A random department name | Electronics, Clothing |
+
+### Hacker and Lorem
+
+| Variable Name | Description | Examples |
+|--------------|-------------|----------|
+| `{{$randomNoun}}` | A random noun | protocol, interface |
+| `{{$randomVerb}}` | A random verb | hack, override |
+| `{{$randomIngverb}}` | A random -ing verb | hacking, overriding |
+| `{{$randomAdjective}}` | A random adjective | digital, virtual |
+| `{{$randomPhrase}}` | A random phrase | Try to reboot the SQL bus |
+| `{{$randomLoremWord}}` | A random Lorem Ipsum word | lorem, ipsum |
+| `{{$randomLoremWords}}` | Multiple Lorem Ipsum words | lorem ipsum dolor |
+| `{{$randomLoremSentence}}` | A random Lorem Ipsum sentence | Lorem ipsum dolor sit amet. |
+| `{{$randomLoremSentences}}` | Multiple Lorem Ipsum sentences | Lorem ipsum dolor sit amet. Consectetur adipiscing elit. |
+| `{{$randomLoremParagraph}}` | A random Lorem Ipsum paragraph | Lorem ipsum dolor sit amet... |
+| `{{$randomLoremParagraphs}}` | Multiple Lorem Ipsum paragraphs | Lorem ipsum dolor sit amet...\n\nConsectetur adipiscing elit... |
+| `{{$randomLoremText}}` | A random Lorem Ipsum text | Lorem ipsum dolor sit amet... |
+| `{{$randomLoremSlug}}` | A random Lorem Ipsum slug | lorem-ipsum-dolor |
+| `{{$randomLoremLines}}` | Multiple Lorem Ipsum lines | Lorem ipsum dolor\nConsectetur adipiscing elit |
