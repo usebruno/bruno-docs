@@ -21,6 +21,16 @@ export default withNextra({
       { source: '/introduction/support', destination: '/introduction/feedback-community', permanent: true },
       { source: '/manifesto.html', destination: '/introduction/manifesto', permanent: true },
       { source: '/manifesto', destination: '/introduction/manifesto', permanent: true },
+      { source: '/get-started/bruno-basics', destination: '/get-started/bruno-basics/download', permanent: true },
+
+      // OAuth2 Experimental to OAuth2 2.0 redirects
+      { source: '/auth/oauth2-experimental', destination: '/auth/oauth2-2.0/overview', permanent: true },
+      { source: '/auth/oauth2-experimental/overview', destination: '/auth/oauth2-2.0/overview', permanent: true },
+      { source: '/auth/oauth2-experimental/collection-level-configuration', destination: '/auth/oauth2-2.0/collection-level-configuration', permanent: true },
+      { source: '/auth/oauth2-experimental/request-level-configuration', destination: '/auth/oauth2-2.0/request-level-configuration', permanent: true },
+      { source: '/auth/oauth2-experimental/authorization-code', destination: '/auth/oauth2-2.0/authorization-code', permanent: true },
+      { source: '/auth/oauth2-experimental/client-credentials', destination: '/auth/oauth2-2.0/client-credentials', permanent: true },
+      { source: '/auth/oauth2-experimental/password-credentials', destination: '/auth/oauth2-2.0/password-credentials', permanent: true },
 
       // - /get-started links:
       { source: '/tools/translator', destination: '/get-started/import-export-data/script-translator', permanent: true },
