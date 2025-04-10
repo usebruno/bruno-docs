@@ -45,3 +45,19 @@ bru run request.bru --reporter-json results.json --reporter-junit results.xml --
 
 This command will create three files: results.json, results.xml, and results.html, allowing you to analyze the results in different formats as needed.
 
+## Skipping Specific Headers in the Report
+
+If you want to exclude certain headers from the report, use the `--reporter-skip-headers` option. You can list multiple headers to skip, separated by spaces.
+
+```bash
+bru run --reporter-html results.html --reporter-skip-headers "Authorization" "Content-Type" "Date"
+```
+
+## Skip All Headers in the Report
+
+To exclude all headers from the report, use the `--reporter-skip-all-headers` option. This will remove all headers from the output report, ensuring a cleaner result.
+
+```bash copy
+bru run --reporter-html results.html --reporter-skip-all-headers
+```
+

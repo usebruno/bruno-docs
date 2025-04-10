@@ -1,5 +1,5 @@
 import { Callout } from 'nextra/components'
- 
+import { Tabs } from 'nextra/components'
 
 # Installation
 
@@ -7,44 +7,30 @@ import { Callout } from 'nextra/components'
   Make sure you have Node.js installed on your local system. It is recommended to use the latest LTS version (Node 18 or higher). 
 </Callout>
 
-To install the Bruno CLI, use the node package manager of your choice, such as NPM:
-```bash copy
+To install the Bruno CLI, use the node package manager of your choice:
+
+<Tabs items={['pnpm', 'npm', 'yarn']}>
+  <Tabs.Tab>
+  ### Using pnpm
+
+    ```bash
+pnpm install -g @usebruno/cli
+```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    
+    ### Using npm
+```bash
 npm install -g @usebruno/cli
 ```
 
-## Getting Started
-
-Navigate to the directory where your API collection resides, and run the following command:
-
-```bash copy
-bru run
+  </Tabs.Tab>
+  <Tabs.Tab>
+    
+    ### Using yarn
+```bash
+yarn global add @usebruno/cli
 ```
-
-This will run all the requests in your collection. If you want to run a single request, specify its filename:
-
-```bash copy
-bru run request.bru
-```
-
-## Running Requests in a Folder
-To run all the requests within a folder, use:
-
-```bash copy
-bru run folder
-```
-
-## Using Environments
-If you need to use a specific environment, you can pass it with the --env option:
-
-```bash copy
-bru run folder --env Local
-```
-
-## Passing Environment Variables
-
-> Variables marked as secrets in Bruno app are not accessible via the CLI. Pass them directly as command-line arguments.
-
-```bash copy
-bru run folder --env Local --env-var JWT_TOKEN=1234
-```
-
+  </Tabs.Tab>
+</Tabs>
+For more details, visit the official [NPM Page for Bruno CLI](https://www.npmjs.com/package/@usebruno/cli)
