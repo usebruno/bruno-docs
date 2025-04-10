@@ -1,25 +1,45 @@
 "use client";
 
 import Script from "next/script";
+import { usePathname, useSearchParams } from 'next/navigation';
 import { useEffect } from "react";
 
+const GA_MEASUREMENT_ID = "G-ZZBSKJSFZ8";
+
 const GoogleAnalytics = () => {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      window.dataLayer = window.dataLayer || [];
-      const gtag = (...args: any[]) => {
-        window.dataLayer.push(args);
-      };
-      gtag("js", new Date());
-      gtag("config", "G-ZZBSKJSFZ8");
+    if (typeof window !== "undefined" && window.gtag) {
+      window.gtag('config', GA_MEASUREMENT_ID, {
+        page_path: pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : ''),
+        send_page_view: true
+      });
     }
-  }, []);
+  }, [pathname, searchParams]);
 
   return (
-    <Script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-ZZBSKJSFZ8"
-    />
+    <>
+      <Script
+        strategy="afterInteractive"
+        src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+      />
+      <Script
+        id="google-analytics"
+        strategy="afterInteractive"
+      >
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', '${GA_MEASUREMENT_ID}', {
+            page_path: window.location.pathname + window.location.search,
+            send_page_view: true
+          });
+        `}
+      </Script>
+    </>
   );
 };
 
