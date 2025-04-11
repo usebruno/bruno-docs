@@ -1,0 +1,69 @@
+import { Callout } from "nextra/components";
+
+# Export to OpenAPI Specification (OAS)
+
+Bruno allows you to export your collections as OpenAPI Specification (OAS) files, enabling you to share your API definitions with other tools and team members. This feature helps maintain consistency across your API documentation and development workflow.
+
+<Callout type="info">
+Bruno exports collections in OpenAPI Specification (OAS) V3 format, which is widely supported by API tools and platforms.
+</Callout>
+
+## Prerequisites
+
+Before exporting a collection, ensure:
+- Your collection is properly organized with clear request structures
+- All endpoints have appropriate HTTP methods defined
+- Request parameters and headers are properly configured
+
+### Exporting to a File
+
+1. Open Bruno and navigate to your collection
+2. Click on the context menu (three dots) in the collections panel
+3. Select **Share** from the dropdown menu
+
+![collection-settings](/screenshots/git-integration/share-collection/1-share-collection-overview.webp)
+
+4. Choose **OpenAPI Specification** option
+
+![ExportModal](/screenshots/get-started/import-export/export_collection/2-export-options.webp)
+
+5. Enter name of your file and location.
+6. Click **Create**
+
+
+## Example Exported Structure
+
+```yaml
+openapi: 3.0.0
+info:
+  title: Example API
+  version: 1.0.0
+  description: API documentation exported from Bruno
+paths:
+  /users:
+    get:
+      summary: Get all users
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+```
