@@ -13,11 +13,11 @@ git clone https://github.com/usebruno/bruno-docs.git
 cd bruno-docs
 ```
 2. Install dependencies 
-```js
+```console
 npm install
 ```
 3. Start development server
-```js
+```console
 npm run dev
 ```
 
