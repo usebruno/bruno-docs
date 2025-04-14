@@ -6,5 +6,6 @@ export default {
   "basic": "Basic",
   "bearer": "Bearer",
   "digest": "Digest",
+  "ntlm":"NTLM",
   "add-and-manage-certs": "Add and Manage Certificates"
 } 
