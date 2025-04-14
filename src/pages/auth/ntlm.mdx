@@ -1,0 +1,22 @@
+# Authenticate with NTLM 
+
+NTLM (NT LAN Manager) is a Microsoft authentication protocol used for Windows-based systems. Its challenge-response authentication mechanism is primarily used for:
+- SharePoint
+- Exchange
+- Internal corporate APIs
+
+Unlike basic authentication, which has a less secure protection layer, NTLM has multiple handshake steps and offers more robust security.
+
+## NTLM in Bruno
+
+Follow these steps to use NTLM authentication:
+
+1. Open your request
+2. Navigate to the **Auth** tab
+3. Select **NTLM** from the dropdown list
+4. Fill in the required fields:
+   - **Username**: Your Windows username
+   - **Password**: Your Windows password
+   - **Domain**: Your Windows domain name
+
+![ntlm-auth](/screenshots/auth/ntlm-auth.webp)
