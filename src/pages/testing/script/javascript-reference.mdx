@@ -145,6 +145,34 @@ Sets a timeout for the request.
 req.setTimeout(5000); // Sets the timeout to 5000 milliseconds (5 seconds)
 ```
 
+### `getExecutionMode`
+
+Get the current active execution mode of the request.
+
+**Returns:**
+- `runner`: When the request is being executed as part of a collection run
+- `standalone`: When the request is being executed individually
+
+**Example:**
+```javascript
+const executionMode = req.getExecutionMode();
+console.log(`Request is running in ${executionMode} mode`);
+```
+
+### `getExecutionPlatform`
+
+Get the platform on which the request is being executed.
+
+**Returns:**
+- `app`: When running in the Bruno desktop application
+- `cli`: When running through the Bruno CLI
+
+**Example:**
+```javascript
+const platform = req.getExecutionPlatform();
+console.log(`Request is running on ${platform} platform`);
+```
+
 ## Response
 
 This `res` variable is available inside your scripting and testing context.
