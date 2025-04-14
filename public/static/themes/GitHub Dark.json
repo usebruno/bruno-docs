@@ -163,7 +163,7 @@
     },
     {
       "foreground": "79b8ff",
-      "token": "string.regexp string.regexp.arbitrary-repitition"
+      "token": "string.regexp string.regexp.arbitrary-repetition"
     },
     {
       "foreground": "7bcc72",

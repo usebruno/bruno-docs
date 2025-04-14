@@ -92,7 +92,7 @@
     {
       "foreground": "cf5628",
       "fontStyle": "bold italic",
-      "token": "string.regexp string.regexp.arbitrary-repitition"
+      "token": "string.regexp string.regexp.arbitrary-repetition"
     },
     {
       "foreground": "811f24",

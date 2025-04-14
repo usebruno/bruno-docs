@@ -128,7 +128,7 @@
     {
       "foreground": "00fff8",
       "background": "43800033",
-      "token": "string.regexp.arbitrary-repitition"
+      "token": "string.regexp.arbitrary-repetition"
     },
     {
       "foreground": "803d00",

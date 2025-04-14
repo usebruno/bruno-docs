@@ -352,7 +352,7 @@
     },
     {
       "foreground": "c792ea",
-      "token": "keyword.operator.assignement"
+      "token": "keyword.operator.assignment"
     },
     {
       "foreground": "c792ea",
