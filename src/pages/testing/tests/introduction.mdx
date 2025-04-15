@@ -21,12 +21,10 @@ Some of the benefits include
 
 ```javascript
 test("should be able to login", function () {
-  const data = res.getBody();
   expect(res.getStatus()).to.equal(200);
 });
 
 test("should return json", function () {
-  const data = res.getBody();
   expect(res.getBody()).to.eql({
     hello: "Bruno",
   });
