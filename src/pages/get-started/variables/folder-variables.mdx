@@ -21,3 +21,17 @@ You can also use the `bru.getFolderVar()` function to get the value of a folder 
 ```javascript
 let bearerToken = bru.getFolderVar("bearerToken");
 ```
+
+#### Set Folder Variable inside scripts
+You can also use the `bru.setFolderVar()` function to set the value of a folder variable and use it inside your scripts.
+
+```javascript
+let bearerToken = bru.setFolderVar("bearerToken","XXXXXXX");
+```
+
+#### Delete Folder Variable inside scripts
+To remove a folder variable within a script, use `bru.deleteFolderVar()` function. This is helpful when you want to clean up or reset stored values.
+
+```javascript
+let bearerToken = bru.deleteFolderVar("bearerToken");
+```
