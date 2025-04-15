@@ -16,7 +16,7 @@ This will output the test results in a results.json file, which can be useful fo
 
 ### JUnit Report
 
-To generate a report in JUnit format, use the --reporter-junit option:
+To generate a report in JUnit format, use the `--reporter-junit` option:
 
 ```bash copy
 bru run request.bru --reporter-junit results.xml
@@ -27,7 +27,7 @@ The results.xml file will be in a format compatible with JUnit, making it ideal 
 
 ### HTML Report
 
-To generate a human-readable HTML report, use the --reporter-html option:
+To generate a human-readable HTML report, use the `--reporter-html` option:
 
 ```bash copy
 bru run request.bru --reporter-html results.html
@@ -43,7 +43,7 @@ You can generate multiple reports at once by specifying more than one reporter o
 bru run request.bru --reporter-json results.json --reporter-junit results.xml --reporter-html results.html
 ```
 
-This command will create three files: results.json, results.xml, and results.html, allowing you to analyze the results in different formats as needed.
+This command will create three files: `results.json, results.xml, and results.html`, allowing you to analyze the results in different formats as needed.
 
 ## Skipping Specific Headers in the Report
 
