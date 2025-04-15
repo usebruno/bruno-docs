@@ -28,16 +28,26 @@ Additionally, Process Environment Variables can be defined in an external enviro
 
 - [Process Environment Variables](./process-env.mdx)
 
-### Variable Precedence
+### Variable Precedence and Scope
 
 When a variable is accessed, the following precedence is used to determine which value is used:
 
-1. Runtime Variables
-2. Request Variables
-3. Folder Variables
-4. Environment Variables
-5. Collection Variables
-6. Global Variables
+<div style={{ display: 'flex', justifyContent: 'center', fontFamily: 'sans-serif', marginTop: '2em', width: '100%' }}>
+  <div style={{ display: 'flex', alignItems: 'flex-start', position: 'relative', width: '420px' }}>
+    <div style={{ position: 'absolute', left: '-120px', top: 0, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', fontSize: '0.85em', color: '#555', textAlign: 'right', width: '120px' }}>
+      <div style={{ paddingRight: '10px' }}>↑ Higher Precedence</div>
+      <div style={{ paddingRight: '10px' }}>↓ Broader Scope</div>
+    </div>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '300px' }}>
+      <div style={{ fontWeight: 'bold', backgroundColor: '#e07f00', color: 'white', padding: '8px', width: '200px', borderRadius: '6px' }}>Runtime Variables</div>
+      <div style={{ marginTop: '6px', backgroundColor: '#e88f1a', color: 'white', padding: '8px', width: '220px', borderRadius: '6px' }}>Request Variables</div>
+      <div style={{ marginTop: '6px', backgroundColor: '#ee9f33', color: 'white', padding: '8px', width: '240px', borderRadius: '6px' }}>Folder Variables</div>
+      <div style={{ marginTop: '6px', backgroundColor: '#f4aa4a', color: 'black', padding: '8px', width: '260px', borderRadius: '6px' }}>Environment Variables</div>
+      <div style={{ marginTop: '6px', backgroundColor: '#f6b45d', color: 'black', padding: '8px', width: '280px', borderRadius: '6px' }}>Collection Variables</div>
+      <div style={{ marginTop: '6px', backgroundColor: '#f8be70', color: 'black', padding: '8px', width: '300px', borderRadius: '6px' }}>Global Variables</div>
+    </div>
+  </div>
+</div>
 
 Runtime variables get the highest precedence. Process Environment Variables are accessed using the `{{process.env.VAR_NAME}}` syntax and hence don't compete with the above.
 
