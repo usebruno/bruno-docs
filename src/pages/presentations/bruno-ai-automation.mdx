@@ -1,0 +1,378 @@
+# Supercharging API Testing with Bruno + Git + GitHub Actions and GitHub Copilot
+
+## Session Description
+Join us for an in-depth exploration of how to create a powerful, automated API testing workflow by combining Bruno's local-first approach with Git version control, GitHub Actions for CI/CD, and GitHub Copilot for intelligent test generation. You'll learn how to set up a complete testing pipeline that enables seamless collaboration, automated testing, and AI-assisted development. Through practical examples and live demonstrations, you'll discover how to build a robust testing infrastructure that scales with your team's needs.
+
+## Key Takeaways
+
+1. **Learn** how to leverage Bruno's Git integration to create collaborative, version-controlled API test suites that can be easily shared and maintained across your team.
+
+2. **Discover** how to automate your API testing workflow using GitHub Actions, including setting up CI/CD pipelines, automated test runs, and reporting.
+
+3. **Gain insight into** using GitHub Copilot to accelerate test development, generate comprehensive test cases, and maintain high-quality test coverage with minimal manual effort.
+
+## Session Duration
+60 minutes (45 minutes presentation + 15 minutes Q&A)
+
+## Session Outline
+
+### 1. Introduction (10 minutes)
+- Overview of Bruno's local-first approach
+- The power of combining Bruno with Git, GitHub Actions, and Copilot
+- Setting up your development environment
+- Understanding the workflow architecture
+
+### 2. Git Integration with Bruno (15 minutes)
+- Initializing Git in Bruno collections
+- Best practices for version control
+- Collaborative workflows
+- Handling merge conflicts
+- Using Bruno's Git features effectively
+
+### 3. GitHub Actions Integration (15 minutes)
+- Setting up GitHub Actions workflows
+- Automated test execution
+- Environment management
+- Test reporting and notifications
+- Integration with other GitHub features
+
+### 4. GitHub Copilot for Test Development (15 minutes)
+- Generating test cases with Copilot
+- Writing assertions and validations
+- Handling complex scenarios
+- Maintaining test quality
+- Best practices for AI-assisted testing
+
+### 5. Putting It All Together (10 minutes)
+- End-to-end workflow demonstration
+- Real-world use cases
+- Troubleshooting common issues
+- Scaling the solution
+- Future enhancements
+
+### 6. Q&A and Discussion (15 minutes)
+- Open floor for questions
+- Sharing experiences and tips
+- Resources and next steps
+
+## Prerequisites
+- Basic understanding of API testing
+- Familiarity with Git and GitHub
+- Bruno installed on your system
+- GitHub Copilot access
+- Basic knowledge of GitHub Actions
+
+## Resources
+- [Bruno Documentation](https://docs.usebruno.com)
+- [GitHub Actions Documentation](https://docs.github.com/en/actions)
+- [GitHub Copilot Documentation](https://docs.github.com/en/copilot)
+- [Example Workflows](https://github.com/usebruno/examples)
+- [API Testing Best Practices](https://github.com/goldbergyoni/javascript-testing-best-practices)
+
+## Example GitHub Actions Workflow
+
+```yaml
+name: API Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Install Bruno
+        run: npm install -g @usebruno/cli
+        
+      - name: Run API Tests
+        run: |
+          bruno test ./tests
+        env:
+          API_URL: ${{ secrets.API_URL }}
+          API_KEY: ${{ secrets.API_KEY }}
+```
+
+## Example Bruno Test with Copilot Assistance
+
+```javascript
+// Example: E-commerce API Test Suite
+test('Product Management API', () => {
+  // GitHub Copilot can help generate comprehensive test cases
+  const testCases = [
+    {
+      name: 'Create Product',
+      method: 'POST',
+      endpoint: '/products',
+      body: {
+        name: 'Test Product',
+        price: 99.99,
+        stock: 100
+      },
+      expectedStatus: 201
+    },
+    {
+      name: 'Update Stock',
+      method: 'PATCH',
+      endpoint: '/products/{id}/stock',
+      body: { stock: 50 },
+      expectedStatus: 200
+    }
+  ];
+
+  testCases.forEach(async (testCase) => {
+    const response = await request[testCase.method.toLowerCase()](
+      testCase.endpoint,
+      testCase.body
+    );
+    
+    expect(response.status).to.equal(testCase.expectedStatus);
+    // Copilot can suggest relevant assertions
+    expect(response.body).to.have.property('id');
+    expect(response.body).to.have.property('updatedAt');
+  });
+});
+```
+
+## Why Bruno + AI?
+
+- **Local-First Nature**: Full control over your test files
+- **File System Based**: Direct access to test files and data
+- **Git Integration**: Version control and collaboration
+- **JavaScript Support**: Access to npm ecosystem
+- **AI Assistance**: Smart test generation and optimization
+
+## Core Capabilities
+
+### 1. Basic Test Automation
+
+```javascript
+// Example: Simple API Test
+test('User API Test Suite', () => {
+  const testCases = [
+    {
+      name: 'Create User',
+      method: 'POST',
+      endpoint: '/users',
+      body: { name: 'John Doe', email: 'john@example.com' },
+      expectedStatus: 201
+    }
+  ];
+
+  testCases.forEach(async (testCase) => {
+    const response = await request[testCase.method.toLowerCase()](
+      testCase.endpoint,
+      testCase.body
+    );
+    
+    expect(response.status).to.equal(testCase.expectedStatus);
+    expect(response.body).to.have.property('id');
+  });
+});
+```
+
+### 2. Data Handling and Validation
+
+```javascript
+// Example: Data Processing
+const processApiData = async () => {
+  const transformData = (data) => ({
+    ...data,
+    processedAt: new Date().toISOString(),
+    metadata: { source: 'api', version: '1.0' }
+  });
+
+  try {
+    const response = await request.get('/data');
+    const processed = transformData(response.data);
+    await saveToFile(processed);
+  } catch (error) {
+    console.error('Data processing failed:', error);
+    await logError(error);
+  }
+};
+```
+
+## Real-world Examples
+
+### 1. E-commerce API Testing
+
+```javascript
+// E-commerce Test Suite
+const ecommerceTests = {
+  productManagement: async () => {
+    const products = [{
+      name: 'Test Product',
+      price: 99.99,
+      stock: 100
+    }];
+
+    // Test product creation
+    const createResponse = await request.post('/products', products[0]);
+    expect(createResponse.status).to.equal(201);
+
+    // Test inventory updates
+    const updateResponse = await request.patch(
+      `/products/${createResponse.body.id}/stock`,
+      { stock: 50 }
+    );
+    expect(updateResponse.status).to.equal(200);
+  }
+};
+```
+
+### 2. Authentication Testing
+
+```javascript
+// Auth Test Suite
+const authTests = {
+  loginFlow: async () => {
+    const testUsers = [{
+      email: 'test@example.com',
+      password: 'password123'
+    }];
+
+    // Test login
+    const loginResponse = await request.post('/auth/login', testUsers[0]);
+    expect(loginResponse.status).to.equal(200);
+    expect(loginResponse.body).to.have.property('token');
+
+    // Test protected route
+    const protectedResponse = await request.get('/protected', {
+      headers: {
+        Authorization: `Bearer ${loginResponse.body.token}`
+      }
+    });
+    expect(protectedResponse.status).to.equal(200);
+  }
+};
+```
+
+## Integration Examples
+
+### 1. CI/CD Pipeline Integration
+
+```javascript
+// CI/CD Integration
+const runTests = async () => {
+  const results = {
+    passed: 0,
+    failed: 0,
+    errors: []
+  };
+
+  try {
+    // Run test suites
+    await ecommerceTests.productManagement();
+    await authTests.loginFlow();
+    
+    // Generate report
+    const report = generateTestReport(results);
+    await saveReport(report);
+    
+    // Commit results
+    await gitCommit('Test results', 'test-results/');
+  } catch (error) {
+    console.error('Test execution failed:', error);
+    process.exit(1);
+  }
+};
+```
+
+### 2. External Service Integration
+
+```javascript
+// External Service Integration
+const externalServices = {
+  sendSlackNotification: async (message) => {
+    await request.post(process.env.SLACK_WEBHOOK_URL, {
+      text: message
+    });
+  },
+  
+  logToDatadog: async (metrics) => {
+    await request.post(process.env.DATADOG_API_URL, {
+      series: [{
+        metric: 'api.tests',
+        points: [[Date.now() / 1000, metrics.passed]],
+        type: 'count'
+      }]
+    });
+  }
+};
+```
+
+## Best Practices
+
+1. **File Organization**
+   ```
+   tests/
+   ├── api/
+   │   ├── auth/
+   │   ├── products/
+   │   └── users/
+   ├── utils/
+   │   ├── helpers.js
+   │   └── validators.js
+   └── config/
+       └── test-config.js
+   ```
+
+2. **Git Workflow**
+   ```bash
+   # Create feature branch
+   git checkout -b feature/new-tests
+   
+   # Add and commit tests
+   git add tests/
+   git commit -m "Add new API test suite"
+   
+   # Push to remote
+   git push origin feature/new-tests
+   ```
+
+3. **Environment Setup**
+   ```javascript
+   // test-config.js
+   module.exports = {
+     baseUrl: process.env.API_URL || 'http://localhost:3000',
+     timeout: 5000,
+     retries: 3
+   };
+   ```
+
+## Tips for Using AI Effectively
+
+1. **Prompt Engineering**
+   - Be specific about test requirements
+   - Include example responses
+   - Specify assertion types
+   - Mention edge cases
+
+2. **Code Organization**
+   - Keep tests modular
+   - Use descriptive names
+   - Include comments
+   - Follow consistent patterns
+
+3. **Error Handling**
+   - Implement proper error catching
+   - Log detailed error information
+   - Include retry mechanisms
+   - Clean up test data
+
+## Resources
+
+- [Bruno Documentation](https://docs.usebruno.com)
+- [GitHub Copilot Documentation](https://docs.github.com/en/copilot)
+- [JavaScript Testing Best Practices](https://github.com/goldbergyoni/javascript-testing-best-practices)
+- [API Testing Tools](https://github.com/public-apis/public-apis) 
