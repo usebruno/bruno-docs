@@ -2,8 +2,7 @@ import PremiumBadge from "@/components/premium-badge";
 
 # Response Visualization<PremiumBadge />
 
-The `bru.visualize` function in the Bruno CLI allows for rendering various types of visualizations such as tables and HTML. It supports different providers for each visualization type, offering flexibility in how data is displayed. Below are examples and details on the supported types and providers.
-
+Bruno provides a powerful visualization feature that allows you to display API response data in a more readable and interactive format using the `bru.visualize` function.
 ```javascript
 bru.visualize(type, config)
 ```
@@ -28,7 +27,8 @@ You can render tables using different providers like `ag-grid` and `react-table`
 
 *Example:*
 
-![ag-grid](/screenshots/visualization/ag-grid.png)
+![ag-grid](/screenshots/visualization/ag-grid.webp)
+
 
 ```javascript
 const rowData = [
@@ -56,7 +56,8 @@ This will render a table using the ag-grid provider with filters enabled on all 
 
 *Example:*
 
-![react-table](/screenshots/visualization/react-table.png)
+![react-table](/screenshots/visualization/react-table.webp)
+
 
 ```javascript
 const rowData1 = Array.from({ length: 2500 })
@@ -100,7 +101,7 @@ You can also render custom HTML content using the html type. This allows for adv
 
 *Example:*
 
-![html](/screenshots/visualization/html.png)
+![html](/screenshots/visualization/html.webp)
 
 ```javascript
 const htmlString = `
@@ -129,6 +130,18 @@ bru.visualize('html', {
 ```
 
 This example will render an HTML table with predefined data using the html type.
+
+## Viewing Your Visualization
+
+1. Add the visualization code to your request's script section
+2. Execute the request
+3. Click on the **Table** option (next to Raw)
+
+![View Table Option](/screenshots/visualization/1-view-table.webp)
+
+4. Your visualization will be displayed in the panel
+
+![Visualization Output](/screenshots/visualization/2-use-table.webp)
 
 ### Parameters
 
