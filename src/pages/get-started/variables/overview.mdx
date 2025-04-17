@@ -28,18 +28,76 @@ Additionally, Process Environment Variables can be defined in an external enviro
 
 - [Process Environment Variables](./process-env.mdx)
 
-### Variable Precedence
+Runtime variables get the highest precedence. Process Environment Variables are accessed using the `{{process.env.VAR_NAME}}` syntax and hence don't compete with the above.
+
+### Variable Precedence and Scope
 
 When a variable is accessed, the following precedence is used to determine which value is used:
 
-1. Runtime Variables
-2. Request Variables
-3. Folder Variables
-4. Environment Variables
-5. Collection Variables
-6. Global Variables
+<div style={{ display: 'flex', justifyContent: 'center', fontFamily: 'sans-serif', marginTop: '2em', width: '100%' }}>
+  <div style={{ display: 'flex', alignItems: 'flex-start', position: 'relative', width: '420px' }}>
+    <div style={{ position: 'absolute', left: '-120px', top: 0, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', fontSize: '0.85em', color: '#555', textAlign: 'right', width: '120px' }}>
+      <div style={{ paddingRight: '10px' }}>↑ Higher Precedence</div>
+      <div style={{ paddingRight: '10px' }}>↓ Broader Scope</div>
+    </div>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '300px' }}>
+      <div style={{ fontWeight: 'bold', backgroundColor: '#e07f00', color: 'white', padding: '8px', width: '200px', borderRadius: '6px' }}>Runtime Variables</div>
+      <div style={{ marginTop: '6px', backgroundColor: '#e88f1a', color: 'white', padding: '8px', width: '220px', borderRadius: '6px' }}>Request Variables</div>
+      <div style={{ marginTop: '6px', backgroundColor: '#ee9f33', color: 'white', padding: '8px', width: '240px', borderRadius: '6px' }}>Folder Variables</div>
+      <div style={{ marginTop: '6px', backgroundColor: '#f4aa4a', color: 'black', padding: '8px', width: '260px', borderRadius: '6px' }}>Environment Variables</div>
+      <div style={{ marginTop: '6px', backgroundColor: '#f6b45d', color: 'black', padding: '8px', width: '280px', borderRadius: '6px' }}>Collection Variables</div>
+      <div style={{ marginTop: '6px', backgroundColor: '#f8be70', color: 'black', padding: '8px', width: '300px', borderRadius: '6px' }}>Global Variables</div>
+    </div>
+  </div>
+</div>
 
 Runtime variables get the highest precedence. Process Environment Variables are accessed using the `{{process.env.VAR_NAME}}` syntax and hence don't compete with the above.
+
+### Variable Storage
+
+Each variable has its own storage location either within your collection file or within the app's memory. **All storage is local.**
+
+<div style={{ display: 'flex', justifyContent: 'center', marginTop: '2em' }}>
+  <table style={{ borderCollapse: 'collapse', width: '600px', fontFamily: 'sans-serif', border: '1px solid #ddd' }}>
+    <thead>
+      <tr style={{ backgroundColor: '#f4aa4a', color: 'white' }}>
+        <th style={{ textAlign: 'left', padding: '8px', border: '1px solid #ddd', width: '50%' }}>Variable Type</th>
+        <th style={{ textAlign: 'left', padding: '8px', border: '1px solid #ddd', width: '50%' }}>Storage Location</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%' }}>Collection</td>
+        <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%' }}>`<collection-name>.bru`</td>
+      </tr>
+      <tr>
+        <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%' }}>Folder</td>
+        <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%' }}>`<folder-name>.bru`</td>
+      </tr>
+      <tr>
+        <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%' }}>Request</td>
+        <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%' }}>`<request-name>.bru`</td>
+      </tr>
+      <tr>
+        <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%' }}>Environment</td>
+        <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%' }}>`<env-name>.bru`</td>
+      </tr>
+      <tr>
+        <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%' }}>Runtime</td>
+        <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%' }}>Local storage</td>
+      </tr>
+      <tr>
+        <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%' }}>Global</td>
+        <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%' }}>Local storage</td>
+      </tr>
+      <tr style={{ backgroundColor: 'rgba(128, 128, 128, 0.1)' }}>
+        <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%' }}>Process Environment</td>
+        <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%', fontStyle: 'italic' }}>Separate `.env` file</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
 
 ### Variable Data Type
 
