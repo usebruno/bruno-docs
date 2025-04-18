@@ -63,6 +63,7 @@ export default withNextra({
       { source: '/testing/javascript-reference', destination: '/testing/script/javascript-reference', permanent: true },
       { source: '/testing/assertions.html', destination: '/testing/tests/assertions', permanent: true },
       { source: '/testing/javascript-reference.html', destination: '/testing/script/javascript-reference', permanent: true },
+      { source: '/testing/tests/data-driven-testing', destination: '/testing/automate-test/data-driven-testing', permanent: true },
 
       // - /license
       { source: '/license-management/license-management', destination: '/license-management/overview', permanent: true },
