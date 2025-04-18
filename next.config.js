@@ -88,6 +88,16 @@ export default withNextra({
 
       // Share Collection
       { source: '/to/embed-bruno-collection', destination: '/git-integration/embed-bruno-collection', permanent: true },
+
+      // Variables section redirects
+      { source: '/get-started/variables/overview', destination: '/variables/overview', permanent: true },
+      { source: '/get-started/variables/environment-variables', destination: '/variables/environment-variables', permanent: true },
+      { source: '/get-started/variables/global-environment-variables', destination: '/variables/global-environment-variables', permanent: true },
+      { source: '/get-started/variables/collection-variables', destination: '/variables/collection-variables', permanent: true },
+      { source: '/get-started/variables/folder-variables', destination: '/variables/folder-variables', permanent: true },
+      { source: '/get-started/variables/request-variables', destination: '/variables/request-variables', permanent: true },
+      { source: '/get-started/variables/runtime-variables', destination: '/variables/runtime-variables', permanent: true },
+      { source: '/get-started/variables/process-env', destination: '/variables/process-env', permanent: true },
     ];
   },
 });
