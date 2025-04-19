@@ -5,12 +5,13 @@ export default {
   },
   "introduction": "Introduction",
   "get-started": "Getting Started Guide",
-  "send-requests": "Send Requests",
 
   "core-features": {
     "title": "Core Features",
     "type": "separator"
   },
+  "variables": "Variables",
+  "send-requests": "Send Requests",
   "git-integration": "Git Integration & Collaboration",
   "testing": "Tests and Scripts",
   "secrets-management": "Secret Management",
