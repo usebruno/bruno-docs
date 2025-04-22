@@ -5,7 +5,7 @@ import { FileTree } from "nextra/components";
 
 ## Overview
 
-Process environment variables are used to store sensitive information, such as API keys, passwords, and other secret values. These values are typically stored in a .env file. For more details on secret management, refer to the [secret management](../../secrets-management/dotenv-file.mdx) section.
+Process environment variables are used to store sensitive information, such as API keys, passwords, and other secret values. These values are typically stored in a .env file. For more details on secret management, refer to the [secret management](/secrets-management/dotenv-file) section.
 
 <Callout type="warning">
   You must create the `.env` file in your local project directory (e.g., using
@@ -45,8 +45,8 @@ key = bruno
 
 To access the values stored in the `.env` file, you can use the `process.env` global object. For example, if you want to retrieve the key value from your `.env` file, you would use:
 
-![image](../../../../public/screenshots/variables/creating-process-env-variables.png)
+![image](/screenshots/variables/creating-process-env-variables.webp)
 
 You can use `process.env.<secret-name>` throughout your Bruno collection to securely manage and access your environment variables.
 
-![image](../../../../public/screenshots/variables/using-process-env-variables.png)
+![image](/screenshots/variables/using-process-env-variables.webp)
