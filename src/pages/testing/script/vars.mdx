@@ -1,18 +1,20 @@
-# Vars
+# Vars tab
 
-Vars allow you to set variables before request, and after you receive the response.
+**Vars** tab allows you to set variables:
+ - before request and
+ - after you receive the response.
 
-Vars are scoped within the request and cannot be accessed outside of it.
+Variables are scoped within the request and cannot be accessed outside of it.
 
 > Note: Prior to v1.20.0, request vars were accessible at the collection scope, but this is no longer the case.
 
-In the *Pre Request Variables* section, you can write any Strings, Numbers or any valid JavaScript literal.
+In the **Vars** tab > **Pre Request** variables section, you can write any strings, numbers or any valid JavaScript literal.
 
-In the *Post Response Variables* section, you can write any valid JavaScript expression. The res object is available, allowing you to declaratively parse the [response](./javascript-reference#response) and set variables, instead of writing scripts to do the same.
+In the **Vars** tab > **Post Response** variables section, you can write any valid JavaScript expression. The `res` object is available, allowing you to declaratively parse the [response object](/testing/script/response/response-object) and set variables, instead of writing scripts to do the same.
 
-For parsing the response, you can checkout the [response query](./response/response-query) that allows you to easily query your response.
+For parsing the response, you can checkout the [response query](/testing/script/response/response-query) that allows you to easily query your response.
 
 **Example:**
-![bru vars](/screenshots/vars.webp)
+![bru vars](/screenshots/set-vars.webp)
 
-![Screenshot showing how to use defined variables in the request body](/screenshots/set-vars.webp)
+![Screenshot showing how to use defined variables in the request body](/screenshots/vars.webp)
