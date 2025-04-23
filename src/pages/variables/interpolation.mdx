@@ -1,0 +1,224 @@
+import { Callout } from "nextra/components";
+
+# Variable Interpolation
+
+<Callout type="warning" emoji="">
+  Bruno v2.2.x introduces breaking changes in how arrays, objects, and Date objects are interpolated. If you're using these data types, please review the updated documentation below.
+</Callout>
+
+Variable interpolation in Bruno allows you to use variables in your requests using the `{{variableName}}` syntax. Let's explore how interpolation works with different data types.
+
+## Basic Interpolation
+
+### Strings
+
+```javascript
+// Setting a string variable
+bru.setVar("greeting", "Hello World");
+
+// Using in request
+GET http://api.example.com/{{greeting}}
+// Interpolates to: http://api.example.com/Hello World
+```
+
+### Numbers
+
+```javascript
+// Setting a number variable
+bru.setVar("userId", 123);
+
+// Using in request
+GET http://api.example.com/users/{{userId}}
+// Interpolates to: http://api.example.com/users/123
+```
+
+### Booleans
+
+```javascript
+// Setting a boolean variable
+bru.setVar("isActive", true);
+
+// Using in request body
+{
+  "active": {{isActive}}
+}
+// Interpolates to: { "active": true }
+```
+
+## Object Interpolation
+
+<Callout type="info">
+  Object interpolation is available from Bruno v2.2.0 onwards.
+</Callout>
+
+You can access object properties using dot notation. Here's how to work with objects containing different data types:
+
+```javascript
+// Define your object with multiple data types
+const userProfile = {
+  username: "john_doe",           // string
+  accountId: 12345,              // number
+  isVerified: true,              // boolean
+  preferences: {                  // nested object
+    theme: "dark",
+    notifications: true
+  }
+};
+
+// Set the object as a variable
+bru.setVar("user", userProfile);
+
+// Using in request body
+{
+  "username": "{{user.username}}",
+  "id": {{user.accountId}},
+  "verified": {{user.isVerified}},
+  "theme": "{{user.preferences.theme}}",
+  "notificationsEnabled": {{user.preferences.notifications}}
+}
+
+// Interpolates to:
+// {
+//   "username": "john_doe",
+//   "id": 12345,
+//   "verified": true,
+//   "theme": "dark",
+//   "notificationsEnabled": true
+// }
+```
+
+## Array Interpolation
+
+<Callout type="info">
+  Array interpolation is available from Bruno v2.2.0 onwards.
+</Callout>
+
+```javascript
+// Define your arrays
+const technologies = ["REST", "GraphQL", "gRPC"];
+const settings = [
+  { port: 3000, env: "dev" },
+  { port: 8080, env: "prod" }
+];
+const versions = [1, 2, 3, 4.5];
+
+// Set arrays as variables
+bru.setVar("apiTypes", technologies);
+const serverConfigs = settings;
+bru.setVar("configs", serverConfigs);
+bru.setVar("supportedVersions", versions);
+
+// Using array elements in request
+{
+  // Simple array access
+  "primaryAPI": "{{apiTypes[0]}}",        // "REST"
+  "alternativeAPI": "{{apiTypes[1]}}",    // "GraphQL"
+  
+  // Accessing object properties in arrays
+  "devPort": {{configs[0].port}},         // 3000
+  "prodEnv": "{{configs[1].env}}",        // "prod"
+  
+  // Numeric array values
+  "latestVersion": {{supportedVersions[3]}}, // 4.5
+  
+  // Using multiple array elements
+  "supported": {
+    "apis": ["{{apiTypes[0]}}", "{{apiTypes[1]}}"],
+    "versions": [{{supportedVersions[0]}}, {{supportedVersions[1]}}]
+  }
+}
+
+// Interpolates to:
+// {
+//   "primaryAPI": "REST",
+//   "alternativeAPI": "GraphQL",
+//   "devPort": 3000,
+//   "prodEnv": "prod",
+//   "latestVersion": 4.5,
+//   "supported": {
+//     "apis": ["REST", "GraphQL"],
+//     "versions": [1, 2]
+//   }
+// }
+```
+
+## Date Interpolation (Breaking Change)
+
+<Callout type="warning">
+  Bruno v2.2.0 changes how Date objects are interpolated. They are now automatically stringified.
+</Callout>
+
+```javascript
+// Previous versions
+bru.setVar("timestamp", new Date());
+// Required manual stringification
+
+// Bruno v2.2.0+
+bru.setVar("timestamp", new Date());
+// Automatically converts to: "2025-04-23T13:57:56.341Z"
+
+// Using in request
+{
+  "createdAt": "{{timestamp}}"
+}
+// Interpolates to:
+// {
+//   "createdAt": "2025-04-23T13:57:56.341Z"
+// }
+```
+
+## Practical Examples
+
+### API Authentication
+
+```javascript
+bru.setVar("authConfig", {
+  apiKey: "your-api-key",
+  secret: "your-secret"
+});
+
+// In request headers
+headers {
+  "X-API-Key": "{{authConfig.apiKey}}",
+  "X-Secret": "{{authConfig.secret}}"
+}
+```
+
+### Dynamic Query Parameters
+
+```javascript
+bru.setVar("searchParams", {
+  limit: 10,
+  offset: 0,
+  filter: "active"
+});
+
+// In URL
+GET http://api.example.com/users?limit={{searchParams.limit}}&offset={{searchParams.offset}}&filter={{searchParams.filter}}
+```
+
+### Request Body with Mixed Types
+
+```javascript
+bru.setVar("product", {
+  name: "Bruno Pro",
+  price: 99.99,
+  features: ["Git Integration", "Offline First"],
+  metadata: {
+    version: "2.2.0",
+    released: new Date()
+  }
+});
+
+// In request body
+{
+  "productName": "{{product.name}}",
+  "price": {{product.price}},
+  "firstFeature": "{{product.features[0]}}",
+  "releaseDate": "{{product.metadata.released}}"
+}
+```
+
+<Callout type="info">
+  Remember that variables set using `bru.setVar()` are available throughout your collection's scope. Use them to make your requests more dynamic and maintainable.
+</Callout> 
