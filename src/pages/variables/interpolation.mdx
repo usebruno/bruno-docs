@@ -2,10 +2,6 @@ import { Callout } from "nextra/components";
 
 # Variable Interpolation
 
-<Callout type="warning" emoji="">
-  Bruno v2.2.x introduces breaking changes in how arrays, objects, and Date objects are interpolated. If you're using these data types, please review the updated documentation below.
-</Callout>
-
 Variable interpolation in Bruno allows you to use variables in your requests using the `{{variableName}}` syntax. Let's explore how interpolation works with different data types.
 
 ## Basic Interpolation
@@ -144,9 +140,6 @@ bru.setVar("supportedVersions", versions);
 
 ## Date Interpolation (Breaking Change)
 
-<Callout type="warning">
-  Bruno v2.2.0 changes how Date objects are interpolated. They are now automatically stringified.
-</Callout>
 
 ```javascript
 // Previous versions
