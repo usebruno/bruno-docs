@@ -67,19 +67,18 @@ bru.setVar("user", userProfile);
 // Using in request body
 {
   "username": "{{user.username}}",
-  "id": {{user.accountId}},
   "verified": {{user.isVerified}},
-  "theme": "{{user.preferences.theme}}",
-  "notificationsEnabled": {{user.preferences.notifications}}
+  "preferences": {{user.preferences}},
 }
 
 // Interpolates to:
 // {
 //   "username": "john_doe",
-//   "id": 12345,
 //   "verified": true,
-//   "theme": "dark",
-//   "notificationsEnabled": true
+//   "preferences": {
+//    "theme": "dark",
+//    "notifications": true
+ //   }
 // }
 ```
 
@@ -92,48 +91,54 @@ bru.setVar("user", userProfile);
 ```javascript
 // Define your arrays
 const technologies = ["REST", "GraphQL", "gRPC"];
+
 const settings = [
   { port: 3000, env: "dev" },
   { port: 8080, env: "prod" }
 ];
-const versions = [1, 2, 3, 4.5];
 
 // Set arrays as variables
 bru.setVar("apiTypes", technologies);
-const serverConfigs = settings;
-bru.setVar("configs", serverConfigs);
-bru.setVar("supportedVersions", versions);
+bru.setVar("configs", settings);
 
 // Using array elements in request
 {
   // Simple array access
   "primaryAPI": "{{apiTypes[0]}}",        // "REST"
-  "alternativeAPI": "{{apiTypes[1]}}",    // "GraphQL"
+  "alternativeAPI": {{apiTypes}},    
   
   // Accessing object properties in arrays
   "devPort": {{configs[0].port}},         // 3000
-  "prodEnv": "{{configs[1].env}}",        // "prod"
-  
-  // Numeric array values
-  "latestVersion": {{supportedVersions[3]}}, // 4.5
+  "prodEnv": {{configs}},        
   
   // Using multiple array elements
   "supported": {
     "apis": ["{{apiTypes[0]}}", "{{apiTypes[1]}}"],
-    "versions": [{{supportedVersions[0]}}, {{supportedVersions[1]}}]
   }
 }
 
 // Interpolates to:
 // {
 //   "primaryAPI": "REST",
-//   "alternativeAPI": "GraphQL",
+//    "alternativeAPI": [
+//    "REST",
+//    "GraphQL",
+//    "gRPC"
+//    ]
 //   "devPort": 3000,
-//   "prodEnv": "prod",
-//   "latestVersion": 4.5,
+//   "prodEnv": [
+//    {
+//      "port": 3000,
+//      "env": "dev"
+//    },
+//    {
+//      "port": 8080,
+//     "env": "prod"
+//    }
+//  ]
+
 //   "supported": {
 //     "apis": ["REST", "GraphQL"],
-//     "versions": [1, 2]
 //   }
 // }
 ```
@@ -142,9 +147,6 @@ bru.setVar("supportedVersions", versions);
 
 
 ```javascript
-// Previous versions
-bru.setVar("timestamp", new Date());
-// Required manual stringification
 
 // Bruno v2.2.0+
 bru.setVar("timestamp", new Date());
