@@ -1,6 +1,5 @@
 import { Callout } from 'nextra/components'
 import { Tabs } from 'nextra/components'
-import { FileTree } from 'nextra/components'
 
 # Bruno Converters
 
@@ -8,8 +7,7 @@ Bruno converter is a standalone NPM package that provides programmatic conversio
 
 ## Installation
 
-<Callout emoji="">
-  Bruno Converters is a CommonJS module. 
+<Callout emoji=""> 
   Make sure you have Node.js (Node 18 or higher) installed on your local system. It is recommended to use the latest LTS version. 
 </Callout>
 
@@ -42,167 +40,11 @@ yarn add @usebruno/converters
 
 For more details, visit the official [NPM Page for Bruno Converters](https://www.npmjs.com/package/@usebruno/converters)
 
-## Migrating API Collections
+## Conversions
 
-### Postman Conversions
-
-<Tabs items={['Collection', 'Environment']}>
-  <Tabs.Tab>
-  ### Convert Postman collection to Bruno collection
-
-  ```javascript
-  const { postmanToBruno } = require('@usebruno/converters');
-
-  const brunoCollection = postmanToBruno(postmanCollection);
-  ```
-
-  ```javascript showLineNumbers filename="postman-to-bruno.js"
-  const { postmanToBruno } = require('@usebruno/converters');
-  const { readFile, writeFile } = require('fs/promises');
-
-  async function convertPostmanToBruno(inputFile, outputFile) {
-    try {
-      const inputData = await readFile(inputFile, 'utf8');
-      const brunoCollection = postmanToBruno(JSON.parse(inputData));
-      await writeFile(outputFile, JSON.stringify(brunoCollection, null, 2));
-      console.log('Conversion successful!');
-    } catch (error) {
-      console.error('Error during conversion:', error);
-    }
-  }
-
-  // Usage example
-  convertPostmanToBruno('path/to/postman-collection.json', 'path/to/bruno-collection.json');
-  ```
-  </Tabs.Tab>
-  <Tabs.Tab>
-  ### Convert Postman Environment to Bruno Environment
-
-  ```javascript
-  const { postmanToBrunoEnvironment } = require('@usebruno/converters');
-
-  const brunoEnvironment = postmanToBrunoEnvironment(postmanEnvironment);
-  ```
-
-  ```javascript showLineNumbers filename="postman-env-to-bruno.js"
-  const { postmanToBrunoEnvironment } = require('@usebruno/converters');
-  const { readFile, writeFile } = require('fs/promises');
-
-  async function convertPostmanEnvironment(inputFile, outputFile) {
-    try {
-      const inputData = await readFile(inputFile, 'utf8');
-      const brunoEnvironment = postmanToBrunoEnvironment(JSON.parse(inputData));
-      await writeFile(outputFile, JSON.stringify(brunoEnvironment, null, 2));
-      console.log('Environment conversion successful!');
-    } catch (error) {
-      console.error('Error during environment conversion:', error);
-    }
-  }
-
-  
-  convertPostmanEnvironment('path/to/postman-environment.json', 'path/to/bruno-environment.json');
-  ```
-  </Tabs.Tab>
-</Tabs>
-
-### Convert Insomnia collection to Bruno collection
-
-```javascript
-const { insomniaToBruno } = require('@usebruno/converters');
-
-const brunoCollection = insomniaToBruno(insomniaCollection);
-```
-
-```javascript showLineNumbers filename="insomnia-to-bruno.js"
-const { insomniaToBruno } = require('@usebruno/converters');
-const { readFile, writeFile } = require('fs/promises');
-
-async function convertInsomniaToBruno(inputFile, outputFile) {
-  try {
-    const inputData = await readFile(inputFile, 'utf8');
-    const brunoCollection = insomniaToBruno(JSON.parse(inputData));
-    await writeFile(outputFile, JSON.stringify(brunoCollection, null, 2));
-    console.log('Insomnia conversion successful!');
-  } catch (error) {
-    console.error('Error during Insomnia conversion:', error);
-  }
-}
-
-
-convertInsomniaToBruno('path/to/insomnia-collection.json', 'path/to/bruno-collection.json');
-```
-
-### Convert OpenAPI specification to Bruno collection
-
-<Tabs items={['JSON', 'YAML']}>
-  <Tabs.Tab>
-  ### Convert OpenAPI JSON to Bruno collection
-
-  ```javascript
-  const { openApiToBruno } = require('@usebruno/converters');
-  
-  const brunoCollection = openApiToBruno(openApiSpecification);
-  ```
-
-  ```javascript showLineNumbers filename="openapi-json-to-bruno.js"
-  const { openApiToBruno } = require('@usebruno/converters');
-  const { readFile, writeFile } = require('fs/promises');
-
-  async function convertOpenApiToBruno(inputFile, outputFile) {
-    try {
-      
-      const jsonContent = await readFile(inputFile, 'utf8');
-      
-      const openApiSpec = JSON.parse(jsonContent);
-      
-      const brunoCollection = openApiToBruno(openApiSpec);
-      
-      await writeFile(outputFile, JSON.stringify(brunoCollection, null, 2));
-      console.log('OpenAPI JSON conversion successful!');
-    } catch (error) {
-      console.error('Error during OpenAPI JSON conversion:', error);
-    }
-  }
-
-  
-  convertOpenApiToBruno('path/to/openapi-spec.json', 'path/to/bruno-collection.json');
-  ```
-  </Tabs.Tab>
-  <Tabs.Tab>
-  ### Convert OpenAPI YAML to Bruno collection
-
-  <Callout emoji="">
-    Bruno Converters currently doesn't support YAML conversion directly. You need to install the `js-yaml` package to handle YAML files.
-  </Callout>
-
-  ```javascript
-  const { openApiToBruno } = require('@usebruno/converters');
-  const yaml = require('js-yaml');
-  const brunoCollection = openApiToBruno(yamlSpecification);
-  ```
-
-  ```javascript showLineNumbers filename="openapi-yaml-to-bruno.js"
-  const { openApiToBruno } = require('@usebruno/converters');
-  const { readFile, writeFile } = require('fs/promises');
-  const yaml = require('js-yaml');
-
-  async function convertOpenApiToBruno(inputFile, outputFile) {
-    try {
-      const yamlContent = await readFile(inputFile, 'utf8');
-      const openApiSpec = yaml.load(yamlContent);
-      const brunoCollection = openApiToBruno(openApiSpec);
-      await writeFile(outputFile, JSON.stringify(brunoCollection, null, 2));
-      console.log('OpenAPI YAML conversion successful!');
-    } catch (error) {
-      console.error('Error during OpenAPI YAML conversion:', error);
-    }
-  }
-
-  
-  convertOpenApiToBruno('path/to/openapi-spec.yaml', 'path/to/bruno-collection.json');
-  ```
-  </Tabs.Tab>
-</Tabs>
+1. [Bruno to Postman](./bruno-to-postman)
+2. [Bruno to Insomnia](./bruno-to-insomnia)
+3. [Bruno to OpenAPI](./bruno-to-openapi)
 
 ## API Reference
 

@@ -1,0 +1,74 @@
+import { Callout } from 'nextra/components'
+import { Tabs } from 'nextra/components'
+
+# Convert OpenAPI to Bruno collection
+
+<Tabs items={['JSON', 'YAML']}>
+  <Tabs.Tab>
+  ### Convert OpenAPI JSON to Bruno collection
+
+  ```javascript
+  const { openApiToBruno } = require('@usebruno/converters');
+  
+  const brunoCollection = openApiToBruno(openApiSpecification);
+  ```
+
+  ```javascript showLineNumbers filename="openapi-json-to-bruno.js"
+  const { openApiToBruno } = require('@usebruno/converters');
+  const { readFile, writeFile } = require('fs/promises');
+
+  async function convertOpenApiToBruno(inputFile, outputFile) {
+    try {
+      
+      const jsonContent = await readFile(inputFile, 'utf8');
+      
+      const openApiSpec = JSON.parse(jsonContent);
+      
+      const brunoCollection = openApiToBruno(openApiSpec);
+      
+      await writeFile(outputFile, JSON.stringify(brunoCollection, null, 2));
+      console.log('OpenAPI JSON conversion successful!');
+    } catch (error) {
+      console.error('Error during OpenAPI JSON conversion:', error);
+    }
+  }
+
+  
+  convertOpenApiToBruno('path/to/openapi-spec.json', 'path/to/bruno-collection.json');
+  ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+  ### Convert OpenAPI YAML to Bruno collection
+
+  <Callout emoji="">
+    Bruno Converters currently doesn't support YAML conversion directly. You need to install the `js-yaml` package to handle YAML files.
+  </Callout>
+
+  ```javascript
+  const { openApiToBruno } = require('@usebruno/converters');
+  const yaml = require('js-yaml');
+  const brunoCollection = openApiToBruno(yamlSpecification);
+  ```
+
+  ```javascript showLineNumbers filename="openapi-yaml-to-bruno.js"
+  const { openApiToBruno } = require('@usebruno/converters');
+  const { readFile, writeFile } = require('fs/promises');
+  const yaml = require('js-yaml');
+
+  async function convertOpenApiToBruno(inputFile, outputFile) {
+    try {
+      const yamlContent = await readFile(inputFile, 'utf8');
+      const openApiSpec = yaml.load(yamlContent);
+      const brunoCollection = openApiToBruno(openApiSpec);
+      await writeFile(outputFile, JSON.stringify(brunoCollection, null, 2));
+      console.log('OpenAPI YAML conversion successful!');
+    } catch (error) {
+      console.error('Error during OpenAPI YAML conversion:', error);
+    }
+  }
+
+  
+  convertOpenApiToBruno('path/to/openapi-spec.yaml', 'path/to/bruno-collection.json');
+  ```
+  </Tabs.Tab>
+</Tabs>
