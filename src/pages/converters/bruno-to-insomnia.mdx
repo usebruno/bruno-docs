@@ -1,0 +1,29 @@
+import { Callout } from 'nextra/components'
+import { Tabs } from 'nextra/components'
+
+# Convert Insomnia collection to Bruno collection
+
+```javascript
+const { insomniaToBruno } = require('@usebruno/converters');
+
+const brunoCollection = insomniaToBruno(insomniaCollection);
+```
+
+```javascript showLineNumbers filename="insomnia-to-bruno.js"
+const { insomniaToBruno } = require('@usebruno/converters');
+const { readFile, writeFile } = require('fs/promises');
+
+async function convertInsomniaToBruno(inputFile, outputFile) {
+  try {
+    const inputData = await readFile(inputFile, 'utf8');
+    const brunoCollection = insomniaToBruno(JSON.parse(inputData));
+    await writeFile(outputFile, JSON.stringify(brunoCollection, null, 2));
+    console.log('Insomnia conversion successful!');
+  } catch (error) {
+    console.error('Error during Insomnia conversion:', error);
+  }
+}
+
+
+convertInsomniaToBruno('path/to/insomnia-collection.json', 'path/to/bruno-collection.json');
+```
