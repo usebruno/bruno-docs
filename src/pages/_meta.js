@@ -10,8 +10,8 @@ export default {
     "title": "Core Features",
     "type": "separator"
   },
-  "variables": "Variables",
   "send-requests": "Send Requests",
+  "variables": "Variables",
   "git-integration": "Git Integration & Collaboration",
   "testing": "Tests and Scripts",
   "secrets-management": "Secret Management",
