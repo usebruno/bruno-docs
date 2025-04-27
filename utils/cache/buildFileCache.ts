@@ -6,13 +6,19 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 function extractTextFromMarkdown(markdownContent: string): string {
-  const headingRegex = /^#+\s+(.*)/gm; // Matches Markdown headings
-  const htmlTagRegex = /<[^>]*>/gm; // Matches HTML tags
-  const urlRegex = /(https?:\/\/\S+)/gm; // Matches URLs starting with "http://" or "https://"
-  let plainText = markdownContent.replace(headingRegex, "$1\n");
-  plainText = plainText.replace(htmlTagRegex, "");
-  plainText = plainText.replace(urlRegex, "");
-  return plainText;
+  // Combined regex to match headings, HTML tags, and URLs
+  const regex = /^(#+\s+(.*))|(<[^>]*>)|(https?:\/\/\S+)/gm;
+  return markdownContent.replace(regex, (match, heading, htmlTag, url) => {
+    if (heading) {
+      // Replace headings with just the text after removing the '#'
+      return heading.replace(/^#+\s+/, "") + "\n";
+    }
+    if (htmlTag || url) {
+      // Remove HTML tags and URLs
+      return "";
+    }
+    return match; // Default case, return the match unchanged
+  });
 }
 
 interface FileData {
