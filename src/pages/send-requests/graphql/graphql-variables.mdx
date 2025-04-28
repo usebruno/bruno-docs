@@ -1,0 +1,37 @@
+# GraphQL Variables
+
+Variables in GraphQL allow you to create dynamic, reusable, and secure queries. Instead of embedding values directly in your query string, you can use variables to pass values separately. This approach offers several benefits:
+
+- **Security**: Prevents GraphQL injection attacks
+- **Reusability**: Same query can be used with different values
+- **Type Safety**: Variables are strongly typed
+- **Readability**: Makes queries cleaner and easier to understand
+
+## Adding Variables to Your GraphQL Request
+
+1. **Create a GraphQL Request**:
+   - Open Bruno and create a new GraphQL request
+   - Select the appropriate HTTP method (usually POST)
+
+2. **Define Variables**:
+   - Go to the `Variables` section
+   - Add your variables in JSON format
+   - Each variable should match the type defined in your query
+
+  ![query-graphql](/screenshots/send-request/graphql/adding-var-graphql.webp)
+
+3. **Write Your Query with Variables**:
+   - Use the `$` prefix to declare variables
+   - Reference variables in your query using the `$variableName` syntax
+
+![query-graphql](/screenshots/send-request/graphql/using-var-in-graphql.webp)
+
+4. **Execute the Request**:
+   - Bruno will automatically combine your query and variables
+   - The variables will be properly escaped and sent with the request
+
+
+
+
+
+
