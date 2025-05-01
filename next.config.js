@@ -100,6 +100,11 @@ export default withNextra({
       { source: '/get-started/variables/process-env', destination: '/variables/process-env', permanent: true },
 
       // Secret Managers redirects
+      { source: '/secrets-management/secret-managers/secret-managers/:path*', destination: '/secrets-management/secret-managers/:path*', permanent: true },
+      { source: '/secrets-management/secret-managers', destination: '/secrets-management/secret-managers/overview', permanent: true },
+      { source: '/secrets-management/secret-managers/hashicorp-vault', destination: '/secrets-management/secret-managers/hashicorp-vault/overview', permanent: true },
+      { source: '/secrets-management/secret-managers/aws-secrets-manager', destination: '/secrets-management/secret-managers/aws-secrets-manager/overview', permanent: true },
+      { source: '/secrets-management/secret-managers/azure-key-vault', destination: '/secrets-management/secret-managers/azure-key-vault/overview', permanent: true },
       { source: '/introduction/secrets-management/hashicorp-vault', destination: '/secrets-management/secret-managers/hashicorp-vault/overview', permanent: true },
       { source: '/introduction/secrets-management/hashicorp-vault/overview', destination: '/secrets-management/secret-managers/hashicorp-vault/overview', permanent: true },
       { source: '/introduction/secrets-management/hashicorp-vault/adding-a-secret-provider', destination: '/secrets-management/secret-managers/hashicorp-vault/adding-a-secret-provider', permanent: true },
