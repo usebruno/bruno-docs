@@ -123,6 +123,18 @@ export default withNextra({
       { source: '/introduction/secrets-management/azure-key-vault/adding-a-secret-provider', destination: '/secrets-management/secret-managers/azure-key-vault/adding-a-secret-provider', permanent: true },
       { source: '/introduction/secrets-management/azure-key-vault/configuring-and-fetching-secrets', destination: '/secrets-management/secret-managers/azure-key-vault/configuring-and-fetching-secrets', permanent: true },
       { source: '/introduction/secrets-management/azure-key-vault/using-secrets', destination: '/secrets-management/secret-managers/azure-key-vault/using-secrets', permanent: true },
+
+      // Additional Azure Key Vault redirects
+      { source: '/secrets-management/azure-key-vault/adding-a-secret-provider', destination: '/secrets-management/secret-managers/azure-key-vault/adding-a-secret-provider', permanent: true },
+      { source: '/secrets-management/azure-key-vault/configuring-and-fetching-secrets', destination: '/secrets-management/secret-managers/azure-key-vault/configuring-and-fetching-secrets', permanent: true },
+
+      // Additional AWS Secrets Manager redirects
+      { source: '/secrets-management/aws-secrets-manager/adding-a-secret-provider', destination: '/secrets-management/secret-managers/aws-secrets-manager/adding-a-secret-provider', permanent: true },
+      { source: '/secrets-management/aws-secrets-manager/configuring-and-fetching-secrets', destination: '/secrets-management/secret-managers/aws-secrets-manager/configuring-and-fetching-secrets', permanent: true },
+
+      // Additional HashiCorp Vault redirects
+      { source: '/secrets-management/hashicorp-vault/adding-a-secret-provider', destination: '/secrets-management/secret-managers/hashicorp-vault/adding-a-secret-provider', permanent: true },
+      { source: '/secrets-management/hashicorp-vault/configuring-and-fetching-secrets', destination: '/secrets-management/secret-managers/hashicorp-vault/configuring-and-fetching-secrets', permanent: true },
     ];
   },
 });
