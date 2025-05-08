@@ -66,3 +66,24 @@ In this example, the `JWT_TOKEN` secret from the `.env` file is referenced using
 1. Always add the `.env` file to your `.gitignore` file to ensure secrets are not accidentally pushed to version control.
 
 2. If you need to share the structure of your environment variables with other developers, create a `.env.sample` file without actual secret values.
+
+### Handling Variables with Dots
+
+When using environment variables that contain dots in their names, use square bracket notation:
+
+```bash
+# In .env file
+example.test=mysecretvalue
+```
+
+```javascript
+// In your request
+// Won't work
+"secret": "{{process.env.demo.example.test}}"
+
+// Works correctly
+"secret": "{{process.env['example.test']}}"
+```
+
+This happens because Bruno interprets dots as object path separators. Square brackets tell Bruno to treat the entire string as a single variable name.
+
