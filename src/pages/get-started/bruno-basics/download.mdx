@@ -2,56 +2,74 @@ import { Tabs } from 'nextra/components'
 
 # Download Bruno
 
-Bruno is available on MacOS, Windows and Linux. 
-Visit the [Download page](https://www.usebruno.com/downloads) and select the option for your operating system. 
+Bruno is an open-source, fast and lightweight API client for exploring and testing APIs. It's designed to be a modern alternative to traditional API clients with a focus on speed, simplicity, and collaboration.
 
+## Installation Options
 
-<Tabs items={['MacOS', 'Windows', 'Linux']}>
+Bruno can be installed via direct download or through package managers on supported platforms.
+
+<Tabs items={['macOS', 'Windows', 'Linux']}>
   <Tabs.Tab>
-    Download Bruno on MacOS from [here](https://www.usebruno.com/downloads).
-
-    To install via Homebrew, run the following command:
+    ### Direct Download
+    
+    Download the latest macOS version from the [official downloads page](https://www.usebruno.com/downloads).
+    
+    ### Homebrew
     
     ```bash
     brew install bruno
     ```
+    
   </Tabs.Tab>
   <Tabs.Tab>
-    Download Bruno on Windows from [here](https://www.usebruno.com/downloads).
+    ### Direct Download
     
-    For Chocolatey, use the following command:
+    Download the latest Windows installer from the [official downloads page](https://www.usebruno.com/downloads).
+    
+    ### Using Package Managers
+    
+    **Chocolatey**
     ```bash
     choco install bruno
     ```
-
-    For Winget, use the following command:
-     ```bash
+    
+    **Winget**
+    ```bash
     winget install Bruno.Bruno
     ```
-
-    For Scoop, use the following command:
-     ```bash
+    
+    **Scoop**
+    ```bash
     scoop install bruno
     ```
-
+    
   </Tabs.Tab>
   <Tabs.Tab>
-    Download Bruno on Linux from [here](https://www.usebruno.com/downloads).
-
-    For Debian-based distributions (like Ubuntu), use the following command:
+    ### Direct Download
     
+    Download the latest Linux package from the [official downloads page](https://www.usebruno.com/downloads).
+    
+    ### Using Package Managers
+    
+    **Debian/Ubuntu (Repository Setup)**
     ```bash
+    # Add the Bruno repository key
+    sudo mkdir -p /etc/apt/keyrings 
+    sudo gpg --no-default-keyring --keyring /etc/apt/keyrings/bruno.gpg --keyserver keyserver.ubuntu.com --recv-keys 9FA6017ECABE0266 
+
+    # Add the Bruno repository
+    echo "deb [signed-by=/etc/apt/keyrings/bruno.gpg] http://debian.usebruno.com/ bruno stable" | sudo tee /etc/apt/sources.list.d/bruno.list 
+     
+    # Update and install
+    sudo apt update 
     sudo apt install bruno
     ```
-
-    For Flatpak, use the following command:
-    
+    **Flatpak**
     ```bash
     flatpak install flathub com.usebruno.Bruno
     ```
-
-    For Snap, use the following command:
     
+    **Snap**
     ```bash
     sudo snap install bruno
     ```
@@ -59,4 +77,11 @@ Visit the [Download page](https://www.usebruno.com/downloads) and select the opt
 </Tabs>
 
 
-You can also check out the [GitHub Releases](https://github.com/usebruno/bruno/releases) for the latest release notes, bug fixes, and new features included in each release.
+## Release Information
+
+Bruno follows semantic versioning. You can check the [GitHub Releases](https://github.com/usebruno/bruno/releases) page for:
+- Latest version information
+- Release notes
+- Bug fixes
+- New features included in each release
+
