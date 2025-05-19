@@ -1,10 +1,25 @@
 import PremiumBadge from "@/components/premium-badge";
 
-# Run Manual Test
+# Running Tests Manually
 
-Bruno provides an easy way to run API tests from collections and generate detailed test reports. Follow these steps to run your collection, view the results, and download the test report as an HTML document.
+Running tests manually in Bruno allows you to quickly validate functionality and immediately view results. The most common example of this would be simply hitting an endpoint and seeing if it is working.
 
-## Generate Test Report <PremiumBadge />
+### Running a Single Test
+
+The smallest unit of testing in Bruno is a single request. The request itself tests the functionality of any given endpoint. You can add additional logic to requests by using the `Tests` tab. 
+
+To manually trigger a single test:
+
+1. Open a Collection
+2. Select the Request that you would like to run
+3. Click Enter or press the send icon 
+4. View the results in the `Tests` section of the response pane
+
+### Running a Test Suite 
+
+Often times a Bruno Collection can represent a test suite of different actions or workflows of an API. You can use the Collection Runner to execute this entire suite, and also iterate through data using [data driven testing](/testing/automate-test/data-driven-testing). 
+
+Follow these steps to run your collection, view the results, and optionally download the test report as an HTML document.
 
 1. Open the **Bruno** collection
 2. Click on the **Run** option from the dropdown menu.
@@ -14,10 +29,10 @@ Bruno provides an easy way to run API tests from collections and generate detail
 3. Click **Run Collection** to initiate the test.
    ![click-runner.webp](/screenshots/testing/click-runner.webp)
 
-4. Once the test run is complete, the test report will be automatically generated.
+4. Once the test run is complete, a test report will be automatically generated.
    ![generate-test-report.webp](/screenshots/testing/generate-test-report.webp)
 
-## Download Test Report
+### Download Test Report <PremiumBadge />
 
 After the test report is generated, you can download it as an HTML document (`report.html`).
 
