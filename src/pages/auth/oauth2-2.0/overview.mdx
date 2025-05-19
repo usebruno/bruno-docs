@@ -22,6 +22,23 @@ Bruno supports OAuth 2 authentication at both collection and request levels:
 2. **Automatic Token Management**: No scripting is required to set headers for the resource URL
 3. **Automatic Token Injection**: Bruno automatically adds the token to request headers or parameters based on your configuration
 4. **Token Data Access**: Access token data using variables: `{{$oauth2.<tokenId>.access_token}}` within the collection
+5. **Auto-fetch and Auto-refresh**: Bruno can automatically fetch new tokens when needed and refresh tokens when they expire, providing a seamless authentication experience
+
+### Auto-fetch and Auto-refresh
+
+Bruno includes two powerful token management features:
+
+- **Auto-fetch**: Automatically fetches a new token when you try to access a protected resource and don't have a valid token
+- **Auto-refresh**: Automatically refreshes your token using the refresh URL when it expires
+
+These settings can be configured separately for each OAuth2 implementation and help streamline your API testing workflow by reducing manual token management tasks.
+
+<img
+  src="/screenshots/auth/auto-refresh.webp"
+  alt="OAuth2 Auto-fetch and Auto-refresh settings"
+  className="mt-4 mb-6 border border-gray-200 rounded-md"
+  width="700"
+/>
 
 ## Accessing OAuth2 Tokens in Scripts
 

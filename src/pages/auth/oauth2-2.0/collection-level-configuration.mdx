@@ -39,6 +39,16 @@ Bruno supports three OAuth2 grant types:
      - Configure the query parameter name (defaults to "access_token")
 3. Click "Get Access Token" to obtain and store the token.
 
+### Auto-fetch and Auto-refresh Settings
+
+Bruno provides two important token management features:
+
+- **Auto-fetch**: When enabled, Bruno will automatically fetch a new token when you try to access a resource and don't have a valid token. This eliminates the need to manually retrieve a token before making API calls.
+
+- **Auto-refresh**: When enabled, Bruno will automatically refresh your token using the refresh URL when it expires. This ensures continuous access to protected resources without manual intervention.
+
+These settings can be found in the OAuth2 configuration panel and provide significant convenience for API testing workflows.
+
 > **Note**: You may optionally assign a Token ID to your token. If you do, you can reference this token in requests using the format `{{$oauth2.<tokenId>.access_token}}` (replace `<tokenId>` with your Token ID).
 >
 > If you use the same Token ID in multiple OAuth requests, Bruno will overwrite the existing token data. Make sure to use unique Token IDs for different OAuth configurations.
