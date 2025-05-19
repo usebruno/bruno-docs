@@ -5,16 +5,25 @@ import { useEffect } from "react";
 
 Bruno allows you to share your Git-synchronized collection via an embedded "Fetch in Bruno" (FiB) button turning the import/cloning process into a single click!
 
-This button can be placed in websites, articles, and documentation, with support for HTML and Markdown formats.
+This button can be placed in websites, articles, and documentation, with support for both HTML and Markdown formats.
+
+## Import collections from Git
 
 This feature helps you to share your collections in an easy and flexible way - meeting the user wherever they are. Once imported, the user now has a Git-synced collection and can seamlessly pull down new changes as updates are made.
 
-## Things You Need
+
+<Callout emoji="">
+  Make sure you have Bruno version **1.40.0** or above installed on your system
+  to use this feature.
+</Callout>
+
+
+### Things You Need
 
 1. Bruno installed on your system.
 2. A collection that has been initialized as a Git repository [either through the UI](https://docs.usebruno.com/git-integration/using-gui/provider#initializing-git) or from [the CLI](https://docs.usebruno.com/git-integration/using-cli#initializing-git-in-bruno-collection).
 
-## How to Share Your Collection
+### How to Share Your Collection
 
 1. Open Bruno.
 2. Either go to the collection Overview tab or click on the `...` and select `Share`.
@@ -46,14 +55,23 @@ export const BrunoButton = () => (
 
 <BrunoButton />
 
-The Fetch in Bruno button will now automatically clone the repository and associated collection whenever it is clicked.
+### Manual Embedding Options
 
-## How to Open Your Shared Collection in Bruno
+#### HTML Format
+```html
+<div
+  class="bruno-fetch-button"
+  data-bruno-collection-url="https://linktoGitCollection.git"
+></div>
+<script src="https://fetch.usebruno.com/button.js"></script>
+```
 
-<Callout emoji="">
-  Make sure you have Bruno version **1.40.0** or above installed on your system
-  to use this feature.
-</Callout>
+#### Markdown Format
+```
+[<img src="https://fetch.usebruno.com/button.svg" alt="Fetch in Bruno" style="width: 130px; height: 30px;" width="128" height="32">](https://fetch.usebruno.com?url=https://linktoGitCollection.git "target=_blank rel=noopener noreferrer")
+```
+
+### How to Open Your Shared Collection
 
 1. Click on any Fetch in Bruno button.
 2. A popup will appear. Click on **Open In Bruno**.
@@ -70,7 +88,7 @@ The Fetch in Bruno button will now automatically clone the repository and associ
 
 Once the collection is loaded in Bruno, you'll be able to see the folder, requests, and all associated parameters.
 
-## Customizations 
+### Customizations 
 
 You can replace the Fetch in Bruno title and logo with your preferred logo and name. Simply follow the changes below in the markdown link:
 
@@ -78,3 +96,40 @@ You can replace the Fetch in Bruno title and logo with your preferred logo and n
 [<img src="your-custom-image.svg" alt="your-custom-name"]
 ```
 Make sure to keep everything else as it is.
+
+## Import collections from OpenAPI Specifications
+
+In addition to importing Git repositories, the Fetch in Bruno button now supports importing OpenAPI specifications directly. This allows you to easily convert any OpenAPI specification into a Bruno collection with a single click.
+
+<Callout emoji="">
+  Make sure you have Bruno version **2.3.0** or above installed on your system
+  to use these features.
+</Callout>
+
+### How to Use
+
+1. Choose your preferred embedding format:
+
+#### HTML Format
+```html
+<div
+  class="bruno-fetch-button"
+  data-bruno-collection-url="https://linktoOpenAPIspec.json"
+  data-bruno-source-type="openapi"
+></div>
+<script src="https://fetch.usebruno.com/button.js"></script>
+```
+
+#### Markdown Format
+```
+[<img src="https://fetch.usebruno.com/button.svg" alt="Fetch in Bruno" width="130" height="30">](https://fetch.usebruno.com?url=https://linktoOpenAPIspec.json&type=openapi "target=_blank rel=noopener noreferrer")
+```
+
+2. Replace `https://linktoOpenAPIspec.json` with your OpenAPI specification URL.
+3. Embed this code in your website, documentation, or any HTML page.
+
+When users click the button, Bruno will automatically:
+- Fetch the OpenAPI specification from the provided URL
+- Convert it into a Bruno collection
+- Open it in the Bruno app and prompt the user to choose a location to save the collection
+
