@@ -1,4 +1,4 @@
-import { Steps } from 'nextra/components'
+import { Callout } from 'nextra/components'
 
 # Bruno Starter Guide
 
@@ -46,7 +46,7 @@ Learn the fundamentals of Bruno's interface and create your first API request. Y
 - Bruno is installed and running
 - You know basic API terminology (like GET/POST)
 
-### <span className="text-orange-500">Instructions</span>
+### Instructions
 
 1. Right click on `Basics` folder
 2. Select **New Request**
@@ -61,7 +61,7 @@ Congrats on creating your first request inside Bruno!
 
 Master Bruno's environment system to manage variables across different contexts. You will create environment variables at collection level and use them in request.
 
-### <span className="text-orange-500">Instructions</span>
+### Instructions
 
 #### Creating Environments
 1. Navigate to the **Environment** section (top right)
@@ -80,7 +80,7 @@ Master Bruno's environment system to manage variables across different contexts.
 
 Learn to construct requests with different HTTP methods and body formats. In this challenge, you'll create a POST request that sends structured JSON data to an API endpoint and examine the response.
 
-### <span className="text-orange-500">Instructions</span>
+### Instructions
 
 #### Step 1: Create a New Request
 1. Click on the **Context Menu** (...) and select **New Request**
@@ -108,8 +108,11 @@ Click on **Send** (arrow button) to execute the request.
 
 Explore response data, status codes, and use Bruno's debugging tools. You'll learn how to access the `req` (request) object and understand API responses in the Response tab.
 
-### <span className="text-orange-500">Instructions</span>
-> 💡 **Tip:**  The `req` object is only available in the **Pre-Script** section.
+### Instructions
+
+<Callout type="info" emoji="">
+  The `req` object is only available in the **Pre-Script** section.
+</Callout>
 
 #### Step 1: Use `req` object in Pre-Script
 1. Use same request from `03-Send Request`
@@ -127,7 +130,7 @@ req.setBody({
 
 Implement common API authentication patterns. In this challenge, you'll learn how to get and use an API key for authentication with the News API.
 
-### <span className="text-orange-500">Instructions</span>
+### Instructions
 
 #### Step 1: Get Your API Key
 1. Go to [https://newsapi.org](https://newsapi.org)
@@ -161,7 +164,7 @@ https://newsapi.org/v2/everything?q=tesla&from=2025-03-22&sortBy=publishedAt
 
 Learn best practices for handling sensitive information in Bruno. You'll discover how to mark sensitive values as secrets in Bruno environments.
 
-### <span className="text-orange-500">Instructions</span>
+### Instructions
 
 #### Step 1: Mark Environment Variable as Secret
 1. Go to environment variables (top-right) and select `echo-bruno`
@@ -189,7 +192,7 @@ Value: Bruno
 
 Harness Bruno's powerful scripting capabilities to automate request preparation. You'll set up a request dynamically using JavaScript in the `Pre-Script`, and then log the response using `Post-Script`.
 
-### <span className="text-orange-500">Instructions</span>
+### Instructions
 
 #### Step 1: Create a Request
 1. Right click on `Script` folder and create request `echo-script`
@@ -224,7 +227,7 @@ console.log(res.body);
 
 Build robust API tests with assertions. You'll learn to write assertions using Bruno's built-in expression UI and custom test scripts.
 
-### <span className="text-orange-500">Instructions</span>
+### Instructions
 
 #### Step 1: Create a Request
 1. Right click on `Assert and Testing` folder and create request called `echo-script`
@@ -266,7 +269,7 @@ test("You must love Bruno! 🧡", function () {
 
 Execute multiple requests in sequence with Bruno's collection runner. In this challenge, you'll learn to run all requests in your collection with Bruno's Collection Runner.
 
-### <span className="text-orange-500">Instructions</span>
+### Instructions
 
 #### Step 1: Setup the Collection
 1. Right click on `Bruno Starter Guide`
@@ -279,7 +282,7 @@ You will see all your request running one by one. You can also check the request
 
 Create clear, comprehensive documentation for your APIs using Bruno's markdown support. You'll learn to structure documentation clearly at each level and use markdown features effectively.
 
-### <span className="text-orange-500">Instructions</span>
+### Instructions
 
 #### Step 1: Add Collection-Level Docs
 1. Right-click on the `Bruno Starter Guide` collection
@@ -330,7 +333,7 @@ Below are the some API documentation best practices:
 
 Leverage Bruno's file-based approach for version control. In this challenge, you'll learn to initialize, commit, and push Bruno collections to GitHub for collaboration.
 
-### <span className="text-orange-500">Instructions</span>
+### Instructions
 
 #### Step 1: Initialize Git
 
@@ -393,7 +396,7 @@ git push -u origin main
 
 Import and export OpenAPI specifications. Convert between Bruno collections and industry-standard API definitions. In this challenge, you'll learn how to import an OpenAPI V3 spec into Bruno and view it as a collection.
 
-### <span className="text-orange-500">Instructions</span>
+### Instructions
 
 #### Step 1: Find an OpenAPI Specification
 You can use any OpenAPI spec, but for this challenge, we recommend:
@@ -434,7 +437,7 @@ Make sure you have:
 1. Node.js installed
 2. A Bruno collection ready with at least one request
 
-### <span className="text-orange-500">Instructions</span>
+### Instructions
 
 #### Step 1: Install Bruno CLI
 Open your terminal and run:
