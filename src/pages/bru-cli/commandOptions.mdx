@@ -94,6 +94,24 @@ The client-cert-config.json file should contain the following fields:
 }
 ```
 
+## Importing OpenAPI Specifications
+
+Bruno CLI allows you to import OpenAPI specifications directly from the command line, which can be integrated into CI/CD pipelines whenever API changes are committed.
+
+```bash copy
+bru import openapi --source ./api-spec/petstore-v3.yaml --output ./collections/petstore --collection-name "Petstore API"
+```
+
+This will import the OpenAPI specification and generate a Bruno collection in the specified output directory.
+
+For JSON output format:
+
+```bash copy
+bru import openapi --source ./api-spec/petstore-v3.yaml --output-file ./collections/petstore-api.json --collection-name "Petstore API"
+```
+
+If no `output path` is specified, the collection will be imported to a default directory.
+
 ## Options
 
 | Option                       | Details                                                                       |
@@ -117,6 +135,10 @@ The client-cert-config.json file should contain the following fields:
 | `--reporter-skip-headers`   | Skip specific headers in the report                                           |
 | `--client-cert-config`      | Client certificate configuration by passing a JSON file                       |
 | `--delay [number]`          | Add delay to each request                                                     |
+| `--source [string]`        | Path to the OpenAPI specification file (YAML or JSON)      |
+| `--output [string]`        | Output directory to create Bruno collections as `.bru` files |
+| `--output-file [string]`   | Output file to export as Bruno collection in JSON format   |
+| `--collection-name [string]` | Name for the imported collection from OpenAPI            |
 
 ## Demo
 ![bru cli](/screenshots/cli-demo.webp)
