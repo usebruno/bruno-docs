@@ -111,5 +111,32 @@ The client-cert-config.json file should contain the following fields:
 ## Demo
 ![bru cli](/screenshots/cli-demo.webp)
 
+## Adding "Fetch in Bruno" Button to Your Documentation
+
+You can add a "Fetch in Bruno" button to your website or documentation to allow users to directly import your Bruno collection with a single click. This is particularly useful for sharing collections hosted on GitHub.
+
+Add the following HTML to your website:
+
+```html copy
+<div class="bruno-fetch-button" data-bruno-collection-url="https://github.com/your-username/your-collection"></div>
+<script src="https://fetch.usebruno.com/button.js"></script>
+```
+
+Replace `https://github.com/your-username/your-collection` with the URL to your Bruno collection on GitHub.
+
+### Example
+
+Here's a live example of the "Fetch in Bruno" button for the Bruno Starter Guide:
+
+<div className="flex justify-center my-6">
+  <img 
+    src="https://fetch.usebruno.com/button.svg" 
+    alt="Fetch in Bruno" 
+    style={{ width: '160px', height: '40px' }}
+  />
+</div>
+
+When users click this button, Bruno will automatically clone the repository and import the collection.
+
 ## Support
 If you encounter any issues or have any feedback or suggestions, please raise them on our [GitHub repository](https://github.com/usebruno/bruno)
