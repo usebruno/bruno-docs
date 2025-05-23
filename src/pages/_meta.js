@@ -1,4 +1,8 @@
 export default {
+  "index": {
+    "title": "Homepage",
+    "display": "hidden"
+  },
   "getting-started": {
     "title": "Getting Started",
     "type": "separator"
