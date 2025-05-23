@@ -1,6 +1,6 @@
 export default {
   "index": {
-    "title": "Home",
+    "title": "Homepage",
     "display": "hidden"
   },
   "getting-started": {
