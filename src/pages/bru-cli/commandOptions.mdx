@@ -103,6 +103,32 @@ bru run --noproxy
 ```
 The flag completely disables all proxy settings for that particular CLI run.
 
+## Importing OpenAPI Specifications
+
+Bruno CLI allows you to import OpenAPI specifications directly into Bruno collection from the command line, which can be integrated into CI/CD pipelines whenever API changes are committed.
+
+### Option 1: Import to Bruno Collection
+This will import the OpenAPI specification (supports both YAML and JSON formats) and generate a Bruno collection in the specified output directory.
+
+```bash copy
+bru import openapi --source <your-openapi.yaml> --output <preferred-location> --collection-name "Petstore API"
+```
+
+Where:
+- `<your-openapi.yaml>`: Path to your OpenAPI specification file (can be either YAML or JSON format)
+- `<preferred-location>`: Directory where you want to save the collection
+
+### Option 2: Import to Single JSON File
+This will import the OpenAPI specification and generate a Bruno collection as a single JSON file at the specified location.
+
+```bash copy
+bru import openapi --source <your-openapi.yaml> --output-file <preferred-location>.json --collection-name "Petstore API"
+```
+
+Where:
+- `<your-openapi.yaml>`: Path to your OpenAPI specification file (can be either YAML or JSON format)
+- `<preferred-location>`: Base path and filename for your JSON output
+
 ## Options
 
 | Option                       | Details                                                                       |
@@ -130,6 +156,9 @@ The flag completely disables all proxy settings for that particular CLI run.
 | `--client-cert-config`      | Path to the Client certificate config file used for securing the connection   |
 | `--delay [number]`          | Delay between each requests (in milliseconds)                                 |
 | `--noproxy`                 | Disable all proxy settings (both collection-defined and system proxies) [boolean] [default: false] |
+| `--source [string]`         | Path to the OpenAPI specification file (YAML or JSON)                         |
+| `--output-file [string]`    | Output file to export as Bruno collection in JSON format                      |
+| `--collection-name [string]`| Name for the imported collection                                              |
 
 ## Demo
 ![bru cli](/screenshots/cli-demo.webp)
