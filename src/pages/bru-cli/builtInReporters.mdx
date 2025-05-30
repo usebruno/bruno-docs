@@ -50,7 +50,7 @@ This command will create three files: `results.json, results.xml, and results.ht
 If you want to exclude certain headers from the report, use the `--reporter-skip-headers` option. You can list multiple headers to skip, separated by spaces.
 
 ```bash
-bru run --reporter-html results.html --reporter-skip-headers "Authorization" "Content-Type" "Date"
+bru run --reporter-html results.html --reporter-skip-headers "Authorization" "X-Auth-Token"
 ```
 
 ## Skip All Headers in the Report
