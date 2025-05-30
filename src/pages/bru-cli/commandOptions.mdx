@@ -108,6 +108,7 @@ The flag completely disables all proxy settings for that particular CLI run.
 Bruno CLI allows you to import OpenAPI specifications directly into Bruno collection from the command line, which can be integrated into CI/CD pipelines whenever API changes are committed.
 
 ### Option 1: Import to Bruno Collection
+
 This will import the OpenAPI specification (supports both YAML and JSON formats) and generate a Bruno collection in the specified output directory.
 
 ```bash copy
@@ -119,6 +120,7 @@ Where:
 - `<preferred-location>`: Directory where you want to save the collection
 
 ### Option 2: Import to Single JSON File
+
 This will import the OpenAPI specification and generate a Bruno collection as a single JSON file at the specified location.
 
 ```bash copy
@@ -159,6 +161,7 @@ Where:
 | `--source [string]`         | Path to the OpenAPI specification file (YAML or JSON)                         |
 | `--output-file [string]`    | Output file to export as Bruno collection in JSON format                      |
 | `--collection-name [string]`| Name for the imported collection                                              |
+
 
 ## Demo
 ![bru cli](/screenshots/cli-demo.webp)
