@@ -94,6 +94,15 @@ The client-cert-config.json file should contain the following fields:
 }
 ```
 
+## Disabling Proxies
+
+If you need to bypass all proxy settings (both collection-defined and system proxies) when running requests, you can use the `--noproxy` flag:
+
+```bash copy
+bru run --noproxy
+```
+The flag completely disables all proxy settings for that particular CLI run.
+
 ## Options
 
 | Option                       | Details                                                                       |
@@ -102,21 +111,25 @@ The client-cert-config.json file should contain the following fields:
 | `--version`                 | Show version number                                                           |
 | `-r`                        | Indicates a recursive run (default: false)                                    |
 | `--cacert [string]`         | CA certificate to verify peer against                                         |
+| `--ignore-truststore`       | The specified custom CA certificate (--cacert) will be used exclusively and the default truststore is ignored [boolean] [default: false] |
+| `--disable-cookies`         | Automatically save and sent cookies with requests [boolean] [default: false]  |
 | `--env [string]`            | Specify environment to run with                                               |
 | `--env-var [string]`        | Overwrite a single environment variable, multiple usages possible             |
+| `--sandbox [string]`        | Javascript sandbox to use; available sandboxes are "developer" (default) or "safe" [string] [default: "developer"] |
 | `-o`, `--output [string]`   | **[DEPRECATED]** Path to write file results to. Use reporter options instead  |
 | `-f`, `--format [string]`   | **[DEPRECATED]** Format of the file results. Use reporter options instead     |
 | `--reporter-json [string]`  | Path to generate a JSON report                                                |
 | `--reporter-junit [string]` | Path to generate a JUnit report                                               |
 | `--reporter-html [string]`  | Path to generate an HTML report                                               |
 | `--insecure`                | Allow insecure server connections                                             |
-| `--tests-only`              | Only run requests that have tests                                             |
+| `--tests-only`              | Only run requests that have tests or active assertions                        |
 | `--bail`                    | Stop execution after a failure of a request, test, or assertion               |
 | `--csv-file-path`           | CSV file to run the collection with                                           |
-| `--reporter--skip-all-headers` | Skip all headers in the report                                            |
-| `--reporter-skip-headers`   | Skip specific headers in the report                                           |
-| `--client-cert-config`      | Client certificate configuration by passing a JSON file                       |
-| `--delay [number]`          | Add delay to each request                                                     |
+| `--reporter-skip-all-headers` | Skip all headers in the report [boolean] [default: false]                   |
+| `--reporter-skip-headers`   | Skip specific headers in the report [array] [default: []]                     |
+| `--client-cert-config`      | Path to the Client certificate config file used for securing the connection   |
+| `--delay [number]`          | Delay between each requests (in milliseconds)                                 |
+| `--noproxy`                 | Disable all proxy settings (both collection-defined and system proxies) [boolean] [default: false] |
 
 ## Demo
 ![bru cli](/screenshots/cli-demo.webp)
