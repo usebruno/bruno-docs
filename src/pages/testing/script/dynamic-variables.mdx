@@ -8,6 +8,8 @@ Dynamic variables enable you to generate and use random data in your testing wor
  Dynamic variables are case-sensitive and follow the camelCase convention. 
 </Callout>
 
+To use dynamic variables in pre-request or post-response scripts, use bru.interpolate(). For example, to enter a random first name, use bru.interpolate('{{$randomFirstName}}').
+
 ## Usage Examples
 
 Here are some common use cases for dynamic variables:
