@@ -5,8 +5,35 @@ import { Callout } from 'nextra/components'
 Dynamic variables enable you to generate and use random data in your testing workflow. Bruno uses the [faker.js](https://fakerjs.dev/) library to generate random data. You can use these variables like any other variables in Bruno. The syntax to use dynamic variables is `{{$randomData}}`, and you can use them in the request body, authentication, parameters, and other fields.
 
 <Callout emoji="">
- Dynamic variables are case-sensitive and follow the camelCase convention. 
+  Dynamic variables are case-sensitive and follow the camelCase convention. This feature is available in Bruno version 2.x and above.
 </Callout>
+
+## Using Dynamic Variables in Scripts
+
+To use dynamic variables in pre-request or post-response scripts, use the `bru.interpolate()` function. For example:
+
+```javascript
+// Generate a random first name
+const firstName = bru.interpolate('{{$randomFirstName}}');
+console.log('Random first name:', firstName);
+
+// Generate a random email
+const email = bru.interpolate('{{$randomEmail}}');
+console.log('Random email:', email);
+
+// Generate multiple dynamic values in one call
+const userInfo = bru.interpolate(`
+  Name: {{$randomFullName}}
+  Job: {{$randomJobTitle}}
+  Email: {{$randomEmail}}
+`);
+console.log(userInfo);
+
+// Use with environment variables
+const greeting = bru.interpolate('Hello {{user}} from {{$randomCity}}');
+```
+
+The `bru.interpolate()` function allows you to embed dynamic variables in strings and have them evaluated at runtime within scripts, just like they would be in request bodies or headers.
 
 ## Usage Examples
 
