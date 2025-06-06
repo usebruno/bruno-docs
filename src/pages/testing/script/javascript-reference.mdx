@@ -283,6 +283,35 @@ Pauses execution for the specified duration. This is useful for introducing dela
 await bru.sleep(3000);
 ```
 
+#### `interpolate`
+
+Evaluates dynamic variables and environment variables within a string. This function allows you to use Bruno's dynamic variables (like `{{$randomFirstName}}`) directly in your scripts.
+
+
+**Syntax:**
+```javascript
+bru.interpolate(string);
+```
+
+**Example:**
+
+```javascript
+// Generate a random first name
+const firstName = bru.interpolate('{{$randomFirstName}}');
+console.log('Random first name:', firstName);
+
+// Generate a random email
+const email = bru.interpolate('{{$randomEmail}}');
+
+// Generate multiple dynamic values in one call
+const userInfo = bru.interpolate(`
+  Name: {{$randomFullName}}
+  Job: {{$randomJobTitle}}
+  Email: {{$randomEmail}}
+`);
+
+```
+
 #### `disableParsingResponseJson`
 
 To prevent the automatic parsing of the JSON response body and work directly with the raw data, you can use the expression below in the pre-request script of the request.

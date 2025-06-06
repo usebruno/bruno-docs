@@ -105,6 +105,15 @@ The client-cert-config.json file should contain the following fields:
 }
 ```
 
+## Disabling Proxies
+
+If you need to bypass all proxy settings (both collection-defined and system proxies) when running requests, you can use the `--noproxy` flag:
+
+```bash copy
+bru run --noproxy
+```
+The flag completely disables all proxy settings for that particular CLI run.
+
 ## Importing OpenAPI Specifications
 
 Bruno CLI allows you to import OpenAPI specifications directly into Bruno collection from the command line, which can be integrated into CI/CD pipelines whenever API changes are committed.
@@ -141,15 +150,18 @@ Where:
 | `--version`                 | Show version number                                                           |
 | `-r`                        | Indicates a recursive run (default: false)                                    |
 | `--cacert [string]`         | CA certificate to verify peer against                                         |
+| `--ignore-truststore`       | The specified custom CA certificate (--cacert) will be used exclusively and the default truststore is ignored [boolean] [default: false] |
+| `--disable-cookies`         | Automatically save and sent cookies with requests [boolean] [default: false]  |
 | `--env [string]`            | Specify environment to run with                                               |
 | `--env-var [string]`        | Overwrite a single environment variable, multiple usages possible             |
+| `--sandbox [string]`        | Javascript sandbox to use; available sandboxes are "developer" (default) or "safe" [string] [default: "developer"] |
 | `-o`, `--output [string]`   | **[DEPRECATED]** Path to write file results to. Use reporter options instead  |
 | `-f`, `--format [string]`   | **[DEPRECATED]** Format of the file results. Use reporter options instead     |
 | `--reporter-json [string]`  | Path to generate a JSON report                                                |
 | `--reporter-junit [string]` | Path to generate a JUnit report                                               |
 | `--reporter-html [string]`  | Path to generate an HTML report                                               |
 | `--insecure`                | Allow insecure server connections                                             |
-| `--tests-only`              | Only run requests that have tests                                             |
+| `--tests-only`              | Only run requests that have tests or active assertions                        |
 | `--bail`                    | Stop execution after a failure of a request, test, or assertion               |
 | `--csv-file-path`           | CSV file to run the collection with                                           |
 | `--iteration-count [number]` | Number of times to run the collection                                        |
@@ -160,36 +172,18 @@ Where:
 | `--source [string]`        | Path to the OpenAPI specification file (YAML or JSON)      |
 | `--output-file [string]`   | Output file to export as Bruno collection in JSON format   |
 | `--collection-name [string]` | Name for the imported collection from OpenAPI            |
+| `--reporter-skip-all-headers` | Skip all headers in the report [boolean] [default: false]                   |
+| `--reporter-skip-headers`   | Skip specific headers in the report [array] [default: []]                     |
+| `--client-cert-config`      | Path to the Client certificate config file used for securing the connection   |
+| `--delay [number]`          | Delay between each requests (in milliseconds)                                 |
+| `--noproxy`                 | Disable all proxy settings (both collection-defined and system proxies) [boolean] [default: false] |
+| `--source [string]`         | Path to the OpenAPI specification file (YAML or JSON)                         |
+| `--output-file [string]`    | Output file to export as Bruno collection in JSON format                      |                                           |
+
 
 ## Demo
 ![bru cli](/screenshots/cli-demo.webp)
 
-## Adding "Fetch in Bruno" Button to Your Documentation
-
-You can add a "Fetch in Bruno" button to your website or documentation to allow users to directly import your Bruno collection with a single click. This is particularly useful for sharing collections hosted on GitHub.
-
-Add the following HTML to your website:
-
-```html copy
-<div class="bruno-fetch-button" data-bruno-collection-url="https://github.com/your-username/your-collection"></div>
-<script src="https://fetch.usebruno.com/button.js"></script>
-```
-
-Replace `https://github.com/your-username/your-collection` with the URL to your Bruno collection on GitHub.
-
-### Example
-
-Here's a live example of the "Fetch in Bruno" button for the Bruno Starter Guide:
-
-<div className="flex justify-center my-6">
-  <img 
-    src="https://fetch.usebruno.com/button.svg" 
-    alt="Fetch in Bruno" 
-    style={{ width: '160px', height: '40px' }}
-  />
-</div>
-
-When users click this button, Bruno will automatically clone the repository and import the collection.
 
 ## Support
 If you encounter any issues or have any feedback or suggestions, please raise them on our [GitHub repository](https://github.com/usebruno/bruno)
