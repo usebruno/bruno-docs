@@ -1,19 +1,60 @@
+import { Callout } from "nextra/components";
+
 # Running a Collection 
 
-Bruno CLI allows you to run your API collections with ease, either by directly executing requests or using external data sources. 
+Bruno CLI allows you to run your API collections with ease, either by directly executing requests or using external data sources.
 
-You can run collections using data from CSV or JSON files, customize the output of your test results, skip specific headers, and even work with client certificates for secure API communication.
+This guide explains how to run entire collections, specific folders, and how to use data sources like CSV and JSON files to drive your API tests.
+
+## Basic Collection Execution
+
+To run an entire collection, navigate to your collection directory and use the `run` command:
+
+```bash copy
+bru run
+```
+
+## Running a Folder within a Collection
+
+You can run all the requests within a specific folder by specifying the folder name:
+
+```bash copy
+bru run <folder-name>
+```
+
+For example, to run all requests in the **users** folder:
+
+```bash copy
+bru run users
+```
 
 ## Running a Collection with a CSV File
+
+<Callout type="info">
+  This feature requires [Bruno CLI](https://www.npmjs.com/package/@usebruno/cli) version 1.35.0 or higher.
+</Callout>
+
 If you need to run a collection using data from a CSV file, specify the path to the file with the `--csv-file-path` option:
 
 ```bash copy
-bru run folder --csv-file-path /path/to/csv/file.csv
+bru run --csv-file-path /path/to/csv/file.csv
 ```
+
+This will execute the collection once for each row in the CSV file, with each row's data available as variables in your requests.
+
 ## Running a Collection with a JSON File
+
 To run a collection using data from a JSON file, provide the file path using the `--json-file-path` option:
 
 ```bash copy
-bru run folder --json-file-path /path/to/json/file.json
+bru run --json-file-path /path/to/json/file.json
 ```
-> This feature requires Bruno CLI version 1.35.0 or higher.
+## Running a Collection Multiple Times
+
+You can run a collection multiple times in a single command using the `--iteration-count` flag:
+
+```bash copy
+bru run --iteration-count=2
+```
+
+This will execute the collection twice. This is useful for load testing or when you need to repeat the same set of requests multiple times.
