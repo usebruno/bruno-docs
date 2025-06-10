@@ -13,3 +13,9 @@ This guide provides detailed steps to configure and utilize Azure Key Vault in B
 - [Adding a secret provider](/secrets-management/azure-key-vault/adding-a-secret-provider)
 - [Configuring and fetching secrets](/secrets-management/azure-key-vault/configuring-and-fetching-secrets)
 - [Using secrets in Bruno](./using-secrets)
+
+<Callout type="info">
+Bruno requires two specific permissions to be able to work with Azure Key Vault:
+- Microsoft.KeyVault/vaults/secrets/read **to read secret values**
+- Microsoft.KeyVault/vaults/secrets/readMetadata/action **to list available secrets**
+</Callout>
