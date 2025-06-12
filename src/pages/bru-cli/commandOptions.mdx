@@ -1,3 +1,5 @@
+import { Callout } from "nextra/components";
+
 # Command Options
 
 Bruno CLI provides a variety of command options to help you customize your API testing and execution process. These options allow you to specify environments, configure reports, handle security, and much more. Below is a comprehensive list of available options:
@@ -40,7 +42,9 @@ bru run folder --env Local
 
 ## Passing Environment Variables
 
-> Variables marked as secrets in Bruno app are not accessible via the CLI. Pass them directly as command-line arguments.
+<Callout type="warning">
+Variables marked as secrets in Bruno app are not accessible via the CLI. Pass them directly as command-line arguments.
+</Callout>
 
 ```bash copy
 bru run folder --env Local --env-var JWT_TOKEN=1234
