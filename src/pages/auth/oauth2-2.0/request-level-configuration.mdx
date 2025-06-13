@@ -1,3 +1,5 @@
+import { Callout } from "nextra/components";
+
 # Request-Level OAuth2 Configuration
 
 ## Overview
@@ -47,9 +49,11 @@ Bruno provides two important token management features:
 
 These settings can be found in the OAuth2 configuration panel and provide significant convenience for API testing workflows.
 
-> **Note**: You may optionally assign a Token ID to your token. If you do, you can reference this token in requests using the format `{{$oauth2.<tokenId>.access_token}}` (replace `<tokenId>` with your Token ID).
->
-> If you use the same Token ID in multiple OAuth requests, Bruno will overwrite the existing token data. Make sure to use unique Token IDs for different OAuth configurations.
+<Callout type="info">
+  You may optionally assign a Token ID to your token. If you do, you can reference this token in requests using the format `{{$oauth2.<tokenId>.access_token}}` (replace `<tokenId>` with your Token ID).
+  
+  If you use the same Token ID in multiple OAuth requests, Bruno will overwrite the existing token data. Make sure to use unique Token IDs for different OAuth configurations.
+</Callout>
 
 ## Using Request-Level OAuth2
 
@@ -90,7 +94,3 @@ If you've configured OAuth2 at the collection level, you can:
 
 - Override it by setting up request-level OAuth2 configuration
 - Inherit it by selecting "Inherit from collection" in the request's Auth settings
-
-<br />
-<br />
-<br />

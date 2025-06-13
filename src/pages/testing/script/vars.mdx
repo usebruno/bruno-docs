@@ -1,3 +1,5 @@
+import { Callout } from "nextra/components";
+
 # Vars tab
 
 **Vars** tab allows you to set variables:
@@ -6,7 +8,9 @@
 
 Variables are scoped within the request and cannot be accessed outside of it.
 
-> Note: Prior to v1.20.0, request vars were accessible at the collection scope, but this is no longer the case.
+<Callout type="info">
+Prior to v1.20.0, request vars were accessible at the collection scope, but this is no longer the case.
+</Callout>
 
 In the **Vars** tab > **Pre Request** variables section, you can write any strings, numbers or any valid JavaScript literal.
 

@@ -1,25 +1,35 @@
-# Javascript Sandbox
+import { Callout } from "nextra/components";
 
-Your collections might include JavaScript code in Variables, Scripts, Tests, and Assertions. <br/>
-We take security seriously and want to ensure you can safely interact with collections, regardless of their source or original authors. <br/>
+# JavaScript Sandbox
 
-There are two modes you can choose from:
+Bruno provides two modes for executing JavaScript code in your collections: 
+1. Safe Mode
+2. Developer Mode
+
 ![Javascript Sandbox](/screenshots/javascript-sandbox.png)
 
 ## Safe Mode
+
 JavaScript code is executed in a secure sandbox and cannot access your filesystem or execute system commands. We recommend Safe Mode for most users.
 
-> **Note**: When in doubt, leave the Collection in Safe Mode. You can always switch to Developer Mode later.
+<Callout type="info">
+  When in doubt, leave the Collection in Safe Mode. You can always switch to Developer Mode later.
+</Callout>
 
 ## Developer Mode
+
 JavaScript code has access to the filesystem, can execute system commands and access sensitive information.
 
 #### When to use Developer Mode
+
 - You trust the collection source/authors (Ex: Collection maintained by you/your team) and Safe Mode is not enough for your use case.
 - You need to use external npm packages in your scripts
 - Your collection needs access to filesystem / system commands
 
 #### When to avoid Developer Mode
+
 - You are running a collection that you do not trust (Ex: Downloaded from the internet)
 
-> **Warning**: Developer Mode can be dangerous and should only be used when you fully understand the implications.
+<Callout type="warning">
+  Developer Mode can be dangerous and should only be used when you fully understand the implications.
+</Callout>
