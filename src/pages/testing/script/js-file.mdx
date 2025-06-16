@@ -36,3 +36,77 @@ Here:
 3. In the url `{{val}}` is replaced with value (e.g., 2), resulting in `https://reqres.in/api/users/2`.
 
 When the requests are run, you will see the script being invoked.
+
+## Sharing Scripts Across Collections
+
+The `additionalContextRoots` feature in Bruno allows you to share scripts across multiple collections, eliminating code duplication and promoting better code organization. This is particularly useful when you have common utility functions or shared logic that you want to use across different collections.
+
+<Callout type="warning">
+Make sure you're in Developer Mode to use `additionalContextRoots` feature.
+</Callout>
+
+### How to Use
+
+#### 1. Create a Shared Scripts Directory
+
+First, create a directory to store your shared scripts. This can be anywhere in your project structure, but it's common to place it at the root level of your project.
+
+```bash
+project/
+├── collection-a/
+│   └── bruno.json
+├── collection-b/
+│   └── bruno.json
+└── shared-scripts/
+    └── utils.js
+```
+
+#### 2. Configure bruno.json
+
+In each collection's `bruno.json` file, add the `additionalContextRoots` configuration under the `scripts` object:
+
+```json showLineNumbers
+{
+  "scripts": {
+    "additionalContextRoots": ["./path/to/shared/scripts"]
+  }
+}
+```
+
+#### 3. Create Shared Scripts
+
+Create your shared scripts in the specified directory. For example: `shared-scripts/utils.js`:
+
+```javascript showLineNumbers
+// shared-scripts/utils.js
+const formatDate = (date) => {
+  return new Date(date).toISOString();
+};
+
+const generateAuthToken = (apiKey) => {
+  return `Bearer ${apiKey}`;
+};
+
+module.exports = {
+  formatDate,
+  generateAuthToken
+};
+```
+
+#### 4. Use Shared Scripts in Collections
+
+You can now use these shared scripts in your collection's pre-request or post-response scripts:
+
+```javascript showLineNumbers
+// In your collection's pre-request script
+const { formatDate, generateAuthToken } = require('../shared-scripts/utils.js');
+
+// Use the shared functions
+const today = formatDate(new Date());
+const token = generateAuthToken('your-api-key');
+
+// Set environment variables or request headers
+bru.setEnvVar('auth_token', token);
+bru.setEnvVar('current_date', today);
+```
+
