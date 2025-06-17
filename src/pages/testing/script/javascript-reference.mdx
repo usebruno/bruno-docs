@@ -268,8 +268,50 @@ Here is a complete table for all available methods with the `bru`.
 | bru.runRequest(requestPathName)  | Executes a request by its path name.                      |
 | bru.getAssertionResults()        | Retrieves the results of assertions.                      |
 | bru.getTestResults()             | Fetches the test                                          |
+| bru.sendRequest(options, callback) | Sends a programmatic HTTP request within your script |
 
 Below is the API documentation for the methods available on `bru`
+
+### `sendRequest`
+
+Send a programmatic HTTP request within your script. This allows you to make additional API calls during script execution.
+
+**Syntax:**
+```javascript
+bru.sendRequest({
+  method: string,
+  url: string,
+  headers?: object,
+  body?: string | object,
+  timeout?: number
+}, callback)
+```
+
+**Parameters:**
+- `method`: HTTP method (GET, POST, PUT, etc.)
+- `url`: The URL to send the request to
+- `headers`: (Optional) Request headers
+- `body`: (Optional) Request body. Can be a string or object
+- `timeout`: (Optional) Request timeout in milliseconds
+- `callback`: Function to handle the response with signature `(err, res)`
+
+**Example:**
+```javascript
+bru.sendRequest({
+  method: 'POST',
+  url: 'https://echo.usebruno.com',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({ key: 'value' }),
+}, function (err, res) {
+  if (err) {
+    console.error('Error:', err);
+    return;
+  }
+  console.log('Response:', res.body);
+});
+```
 
 ### Helpers
 
