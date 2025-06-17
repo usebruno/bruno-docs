@@ -58,3 +58,29 @@ bru run --iteration-count=2
 ```
 
 This will execute the collection twice. This is useful for load testing or when you need to repeat the same set of requests multiple times.
+
+## Running a Collection with Environment Files
+
+You can run a collection using environment variables from a `.bru` file. This allows you to attach environments via the CLI from anywhere in the filesystem.
+
+### Using Environment Files
+
+To run a collection with an environment file, use the `--env-file` option:
+
+```bash copy
+bru run --env-file /path/to/environment.bru
+```
+
+You can specify either a relative or absolute path to the environment file:
+
+```bash copy
+# Using relative path
+bru run --env-file ./environments/local.bru
+
+# Using absolute path
+bru run --env-file /Users/username/projects/api-testing/environments/prod.bru
+```
+
+<Callout type="info">
+  The environment file should be in Bruno's `.bru` format. Make sure the file contains valid environment variables and their values.
+</Callout>

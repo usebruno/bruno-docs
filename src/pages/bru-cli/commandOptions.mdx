@@ -42,7 +42,7 @@ bru run folder --env Local
 
 ## Passing Environment Variables
 
-<Callout type="warning">
+<Callout type="info">
 Variables marked as secrets in Bruno app are not accessible via the CLI. Pass them directly as command-line arguments.
 </Callout>
 
@@ -173,8 +173,8 @@ Where:
 | `--reporter-skip-headers`   | Skip specific headers in the report                                           |
 | `--client-cert-config`      | Client certificate configuration by passing a JSON file                       |
 | `--delay [number]`          | Add delay to each request                                                     |
-| `--source [string]`        | Path to the OpenAPI specification file (YAML or JSON)      |
-| `--output-file [string]`   | Output file to export as Bruno collection in JSON format   |
+| `--source [string]`         | Path to the OpenAPI specification file (YAML or JSON)                         |
+| `--output-file [string]`    | Output file to export as Bruno collection in JSON format                      |
 | `--collection-name [string]` | Name for the imported collection from OpenAPI            |
 | `--reporter-skip-all-headers` | Skip all headers in the report [boolean] [default: false]                   |
 | `--reporter-skip-headers`   | Skip specific headers in the report [array] [default: []]                     |
@@ -182,7 +182,7 @@ Where:
 | `--delay [number]`          | Delay between each requests (in milliseconds)                                 |
 | `--noproxy`                 | Disable all proxy settings (both collection-defined and system proxies) [boolean] [default: false] |
 | `--source [string]`         | Path to the OpenAPI specification file (YAML or JSON)                         |
-| `--output-file [string]`    | Output file to export as Bruno collection in JSON format                      |                                           |
+| `--env-file [string]`       | Path to the environment file (.bru) to use for the collection run            |
 
 
 ## Demo
