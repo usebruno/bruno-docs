@@ -51,7 +51,9 @@ These settings can be found in the OAuth2 configuration panel and provide signif
 
 <Callout type="info">
   You may optionally assign a Token ID to your token. If you do, you can reference this token in requests using the format `{{$oauth2.<tokenId>.access_token}}` (replace `<tokenId>` with your Token ID).
-  
+</Callout>
+
+<Callout>
   If you use the same Token ID in multiple OAuth requests, Bruno will overwrite the existing token data. Make sure to use unique Token IDs for different OAuth configurations.
 </Callout>
 
