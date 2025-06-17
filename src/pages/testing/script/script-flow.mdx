@@ -13,12 +13,15 @@ In Bruno, we provide two types of script flows: **Sandwich** and **Sequential (N
 
 In the **Sandwich Flow**, scripts are executed in the following order:
 
-- **Collection Pre Script**
-  - **Folder Pre Script**
-    - **Request Pre Script**
-- **Request Post Script**
-  - **Folder Post Script**
-    - **Collection Post Script**
+```bash
+sandwich-flow/
+├── Collection Pre Script
+│   └── Folder Pre Script
+│       └── Request Pre Script
+└── Request Post Script
+    └── Folder Post Script
+        └── Collection Post Script
+```
 
 This order allows you to execute actions at multiple levels (collection, folder, and request) before and after each test. It is useful when you need to configure different environments or states before and after running tests at various levels.
 
@@ -26,16 +29,17 @@ This order allows you to execute actions at multiple levels (collection, folder,
 
 In the **Sequential Flow**, scripts are executed in this order:
 
-- **Collection Pre Script**
-  - **Folder Pre Script**
-    - **Request Pre Script**
-- **Collection Post Script**
-  - **Folder Post Script**
-    - **Request Post Script**
+```bash
+sequential-flow/
+├── Collection Pre Script
+│   └── Folder Pre Script
+│       └── Request Pre Script
+└── Collection Post Script
+    └── Folder Post Script
+        └── Request Post Script
+```
 
 This flow executes scripts in a more natural, linear order. After the **Request Pre Script**, it runs the **Collection Post Script**, followed by **Folder Post Script**, and finally, the **Request Post Script**. This flow may be better suited when you want a clean execution from top to bottom.
-
-## Code Example
 
 <Callout emoji="">
   If the `flow` property is not specified, Sandwich is used by default.

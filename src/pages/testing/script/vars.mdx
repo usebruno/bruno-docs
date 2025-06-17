@@ -2,23 +2,28 @@ import { Callout } from "nextra/components";
 
 # Vars tab
 
-**Vars** tab allows you to set variables:
- - before request and
- - after you receive the response.
-
-Variables are scoped within the request and cannot be accessed outside of it.
+The **Vars** tab in Bruno allows you to manage variables at different stages of your request lifecycle. You can set and use variables:
+- Before the request (Pre Request)
+- After receiving the response (Post Response)
 
 <Callout type="info">
-Prior to v1.20.0, request vars were accessible at the collection scope, but this is no longer the case.
+  Variables are scoped within the request and cannot be accessed outside of it. This ensures clean separation between different requests.
 </Callout>
+
+## Pre Request Vars
 
 In the **Vars** tab > **Pre Request** variables section, you can write any strings, numbers or any valid JavaScript literal.
 
-In the **Vars** tab > **Post Response** variables section, you can write any valid JavaScript expression. The `res` object is available, allowing you to declaratively parse the [response object](/testing/script/response/response-object) and set variables, instead of writing scripts to do the same.
+Example:
 
-For parsing the response, you can checkout the [response query](/testing/script/response/response-query) that allows you to easily query your response.
-
-**Example:**
 ![bru vars](/screenshots/set-vars.webp)
 
+## Post Response Vars
+
+In the **Vars** tab > **Post Response** variables section, you can write any valid JavaScript expression. The `res` object is available, allowing you to declaratively parse the [response object](/testing/script/response/response-object) and set variables, instead of writing scripts to do the same.
+
+Example:
+
 ![Screenshot showing how to use defined variables in the request body](/screenshots/vars.webp)
+
+For parsing the response, you can checkout the [response query](/testing/script/response/response-query) that allows you to easily query your response.
