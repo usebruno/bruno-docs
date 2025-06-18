@@ -282,7 +282,7 @@ bru.sendRequest({
   method: string,
   url: string,
   headers?: object,
-  body?: string | object,
+  data?: string | object,
   timeout?: number
 }, callback)
 ```
@@ -291,7 +291,7 @@ bru.sendRequest({
 - `method`: HTTP method (GET, POST, PUT, etc.)
 - `url`: The URL to send the request to
 - `headers`: (Optional) Request headers
-- `body`: (Optional) Request body. Can be a string or object
+- `data`: (Optional) Request data. Can be a string or object
 - `timeout`: (Optional) Request timeout in milliseconds
 - `callback`: Function to handle the response with signature `(err, res)`
 
@@ -303,7 +303,7 @@ bru.sendRequest({
   headers: {
     'Content-Type': 'application/json',
   },
-  body: JSON.stringify({ key: 'value' }),
+  data: { key: 'value' },
 }, function (err, res) {
   if (err) {
     console.error('Error:', err);
@@ -515,7 +515,6 @@ This works only in a post-request script or test-script.
 ```javascript
 bru.setNextRequest("Get process status");
 ```
-
 You can also abort the run by explicitly setting the next request to `null`
 **Example:**
 
@@ -594,3 +593,4 @@ Obtain the assertion results of a request by calling `bru.getAssertionResults` w
 ```javascript
 const assertionResults = await bru.getAssertionResults();
 ```
+
