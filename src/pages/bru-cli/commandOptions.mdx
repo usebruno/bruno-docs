@@ -20,10 +20,23 @@ Navigate to the directory where your API collection resides, and run the followi
 bru run
 ```
 
-This will run all the requests in your collection. If you want to run a single request, specify its filename:
+This will run all the requests in your collection. You can also run specific files or folders:
 
 ```bash copy
+# Run a single file
 bru run request.bru
+
+# Run multiple files
+bru run request1.bru request2.bru
+
+# Run a folder
+bru run folder
+
+# Run multiple folders
+bru run folder1 folder2
+
+# Mix of files and folders
+bru run folder1 request1.bru folder2 request2.bru
 ```
 
 ## Running Requests in a Folder
