@@ -1,12 +1,20 @@
+import {Callout} from "nextra/components"
+
 # JavaScript API Reference
 
+Bruno offers powerful scripting capabilities that allow you to extend and automate your API testing workflows.
 Here is the complete set of API reference for the scripting feature in Bruno.
 
 ## Request
 
-This `req` variable is available inside your scripting and testing context.
+The `req` variable represents the HTTP request object and is automatically available inside your scripting and testing context. It provides methods to access and modify the current request's properties such as URL, method, headers, body, and other configuration options before the request is sent to the server.
 
 Below is the API documentation for the methods available on `req`
+
+<Callout type="info">
+  The `req` object is available in pre-request scripts and test scripts, allowing you to modify request properties before execution and access them after completion.
+</Callout>
+
 
 ### `getUrl`
 
@@ -175,16 +183,23 @@ console.log(`Request is running on ${platform} platform`);
 
 ## Response
 
-This `res` variable is available inside your scripting and testing context.
+The `res` variable represents the HTTP response object and is automatically available inside your scripting and testing context after a request is executed. It contains all the information about the response received from the server, including status codes, headers, body data, and timing information.
+
+<Callout type="info">
+  The `res` object is only available in post-request scripts and test scripts, as it contains the response data from the completed request.
+</Callout>
 
 Below are the properties available on the `res` object.
-| Property | Description |
-|----------|-------------|
-| status | The response status code|
-| statusText | The response status text|
-| headers | The response headers|
-| body | The response body|
-| responseTime | The API response time|
+
+- `status`: The HTTP response status code (e.g., 200, 404, 500)
+- `statusText`: The HTTP response status text (e.g., "OK", "Not Found", "Internal Server Error")
+- `headers`: An object containing all response headers
+- `body`: The response body data (automatically parsed as JSON if the response is JSON)
+- `responseTime`: The total time taken for the request in milliseconds
+
+<Callout type="info">
+  The `body` property is automatically parsed as JSON if the response has a JSON content type. For other content types, it will be a string.
+</Callout>
 
 Below are the methods available on the `res` object.
 
@@ -309,7 +324,7 @@ bru.sendRequest({
     console.error('Error:', err);
     return;
   }
-  console.log('Response:', res.body);
+  console.log('Response:', res.data);
 });
 ```
 
