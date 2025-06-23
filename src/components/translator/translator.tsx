@@ -24,13 +24,18 @@ export const Translator = () => {
   const [pmCode, setPmCode] = useState<string[]>([
     '// translate your awesome code',
   ]);
-  const computedTranslation = useMemo(() => {
-    return pmCode.map((line, index) => {
-      return postmanTranslation(line);
-    });
+  const [translatedCode, setTranslatedCode] = useState<string[]>(['']);
+
+  useEffect(() => {
+    const translate = async () => {
+      const output = await postmanTranslation(pmCode.join('\n'));
+      setTranslatedCode(output.split('\n'));
+    };
+    translate();
   }, [pmCode]);
+
   const copyClipboard = () => {
-    navigator.clipboard.writeText(computedTranslation.join("\n")).then(() => {
+    navigator.clipboard.writeText(translatedCode.join("\n")).then(() => {
       toast('Copied to clipboard !')
     })
   }
@@ -71,7 +76,7 @@ export const Translator = () => {
                 />
                 <EditorLayout
                   pmCode={pmCode}
-                  computedTranslation={computedTranslation}
+                  computedTranslation={translatedCode}
                   setPmCode={savePmCode}
                   layoutMode={layoutMode}
                   editorTheme={editorTheme}
@@ -98,7 +103,7 @@ export const Translator = () => {
           />
           <EditorLayout
             pmCode={pmCode}
-            computedTranslation={computedTranslation}
+            computedTranslation={translatedCode}
             setPmCode={savePmCode}
             layoutMode={layoutMode}
             editorTheme={editorTheme}

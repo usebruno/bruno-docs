@@ -30,7 +30,7 @@ export default {
 
   "developer-tools": {
     "title": "Developer Tools",
-    "type": "separator",
+    "type": "separator"
   },
   "bru-cli": "Bruno's CLI",
   "bru-lang": "Bru Lang",
