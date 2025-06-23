@@ -12,6 +12,25 @@ const withNextra = nextra({
 
 export default withNextra({
   reactStrictMode: true,
+  webpack: (config, { isServer }) => {
+    // Exclude node-specific modules from the client-side bundle
+    if (!isServer) {
+      config.externals.push({
+        'node:os': 'os',
+        'node:path': 'path',
+        'node:worker_threads': 'worker_threads'
+      });
+    }
+
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      os: false,
+      path: false,
+      worker_threads: false
+    };
+
+    return config;
+  },
 
   // Define the redirects in next.config.js
   async redirects() {

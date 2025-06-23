@@ -9,5 +9,5 @@ export default {
   "javascript-reference": "JavaScript Reference",
   "request": "Request",
   "response": "Response",
-  "dynamic-variables": "Dynamic Variables",
+  "dynamic-variables": "Dynamic Variables"
 } 
