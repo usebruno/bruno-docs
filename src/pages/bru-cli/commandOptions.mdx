@@ -4,23 +4,89 @@ import { Callout } from "nextra/components";
 
 Bruno CLI provides a variety of command options to help you customize your API testing and execution process. These options allow you to specify environments, configure reports, handle security, and much more. Below is a comprehensive list of available options:
 
-## Bruno version 
-To check the current version of your Bruno CLI installation, use the following command:
+## Options 
 
-```bash copy
-bru --version
+To use options, add them to the bru run command after you specify the collection file or folder:
+
+```bash
+bru run [options]
 ```
-This will display the version number of the Bruno CLI you have installed. It's a helpful command for ensuring you're working with the latest version or for troubleshooting version-specific issues.
 
-## Getting Started
+To view a list of available options for Bruno CLI, run the following command:
 
-Navigate to the directory where your API collection resides, and run the following command:
+```bash
+bru run -h
+```
+
+### Basic options
+
+| Option                       | Details                                                                       |
+| ---------------------------- | ----------------------------------------------------------------------------- |
+| `-h`, `--help`              | Output usage information                                                      |
+| `--version`                 | Output the version number                                                     |
+
+### Setup options
+
+| Option                       | Details                                                                       |
+| ---------------------------- | ----------------------------------------------------------------------------- |
+| `--env [string]`            | Specify environment to run with                                               |
+| `--env-var [string]`        | Overwrite a single environment variable, multiple usages possible             |
+| `--env-file [string]`       | Path to the environment file (.bru) to use for the collection run            |
+| `--sandbox [string]`        | Javascript sandbox to use; available sandboxes are "developer" (default) or "safe" [string] [default: "developer"] |
+| `--csv-file-path`           | CSV file to run the collection with                                           |
+| `--json-file-path`           | Path to the JSON data file                                                   |             
+| `--iteration-count [number]` | Number of times to run the collection                                        |
+| `-r`                        | Indicates a recursive run [boolean] [default: false]                          |
+
+### Request options
+
+| Option                       | Details                                                                       |
+| ---------------------------- | ----------------------------------------------------------------------------- |
+| `--delay [number]`          | Delay between each requests (in milliseconds)                                 |
+| `--tests-only`              | Only run requests that have tests or active assertions                        |
+| `--bail`                    | Stop execution after a failure of a request, test, or assertion               |
+
+### SSL & Security options
+
+| Option                       | Details                                                                       |
+| ---------------------------- | ----------------------------------------------------------------------------- |
+| `--cacert [string]`         | CA certificate to verify peer against                                         |
+| `--ignore-truststore`       | Use custom CA certificate exclusively and ignore default truststore [boolean] [default: false] |
+| `--client-cert-config`      | Path to the Client certificate config file used for securing the connection   |
+| `--insecure`                | Allow insecure server connections                                             |
+| `--disable-cookies`         | Automatically save and send cookies with requests [boolean] [default: false] |
+| `--noproxy`                 | Disable all proxy settings (both collection-defined and system proxies) [boolean] [default: false] |
+
+### Output & Reporting options
+
+| Option                       | Details                                                                       |
+| ---------------------------- | ----------------------------------------------------------------------------- |
+| `-o`, `--output [string]`   | **[DEPRECATED]** Path to write file results to. Use reporter options instead  |
+| `-f`, `--format [string]`   | **[DEPRECATED]** Format of the file results. Use reporter options instead     |
+| `--reporter-json [string]`  | Path to generate a JSON report                                                |
+| `--reporter-junit [string]` | Path to generate a JUnit report                                               |
+| `--reporter-html [string]`  | Path to generate an HTML report                                               |
+| `--reporter-skip-all-headers` | Skip all headers in the report [boolean] [default: false]                   |
+| `--reporter-skip-headers`   | Skip specific headers in the report [array] [default: []]                     |
+
+### Import options
+
+| Option                       | Details                                                                       |
+| ---------------------------- | ----------------------------------------------------------------------------- |
+| `--source [string]`         | Path to the OpenAPI specification file (YAML or JSON)                         |
+| `--output-file [string]`    | Output file to export as Bruno collection in JSON format                      |
+| `--collection-name [string]` | Name for the imported collection from OpenAPI                                 |
+
+## Examples
+
+This will run all the requests in your collection.
+
 
 ```bash copy
 bru run
 ```
 
-This will run all the requests in your collection. You can also run specific files or folders:
+You can also run specific files or folders:
 
 ```bash copy
 # Run a single file
@@ -38,98 +104,6 @@ bru run folder1 folder2
 # Mix of files and folders
 bru run folder1 request1.bru folder2 request2.bru
 ```
-
-## Running Requests in a Folder
-To run all the requests within a folder, use:
-
-```bash copy
-bru run folder
-```
-
-## Using Environments
-If you need to use a specific environment, you can pass it with the `--env` option:
-
-```bash copy
-bru run folder --env Local
-```
-
-## Passing Environment Variables
-
-<Callout type="info">
-Variables marked as secrets in Bruno app are not accessible via the CLI. Pass them directly as command-line arguments.
-</Callout>
-
-```bash copy
-bru run folder --env Local --env-var JWT_TOKEN=1234
-```
-
-### Multiple Environment Variables
-
-You can override multiple environment variables by using additional `--env-var` flags:
-
-```bash copy
-bru run folder --env Local --env-var JWT_TOKEN=1234 --env-var API_KEY=abcd1234 
-```
-
-Each `--env-var` flag adds or overrides a single environment variable, and you can chain as many as needed.
-
-## Adding Delay
-If you need to add a delay between requests during the execution of your API collection, you can use the `--delay` option.
-
-Example:
-```bash copy
-bru run  --delay 1000
-```
-
-## Running Multiple Iterations
-You can run a collection multiple times in a single command using the `--iteration-count` flag. This is useful for load testing or when you need to execute the same collection with different data sets.
-
-Example:
-```bash copy
-bru run --iteration-count=2
-```
-
-This will execute the collection twice. You can specify any positive integer to control how many times the collection runs.
-
-## Using Client Certificates for API Requests
-
-If your API requests require client certificates for authentication, you can specify using the `--client-cert-config` option. The configuration should be provided in a JSON file. Here's an example of how to use this option:
-
-```bash copy
-bru run folder --client-cert-config /path/to/client-cert-config.json
-```
-
-The client-cert-config.json file should contain the following fields:
-
-```json
-{
-  "enabled": true,
-  "certs": [
-    {
-      "domain": "usebruno.com",
-      "type": "cert",
-      "certFilePath": "certs/server_1.crt",
-      "keyFilePath": "private/server_1.key",
-      "passphrase": "Iu$eBrun0_#Secure!"
-    },
-    {
-      "domain": "the-example.com",
-      "type": "pfx",
-      "pfxFilePath": "pfx/server_3.pfx",
-      "passphrase": "L!ghT_Y@g@mi_2024!"
-    }
-  ]
-}
-```
-
-## Disabling Proxies
-
-If you need to bypass all proxy settings (both collection-defined and system proxies) when running requests, you can use the `--noproxy` flag:
-
-```bash copy
-bru run --noproxy
-```
-The flag completely disables all proxy settings for that particular CLI run.
 
 ## Importing OpenAPI Specifications
 
@@ -159,38 +133,6 @@ Where:
 - `<your-openapi.yaml>`: Path to your OpenAPI specification file (can be either YAML or JSON format)
 - `<preferred-location>`: Base path and filename for your JSON output
 
-## Options
-
-| Option                       | Details                                                                       |
-| ---------------------------- | ----------------------------------------------------------------------------- |
-| `-h`, `--help`              | Show help                                                                     |
-| `--version`                 | Show version number                                                           |
-| `-r`                        | Indicates a recursive run [boolean] [default: false]                          |
-| `--env [string]`            | Specify environment to run with                                               |
-| `--env-var [string]`        | Overwrite a single environment variable, multiple usages possible             |
-| `--env-file [string]`       | Path to the environment file (.bru) to use for the collection run            |
-| `--sandbox [string]`        | Javascript sandbox to use; available sandboxes are "developer" (default) or "safe" [string] [default: "developer"] |
-| `--tests-only`              | Only run requests that have tests or active assertions                        |
-| `--bail`                    | Stop execution after a failure of a request, test, or assertion               |
-| `--iteration-count [number]` | Number of times to run the collection                                        |
-| `--delay [number]`          | Delay between each requests (in milliseconds)                                 |
-| `--csv-file-path`           | CSV file to run the collection with                                           |
-| `--cacert [string]`         | CA certificate to verify peer against                                         |
-| `--ignore-truststore`       | Use custom CA certificate exclusively and ignore default truststore [boolean] [default: false] |
-| `--client-cert-config`      | Path to the Client certificate config file used for securing the connection   |
-| `--insecure`                | Allow insecure server connections                                             |
-| `--disable-cookies`         | Automatically save and send cookies with requests [boolean] [default: false] |
-| `--noproxy`                 | Disable all proxy settings (both collection-defined and system proxies) [boolean] [default: false] |
-| `-o`, `--output [string]`   | **[DEPRECATED]** Path to write file results to. Use reporter options instead  |
-| `-f`, `--format [string]`   | **[DEPRECATED]** Format of the file results. Use reporter options instead     |
-| `--reporter-json [string]`  | Path to generate a JSON report                                                |
-| `--reporter-junit [string]` | Path to generate a JUnit report                                               |
-| `--reporter-html [string]`  | Path to generate an HTML report                                               |
-| `--reporter-skip-all-headers` | Skip all headers in the report [boolean] [default: false]                   |
-| `--reporter-skip-headers`   | Skip specific headers in the report [array] [default: []]                     |
-| `--source [string]`         | Path to the OpenAPI specification file (YAML or JSON)                         |
-| `--output-file [string]`    | Output file to export as Bruno collection in JSON format                      |
-| `--collection-name [string]` | Name for the imported collection from OpenAPI                                 |
 
 ## Demo
 ![bru cli](/screenshots/cli-demo.webp)

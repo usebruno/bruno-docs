@@ -1,0 +1,184 @@
+import { Callout } from "nextra/components";
+
+# Jenkins CI
+
+Bruno CLI integrates seamlessly with Jenkins to automate your API testing workflows. This guide will walk you through setting up automated test execution using Jenkins CI.
+
+## Prerequisites
+
+Before setting up Jenkins CI with Bruno, ensure you have:
+
+1. **Jenkins server** installed and configured
+2. **Git repository** containing your Bruno collections
+3. **Bruno CLI** available on the Jenkins server
+
+<Callout type="info">
+  Make sure your Bruno collections are properly organized and tested locally before setting up CI/CD.
+</Callout>
+
+## Step 1: Organize Your Bruno Collections
+
+First, ensure your Bruno collections are properly organized in your repository:
+
+```
+your-api-project/
+├── Jenkinsfile
+├── collections/
+│   ├── authentication/
+│   │   ├── login.bru
+│   │   └── logout.bru
+│   ├── users/
+│   │   ├── create-user.bru
+│   │   ├── get-user.bru
+│   │   └── update-user.bru
+│   └── api/
+│       ├── health-check.bru
+│       └── status.bru
+├── environments/
+│   ├── development.bru
+│   ├── staging.bru
+│   └── production.bru
+└── README.md
+```
+
+## Step 2: Create Jenkins Pipeline
+
+### Create Jenkinsfile
+
+Create a new file `Jenkinsfile` in your repository root with the following content:
+
+```groovy
+pipeline {
+    agent any
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        
+        stage('Setup Node.js') {
+            steps {
+                sh 'node --version'
+                sh 'npm --version'
+            }
+        }
+        
+        stage('Install Bruno CLI') {
+            steps {
+                sh 'npm install -g @usebruno/cli'
+            }
+        }
+        
+        stage('Run API Tests') {
+            steps {
+                sh 'bru run --env ci --reporter-html results.html'
+            }
+        }
+        
+        stage('Archive Results') {
+            steps {
+                archiveArtifacts artifacts: 'results.html', fingerprint: true
+            }
+        }
+    }
+    
+    post {
+        always {
+            echo 'API Tests completed!'
+        }
+        success {
+            echo 'All tests passed!'
+        }
+        failure {
+            echo 'Tests failed!'
+        }
+    }
+}
+```
+
+## Step 3: Configure Jenkins Job
+
+1. **Create a new Pipeline job** in Jenkins:
+   - Go to Jenkins dashboard
+   - Click "New Item"
+   - Enter job name and select "Pipeline"
+   - Click "OK"
+
+2. **Configure the pipeline**:
+   - In "Pipeline" section, select "Pipeline script from SCM"
+   - Choose your SCM (Git)
+   - Enter your repository URL
+   - Set branch to `*/main`
+   - Set script path to `Jenkinsfile`
+
+3. **Save and run** the job
+
+## Sample Pipeline with Environment Variables
+
+If you need to use environment variables in your tests, here's an enhanced pipeline:
+
+```groovy
+pipeline {
+    agent any
+    
+    environment {
+        API_BASE_URL = "${env.API_BASE_URL}"
+        API_KEY = "${env.API_KEY}"
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        
+        stage('Setup Node.js') {
+            steps {
+                sh 'node --version'
+                sh 'npm --version'
+            }
+        }
+        
+        stage('Install Bruno CLI') {
+            steps {
+                sh 'npm install -g @usebruno/cli'
+            }
+        }
+        
+        stage('Run API Tests') {
+            steps {
+                sh 'bru run --env ci --env-var API_BASE_URL=$API_BASE_URL --env-var API_KEY=$API_KEY --reporter-html results.html'
+            }
+        }
+        
+        stage('Archive Results') {
+            steps {
+                archiveArtifacts artifacts: 'results.html', fingerprint: true
+            }
+        }
+    }
+    
+    post {
+        always {
+            echo 'API Tests completed!'
+        }
+        success {
+            echo 'All tests passed!'
+        }
+        failure {
+            echo 'Tests failed!'
+        }
+    }
+}
+```
+
+<Callout type="info">
+  To use environment variables, configure them in Jenkins job settings under "Environment variables" or use Jenkins credentials for sensitive data.
+</Callout>
+
+## Learn More
+
+For more advanced Jenkins features and configurations, visit the [Jenkins documentation](https://www.jenkins.io/doc/). 
