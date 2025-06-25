@@ -5,6 +5,6 @@ export default {
   "runCollection": "Run a Collection",
   "builtInReporters": "Generate Reports",
   "proxyConfiguration": "Proxy Configuration",
-  "gitHubCLI": "GitHub CI",
+  "gitHubCLI": "GitHub Actions",
   "jenkins": "Jenkins CI"
 }

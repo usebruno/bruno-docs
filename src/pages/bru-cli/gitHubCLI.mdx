@@ -1,8 +1,18 @@
 import { Callout } from "nextra/components";
 
-# GitHub Actions
+# GitHub Actions Integration
 
-Bruno CLI integrates seamlessly with GitHub Actions to automate API testing workflows. Follow the below stpes to integrate GitHub Actions with Bruno CLI.
+[GitHub Actions](https://docs.github.com/en/actions) is a powerful continuous integration and continuous delivery (CI/CD) platform that enables you to automate your software development workflows directly from your GitHub repository. It provides seamless integration with GitHub's ecosystem, making it an ideal choice for teams looking to automate their API testing workflows.
+
+Bruno CLI integrates seamlessly with GitHub Actions to automate API testing workflows.
+
+
+
+
+## Prerequisites
+- [Git](https://git-scm.com/downloads) Installed.
+- GitHub repository with Bruno collection.
+
 
 ## Automate API Testing with GitHub Actions
 
@@ -17,18 +27,11 @@ your-api-project/
 │   ├── authentication/
 │   │   ├── login.bru
 │   │   └── logout.bru
-│   ├── users/
-│   │   ├── create-user.bru
-│   │   ├── get-user.bru
-│   │   └── update-user.bru
-│   └── api/
-│       ├── health-check.bru
-│       └── status.bru
 ├── environments/
 │   ├── development.bru
-│   ├── staging.bru
+│   ├── ci.bru
 │   └── production.bru
-└── README.md
+└── bruno.json
 ```
 
 2. In your repository, create the following directory structure:

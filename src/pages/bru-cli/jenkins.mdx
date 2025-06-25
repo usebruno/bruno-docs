@@ -1,24 +1,21 @@
 import { Callout } from "nextra/components";
 
-# Jenkins CI
+# Jenkins CI Integration
 
-Bruno CLI integrates seamlessly with Jenkins to automate your API testing workflows. This guide will walk you through setting up automated test execution using Jenkins CI.
+[Jenkins](https://www.jenkins.io/) is a powerful open-source automation server that enables continuous integration and continuous delivery (CI/CD) for software development workflows. It provides a robust platform for automating build, test, and deployment processes across multiple environments and platforms.
 
 ## Prerequisites
 
-Before setting up Jenkins CI with Bruno, ensure you have:
+*   A running Jenkins instance (local or remote).
+*   The [NodeJS Plugin](https://plugins.jenkins.io/nodejs/) installed in your Jenkins environment.
+*   A Git repository containing your Bruno collections and a `Jenkinsfile`.
 
-1. **Jenkins server** installed and configured
-2. **Git repository** containing your Bruno collections
-3. **Bruno CLI** available on the Jenkins server
+## Automate API Testing with Jenkins
 
-<Callout type="info">
-  Make sure your Bruno collections are properly organized and tested locally before setting up CI/CD.
-</Callout>
 
-## Step 1: Organize Your Bruno Collections
+### Step 1: Organize Your Bruno Collections
 
-First, ensure your Bruno collections are properly organized in your repository:
+Ensure your Bruno collections and environment files are properly organized within your Git repository. A typical structure looks like this:
 
 ```
 your-api-project/
@@ -27,157 +24,131 @@ your-api-project/
 │   ├── authentication/
 │   │   ├── login.bru
 │   │   └── logout.bru
-│   ├── users/
-│   │   ├── create-user.bru
-│   │   ├── get-user.bru
-│   │   └── update-user.bru
-│   └── api/
-│       ├── health-check.bru
-│       └── status.bru
 ├── environments/
 │   ├── development.bru
-│   ├── staging.bru
+│   ├── ci.bru
 │   └── production.bru
-└── README.md
+└── bruno.json
 ```
 
-## Step 2: Create Jenkins Pipeline
+### Step 2: Configure Node.js in Jenkins
 
-### Create Jenkinsfile
+Before running Bruno CLI, you need to ensure Jenkins can access a Node.js runtime environment.
 
-Create a new file `Jenkinsfile` in your repository root with the following content:
+1.  **Install the NodeJS Plugin:**
+    *   Navigate to `Manage Jenkins` > `Plugins`.
+    *   Select the `Available plugins` tab, search for "NodeJS", and install it.
+
+2.  **Configure a Node.js Installation:**
+    *   Go to `Manage Jenkins` > `Tools` (under `System Configuration`).
+    *   Scroll down to the `NodeJS installations` section.
+    *   Click `Add NodeJS`.
+    *   Provide a descriptive **Name** (e.g., `Node.js 18`). This exact name will be used in your Jenkinsfile.
+    *   Check `Install automatically` and select your desired `Node.js version` (e.g., `NodeJS 18.20.8`).
+    *   **Crucially, ensure the checkbox "Provide Node & npm folder to PATH" is checked.** This ensures `node` and `npm` commands are available to your pipeline.
+    *   Click `Save`.
+
+### Step 3: Create Your Jenkinsfile
+
+Create a file named `Jenkinsfile` in the root of your Git repository. This file defines the steps of your CI pipeline.
 
 ```groovy
+// Sample Jenkinsfile
 pipeline {
-    agent any
-    
+    agent any // Run the pipeline on any available Jenkins agent
+
     stages {
-        stage('Checkout') {
+        stage('Checkout Code') {
             steps {
+                // Clones the repository to the Jenkins workspace
                 checkout scm
             }
         }
-        
-        stage('Setup Node.js') {
+
+        stage('Setup Node.js & Install Bruno CLI') {
             steps {
-                sh 'node --version'
-                sh 'npm --version'
+                // Makes the Node.js installation (configured in Jenkins Tools) available
+                tool 'Node.js 18' // Use the exact name configured in Jenkins Global Tool Configuration
+
+                echo 'Verifying Node.js and npm versions...'
+                sh 'node -v' // Verify Node.js is on PATH
+                sh 'npm -v'  // Verify npm is on PATH
+
+                echo 'Installing Bruno CLI globally...'
+                sh 'npm install -g @usebruno/cli' // Install Bruno CLI
+                sh 'bru --version' // Verify Bruno CLI installation
             }
         }
-        
-        stage('Install Bruno CLI') {
-            steps {
-                sh 'npm install -g @usebruno/cli'
-            }
-        }
-        
+
         stage('Run API Tests') {
             steps {
+                // Ensure Node.js is available if this stage runs in a separate context
+                tool 'Node.js 18'
+
+                echo 'Executing Bruno API tests...'
+                // Run tests with 'ci' environment and generate an HTML report
                 sh 'bru run --env ci --reporter-html results.html'
             }
         }
-        
-        stage('Archive Results') {
+
+        stage('Archive Test Results') {
             steps {
+                echo 'Archiving test report...'
+                // Save the generated HTML report as a build artifact
                 archiveArtifacts artifacts: 'results.html', fingerprint: true
             }
         }
     }
-    
-    post {
+
+    post { // Actions to run after the main pipeline stages complete
         always {
-            echo 'API Tests completed!'
+            echo 'Pipeline finished.'
         }
         success {
-            echo 'All tests passed!'
+            echo 'API Tests Passed Successfully!'
         }
         failure {
-            echo 'Tests failed!'
+            echo 'API Tests Failed! Check console output for details.'
         }
     }
 }
 ```
 
-## Step 3: Configure Jenkins Job
+### Step 4: Configure Jenkins Pipeline Job
 
-1. **Create a new Pipeline job** in Jenkins:
-   - Go to Jenkins dashboard
-   - Click "New Item"
-   - Enter job name and select "Pipeline"
-   - Click "OK"
+1. Create a New Jenkins Job:
 
-2. **Configure the pipeline**:
-   - In "Pipeline" section, select "Pipeline script from SCM"
-   - Choose your SCM (Git)
-   - Enter your repository URL
-   - Set branch to `*/main`
-   - Set script path to `Jenkinsfile`
+	- From the Jenkins Dashboard, click New Item.
+	- Enter an Item name (e.g., bruno-api-tests-pipeline).
+	- Select Pipeline as the item type and click OK.
 
-3. **Save and run** the job
+2. Configure Job Details:
 
-## Sample Pipeline with Environment Variables
+	- In the job configuration page, navigate to the Pipeline section.
+	- Set Definition to Pipeline script from SCM and Choose your SCM (e.g., Git).
+	- Enter your Repository URL (e.g., `https://github.com/your-org/your-repo.git`).
+	- Specify any Credentials if your repository is private.
+	- Set Branches to build to ***/main** (or the branch containing your Jenkinsfile).
+	- Ensure Script Path is Jenkinsfile (this is the default).
 
-If you need to use environment variables in your tests, here's an enhanced pipeline:
+3. Click Save to finalize your job configuration.
 
-```groovy
-pipeline {
-    agent any
-    
-    environment {
-        API_BASE_URL = "${env.API_BASE_URL}"
-        API_KEY = "${env.API_KEY}"
-    }
-    
-    stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-        
-        stage('Setup Node.js') {
-            steps {
-                sh 'node --version'
-                sh 'npm --version'
-            }
-        }
-        
-        stage('Install Bruno CLI') {
-            steps {
-                sh 'npm install -g @usebruno/cli'
-            }
-        }
-        
-        stage('Run API Tests') {
-            steps {
-                sh 'bru run --env ci --env-var API_BASE_URL=$API_BASE_URL --env-var API_KEY=$API_KEY --reporter-html results.html'
-            }
-        }
-        
-        stage('Archive Results') {
-            steps {
-                archiveArtifacts artifacts: 'results.html', fingerprint: true
-            }
-        }
-    }
-    
-    post {
-        always {
-            echo 'API Tests completed!'
-        }
-        success {
-            echo 'All tests passed!'
-        }
-        failure {
-            echo 'Tests failed!'
-        }
-    }
-}
-```
+### Step 5: Run and Monitor Your Pipeline
 
-<Callout type="info">
-  To use environment variables, configure them in Jenkins job settings under "Environment variables" or use Jenkins credentials for sensitive data.
-</Callout>
+1. Trigger a Build:
+
+	- From your Jenkins pipeline job page, click Build Now (in the left-hand menu) to manually start the pipeline.
+
+2. Monitor Progress:
+
+	- Observe the Build History section to see the status of your builds (green checkmark for success, red cross mark for failure).
+	- Click on a specific build number, then select Console Output to view real-time logs and detailed execution steps.
+
+3. View Test Results:
+
+	- Once a build that generated results.html completes, navigate to that specific build's page.
+	- Look for the **Artifacts** section (usually on the left sidebar or at the top of the build summary).
+	- Click on `results.html` to download the report, then open it in your web browser for detailed test outcomes.
 
 ## Learn More
 
