@@ -19,6 +19,27 @@ Select `OAuth 2.0` as the authentication method and set the grant type to `Autho
 
 Enable **Use PKCE** if your OAuth provider supports and requires PKCE (Proof Key for Code Exchange).
 
+## Understanding Callback URLs (Redirect URIs)
+
+The **Callback URL** (also known as **Redirect URI**) is a critical component of the OAuth2 authorization code flow. Here's what you need to know:
+
+### What is a Callback URL?
+
+The callback URL is the address where the OAuth2 provider (like Azure, Google, Facebook, etc.) will redirect the browser after successful authentication. This redirect contains a sensitive authorization code that Bruno extracts to complete the authentication process.
+
+### How Bruno Handles Callback URLs
+
+Bruno does not actually redirect to the callback URL. Instead, it intercepts the redirect attempt and extracts the authorization code from the URL that the OAuth2 provider tried to redirect to.
+
+This means:
+- **Bruno Support all formats**: It can handle any callback URL format that your OAuth2 provider allows
+- **No actual redirection**: Bruno never actually navigates to the callback URL
+- **Security maintained**: The authorization code is extracted securely without exposing it
+
+<Callout type="warning">
+If your application is already configured with OAuth2, use one of the existing callback URLs from your OAuth2 provider console. Do not add new URLs unless necessary.
+</Callout>
+
 ## Token Configuration and Usage
 
 Before getting the access token, configure how you want to use it in your requests:
