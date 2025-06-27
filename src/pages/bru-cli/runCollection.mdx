@@ -59,7 +59,7 @@ bru run --iteration-count=2
 
 This will execute the collection twice. This is useful for load testing or when you need to repeat the same set of requests multiple times.
 
-## Running a Collection with Environment Files
+## Running a Collection with Environments
 
 You can run a collection using environment variables from a `.bru` file. This allows you to attach environments via the CLI from anywhere in the filesystem.
 
@@ -84,3 +84,31 @@ bru run --env-file /Users/username/projects/api-testing/environments/prod.bru
 <Callout type="info">
   The environment file should be in Bruno's `.bru` format. Make sure the file contains valid environment variables and their values.
 </Callout>
+
+### Using Environments Names
+
+If you need to use a specific environment, you can pass it with the `--env` option:
+
+```bash copy
+bru run --env Local
+```
+
+#### Passing Environment Variables
+
+<Callout type="info">
+Variables marked as secrets in Bruno app are not accessible via the CLI. Pass them directly as command-line arguments.
+</Callout>
+
+```bash copy
+bru run --env Local --env-var JWT_TOKEN=1234
+```
+
+## Multiple Environment Variables
+
+You can override multiple environment variables by using additional `--env-var` flags:
+
+```bash copy
+bru run --env Local --env-var JWT_TOKEN=1234 --env-var API_KEY=abcd1234 
+```
+
+Each `--env-var` flag adds or overrides a single environment variable, and you can chain as many as needed.

@@ -293,7 +293,7 @@ Send a programmatic HTTP request within your script. This allows you to make add
 
 **Syntax:**
 ```javascript
-bru.sendRequest({
+await bru.sendRequest({
   method: string,
   url: string,
   headers?: object,
@@ -312,7 +312,7 @@ bru.sendRequest({
 
 **Example:**
 ```javascript
-bru.sendRequest({
+await bru.sendRequest({
   method: 'POST',
   url: 'https://echo.usebruno.com',
   headers: {

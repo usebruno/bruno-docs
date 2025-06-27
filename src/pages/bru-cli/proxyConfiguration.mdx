@@ -1,0 +1,45 @@
+# Proxy Configuration
+
+Bruno CLI allows you to configure proxy settings directly from the terminal. You can also add client certificates through the CLI.
+
+Follow the steps below to set up configurations quickly and efficiently.
+
+## Disabling Proxies
+
+If you need to bypass all proxy settings (both collection-defined and system proxies) when running requests, you can use the `--noproxy` flag:
+
+```bash copy
+bru run --noproxy
+```
+The flag completely disables all proxy settings for that particular CLI run.
+
+## Using Client Certificates for API Requests
+
+If your API requests require client certificates for authentication, you can specify using the `--client-cert-config` option. The configuration should be provided in a JSON file. Here's an example of how to use this option:
+
+```bash copy
+bru run  --client-cert-config /path/to/client-cert-config.json
+```
+
+The client-cert-config.json file should contain the following fields:
+
+```json
+{
+  "enabled": true,
+  "certs": [
+    {
+      "domain": "usebruno.com",
+      "type": "cert",
+      "certFilePath": "certs/server_1.crt",
+      "keyFilePath": "private/server_1.key",
+      "passphrase": "Iu$eBrun0_#Secure!"
+    },
+    {
+      "domain": "the-example.com",
+      "type": "pfx",
+      "pfxFilePath": "pfx/server_3.pfx",
+      "passphrase": "L!ghT_Y@g@mi_2024!"
+    }
+  ]
+}
+```
