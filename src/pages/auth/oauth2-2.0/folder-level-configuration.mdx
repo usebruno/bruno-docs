@@ -1,3 +1,75 @@
 import { Callout } from "nextra/components";
 
 # Folder-Level OAuth2 Configuration
+
+Bruno allows you to configure OAuth2 authentication at the folder level, making it reusable across all requests within that specific folder. This provides more granular control than collection-level configuration while maintaining the same powerful features.
+
+## Configuration
+
+1. Right-click on the folder and select "Folder Settings" > "Auth" tab
+2. Select "OAuth 2.0" from the authentication dropdown
+3. Choose your grant type and fill in the required OAuth2 parameters
+4. Configure token usage (Headers or URL) and management settings (Auto-fetch, Auto-refresh)
+5. Optionally assign a Token ID for manual reference
+6. Click "Get Access Token" to obtain and store the token
+
+<Callout type="info">
+For detailed OAuth2 parameter configuration, see the [Collection-Level OAuth2 Configuration](./collection-level-configuration.mdx) guide. The setup process and all settings are identical.
+</Callout>
+
+## Supported Grant Types
+
+Bruno supports the same three OAuth2 grant types at the folder level:
+
+- [Authorization Code](./authorization-code.mdx)
+- [Client Credentials](./client-credentials.mdx)
+- [Password Credentials](./password-credentials.mdx)
+
+## Token Management
+
+### Auto-fetch and Auto-refresh
+
+Folder-level OAuth2 includes the same token management features as collection-level:
+
+- **Auto-fetch**: Automatically fetches new tokens when needed
+- **Auto-refresh**: Automatically refreshes expired tokens
+
+<Callout type="important">
+You may optionally assign a Token ID to your token. If you do, you can reference this token in requests using the format `{{$oauth2.<tokenId>.access_token}}` (replace `<tokenId>` with your Token ID).
+</Callout>
+
+## Using Folder-Level OAuth2 in Requests
+
+Requests within the folder can use the authentication in two ways:
+
+### Method 1: Folder Inheritance (Recommended)
+
+- Open request settings
+- Select "Auth" tab
+- Choose "Inherit from folder"
+- The token will be automatically added according to your folder-level configuration
+
+### Method 2: Direct Token Reference
+
+Manually reference the folder's OAuth2 token using the variable format `{{$oauth2.<tokenId>.access_token}}` in headers or query parameters.
+
+## Folder vs Collection Level
+
+| Feature | Collection Level | Folder Level |
+|---------|------------------|--------------|
+| **Scope** | All requests in collection | Requests in specific folder only |
+| **Inheritance** | Inherit from collection | Inherit from folder |
+| **Configuration** | Collection settings | Folder settings |
+| **Token Management** | Same features | Same features |
+| **Use Case** | Collection-wide authentication | Folder-specific authentication |
+
+## Best Practices
+
+- **Use folder-level OAuth2** when different folders need different authentication
+- **Use collection-level OAuth2** when the entire collection uses the same authentication
+- **Keep Token IDs unique** across your collection to avoid conflicts
+- **Test inheritance** to ensure requests are using the correct authentication
+
+<Callout type="info">
+Folder-level OAuth2 configuration overrides collection-level settings for requests within that folder. If no folder-level auth is configured, requests will inherit from the collection level.
+</Callout>
