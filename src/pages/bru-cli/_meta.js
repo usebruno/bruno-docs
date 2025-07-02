@@ -4,7 +4,7 @@ export default {
   "commandOptions": "Command Options",
   "runCollection": "Run a Collection",
   "builtInReporters": "Generate Reports",
-  "proxyConfiguration": "Proxy Configuration",
+  "proxyConfiguration": "Proxy & mTLS",
   "gitHubCLI": "GitHub Actions",
   "jenkins": "Jenkins CI"
 }
