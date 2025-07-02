@@ -1,18 +1,21 @@
 import { Callout } from "nextra/components";
 
-# Collection-Level OAuth2 Configuration
+# OAuth 2.0 Configuration
 
 ## Overview
 
-Bruno allows you to configure OAuth2 authentication at the collection level, making it reusable across all requests within that collection. This guide explains how to set up and use OAuth2 authentication effectively.
+Bruno allows you to configure OAuth2 authentication at multiple levels: collection, folder, and request. This guide explains how to set up and use OAuth2 authentication effectively across your API testing workflow.
+
+<Callout type="info">
+The configuration process and all settings are identical across all levels. The only difference is where you access the settings and the scope of the configuration.
+</Callout>
 
 ## Setting Up OAuth2
 
-1. **Access Collection Settings**
-
-   - Open your collection
-   - Navigate to Collection Settings
-   - Select the "Auth" tab
+1. **Access Settings**
+   - **Collection Level**: Open your collection and navigate to Collection Settings > Auth tab
+   - **Folder Level**: Right-click on the folder and select Folder Settings > Auth tab
+   - **Request Level**: Open your request and navigate to Auth tab
 
 2. **Configure OAuth2**
    - Choose "OAuth 2.0" from the authentication dropdown
@@ -59,16 +62,45 @@ These settings can be found in the OAuth2 configuration panel and provide signif
   If you use the same Token ID in multiple OAuth requests, Bruno will overwrite the existing token data. Make sure to use unique Token IDs for different OAuth configurations.
 </Callout>
 
-## Using Collection-Level OAuth2 in Requests
+## Authentication Inheritance
 
-When a collection has OAuth2 configured, individual requests can use the authentication in two ways:
+Once you configure OAuth2 at the collection or folder level, you can inherit the authentication at the request level without duplicating the configuration.
 
-### Method 1: Collection Inheritance (Recommended)
+### How to Inherit Authentication
+
+1. Open your request and navigate to **Auth** tab
+2. Select **Inherit** from the authentication dropdown
+<Callout type="important">
+Bruno will automatically determine the source level:
+- **Inherit from Collection**: Uses the collection-level OAuth2 configuration
+- **Inherit from Folder**: Uses the folder-level OAuth2 configuration (if available)
+</Callout>
+
+The token will be automatically added to your request according to the inherited configuration.
+
+### Inheritance Hierarchy
+
+Bruno follows a specific hierarchy for authentication inheritance:
+
+1. **Request-level configuration** (highest priority)
+2. **Folder-level configuration** (if no request-level config)
+3. **Collection-level configuration** (if no folder-level config)
+4. **No authentication** (if no configuration at any level)
+
+<Callout type="info">
+Folder-level OAuth2 configuration overrides collection-level settings for requests within that folder. If no folder-level auth is configured, requests will inherit from the collection level.
+</Callout>
+
+## Using OAuth2 Tokens
+
+### Method 1: Collection/Folder Inheritance
+
+When a collection or folder has OAuth2 configured, individual requests can inherit the authentication:
 
 - Open request settings
 - Select "Auth" tab
-- Choose "Inherit from collection"
-- The token will be automatically added to the request according to your collection-level configuration (Headers or URL)
+- Choose "Inherit from collection" or "Inherit from folder"
+- The token will be automatically added to the request according to your configuration (Headers or URL)
 
 <video controls className="mt-10">
   <source
@@ -80,7 +112,7 @@ When a collection has OAuth2 configured, individual requests can use the authent
 
 ### Method 2: Direct Token Reference
 
-You can manually reference the collection's OAuth2 token in your requests using the variable format `{{$oauth2.<tokenId>.access_token}}` in headers or query parameters.
+You can manually reference OAuth2 tokens in your requests using the variable format `{{$oauth2.<tokenId>.access_token}}` in headers or query parameters.
 
 #### Example
 
@@ -93,3 +125,19 @@ As shown in the video above, the Token ID value will be `{{$oauth2.credentials.a
   />
   Your browser does not support the video tag.
 </video>
+
+<Callout type="info">
+You can click the 'Clear Cache' button to remove the stored token and request a new one at any time.
+</Callout>
+
+## Configuration Comparison
+
+| Feature | Collection Level | Folder Level | Request Level |
+|---------|------------------|--------------|---------------|
+| **Scope** | All requests in collection | Requests in specific folder | Individual request |
+| **Inheritance** | Inherit from collection | Inherit from folder | Override collection/folder |
+| **Configuration** | Collection settings | Folder settings | Request settings |
+| **Use Case** | Collection-wide authentication | Folder-specific authentication | Request-specific authentication |
+| **Priority** | Lowest | Medium | Highest |
+
+
