@@ -8,16 +8,16 @@ The official [Bruno Documentation](https://docs.usebruno.com/) repository!
 > Ensure that Node.js (version 19 or higher) is installed before proceeding.
 
 1. Clone the repository.
-```
+```shell
 git clone https://github.com/usebruno/bruno-docs.git
 cd bruno-docs
 ```
 2. Install dependencies 
-```js
+```shell
 npm install
 ```
 3. Start development server
-```js
+```shell
 npm run dev
 ```
 
