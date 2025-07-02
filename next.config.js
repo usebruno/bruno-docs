@@ -47,6 +47,7 @@ export default withNextra({
       { source: '/auth/oauth2-experimental/overview', destination: '/auth/oauth2-2.0/overview', permanent: true },
       { source: '/auth/oauth2-experimental/collection-level-configuration', destination: '/auth/oauth2-2.0/collection-level-configuration', permanent: true },
       { source: '/auth/oauth2-experimental/request-level-configuration', destination: '/auth/oauth2-2.0/request-level-configuration', permanent: true },
+      { source: '/auth/oauth2-2.0/request-level-configuration', destination: '/auth/oauth2-2.0/collection-level-configuration', permanent: true },
       { source: '/auth/oauth2-experimental/authorization-code', destination: '/auth/oauth2-2.0/authorization-code', permanent: true },
       { source: '/auth/oauth2-experimental/client-credentials', destination: '/auth/oauth2-2.0/client-credentials', permanent: true },
       { source: '/auth/oauth2-experimental/password-credentials', destination: '/auth/oauth2-2.0/password-credentials', permanent: true },
