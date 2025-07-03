@@ -1,20 +1,22 @@
 import { Callout } from "nextra/components";
 
-## OAuth 2.0 authentication in Bruno
+# OAuth 2.0 Authentication in Bruno
 
 <Callout type="warning" emoji="">  
   This OAuth 2 implementation is **specific to Bruno v2.x.x**. If using Bruno v.1.x.x, please see the [documentation for that version](/auth/oauth2/overview).
 
 </Callout>
 
-This document describes the new OAuth 2 implementation available in v2.x.x. This new approach simplifies authentication handling compared to the previous version.
+This document describes the new OAuth 2 implementation available in `v2.x.x`. This new approach simplifies authentication handling compared to the previous version.
 
 ## Overview
 
-Bruno supports OAuth 2 authentication at both collection and request levels:
+Bruno supports OAuth 2 authentication at collection, folder and request levels:
 
-- **[Collection Level](/auth/oauth2-experimental/collection-level-configuration)**: Configure once and share across multiple requests
-- **[Request Level](/auth/oauth2-experimental/request-level-configuration)**: Configure for specific requests, overriding collection settings if needed
+- **Collection Level**: Configure once and share across all requests in the collection
+- **Folder Level**: Configure for a specific folder and share across all requests within that folder
+- **Request Level**: Configure for individual requests, providing maximum flexibility
+
 
 ## Features & Improvements
 

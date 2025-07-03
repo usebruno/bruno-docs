@@ -2,7 +2,7 @@ import { Callout } from "nextra/components";
 
 # How to Use OAuth2 for the Authorization Code Grant Type
 
-OAuth2 authentication can be implemented in various ways, depending on the collection structure and specific requirements. You can configure OAuth2 at either the [collection level](/auth/oauth2-experimental/collection-level-configuration) or [request level](/auth/oauth2-experimental/request-level-configuration).
+OAuth2 authentication can be implemented in various ways, depending on the collection structure and specific requirements. You can configure OAuth2 authentication at collection, folder, and request level.
 
 ## OAuth2 Configuration
 
@@ -55,7 +55,7 @@ Before getting the access token, configure how you want to use it in your reques
 
    These settings streamline your workflow by reducing manual token management. Note that token refresh operations require a valid refresh token to be available.
 
-<Callout type="info">
+<Callout type="important">
   You may optionally assign a Token ID to your token. If you do, you can reference this token in requests using the format `{{$oauth2.<tokenId>.access_token}}` (replace `<tokenId>` with your Token ID).
 </Callout>
 
@@ -69,7 +69,3 @@ Before getting the access token, configure how you want to use it in your reques
 <Callout type="info">
   You can click the 'Clear Cache' button to remove the stored token and request a new one.
 </Callout>
-
-<br />
-<br />
-<br />
