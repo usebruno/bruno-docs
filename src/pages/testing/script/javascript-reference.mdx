@@ -617,7 +617,7 @@ The `onFail` function allows you to handle request errors in a custom way. This 
 
 **Syntax:**
 ```javascript
-bru.onFail((error) => {
+req.onFail((error) => {
   // Custom error handling logic
 });
 ```
@@ -628,7 +628,7 @@ bru.onFail((error) => {
 **Example:**
 ```javascript
 // Handle request failures with custom logic
-bru.onFail((error) => {
+req.onFail((error) => {
   console.error('Request failed:', error.message);
   
   // Log error details for debugging
