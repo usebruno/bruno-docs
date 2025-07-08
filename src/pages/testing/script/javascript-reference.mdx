@@ -609,3 +609,42 @@ Obtain the assertion results of a request by calling `bru.getAssertionResults` w
 const assertionResults = await bru.getAssertionResults();
 ```
 
+### Error Handling
+
+#### `onFail`
+
+The `onFail` function allows you to handle request errors in a custom way. This is useful for implementing custom error handling logic, logging, or taking specific actions when a request fails.
+
+**Syntax:**
+```javascript
+bru.onFail((error) => {
+  // Custom error handling logic
+});
+```
+
+**Parameters:**
+- `error`: The error object containing details about the request failure
+
+**Example:**
+```javascript
+// Handle request failures with custom logic
+bru.onFail((error) => {
+  console.error('Request failed:', error.message);
+  
+  // Log error details for debugging
+  console.log('Error details:', {
+    status: error.status,
+    statusText: error.statusText,
+    url: error.url,
+    method: error.method
+  });
+  
+  // Set a variable to track failure
+  bru.setVar('lastError', error.message);
+});
+```
+
+<Callout type="info">
+The `onFail` function is only available in Developer mode and should be called in pre-request scripts.
+</Callout>
+
