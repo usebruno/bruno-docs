@@ -617,7 +617,7 @@ The `onFail` function allows you to handle request errors in a custom way. This 
 
 **Syntax:**
 ```javascript
-req.onFail((error) => {
+bru.onFail((error) => {
   // Custom error handling logic
 });
 ```
@@ -628,7 +628,7 @@ req.onFail((error) => {
 **Example:**
 ```javascript
 // Handle request failures with custom logic
-req.onFail((error) => {
+bru.onFail((error) => {
   console.error('Request failed:', error.message);
   
   // Log error details for debugging
@@ -645,6 +645,6 @@ req.onFail((error) => {
 ```
 
 <Callout type="info">
-The `onFail` function should be called before the request is made (in pre-request scripts) to ensure it's properly registered for error handling.
+The `onFail` function is only available in Developer mode and should be called in pre-request scripts.
 </Callout>
 
