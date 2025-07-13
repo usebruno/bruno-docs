@@ -1,19 +1,16 @@
-import { DocsThemeConfig } from 'nextra-theme-docs'
+import { DocsThemeConfig, useConfig } from 'nextra-theme-docs'
 import { Navbar } from "./src/components/navbar";
-import { SidebarTitle } from "./src/components/sidebar-title";
+import { useRouter } from 'next/router';
 
-const config: DocsThemeConfig = {
-  logo: <span>Bruno Docs</span>,
-  project: {
-    link: "https://github.com/usebruno/bruno",
-  },
-  chat: {
-    link: "https://discord.com/invite/KgcZUncpjq",
-  },
-  docsRepositoryBase: "https://github.com/usebruno/bruno-docs/tree/main",
-  head: (
+const CustomHead = () => {
+  const frontmatter = useConfig()
+
+  const title = ("Bruno Docs | ").concat(frontmatter.title) ?? "Bruno Docs"
+  
+  return(
     <>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>{title}</title>
       <meta name="description" content="Bruno is a fast and git-friendly open source API client, helping developers test and manage APIs efficiently." />
       <meta name="keywords" content="API client, API testing, Postman alternative, REST client, GraphQL client, SOAP client, API development, git-friendly API client" />
       <meta name="robots" content="index, follow" />
@@ -36,7 +33,19 @@ const config: DocsThemeConfig = {
       <link href="/bruno.png" rel="apple-touch-icon" type="image/png" sizes="32x32" />
       <link rel="canonical" href="https://docs.usebruno.com" />
     </>
-  ),
+  )
+}
+
+const config: DocsThemeConfig = {
+  logo: <span>Bruno Docs</span>,
+  project: {
+    link: "https://github.com/usebruno/bruno",
+  },
+  chat: {
+    link: "https://discord.com/invite/KgcZUncpjq",
+  },
+  docsRepositoryBase: "https://github.com/usebruno/bruno-docs/tree/main",
+  head: CustomHead,
   navbar: {
     component: Navbar
   },
