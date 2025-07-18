@@ -40,7 +40,15 @@ Open your terminal and execute:
 ssh-keygen -t ed25519 -C "your_email@example.com" -f ~/.ssh/id_ed25519_gitlab
 ```
 
-#### 2. Add the SSH Key to Your GitLab Account
+#### 2. Add SSH Key to SSH Agent
+
+Add the SSH key to your SSH agent so it can be used for authentication:
+
+```bash
+ssh-add ~/.ssh/id_ed25519_gitlab
+```
+
+#### 3. Add the SSH Key to Your GitLab Account
 
 1. Go to **GitLab** > **User Settings** (click your avatar) > **SSH Keys**
 2. Click **Add new key**
