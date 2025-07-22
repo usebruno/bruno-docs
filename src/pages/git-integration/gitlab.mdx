@@ -1,0 +1,72 @@
+# Collaboration via GitLab
+
+GitLab is widely recognized as a leading all-in-one platform for teams and organizations to efficiently manage and collaborate on software development projects. Offering a comprehensive suite of DevOps tools, GitLab streamlines the entire software lifecycle from planning and coding to testing, deployment, and monitoring—enabling seamless collaboration and faster delivery.
+
+Bruno's Git functionality allows you to work with GitLab to manage, collaborate, and maintain your API development workflow.
+
+## Configure GitLab
+
+You need to set up an SSH key with GitLab. While you can also set up personal access tokens (HTTPS), this requires you to enter your token on every operation. SSH is a more convenient and secure way to work with GitLab.
+
+### Create Repository on GitLab
+
+To get started, you have to create a project/repository on GitLab. Follow these steps:
+
+1. Log into your GitLab account (create one if you don't have one)
+2. Click on the **New Project** button
+3. Choose **Create blank project** or **Create from template**
+4. Fill in all required fields (Project name, Description, Visibility level)
+5. Click **Create project**
+
+![gitlab-create-project](/screenshots/git-integration/bitbucket-gitlab/gitlab-blank-project.webp)
+
+Once you create a repository, click on the **Clone** button and copy the SSH URL, which looks similar to:
+
+![gitlab-clone-url](/screenshots/git-integration/bitbucket-gitlab/gitlab-clone-url.webp)
+
+```bash
+git@gitlab.com:<username>/<project-name>.git
+```
+
+### Configure SSH Key
+
+Follow these steps to configure an SSH key on your local system:
+
+#### 1. Generate SSH Key
+
+Open your terminal and execute:
+
+```bash
+ssh-keygen -t ed25519 -C "your_email@example.com" -f ~/.ssh/id_ed25519_gitlab
+```
+
+#### 2. Add SSH Key to SSH Agent
+
+Add the SSH key to your SSH agent so it can be used for authentication:
+
+```bash
+ssh-add ~/.ssh/id_ed25519_gitlab
+```
+
+#### 3. Add the SSH Key to Your GitLab Account
+
+1. Go to **GitLab** > **User Settings** (click your avatar) > **SSH Keys**
+2. Click **Add new key**
+3. Paste your `id_ed25519_gitlab.pub` content
+4. Give your key a title (e.g., "Bruno Development")
+5. Click **Add key**
+
+![gitlab-add-ssh-key](/screenshots/git-integration/bitbucket-gitlab/gitlab-add-ssh-key.webp)
+
+## Use GitLab with Bruno
+
+1. Create a Collection inside Bruno (if you haven't already)
+2. Click on the **Git** icon (next to Safe Mode) and select **Initialize repo**
+3. Click on **main** and select **Remotes** from the dropdown
+4. Add **origin** as the name of the remote and paste your repository URL (copied previously)
+
+Now you can perform push, pull, and other Git operations directly from Bruno. 
+
+![bruno-git-operations](/screenshots/git-integration/bitbucket-gitlab/bruno-git-operations.webp)
+
+For more detailed information about Git operations in Bruno, check out the [Collaboration via GUI documentation](/git-integration/using-gui/intro). 
