@@ -36,6 +36,16 @@ Set the current request url
 req.setUrl("https://api.github.com/search/repositories?q=vue");
 ```
 
+### `getAuthMode`
+
+Get the current authentication mode
+
+**Example:**
+
+```javascript
+let authMode = req.getAuthMode();
+```
+
 ### `getMethod`
 
 Get the current request method
@@ -54,6 +64,16 @@ Set the current request method
 
 ```javascript
 req.setMethod("POST");
+```
+
+### `getName`
+
+Get the current request name
+
+**Example:**
+
+```javascript
+const name = req.getName();
 ```
 
 ### `getHeader`
