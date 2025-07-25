@@ -7,11 +7,16 @@ meta {
   name: Get users
   type: http
   seq: 1
+  tags: [
+    smoke
+    sanity
+  ]
 }
 ```
 
 The `seq` is used to store the sequence number. This decides the sort position of your request in the UI.
 The `type` can be either `http` or `graphql`
+The `tags` is an array of strings that can be used to filter requests during collection runs. Tags are useful for organizing and selectively running requests based on categories like environment, functionality, or priority.
 
 ## get
 

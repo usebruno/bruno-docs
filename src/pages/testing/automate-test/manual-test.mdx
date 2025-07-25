@@ -1,4 +1,5 @@
 import PremiumBadge from "@/components/premium-badge";
+import { Callout } from "nextra/components";
 
 # Running Tests Manually
 
@@ -40,8 +41,39 @@ After the test report is generated, you can download it as an HTML document (`re
 
 ![details-test-reports.webp](/screenshots/testing/details-test-reports.webp)
 
+## Controlling Request Execution with Tags
+
+Bruno allows you to filter which requests to run in your collection using tags. You can add tags to your requests and then filter them during collection runs.
+
+<Callout type="info">
+  This feature requires Bruno version 2.8.0 or higher.
+</Callout>
+
+### Filtering by Tags in GUI
+
+When running a collection in the Bruno app, you can filter requests by tags:
+
+1. **Add tags to your requests**: Go to request settings and add tags to categorize your requests
+   
+   ![Add Tags to Requests](/screenshots/collection-runner/1-add-tags.webp)
+
+2. **Go to Collection Runner**: Open the collection runner to start filtering requests
+3. **Use tag filter options**: Use the tag filter options to include or exclude requests based on their tags
+4. **Run filtered collection**: Only requests matching your tag criteria will be executed
+
+   ![Run Collection with Tags](/screenshots/collection-runner/2-run-collection-tags.webp)
+
+#### Tag Filtering Options
+
+- **Include tags**: Only run requests that have ALL of the specified tags
+- **Exclude tags**: Skip requests that have ANY of the specified tags
+- **Combined filtering**: Use both include and exclude filters together
+
+Learn more about tag filtering in Bruno CLI in the [CLI tag filtering documentation](/bru-cli/runCollection#filtering-requests-with-tags).
+
 ## View Test Report
 
 Once the report is downloaded, you can open the `report.html` file in any web browser to review the detailed test results.
 
 ![test-web-view.webp](/screenshots/testing/test-web-view.webp)
+

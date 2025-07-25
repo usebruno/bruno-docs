@@ -112,3 +112,35 @@ bru run --env Local --env-var JWT_TOKEN=1234 --env-var API_KEY=abcd1234
 ```
 
 Each `--env-var` flag adds or overrides a single environment variable, and you can chain as many as needed.
+
+## Filtering Requests with Tags
+
+Bruno CLI supports filtering requests by tags, allowing you to run only specific subsets of your collection based on tag criteria.
+
+<Callout type="info">
+  This feature requires [Bruno CLI <strong><sup>↗</sup></strong>](https://www.npmjs.com/package/@usebruno/cli) version 2.8.0 or higher.
+</Callout>
+
+### Include Tags
+
+Run only requests that have at least one matching tag.
+
+```bash copy
+bru run --tags=smoke,sanity
+```
+
+#### Exclude Tags
+
+Skip requests that have ANY of the specified tags:
+
+```bash copy
+bru run --exclude-tags=skip,draft
+```
+
+#### Combined Filtering
+
+You can combine include and exclude filters:
+
+```bash copy
+bru run --tags=smoke,sanity --exclude-tags=skip,draft
+```

@@ -292,6 +292,28 @@ Get the response time
 let responseTime = res.getResponseTime();
 ```
 
+### `getSize`
+
+Get the response size in bytes. Returns an object with the following properties:
+
+- `body`: number,
+- `headers`: number,
+- `total`: number
+
+**Syntax:**
+```javascript
+const responseSize = res.getSize()
+```
+
+**Example:**
+
+```javascript
+test("Response body size is less than 1KB", () => {
+  const responseSize = res.getSize().body;
+  expect(responseSize).to.be.lessThan(1024);
+});
+```
+
 ## Bru
 
 The `bru` variable is available inside your scripting and testing context.
