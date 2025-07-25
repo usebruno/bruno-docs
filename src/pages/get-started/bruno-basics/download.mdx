@@ -51,18 +51,25 @@ Bruno can be installed via direct download or through package managers on suppor
     
     ### Using Package Managers
     
-    **Debian/Ubuntu (Repository Setup)**
+    **APT (Debian/Ubuntu)**
     ```bash
+    # Create keyrings directory
+    sudo mkdir -p /etc/apt/keyrings
+    
+    # Update and install GPG
+    sudo apt update && sudo apt install gpg
+    
+    # List existing keys (optional)
+    sudo gpg --list-keys
+    
     # Add the Bruno repository key
-    sudo mkdir -p /etc/apt/keyrings 
-    sudo gpg --no-default-keyring --keyring /etc/apt/keyrings/bruno.gpg --keyserver keyserver.ubuntu.com --recv-keys 9FA6017ECABE0266 
-
+    sudo gpg --no-default-keyring --keyring /etc/apt/keyrings/bruno.gpg --keyserver keyserver.ubuntu.com --recv-keys 9FA6017ECABE0266
+    
     # Add the Bruno repository
-    echo "deb [signed-by=/etc/apt/keyrings/bruno.gpg] http://debian.usebruno.com/ bruno stable" | sudo tee /etc/apt/sources.list.d/bruno.list 
-     
-    # Update and install
-    sudo apt update 
-    sudo apt install bruno
+    echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/bruno.gpg] http://debian.usebruno.com/ bruno stable" | sudo tee /etc/apt/sources.list.d/bruno.list
+    
+    # Update and install Bruno
+    sudo apt update && sudo apt install bruno
     ```
     **Flatpak**
     ```bash
