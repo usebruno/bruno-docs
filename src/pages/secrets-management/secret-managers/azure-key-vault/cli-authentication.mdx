@@ -27,11 +27,17 @@ Azure CLI authentication feature allows you to authenticate with Azure Key Vault
 
 1. Navigate to the **Secrets** tab in your collection
 2. Click on **Select Provider** and select **Azure Key Vault** from dropdown.
+
+![Select Azure Key Vault Provider](/screenshots/secret-variables/azure-key-vault/1-select-azure-vault.webp)
+
 3. In the **EDIT PROVIDER** dialog:
    - Click **+ Add Secret**
    - Enter the **Name** for your secret
    - Enter the **Vault Name** (your Azure Key Vault name)
-3. Click on **Save** button.
+
+![Azure Key Vault Dialog Box](/screenshots/secret-variables/azure-key-vault/2-azure-dialog-box.webp)
+
+4. Click on **Save** button.
 
 ### Step 3: Fetch Secrets
 
@@ -40,5 +46,9 @@ Azure CLI authentication feature allows you to authenticate with Azure Key Vault
    - Select the **CLI** tab
    - Click **Test CLI** to verify authentication
    - Click **Fetch** to retrieve secrets
-3. If successful, you'll see a secrets feteched in **Secrets** tab.
 
+![Test CLI Authentication](/screenshots/secret-variables/azure-key-vault/3-test-cli.webp)
+
+3. If successful, you'll see secrets fetched in the **Secrets** tab.
+
+Bruno Azure CLI authentication for Azure Key Vault integration, eliminating the need to store credentials locally and providing a more secure authentication method.
