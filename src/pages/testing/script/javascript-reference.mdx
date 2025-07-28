@@ -312,6 +312,26 @@ Get the response time
 let responseTime = res.getResponseTime();
 ```
 
+### `getStatusText`
+
+Get the response status text
+
+**Example:**
+
+```javascript
+let statusText = res.getStatusText();
+```
+
+### `setBody`
+
+Set the response body data
+
+**Example:**
+
+```javascript
+res.setBody({ message: "Custom response data" });
+```
+
 ### `getSize`
 
 Get the response size in bytes. Returns an object with the following properties:
@@ -365,6 +385,8 @@ Here is a complete table for all available methods with the `bru`.
 | bru.getAssertionResults()        | Retrieves the results of assertions.                      |
 | bru.getTestResults()             | Fetches the test                                          |
 | bru.sendRequest(options, callback) | Sends a programmatic HTTP request within your script |
+| bru.getOauth2CredentialVar(key)  | Retrieves an OAuth2 credential variable value.            |
+| bru.getCollectionName()          | Retrieves the current collection name.                    |
 
 Below is the API documentation for the methods available on `bru`
 
@@ -690,4 +712,28 @@ Obtain the assertion results of a request by calling `bru.getAssertionResults` w
 const assertionResults = await bru.getAssertionResults();
 ```
 
+### OAuth2 Credentials
+
+#### `getOauth2CredentialVar`
+
+Retrieve an OAuth2 credential variable value. This is useful for accessing OAuth2 tokens and credentials.
+
+**Example:**
+
+```javascript
+const accessToken = bru.getOauth2CredentialVar("access_token");
+```
+
+### Collection Information
+
+#### `getCollectionName`
+
+Retrieve the name of the current collection.
+
+**Example:**
+
+```javascript
+const collectionName = bru.getCollectionName();
+console.log('Current collection:', collectionName);
+```
 
