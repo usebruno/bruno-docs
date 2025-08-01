@@ -1,0 +1,67 @@
+import {Callout} from "nextra/components";
+
+# gRPC Request
+
+Bruno provides comprehensive support for gRPC requests, enabling you to test and interact with gRPC services. 
+
+<Callout>
+    gRPC is available in Bruno 2.9.0 and higher versions.
+</Callout>
+
+## Creating a gRPC Request
+
+### Step 1: Enable gRPC Support
+
+First, you need to enable gRPC support in Bruno's beta features:
+
+1. Go to **Settings** > **Beta**
+2. Check the **Enable** checkbox for gRPC support
+
+![Enable gRPC Support](/screenshots/send-request/grpc/1-enable.grpc-support.webp)
+
+### Step 2: Create a gRPC Request
+
+1. Open collection context menu and select **New Request** from dropdown.
+2. Select **gRPC** as your request type.
+3. Enter the **service endpoint** in the URL field.
+
+![Create gRPC Request](/screenshots/send-request/grpc/2-create-grpc-req.webp)
+
+### Step 3: Configure the Request
+ 
+1. Choose the **method** you want to call from the dropdown
+2. Add any **required parameters** in the message section
+
+![Add Message](/screenshots/send-request/grpc/3-add-message.webp)
+
+### Step 4: Send the Request
+
+Click the **Send** button to execute your gRPC request.
+
+### Step 5: View Response
+
+After sending the request, you'll receive the response from the gRPC service:
+
+![Received Response](/screenshots/send-request/grpc/4-received-response.webp)
+
+### Step 6: Add Proto Files (Optional)
+
+For better IntelliSense and method discovery, you can add your `.proto` files:
+
+![Add Proto Files](/screenshots/send-request/grpc/5-add-probo-files.webp)
+
+## Supported Features
+
+- Protocol buffer support
+- Streaming requests
+- Metadata handling
+- Response visualization
+- Proto file integration for better IntelliSense
+
+## Configuration
+
+Configure your gRPC settings in the request configuration panel. You can specify:
+- Service endpoints
+- Authentication methods
+- Metadata headers
+- Proto file paths
