@@ -387,14 +387,15 @@ Here is a complete table for all available methods with the `bru`.
 | bru.sendRequest(options, callback) | Sends a programmatic HTTP request within your script |
 | bru.getOauth2CredentialVar(key)  | Retrieves an OAuth2 credential variable value.            |
 | bru.getCollectionName()          | Retrieves the current collection name.                    |
-| bru.setCookie(url, name, value) | Sets a single cookie using key-value format.              |
-| bru.setCookie(url, cookieObject) | Sets a single cookie using object format.                 |
-| bru.setCookies(url, cookies)     | Sets multiple cookies at once using an array of cookie objects. |
-| bru.getCookie(url, name)         | Gets a specific cookie by name.                           |
-| bru.getCookies(url)              | Gets all cookies for a specific URL.                      |
-| bru.deleteCookie(url, name)      | Deletes a specific cookie by name.                        |
-| bru.deleteCookies(url)           | Deletes all cookies for a specific URL.                   |
-| bru.jar.clear()                  | Clears all cookies from the cookie jar.                   |
+| bru.cookies.jar()                | Creates a cookie jar instance for managing cookies.        |
+| jar.setCookie(url, name, value) | Sets a single cookie using key-value format.              |
+| jar.setCookie(url, cookieObject) | Sets a single cookie using object format.                 |
+| jar.setCookies(url, cookies)     | Sets multiple cookies at once using an array of cookie objects. |
+| jar.getCookie(url, name)         | Gets a specific cookie by name.                           |
+| jar.getCookies(url)              | Gets all cookies for a specific URL.                      |
+| jar.deleteCookie(url, name)      | Deletes a specific cookie by name.                        |
+| jar.deleteCookies(url)           | Deletes all cookies for a specific URL.                   |
+| jar.clear()                      | Clears all cookies from the cookie jar.                   |
 
 Below is the API documentation for the methods available on `bru`
 
@@ -747,23 +748,39 @@ console.log('Current collection:', collectionName);
 
 ### Cookie Management
 
-Bruno provides Cookie Jar APIs that enable programmatic cookie management in request scripts. These APIs allow you to set, get, and delete cookies programmatically.
+Bruno provides Cookie Jar APIs that enable programmatic cookie management in request scripts. These APIs allow you to set, get, and delete cookies programmatically using a cookie jar instance.
 
 <Callout type="info">
   Cookie management APIs are available in pre-request scripts, post-request scripts, and test scripts.
 </Callout>
 
-#### `setCookie`
+#### `cookies.jar()`
+
+Create a cookie jar instance for managing cookies.
+
+**Syntax:**
+```javascript
+const jar = bru.cookies.jar();
+```
+
+**Returns:** A cookie jar instance with methods for cookie management
+
+**Example:**
+```javascript
+const jar = bru.cookies.jar();
+```
+
+#### `jar.setCookie`
 
 Set a single cookie with specified attributes. This method has two overloads for different use cases.
 
 **Syntax:**
 ```javascript
 // Overload 1: Key-value format
-bru.setCookie(url, name, value);
+jar.setCookie(url, name, value);
 
 // Overload 2: Object format
-bru.setCookie(url, cookieObject);
+jar.setCookie(url, cookieObject);
 ```
 
 **Parameters:**
@@ -783,11 +800,13 @@ bru.setCookie(url, cookieObject);
 
 **Example:**
 ```javascript
+const jar = bru.cookies.jar();
+
 // Set a simple cookie using key-value format
-bru.setCookie("https://example.com", "sessionId", "abc123");
+jar.setCookie("https://example.com", "sessionId", "abc123");
 
 // Set a cookie with options using object format
-bru.setCookie("https://example.com", {
+jar.setCookie("https://example.com", {
   key: "userToken",
   value: "xyz789",
   domain: "example.com",
@@ -798,13 +817,13 @@ bru.setCookie("https://example.com", {
 });
 ```
 
-#### `setCookies`
+#### `jar.setCookies`
 
 Set multiple cookies at once using an array of cookie objects.
 
 **Syntax:**
 ```javascript
-bru.setCookies(url, cookies);
+jar.setCookies(url, cookies);
 ```
 
 **Parameters:**
@@ -822,7 +841,9 @@ bru.setCookies(url, cookies);
 
 **Example:**
 ```javascript
-bru.setCookies("https://example.com", [
+const jar = bru.cookies.jar();
+
+jar.setCookies("https://example.com", [
   {
     key: "sessionId",
     value: "abc123",
@@ -838,13 +859,13 @@ bru.setCookies("https://example.com", [
 ]);
 ```
 
-#### `getCookie`
+#### `jar.getCookie`
 
 Get a specific cookie by name.
 
 **Syntax:**
 ```javascript
-bru.getCookie(url, name);
+jar.getCookie(url, name);
 ```
 
 **Parameters:**
@@ -855,20 +876,21 @@ bru.getCookie(url, name);
 
 **Example:**
 ```javascript
-const sessionCookie = bru.getCookie("https://example.com", "sessionId");
+const jar = bru.cookies.jar();
+const sessionCookie = jar.getCookie("https://example.com", "sessionId");
 if (sessionCookie) {
   console.log("Session ID:", sessionCookie.value);
   console.log("Expires:", sessionCookie.expires);
 }
 ```
 
-#### `getCookies`
+#### `jar.getCookies`
 
 Get all cookies for a specific URL.
 
 **Syntax:**
 ```javascript
-bru.getCookies(url);
+jar.getCookies(url);
 ```
 
 **Parameters:**
@@ -878,17 +900,18 @@ bru.getCookies(url);
 
 **Example:**
 ```javascript
-const allCookies = bru.getCookies("https://example.com");
+const jar = bru.cookies.jar();
+const allCookies = jar.getCookies("https://example.com");
 console.log("All cookies:", allCookies);
 ```
 
-#### `deleteCookie`
+#### `jar.deleteCookie`
 
 Delete a specific cookie by name.
 
 **Syntax:**
 ```javascript
-bru.deleteCookie(url, name);
+jar.deleteCookie(url, name);
 ```
 
 **Parameters:**
@@ -897,17 +920,19 @@ bru.deleteCookie(url, name);
 
 **Example:**
 ```javascript
+const jar = bru.cookies.jar();
+
 // Delete a cookie
-bru.deleteCookie("https://example.com", "sessionId");
+jar.deleteCookie("https://example.com", "sessionId");
 ```
 
-#### `deleteCookies`
+#### `jar.deleteCookies`
 
 Delete all cookies for a specific URL.
 
 **Syntax:**
 ```javascript
-bru.deleteCookies(url);
+jar.deleteCookies(url);
 ```
 
 **Parameters:**
@@ -915,8 +940,10 @@ bru.deleteCookies(url);
 
 **Example:**
 ```javascript
+const jar = bru.cookies.jar();
+
 // Delete all cookies for a specific URL
-bru.deleteCookies("https://example.com");
+jar.deleteCookies("https://example.com");
 ```
 
 #### `jar.clear`
@@ -925,13 +952,15 @@ Clear all cookies from the cookie jar.
 
 **Syntax:**
 ```javascript
-bru.jar.clear();
+jar.clear();
 ```
 
 **Example:**
 ```javascript
+const jar = bru.cookies.jar();
+
 // Clear all cookies
-bru.jar.clear();
+jar.clear();
 ```
 
 <Callout type="warning" emoji="">
