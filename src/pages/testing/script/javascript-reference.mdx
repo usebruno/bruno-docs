@@ -322,6 +322,30 @@ Get the response status text
 let statusText = res.getStatusText();
 ```
 
+### `getUrl`
+
+Get the response URL. In case of redirects, you will get the final URL which may be different from the original request URL if redirects were followed. This functionality is also available as a property `res.url`.
+
+<Callout type="important">
+  This method is only available in post-response scripts and test scripts.
+</Callout>
+
+**Returns:** Response URL as a string.
+
+**Example:**
+
+```javascript
+// Get the response URL
+const responseUrl = res.getUrl();
+console.log("Response URL:", responseUrl);
+
+// Test that the response URL is as expected
+test("should end up at correct URL after redirects", () => {
+  const url = res.getUrl();
+  expect(url).to.equal("https://www.apple.com");
+});
+```
+
 ### `setBody`
 
 Set the response body data
