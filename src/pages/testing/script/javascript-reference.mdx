@@ -411,6 +411,8 @@ Here is a complete table for all available methods with the `bru`.
 | bru.sendRequest(options, callback) | Sends a programmatic HTTP request within your script |
 | bru.getOauth2CredentialVar(key)  | Retrieves an OAuth2 credential variable value.            |
 | bru.getCollectionName()          | Retrieves the current collection name.                    |
+| bru.cookies.jar()                | Creates a cookie jar instance for managing cookies.        |
+
 
 Below is the API documentation for the methods available on `bru`
 
@@ -760,4 +762,225 @@ Retrieve the name of the current collection.
 const collectionName = bru.getCollectionName();
 console.log('Current collection:', collectionName);
 ```
+
+### Cookie Management
+
+Bruno provides Cookie Jar APIs that enable programmatic cookie management in request scripts. These APIs allow you to set, get, and delete cookies programmatically using a cookie jar instance.
+
+<Callout type="info">
+  Cookie management APIs are available in pre-request scripts, post-request scripts, and test scripts.
+</Callout>
+
+#### `cookies.jar()`
+
+Create a cookie jar instance for managing cookies.
+
+**Syntax:**
+```javascript
+const jar = bru.cookies.jar();
+```
+
+**Returns:** A cookie jar instance with methods for cookie management
+
+**Example:**
+```javascript
+const jar = bru.cookies.jar();
+```
+
+#### `jar.setCookie`
+
+Set a single cookie with specified attributes. This method has two overloads for different use cases.
+
+**Syntax:**
+```javascript
+// Overload 1: Key-value format
+jar.setCookie(url, name, value);
+
+// Overload 2: Object format
+jar.setCookie(url, cookieObject);
+```
+
+**Parameters:**
+- `url`: The URL for which the cookie should be set
+- `name`: The name of the cookie (for key-value format)
+- `value`: The value of the cookie (for key-value format)
+- `cookieObject`: Cookie object with the following properties:
+  - `key`: The name of the cookie
+  - `value`: The value of the cookie
+  - `domain`: The domain where the cookie is valid
+  - `path`: The URL path where the cookie will be sent (default: "/")
+  - `expires`: The expiration date (Date object or string)
+  - `maxAge`: Maximum age in seconds
+  - `secure`: Boolean indicating if the cookie should only be sent over HTTPS
+  - `httpOnly`: Boolean indicating if the cookie should be HTTP-only
+  - `sameSite`: SameSite attribute ("Strict", "Lax", or "None")
+
+**Example:**
+```javascript
+const jar = bru.cookies.jar();
+
+// Set a simple cookie using key-value format
+jar.setCookie("https://example.com", "sessionId", "abc123");
+
+// Set a cookie with options using object format
+jar.setCookie("https://example.com", {
+  key: "userToken",
+  value: "xyz789",
+  domain: "example.com",
+  path: "/api",
+  secure: true,
+  httpOnly: true,
+  maxAge: 3600 // 1 hour
+});
+```
+
+#### `jar.setCookies`
+
+Set multiple cookies at once using an array of cookie objects.
+
+**Syntax:**
+```javascript
+jar.setCookies(url, cookies);
+```
+
+**Parameters:**
+- `url`: The URL for which the cookies should be set
+- `cookies`: Array of cookie objects, each with the following properties:
+  - `key`: The name of the cookie
+  - `value`: The value of the cookie
+  - `domain`: (Optional) The domain where the cookie is valid
+  - `path`: (Optional) The URL path where the cookie will be sent
+  - `expires`: (Optional) The expiration date
+  - `maxAge`: (Optional) Maximum age in seconds
+  - `secure`: (Optional) Boolean indicating if the cookie should only be sent over HTTPS
+  - `httpOnly`: (Optional) Boolean indicating if the cookie should be HTTP-only
+  - `sameSite`: (Optional) SameSite attribute
+
+**Example:**
+```javascript
+const jar = bru.cookies.jar();
+
+jar.setCookies("https://example.com", [
+  {
+    key: "sessionId",
+    value: "abc123",
+    secure: true,
+    httpOnly: true
+  },
+  {
+    key: "userPreference",
+    value: "dark-mode",
+    path: "/",
+    maxAge: 86400 // 24 hours
+  }
+]);
+```
+
+#### `jar.getCookie`
+
+Get a specific cookie by name.
+
+**Syntax:**
+```javascript
+jar.getCookie(url, name);
+```
+
+**Parameters:**
+- `url`: The URL for which to retrieve the cookie
+- `name`: The name of the cookie to retrieve
+
+**Returns:** The cookie object or `null` if not found
+
+**Example:**
+```javascript
+const jar = bru.cookies.jar();
+const sessionCookie = jar.getCookie("https://example.com", "sessionId");
+if (sessionCookie) {
+  console.log("Session ID:", sessionCookie.value);
+  console.log("Expires:", sessionCookie.expires);
+}
+```
+
+#### `jar.getCookies`
+
+Get all cookies for a specific URL.
+
+**Syntax:**
+```javascript
+jar.getCookies(url);
+```
+
+**Parameters:**
+- `url`: The URL for which to retrieve all cookies
+
+**Returns:** Array of cookie objects or empty array if no cookies found
+
+**Example:**
+```javascript
+const jar = bru.cookies.jar();
+const allCookies = jar.getCookies("https://example.com");
+console.log("All cookies:", allCookies);
+```
+
+#### `jar.deleteCookie`
+
+Delete a specific cookie by name.
+
+**Syntax:**
+```javascript
+jar.deleteCookie(url, name);
+```
+
+**Parameters:**
+- `url`: The URL for which to delete the cookie
+- `name`: The name of the cookie to delete
+
+**Example:**
+```javascript
+const jar = bru.cookies.jar();
+
+// Delete a cookie
+jar.deleteCookie("https://example.com", "sessionId");
+```
+
+#### `jar.deleteCookies`
+
+Delete all cookies for a specific URL.
+
+**Syntax:**
+```javascript
+jar.deleteCookies(url);
+```
+
+**Parameters:**
+- `url`: The URL for which to delete all cookies
+
+**Example:**
+```javascript
+const jar = bru.cookies.jar();
+
+// Delete all cookies for a specific URL
+jar.deleteCookies("https://example.com");
+```
+
+#### `jar.clear`
+
+Clear all cookies from the cookie jar.
+
+**Syntax:**
+```javascript
+jar.clear();
+```
+
+**Example:**
+```javascript
+const jar = bru.cookies.jar();
+
+// Clear all cookies
+jar.clear();
+```
+
+<Callout type="warning" emoji="">
+  When deleting cookies, the domain and path options must match the original cookie's domain and path for the deletion to be successful.
+</Callout>
 
