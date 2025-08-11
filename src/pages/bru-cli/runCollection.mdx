@@ -144,3 +144,31 @@ You can combine include and exclude filters:
 ```bash copy
 bru run --tags=smoke,sanity --exclude-tags=skip,draft
 ```
+
+## Parallel Execution and Progress Tracking
+
+Bruno CLI supports running requests in parallel and displaying real-time progress during collection execution.
+
+### Parallel Execution
+
+By default, Bruno CLI runs requests sequentially. You can enable parallel execution using the `--parallel` flag:
+
+```bash copy
+bru run --iteration-count 2 --parallel
+```
+
+
+### Progress Display
+
+To see real-time progress during collection execution, use the `--show-progress` flag:
+
+```bash copy
+bru run --show-progress
+```
+
+This displays a formatted table showing:
+- Request status (running, completed, failed)
+- Response times
+- Test results
+- Overall progress
+
