@@ -1,1 +1,68 @@
 # gRPC Streams
+
+gRPC streaming enables real-time, bidirectional communication between clients and servers. Bruno supports all four types of gRPC streaming patterns, allowing you to test and interact with streaming APIs efficiently.
+
+## Understanding gRPC Streaming
+
+gRPC streaming allows you to send and receive multiple messages over a single connection, making it ideal for:
+- **Real-time applications** (chat, notifications, live updates)
+- **Large data transfers** (file uploads, bulk operations)
+- **Continuous data processing** (sensor data, analytics)
+- **Bidirectional communication** (collaborative editing, gaming)
+
+## Step-by-Step: Bidirectional Streaming Workflow
+
+Follow this complete workflow to set up and test bidirectional streaming in Bruno:
+
+### Step 1: Select Streaming Method
+
+1. **Create a gRPC Request**: Open your collection and create a new gRPC request
+2. **Enter Service Endpoint**: Add your gRPC server URL (e.g., `localhost:50051`)
+3. **Choose Streaming Method**: Select a bidirectional streaming method from the dropdown
+
+![Select Streaming Method](/screenshots/send-request/grpc/grpc-streams/1-grpc-select-stream.webp)
+
+### Step 2: Auto-Generate or Add Proto Files
+
+You have two options for method discovery:
+
+**Option A: Auto-Generate Messages**
+- Bruno can auto-generate message templates based on server reflection
+- This works when your gRPC server has reflection enabled
+
+**Option B: Add Proto Files**
+- Upload your `.proto` files for enhanced IntelliSense
+- Provides better type safety and method discovery
+
+![Auto-Fill gRPC Messages](/screenshots/send-request/grpc/grpc-streams/2-autofill-grpc-msg.webp)
+
+### Step 3: Build Stream Connection
+
+1. **Configure Request**: Set up any initial request parameters
+2. **Start Stream**: Click the start button to establish the bidirectional connection
+3. **Monitor Status**: Watch the connection status indicator
+
+![Building Stream Connection](/screenshots/send-request/grpc/grpc-streams/3-building-stream-conn.webp)
+
+### Step 4: Send Multiple Messages
+
+Once the stream is active:
+
+1. **Type Your Message**: Enter the message content in the input field
+2. **Send Message**: Click the send button to transmit your message
+3. **Add More Messages**: Continue sending additional messages as needed
+4. **Monitor Responses**: Watch for incoming messages from the server
+
+![Add Multiple Messages](/screenshots/send-request/grpc/grpc-streams/4-add-multiple-msg.webp)
+
+### Step 5: End Stream and View Timeline
+
+1. **End Message Stream**: Click the right icon (end stream button) to stop sending messages
+2. **Complete Request**: End the entire streaming session
+3. **View Response Timeline**: See the complete conversation timeline with timestamps
+
+![gRPC Response Timeline](/screenshots/send-request/grpc/grpc-streams/5-grpc-res.webp)
+
+
+
+
