@@ -7,10 +7,9 @@ Bruno provides comprehensive support for gRPC requests, enabling you to test and
 - **Test real-time streaming APIs** including unary, server streaming, client streaming, and bidirectional streaming
 - **Debug gRPC services** with detailed request/response inspection
 
+## gRPC Interface
 
-
-## Bruno gRPC Interface
-
+![gRPC Iiterface](/screenshots/send-request/grpc/1-grpc-interface.webp)
 
 ## Creating a gRPC Request
 
@@ -34,7 +33,7 @@ First, you need to enable gRPC support in Bruno's beta features:
 ### Step 3: Configure the Request
  
 1. Choose the **method** you want to call from the dropdown
-2. Add any **required parameters** in the message section
+2. Add any **required inputs** in the message section.
 
 ![Select Method](/screenshots/send-request/grpc/3-select-method.webp)
 
@@ -44,3 +43,6 @@ Click the **Send** button to execute your gRPC request.
 
 ![Add Message and Receive Response](/screenshots/send-request/grpc/4-add-msg-receive-resp.webp)
 
+You'll see relevant response in the **Response** section. 
+
+To learn about proto files, navigate to the [Adding Proto file section.](./grpc-proto.mdx)
