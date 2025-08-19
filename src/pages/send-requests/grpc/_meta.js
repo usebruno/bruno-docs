@@ -1,6 +1,6 @@
 export default {
     "overview": "Overview",
-    "grpc-request": "gRPC Request",
-    "grpc-proto": "gRPC Proto",
-    "grpc-streams": "gRPC Streams"
+    "grpc-request": "Create Request",
+    "grpc-proto": "Proto Files",
+    "grpc-streams": "Streams"
 }
