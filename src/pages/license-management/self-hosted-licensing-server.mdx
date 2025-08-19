@@ -1,0 +1,435 @@
+# Self Hosted Licensing Server Installation Guide
+
+## Overview
+
+This document provides a step-by-step guide to installing and configuring the Bruno Licensing Server on your infrastructure. The server will be hosted as a Docker container. To ensure proper functionality, you'll need to set up MongoDB for data storage and SMTP credentials for sending emails.
+
+## Prerequisites
+
+- **Docker** installed on your server. You should allocate at least 2GB of memory. [Install Docker](https://docs.docker.com/get-docker/)
+- **Access to a MongoDB instance** (on-premise or cloud-hosted, e.g., MongoDB Atlas)
+- **SMTP credentials** to configure the email service for notifications (use any email service provider such as SendGrid, Gmail, or custom SMTP server)
+
+## System Requirements
+
+### MongoDB Community Server
+- **Version**: v6 or greater
+- **Size**: 4GB or greater
+
+### Docker Container
+- **Memory Allocated**: 2 GB or greater
+
+## Architecture Diagram
+
+We will outline four different approaches to setting up the Bruno Licensing Server using Docker. Whether you prefer to run the image directly, use Kubernetes for container orchestration, automate with Ansible, or manage the service with Docker Compose, each method provides flexibility to suit your infrastructure needs. We'll walk you through the steps and configurations required for each approach to help you get your licensing server up and running efficiently.
+
+## 1. Setup by Running the Docker Image
+
+### Pull the Docker Image
+
+```bash
+docker pull public.ecr.aws/e6d0f8t6/bruno-hosted-license-server
+```
+
+### Run the Docker container with required environment variables:
+
+```bash
+docker run -d \
+  -e MONGODB_URI="{{ mongodb_uri }}" \
+  -e SMTP_HOST="{{ smtp_host }}" \
+  -e SMTP_PORT="{{ smtp_port }}" \
+  -e SMTP_USER="{{ smtp_user }}" \
+  -e SMTP_PASSWORD="{{ smtp_password }}" \
+  -e AUTH_JWT_SECRET="{{ random_uuid }}" \
+  -e BRUNO_GLOBAL_LICENSE_SERVER_URL="https://license-api.usebruno.com" \
+  -e PORT="80" \
+  -p 8080:80 \
+  public.ecr.aws/e6d0f8t6/bruno-hosted-license-server
+```
+
+## 2. Setup Using Ansible
+
+### Ansible Playbook
+
+```yaml
+- hosts: all
+  become: true
+  tasks:
+    - name: Pull Docker image for licensing server
+      docker_image:
+        name: public.ecr.aws/e6d0f8t6/bruno-hosted-license-server
+        source: pull
+    - name: Run the licensing server container
+      docker_container:
+        name: licensing_server
+        image: public.ecr.aws/e6d0f8t6/bruno-hosted-license-server
+        state: started
+        restart_policy: always
+        ports:
+          - "8080:8080"
+        env:
+          MONGODB_URI: "{{ mongodb_uri }}"
+          SMTP_HOST: "{{ smtp_host }}"
+          SMTP_PORT: "{{ smtp_port }}"
+          SMTP_USER: "{{ smtp_user }}"
+          SMTP_PASSWORD: "{{ smtp_pass }}"
+          AUTH_JWT_SECRET: "{{ random_uuid }}"
+          BRUNO_GLOBAL_LICENSE_SERVER_URL: "https://license-api.usebruno.com"
+          PORT: 80
+```
+
+## 3. Setup Using Docker Compose
+
+### Docker Compose File
+
+```yaml
+version: '3'
+services:
+  licensing-server:
+    image: public.ecr.aws/e6d0f8t6/bruno-hosted-license-server
+    ports:
+      - "8080:80"
+    environment:
+      MONGODB_URI: "your_mongodb_uri"
+      SMTP_HOST: "your_smtp_host"
+      SMTP_PORT: "your_smtp_port"
+      SMTP_USER: "your_smtp_user"
+      SMTP_PASSWORD: "your_smtp_password"
+      AUTH_JWT_SECRET: "{{ random_uuid }}"
+      BRUNO_GLOBAL_LICENSE_SERVER_URL: "https://license-api.usebruno.com"
+      PORT: 80
+```
+
+### Run Docker compose
+
+```bash
+docker-compose up -d
+```
+
+## 4. Setup Using Kubernetes
+
+### Create a Kubernetes secret for MongoDB URI and SMTP credentials:
+
+```bash
+kubectl create secret generic licensing-server-secrets \
+  --from-literal=MONGODB_URI="your_mongodb_uri" \
+  --from-literal=SMTP_HOST="your_smtp_host" \
+  --from-literal=SMTP_PORT="your_smtp_port" \
+  --from-literal=SMTP_USER="your_smtp_user" \
+  --from-literal=SMTP_PASSWORD="your_smtp_password" \
+  --from-literal=BRUNO_GLOBAL_LICENSE_SERVER_URL="https://license-api.usebruno.com" \
+  --from-literal=AUTH_JWT_SECRET="random_uuid"
+```
+
+### Create a Kubernetes Deployment and Service configuration
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: licensing-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: licensing-server
+  template:
+    metadata:
+      labels:
+        app: licensing-server
+    spec:
+      containers:
+      - name: licensing-server
+        image: usebruno/hosted-licensing-server
+        ports:
+        - containerPort: 8080
+        env:
+        - name: PORT
+          value: 80
+        - name: MONGODB_URI
+          valueFrom:
+            secretKeyRef:
+              name: licensing-server-secrets
+              key: MONGODB_URI
+        - name: SMTP_HOST
+          valueFrom:
+            secretKeyRef:
+              name: licensing-server-secrets
+              key: SMTP_HOST
+        - name: SMTP_PORT
+          valueFrom:
+            secretKeyRef:
+              name: licensing-server-secrets
+              key: SMTP_PORT
+        - name: SMTP_USER
+          valueFrom:
+            secretKeyRef:
+              name: licensing-server-secrets
+              key: SMTP_USER
+        - name: SMTP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: licensing-server-secrets
+              key: SMTP_PASS
+        - name: BRUNO_GLOBAL_LICENSE_SERVER_URL
+          valueFrom:
+            secretKeyRef:
+              name: licensing-server-secrets
+              key: BRUNO_GLOBAL_LICENSE_SERVER_URL
+        - name: AUTH_JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: licensing-server-secrets
+              key: AUTH_JWT_SECRET
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: licensing-server
+spec:
+  selector:
+    app: licensing-server
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+```
+
+### Apply the manifest file:
+
+```bash
+kubectl apply -f licensing-server.yaml
+```
+
+## Network Ports & Firewall Rules
+
+| System / URL | Port | Description |
+|--------------|------|-------------|
+| https://license-api.usebruno.com/ | 443 | Required for the on-premises server to retrieve keys from the Bruno Global Licensing Server. |
+| On Prem License Server | 443 | Ensure port 443 is open on the machine hosting the on-premises server. |
+| On Prem MongoDB Server | 27017 | The on-premises server must establish communication with the MongoDB database server (also hosted on-prem) |
+
+## Proxy Settings
+
+You can pass the below environment variables to configure proxy settings:
+
+| Name | Value |
+|------|-------|
+| PROXY_ENABLED | true |
+| HTTP_PROXY | https proxy url |
+| HTTPS_PROXY | http proxy url |
+
+## Troubleshooting SSL Issues
+
+You can pass the below environment variables to disable SSL validation while connecting to the Bruno Global Licensing Server.
+
+> **Warning**: The following settings should only be used to verify if the issue is related to SSL validation and should not be utilized in a production environment.
+
+| Name | Value |
+|------|-------|
+| BRUNO_GLOBAL_LICENSE_SERVER_DISABLE_SSL | true |
+| NODE_TLS_REJECT_UNAUTHORIZED | 1 |
+
+## SSL Configuration
+
+The licensing server supports SSL configuration using a self-signed certificate. To enable SSL, you need to mount the SSL certificate and key files to the container.
+
+We support two formats for the SSL certificate and key files:
+
+1. **PFX format** (.p12)
+2. **CRT and KEY format** (.crt and .key)
+
+The `SSL_KEY_PASSPHRASE` environment variable is optional and is only required if the SSL certificate is encrypted.
+
+### File structure for SSL certificate and key files:
+
+```
+ssl/
+├── certificate.crt
+├── certificate.key
+└── certificate.p12
+```
+
+### Sample command to run the licensing server with SSL enabled:
+
+```bash
+docker run -d \
+  -e MONGODB_URI="{{ mongodb_uri }}" \
+  -e SMTP_HOST="{{ smtp_host }}" \
+  -e SMTP_PORT="{{ smtp_port }}" \
+  -e SMTP_USER="{{ smtp_user }}" \
+  -e SMTP_PASSWORD="{{ smtp_password }}" \
+  -e AUTH_JWT_SECRET="{{ random_uuid }}" \
+  -e BRUNO_GLOBAL_LICENSE_SERVER_URL="https://license-api.usebruno.com" \
+  -e PORT="80" \
+  -p 8080:80 \
+  -v ~/ssl:/opt/license-service/ssl \
+  -e SSL_KEY_PASSPHRASE="secret" \
+  public.ecr.aws/e6d0f8t6/bruno-hosted-license-server
+```
+
+## Email Configuration
+
+The licensing server supports customizable email templates for license activation, license deactivation, and OTP-based login. To override the default templates, mount your custom files to the container.
+
+### Template Format
+
+Custom templates must be written in TOML format, with two required fields:
+
+- **subject**: The email subject line (supports variables)
+- **body**: The full HTML body of the email (supports variables)
+
+### Example structure:
+
+```toml
+subject = "Your Bruno License Key - {{orgName}}"
+body = '''
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bruno License Key</title>
+</head>
+<body>
+  <h1>Welcome to {{orgName}}!</h1>
+  <p>Hello {{name}},</p>
+  <p>Your Bruno license key is ready:</p>
+  <h2>{{licenseKey}}</h2>
+  <p>Please keep this license key secure and do not share it with anyone.</p>
+  <p>If you have any questions, please contact our support team.</p>
+  <hr>
+  <p><small>&copy; {{currentYear}} {{orgName}}. Powered by Bruno.</small></p>
+</body>
+</html>
+'''
+```
+
+### Available Template Variables
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `{{licenseKey}}` | The generated license key | XXXX-XXXX-XXXX-XXXX |
+| `{{orgName}}` | Organization name | Your Corporation |
+| `{{email}}` | User's email address | user@example.com |
+| `{{name}}` | User's name | John Doe |
+| `{{currentYear}}` | Current year | 2025 |
+| `{{otp}}` | One-Time Password for login (OTP only) | 123456 |
+
+### Template File Structure
+
+To use custom email templates, mount them using the following structure:
+
+```
+templates/
+├── license-activation.toml
+├── license-deactivation.toml
+└── otp-email.toml
+```
+
+### Template File Names
+
+| Purpose | File Name |
+|---------|-----------|
+| License Activation | license-activation.toml |
+| License Deactivation | license-deactivation.toml |
+| OTP Login Email | otp-email.toml |
+
+### Sample Docker Run Command
+
+To mount the templates when starting the container:
+
+```bash
+docker run -d \
+  -e MONGODB_URI="{{ mongodb_uri }}" \
+  -e SMTP_HOST="{{ smtp_host }}" \
+  -e SMTP_PORT="{{ smtp_port }}" \
+  -e SMTP_USER="{{ smtp_user }}" \
+  -e SMTP_PASSWORD="{{ smtp_password }}" \
+  -e AUTH_JWT_SECRET="{{ random_uuid }}" \
+  -e BRUNO_GLOBAL_LICENSE_SERVER_URL="https://license-api.usebruno.com" \
+  -e PORT="80" \
+  -p 8080:80 \
+  -v ~/templates:/opt/license-service/templates \
+  public.ecr.aws/e6d0f8t6/bruno-hosted-license-server
+```
+
+### Template Fallback Behavior
+
+If a custom template is missing or cannot be parsed, the server will automatically fall back to the default Bruno template for that notification type. Template usage and fallback events will be logged at startup and runtime.
+
+## SSO for License Admins
+
+We support Single Sign-On (SSO) using SAML integration, allowing License Administrators to log in securely via your organization's Identity Provider (IdP).
+
+Below is the list of environment variables required to configure SAML-based SSO:
+
+| Environment Variable | Description | Example Value |
+|---------------------|-------------|---------------|
+| SERVER_URL | The URL where the server is hosted. | https://bruno.internal |
+| SSO_ENABLED | Flag to enable or disable SSO | true |
+| SSO_SAML_SELF_ISSUER_ID | The SP(self) issuer ID. In this case the server itself is the SP | bruno-license-manager |
+| SSO_SAML_IDP_CERTIFICATE | The IdP Certificate to validate the SAMLResponse signature. This is obtained from the IdP metadata. | MIICnTCCAYUCBgGVENAwejANBgkqhkiG9w0BAQsFADASMRAw... |
+| SSO_SAML_IDP_LOGIN_URL | The login URL for the IdP. AuthNRequest is sent to this endpoint. | https://idp.internal/realms/testidp/protocol/saml |
+| SSO_ADMIN_ROLES | Roles assigned to License Admins in IdP system | bruno-license-admin |
+| SSO_USER_ROLES | Roles assigned to Users in IdP system. | bruno-license-user |
+| SSO_SESSION_TIMEOUT_SECONDS | The session timeout duration in seconds(default is `3600` or 60 minutes). | 7200 |
+
+### SSO Setup Essentials for License Admins
+
+We support domain discovery, which automatically detects your organization's license server based on employee email domains. This feature simplifies IdP configuration and credential management.
+
+Please send us the required information for the domain discovery process.
+
+**Required Information:**
+
+We need the following details to configure domain discovery:
+
+- **Domain** (e.g., company.com, as in john@company.com)
+- **Internal License Server URL** (e.g., https://bruno.internal)
+
+### User Workflow for License activation using SSO
+
+We support SSO activation with the internal IdP, allowing users to activate their license directly from the Bruno App. The following steps outline the process:
+
+1. Open the Bruno app and select the SSO option and enter the work email.
+2. You will be redirected to the SSO login page. If `SSO_ENABLED=true`, a button for logging in with SSO will appear.
+3. The user will be directed to their IdP login page. After logging in, if the user has a role called `bruno-license-user`, they will be able to log in and receive the activation confirmation page upon successful SAML redirection.
+
+## Changelog
+
+### 1.12.0 (07 August 2025)
+- Support for Customizing License Activation, Deactivation, and OTP Emails
+
+### 1.11.0 (08 July 2025)
+- Support for In-App License Activation using SSO
+- Users are now notified via email upon deactivation
+
+### 1.10.1 (10 June 2025)
+- Parse Group/Role Attributes with list of values(SSO)
+
+### 1.10.0 (29 May 2025)
+- License Keys are masked in the UI
+- Seat Usage is now displayed in the UI
+
+### 1.9.3 (22 May 2025)
+- Retrieve role info from Groups Attribute and validate accordingly(SAML, SSO)
+
+### 1.9.2 (9 May 2025)
+- Made Assertion signature non-mandatory (Response sig is) for SSO
+
+### 1.9.1 (17 Apr 2025)
+- Fixed issue related to duplicate user during upload
+
+### 1.9.0 (4 Apr 2025)
+- SSO Support for License Admins
+
+### 1.8.0 (28 Mar 2025)
+- SSL Certificate Configuration support
+
+### 1.7.0 (26 Nov 2024)
+- Status API - /api/v1/status
+
+## Support
+
+For further assistance, feel free to contact our support team at [support@usebruno.com](mailto:support@usebruno.com)
