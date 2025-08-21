@@ -1,15 +1,19 @@
+import {Callout} from "nextra/components";
+
 # gRPC Request
 
 Bruno provides comprehensive support for gRPC requests, enabling you to test and interact with gRPC services directly from the interface. With Bruno's gRPC support, you can:
 
 - **Add Proto files** for enhanced IntelliSense and method discovery
-- **Call server methods** with full parameter support
+- **Use Server Reflection** as an alternative to Proto files for automatic method suggestions
+- **Call server methods** with full parameter support and type validation
 - **Test real-time streaming APIs** including unary, server streaming, client streaming, and bidirectional streaming
-- **Debug gRPC services** with detailed request/response inspection
 
 ## gRPC Interface
 
-![gRPC Iiterface](/screenshots/send-request/grpc/1-grpc-interface.webp)
+Bruno gRPC interface provides an intuitive way to interact with gRPC services. The interface automatically adapts based on whether you're using Proto files or Server Reflection.
+
+![gRPC Interface](/screenshots/send-request/grpc/1-grpc-interface.webp)
 
 ## Creating a gRPC Request
 
@@ -24,16 +28,21 @@ First, you need to enable gRPC support in Bruno's beta features:
 
 ### Step 2: Create a gRPC Request
 
-1. Open collection context menu and select **New Request** from dropdown.
-2. Select **gRPC** as your request type.
-3. Enter the **service endpoint** in the URL field.
+1. Open the collection context menu and select **New Request** from the dropdown
+2. Select **gRPC** as your request type
+3. Enter the **service endpoint** in the URL field (e.g., `https://grpcb.in/`)
 
 ![Create gRPC Request](/screenshots/send-request/grpc/2-create-grpc-req.webp)
 
 ### Step 3: Configure the Request
  
-1. Choose the **method** you want to call from the dropdown
-2. Add any **required inputs** in the message section.
+1. Click on **Reflection** and choose the **method** you want to call from the dropdown
+
+<Callout type="important"> 
+   **Refresh**: The gRPC refresh feature caches server information in memory for better performance. If you're running a local gRPC server and make changes to your service definitions, click the **Refresh** button next to the **Using Reflection** toggle to reload the latest changes from your server.
+</Callout>
+
+2. Add any **required inputs** in the message section (auto generate with **Auto Fill** button)
 
 ![Select Method](/screenshots/send-request/grpc/3-select-method.webp)
 
@@ -43,6 +52,7 @@ Click the **Send** button to execute your gRPC request.
 
 ![Add Message and Receive Response](/screenshots/send-request/grpc/4-add-msg-receive-resp.webp)
 
-You'll see relevant response in the **Response** section. 
+You'll see the response in the **Response** section with detailed information about the request execution.
+
 
 To learn about proto files, navigate to the [Adding Proto file section.](./grpc-proto.mdx)
