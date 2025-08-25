@@ -120,6 +120,7 @@ export default withNextra({
       { source: '/get-started/variables/process-env', destination: '/variables/process-env', permanent: true },
 
       // Secret Managers redirects
+      { source: '/secrets-management/overview.html', destination: '/secrets-management/overview', permanent: true },
       { source: '/secrets-management/secret-managers/secret-managers/:path*', destination: '/secrets-management/secret-managers/:path*', permanent: true },
       { source: '/secrets-management/secret-managers', destination: '/secrets-management/secret-managers/overview', permanent: true },
       { source: '/secrets-management/secret-managers/hashicorp-vault', destination: '/secrets-management/secret-managers/hashicorp-vault/overview', permanent: true },
