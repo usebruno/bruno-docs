@@ -144,3 +144,18 @@ You can combine include and exclude filters:
 ```bash copy
 bru run --tags=smoke,sanity --exclude-tags=skip,draft
 ```
+
+### Progress Display
+
+To see real-time progress during collection execution, use the `--show-progress` flag:
+
+```bash copy
+bru run --show-progress
+```
+
+This displays a formatted table showing:
+- Request status (running, completed, failed)
+- Response times
+- Test results
+- Overall progress
+
