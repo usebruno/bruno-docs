@@ -570,14 +570,32 @@ let token = bru.getEnvVar("access_token");
 
 #### `setEnvVar`
 
-Set the Bruno environment variable
+Set the Bruno environment variable. By default, environment variables are temporary and do not persist between app restarts.
 
-**Example:**
+**Syntax:**
+```javascript
+bru.setEnvVar(key, value, options?)
+```
+
+**Parameters:**
+- `key` (string): The environment variable name
+- `value` (any): The value to set
+- `options` (object, optional): Configuration options
+  - `persist` (boolean): When `true`, saves the variable to file system. When `false` or not provided, maintains in-memory behavior.
+
+**Examples:**
 
 ```javascript
+// In-memory only (default behavior)
+bru.setEnvVar("sessionId", "temp");
+
+// Persist to file system
+bru.setEnvVar("apiToken", "12345", { persist: true });
+
+// In post-response script
 function onResponse(res) {
   let data = res.getBody();
-  let token = bru.setEnvVar("access_token", data.token);
+  let token = bru.setEnvVar("access_token", data.token, { persist: true });
 }
 ```
 
