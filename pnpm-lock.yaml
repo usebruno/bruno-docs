@@ -36,8 +36,8 @@ importers:
         specifier: ^1.0.7
         version: 1.1.8(@types/react-dom@18.3.5(@types/react@18.3.19))(@types/react@18.3.19)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@usebruno/converters':
-        specifier: ^0.6.0
-        version: 0.6.0(yup@0.32.11)
+        specifier: ^0.10.0
+        version: 0.10.0(yup@0.32.11)
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.1
@@ -1697,11 +1697,11 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@usebruno/converters@0.6.0':
-    resolution: {integrity: sha512-ssKukPZzUqczq6MeiOMQgeOn0+gFlu6tK1RaAAyo2As0wYJ43qn2SGEEMrnxJ6Nd3TpCCtqRjXA1TzUFsoCAdQ==}
+  '@usebruno/converters@0.10.0':
+    resolution: {integrity: sha512-sT5yc+aiR+ausJn0D4ake2oKjgaFQluOOJxgy7gQpZP/oJ8wVbJgcd2M47/CoY9x0me1zhkISOTFHPZzMSHyFA==}
 
-  '@usebruno/schema@0.16.0':
-    resolution: {integrity: sha512-wASIrZdzLtIsuKspUijil1sHqzk8p43ulwHlu/hWsRN3rwy75g5KSLKHwEEaLuSM6L26tr05LrquOORA7UL4UA==}
+  '@usebruno/schema@0.17.0':
+    resolution: {integrity: sha512-fq+SAUaym8LFu+h8+BLXaX05q9uzvBgvAPSn/+3MFitok0UggHlYnil5uzchCXrAbxCuRSAu3HsrTLxxoTdnmg==}
     peerDependencies:
       yup: ^0.32.11
 
@@ -6411,9 +6411,9 @@ snapshots:
   '@unrs/rspack-resolver-binding-win32-x64-msvc@1.2.2':
     optional: true
 
-  '@usebruno/converters@0.6.0(yup@0.32.11)':
+  '@usebruno/converters@0.10.0(yup@0.32.11)':
     dependencies:
-      '@usebruno/schema': 0.16.0(yup@0.32.11)
+      '@usebruno/schema': 0.17.0(yup@0.32.11)
       js-yaml: 4.1.0
       jscodeshift: 17.3.0
       lodash: 4.17.21
@@ -6423,7 +6423,7 @@ snapshots:
       - supports-color
       - yup
 
-  '@usebruno/schema@0.16.0(yup@0.32.11)':
+  '@usebruno/schema@0.17.0(yup@0.32.11)':
     dependencies:
       nanoid: 3.3.8
       yup: 0.32.11
@@ -8154,7 +8154,7 @@ snapshots:
   jscodeshift@17.3.0:
     dependencies:
       '@babel/core': 7.26.10
-      '@babel/parser': 7.26.10
+      '@babel/parser': 7.27.5
       '@babel/plugin-transform-class-properties': 7.27.1(@babel/core@7.26.10)
       '@babel/plugin-transform-modules-commonjs': 7.27.1(@babel/core@7.26.10)
       '@babel/plugin-transform-nullish-coalescing-operator': 7.27.1(@babel/core@7.26.10)

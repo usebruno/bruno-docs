@@ -1,0 +1,31 @@
+# gRPC Proto Files
+
+Proto files (`.proto`) are the foundation of gRPC services, defining the contract between clients and servers. Bruno supports adding proto files to enhance your gRPC development experience with better IntelliSense, method discovery, and type safety.
+
+## Proto File Options
+
+You have two ways to add Proto files for enhanced IntelliSense and method discovery:
+
+**Option 1: Request Level**
+
+1. Open your gRPC request in Bruno
+2. In the gRPC interface, locate the **Using Reflection** section
+3. Click on the **Browse for proto file** button or toggle the proto file option
+4. Click the file browser to select `.proto` files from your local system
+
+![Request Level Proto File](/screenshots/send-request/grpc/req-level-proto-file.webp)
+
+**Option 2: Collection Level**
+
+1. Go to collection level settings
+2. Navigate to the **gRPC** tab
+3. Click the **Browse for proto files** to select `.proto` files from your local system
+
+![Collection Level Proto File](/screenshots/send-request/grpc/coll-level-proto-file.webp)
+
+
+Add Proto files at the collection level for reuse across all requests.
+
+Bruno will validate that the selected files are valid proto files.
+You can add multiple proto files if your service uses imports or multiple definitions.
+
