@@ -32,9 +32,10 @@ export default {
     "title": "Developer Tools",
     "type": "separator"
   },
-  "bru-cli": "Bruno's CLI",
+  "bru-cli": "Bruno CLI",
   "bru-lang": "Bru Lang",
   "converters": "Converters",
+  "vs-code-extension": "VS Code Extension",
 
   "other": {
     "title": "Other",
