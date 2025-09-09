@@ -570,14 +570,32 @@ let token = bru.getEnvVar("access_token");
 
 #### `setEnvVar`
 
-Set the Bruno environment variable
+Set the Bruno environment variable. By default, environment variables are temporary and do not persist between app restarts.
 
-**Example:**
+**Syntax:**
+```javascript
+bru.setEnvVar(key, value, options?)
+```
+
+**Parameters:**
+- `key` (string): The environment variable name
+- `value` (any): The value to set
+- `options` (object, optional): Configuration options
+  - `persist` (boolean): When `true`, saves the variable to file system. When `false` or not provided, maintains in-memory behavior.
+
+**Examples:**
 
 ```javascript
+// In-memory only (default behavior)
+bru.setEnvVar("sessionId", "temp");
+
+// Persist to file system
+bru.setEnvVar("apiToken", "12345", { persist: true });
+
+// In post-response script
 function onResponse(res) {
   let data = res.getBody();
-  let token = bru.setEnvVar("access_token", data.token);
+  let token = bru.setEnvVar("access_token", data.token, { persist: true });
 }
 ```
 
@@ -776,7 +794,7 @@ Bruno provides Cookie Jar APIs that enable programmatic cookie management in req
 Create a cookie jar instance for managing cookies.
 
 **Syntax:**
-```javascript
+```javascript 
 const jar = bru.cookies.jar();
 ```
 
@@ -816,7 +834,7 @@ jar.setCookie(url, cookieObject);
   - `sameSite`: SameSite attribute ("Strict", "Lax", or "None")
 
 **Example:**
-```javascript
+```javascript showLineNumbers
 const jar = bru.cookies.jar();
 
 // Set a simple cookie using key-value format
@@ -857,7 +875,7 @@ jar.setCookies(url, cookies);
   - `sameSite`: (Optional) SameSite attribute
 
 **Example:**
-```javascript
+```javascript showLineNumbers 
 const jar = bru.cookies.jar();
 
 jar.setCookies("https://example.com", [
@@ -892,9 +910,9 @@ jar.getCookie(url, name);
 **Returns:** The cookie object or `null` if not found
 
 **Example:**
-```javascript
+```javascript showLineNumbers
 const jar = bru.cookies.jar();
-const sessionCookie = jar.getCookie("https://example.com", "sessionId");
+const sessionCookie = await jar.getCookie("https://example.com", "sessionId");
 if (sessionCookie) {
   console.log("Session ID:", sessionCookie.value);
   console.log("Expires:", sessionCookie.expires);
@@ -916,9 +934,9 @@ jar.getCookies(url);
 **Returns:** Array of cookie objects or empty array if no cookies found
 
 **Example:**
-```javascript
+```javascript showLineNumbers
 const jar = bru.cookies.jar();
-const allCookies = jar.getCookies("https://example.com");
+const allCookies = await jar.getCookies("https://example.com");
 console.log("All cookies:", allCookies);
 ```
 
@@ -942,6 +960,9 @@ const jar = bru.cookies.jar();
 // Delete a cookie
 jar.deleteCookie("https://example.com", "sessionId");
 ```
+<Callout type="warning" emoji="">
+  When deleting cookies, the domain and path options must match the original cookie's domain and path for the deletion to be successful.
+</Callout>
 
 #### `jar.deleteCookies`
 
@@ -979,8 +1000,4 @@ const jar = bru.cookies.jar();
 // Clear all cookies
 jar.clear();
 ```
-
-<Callout type="warning" emoji="">
-  When deleting cookies, the domain and path options must match the original cookie's domain and path for the deletion to be successful.
-</Callout>
 

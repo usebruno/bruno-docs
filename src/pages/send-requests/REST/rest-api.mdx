@@ -1,3 +1,5 @@
+import BrunoButton from '../../../components/BrunoButton';
+
 # REST API request
 
 Bruno enables you to send API requests using both HTTP and GraphQL protocols. You can include various details in the request, such as parameters, body, headers, and more, based on the API specifications.
@@ -22,6 +24,7 @@ In Bruno, the **GET** method is set as the default HTTP method for new requests.
 
 ![various-http-method](/screenshots/send-request/rest/various-http-method.webp)
 
+
 ## Custom HTTP Methods
 
 Bruno supports custom HTTP methods beyond the standard ones (GET, POST, PUT, DELETE, etc.). This is useful for APIs that use non-standard methods like Vault's LIST method or other custom protocols.
@@ -33,3 +36,15 @@ Bruno supports custom HTTP methods beyond the standard ones (GET, POST, PUT, DEL
 3. **Type your custom method name** in the input field (e.g., `LIST`, `PATCH`, `SEARCH`)
 
 ![custom-http-method](/screenshots/send-request/rest/custom-http-methods.webp)
+=======
+
+## Get Started with REST APIs
+
+Explore our sample GitHub REST API collection to see practical examples and test different HTTP methods:
+
+<BrunoButton 
+  collectionUrl="https://github.com/bruno-collections/github-rest-api-collection"
+  width={160}
+  height={40}
+/>
+
