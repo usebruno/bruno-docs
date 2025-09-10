@@ -21,6 +21,8 @@ This document provides a step-by-step guide to installing and configuring the Br
 
 ## Architecture Diagram
 
+![Self-Hosted Licensing Server Architecture](/screenshots/selfhosted-server/selfhostedserverdiagram.png)
+
 We will outline four different approaches to setting up the Bruno Licensing Server using Docker. Whether you prefer to run the image directly, use Kubernetes for container orchestration, automate with Ansible, or manage the service with Docker Compose, each method provides flexibility to suit your infrastructure needs. We'll walk you through the steps and configurations required for each approach to help you get your licensing server up and running efficiently.
 
 ## 1. Setup by Running the Docker Image
@@ -396,39 +398,91 @@ We support SSO activation with the internal IdP, allowing users to activate thei
 2. You will be redirected to the SSO login page. If `SSO_ENABLED=true`, a button for logging in with SSO will appear.
 3. The user will be directed to their IdP login page. After logging in, if the user has a role called `bruno-license-user`, they will be able to log in and receive the activation confirmation page upon successful SAML redirection.
 
-## Changelog
+## SCIM User Provisioning
 
-### 1.12.0 (07 August 2025)
-- Support for Customizing License Activation, Deactivation, and OTP Emails
+The licensing server supports SCIM (System for Cross-domain Identity Management) for automated user provisioning and deprovisioning from your Identity Provider.
 
-### 1.11.0 (08 July 2025)
-- Support for In-App License Activation using SSO
-- Users are now notified via email upon deactivation
+### SCIM Configuration
 
-### 1.10.1 (10 June 2025)
-- Parse Group/Role Attributes with list of values(SSO)
+To enable SCIM provisioning, you'll need to configure your Identity Provider to connect to the licensing server's SCIM endpoint.
 
-### 1.10.0 (29 May 2025)
-- License Keys are masked in the UI
-- Seat Usage is now displayed in the UI
+**SCIM Endpoint Details:**
+- **Base URL**: `https://your-licensing-server.com/scim/v2`
+- **Authentication**: Bearer token (API key)
+- **Supported Operations**: Create Users, Update User Attributes, Deactivate Users
 
-### 1.9.3 (22 May 2025)
-- Retrieve role info from Groups Attribute and validate accordingly(SAML, SSO)
+### Okta SCIM Configuration
 
-### 1.9.2 (9 May 2025)
-- Made Assertion signature non-mandatory (Response sig is) for SSO
+#### 1. Create a New Application in Okta
 
-### 1.9.1 (17 Apr 2025)
-- Fixed issue related to duplicate user during upload
+1. Go to the Okta Admin Console
+2. Navigate to: **Applications → Applications → Create App Integration**
+3. Select **"SWA - Secure Web Authentication"**
+4. Complete the initial app creation steps (enter name, logo, etc.)
+5. Click **Done** after the app is created
 
-### 1.9.0 (4 Apr 2025)
-- SSO Support for License Admins
+#### 2. Enable SCIM Provisioning for the Application
 
-### 1.8.0 (28 Mar 2025)
-- SSL Certificate Configuration support
+1. Open the newly created app
+2. Go to the **General** tab
+3. Scroll down to the **App Settings** section
+4. Set **Provisioning** to **SCIM** and save the settings
 
-### 1.7.0 (26 Nov 2024)
-- Status API - /api/v1/status
+#### 3. Configure SCIM in the Provisioning Tab
+
+1. Go to the **Provisioning** tab in the app
+2. Click **Configure API Integration**
+3. Check **Enable API Integration**
+4. Fill in the SCIM details:
+   - **SCIM Base URL**: `https://your-licensing-server.com/scim/v2`
+   - **Authentication Method**: HTTP Header
+   - **Authorization Header**: `Bearer YOUR_API_KEY`
+5. Click **Test API Credentials** to verify the connection
+6. Click **Save** if the test is successful
+
+#### 4. Enable SCIM Features
+
+1. Still under the **Provisioning** tab, click **To App**
+2. Enable the features you need:
+   - ✅ Create Users
+   - ✅ Update User Attributes
+   - ✅ Deactivate Users
+
+### Other Identity Providers
+
+SCIM configuration for other Identity Providers follows similar patterns:
+
+#### Microsoft Azure AD
+- Use **Enterprise Applications** → **Provisioning**
+- Set **Provisioning Mode** to **Automatic**
+- Configure **Tenant URL** and **Secret Token**
+
+#### Ping Identity
+- Configure SCIM connector in PingDirectory
+- Set up provisioning policies and attribute mappings
+
+> **Note**: Specific configuration steps may vary depending on your Identity Provider version and setup. Consult your IdP documentation for detailed SCIM configuration instructions.
+
+### SCIM Environment Variables
+
+Configure these environment variables to enable SCIM:
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `SCIM_ENABLED` | Enable SCIM provisioning | `true` |
+| `SCIM_API_KEY` | API key for SCIM authentication | `your-secure-api-key` |
+| `SCIM_BASE_PATH` | Base path for SCIM endpoints | `/scim/v2` |
+
+### Supported SCIM Operations
+
+The licensing server supports the following SCIM operations:
+
+- **GET /scim/v2/Users** - List users
+- **POST /scim/v2/Users** - Create user
+- **GET /scim/v2/Users/\{id\}** - Get user by ID
+- **PUT /scim/v2/Users/\{id\}** - Update user
+- **PATCH /scim/v2/Users/\{id\}** - Partial update user
+- **DELETE /scim/v2/Users/\{id\}** - Deactivate user
 
 ## Support
 
