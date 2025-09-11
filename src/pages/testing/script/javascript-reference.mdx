@@ -684,6 +684,28 @@ You can also abort the run by explicitly setting the next request to `null`
 bru.setNextRequest(null); // aborts the run gracefully
 ```
 
+**How it works:**
+- `setNextRequest` works with **single requests** - it executes the current request first, then jumps to the specified request
+- It **skips** all requests between the current one and the target request
+- The target request must exist in the collection and be specified by its exact name
+- **For requests inside folders**: Use just the request name (e.g., "request-name"), not the full path
+- Works the same way with both `bru.setNextRequest()` and `bru.runner.setNextRequest()`
+
+**Basic Usage:**
+
+```javascript
+// In post-request script of "one.bru"
+bru.setNextRequest("three"); // Will skip "two.bru" and jump to "three.bru"
+```
+
+**Request Inside Folder:**
+
+```javascript
+// If you have: folder1/request-name.bru
+// Use just the request name, not the full path
+bru.setNextRequest("request-name"); 
+```
+
 #### `runRequest`
 
 You can execute any request in the collection and retrieve the response directly within the script.
