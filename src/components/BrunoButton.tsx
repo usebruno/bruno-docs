@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 interface BrunoButtonProps {
   collectionUrl: string;
@@ -34,12 +35,12 @@ export const BrunoButton: React.FC<BrunoButtonProps> = ({
         target="_blank" 
         rel="noopener noreferrer"
       >
-        <img 
+        <Image 
           src="https://fetch.usebruno.com/button.svg" 
           alt="Fetch in Bruno" 
-          style={{ width: `${width}px`, height: `${height}px` }} 
           width={width} 
           height={height}
+          style={{ width: `${width}px`, height: `${height}px` }}
         />
       </a>
     </div>
