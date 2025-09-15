@@ -1,5 +1,5 @@
 export default {
-  "devtools": "DevTools",
+  "dev-utils": "Dev Utils",
   "timeline": "Timeline",
-  "bru-console": "Dev Tools",
+  "dev-tools": "Dev Tools",
 } 
