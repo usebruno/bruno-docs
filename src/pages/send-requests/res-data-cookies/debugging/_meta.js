@@ -1,4 +1,5 @@
 export default {
-  "devtools": "DevTools",
-  "timeline": "Timeline"
+  "dev-utils": "Dev Utils",
+  "timeline": "Timeline",
+  "dev-tools": "Dev Tools",
 } 

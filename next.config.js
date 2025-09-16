@@ -156,6 +156,10 @@ export default withNextra({
       // Additional HashiCorp Vault redirects
       { source: '/secrets-management/hashicorp-vault/adding-a-secret-provider', destination: '/secrets-management/secret-managers/hashicorp-vault/adding-a-secret-provider', permanent: true },
       { source: '/secrets-management/hashicorp-vault/configuring-and-fetching-secrets', destination: '/secrets-management/secret-managers/hashicorp-vault/configuring-and-fetching-secrets', permanent: true },
+
+      // Dev Tools redirects (from docs/dev-tool PR)
+      { source: '/send-requests/res-data-cookies/debugging/devtools', destination: '/send-requests/res-data-cookies/debugging/dev-utils', permanent: true },
+      { source: '/send-requests/res-data-cookies/debugging/bru-console', destination: '/send-requests/res-data-cookies/debugging/dev-tools', permanent: true },
     ];
   },
 });
