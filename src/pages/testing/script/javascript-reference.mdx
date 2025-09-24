@@ -710,6 +710,10 @@ bru.setNextRequest("request-name");
 
 You can execute any request in the collection and retrieve the response directly within the script.
 
+<Callout type="important">
+  **Avoid using `bru.runRequest()` in collection-level scripts.** Since collection scripts run for all requests, calling `bru.runRequest()` from a collection script will trigger the target request, which will also execute the collection script again, creating an infinite loop.
+</Callout>
+
 **Syntax:**
 
 ```javascript
