@@ -1,3 +1,5 @@
+import { Callout } from "nextra/components";
+
 # Variables
 
 ### Overview
@@ -6,7 +8,7 @@ Variables in the Bruno allow you to store dynamic values that can be reused acro
 
 ### Types
 
-There are 6 types of variables you can create:
+There are 7 types of variables you can create:
 
 - [Global Environments Variables](./global-environment-variables.mdx)
 - [Environment Variables](./environment-variables.mdx)
@@ -14,18 +16,17 @@ There are 6 types of variables you can create:
 - [Folder Variables](./folder-variables.mdx)
 - [Request Variables](./request-variables.mdx)
 - [Runtime Variables](./runtime-variables.mdx)
+- [Prompt Variables](./prompt-variables.mdx)
 
 Additionally, Process Environment Variables can be defined in an external environment configuration file:
 
 - [Process Environment Variables](./process-env.mdx)
 
-Runtime variables get the highest precedence. Process Environment Variables are accessed using the `{{process.env.VAR_NAME}}` syntax and hence don't compete with the above.
-
 ### Variable Precedence and Scope
 
 When a variable is accessed, the following precedence is used to determine which value is used:
 
-<div style={{ display: 'flex', justifyContent: 'center', fontFamily: 'sans-serif', marginTop: '2em', width: '100%' }}>
+<div style={{ display: 'flex', justifyContent: 'center', fontFamily: 'sans-serif', marginTop: '2em', width: '100%', textAlign: 'center' }}>
   <div style={{ display: 'flex', alignItems: 'flex-start', position: 'relative', width: '420px' }}>
     <div style={{ position: 'absolute', left: '-120px', top: 0, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', fontSize: '0.85em', color: '#555', textAlign: 'right', width: '120px' }}>
       <div style={{ paddingRight: '10px' }}>↑ Higher Precedence</div>
@@ -42,7 +43,9 @@ When a variable is accessed, the following precedence is used to determine which
   </div>
 </div>
 
-Runtime variables get the highest precedence. Process Environment Variables are accessed using the `{{process.env.VAR_NAME}}` syntax and hence don't compete with the above.
+- Runtime variables get the highest precedence.
+- Prompt Variables are defined using the `{{?:Prompt String}}` syntax and hence don't compete with the above.
+- Process Environment Variables are accessed using the `{{process.env.VAR_NAME}}` syntax and hence don't compete with the above.
 
 ### Variable Storage
 
@@ -82,6 +85,10 @@ Each variable has its own storage location either within your collection file or
         <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%' }}>Local storage</td>
       </tr>
       <tr style={{ backgroundColor: 'rgba(128, 128, 128, 0.1)' }}>
+        <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%' }}>Prompt</td>
+        <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%', fontStyle: 'italic' }}>Never stored</td>
+      </tr>
+      <tr style={{ backgroundColor: 'rgba(128, 128, 128, 0.1)' }}>
         <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%' }}>Process Environment</td>
         <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%', fontStyle: 'italic' }}>Separate `.env` file</td>
       </tr>
@@ -112,3 +119,7 @@ console.log(bru.getVar('myVar'))           // Runtime variables
 ### Scripting API
 
 Please see the [Scripting API](/scripting/javascript-reference#collection-variables) for more information on how to access variables in your scripts.
+
+<Callout type="info">
+  Prompt variables are not accessible via the Scripting API.
+</Callout>
