@@ -627,6 +627,21 @@ Get the folder variable
 let company = bru.getFolderVar("company");
 ```
 
+### Request Variables
+
+Bruno allows you to get request variables on the fly.
+
+#### `getRequestVar`
+
+Get the request variable
+
+**Example:**
+
+```javascript
+let source = bru.getRequestVar("source");
+let destination = bru.getRequestVar("destination");
+```
+
 ### Runtime Variables
 
 Bruno allows you to get, set and delete runtime variables on the fly.
@@ -710,8 +725,8 @@ bru.setNextRequest("request-name");
 
 You can execute any request in the collection and retrieve the response directly within the script.
 
-<Callout type="important">
-  **Avoid using `bru.runRequest()` in collection-level scripts.** Since collection scripts run for all requests, calling `bru.runRequest()` from a collection script will trigger the target request, which will also execute the collection script again, creating an infinite loop.
+<Callout type="warning" emoji="">
+  Avoid using `bru.runRequest()` in **collection-level scripts**. Since collection scripts run for all requests, calling `bru.runRequest()` from a collection script will trigger the target request, which will also execute the collection script again, creating an infinite loop.
 </Callout>
 
 **Syntax:**
@@ -752,7 +767,7 @@ bru.runner.skipRequest();
 
 #### `stopExecution`
 
-You can terminate the collection run by using `bru.runner.stopExecution()` in the pre-request scripts, post-request scripts, or the test scripts. This function is effective only within the context of a collection run.
+You can terminate a collection run by calling `bru.runner.stopExecution()` from a pre-request, post-response, or test script. This function only takes effect during a collection run.
 
 **Example:**
 
