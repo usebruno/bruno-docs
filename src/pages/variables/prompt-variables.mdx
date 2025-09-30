@@ -13,11 +13,11 @@ Prompt variables are scoped within a request, meaning they are available only to
 Prompt variables use the following syntax:
 
 ```handlebars
-{{?:Prompt Here}}
+{{?Prompt Here}}
 ```
 
-- The `?:` indicates that this is a prompt variable.
-- The text after the colon (`:`) is the prompt message shown to the user.
+- The `?` indicates that this is a prompt variable.
+- The text after the question mark (`?`) is the prompt message shown to the user.
 
 Prompt variables are highlighted in <span style={{ color: "dodgerblue" }}>blue</span> in the Bruno UI.
 
@@ -36,7 +36,8 @@ When you execute a request containing one or more prompt variables, Bruno will d
 ![prompt-var-modal](/screenshots/variables/prompt-var-modal.webp)
 
 <Callout type="info">
-  If you leave a prompt variable blank, it will be replaced with an empty string in the request.
+  If you leave a prompt variable blank, it will be replaced with an empty string
+  in the request.
 </Callout>
 
 ### Deduplication
@@ -49,9 +50,9 @@ For the following request referencing the `Username` prompt variable twice:
 
 ```json
 {
-  "user": "{{?:Username}}",
+  "user": "{{?Username}}",
   "profile": {
-    "name": "{{?:Username}}"
+    "name": "{{?Username}}"
   }
 }
 ```
@@ -75,7 +76,8 @@ If you run a collection containing prompt variables using the Bruno Runner, any 
 Prompt variables are ephemeral and only exist during request execution. They are not shown in any variables viewer and are not persisted.
 
 <Callout type="warning">
-  Prompt variables are only available during the execution of a request and are not persisted or accessible after the request completes.
+  Prompt variables are only available during the execution of a request and are
+  not persisted or accessible after the request completes.
 </Callout>
 
 ## Notes
