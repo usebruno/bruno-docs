@@ -1,0 +1,69 @@
+# Bruno Secret Masking in Reports
+
+## Overview
+
+Bruno automatically masks sensitive information in reports to protect your secrets from being exposed. This documentation explains what gets masked.
+
+## What gets masked?
+
+### 1. Sensitive Headers (Always Masked)
+
+Bruno automatically masks these header names regardless of their values:
+
+| Header Name | Example | Masked Result |
+|-------------|---------|---------------|
+| `Authorization` | `Bearer eyJhbGciOiJIUzI1NiIs...` | `Bearer ********` |
+| `X-API-Key` | `sk-1234567890abcdef` | `********` |
+| `Cookie` | `session=abc123; auth=xyz789` | `********` |
+| `Set-Cookie` | `session=abc123; HttpOnly` | `********` |
+| `X-Auth-Token` | `token123456` | `********` |
+| `Client-Secret` | `secret_abc123` | `********` |
+
+**Complete list of sensitive headers:**
+- `authorization`, `proxy-authorization`
+- `x-api-key`, `x-auth-token`, `x-csrf-token`, `x-xsrf-token`
+- `cookie`, `set-cookie`
+- `api-key`, `x-access-token`
+- `session-token`, `x-session-token`, `x-refresh-token`
+- `x-id-token`, `x-jwt-assertion`
+- `client-secret`, `secret-key`
+- `x-wsse`, `www-authenticate`
+
+### 3. Secret Environment Variables
+
+Bruno masks all values of environment variables marked as secret in the UI:
+
+![secret masking](/screenshots/secret-masking/secret-masking.png)
+
+
+- **`db_pass` variable**: Marked as secret (blue checkmark in Secret column), so its value is masked as `****` in the interface
+- **`db_user` variable**: Not marked as secret (unchecked Secret column), so the value will be displayed in plain text
+
+
+**Result:** Every instance where `db_pass` is referenced appears masked in the report.
+
+### 4. External Secrets
+
+Bruno masks secrets fetched from external providers:
+
+- **HashiCorp Vault** secrets
+- **AWS Secrets Manager** values
+- **Azure Key Vault** secrets
+
+### In .env Files
+
+All values in `.env` files are treated as secrets:
+
+```env
+API_KEY=sk-1234567890abcdef
+CLIENT_SECRET=secret_abc123
+DATABASE_URL=postgresql://user:pass@host:5432/db
+```
+
+## Where Masking Appears
+
+Bruno masks secrets in:
+
+- **HTML reports**
+- **JSON reports**
+- **JUnit reports**
