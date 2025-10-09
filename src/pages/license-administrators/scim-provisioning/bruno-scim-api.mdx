@@ -2,29 +2,19 @@ import { Callout } from "nextra/components";
 
 # Bruno SCIM API
 
-The Bruno SCIM API provides a direct way to manage users and groups programmatically without requiring integration through identity provider applications like Okta or Microsoft Entra. This is ideal for organizations that want to build custom integrations or use identity providers that don't have pre-built Bruno applications.
+The Bruno SCIM API provides a direct way to manage users and groups programmatically without requiring integration through identity provider applications like Okta or Microsoft Entra. This is ideal for organizations that want to build custom integrations.
+
+<Callout type="info">
+**Prerequisites**: Before using the Bruno SCIM API, you must first enable SCIM provisioning in Bruno and generate an API key. Follow the [Enabling SCIM Provisioning](./overview#enabling-scim-provisioning) section in the overview page to complete this setup and save your API key for use in the steps below.
+</Callout>
 
 ## Who Should Use the SCIM API?
 
 The Bruno SCIM API is designed for:
 
-- **Organizations with custom identity providers** that don't have pre-built Bruno integrations
+- **Organizations with custom identity providers** that do not want to leverage a SCIM 2.0 configuration
 - **Development teams** building custom user management workflows
 - **System administrators** who need programmatic control over user provisioning
-- **Organizations requiring advanced SCIM configurations** not available through standard identity provider apps
-
-<Callout type="warning">
-If your organization uses Okta, Azure AD, or other supported identity providers, we recommend using the dedicated integration guides instead of the direct API approach.
-</Callout>
-
-## Prerequisites
-
-Before using the Bruno SCIM API, ensure you have:
-
-1. **Ultimate Edition subscription** with SCIM feature enabled
-2. **Authentication domain** configured with SCIM enabled in the Bruno license portal
-3. **API bearer token** generated from your authentication domain settings
-4. **Base URL** for your SCIM endpoint: `https://license.usebruno.com/scim/v2`
 
 ## API Collection
 
@@ -32,7 +22,7 @@ Bruno provides a complete API collection to help you get started quickly:
 
 📁 **[Bruno SCIM API Collection](https://github.com/bruno-collections/bruno-scim-api-collection)**
 
-[![Fetch in Bruno](https://fetch.usebruno.com/button.svg)](https://fetch.usebruno.com?url=https://github.com/bruno-collections/bruno-scim-api-collection.git)
+[<img src="https://fetch.usebruno.com/button.svg" alt="Fetch in Bruno" style={{width: '130px', height: '30px'}} width="128" height="32" />](https://fetch.usebruno.com?url=https://github.com/bruno-collections/bruno-scim-api-collection.git)
 
 
 
