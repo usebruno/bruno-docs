@@ -1,0 +1,217 @@
+import { Callout } from "nextra/components";
+
+# Bruno SCIM API
+
+The Bruno SCIM API provides a direct way to manage users and groups programmatically without requiring integration through identity provider applications like Okta or Microsoft Entra. This is ideal for organizations that want to build custom integrations.
+
+<Callout type="info">
+**Prerequisites**: Before using the Bruno SCIM API, you must first enable SCIM provisioning in Bruno and generate an API key. Follow the [Enabling SCIM Provisioning](./overview#enabling-scim-provisioning) section in the overview page to complete this setup and save your API key for use in the steps below.
+</Callout>
+
+## Who Should Use the SCIM API?
+
+The Bruno SCIM API is designed for:
+
+- **Organizations with custom identity providers** that do not want to leverage a SCIM 2.0 configuration
+- **Development teams** building custom user management workflows
+- **System administrators** who need programmatic control over user provisioning
+
+## API Collection
+
+Bruno provides a complete API collection to help you get started quickly:
+
+📁 **[Bruno SCIM API Collection](https://github.com/bruno-collections/bruno-scim-api-collection)**
+
+[<img src="https://fetch.usebruno.com/button.svg" alt="Fetch in Bruno" style={{width: '130px', height: '30px'}} width="128" height="32" />](https://fetch.usebruno.com?url=https://github.com/bruno-collections/bruno-scim-api-collection.git)
+
+
+
+This collection includes:
+- **User management** endpoints (create, read, update, delete)
+- **Group management** endpoints (create, read, update, delete)
+- **Service provider configuration** endpoints
+- **Pre-configured environments** for testing
+- **Example requests and responses** for all operations
+
+## Authentication
+
+All SCIM API requests require authentication using a bearer token:
+
+```http
+Authorization: Bearer YOUR_SCIM_API_TOKEN
+```
+
+The bearer token is specific to your Bruno authentication domain and can be generated from the SCIM Provisioning settings in your license portal.
+
+## Supported SCIM Operations
+
+Bruno's SCIM implementation follows the SCIM 2.0 specification and supports the following operations:
+
+### User Operations
+
+| Operation | HTTP Method | Endpoint | Description |
+|-----------|-------------|----------|-------------|
+| Create User | `POST` | `/Users` | Provision a new user with Bruno license |
+| Get User | `GET` | `/Users/{id}` | Retrieve user information by ID |
+| Update User | `PUT` | `/Users/{id}` | Update user attributes |
+| Patch User | `PATCH` | `/Users/{id}` | Partial user updates |
+| Delete User | `DELETE` | `/Users/{id}` | Deprovision user and revoke license |
+| List Users | `GET` | `/Users` | Retrieve all users with pagination |
+| Filter Users | `GET` | `/Users?filter=...` | Search users by attributes |
+
+### Group Operations
+
+| Operation | HTTP Method | Endpoint | Description |
+|-----------|-------------|----------|-------------|
+| Create Group | `POST` | `/Groups` | Create a new user group |
+| Get Group | `GET` | `/Groups/{id}` | Retrieve group information by ID |
+| Update Group | `PUT` | `/Groups/{id}` | Update group attributes |
+| Patch Group | `PATCH` | `/Groups/{id}` | Partial group updates |
+| Delete Group | `DELETE` | `/Groups/{id}` | Remove group |
+| List Groups | `GET` | `/Groups` | Retrieve all groups with pagination |
+| Filter Groups | `GET` | `/Groups?filter=...` | Search groups by attributes |
+
+## User Schema
+
+Bruno supports the following SCIM user attributes:
+
+### Required Fields
+- `userName` - User's email address (unique identifier)
+- `emails` - Array of email addresses (primary email required)
+- `active` - Boolean indicating if user should have access
+
+### Optional Fields
+- `externalId` - External system identifier for the user
+- `name.givenName` - First name
+- `name.familyName` - Last name
+- `timezone` - User's timezone (IANA format, e.g., "America/Los_Angeles")
+- `groups` - Array of group memberships
+
+### Bruno-Specific Extensions
+- `urn:ietf:params:scim:schemas:extension:newrelic:2.0:User:nrUserType` - User type (Basic User, Core User, or Full User)
+
+## Group Schema
+
+Bruno supports the following SCIM group attributes:
+
+### Required Fields
+- `displayName` - Name of the group (must be unique)
+
+### Optional Fields
+- `members` - Array of users in the group
+- `externalId` - External system identifier for the group
+
+## Example API Calls
+
+### Create a User
+
+```http
+POST /Users
+Authorization: Bearer YOUR_TOKEN
+
+{
+  "schemas": [
+    "urn:ietf:params:scim:schemas:core:2.0:User"
+  ],
+  "externalId": "emp-12345",
+  "userName": "john.doe@company.com",
+  "name": {
+    "givenName": "John",
+    "familyName": "Doe"
+  },
+  "emails": [{
+    "value": "john.doe@company.com",
+    "primary": true
+  }],
+  "timezone": "America/New_York",
+  "active": true,
+  "groups": []
+}
+```
+
+### Create a Group
+
+```http
+POST /Groups
+Authorization: Bearer YOUR_TOKEN
+
+{
+  "schemas": [
+    "urn:ietf:params:scim:schemas:core:2.0:Group"
+  ],
+  "displayName": "Engineering Team",
+  "members": []
+}
+```
+
+### Update User Group Membership
+
+```http
+PATCH /Users/{userId}
+Authorization: Bearer YOUR_TOKEN
+
+{
+  "schemas": [
+    "urn:ietf:params:scim:api:messages:2.0:PatchOp"
+  ],
+  "Operations": [{
+    "op": "Add",
+    "path": "groups",
+    "value": [{
+      "value": "{groupId}",
+      "display": "Engineering Team"
+    }]
+  }]
+}
+```
+
+## Error Handling
+
+The Bruno SCIM API returns standard HTTP status codes and SCIM-compliant error responses:
+
+- `200 OK` - Successful operation
+- `201 Created` - Resource created successfully
+- `204 No Content` - Successful operation with no response body
+- `400 Bad Request` - Invalid request format or missing required fields
+- `401 Unauthorized` - Invalid or missing authentication token
+- `404 Not Found` - Resource not found
+- `409 Conflict` - Resource already exists or conflict with current state
+- `500 Internal Server Error` - Server error
+
+## Rate Limiting
+
+The Bruno SCIM API implements rate limiting to ensure service stability:
+
+- **Rate limit**: 100 requests per minute per authentication domain
+- **Burst limit**: 20 requests per 10-second window
+- **Headers**: Rate limit information is included in response headers
+
+## Best Practices
+
+### Security
+- **Secure token storage**: Store API tokens securely and rotate them regularly
+- **HTTPS only**: Always use HTTPS for API requests
+- **Minimal permissions**: Use dedicated service accounts with minimal required permissions
+
+### Performance
+- **Batch operations**: Use PATCH operations for bulk updates when possible
+- **Pagination**: Implement proper pagination for large result sets
+- **Caching**: Cache user and group data to reduce API calls
+
+### Error Handling
+- **Retry logic**: Implement exponential backoff for transient errors
+- **Logging**: Log all API interactions for debugging and audit purposes
+- **Validation**: Validate data before sending API requests
+
+## Getting Started
+
+1. **Download the collection**: Clone or download the [Bruno SCIM API Collection](https://github.com/bruno-collections/bruno-scim-api-collection)
+2. **Configure environment**: Set up your base URL and API token in the environment variables
+3. **Test connectivity**: Start with the Service Provider Config endpoint to verify your setup
+4. **Create test user**: Use the Create User endpoint to provision your first user
+5. **Explore operations**: Try different SCIM operations using the provided examples
+
+## Next Steps
+
+- [Configure SCIM with Okta](./configure-scim-with-okta) - If you prefer using Okta's built-in integration
+- [SCIM Provisioning Overview](./overview) - Learn more about SCIM concepts and benefits

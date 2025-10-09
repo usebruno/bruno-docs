@@ -1,0 +1,83 @@
+import Image from 'next/image'
+import { Callout } from "nextra/components";
+
+
+# Okta SCIM provisioning with Bruno
+
+This guide will walk you through setting up SCIM (System for Cross-domain Identity Management) provisioning with Bruno using Okta SWA (Secure Web Authentication).
+
+<Callout type="info">
+**Prerequisites**: Before configuring Okta, you must first enable SCIM provisioning in Bruno and generate an API key. Follow the [Enabling SCIM Provisioning](./overview#enabling-scim-provisioning) section in the overview page to complete this setup and save your API key for use in the steps below.
+</Callout>
+
+## Create your Okta App
+
+1. As an Okta admin, navigate to **Applications** and click **Create App Integration**
+
+<Image src="/screenshots/sso-scim-management/okta/okta-swa-1.webp" alt="License portal login" width={800} height={600} className="rounded mt-4" />
+
+2. Select **SWA - Secure Web Authentication** and click **Next**
+
+<Image src="/screenshots/sso-scim-management/okta/okta-swa-2.webp" alt="License portal login" width={800} height={600} className="rounded mt-4" />
+
+3. On the **Create SWA Integration** page, add the following values and click **Finish**:
+   - **App name**: (Unique App Name - e.g. Bruno SCIM Integration)
+   - **App's login page URL**: `https://license.usebruno.com/`
+
+<Image src="/screenshots/sso-scim-management/okta/okta-swa-3.webp" alt="License portal login" width={800} height={600} className="rounded mt-4" />
+
+## Configure your Okta App
+
+1. On your newly created application page, select the **General** tab
+2. Under **App Settings**, select **Edit**, and check the **Provisioning** option **SCIM** and click **Save**
+
+<Image src="/screenshots/sso-scim-management/okta/okta-swa-5.webp" alt="License portal login" width={800} height={600} className="rounded mt-4" />
+
+3. Return to your Okta app, select the **Provisioning** tab, under **SCIM Connection** select **Edit** and configure the following values:
+   - **SCIM connector base URL**: `https://license.usebruno.com/scim/v2`
+   - **Unique identifier field for users**: `email`
+   - **Supported provisioning actions**: Check the following options:
+     - `Import New Users and Profile Updates`
+     - `Push New Users`
+     - `Push Profile Updates`
+     - `Push Groups`
+   - **Authentication**: set to **HTTP Header**
+   - Under **HTTP Header**, for **token**: add the generated API Key value from the [prerequisites step](./overview#enabling-scim-provisioning)
+
+<Image src="/screenshots/sso-scim-management/okta/okta-swa-7.webp" alt="License portal login" width={800} height={600} className="rounded mt-4" />
+
+4. Click **Test Connector Configuration**. If successful, a **Connector configured successfully** message dialogue appears.
+
+<Image src="/screenshots/sso-scim-management/okta/okta-swa-8.webp" alt="License portal login" width={800} height={600} className="rounded mt-4" />
+
+5. Click **Save** to complete the Provisioning integration.
+
+6. Under the **Provisioning** tab, select the **To Apps** setting, edit and enable the following options and click **Save**:
+   - `Create Users`
+   - `Update User Attributes`
+   - `Deactivate Users`
+
+<Image src="/screenshots/sso-scim-management/okta/okta-swa-9.webp" alt="License portal login" width={800} height={600} className="rounded mt-4" />
+
+Your SCIM integration is now complete. You can now begin [assigning users to Bruno](#assign-people-and-groups-to-bruno-in-okta).
+
+## Assign people and groups to Bruno in Okta
+
+1. Under your created Bruno Application, navigate to the **Assignments** tab
+
+2. Select **Assign** and either **Assign to People** or **Assign to Groups** to provision Bruno license keys
+
+<Image src="/screenshots/sso-scim-management/okta/okta-swa-15.webp" alt="License portal login" width={800} height={600} className="rounded mt-4" />
+
+<Image src="/screenshots/sso-scim-management/okta/okta-swa-16.webp" alt="License portal login" width={800} height={600} className="rounded mt-4" />
+
+3. Assigned Users will receive an email with their **License Key**
+
+<Image src="/screenshots/sso-scim-management/okta/okta-swa-12.webp" alt="License portal login" width={800} height={600} className="rounded mt-4" />
+
+## Deprovision users from Bruno in Okta
+
+1. Under your created Bruno Application, navigate to the **Assignments** tab
+<Image src="/screenshots/sso-scim-management/okta/okta-swa-13.webp" alt="License portal login" width={800} height={600} className="rounded mt-4" />
+2. Remove the desired users or groups, their license key(s) will be deactivated and they will receive an email notification
+<Image src="/screenshots/sso-scim-management/okta/okta-swa-14.webp" alt="License portal login" width={800} height={600} className="rounded mt-4" />
