@@ -29,6 +29,14 @@ export const Navbar = () => {
         </div>
 
         <div className="flex items-center space-x-4 sm:space-x-1">
+          <Link href="/testing/script/javascript-reference">
+            <Button
+              variant="link"
+              className="text-sm sm:text-base md:block hidden"
+            >
+              API Reference
+            </Button>
+          </Link>
           <Link href="https://blog.usebruno.com/" target="_blank">
             <Button
               variant="link"
