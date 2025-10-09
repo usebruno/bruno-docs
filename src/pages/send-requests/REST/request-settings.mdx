@@ -1,0 +1,48 @@
+import { Callout } from "nextra/components";
+
+# Request Settings
+
+Bruno provides advanced request execution options that can be configured on a per-request basis through the **Settings** tab in the request pane. These settings allow you to fine-tune how individual requests behave during execution, overriding global or default configurations.
+
+## Accessing Request Settings
+
+1. **Open a request** in your collection
+2. **Click on the Settings tab** in the request pane (alongside existing tabs like Headers, Body, etc.)
+3. **Configure the desired options** for your request
+
+
+## Available Settings
+
+### Automatically Follow Redirects
+
+Controls whether HTTP redirects should be followed automatically during request execution.
+
+**Options:**
+- **Enabled (true)**: Automatically follow redirects (default behavior)
+- **Disabled (false)**: Do not follow redirects, return the redirect response
+
+### Max Redirects
+
+Limits the maximum number of redirects that can be followed in a single request.
+
+**Configuration:**
+- **Type**: Numeric input
+- **Range**: 1 to 50 (validation enforced)
+- **Default**: 5 redirects
+
+### Request Timeout
+
+Sets the timeout duration for the request in milliseconds.
+
+**Configuration:**
+- **Type**: Numeric input (milliseconds)
+- **Range**: 1000 to 300000 (1 second to 5 minutes)
+- **Default**: 30000 (30 seconds)
+
+### URL Encoding
+
+Controls whether URL parameters should be automatically encoded during request execution.
+
+**Options:**
+- **Enabled (true)**: Automatically encode URL parameters (default behavior)
+- **Disabled (false)**: Do not encode URL parameters, send raw values
