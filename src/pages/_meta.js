@@ -37,10 +37,17 @@ export default {
   "converters": "Converters",
   "vs-code-extension": "VS Code Extension",
 
+  "license-management-section": {
+    "title": "License Management",
+    "type": "separator"
+  },
+  "license-overview": "Overview",
+  "license-end-users": "End Users",
+  "license-administrators": "License Administrators",
+
   "other": {
     "title": "Other",
     "type": "separator"
   },
-  "license-management": "License Management",
   "advanced-guides": "Advanced Guides"
 } 

@@ -1,0 +1,90 @@
+import { Callout } from "nextra/components";
+import PremiumBadge from "@/components/premium-badge";
+import Image from 'next/image';
+
+# SCIM Provisioning Overview <PremiumBadge />
+
+<Callout type="info">
+SCIM Provisioning with Bruno is available for Ultimate Edition customers behind a feature flag. Please contact your Account Manager to enable this feature.
+</Callout>
+
+## What is SCIM?
+
+SCIM (System for Cross-domain Identity Management) is an open standard that allows for the automation of user provisioning and deprovisioning between identity providers and service providers. With SCIM, organizations can automatically manage user access to Bruno based on their identity provider configurations.
+
+## Benefits of SCIM with Bruno
+
+### Automated User Management
+- **Automatic provisioning**: New users are automatically granted Bruno licenses when added to your identity provider
+- **Automatic deprovisioning**: Users lose access to Bruno when removed from your identity provider
+
+### Enhanced Security
+- **Centralized access control**: Manage Bruno access through your existing identity management system
+- **Reduced manual errors**: Eliminate manual license assignment and removal processes
+- **Audit trail**: Track all provisioning and deprovisioning activities in your identity provider
+
+### Operational Efficiency
+- **Streamlined onboarding**: New employees automatically receive Bruno access as part of their standard onboarding
+- **Simplified offboarding**: Departing employees automatically lose Bruno access
+- **Reduced administrative overhead**: IT teams spend less time on manual license management
+
+
+## SCIM Operations Supported
+
+### User Operations
+- **Create Users**: Provision new Bruno licenses
+- **Update Users**: Sync profile changes from your identity provider
+- **Deactivate Users**: Remove Bruno access when users are deactivated
+- **Delete Users**: Remove user accounts
+- **List Users**: Retrieve all provisioned users
+- **Get Users**: Retrieve specific user information
+
+### Group Operations
+- **Create Groups**: Create groups for user organization
+- **Update Groups**: Modify group membership and properties
+- **Delete Groups**: Remove groups
+- **List Groups**: Retrieve all groups
+- **Add Members**: Add users to groups
+- **Remove Members**: Remove users from groups
+
+## Enabling SCIM Provisioning
+
+### Prerequisites
+
+You must have Ultimate Edition with SCIM provisioning enabled before you can configure SCIM for your Bruno team.
+
+### Enabling SCIM in Bruno
+
+1. Navigate to the Bruno license portal: https://license.usebruno.com/
+2. Click **Settings** in the navigation menu
+3. Select **SCIM Provisioning** from the settings page
+4. Toggle **Enable SCIM** to turn it on
+
+<Image src="/screenshots/sso-scim-management/bruno-scim/scim-settings-1.webp" alt="Enable SCIM in Bruno license portal" width={800} height={600} className="rounded mt-4" />
+
+### Generating SCIM API Key
+
+1. Under **SCIM Provisioning**, note the **SCIM Base URL**: `https://license.usebruno.com/scim/v2`
+2. Click **Generate New API Key**
+3. Copy your new API key for later use when configuring your identity provider
+
+You can revisit this page to manage your SCIM API keys. The SCIM Base URL and API key will be needed when configuring your identity provider.
+
+## Getting Started
+
+To set up SCIM provisioning with Bruno:
+
+1. **Verify eligibility**: Ensure you have an Ultimate Edition subscription with SCIM enabled
+2. **Choose your identity provider**: Select from our supported providers
+3. **Configure SCIM**: Follow the setup guide for your specific identity provider
+4. **Test the integration**: Verify that users can be provisioned and deprovisioned correctly
+5. **Monitor and maintain**: Regularly review SCIM logs and user synchronization
+
+## Next Steps
+
+Ready to configure SCIM? Choose your integration method:
+
+- [Configure SCIM with Okta](./configure-scim-with-okta) - Complete setup guide for Okta integration
+- [Bruno SCIM API](./bruno-scim-api) - Direct API integration for custom implementations
+
+For questions about SCIM provisioning or to enable this feature, please contact your Bruno Account Manager or support team.
