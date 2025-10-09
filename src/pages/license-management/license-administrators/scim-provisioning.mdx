@@ -20,6 +20,35 @@ Bruno supports SCIM (System for Cross-domain Identity Management). Allowing you 
 
  <Image src="public/screenshots/sso-scim-management/okta/okta-swa-3.webp" alt="License portal login" width={800} height={600} className="rounded mt-4" />
 
- 4. On your newly created application page, select the 'General' tab
+ ### Configure your Okta App
 
- <Image src="public/screenshots/sso-scim-management/okta/okta-swa-4.webp" alt="License portal login" width={800} height={600} className="rounded mt-4" />
+1. On your newly created application page, select the 'General' tab
+
+<Image src="public/screenshots/sso-scim-management/okta/okta-swa-4.webp" alt="License portal login" width={800} height={600} className="rounded mt-4" />
+
+2. Under 'App Settings', select 'Edit', and check the 'Provisioning' option 'SCIM' and click 'Save'
+
+<Image src="public/screenshots/sso-scim-management/okta/okta-swa-5.webp" alt="License portal login" width={800} height={600} className="rounded mt-4" />
+
+3. Navigate to the Bruno license portal: https://license.usebruno.com/
+ - Navigate to `Settings`
+ - Click on `SCIM Provisioning` page
+ - Toggle `Enable SCIM`on
+ - Note the `SCIM Base URL`
+ - Click `Generate New API Key` copy the key for the next step
+
+<image src="public/screenshots/sso-scim-management/okta/okta-swa-6.webp" alt="License portal login" width={800} height={600} className="rounded mt-4" />
+
+3. Return to your Okta app, select the 'Provisiong' tab, under 'SCIM Connection' select 'Edit' and configure the following values:
+ - *SCIM connector base URL*: `https://license.usebruno.com/scim/v2`
+ - *Unique identifier field for users*: `email``
+ - *Supported provisioning actions*: Check the options for`Import New Users and Profile Updates`, `Push New Users`, `Push Profile Updates`, and `Push Groups`
+ - *Authentication*: set to `HTTP Header`
+ - Under *HTTP Header*, for *token*:  add the generated API Key value from the prior step
+
+ <Image src="public/screenshots/sso-scim-management/okta/okta-swa-7.webp" alt="License portal login" width={800} height={600} className="rounded mt-4" />
+
+4. Click *Test Connector Configuration*. If successful, a 'Connector configured successfully' message dialogue appears.
+
+<image src="public/screenshots/sso-scim-management/okta/okta-swa-8.webp" alt="License portal login" width={800} height={600} className="rounded mt-4" />
+Click Save. Then you can configure the SCIM 2.0 test app (Header Auth).
