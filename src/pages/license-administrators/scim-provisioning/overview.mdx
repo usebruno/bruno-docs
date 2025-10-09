@@ -28,25 +28,6 @@ SCIM (System for Cross-domain Identity Management) is an open standard that allo
 - **Simplified offboarding**: Departing employees automatically lose Bruno access
 - **Reduced administrative overhead**: IT teams spend less time on manual license management
 
-
-## SCIM Operations Supported
-
-### User Operations
-- **Create Users**: Provision new Bruno licenses
-- **Update Users**: Sync profile changes from your identity provider
-- **Deactivate Users**: Remove Bruno access when users are deactivated
-- **Delete Users**: Remove user accounts
-- **List Users**: Retrieve all provisioned users
-- **Get Users**: Retrieve specific user information
-
-### Group Operations
-- **Create Groups**: Create groups for user organization
-- **Update Groups**: Modify group membership and properties
-- **Delete Groups**: Remove groups
-- **List Groups**: Retrieve all groups
-- **Add Members**: Add users to groups
-- **Remove Members**: Remove users from groups
-
 ## Enabling SCIM Provisioning
 
 ### Prerequisites
@@ -66,19 +47,11 @@ You must have Ultimate Edition with SCIM provisioning enabled before you can con
 
 1. Under **SCIM Provisioning**, note the **SCIM Base URL**: `https://license.usebruno.com/scim/v2`
 2. Click **Generate New API Key**
-3. Copy your new API key for later use when configuring your identity provider
+3. Copy your new API key for later use when configuring your identity provider - this key will not be shown again
+
+<Image src="/screenshots/sso-scim-management/bruno-scim/scim-settings-2.webp" alt="Generate SCIM API Key in Bruno license portal" width={800} height={600} className="rounded mt-4" />
 
 You can revisit this page to manage your SCIM API keys. The SCIM Base URL and API key will be needed when configuring your identity provider.
-
-## Getting Started
-
-To set up SCIM provisioning with Bruno:
-
-1. **Verify eligibility**: Ensure you have an Ultimate Edition subscription with SCIM enabled
-2. **Choose your identity provider**: Select from our supported providers
-3. **Configure SCIM**: Follow the setup guide for your specific identity provider
-4. **Test the integration**: Verify that users can be provisioned and deprovisioned correctly
-5. **Monitor and maintain**: Regularly review SCIM logs and user synchronization
 
 ## Next Steps
 
@@ -86,5 +59,3 @@ Ready to configure SCIM? Choose your integration method:
 
 - [Configure SCIM with Okta](./configure-scim-with-okta) - Complete setup guide for Okta integration
 - [Bruno SCIM API](./bruno-scim-api) - Direct API integration for custom implementations
-
-For questions about SCIM provisioning or to enable this feature, please contact your Bruno Account Manager or support team.
