@@ -1,13 +1,25 @@
 # SCIM provisioning with Bruno
 
-Bruno supports SCIM (System for Cross-domain Identity Management)! Allowing you to automate the provisioning and de-provisioning of licenses for your team. 
+Bruno supports SCIM (System for Cross-domain Identity Management). Allowing you to automate the provisioning and de-provisioning of licenses for your team. 
 
-## Setting up SCIM with Okta
+## Setting up SCIM with Okta Secure Web Authentication (SWA)
 
 ### Create your Okta App
 
-As an Okta admin, navigate to 'Applications' and click 'Create App Integraion'
+1. As an Okta admin, navigate to 'Applications' and click 'Create App Integraion'
 
-<Image src="/screenshots/license-management/licenseportalenteremail.webp" alt="License portal login" width={800} height={600} className="rounded mt-4" />
+<Image src="public/screenshots/sso-scim-management/okta/okta-swa-1.webp" alt="License portal login" width={800} height={600} className="rounded mt-4" />
 
+2. Select 'SWA - Secure Web Authetication' and click 'Next'
 
+<Image src="public/screenshots/sso-scim-management/okta/okta-swa-2.webp" alt="License portal login" width={800} height={600} className="rounded mt-4" />
+
+3. On the 'Create SWA Integration' page, add the following values and click 'Finish':
+ - App name: {Unique App Name - e.g. Bruno SCIM Integration}
+ - App's login page URL: https://license.usebruno.com/
+
+ <Image src="public/screenshots/sso-scim-management/okta/okta-swa-3.webp" alt="License portal login" width={800} height={600} className="rounded mt-4" />
+
+ 4. On your newly created application page, select the 'General' tab
+
+ <Image src="public/screenshots/sso-scim-management/okta/okta-swa-4.webp" alt="License portal login" width={800} height={600} className="rounded mt-4" />
