@@ -51,4 +51,33 @@ Bruno supports SCIM (System for Cross-domain Identity Management). Allowing you 
 4. Click *Test Connector Configuration*. If successful, a 'Connector configured successfully' message dialogue appears.
 
 <image src="public/screenshots/sso-scim-management/okta/okta-swa-8.webp" alt="License portal login" width={800} height={600} className="rounded mt-4" />
-Click Save. Then you can configure the SCIM 2.0 test app (Header Auth).
+
+5. Click 'Save' to complete the Provisioning integration.
+
+6. Under the 'Provisioning' tab, select the 'To Apps' setting, edit and enable the following options and click 'Save':
+ - *Create Users*
+ - *Update User Attributes*
+ - *Deactivate Users*
+
+ <Image src="public/screenshots/sso-scim-management/okta/okta-swa-9.webp" alt="License portal login" width={800} height={600} className="rounded mt-4" />
+
+Your SCIM integration is now complete. You can now begin assigning users to Bruno.
+
+### Assign people and groups to Bruno in Okta
+1. Under your created Bruno Application, navigate to the 'Assignments' tab
+
+<Image src="public/screenshots/sso-scim-management/okta/okta-swa-10.webp" alt="License portal login" width={800} height={600} className="rounded mt-4" />
+
+2. Select *Assign* and either *Assign to People* or *Assign to Groups* to provision Bruno license keys
+
+<Image src="public/screenshots/sso-scim-management/okta/okta-swa-11.webp" alt="License portal login" width={800} height={600} className="rounded mt-4" />
+
+3. Assigned Users will receive an email with their *License Key*
+
+<image src="public/screenshots/sso-scim-management/okta/okta-swa-12.webp" alt="License portal login" width={800} height={600} className="rounded mt-4" />
+
+### Deprovision users from Bruno in Okta
+1. Under your created Bruno Application, navigate to the 'Assignments' tab
+2. Remove the desired users or groups, their license key(s) will be deactivated
+<Image src="public/screenshots/sso-scim-management/okta/okta-swa-13.webp" alt="License portal login" width={800} height={600} className="rounded mt-4" />
+
