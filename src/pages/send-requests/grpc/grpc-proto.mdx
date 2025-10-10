@@ -41,6 +41,8 @@ To configure import paths for your proto files:
 3. In the **Import Paths** section, click **Add Import Path**
 4. Specify the directory path where Bruno should look for imported proto files
 
+![gRPC Collection Level Import Path](/screenshots/send-request/grpc/grpc-collection-level-import-path.webp)
+
 ### Import Path Types
 
 Bruno supports different types of import paths:
@@ -101,4 +103,6 @@ Bruno automatically manages import paths when you add proto files at the request
 1. When you add a proto file to a request, Bruno automatically adds its directory to the collection's import paths
 2. This ensures that any imports within that proto file are properly resolved
 3. The import paths are shared across all requests in the collection
+
+![gRPC Request Level Import Path](/screenshots/send-request/grpc/grpc-req-level-import-path.webp)
 

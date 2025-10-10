@@ -29,7 +29,7 @@ Bruno offers two ways to import OpenAPI specifications:
 3. Select **Import** from the dropdown menu
 4. Choose **OpenAPI V3 File** option
 
-![select-openapi-file](/screenshots/open-api/select-open-api.webp)
+![select-openapi-file](/screenshots/get-started/import-export/import_collection/import_options.webp)
 
 5. Browse and select your OpenAPI specification file (`.yaml` or `.json`)
 6. Configure the import settings (see [Import Settings](#import-settings) below)
@@ -40,6 +40,8 @@ Bruno offers two ways to import OpenAPI specifications:
 1. Select **OpenAPI V3 URL** and provide the public URL of the OpenAPI file you're trying to import
 2. Configure the import settings (see [Import Settings](#import-settings) below)
 3. Click **Import** to create the collection
+
+![import-openapi-url](/screenshots/open-api/import-openapi-url.webp)
 
 After importing the OAS file, the sample collection will look like this:
 
@@ -53,7 +55,7 @@ Bruno provides flexible options for organizing your imported OpenAPI collection.
 
 When importing an OpenAPI specification, you can choose between two folder grouping strategies:
 
-#### Path-Based Grouping (Default)
+#### Path-Based Grouping
 
 Path-based grouping organizes endpoints into folders based on their URL path structure. This approach mirrors how APIs are typically organized and provides better compatibility with Postman imports.
 
@@ -65,7 +67,7 @@ Path-based grouping organizes endpoints into folders based on their URL path str
 /api/v1/orders/{id}    → /api/v1/orders/ folder
 ```
 
-#### Tag-Based Grouping
+#### Tag-Based Grouping (default)
 
 Tag-based grouping organizes endpoints into folders based on the `tags` defined in the OpenAPI specification. This approach groups endpoints by their functional purpose as defined by the API author.
 
@@ -88,9 +90,11 @@ paths:
 
 1. **Select Import Method**: Choose either file or URL import
 2. **Choose Folder Arrangement**: Select your preferred grouping method from the dropdown:
-   - **Paths** (default): Group by URL path structure
-   - **Tags**: Group by OpenAPI tags
+   - **Paths**: Group by URL path structure
+   - **Tags** (default): Group by OpenAPI tags
 3. **Import**: Click the import button to create your collection
+
+![OpenAPI Import Dialog](/screenshots/open-api/openapi-import.webp)
 
 ## Example OpenAPI Specifications
 
