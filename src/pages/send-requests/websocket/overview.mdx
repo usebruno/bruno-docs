@@ -1,0 +1,30 @@
+import { Callout } from "nextra/components";
+
+# WebSocket Overview
+
+Bruno now supports WebSocket connections, enabling you to test real-time communication protocols and bidirectional data exchange. This feature allows you to establish WebSocket connections, send messages, and receive responses in real-time.
+
+<Callout type="info">
+WebSocket support is available in Bruno 2.13.0.
+</Callout>
+
+## What are WebSockets?
+
+WebSockets provide a persistent, full-duplex communication channel between a client and server. Unlike traditional HTTP requests that follow a request-response pattern, WebSockets maintain an open connection that allows both the client and server to send messages at any time.
+
+## WebSocket vs HTTP
+
+| Feature | HTTP | WebSocket |
+|---------|------|-----------|
+| **Connection** | Request-Response | Persistent |
+| **Latency** | Higher (connection overhead) | Lower (persistent connection) |
+| **Data Flow** | Unidirectional | Bidirectional |
+| **Use Case** | Traditional APIs | Real-time applications |
+| **Overhead** | Higher per request | Lower per message |
+| **Complexity** | Simple | More complex |
+
+## Next Steps
+
+- Learn how to [Create WebSocket Requests](./create-request.mdx)
+
+

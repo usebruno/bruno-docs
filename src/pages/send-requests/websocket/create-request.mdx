@@ -1,0 +1,232 @@
+import { Callout } from "nextra/components";
+
+# Create WebSocket Request
+
+Creating a WebSocket request in Bruno allows you to establish real-time connections and test bidirectional communication with WebSocket servers.
+
+<Callout type="info">
+WebSocket requests are available as a **Beta feature** in Bruno 2.13. This feature is actively being developed and may have limitations or changes in future releases.
+</Callout>
+
+## Creating a WebSocket Request
+
+### Step 1: Add New Request
+
+1. **Open your collection** in Bruno
+2. **Right-click** on the collection or folder where you want to add the request
+3. **Select "New Request"** from the context menu
+4. **Choose "WebSocket"** as the request type
+
+
+### Step 2: Configure WebSocket URL
+
+1. **Enter the WebSocket URL** in the address bar
+   - Use `ws://` for unsecured connections
+   - Use `wss://` for secured connections (recommended for production)
+
+**Example URLs:**
+```
+ws://localhost:8080/websocket
+wss://api.example.com/ws
+wss://echo.websocket.org
+```
+
+2. **Add Query Parameters** (optional)
+   - Click the **Params** tab to add query parameters
+   - These will be appended to the WebSocket URL
+
+### Step 3: Configure Headers
+
+1. **Click the Headers tab**
+2. **Add custom headers** as needed:
+   - **Authorization**: Bearer tokens, API keys
+   - **Custom Headers**: Any additional metadata
+   - **User-Agent**: Custom user agent strings
+
+**Common Headers:**
+```
+Authorization: Bearer your-token-here
+X-API-Key: your-api-key
+User-Agent: Bruno-WebSocket-Client
+```
+
+### Step 4: Set Connection Options
+
+1. **Click the Settings tab** (gear icon)
+2. **Configure connection settings**:
+
+**Connection Timeout**
+- Set the maximum time to wait for connection establishment
+- Default: 30 seconds
+- Range: 1-300 seconds
+
+**Auto-reconnect**
+- Enable automatic reconnection on connection loss
+- Useful for testing resilient WebSocket implementations
+
+## WebSocket Request Interface
+
+The WebSocket request interface consists of several key components:
+
+### Connection Status
+- **Disconnected**: Initial state, ready to connect
+- **Connecting**: Establishing connection to server
+- **Connected**: Successfully connected and ready to send messages
+- **Disconnected**: Connection lost or manually closed
+
+### Message Composition
+- **Message Type**: Choose between Text, JSON, Binary
+- **Message Editor**: Compose your message with syntax highlighting
+- **Send Button**: Send the composed message
+
+### Message History
+- **Sent Messages**: All messages you've sent (marked with →)
+- **Received Messages**: All messages received from server (marked with ←)
+- **Timestamps**: When each message was sent/received
+- **Message Sorting**: Toggle between newest/oldest first
+
+## Connection Management
+
+### Establishing Connection
+
+1. **Click the "Connect" button** to establish the WebSocket connection
+2. **Monitor connection status** in the status indicator
+3. **View connection logs** for detailed connection information
+
+### Sending Messages
+
+1. **Compose your message** in the message editor
+2. **Select message type** (Text, JSON, Binary)
+3. **Click "Send"** to transmit the message
+4. **View sent message** in the message history
+
+### Receiving Messages
+
+1. **Monitor the message history** for incoming messages
+2. **View message details** including timestamp and content
+3. **Use test scripts** to validate received messages
+
+### Closing Connection
+
+1. **Click "Disconnect"** to close the WebSocket connection
+2. **Connection status** will update to "Disconnected"
+3. **Message history** is preserved for review
+
+## Message Types
+
+Bruno supports different message types for WebSocket communication:
+
+### Text Messages
+- **Plain text** messages
+- **UTF-8 encoded** content
+- **Human-readable** format
+
+**Example:**
+```
+Hello, WebSocket server!
+```
+
+### JSON Messages
+- **Structured data** in JSON format
+- **Syntax highlighting** and validation
+- **Auto-formatting** for readability
+
+**Example:**
+```json
+{
+  "type": "message",
+  "content": "Hello from Bruno!",
+  "timestamp": "2025-01-09T10:30:00Z"
+}
+```
+
+### Binary Messages
+- **Binary data** transmission
+- **Base64 encoding** for display
+- **File upload** support
+
+## Environment Variables
+
+You can use environment variables in WebSocket requests:
+
+### URL Variables
+```
+wss://{{host}}/websocket
+wss://{{api_base_url}}/ws/{{channel}}
+```
+
+### Header Variables
+```
+Authorization: Bearer {{auth_token}}
+X-API-Key: {{api_key}}
+```
+
+### Message Variables
+```json
+{
+  "user_id": "{{user_id}}",
+  "message": "{{greeting}} from Bruno"
+}
+```
+
+## Testing WebSocket Requests
+
+### Pre-request Scripts
+Execute JavaScript before establishing the WebSocket connection:
+
+```javascript
+// Set dynamic variables
+bru.setVar("timestamp", new Date().toISOString());
+bru.setVar("random_id", Math.random().toString(36).substr(2, 9));
+```
+
+### Test Scripts
+Validate WebSocket responses and connection status:
+
+```javascript
+// Test connection status
+pm.test("WebSocket connection established", function () {
+    pm.expect(ws.connected).to.be.true;
+});
+
+// Test received message
+pm.test("Message received", function () {
+    pm.expect(ws.messages.length).to.be.greaterThan(0);
+    const lastMessage = ws.messages[ws.messages.length - 1];
+    pm.expect(lastMessage.data).to.include("response");
+});
+```
+
+## Best Practices
+
+### URL Configuration
+- **Use WSS**: Always use `wss://` for production environments
+- **Validate URLs**: Ensure WebSocket URLs are properly formatted
+- **Test Locally**: Use `ws://localhost` for local development
+
+### Message Handling
+- **Keep Messages Small**: Large messages can impact performance
+- **Use JSON**: Structured data is easier to parse and validate
+- **Handle Errors**: Implement proper error handling in test scripts
+
+### Connection Management
+- **Close Connections**: Always disconnect when testing is complete
+- **Handle Reconnection**: Test both connection and reconnection scenarios
+- **Monitor Status**: Keep track of connection state changes
+
+## Troubleshooting
+
+### Connection Issues
+- **Check URL Format**: Ensure proper `ws://` or `wss://` protocol
+- **Verify Server**: Confirm the WebSocket server is running and accessible
+- **Check Headers**: Ensure authentication headers are correct
+- **Network Issues**: Verify network connectivity and firewall settings
+
+### Message Issues
+- **Format Validation**: Check message format and encoding
+- **Size Limits**: Ensure messages don't exceed server limits
+- **Timing Issues**: Allow time for message processing and responses
+
+<Callout type="warning">
+WebSocket support is in Beta. Some advanced features may be limited. Please report any issues or provide feedback to help improve this feature.
+</Callout>
