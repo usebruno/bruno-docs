@@ -4,10 +4,6 @@ import { Callout } from "nextra/components";
 
 Bruno supports various message types for WebSocket communication, allowing you to send and receive different data formats based on your application's requirements.
 
-<Callout type="info">
-WebSocket message types are available as a **Beta feature** in Bruno 2.13. This feature is actively being developed and may have limitations or changes in future releases.
-</Callout>
-
 ## Supported Message Types
 
 Bruno supports the following WebSocket message types:
@@ -87,26 +83,46 @@ Structured data in JSON format for complex data exchange and API-like communicat
 - Complex objects and arrays
 - When you need data validation
 
-### Binary Messages
-Binary data for file transfers, media content, and non-text data.
+### XML Messages
+Structured data in XML format for legacy systems and XML-based protocols.
 
 **Characteristics:**
-- **Format**: Raw binary data
-- **Use Case**: File transfers, images, audio, video
-- **Display**: Base64 encoded for viewing
+- **Format**: XML (eXtensible Markup Language)
+- **Use Case**: SOAP messages, legacy systems, XML-based APIs
+- **Validation**: XML syntax validation and formatting
 - **Size**: Limited by WebSocket frame size
 
-**Example Binary Messages:**
-- **File Upload**: Sending image files, documents
-- **Media Streaming**: Audio/video data chunks
-- **Encrypted Data**: Encrypted messages or files
-- **Custom Protocols**: Proprietary binary protocols
+**Example XML Messages:**
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<message>
+  <type>notification</type>
+  <content>Hello from Bruno!</content>
+  <timestamp>2025-01-09T10:30:00Z</timestamp>
+  <user>
+    <id>123</id>
+    <name>Bruno User</name>
+  </user>
+</message>
+```
+
+**SOAP Message Example:**
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <GetUserRequest>
+      <userId>123</userId>
+    </GetUserRequest>
+  </soap:Body>
+</soap:Envelope>
+```
 
 **When to Use:**
-- File transfers
-- Media content
-- Encrypted data
-- Custom binary protocols
+- Legacy systems requiring XML format
+- SOAP-based WebSocket services
+- XML-based messaging protocols
+- When working with systems that expect XML
 
 ## Message Composition
 
@@ -144,188 +160,20 @@ Current time: {{timestamp}}
 }
 ```
 
-### Binary Message Composition
+### XML Message Composition
 
-1. **Select "Binary" message type**
-2. **Upload a file** or enter binary data
-3. **Preview as Base64** for verification
-4. **Send the binary message**
+1. **Select "XML" message type**
+2. **Compose XML structure** with syntax highlighting
+3. **Use environment variables** in XML values
+4. **Validate XML syntax** before sending
 
-## Message History and Management
-
-### Viewing Message History
-
-Bruno displays all sent and received messages in chronological order:
-
-**Message Indicators:**
-- **→ (Arrow Right)**: Messages you sent
-- **← (Arrow Left)**: Messages received from server
-- **Timestamp**: When each message was sent/received
-- **Message Type**: Text, JSON, or Binary indicator
-
-### Message Sorting
-
-You can sort messages in different orders:
-
-**Newest First (Default):**
-- Most recent messages at the top
-- Useful for real-time monitoring
-- Easy to see latest activity
-
-**Oldest First:**
-- Messages in chronological order
-- Useful for reviewing conversation history
-- Better for debugging and analysis
-
-### Message Search
-
-Search through message history to find specific content:
-
-1. **Use the search box** in the message history
-2. **Search by content** or message type
-3. **Filter by direction** (sent/received)
-4. **Find specific patterns** or keywords
-
-## Environment Variables in Messages
-
-### Dynamic Content
-
-Use environment variables to create dynamic messages:
-
-**Text Messages:**
+**Example with Variables:**
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<message>
+  <type>user_action</type>
+  <userId>{{user_id}}</userId>
+  <action>{{action_type}}</action>
+  <timestamp>{{current_timestamp}}</timestamp>
+</message>
 ```
-User {{username}} joined the room at {{timestamp}}
-```
-
-**JSON Messages:**
-```json
-{
-  "event": "user_joined",
-  "user": {
-    "id": "{{user_id}}",
-    "name": "{{username}}",
-    "email": "{{user_email}}"
-  },
-  "timestamp": "{{current_time}}"
-}
-```
-
-### Common Variables
-
-**System Variables:**
-- `{{timestamp}}`: Current timestamp
-- `{{random_id}}`: Random identifier
-- `{{uuid}}`: Unique identifier
-
-**User Variables:**
-- `{{user_id}}`: Current user ID
-- `{{username}}`: Current username
-- `{{session_id}}`: Current session ID
-
-**Custom Variables:**
-- Define your own variables in environment settings
-- Use in any message type
-- Update dynamically in scripts
-
-## Message Validation
-
-### JSON Validation
-
-Bruno automatically validates JSON messages:
-
-**Valid JSON:**
-```json
-{
-  "type": "message",
-  "content": "Hello World"
-}
-```
-
-**Invalid JSON (will show error):**
-```json
-{
-  "type": "message",
-  "content": "Hello World"
-  // Missing closing brace
-```
-
-### Syntax Highlighting
-
-Bruno provides syntax highlighting for different message types:
-
-- **Text**: Plain text formatting
-- **JSON**: JSON syntax highlighting with error indicators
-- **Binary**: Base64 encoding display
-
-## Best Practices
-
-### Message Design
-
-**Keep Messages Small:**
-- Large messages can impact performance
-- Consider chunking for large data
-- Use compression for text data
-
-**Use Appropriate Types:**
-- Text for simple messages
-- JSON for structured data
-- Binary for files and media
-
-**Include Metadata:**
-```json
-{
-  "id": "{{message_id}}",
-  "type": "data_update",
-  "timestamp": "{{timestamp}}",
-  "data": {
-    // Your actual data here
-  }
-}
-```
-
-### Error Handling
-
-**Validate Input:**
-- Check message format before sending
-- Validate JSON syntax
-- Ensure binary data integrity
-
-**Handle Responses:**
-- Always expect and handle responses
-- Implement timeout handling
-- Log errors and failures
-
-### Performance Considerations
-
-**Message Frequency:**
-- Avoid sending too many messages per second
-- Implement rate limiting if needed
-- Batch multiple updates when possible
-
-**Message Size:**
-- Keep individual messages under 64KB
-- Use compression for large text data
-- Consider streaming for large files
-
-## Troubleshooting
-
-### Common Issues
-
-**JSON Parsing Errors:**
-- Check JSON syntax and formatting
-- Validate all brackets and quotes
-- Use a JSON validator for complex structures
-
-**Message Not Sent:**
-- Verify WebSocket connection is active
-- Check message size limits
-- Ensure proper message format
-
-**Binary Data Issues:**
-- Verify file upload completed
-- Check Base64 encoding
-- Ensure binary data integrity
-
-<Callout type="warning">
-WebSocket message types are in Beta. Some advanced features may be limited. Please report any issues or provide feedback to help improve this feature.
-</Callout>
