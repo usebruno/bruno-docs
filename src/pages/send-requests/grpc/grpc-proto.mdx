@@ -30,7 +30,7 @@ You can add multiple proto files if your service uses imports or multiple defini
 
 ## Import Paths
 
-When working with proto files that import other proto files, Bruno now supports specifying import paths to resolve dependencies without requiring absolute paths. This makes it easier to organize your proto files in different directories while maintaining proper imports.
+When working with proto files that import other proto files, Bruno will always try to resolve imports within the folder where the proto file resides. However, when working with multiple services, you may have common types (like `google/protobuf` types or shared definitions) that are used across different services. Instead of duplicating these common proto definitions in each service folder, you can use import paths to define these common types in a single location and reference them from all dependent services.
 
 ### Adding Import Paths
 
@@ -42,22 +42,6 @@ To configure import paths for your proto files:
 4. Specify the directory path where Bruno should look for imported proto files
 
 ![gRPC Collection Level Import Path](/screenshots/send-request/grpc/grpc-collection-level-import-path.webp)
-
-### Import Path Types
-
-Bruno supports different types of import paths:
-
-**Relative Paths**
-- Use relative paths from your collection root
-- Example: `./proto`, `../shared/proto`
-
-**Absolute Paths**
-- Use full system paths
-- Example: `/Users/username/projects/api/proto`
-
-**Collection Root**
-- Use `.` to reference the collection directory itself
-- Useful when proto files are in the same directory as your collection
 
 ### How Import Paths Work
 
