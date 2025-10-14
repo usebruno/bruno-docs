@@ -1,0 +1,263 @@
+import { Callout } from "nextra/components";
+import Image from 'next/image';
+
+# Configure SAML SSO with Microsoft Entra ID
+
+This guide walks you through configuring SAML Single Sign-On for Bruno using Microsoft Entra ID (formerly Azure Active Directory) as your identity provider.
+
+<Callout type="info">
+Before you begin, make sure you have completed the [prerequisites](./overview#prerequisites) and have admin access to both Microsoft Entra ID and the Bruno License Portal.
+</Callout>
+
+## Configure SSO in Bruno
+
+Before configuring a SAML application in Microsoft Entra ID, you must configure SSO in Bruno.
+
+1. Log in to the [Bruno License Portal](https://license.usebruno.com/)
+2. Navigate to **Settings** → **SSO** in the left sidebar
+
+<Image src="/screenshots/sso-scim-management/saml-sso/bruno-sso-settings.webp" alt="Bruno SSO Configuration settings page" width={800} height={200} className="rounded mt-4" />
+
+3. In the Bruno SSO settings page, you'll see the **SP Issuer ID / Entity ID** field. You can either:
+   - Use the default value shown (commonly `bruno`)
+   - Set your own unique identifier (e.g., `bruno-demo`, `your-company-bruno`, etc.)
+
+   Note the following values (you'll need these when configuring Entra ID):
+   - **Entity ID**: The value you set in the "SP Issuer ID / Entity ID" field
+   - **SAML ACS URL**: Copy this URL exactly as shown in Bruno (the format may vary by version)
+   - **Sign-on URL**: `https://license.usebruno.com/`
+
+<Callout type="warning">
+**Important**: Always copy the SAML ACS URL directly from the Bruno SSO settings page. The URL format may differ from the documentation depending on your Bruno version. Common formats include:
+- `https://license.usebruno.com/saml/acs/{your-domain-id}`
+- `https://license.usebruno.com/api/v2/auth/sso/saml/acs/{your-domain-id}`
+
+Use the exact URL shown in your Bruno instance, not the documentation example.
+</Callout>
+
+<Callout type="info">
+Keep this page open in a separate tab - you'll return here after configuring Entra ID to complete the Bruno SSO setup.
+</Callout>
+
+## Configure SSO with Microsoft Entra ID
+
+### Step 1: Create a New Enterprise Application
+
+1. Log in to the [Microsoft Entra admin center](https://entra.microsoft.com/)
+2. Navigate to **Identity** → **Applications** → **Enterprise applications**
+3. Click **New application**
+4. Click **Create your own application**
+5. Enter the application name: `Bruno`
+6. Select **Integrate any other application you don't find in the gallery (Non-gallery)**
+7. Click **Create**
+
+{/* TODO: Add screenshot - entra-create-app.png
+     Shows the "Create your own application" dialog
+     Alt text: "Create enterprise application in Microsoft Entra ID" */}
+
+### Step 2: Select SAML as Single Sign-On Method
+
+1. In the created Enterprise Application, navigate to **Manage** → **Single sign-on** in the left sidebar
+2. Select **SAML** as the single sign-on method
+
+<Image src="/screenshots/sso-scim-management/saml-sso/entra-select-saml.webp" alt="Select SAML as single sign-on method in Entra ID" width={800} height={600} className="rounded mt-4" />
+
+### Step 3: Configure Basic SAML Configuration
+
+1. In the **Basic SAML Configuration** section, click **Edit**
+2. Copy the values from the Bruno SSO settings page and paste them into your SAML configuration in Microsoft Entra ID:
+   - **Identifier (Entity ID)**: Copy the **SP Issuer ID / Entity ID** value from Bruno and paste it here
+     - This can be any unique identifier (e.g., `bruno`, `bruno-demo`, `your-company-bruno`)
+     - **Important**: This value must match EXACTLY between Bruno and Entra ID
+   - **Reply URL (Assertion Consumer Service URL)**: Copy the **SAML ACS URL** from Bruno and paste it here
+     - Example formats (use the exact URL from your Bruno instance):
+       - `https://license.usebruno.com/saml/acs/673f2f7bd92bbd40de9db5c5`
+       - `https://license.usebruno.com/api/v2/auth/sso/saml/acs/673f2f7bd92bbd40de9db5c5`
+   - **Sign on URL**: `https://license.usebruno.com/`
+3. Click **Save**
+
+<Callout type="warning">
+**Critical**: The Entity ID in Entra ID must match EXACTLY what you configured in Bruno's "SP Issuer ID / Entity ID" field. A mismatch will cause authentication failures.
+</Callout>
+
+{/* TODO: Add screenshot - entra-basic-saml-config.png
+     Shows the Basic SAML Configuration section filled in
+     Alt text: "Configure basic SAML settings in Entra ID" */}
+
+### Step 4: Configure Attributes & Claims
+
+Bruno requires two specific SAML attributes to be configured. In the **Attributes & Claims** section:
+
+1. Click **Edit**
+2. Add or verify the following claims:
+
+**Required Claims:**
+
+| Claim Name | Source Attribute | Notes |
+|------------|------------------|-------|
+| **roles** | Static value, user attribute, or transformation | Any role value from Entra ID. Can be mapped to existing user attributes or group membership. |
+| **fullName** | Transformation: `user.givenname + " " + user.surname` | Combines first and last name. |
+| `emailaddress` (Unique User Identifier) | `user.mail` | Required for user identification. |
+
+**Configuring the roles claim:**
+
+The `roles` claim can be configured in several ways depending on your organization's needs:
+
+1. Click **Add new claim**
+2. Enter `roles` as the name
+3. Choose one of the following options:
+
+   - **Option A - Static value for testing**:
+     - Under **Source**, select **Attribute**
+     - Enter a constant value like `admin` or `Engineering`
+     - All users will receive this same role value
+
+   - **Option B - Map to existing user attribute**:
+     - Under **Source**, select **Attribute**
+     - Choose an existing user attribute like `user.department`, `user.jobtitle`, or custom attributes
+     - The value from this attribute will be sent as the role
+
+   - **Option C - Map to group membership**:
+     - Under **Source**, select **Transformation**
+     - Use a transformation to extract group names or IDs
+     - Map specific groups to role values
+
+4. Click **Save**
+
+**Important**: The role value sent by Entra ID will be mapped to Bruno access levels in the License Portal's SSO Settings. You'll configure which role values correspond to admin or user access in Bruno (see Step 2 in the Bruno configuration section below).
+
+**Example Scenarios:**
+- If you set a static value of `Engineering`, you'll add `Engineering` to either "Admin Roles" or "User Roles" in Bruno
+- If you map to `user.department` and a user's department is `IT`, you'll add `IT` to the appropriate role field in Bruno
+
+**Configuring the fullName claim:**
+
+1. Click **Add new claim**
+2. Enter `fullName` as the name
+3. Under **Source**, select **Transformation**
+4. Choose **Join()** as the transformation
+5. Configure the transformation:
+   - **Parameter 1**: `user.givenname`
+   - **Separator**: ` ` (space)
+   - **Parameter 2**: `user.surname`
+6. Click **Save**
+
+<Callout type="info">
+**Alternative fullName configurations:**
+
+If your Entra ID user profile has a single field containing the full name (e.g., `user.displayname`), you can map the `fullName` attribute directly to that field instead of using a transformation.
+</Callout>
+
+<Callout type="warning">
+**Important**: Both `roles` and `fullName` attributes are required for Bruno SAML SSO to function correctly. The attribute names are case-sensitive and must match exactly as shown.
+</Callout>
+
+{/* TODO: Add screenshot - entra-attributes-claims.png
+     Shows the Attributes & Claims configuration
+     Alt text: "Configure attributes and claims in Entra ID" */}
+
+### Step 5: Download SAML Certificate and Copy Metadata
+
+1. In the **SAML Certificates** section:
+   - **Certificate (Base64)**: Download the certificate
+
+2. In the **Set up Bruno** section, copy the following values (you'll need these for Bruno configuration):
+   - **Login URL**: Copy this URL
+   - **Microsoft Entra Identifier**: Copy this value
+
+{/* TODO: Add screenshot - entra-saml-metadata.png
+     Shows the SAML Certificates and Set up Bruno sections
+     Alt text: "Retrieve SAML metadata from Entra ID" */}
+
+### Step 6: Assign Users or Groups
+
+1. Navigate to **Manage** → **Users and groups** in the left sidebar
+2. Click **Add user/group**
+3. Select the users or groups that should have access to Bruno
+4. Click **Assign**
+
+{/* TODO: Add screenshot - entra-assign-users.png
+     Shows the Users and groups assignment page
+     Alt text: "Assign users or groups to Bruno app in Entra ID" */}
+
+## Complete SSO Configuration in Bruno
+
+Now that Entra ID is configured, return to Bruno to complete the SSO setup.
+
+### Step 1: Enter Identity Provider Details
+
+1. Return to the Bruno License Portal tab you kept open earlier
+2. Navigate to **Settings** → **SSO** (if not already there)
+3. Enter the following information from Entra ID:
+   - **IdP Login URL**: Paste the **Login URL** from Entra ID
+   - **IdP Entity ID**: Paste the **Microsoft Entra Identifier** from Entra ID
+   - **IdP Certificate**: Open the downloaded certificate file and paste the contents (include the `-----BEGIN CERTIFICATE-----` and `-----END CERTIFICATE-----` lines)
+
+{/* TODO: Add screenshot - bruno-saml-config-entra.png
+     Shows the Bruno SAML SSO configuration page with Entra ID values
+     Alt text: "Configure SAML SSO in Bruno License Portal for Entra ID" */}
+
+### Step 2: Configure Role Mapping
+
+Map the role values from Entra ID to Bruno access levels:
+
+1. **Admin Roles**: Enter the role values (comma-separated) that should have admin access to Bruno
+   - Example: `admin,IT,BrunoAdministrators`
+   - These values must match what you configured in the `roles` claim in Entra ID
+   - Users with these roles can access the admin panel and manage licenses
+
+2. **User Roles**: Enter the role values (comma-separated) that should have user access to Bruno
+   - Example: `user,Engineering,Developers,QA`
+   - These values must match what you configured in the `roles` claim in Entra ID
+   - Users with these roles have standard access to Bruno
+
+<Callout type="info">
+**How Role Mapping Works:**
+
+The role value you configured in Entra ID's `roles` claim will be sent in the SAML assertion. Bruno will check if this value matches any role in the "Admin Roles" or "User Roles" fields.
+
+**Example:**
+- In Entra ID, you set the `roles` claim to map to `user.department`
+- A user's department is `Engineering`
+- In Bruno Admin Roles, you enter: `admin,IT`
+- In Bruno User Roles, you enter: `user,Engineering,QA`
+- Result: Users from the Engineering department get standard access (matches "Engineering" in User Roles)
+</Callout>
+
+<Callout type="warning">
+**Important**: Role values are case-sensitive. Ensure the values in Entra ID's `roles` claim match exactly with the values you enter in Bruno's Admin Roles or User Roles fields.
+</Callout>
+
+### Step 3: Configure Session Settings
+
+1. **Session Timeout**: Set the session timeout in seconds (default: 3600 = 1 hour)
+2. Click **Save** to apply your SAML SSO configuration
+
+{/* TODO: Add screenshot - bruno-role-mapping-entra.png
+     Shows the role mapping configuration in Bruno with Group Object IDs
+     Alt text: "Configure role mapping in Bruno License Portal for Entra ID" */}
+
+## Test Your SAML Configuration
+
+You can test your SAML configuration by creating a test user in Microsoft Entra ID and assigning them the Bruno app.
+
+1. In the Bruno SAML SSO settings, click **Test SSO Connection**
+2. You should be redirected to Microsoft Entra ID to authenticate
+3. After successful authentication, you should be redirected back to Bruno
+4. Verify that your user information and roles are correctly displayed
+
+{/* TODO: Add screenshot - bruno-test-sso-entra.png
+     Shows the test SSO connection button and success message
+     Alt text: "Test SSO connection in Bruno for Entra ID" */}
+
+<Callout type="info">
+If you encounter any issues, confirm you've added and saved the correct configuration values on both Bruno and Microsoft Entra ID. See the [Troubleshooting Guide](./troubleshooting) for help.
+</Callout>
+
+## Next Steps
+
+After setting up SSO with Microsoft Entra ID, you can:
+
+- [Configure SCIM Provisioning](../scim-provisioning/overview) to automate user provisioning and deprovisioning
+- [Manage your Bruno licenses](../license-portal) in the License Portal
+- Review the [Troubleshooting Guide](./troubleshooting) for common SSO issues

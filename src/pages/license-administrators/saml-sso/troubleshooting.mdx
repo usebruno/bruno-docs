@@ -1,0 +1,353 @@
+import { Callout } from "nextra/components";
+
+# SAML SSO Troubleshooting
+
+This guide helps you diagnose and resolve common issues when configuring or using SAML Single Sign-On with Bruno.
+
+## Common Error Messages
+
+### "Login with SSO" Button is Disabled or Grayed Out
+
+**Possible Causes:**
+- SSO is not enabled in Bruno
+- SSO configuration is incomplete
+- No email entered in the email field
+
+**Solutions:**
+1. **Enable SSO in Bruno**: Navigate to Settings → SSO and toggle "Enable SSO" to ON
+2. **Complete all required fields**: Ensure all SSO configuration fields are filled and saved
+3. **Enter your email**: The "Login with SSO" button may only activate after you enter an email address that matches a configured SSO domain
+4. **Save the configuration**: Click "Save Configuration" after making any changes
+
+### "500 Internal Server Error" When Clicking "Login with SSO"
+
+**Possible Causes:**
+- SSO configuration not properly saved in Bruno
+- Entity ID mismatch between Bruno and your IdP
+- Invalid or malformed certificate in Bruno configuration
+- Missing required configuration fields
+- Email domain not configured for SSO
+
+**Solutions:**
+1. **Verify Entity ID matches exactly**: The "SP Issuer ID / Entity ID" in Bruno must match the "Identifier (Entity ID)" in your IdP configuration
+   - Example: If Bruno has `bruno-demo`, Entra ID must also have `bruno-demo`
+   - The value can be anything, but it must be identical in both places
+2. **Check certificate format**:
+   - Open the certificate file you downloaded from your IdP
+   - Copy the entire contents including `-----BEGIN CERTIFICATE-----` and `-----END CERTIFICATE-----` lines
+   - Paste into Bruno's IdP Certificate field
+   - Ensure there are no extra spaces or line breaks
+3. **Verify all required fields are filled**:
+   - SP Issuer ID / Entity ID (can be any unique identifier)
+   - IdP Login URL (from your IdP's SAML metadata)
+   - IdP Entity ID (Microsoft Entra Identifier for Entra ID)
+   - IdP Certificate (Base64 encoded certificate)
+4. **Verify your email domain is configured**: The email domain you're using must be associated with the SSO configuration
+5. **Save the configuration**: Click "Save Configuration" button after making changes
+6. **Check browser console**: Open Developer Tools (F12) → Console tab to see detailed error messages
+7. **Try disabling and re-enabling SSO**: Toggle the "Enable SSO" switch off, save, then toggle it back on and save again
+
+<Callout type="warning">
+If you see repeated 500 errors on the `/login` endpoint, this usually indicates the SSO configuration is incomplete or contains invalid values. Double-check all configuration fields match exactly what your IdP provides.
+</Callout>
+
+### Entra ID "Test sign in" Shows Error "AADSTSXXXX" or Redirects to Bruno Login Page
+
+**Possible Causes:**
+- Sign-on URL is configured incorrectly in Entra ID
+- Reply URL (ACS URL) is configured incorrectly
+- Certificate or metadata mismatch
+- SSO not fully enabled in Bruno
+
+**Solutions:**
+1. **Verify Sign-on URL**: In Entra ID → Single sign-on → Basic SAML Configuration:
+   - Sign on URL should be: `https://license.usebruno.com/`
+   - NOT: `https://license.usebruno.com/login`
+   - This URL is where Entra ID will redirect users when they initiate login from the IdP (My Apps portal)
+2. **Verify Reply URL (ACS URL)**: Should be `https://license.usebruno.com/api/v2/auth/sso/saml/acs/<your-org-id>`
+   - This is where Entra ID sends the SAML response after authentication
+3. **Ensure SSO is enabled in Bruno**:
+   - The "Test sign in" from Entra ID will fail if SSO is not fully configured and enabled in Bruno
+   - Complete the Bruno SSO configuration first, then test from Entra ID
+4. **Check the full error code**: The error message may be truncated. Try:
+   - Opening the test in a new incognito/private browser window
+   - Checking the browser console for the full error message
+   - Looking at the Network tab in Developer Tools for the failed request
+5. **Common AADSTS error codes**:
+   - `AADSTS50011`: Reply URL mismatch
+   - `AADSTS75011`: Authentication method mismatch
+   - `AADSTS50105`: User not assigned to application
+   - `AADSTS700016`: Application not found in directory
+
+<Callout type="info">
+**Testing Order**: Always complete the Bruno SSO configuration first before testing from Entra ID. The recommended testing flow is:
+1. Configure SSO in Bruno and save
+2. Test login by clicking "Login with SSO" from Bruno's login page (SP-initiated)
+3. Once that works, test "Test sign in" from Entra ID (IdP-initiated)
+</Callout>
+
+### "SAML Response Validation Failed"
+
+**Possible Causes:**
+- Certificate mismatch between IdP and Bruno configuration
+- Expired or invalid SAML certificate
+- Clock skew between IdP and Bruno servers
+
+**Solutions:**
+1. Verify the certificate in Bruno matches the certificate from your IdP
+2. Ensure you've copied the entire certificate including `-----BEGIN CERTIFICATE-----` and `-----END CERTIFICATE-----` lines
+3. Check that your IdP's certificate hasn't expired
+4. Verify your server's system clock is synchronized (NTP)
+
+### "Invalid ACS URL" or "Redirect URI Mismatch"
+
+**Possible Causes:**
+- Incorrect ACS URL configured in your IdP
+- Missing or incorrect domain ID in the ACS URL
+- ACS URL format doesn't match what Bruno expects
+
+**Solutions:**
+1. **Use the exact ACS URL shown in Bruno**: Copy the SAML ACS URL directly from the Bruno SSO settings page
+   - The URL format may vary depending on your Bruno version
+   - Common formats:
+     - `https://license.usebruno.com/saml/acs/{your-domain-id}`
+     - `https://license.usebruno.com/api/v2/auth/sso/saml/acs/{your-domain-id}`
+2. Check that you've replaced `{your-domain-id}` with your actual domain ID from Bruno
+3. Ensure there are no trailing slashes or extra spaces in the URL
+4. **Important**: The ACS URL in your IdP must match EXACTLY what Bruno shows in the SSO settings page
+
+<Callout type="info">
+Always copy the ACS URL directly from the Bruno SSO settings page rather than using the documentation examples, as the URL format may vary between Bruno versions.
+</Callout>
+
+### "User Not Found" or "Access Denied"
+
+**Possible Causes:**
+- User doesn't have a Bruno license
+- User's email in IdP doesn't match their Bruno account email
+- User is not assigned to the Bruno application in the IdP
+
+**Solutions:**
+1. Verify the user is assigned to the Bruno application in your IdP
+2. Check that the user's email in the IdP matches their Bruno account email
+3. Ensure the user has an active Bruno license
+4. Verify the email attribute is correctly mapped in your IdP
+
+### "Invalid Role" or "Insufficient Permissions"
+
+**Possible Causes:**
+- `roles` attribute not configured correctly in IdP
+- `roles` attribute value doesn't match any role in Bruno's Admin Roles or User Roles fields
+- `roles` attribute is missing from the SAML assertion
+- Role mapping not configured in Bruno License Portal
+
+**Solutions:**
+1. Verify the `roles` attribute is configured in your IdP's SAML attribute statements
+2. Ensure the attribute name is exactly `roles` (case-sensitive)
+3. Check the SAML response to confirm the `roles` attribute is being sent and note its value
+4. In Bruno License Portal → Settings → SSO, verify that the role value from the SAML assertion is listed in either:
+   - **Admin Roles** field (for admin access), or
+   - **User Roles** field (for standard access)
+5. Ensure role values are case-sensitive matches (e.g., `Engineering` ≠ `engineering`)
+6. For Okta: Verify the attribute statement has Name: `roles` and a Value that matches what you configured in Bruno
+7. For Entra ID: Verify the claim name is `roles` and the value matches what you configured in Bruno's role mapping
+
+### "Missing User Information" or "Name Not Displayed"
+
+**Possible Causes:**
+- `fullName` attribute not configured correctly in IdP
+- `fullName` attribute is missing from the SAML assertion
+- Name fields in IdP are empty
+
+**Solutions:**
+1. Verify the `fullName` attribute is configured in your IdP's SAML attribute statements
+2. Ensure the attribute name is exactly `fullName` (case-sensitive)
+3. For Okta: Verify the attribute statement has Name: `fullName` and Value: `user.firstName+" "+user.lastName`
+4. For Entra ID: Verify the claim uses a transformation to combine first and last name
+5. Check that user profiles in your IdP have first name and last name populated
+6. Check the SAML response to confirm the `fullName` attribute is being sent
+
+## Configuration Verification Checklist
+
+Use this checklist to verify your SAML SSO configuration:
+
+### Identity Provider Configuration
+
+- [ ] SAML application created for Bruno
+- [ ] ACS URL configured correctly (copy from Bruno SSO settings page)
+- [ ] Entity ID configured to match Bruno's SP Issuer ID / Entity ID
+- [ ] Name ID format set to EmailAddress
+- [ ] **Required attribute: `roles`** configured with value `admin` or `user`
+- [ ] **Required attribute: `fullName`** configured (e.g., concatenation of first and last name)
+- [ ] Users or groups assigned to the Bruno application
+- [ ] SAML certificate is valid and not expired
+
+### Bruno Configuration
+
+- [ ] SAML SSO enabled in Bruno License Portal
+- [ ] SP Issuer ID / Entity ID configured (must match IdP Entity ID exactly)
+- [ ] IdP Login URL entered correctly
+- [ ] IdP Entity ID entered correctly (for Entra ID)
+- [ ] IdP Certificate pasted correctly (including BEGIN/END lines)
+- [ ] **Admin Roles** configured with role values that should have admin access
+- [ ] **User Roles** configured with role values that should have user access
+- [ ] Role values match exactly (case-sensitive) with the values sent in the `roles` attribute from IdP
+- [ ] Session timeout configured appropriately
+
+## Testing and Debugging
+
+### Test SSO Connection
+
+1. In Bruno License Portal, navigate to **Settings** → **SAML SSO**
+2. Click **Test SSO Connection**
+3. You should be redirected to your IdP
+4. Authenticate with your IdP credentials
+5. You should be redirected back to Bruno
+6. Verify your user information and roles are displayed correctly
+
+### Check SAML Response
+
+If SSO login fails, you can inspect the SAML response to diagnose issues:
+
+1. Open your browser's developer tools (F12)
+2. Go to the **Network** tab
+3. Attempt to log in via SSO
+4. Look for the POST request to `/saml/acs/`
+5. Inspect the SAML response payload for errors
+
+<Callout type="info">
+The SAML response contains assertions about the user's identity and attributes. Look for missing or incorrect attribute values.
+</Callout>
+
+### Verify Attribute Mapping
+
+To verify that user attributes are being sent correctly:
+
+1. Complete a successful SSO login
+2. In Bruno, check the user's profile information
+3. Verify that the `fullName` attribute is populated correctly
+4. If attributes are missing, check your IdP's attribute mapping configuration
+5. Inspect the SAML response (see "Check SAML Response" section) to verify both `roles` and `fullName` attributes are present
+
+### Verify Role Assignment
+
+To verify that roles are being assigned correctly:
+
+1. Complete a successful SSO login
+2. Check if the user has the expected access level (admin vs. user)
+3. If roles are incorrect:
+   - Check the SAML response to see what value is being sent in the `roles` attribute
+   - Verify the `roles` attribute is configured in your IdP
+   - In Bruno License Portal → Settings → SSO, check the "Admin Roles" and "User Roles" fields
+   - Ensure the role value from the SAML response matches one of the values in either field (case-sensitive)
+   - Example: If SAML sends `roles="Engineering"`, make sure `Engineering` is listed in either Admin Roles or User Roles in Bruno
+
+## Certificate Management
+
+### Certificate Expiration
+
+SAML certificates typically expire after 1-3 years. When a certificate expires:
+
+1. Generate a new certificate in your IdP
+2. Update the certificate in Bruno SAML SSO settings
+3. Test the SSO connection to verify it works
+
+<Callout type="warning">
+Set a reminder to renew your SAML certificate before it expires to avoid service disruption.
+</Callout>
+
+### Certificate Format Issues
+
+If you encounter certificate errors:
+
+1. Ensure the certificate is in PEM format (Base64 encoded)
+2. Include the `-----BEGIN CERTIFICATE-----` header
+3. Include the `-----END CERTIFICATE-----` footer
+4. Remove any extra whitespace or line breaks within the certificate body
+5. Do not include the private key (only the public certificate)
+
+## Session and Timeout Issues
+
+### Users Being Logged Out Unexpectedly
+
+**Possible Causes:**
+- Session timeout set too low
+- IdP session timeout shorter than Bruno session timeout
+- Browser cookie issues
+
+**Solutions:**
+1. Increase the session timeout in Bruno SAML SSO settings
+2. Check your IdP's session timeout settings
+3. Clear browser cookies and cache
+4. Ensure cookies are enabled in the browser
+
+### Session Not Ending When Expected
+
+**Possible Causes:**
+- Session timeout set too high
+- Browser keeping session alive
+
+**Solutions:**
+1. Decrease the session timeout in Bruno SAML SSO settings
+2. Implement IdP-initiated logout if available
+3. Educate users to log out manually when finished
+
+## Attribute Configuration Troubleshooting
+
+### Okta Attribute Configuration
+
+**Issue**: Users not getting correct roles or missing name information
+
+**Solutions:**
+1. Verify the `roles` attribute statement is configured in Okta:
+   - Name: `roles`
+   - Name format: Unspecified
+   - Value: Can be any value (e.g., `"admin"`, `"Engineering"`, `user.department`, etc.)
+2. Verify the `fullName` attribute statement is configured in Okta:
+   - Name: `fullName`
+   - Name format: Unspecified
+   - Value: `user.firstName+" "+user.lastName`
+3. Check the attribute preview in Okta to see what values will be sent
+4. Ensure attribute names are case-sensitive and match exactly
+5. **Verify role mapping in Bruno**: In Bruno License Portal → Settings → SSO:
+   - Check that the role value from Okta is listed in either "Admin Roles" or "User Roles"
+   - Example: If Okta sends `roles="Engineering"`, ensure `Engineering` is in one of the role fields in Bruno
+
+### Entra ID Attribute Configuration
+
+**Issue**: Users not getting correct roles or missing name information
+
+**Solutions:**
+1. Verify the `roles` claim is configured in Entra ID:
+   - Claim name: `roles`
+   - Source: Attribute or Transformation
+   - Value: Can be any value (e.g., static `admin`, `user.department`, group mapping, etc.)
+2. Verify the `fullName` claim is configured in Entra ID:
+   - Claim name: `fullName`
+   - Source: Transformation
+   - Transformation: Join() with `user.givenname`, space separator, and `user.surname`
+3. Check the SAML token preview in Entra ID to see what attributes will be sent
+4. Ensure claim names are case-sensitive and match exactly
+5. **Verify role mapping in Bruno**: In Bruno License Portal → Settings → SSO:
+   - Check that the role value from Entra ID is listed in either "Admin Roles" or "User Roles"
+   - Example: If Entra ID sends `roles="IT"`, ensure `IT` is in one of the role fields in Bruno
+
+## Getting Additional Help
+
+If you've tried the troubleshooting steps above and still encounter issues:
+
+1. **Check Bruno Status**: Visit [status.usebruno.com](https://status.usebruno.com) for any ongoing incidents
+2. **Review Documentation**: Re-read the configuration guides for [Okta](./configure-saml-sso-with-okta) or [Entra ID](./configure-saml-sso-with-entra-id)
+3. **Contact Support**: Reach out to Bruno support with the following information:
+   - Your domain ID
+   - Identity provider (Okta, Entra ID, etc.)
+   - Error messages you're seeing
+   - Steps you've already tried
+   - Screenshots of your configuration (redact sensitive information)
+
+## Related Resources
+
+- [SAML SSO Overview](./overview)
+- [Configure SAML SSO with Okta](./configure-saml-sso-with-okta)
+- [Configure SAML SSO with Entra ID](./configure-saml-sso-with-entra-id)
+- [SCIM Provisioning](../scim-provisioning/overview)

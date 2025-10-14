@@ -1,0 +1,255 @@
+import { Callout } from "nextra/components";
+import Image from 'next/image';
+
+# Configure SAML SSO with Okta
+
+This guide walks you through configuring SAML Single Sign-On for Bruno using Okta as your identity provider.
+
+<Callout type="info">
+Before you begin, make sure you have completed the [prerequisites](./overview#prerequisites) and have admin access to both Okta and the Bruno License Portal.
+</Callout>
+
+## Configure SSO in Bruno
+
+Before configuring a SAML application in Okta, you must configure SSO in Bruno.
+
+1. Log in to the [Bruno License Portal](https://license.usebruno.com/)
+2. Navigate to **Settings** → **SSO** in the left sidebar
+
+<Image src="/screenshots/sso-scim-management/saml-sso/bruno-sso-settings.webp" alt="Bruno SSO Configuration settings page" width={800} height={200} className="rounded mt-4" />
+
+3. In the Bruno SSO settings page, you'll see the **SP Issuer ID / Entity ID** field.
+   - Set your own unique identifier (e.g., `bruno-sso`, `your-company-bruno`, etc.)
+
+   Note the following values (you'll need these when configuring Okta):
+   - **Entity ID**: The value you set in the "SP Issuer ID / Entity ID" field
+   - **SAML ACS URL**: Copy this URL exactly as shown in Bruno (the format may vary by version)
+   - **Sign-on URL**: `https://license.usebruno.com/`
+
+<Callout type="warning">
+**Important**: Always copy the SAML ACS URL directly from the Bruno SSO settings page. The URL format may differ from the documentation depending on your Bruno version.
+</Callout>
+
+<Callout type="info">
+Keep this page open in a separate tab - you'll return here after configuring Okta to complete the Bruno SSO setup.
+</Callout>
+
+## Configure SSO with Okta
+
+### Step 1: Create a New SAML Application
+
+1. Log in to your Okta Admin Console
+2. Navigate to **Applications** → **Applications** in the left sidebar
+3. Click **Create App Integration**
+
+<Image src="/screenshots/sso-scim-management/okta/okta-swa-1.webp" alt="Create App Integration in Okta" width={800} height={600} className="rounded mt-4" />
+
+4. Select **SAML 2.0** as the sign-in method
+5. Click **Next**
+
+<Image src="/screenshots/sso-scim-management/okta/okta-sso-1.webp" alt="Select SAML 2.0 as sign-in method" width={800} height={600} className="rounded mt-4" />
+
+### Step 2: Configure General Settings
+
+1. Enter the following information:
+   - **App name**:  Set your own unique identifier (e.g.,`Bruno`, `Bruno-SAML-App`, etc.)
+   - **App logo**: (Optional) Upload Bruno logo
+   - **App visibility**: Configure based on your organization's preferences
+2. Click **Next**
+
+<Image src="/screenshots/sso-scim-management/okta/okta-sso-2.webp" alt="Configure general settings for Bruno SAML app in Okta" width={800} height={600} className="rounded mt-4" />
+
+### Step 3: Configure SAML Settings
+
+Copy the values from the Bruno SSO settings page and paste them into your SAML configuration in Okta.
+
+**Single Sign-On URL:**
+
+1. In the **Single sign-on URL** field, paste the **SAML ACS URL** from Bruno
+   - Example:`https://license.usebruno.com/api/v2/auth/sso/saml/acs/XXXXXXXXXXXXXXXXXXXXXXXX`
+   - Use the exact URL shown in your Bruno SSO Configuration page
+
+2. Check **Use this for Recipient URL and Destination URL**
+
+{/* TODO: Add screenshot - okta-sso-url.png
+     Shows the Single sign-on URL field filled in
+     Alt text: "Configure Single sign-on URL in Okta" */}
+
+**Audience URI (SP Entity ID):**
+
+1. In the **Audience URI (SP Entity ID)** field, paste the **SP Issuer ID / Entity ID** value from Bruno
+   - **Important**: This value must match EXACTLY what you configured in the Bruno SSO Configuration page
+
+<Image src="/screenshots/sso-scim-management/okta/okta-sso-3.webp" alt="Configure Audience URI (SP Entity ID) in Okta" width={800} height={600} className="rounded mt-4" />
+
+**Name ID Format:**
+
+1. Select **EmailAddress** from the **Name ID format** dropdown
+
+**Application Username:**
+
+1. Select **Email** from the **Application username** dropdown
+
+{/* TODO: Add screenshot - okta-saml-settings.png
+     Shows the complete SAML settings section
+     Alt text: "Complete SAML settings configuration in Okta" */}
+
+### Step 4: Configure Attribute Statements
+
+Bruno requires two specific SAML attributes to be configured. Add the following attribute statements:
+
+| Name | Name Format | Value | Notes |
+|------|-------------|-------|-------|
+| **roles** | Unspecified | Any role value from Okta | Can be a static value (e.g., `"admin"`) or mapped to existing Okta user attributes/groups |
+| **fullName** | Unspecified | `user.firstName+" "+user.lastName` | Concatenates first and last name. Can also use a single name field if available. |
+
+<Callout type="info">
+**Configuring the roles attribute:**
+
+The `roles` attribute can be configured in several ways:
+
+1. **Static value for testing**: Set a hardcoded value like `"admin"` for all users assigned to this app
+   - Example: Value = `"admin"`
+
+2. **Map to existing Okta user attribute**: If your Okta users already have a role attribute
+   - Example: Value = `user.userType` or `user.role`
+
+3. **Map to Okta group membership**: Use an Okta expression to map group names
+   - Example: Value = `appuser.groups` (requires group attribute statement configuration)
+
+**Important**: The role value sent by Okta will be mapped to Bruno access levels in the License Portal's SSO Settings. You'll configure which role values correspond to admin or user access in Bruno (see Step 2 in the Bruno configuration section below).
+
+**Example Scenarios:**
+- If you set Value = `"Engineering"`, you'll add `Engineering` to either "Admin Roles" or "User Roles" in Bruno
+- If you set Value = `user.department`, and a user's department is `IT`, you'll add `IT` to the appropriate role field in Bruno
+</Callout>
+
+<Callout type="info">
+**Configuring the fullName attribute:**
+
+The `fullName` attribute can be configured by:
+- Concatenating first and last name: `user.firstName+" "+user.lastName`
+- Using a single field if your Okta user profile has a combined name field
+- Mapping to any existing user property that contains the full name
+</Callout>
+
+<Image src="/screenshots/sso-scim-management/okta/okta-attribute-statements.webp" alt="Configure attribute statements in Okta showing roles and fullName" width={800} height={600} className="rounded mt-4" />
+
+<Callout type="warning">
+**Important**: Both `roles` and `fullName` attributes are required for Bruno SAML SSO to function correctly. The attribute names are case-sensitive and must match exactly as shown.
+</Callout>
+
+### Step 5: Complete Okta App Setup
+
+1. On the **Feedback** page:
+   - Select **I'm an Okta customer adding an internal app**
+   - Check **This is an internal app that we have created**
+2. Click **Finish**
+
+
+### Step 7: Copy SAML Metadata
+
+1. In your Bruno app, navigate to the **Sign On** tab
+2. Scroll down to the **SAML 2.0** section
+3. Copy the following values (you'll need these for Bruno configuration):
+   - **Sign-on URL**: Copy this URL
+   - **Issuer**: Copy this value
+   - **Certificate**: Download or copy the X.509 certificate
+
+{/* TODO: Add screenshot - okta-saml-metadata.png
+     Shows the SAML 2.0 section with metadata details
+     Alt text: "Retrieve SAML metadata from Okta" */}
+
+
+
+
+## Complete SSO Configuration in Bruno
+
+Now that Okta is configured, return to Bruno to complete the SSO setup.
+
+### Step 1: Enter Identity Provider Details
+
+1. Return to the Bruno License Portal tab you kept open earlier
+2. Navigate to **Settings** → **SSO** (if not already there)
+3. Enter the following information from Okta:
+   - **IdP Login URL**: Paste the **Sign-on URL** from Okta
+   - **IdP Certificate**: Paste the X.509 certificate from Okta (include the `-----BEGIN CERTIFICATE-----` and `-----END CERTIFICATE-----` lines)
+
+{/* TODO: Add screenshot - bruno-saml-config.png
+     Shows the Bruno SAML SSO configuration page
+     Alt text: "Configure SAML SSO in Bruno License Portal" */}
+
+### Step 2: Configure Role Mapping
+
+Map the role values from Okta to Bruno access levels:
+
+1. **Admin Roles**: Enter the role values (comma-separated) that should have admin access to Bruno
+   - Example: `admin,BrunoAdmin,IT-Administrators`
+   - These values must match what you configured in the `roles` attribute in Okta
+   - Users with these roles can access the admin panel and manage licenses
+
+2. **User Roles**: Enter the role values (comma-separated) that should have user access to Bruno
+   - Example: `user,Engineering,Developers,QA`
+   - These values must match what you configured in the `roles` attribute in Okta
+   - Users with these roles have standard access to Bruno
+
+<Callout type="info">
+**How Role Mapping Works:**
+
+The role value you configured in Okta's `roles` attribute statement will be sent in the SAML assertion. Bruno will check if this value matches any role in the "Admin Roles" or "User Roles" fields.
+
+**Example:**
+- In Okta, you set the `roles` attribute to `"Engineering"`
+- In Bruno Admin Roles, you enter: `admin,BrunoAdmin`
+- In Bruno User Roles, you enter: `user,Engineering,QA`
+- Result: Users with the `Engineering` role get standard access (matches "Engineering" in User Roles)
+</Callout>
+
+<Callout type="warning">
+**Important**: Role values are case-sensitive. Ensure the values in Okta's `roles` attribute match exactly with the values you enter in Bruno's Admin Roles or User Roles fields.
+</Callout>
+
+### Step 3: Configure Session Settings
+
+1. **Session Timeout**: Set the session timeout in seconds (default: 3600 = 1 hour)
+2. Click **Save** to apply your SAML SSO configuration
+
+{/* TODO: Add screenshot - bruno-role-mapping.png
+     Shows the role mapping configuration in Bruno
+     Alt text: "Configure role mapping in Bruno License Portal" */}
+
+## Test Your SAML Configuration
+
+You can test your SAML configuration by creating a test user in Okta and assigning them the Bruno app.
+
+1. In the Bruno SAML SSO settings, click **Test SSO Connection**
+2. You should be redirected to Okta to authenticate
+3. After successful authentication, you should be redirected back to Bruno
+4. Verify that your user information and roles are correctly displayed
+
+{/* TODO: Add screenshot - bruno-test-sso.png
+     Shows the test SSO connection button and success message
+     Alt text: "Test SSO connection in Bruno" */}
+
+<Callout type="info">
+If you encounter any issues, confirm you've added and saved the correct configuration values on both Bruno and Okta. See the [Troubleshooting Guide](./troubleshooting) for help.
+</Callout>
+
+### Step 6: Assign Users or Groups
+
+1. In your Bruno app, navigate to the **Assignments** tab
+2. Click **Assign** → **Assign to People** or **Assign to Groups**
+3. Select the users or groups that should have access to Bruno
+4. Click **Assign** and **Done**
+
+{/* TODO: Add screenshot - okta-assignments.png
+     Shows the assignments tab with users/groups assigned
+     Alt text: "Assign users or groups to Bruno app in Okta" */}
+
+## Next Steps
+
+After setting up SSO with Okta, you can:
+
+- [Configure SCIM Provisioning](../scim-provisioning/overview) to automate user provisioning and deprovisioning
+- [Manage your Bruno licenses](../license-portal) in the License Portal
+- Review the [Troubleshooting Guide](./troubleshooting) for common SSO issues

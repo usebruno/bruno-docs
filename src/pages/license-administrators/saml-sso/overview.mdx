@@ -1,0 +1,189 @@
+import { Callout } from "nextra/components";
+import PremiumBadge from "@/components/premium-badge";
+
+# SAML Single Sign-On (SSO) Overview <PremiumBadge />
+
+<Callout type="info">
+SAML SSO is available for Ultimate Edition customers behind a feature flag. Please contact your Bruno Account Manager to enable this feature.
+</Callout>
+
+## What is SAML SSO?
+
+SAML (Security Assertion Markup Language) Single Sign-On allows your organization to use your existing identity provider (IdP) to authenticate users accessing Bruno. With SAML SSO, users can sign in to Bruno using their corporate credentials without needing a separate Bruno password.
+
+## Benefits of SAML SSO with Bruno
+
+### Centralized Authentication
+- **Single set of credentials**: Users access Bruno with the same credentials they use for other corporate applications
+- **Reduced password fatigue**: No need to remember separate passwords for Bruno
+- **Streamlined access**: One-click access to Bruno through your identity provider's portal
+
+### Enhanced Security
+- **Centralized access control**: Manage Bruno access through your existing identity management system
+- **Multi-factor authentication**: Leverage your IdP's MFA capabilities for Bruno access
+- **Audit trail**: Track all authentication activities in your identity provider
+- **Automatic session management**: Control session timeouts and security policies centrally
+
+### Operational Efficiency
+- **Simplified onboarding**: New employees automatically receive Bruno access as part of their standard onboarding
+- **Simplified offboarding**: Departing employees automatically lose Bruno access when removed from your IdP
+- **Reduced administrative overhead**: IT teams spend less time on manual user management
+
+## Supported Identity Providers
+
+Bruno supports SAML 2.0 SSO with the following identity providers:
+
+- **Okta** - [Configuration Guide](./configure-saml-sso-with-okta)
+- **Microsoft Entra ID (Azure AD)** - [Configuration Guide](./configure-saml-sso-with-entra-id)
+- **Generic SAML 2.0 providers** - Any SAML 2.0 compliant identity provider
+
+## Prerequisites
+
+Before configuring SAML SSO, ensure you have:
+
+- **Ultimate Edition subscription** with SAML SSO feature enabled
+- **Admin access** to the Bruno License Portal (`https://license.usebruno.com/`)
+- **Admin access** to your identity provider (Okta, Entra ID, etc.)
+- **Domain verification** completed in Bruno (if required)
+
+## General Setup Flow
+
+Setting up SAML SSO involves configuration in both your identity provider and Bruno:
+
+### 1. Configure Your Identity Provider
+
+In your identity provider (Okta, Entra ID, etc.):
+- Create a new SAML application for Bruno
+- Configure the SAML settings using Bruno's ACS URL and Entity ID
+- Set up attribute mappings for user information
+- Configure role mappings for admin and user access
+- Assign users or groups to the Bruno application
+
+### 2. Configure Bruno
+
+In the Bruno License Portal:
+- Navigate to Settings → SAML SSO
+- Enable SAML SSO
+- Enter your IdP's SAML metadata (Login URL, Certificate, Entity ID)
+- Configure role mappings to match your IdP's role attributes
+- Set session timeout preferences
+- Test the SSO connection
+
+### 3. Test and Verify
+
+- Test SSO login with a test user account
+- Verify user attributes are correctly mapped
+- Confirm role assignments work as expected
+- Test session timeout behavior
+
+## SAML Configuration Values
+
+When configuring your identity provider, you'll need these Bruno-specific values:
+
+| Field | Value | Notes |
+|-------|-------|-------|
+| **ACS URL** | Varies by version | Copy the exact SAML ACS URL from your Bruno SSO settings page |
+| **Entity ID (SP Issuer ID)** | Your choice | Can be any unique identifier (e.g., `bruno`, `bruno-demo`). Must match exactly between Bruno and your IdP |
+| **Name ID Format** | Email Address | Required for user identification |
+
+<Callout type="info">
+**Important**: Always copy the ACS URL and Entity ID directly from your Bruno SSO settings page. The Entity ID can be any unique value you choose, but it must match exactly between Bruno and your identity provider.
+</Callout>
+
+{/* TODO: Add screenshot of Bruno SAML settings page showing where to find domain-id */}
+
+## Required SAML Attributes
+
+Bruno requires the following SAML attributes to be configured in your identity provider. These attributes are sent in the SAML assertion and used to provision and manage user access:
+
+### User Attributes
+
+| Attribute Name | Name Format | Description | Example Value |
+|----------------|-------------|-------------|---------------|
+| **roles** | Unspecified | User role(s) for access control | Any role value from your IdP (e.g., `BrunoAdmin`, `Engineering`, `admin`, `user`) |
+| **fullName** | Unspecified | User's full name | `user.firstName+" "+user.lastName` or equivalent |
+
+<Callout type="info">
+**Attribute Configuration Details:**
+
+- **roles**: This attribute contains the role value(s) from your identity provider. The value can be:
+  - Any existing role or group attribute from your IdP (e.g., `Engineering`, `BrunoAdmin`, `IT-Team`)
+  - A hardcoded value for testing purposes (e.g., `admin`, `user`)
+  - Mapped from existing user attributes or group memberships in your IdP
+
+  **Important**: The role values sent in the SAML assertion must be mapped to either "Admin Roles" or "User Roles" in the Bruno License Portal's SSO Settings (see Role Mapping section below).
+
+- **fullName**: This attribute should contain the user's complete name. It can be mapped to:
+  - A single field if your IdP has a combined name field
+  - A concatenation of first and last name fields (e.g., `user.firstName+" "+user.lastName`)
+  - Any existing user property in your IdP that contains the full name
+</Callout>
+
+### Example SAML Assertion
+
+Here's an example of how these attributes appear in a SAML assertion:
+
+```xml
+<saml2:AttributeStatement>
+  <saml2:Attribute Name="roles" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified">
+    <saml2:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                          xsi:type="xs:string">admin</saml2:AttributeValue>
+  </saml2:Attribute>
+  <saml2:Attribute Name="fullName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified">
+    <saml2:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                          xsi:type="xs:string">user.firstName+" "+user.lastName</saml2:AttributeValue>
+  </saml2:Attribute>
+</saml2:AttributeStatement>
+```
+
+<Callout type="warning">
+**Important**: Both attributes must be configured in your identity provider for SAML SSO to work correctly. The attribute names are case-sensitive and must match exactly as shown above.
+</Callout>
+
+## Role Mapping
+
+After configuring the `roles` attribute in your identity provider, you need to map those role values to Bruno access levels in the License Portal.
+
+### Configuring Role Mapping in Bruno
+
+In the Bruno License Portal's SSO Settings, you'll find two fields under "Role Mapping":
+
+1. **Admin Roles**: Comma-separated list of role values that should have admin access
+   - Example: `admin,BrunoAdmin,IT-Administrators`
+   - Users with these roles can access the admin panel and manage licenses
+
+2. **User Roles**: Comma-separated list of role values that should have user access
+   - Example: `user,Engineering,Developers`
+   - Users with these roles have standard access to Bruno
+
+<Callout type="info">
+**How Role Mapping Works:**
+
+1. Your IdP sends the `roles` attribute value in the SAML assertion (e.g., `Engineering`)
+2. Bruno checks if this value matches any role in the "Admin Roles" or "User Roles" fields
+3. If it matches "Admin Roles", the user gets admin access
+4. If it matches "User Roles", the user gets standard access
+5. If it doesn't match either, the user may be denied access
+
+**Example Configuration:**
+- IdP sends: `roles="Engineering"`
+- Bruno Admin Roles: `admin,BrunoAdmin`
+- Bruno User Roles: `user,Engineering,QA`
+- Result: User gets standard access (matches "Engineering" in User Roles)
+</Callout>
+
+<Callout type="warning">
+**Important**: The role values are case-sensitive. Ensure the values in your IdP's `roles` attribute match exactly with the values you configure in Bruno's Admin Roles or User Roles fields.
+</Callout>
+
+## Next Steps
+
+Ready to configure SAML SSO? Choose your identity provider:
+
+- [Configure SAML SSO with Okta](./configure-saml-sso-with-okta) - Complete setup guide for Okta
+- [Configure SAML SSO with Entra ID](./configure-saml-sso-with-entra-id) - Complete setup guide for Microsoft Entra ID
+
+Need help? See our [Troubleshooting Guide](./troubleshooting) for common issues and solutions.
+
