@@ -84,11 +84,21 @@ export default withNextra({
       { source: '/testing/assertions.html', destination: '/testing/tests/assertions', permanent: true },
       { source: '/testing/javascript-reference.html', destination: '/testing/script/javascript-reference', permanent: true },
 
-      // - /license
-      { source: '/license-management/license-management', destination: '/license-management/overview', permanent: true },
-      { source: '/license-management/golden-edition/individual/activate-license', destination: '/license-management/overview', permanent: true },
-      { source: '/license-management/organization/manage-licenses', destination: '/license-management/overview', permanent: true },
-      { source: '/license-management/organization/activate-license', destination: '/license-management/overview', permanent: true },
+      // - /license-management redirects (old structure to new structure)
+      { source: '/license-management/license-management', destination: '/license-overview', permanent: true },
+      { source: '/license-management/overview', destination: '/license-overview', permanent: true },
+      { source: '/license-management/golden-edition/individual/activate-license', destination: '/license-end-users/activate-license', permanent: true },
+      { source: '/license-management/organization/manage-licenses', destination: '/license-administrators/license-portal', permanent: true },
+      { source: '/license-management/organization/activate-license', destination: '/license-end-users/activate-license', permanent: true },
+
+      // License Administrators redirects
+      { source: '/license-management/license-administrators/license-portal', destination: '/license-administrators/license-portal', permanent: true },
+      { source: '/license-management/license-administrators/scim-provisioning/overview', destination: '/license-administrators/scim-provisioning/overview', permanent: true },
+      { source: '/license-management/license-administrators/scim-provisioning/configure-scim-with-okta', destination: '/license-administrators/scim-provisioning/configure-scim-with-okta', permanent: true },
+      { source: '/license-management/license-administrators/scim-provisioning/bruno-scim-api', destination: '/license-administrators/scim-provisioning/bruno-scim-api', permanent: true },
+
+      // License End Users redirects
+      { source: '/license-management/license-end-users/activate-license', destination: '/license-end-users/activate-license', permanent: true },
 
       // - /bru-cli
       { source: '/cli/overview', destination: '/bru-cli/overview', permanent: true },
