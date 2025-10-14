@@ -76,6 +76,35 @@ Get the current request name
 const name = req.getName();
 ```
 
+### `getTags`
+
+Get the current request tags as an array of strings. This method allows you to access the tags associated with the current request, which can be useful for conditional logic, filtering, or organizing requests based on their tags.
+
+**Returns:** Array of strings representing the request tags
+
+**Example:**
+
+```javascript
+const tags = req.getTags();
+console.log("Request tags:", tags);
+
+// Check if request has specific tags
+if (tags.includes("smoke-test")) {
+    console.log("This is a smoke test request");
+}
+
+// Use tags for conditional logic
+if (tags.includes("skip-in-ci")) {
+    bru.runner.skipRequest();
+}
+
+// Filter based on tags
+if (tags.includes("integration-test")) {
+    // Run additional integration test logic
+    console.log("Running integration test validations");
+}
+```
+
 ### `getHeader`
 
 Get the request header by name

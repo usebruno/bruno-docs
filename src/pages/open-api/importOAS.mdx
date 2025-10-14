@@ -29,19 +29,72 @@ Bruno offers two ways to import OpenAPI specifications:
 3. Select **Import** from the dropdown menu
 4. Choose **OpenAPI V3 File** option
 
-![select-openapi-file](/screenshots/open-api/select-open-api.webp)
+![select-openapi-file](/screenshots/get-started/import-export/import_collection/import_options.webp)
 
 5. Browse and select your OpenAPI specification file (`.yaml` or `.json`)
-6. Click **Import** to create the collection
-
+6. Configure the import settings (see [Import Settings](#import-settings) below)
+7. Click **Import** to create the collection
 
 ### Importing from a URL
 
-Select **OpenAPI V3 URL** and provide the public URL of the OpenAPI file you're trying to import.
+1. Select **OpenAPI V3 URL** and provide the public URL of the OpenAPI file you're trying to import
+2. Configure the import settings (see [Import Settings](#import-settings) below)
+3. Click **Import** to create the collection
 
-After, Importing the OAS file the sample collection will looks like this.
+![import-openapi-url](/screenshots/open-api/import-openapi-url.webp)
+
+After importing the OAS file, the sample collection will look like this:
 
 ![import-collection-oas](/screenshots/open-api/import-collection-oas.webp)
+
+## Import Settings
+
+Bruno provides flexible options for organizing your imported OpenAPI collection. You can choose how to group your API endpoints into folders during the import process.
+
+### Folder Arrangement Options
+
+When importing an OpenAPI specification, you can choose between two folder grouping strategies:
+
+#### Path-Based Grouping
+
+Path-based grouping organizes endpoints into folders based on their URL path structure. This approach mirrors how APIs are typically organized and provides better compatibility with Postman imports.
+
+**Example:**
+```
+/api/v1/users          → /api/v1/users/ folder
+/api/v1/users/{id}     → /api/v1/users/ folder
+/api/v1/orders         → /api/v1/orders/ folder
+/api/v1/orders/{id}    → /api/v1/orders/ folder
+```
+
+#### Tag-Based Grouping (default)
+
+Tag-based grouping organizes endpoints into folders based on the `tags` defined in the OpenAPI specification. This approach groups endpoints by their functional purpose as defined by the API author.
+
+**Example:**
+```
+# OpenAPI spec with tags
+paths:
+  /users:
+    get:
+      tags: [User Management]
+  /users/{id}:
+    get:
+      tags: [User Management]
+  /orders:
+    get:
+      tags: [Order Management]
+```
+
+### Configuring Import Settings
+
+1. **Select Import Method**: Choose either file or URL import
+2. **Choose Folder Arrangement**: Select your preferred grouping method from the dropdown:
+   - **Paths**: Group by URL path structure
+   - **Tags** (default): Group by OpenAPI tags
+3. **Import**: Click the import button to create your collection
+
+![OpenAPI Import Dialog](/screenshots/open-api/openapi-import.webp)
 
 ## Example OpenAPI Specifications
 

@@ -3,6 +3,7 @@ export default {
   "REST": "REST",
   "graphql": "GraphQL",
   "soap": "SOAP",
-  "grpc": "gRPC",
+  "grpc": "GRPC",
+  "websocket": "WebSocket",
   "res-data-cookies": "Response Data and Cookies"
 } 
