@@ -120,6 +120,54 @@ If you see repeated 500 errors on the `/login` endpoint, this usually indicates 
 Always copy the ACS URL directly from the Bruno SSO settings page rather than using the documentation examples, as the URL format may vary between Bruno versions.
 </Callout>
 
+### "403 Forbidden" Error After Successful IdP Authentication
+
+**Symptoms:**
+- User successfully authenticates with their IdP (Okta, Entra ID, etc.)
+- User is redirected back to Bruno
+- Bruno shows a 403 Forbidden error or "Access Denied" message
+- Login does not complete
+
+**Most Common Cause:**
+This is typically a **role mapping issue** - the role value sent by your IdP doesn't match what's configured in Bruno's role fields.
+
+**Debugging Steps:**
+1. **Check the SAML response** to see what role value is being sent:
+   - Open browser dev tools (F12) → Network tab
+   - Attempt SSO login again
+   - Look for the POST request to `/saml/acs/` or `/api/v2/auth/sso/saml/acs/`
+   - In the request payload, find the `roles` attribute value
+   - Example: `<saml2:AttributeValue>admin</saml2:AttributeValue>`
+
+2. **Verify role mapping in Bruno**:
+   - Go to Bruno License Portal → Settings → SSO
+   - Check the "Admin Roles" and "User Roles" fields
+   - Ensure the exact role value from the SAML response is listed in one of these fields
+   - **Important**: Role matching is case-sensitive (`admin` ≠ `Admin`)
+
+**Example Fix:**
+- If SAML response shows: `<saml2:AttributeValue>admin</saml2:AttributeValue>`
+- In Bruno Admin Roles field, add: `admin`
+- Or in Bruno User Roles field, add: `admin`
+- Click Save and test again
+
+**Other Possible Causes:**
+- Missing `roles` or `fullName` attributes in SAML response
+- User not assigned to the Bruno application in IdP
+- User doesn't have a Bruno license
+- Quotes in role values (e.g., `"admin"` vs `admin`)
+
+**Additional Checks:**
+1. **User Assignment**: Verify the user is assigned to the Bruno application in your IdP
+2. **Bruno License**: Confirm the user has an active Bruno license in the License Portal
+3. **Quote Issues**: Remove quotes from role values in your IdP configuration
+   - ❌ Bad: `"admin"` (with quotes)
+   - ✅ Good: `admin` (no quotes)
+
+<Callout type="info">
+**Quick Test**: If you're unsure about role mapping, temporarily add a wildcard or common value like `user` to both Admin Roles and User Roles fields in Bruno, then check what role value your IdP is actually sending in the SAML response.
+</Callout>
+
 ### "User Not Found" or "Access Denied"
 
 **Possible Causes:**
