@@ -199,21 +199,7 @@ Return to the **Attributes & Claims** page and verify the following:
 
 <Image src="/screenshots/sso-scim-management/okta/okta-sso-10.webp" alt="Paste SAML certificate into Bruno SSO settings" width={800} height={600} className="rounded mt-4" />
 
-### Step 3: Assign Users or Groups
-
-1. Navigate to **Manage** → **Users and groups** in the left sidebar
-2. Click **Add user/group**
-
-<Image src="/screenshots/sso-scim-management/entra/entra-sso-13.webp" alt="Assign users or groups to Bruno app in Entra ID" width={800} height={600} className="rounded mt-4" />
-
-3. Select the users or groups that should have access to Bruno, if using [App Roles](https://learn.microsoft.com/en-us/entra/external-id/customers/how-to-use-app-roles-customers#app-roles) they can be assigned here
-4. Click **Assign**
-
-{/* TODO: Add screenshot - entra-assign-users.png
-     Shows the Users and groups assignment page
-     Alt text: "Assign users or groups to Bruno app in Entra ID" */}
-
-### Step 4: Map the role values from Entra ID to Bruno access levels
+### Step 3: Map the role values from Entra ID to Bruno access levels
 
 1. Under the Bruno License Portal in the SSO Configuration page, scroll down to the **Role Mapping** section
 2. **Admin Roles**: Enter the role values (comma-separated) that will have admin access to the Bruno License Portal
@@ -258,20 +244,28 @@ The role value you configured in Entra ID's `roles` claim will be sent in the SA
 
 ## Test Your SAML Configuration
 
-You can test your SAML configuration by creating a test user in Microsoft Entra ID and assigning them the Bruno app.
+### Assign Users or Groups
 
-1. In the Bruno SAML SSO settings, click **Test SSO Connection**
-2. You should be redirected to Microsoft Entra ID to authenticate
-3. After successful authentication, you should be redirected back to Bruno
-4. Verify that your user information and roles are correctly displayed
+1. In your Entra ID Enterprise Application, navigate to **Manage** → **Users and groups** in the left sidebar
+2. Click **Add user/group**
 
-{/* TODO: Add screenshot - bruno-test-sso-entra.png
-     Shows the test SSO connection button and success message
-     Alt text: "Test SSO connection in Bruno for Entra ID" */}
+<Image src="/screenshots/sso-scim-management/entra/entra-sso-13.webp" alt="Assign users or groups to Bruno app in Entra ID" width={800} height={600} className="rounded mt-4" />
 
-<Callout type="info">
-If you encounter any issues, confirm you've added and saved the correct configuration values on both Bruno and Microsoft Entra ID. See the [Troubleshooting Guide](./troubleshooting) for help.
-</Callout>
+3. Select the users or groups that should have access to Bruno, if using [App Roles](https://learn.microsoft.com/en-us/entra/external-id/customers/how-to-use-app-roles-customers#app-roles) they can be assigned here
+4. Click **Assign**
+
+
+### Test SSO Login
+
+1. Navigate to the Bruno License Portal (https://license.usebruno.com/)
+2  Enter the email address of a user assigned to the Bruno app in Okta
+3. Click **Login with SSO**
+4. You should be redirected to Okta to authenticate
+
+<Image src="/screenshots/sso-scim-management/saml-sso/bruno-lic-mgr-loginwsso.webp" alt="Login with SSO in Bruno License Portal" width={800} height={600} className="rounded mt-4" />
+
+5. If your user is an admin in Burno and contains the correct role mapping,  you should be redirected back to the Bruno License Portal 
+
 
 ## Next Steps
 
