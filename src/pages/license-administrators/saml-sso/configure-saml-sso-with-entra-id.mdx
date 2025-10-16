@@ -106,7 +106,7 @@ This claim is required for user identification. It will be mapped to the user's 
 
 #### Configuring the `roles` claim
 
-The `roles` claim will represent the user's roles in Bruno. This role value will be mapped to Bruno access levels for the License Portal and for License Activation.
+The `roles` claim will represent the user's roles in Bruno. This role value will be mapped to Bruno access levels for the License Portal and for License Activation. These roles could be hardcoded, mapped to existing user attributes, originate from [App Roles](https://learn.microsoft.com/en-us/entra/external-id/customers/how-to-use-app-roles-customers#app-roles), etc.
 
 On the **Attributes & Claims** page:
 
@@ -168,60 +168,66 @@ Return to the **Attributes & Claims** page and verify the following:
 
 ## Finish SSO Configuration
 
-### Step 5: Download SAML Certificate and Copy Metadata
+### Step 1: Add SSO URL to Bruno License Portal
 
-Return to the Enterprise Application page and navigate to **Manage** → **Single sign-on** in the left sidebar
+**IdP Login URL / SSO URL**
 
-1. In the **SAML Certificates** section:
-   - **Certificate (Base64)**: Download the certificate
-
-2. In the **Set up Bruno** section, copy the following values (you'll need these for Bruno configuration):
+1. Return to the Enterprise Application page and navigate to **Manage** → **Single sign-on** in the left sidebar
+2. In the **Set up 'AppName'** section 4, copy the following value:
    - **Login URL**: Copy this URL
 
-{/* TODO: Add screenshot - entra-saml-metadata.png
-     Shows the SAML Certificates and Set up Bruno sections
+<Image src="/screenshots/sso-scim-management/entra/entra-sso-10.webp" alt="Copy SSO URL from Entra ID" width={800} height={600} className="rounded mt-4" />
 
-### Step 6: Assign Users or Groups
+3. Return to the [Bruno License Portal](https://license.usebruno.com/) tab you opened [from the earlier configuration](#configure-sso-in-bruno)
+4. Navigate to **Settings** → **SSO** (if not already there)
+5. Under **SAML Configuration** paste the **Login URL** from Entra ID into the **IdP Login URL / SSO URL** field
+
+<Image src="/screenshots/sso-scim-management/entra/entra-sso-11.webp" alt="Paste SSO URL into Bruno SSO settings" width={800} height={600} className="rounded mt-4" />
+
+### Step 2: Add IdP Certificate to Bruno License Portal
+
+**Entra ID IdP Certificate**
+
+1. In the **SAML Certificates** section 3:
+   - **Certificate (Base64)**: Download the certificate
+
+<Image src="/screenshots/sso-scim-management/entra/entra-sso-12.webp" alt="Download SAML certificate from Entra ID" width={800} height={600} className="rounded mt-4" />
+
+2. Open the downloaded certificate file and copy the contents (include the `-----BEGIN CERTIFICATE-----` and `-----END CERTIFICATE-----` lines)
+3. Return to the Bruno License Portal tab
+4. Under **SAML Configuration** paste the certificate contents into the **IdP Certificate** field
+
+<Image src="/screenshots/sso-scim-management/okta/okta-sso-10.webp" alt="Paste SAML certificate into Bruno SSO settings" width={800} height={600} className="rounded mt-4" />
+
+### Step 3: Assign Users or Groups
 
 1. Navigate to **Manage** → **Users and groups** in the left sidebar
 2. Click **Add user/group**
-3. Select the users or groups that should have access to Bruno
+
+<Image src="/screenshots/sso-scim-management/entra/entra-sso-13.webp" alt="Assign users or groups to Bruno app in Entra ID" width={800} height={600} className="rounded mt-4" />
+
+3. Select the users or groups that should have access to Bruno, if using [App Roles](https://learn.microsoft.com/en-us/entra/external-id/customers/how-to-use-app-roles-customers#app-roles) they can be assigned here
 4. Click **Assign**
 
 {/* TODO: Add screenshot - entra-assign-users.png
      Shows the Users and groups assignment page
      Alt text: "Assign users or groups to Bruno app in Entra ID" */}
 
-## Complete SSO Configuration in Bruno
+### Step 4: Map the role values from Entra ID to Bruno access levels
 
-Now that Entra ID is configured, return to Bruno to complete the SSO setup.
-
-### Step 1: Enter Identity Provider Details
-
-1. Return to the Bruno License Portal tab you kept open earlier
-2. Navigate to **Settings** → **SSO** (if not already there)
-3. Enter the following information from Entra ID:
-   - **IdP Login URL**: Paste the **Login URL** from Entra ID
-   - **IdP Entity ID**: Paste the **Microsoft Entra Identifier** from Entra ID
-   - **IdP Certificate**: Open the downloaded certificate file and paste the contents (include the `-----BEGIN CERTIFICATE-----` and `-----END CERTIFICATE-----` lines)
-
-{/* TODO: Add screenshot - bruno-saml-config-entra.png
-     Shows the Bruno SAML SSO configuration page with Entra ID values
-     Alt text: "Configure SAML SSO in Bruno License Portal for Entra ID" */}
-
-### Step 2: Configure Role Mapping
-
-Map the role values from Entra ID to Bruno access levels:
-
-1. **Admin Roles**: Enter the role values (comma-separated) that should have admin access to Bruno
-   - Example: `admin,IT,BrunoAdministrators`
-   - These values must match what you configured in the `roles` claim in Entra ID
+1. Under the Bruno License Portal in the SSO Configuration page, scroll down to the **Role Mapping** section
+2. **Admin Roles**: Enter the role values (comma-separated) that will have admin access to the Bruno License Portal
+   - Example: `admin,BrunoAdmin,IT-Administrators`
+   - These values must match what you configured in the `roles` attribute in Entra ID
    - Users with these roles can access the admin panel and manage licenses
 
-2. **User Roles**: Enter the role values (comma-separated) that should have user access to Bruno
+3. **User Roles**: Enter the role values (comma-separated) that should have user access to Bruno
    - Example: `user,Engineering,Developers,QA`
-   - These values must match what you configured in the `roles` claim in Entra ID
-   - Users with these roles have standard access to Bruno
+   - These values must match what you configured in the `roles` attribute in Entra ID
+   - Users with these roles will be able to activate their Bruno licenses with SSO. **They will not have access to the admin panel.**
+
+<Image src="/screenshots/sso-scim-management/okta/okta-sso-11.webp" alt="Configure role mapping in Bruno License Portal" width={800} height={600} className="rounded mt-4" />
+
 
 <Callout type="info">
 **How Role Mapping Works:**
@@ -240,14 +246,15 @@ The role value you configured in Entra ID's `roles` claim will be sent in the SA
 **Important**: Role values are case-sensitive. Ensure the values in Entra ID's `roles` claim match exactly with the values you enter in Bruno's Admin Roles or User Roles fields.
 </Callout>
 
-### Step 3: Configure Session Settings
+### Step 5: Configure Session Settings
 
-1. **Session Timeout**: Set the session timeout in seconds (default: 3600 = 1 hour)
-2. Click **Save** to apply your SAML SSO configuration
+1. Scroll down to the **Session Timeout** section:
+   - Set the session timeout in seconds (default: 3600 = 1 hour)
+2. Click **Save Configuration** to apply your SAML SSO configuration
 
-{/* TODO: Add screenshot - bruno-role-mapping-entra.png
-     Shows the role mapping configuration in Bruno with Group Object IDs
-     Alt text: "Configure role mapping in Bruno License Portal for Entra ID" */}
+{/* TODO: Add screenshot - bruno-session-config-entra.png
+     Shows the session configuration in Bruno
+     Alt text: "Configure session timeout in Bruno License Portal" */}
 
 ## Test Your SAML Configuration
 
