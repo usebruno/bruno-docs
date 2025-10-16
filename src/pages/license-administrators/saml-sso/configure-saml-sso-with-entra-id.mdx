@@ -37,7 +37,7 @@ Keep this page open in a separate tab - you'll return here after configuring Ent
 1. Log in to the [Microsoft Entra admin center](https://entra.microsoft.com/)
 2. On the left sidebar, navigate to **Enterprise apps** → **+ New application**
 3. Click **Create your own application**
-4. Enter the application name: Set your own unique identifier (e.g.,`Bruno`, `Bruno-SAML-App`, etc.)
+4. Enter the application name: Set your own unique identifier (e.g., `Bruno`, `Bruno-SAML-App`, etc.)
 5. Select **Integrate any other application you don't find in the gallery (Non-gallery)**
 6. Click **Create**
 
@@ -55,7 +55,7 @@ Keep this page open in a separate tab - you'll return here after configuring Ent
 1. Under **Single sign-on** section in the **Basic SAML Configuration** section, click **Edit**
 2. Copy the values from the Bruno SSO settings page and paste them into your SAML configuration in Microsoft Entra ID:
    - **Identifier (Entity ID)**: Paste the **SP Issuer ID / Entity ID** value from the Bruno License Portal
-   - **Reply URL (Assertion Consumer Service URL)**: copy and paste the **SAML ACS URL** from the Bruno License Port
+   - **Reply URL (Assertion Consumer Service URL)**: Copy and paste the **SAML ACS URL** from the Bruno License Portal
 3. Click **Save**
 
 <Image src="/screenshots/sso-scim-management/entra/entra-sso-3.webp" alt="Configure basic SAML settings in Entra ID" width={800} height={600} className="rounded mt-4" />
@@ -67,7 +67,7 @@ Keep this page open in a separate tab - you'll return here after configuring Ent
 ### Step 4: Configure Attributes & Claims
 
 Bruno requires three specific SAML attributes to be configured in Entra ID:
-- `Unique User Identifier (Name ID)`, `roles` and `fullName`). 
+- `Unique User Identifier (Name ID)`, `roles`, and `fullName`
 
 These attributes map user information from Entra ID to your Bruno subscription, ensuring users get the correct access levels.
 
@@ -114,7 +114,7 @@ On the **Attributes & Claims** page:
 2. Enter `roles` as the name
 3. Configure the claim as follows:
 
-   - Map to existing user attribute**:
+   - **Map to existing user attribute**:
      - Under **Source**, select **Attribute**
      - Choose an existing user attribute like `user.assignedroles`, `user.department`, `user.jobtitle`, or custom attributes
 4. Click **Save**
@@ -125,8 +125,8 @@ On the **Attributes & Claims** page:
 **Important**: The role value sent by Entra ID will be mapped to Bruno access levels in the License Portal's SSO Settings. You'll configure which role values correspond to admin or user access in Bruno (see Step 2 in the Bruno configuration section below).
 
 **Example Scenarios:**
-- If you set a static value of `Engineering`, you'll add the value `Engineering` in the Bruno License Portal to the corrsponding Admin or User role field
-- If you map to `user.department` and a user's department is `IT`, you'll add `IT` to the appropriate role field in the Bruno License Portal 
+- If you set a static value of `Engineering`, you'll add the value `Engineering` in the Bruno License Portal to the corresponding Admin or User role field
+- If you map to `user.department` and a user's department is `IT`, you'll add `IT` to the appropriate role field in the Bruno License Portal
 
 
 #### Configuring the `fullName` claim 
@@ -141,7 +141,7 @@ On the **Attributes & Claims** page:
 2. Enter `fullName` as the name
 3. Under **Source**, select **Transformation**
 4. In **Manage Transformation**, configure the transformation:
-   - **Trasformation**: `Join()`
+   - **Transformation**: `Join()`
    - **Parameter 1**: `user.givenname`
    - **Separator**: ` ` (space)
    - **Parameter 2**: `user.surname`
@@ -153,8 +153,8 @@ On the **Attributes & Claims** page:
 
 Return to the **Attributes & Claims** page and verify the following:
 
-1. Any other claims that are not on shown below have been deleted
-2. The `Unique User Identifier (Name ID)`, `roles` and `fullName` claims are configured as shown shown above
+1. Any other claims that are not shown below have been deleted
+2. The `Unique User Identifier (Name ID)`, `roles`, and `fullName` claims are configured as shown above
 
 <Image src="/screenshots/sso-scim-management/entra/entra-sso-9.webp" alt="Finalized attributes and claims configuration in Entra ID" width={800} height={600} className="rounded mt-4" />
 
@@ -166,7 +166,7 @@ Return to the **Attributes & Claims** page and verify the following:
      Shows the Attributes & Claims configuration
      Alt text: "Configure attributes and claims in Entra ID" */}
 
-## Finish SSO Configuration
+## Finish SSO Configuration in Bruno
 
 ### Step 1: Add SSO URL to Bruno License Portal
 
@@ -258,13 +258,13 @@ The role value you configured in Entra ID's `roles` claim will be sent in the SA
 ### Test SSO Login
 
 1. Navigate to the Bruno License Portal (https://license.usebruno.com/)
-2  Enter the email address of a user assigned to the Bruno app in Okta
+2. Enter the email address of a user assigned to the Bruno app in Entra ID
 3. Click **Login with SSO**
-4. You should be redirected to Okta to authenticate
+4. You should be redirected to Entra ID to authenticate
 
 <Image src="/screenshots/sso-scim-management/saml-sso/bruno-lic-mgr-loginwsso.webp" alt="Login with SSO in Bruno License Portal" width={800} height={600} className="rounded mt-4" />
 
-5. If your user is an admin in Burno and contains the correct role mapping,  you should be redirected back to the Bruno License Portal 
+5. If your user is an admin in Bruno and contains the correct role mapping, you should be redirected back to the Bruno License Portal
 
 
 ## Next Steps
@@ -273,4 +273,3 @@ After setting up SSO with Microsoft Entra ID, you can:
 
 - [Configure SCIM Provisioning](../scim-provisioning/overview) to automate user provisioning and deprovisioning
 - [Manage your Bruno licenses](../license-portal) in the License Portal
-- Review the [Troubleshooting Guide](./troubleshooting) for common SSO issues
