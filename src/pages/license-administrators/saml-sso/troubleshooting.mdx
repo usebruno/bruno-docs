@@ -4,55 +4,146 @@ import { Callout } from "nextra/components";
 
 This guide helps you diagnose and resolve common issues when configuring or using SAML Single Sign-On with Bruno.
 
+## Quick Pre-Flight Checks
+
+Before diving into technical troubleshooting, verify these basic prerequisites. Most SSO login failures are due to one of these issues:
+
+### 1. Is SSO Enabled in Bruno?
+
+**Check this first:**
+- Go to Bruno License Portal (`https://license.usebruno.com/`)
+- Navigate to **Settings** → **SSO**
+- Verify the **"Enable SSO"** toggle is **ON**
+- If it's OFF, toggle it ON and click **Save Configuration**
+
+**Why this matters**: If SSO is disabled, all SSO login attempts will fail with a 500 error.
+
+<Callout type="warning">
+**Important**: SSO must be enabled in the License Portal before users can log in via SSO. This is the first and most common cause of SSO login failures.
+</Callout>
+
+### 2. Is the User Already an Admin in Bruno License Portal?
+
+Accessing the license portal requires admin access. Users will not need to be added as admins if they only need to activate their license via SSO.
+
+**Check this next:**
+- Go to Bruno License Portal → **Settings** → **Admins**
+- Look for the user's email address in the Admins list
+- If the user is NOT in the list, they must be added first before they can use SSO
+
+**Why this matters**: Users must be configured as admins in Bruno BEFORE they can log in via SSO. SSO only authenticates users who are already admins in the system.
+
+**If the user is not listed:**
+1. Click the **"Add Admin"** button
+2. Enter the user's email address
+3. Click **Add**
+4. The user will now be able to log in via SSO
+
+**After the user is added as an admin, verify role mapping:**
+- Go to Bruno License Portal → **Settings** → **SSO**
+- Look at the **"Admin Roles"** field
+- The user's role (from their IdP) must match one of the values in this field
+- **Example**: If Admin Roles is set to `admin,BrunoAdmin`, the user's role must be exactly `admin` or `BrunoAdmin`
+
+**How to verify the user's role:**
+1. In your IdP, check what role value is assigned to the user
+2. In Bruno License Portal → Settings → SSO, check the "Admin Roles" field
+3. Ensure they match exactly (case-sensitive)
+
+<Callout type="warning">
+**Two-Step Process**:
+1. First, add the user as an admin in Bruno License Portal (Settings → Admins)
+2. Then, ensure their IdP role matches the "Admin Roles" field in SSO settings
+
+Both steps are required for SSO login to work.
+</Callout>
+
+<Callout type="warning">
+**Role Matching is Case-Sensitive**: `admin` ≠ `Admin`. The role value from your IdP must match exactly what's in the Admin Roles field.
+</Callout>
+
+### 3. Is SSO Configuration Complete?
+
+**Verify all required fields are filled:**
+- Go to Bruno License Portal → **Settings** → **SSO**
+- Check that these fields are NOT empty:
+  - **SP Issuer ID / Entity ID**
+  - **IdP Login URL**
+  - **IdP Entity ID**
+  - **IdP Certificate**
+  - **Admin Roles** (at least one role value)
+
+**Why this matters**: If any required field is missing, Bruno cannot generate a SAML request and will return a 500 error.
+
+<Callout type="info">
+**Tip**: If you're not sure what values to use, refer to the [SAML SSO Overview](./overview) page for detailed explanations of each field.
+</Callout>
+
+---
+
 ## Common Error Messages
 
 ### "500 Internal Server Error" When Clicking "Login with SSO"
 
+**First, complete the pre-flight checks above** (Is SSO enabled? Is the user an admin? Is configuration complete?)
+
 **Possible Causes:**
-- SSO configuration not properly saved in Bruno
+- SSO is not enabled in Bruno (see Pre-Flight Check #1)
+- User is not a License Manager Admin (see Pre-Flight Check #2)
+- SSO configuration is incomplete (see Pre-Flight Check #3)
 - Entity ID mismatch between Bruno and your IdP
 - Invalid or malformed certificate in Bruno configuration
-- Missing required configuration fields
-- Email domain not configured for SSO
+- IdP Login URL is missing or incorrect
+
+**What This Error Means:**
+This error occurs when Bruno tries to generate a SAML authentication request but the SSO configuration is incomplete or invalid. The backend checks that all required fields are present before proceeding.
 
 **Solutions:**
-1. **Verify Entity ID matches exactly**: The "SP Issuer ID / Entity ID" in Bruno must match the "Identifier (Entity ID)" in your IdP configuration
+
+1. **Complete the pre-flight checks first**:
+   - Verify SSO is enabled
+   - Verify the user is a License Manager Admin (role matches Admin Roles)
+   - Verify all required configuration fields are filled
+
+2. **Verify Entity ID matches exactly**:
+   - The "SP Issuer ID / Entity ID" in Bruno must match the "Identifier (Entity ID)" in your IdP configuration
    - Example: If Bruno has `bruno-demo`, your IdP must also have `bruno-demo`
    - The value can be anything, but it must be identical in both places
-2. **Check certificate format**:
+
+3. **Check certificate format**:
    - Open the certificate file you downloaded from your IdP
    - Copy the entire contents including `-----BEGIN CERTIFICATE-----` and `-----END CERTIFICATE-----` lines
    - Paste into Bruno's IdP Certificate field
-   - Ensure there are no extra spaces or line breaks
-3. **Verify all required fields are filled**:
-   - SP Issuer ID / Entity ID (can be any unique identifier)
-   - IdP Login URL (from your IdP's SAML metadata)
-   - IdP Entity ID (from your IdP's SAML metadata)
-   - IdP Certificate (Base64 encoded certificate)
-4. **Verify your email domain is configured**: The email domain you're using must be associated with the SSO configuration
+   - Ensure there are no extra spaces or line breaks at the beginning or end
+
+4. **Verify IdP Login URL is correct**:
+   - The IdP Login URL should be the SAML entry point from your IdP
+   - Example: `https://idp.example.com/app/123/sso/saml`
+   - This is typically found in your IdP's SAML metadata
+
 5. **Save the configuration**: Click "Save Configuration" button after making changes
+
 6. **Check browser console**: Open Developer Tools (F12) → Console tab to see detailed error messages
+
 7. **Try disabling and re-enabling SSO**: Toggle the "Enable SSO" switch off, save, then toggle it back on and save again
 
 <Callout type="warning">
-If you see repeated 500 errors on the `/login` endpoint, this usually indicates the SSO configuration is incomplete or contains invalid values. Double-check all configuration fields match exactly what your IdP provides.
+**Backend Validation**: Bruno validates that SSO is enabled and all required configuration fields are present before generating the SAML request. If any field is missing or SSO is disabled, you'll see a 500 error. Check the browser console for the specific error message.
 </Callout>
 
 ### IdP Test Login Shows Error or Redirects to Bruno Login Page
 
 **Possible Causes:**
-- Sign-on URL is configured incorrectly in your IdP
-- Reply URL (ACS URL) is configured incorrectly
+- Reply URL (ACS URL) is configured incorrectly in your IdP
 - Certificate or metadata mismatch
 - SSO not fully enabled in Bruno
 
 **Solutions:**
-1. **Verify Sign-on URL**: In your IdP's SAML application configuration:
-   - Sign on URL should be: `https://license.usebruno.com/`
-   - NOT: `https://license.usebruno.com/login`
-   - This URL is where your IdP will redirect users when they initiate login from the IdP portal
-2. **Verify Reply URL (ACS URL)**: Should be `https://license.usebruno.com/api/v2/auth/sso/saml/acs/<your-org-id>`
+1. **Verify Reply URL (ACS URL)**: In your IdP's SAML application configuration:
+   - Should be: `https://license.usebruno.com/api/v2/auth/sso/saml/acs/<your-subscription-id>`
    - This is where your IdP sends the SAML response after authentication
+   - The subscription ID is shown in the Bruno License Portal SSO settings page
+   - This URL must match EXACTLY what's configured in Bruno
    - Copy this URL exactly from the Bruno SSO settings page
 3. **Ensure SSO is enabled in Bruno**:
    - IdP test login will fail if SSO is not fully configured and enabled in Bruno
@@ -73,7 +164,7 @@ If you see repeated 500 errors on the `/login` endpoint, this usually indicates 
 - `AADSTS75011`: Authentication method mismatch - ensure SAML 2.0 is selected
 - `AADSTS50105`: User not assigned - assign user/group to the Bruno application in Enterprise Applications
 - `AADSTS700016`: Application not found - verify the application exists and is properly configured
-- `AADSTS50020`: User account from identity provider does not exist - check user provisioning
+- `AADSTS50020`: User account from identity provider does not exist - ensure the user is assigned to the Bruno application in Entra ID
 </Callout>
 
 <Callout type="warning">
@@ -141,16 +232,24 @@ Always copy the ACS URL directly from the Bruno SSO settings page rather than us
 - Bruno shows a 403 Forbidden error or "Access Denied" message
 - Login does not complete
 
-**Most Common Cause:**
-This is typically a **role mapping issue** - the role value sent by your IdP doesn't match what's configured in Bruno's role fields.
+**What This Error Means:**
+Bruno received a valid SAML response from your IdP, but the user's roles don't match any configured role in Bruno's "Admin Roles" or "User Roles" fields. This is a **role mapping issue** - the role value sent by your IdP doesn't match what's configured in Bruno.
+
+**How Role Matching Works (Backend Logic):**
+1. Bruno extracts the `roles` attribute from the SAML response
+2. Bruno checks if ANY of the user's roles match the "Admin Roles" field
+3. If not, Bruno checks if ANY of the user's roles match the "User Roles" field
+4. If neither match, Bruno returns a 403 Forbidden error
+5. **Important**: Role matching is case-sensitive and exact (`admin` ≠ `Admin`)
 
 **Debugging Steps:**
 1. **Check the SAML response** to see what role value is being sent:
    - Open browser dev tools (F12) → Network tab
    - Attempt SSO login again
-   - Look for the POST request to `/saml/acs/` or `/api/v2/auth/sso/saml/acs/`
+   - Look for the POST request to `/api/v2/auth/sso/saml/acs/`
    - In the request payload, find the `roles` attribute value
    - Example: `<saml2:AttributeValue>admin</saml2:AttributeValue>`
+   - Note: Users can have multiple roles; Bruno checks if ANY match
 
 2. **Verify role mapping in Bruno**:
    - Go to Bruno License Portal → Settings → SSO
@@ -165,17 +264,18 @@ This is typically a **role mapping issue** - the role value sent by your IdP doe
 - Click Save and test again
 
 **Other Possible Causes:**
-- Missing `roles` or `fullName` attributes in SAML response
+- Missing `roles` attribute in SAML response (not configured in IdP)
 - User not assigned to the Bruno application in IdP
-- User doesn't have a Bruno license
 - Quotes in role values (e.g., `"admin"` vs `admin`)
+- Role value is empty or whitespace
 
 **Additional Checks:**
 1. **User Assignment**: Verify the user is assigned to the Bruno application in your IdP
-2. **Bruno License**: Confirm the user has an active Bruno license in the License Portal
+2. **Role Attribute Present**: Confirm the `roles` attribute is being sent in the SAML response (check Network tab)
 3. **Quote Issues**: Remove quotes from role values in your IdP configuration
    - ❌ Bad: `"admin"` (with quotes)
    - ✅ Good: `admin` (no quotes)
+4. **Empty Roles**: Ensure the role value is not empty or just whitespace
 
 <Callout type="warning">
 **Okta Specific**: For 403 errors in Okta:
@@ -198,18 +298,46 @@ This is typically a **role mapping issue** - the role value sent by your IdP doe
 **Quick Test**: If you're unsure about role mapping, temporarily add a wildcard or common value like `user` to both Admin Roles and User Roles fields in Bruno, then check what role value your IdP is actually sending in the SAML response.
 </Callout>
 
-### "User Not Found" or "Access Denied"
+### "User Not Found" or "Access Denied" After Role Mapping
 
-**Possible Causes:**
-- User doesn't have a Bruno license
-- User's email in IdP doesn't match their Bruno account email
-- User is not assigned to the Bruno application in the IdP
+**Symptoms:**
+- User's role matches Bruno's role mapping (403 error is gone)
+- But user still cannot access Bruno
+- Error message indicates user not found or access denied
+
+**What This Error Means:**
+The user's role matched Bruno's configuration, but there's an issue with the user's email or account status. Bruno uses the NameID (email) from the SAML response to identify users.
+
+**How User Identification Works (Backend Logic):**
+1. Bruno extracts the NameID from the SAML response (this should be the user's email)
+2. Bruno converts the email to lowercase for consistency
+3. Bruno looks up the user in the database using this email
+4. If the user doesn't exist, Bruno creates a new user account automatically
+5. If the user exists but is inactive, Bruno reactivates them
+
+**Debugging Steps:**
+1. **Verify the NameID is an email address**:
+   - Open browser dev tools (F12) → Network tab
+   - Attempt SSO login again
+   - Look for the POST request to `/api/v2/auth/sso/saml/acs/`
+   - In the SAML response, find the NameID value
+   - Example: `<saml:NameID>user@example.com</saml:NameID>`
+   - Ensure it's a valid email address
+
+2. **Check email consistency**:
+   - The NameID email should match the user's email in your IdP
+   - Bruno uses this email to identify and create user accounts
+   - If the email changes between logins, Bruno will create a new account
+
+3. **Verify user assignment in IdP**:
+   - Ensure the user is assigned to the Bruno application
+   - Check that the user's email is correctly configured in the IdP
 
 **Solutions:**
 1. Verify the user is assigned to the Bruno application in your IdP
-2. Check that the user's email in the IdP matches their Bruno account email
-3. Ensure the user has an active Bruno license
-4. Verify the email attribute is correctly mapped in your IdP
+2. Ensure the NameID in your IdP is configured to send the user's email address
+3. Check that the user's email in the IdP is valid and consistent
+4. Verify the email attribute is correctly mapped in your IdP (should be NameID, not a separate attribute)
 
 ### "Invalid Role" or "Insufficient Permissions"
 
@@ -253,13 +381,49 @@ This is typically a **role mapping issue** - the role value sent by your IdP doe
 - `fullName` attribute not configured correctly in IdP
 - `fullName` attribute is missing from the SAML assertion
 - Name fields in IdP are empty
+- `firstName` and `lastName` attributes are not configured as fallback
+
+**What This Error Means:**
+Bruno tries to extract the user's full name from the SAML response. If the `fullName` attribute is missing, Bruno attempts to construct it from `firstName` and `lastName` attributes. If all are missing, Bruno uses the email address as the name.
+
+**How Name Extraction Works (Backend Logic):**
+1. Bruno first looks for a `fullName` attribute in the SAML response
+2. If `fullName` is not found, Bruno looks for `firstName` and `lastName` attributes
+3. If found, Bruno combines them: `firstName + " " + lastName`
+4. If none of these are found, Bruno uses the email address (NameID) as the name
+5. The name is stored in the user's profile
+
+**Debugging Steps:**
+1. **Check what name attributes are being sent**:
+   - Open browser dev tools (F12) → Network tab
+   - Attempt SSO login again
+   - Look for the POST request to `/api/v2/auth/sso/saml/acs/`
+   - In the SAML response, look for these attributes:
+     - `fullName` (preferred)
+     - `firstName` and `lastName` (fallback)
+   - Example: `<saml2:Attribute Name="fullName"><saml2:AttributeValue>John Doe</saml2:AttributeValue></saml2:Attribute>`
+
+2. **Verify attribute names are case-insensitive**:
+   - Bruno looks for attributes case-insensitively (e.g., `fullName`, `FullName`, `FULLNAME` all work)
+   - But the attribute values are case-sensitive
+
+3. **Check user profile after login**:
+   - After a successful SSO login, check the user's profile in Bruno
+   - If the name is just an email address, the name attributes weren't found
 
 **Solutions:**
-1. Verify the `fullName` attribute is configured in your IdP's SAML attribute statements
-2. Ensure the attribute name is exactly `fullName` (case-sensitive)
-3. Configure the attribute to combine first and last name (e.g., concatenation of first name + space + last name)
-4. Check that user profiles in your IdP have first name and last name populated
-5. Check the SAML response to confirm the `fullName` attribute is being sent
+1. **Configure `fullName` attribute** (recommended):
+   - Verify the `fullName` attribute is configured in your IdP's SAML attribute statements
+   - Configure the attribute to combine first and last name (e.g., concatenation of first name + space + last name)
+   - Check that user profiles in your IdP have first name and last name populated
+
+2. **Or configure `firstName` and `lastName` attributes** (fallback):
+   - If you can't use `fullName`, configure both `firstName` and `lastName` attributes
+   - Bruno will automatically combine them with a space
+
+3. **Verify attributes are being sent**:
+   - Check the SAML response to confirm the name attributes are being sent
+   - Use your IdP's preview/test feature to verify attribute values
 
 <Callout type="info">
 **Okta fullName Configuration**: In Okta attribute statements:
@@ -290,7 +454,7 @@ Use this checklist to verify your SAML SSO configuration:
 - [ ] ACS URL configured correctly (copy from Bruno SSO settings page)
 - [ ] Entity ID configured to match Bruno's SP Issuer ID / Entity ID
 - [ ] Name ID format set to EmailAddress
-- [ ] **Required attribute: `roles`** configured with value `admin` or `user`
+- [ ] **Required attribute: `roles`** configured to send user role values from your IdP (e.g., `Engineering`, `BrunoAdmin`, `IT-Team`, etc.)
 - [ ] **Required attribute: `fullName`** configured (e.g., concatenation of first and last name)
 - [ ] Users or groups assigned to the Bruno application
 - [ ] SAML certificate is valid and not expired
@@ -444,6 +608,45 @@ If you encounter certificate errors:
    - Check that the role value from your IdP is listed in either "Admin Roles" or "User Roles"
    - Example: If your IdP sends `roles="Engineering"`, ensure `Engineering` is in one of the role fields in Bruno
 
+### Testing Roles with Hardcoded Values
+
+**When to use this**: If you're having trouble getting role values to work correctly, you can temporarily configure a hardcoded role value in your IdP. This applies the same role to all users logging in via SSO and helps you isolate whether the issue is with role mapping or attribute configuration.
+
+**Important**: This is for testing only. Once you verify SSO is working, configure proper role values based on your user directory.
+
+**Steps to test with hardcoded roles:**
+
+1. **In your IdP, configure the `roles` attribute with a static/hardcoded value**:
+   - **Okta**: In the SAML app → General → SAML Attribute Statements, set:
+     - Name: `roles`
+     - Value: `admin` (or any test value)
+     - This will send `roles="admin"` for all users
+
+   - **Entra ID**: In Enterprise Applications → Single sign-on → Attributes & Claims, add a new claim:
+     - Name: `roles`
+     - Source: Attribute
+     - Source attribute: Select any attribute (or use a static value if available)
+     - Or use Transformation with a static value like `"admin"`
+
+2. **In Bruno License Portal, add this test value to Admin Roles**:
+   - Go to Settings → SSO
+   - In the "Admin Roles" field, add the value you used (e.g., `admin`)
+   - Click Save Configuration
+
+3. **Test SSO login**:
+   - Try logging in via SSO
+   - If it works, the issue is with your role attribute configuration in the IdP
+   - If it still fails, the issue is elsewhere (certificate, ACS URL, etc.)
+
+4. **Once testing is complete**:
+   - Remove the hardcoded value from your IdP
+   - Configure proper role values based on your user directory (departments, groups, etc.)
+   - Update Bruno's Admin Roles and User Roles fields with the actual role values
+
+<Callout type="warning">
+**Important**: Hardcoded role values apply to ALL users logging in via SSO. Only use this for testing. Once you've verified SSO is working, configure role values that map to your actual user attributes or groups.
+</Callout>
+
 ### Common IdP-Specific Configurations
 
 **For Okta:**
@@ -487,8 +690,8 @@ If you've tried the troubleshooting steps above and still encounter issues:
 1. **Review Documentation**: Re-read the configuration guides for your specific IdP:
    - [Configure SAML SSO with Okta](./configure-saml-sso-with-okta)
    - [Configure SAML SSO with Entra ID](./configure-saml-sso-with-entra-id)
-2. **Contact Support**: Reach out to Bruno support with the following information:
-   - Your domain ID
+2. **Contact [Support](https://www.usebruno.com/support)**: Reach out to Bruno support with the following information:
+   - Your Bruno subscription ID 
    - Identity provider (Okta, Entra ID, or other SAML 2.0 provider)
    - Error messages you're seeing
    - Steps you've already tried
