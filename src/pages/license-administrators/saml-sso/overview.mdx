@@ -81,7 +81,7 @@ When configuring your identity provider, you'll need these Bruno-specific values
 
 | Field | Value | Notes |
 |-------|-------|-------|
-| **ACS URL** | Specific to your Bruno subscription | Copy the exact SAML ACS URL from your Bruno SSO settings page |
+| **ACS URL** | Specific to your Bruno subscription | Copy the exact SAML ACS URL from your Bruno SSO settings page. Format: `https://license.usebruno.com/api/v2/auth/sso/saml/acs/{subscription-id}` |
 | **SP Issuer ID / Entity ID** | Enter a unique value | Can be any unique identifier (e.g., `bruno`, `bruno-demo`). Must match exactly between Bruno and your IdP |
 
 <Callout type="info">
@@ -98,18 +98,21 @@ Bruno requires the following SAML attributes to be configured in your identity p
 
 | Attribute Name | Description | Example Value |
 |----------------|-------------|---------------|
+| **NameID** | User's email address (unique identifier) | `user.mail` or `user.email` - Must be in email format |
 | **roles** | User role(s) for access control | Any role value from your IdP (e.g., `BrunoAdmin`, `Engineering`, `admin`, `user`) |
 | **fullName** | User's full name | `user.firstName+" "+user.lastName` or equivalent |
 
 <Callout type="info">
 **Attribute Configuration Details:**
 
+- **NameID**: Bruno uses the NameID as the unique user identifier and email address. Configure your IdP to send the user's email address as the NameID with format `urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress`. This is critical for user identification and license activation.
+
 - **roles**: This attribute contains the role value(s) from your identity provider. The value can be:
   - Any existing role or group attribute from your IdP (e.g., `Engineering`, `BrunoAdmin`, `IT-Team`)
   - A hardcoded value for testing purposes (e.g., `admin`, `user`)
   - Mapped from existing user attributes or group memberships in your IdP
 
-  **Important**: The role values sent in the SAML assertion must be mapped to either "Admin Roles" or "User Roles" in the Bruno License Portal's SSO Settings (see Role Mapping section below).
+  **Important**: The role values sent in the SAML assertion must be mapped to either "Admin Roles" or "User Roles" in the Bruno License Portal's SSO Settings (see [Role Mapping](#role-mapping) section below).
 
 - **fullName**: This attribute should contain the user's complete name. It can be mapped to:
   - A single field if your IdP has a combined name field
@@ -164,7 +167,7 @@ In the Bruno License Portal's SSO Settings, you'll find two fields under "Role M
 1. Your IdP sends the `roles` attribute value in the SAML assertion (e.g., `Engineering`)
 2. Bruno checks if this value matches any role in the "Admin Roles" or "User Roles" fields
 3. If it matches "Admin Roles", the user will be able to access the license portal and manage licenses
-4. If it matches "User Roles", the user will be able to activate their license with SSO but will not have license portal access 
+4. If it matches "User Roles", the user will be able to activate their license with SSO but will not have license portal access
 5. If it doesn't match either, the user will be denied access
 
 **Example Configuration:**
@@ -172,10 +175,43 @@ In the Bruno License Portal's SSO Settings, you'll find two fields under "Role M
 - Bruno Admin Roles: `admin,BrunoAdmin`
 - Bruno User Roles: `user,Engineering,QA`
 - Result: User gets standard access (matches "Engineering" in User Roles)
+
+**Important Implementation Details:**
+- Role matching is **case-sensitive** - `admin` ≠ `Admin`
+- A user can have multiple roles in the IdP; Bruno checks if **any** of them match the configured roles
+- If a user matches "Admin Roles", they get admin access (even if they also match "User Roles")
+- When a user is removed from the IdP, they lose access on their next login attempt
 </Callout>
 
 <Callout type="warning">
 **Important**: The role values are case-sensitive. Ensure the values in your IdP's `roles` attribute match exactly with the values you configure in Bruno's Admin Roles or User Roles fields.
+</Callout>
+
+## License Activation and Access Control
+
+### License Activation Flow
+
+**For User Role Users:**
+- Users can activate their Bruno license using SSO
+- They receive a license key via email on first login
+- They can use this key to activate Bruno on their local machine
+- They do NOT have access to the License Portal
+
+**For Admin Role Users:**
+- Admins can access the License Portal to manage licenses and users
+- Admins can view all users in their subscription
+- Admins can manage role mappings and SSO configuration
+- Admins can view subscription details and usage
+
+### Session Management
+
+- **Session timeout**: Configured in Bruno SSO settings (default: 1 hour / 3600 seconds)
+- **Minimum timeout**: 60 seconds
+- **Session cookies**: Secure, HTTP-only cookies are used for session management
+- **Logout**: Users are logged out when the session expires or when they manually log out
+
+<Callout type="info">
+**Coordination with IdP Sessions**: Bruno's session timeout is independent of your IdP's session timeout. The shorter timeout will take precedence. For example, if your IdP session expires after 30 minutes but Bruno is set to 1 hour, users will be logged out after 30 minutes.
 </Callout>
 
 ## Next Steps
