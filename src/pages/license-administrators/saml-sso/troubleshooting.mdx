@@ -6,19 +6,6 @@ This guide helps you diagnose and resolve common issues when configuring or usin
 
 ## Common Error Messages
 
-### "Login with SSO" Button is Disabled or Grayed Out
-
-**Possible Causes:**
-- SSO is not enabled in Bruno
-- SSO configuration is incomplete
-- No email entered in the email field
-
-**Solutions:**
-1. **Enable SSO in Bruno**: Navigate to Settings → SSO and toggle "Enable SSO" to ON
-2. **Complete all required fields**: Ensure all SSO configuration fields are filled and saved
-3. **Enter your email**: The "Login with SSO" button may only activate after you enter an email address that matches a configured SSO domain
-4. **Save the configuration**: Click "Save Configuration" after making any changes
-
 ### "500 Internal Server Error" When Clicking "Login with SSO"
 
 **Possible Causes:**
@@ -30,7 +17,7 @@ This guide helps you diagnose and resolve common issues when configuring or usin
 
 **Solutions:**
 1. **Verify Entity ID matches exactly**: The "SP Issuer ID / Entity ID" in Bruno must match the "Identifier (Entity ID)" in your IdP configuration
-   - Example: If Bruno has `bruno-demo`, Entra ID must also have `bruno-demo`
+   - Example: If Bruno has `bruno-demo`, your IdP must also have `bruno-demo`
    - The value can be anything, but it must be identical in both places
 2. **Check certificate format**:
    - Open the certificate file you downloaded from your IdP
@@ -40,7 +27,7 @@ This guide helps you diagnose and resolve common issues when configuring or usin
 3. **Verify all required fields are filled**:
    - SP Issuer ID / Entity ID (can be any unique identifier)
    - IdP Login URL (from your IdP's SAML metadata)
-   - IdP Entity ID (Microsoft Entra Identifier for Entra ID)
+   - IdP Entity ID (from your IdP's SAML metadata)
    - IdP Certificate (Base64 encoded certificate)
 4. **Verify your email domain is configured**: The email domain you're using must be associated with the SSO configuration
 5. **Save the configuration**: Click "Save Configuration" button after making changes
@@ -51,39 +38,58 @@ This guide helps you diagnose and resolve common issues when configuring or usin
 If you see repeated 500 errors on the `/login` endpoint, this usually indicates the SSO configuration is incomplete or contains invalid values. Double-check all configuration fields match exactly what your IdP provides.
 </Callout>
 
-### Entra ID "Test sign in" Shows Error "AADSTSXXXX" or Redirects to Bruno Login Page
+### IdP Test Login Shows Error or Redirects to Bruno Login Page
 
 **Possible Causes:**
-- Sign-on URL is configured incorrectly in Entra ID
+- Sign-on URL is configured incorrectly in your IdP
 - Reply URL (ACS URL) is configured incorrectly
 - Certificate or metadata mismatch
 - SSO not fully enabled in Bruno
 
 **Solutions:**
-1. **Verify Sign-on URL**: In Entra ID → Single sign-on → Basic SAML Configuration:
+1. **Verify Sign-on URL**: In your IdP's SAML application configuration:
    - Sign on URL should be: `https://license.usebruno.com/`
    - NOT: `https://license.usebruno.com/login`
-   - This URL is where Entra ID will redirect users when they initiate login from the IdP (My Apps portal)
+   - This URL is where your IdP will redirect users when they initiate login from the IdP portal
 2. **Verify Reply URL (ACS URL)**: Should be `https://license.usebruno.com/api/v2/auth/sso/saml/acs/<your-org-id>`
-   - This is where Entra ID sends the SAML response after authentication
+   - This is where your IdP sends the SAML response after authentication
+   - Copy this URL exactly from the Bruno SSO settings page
 3. **Ensure SSO is enabled in Bruno**:
-   - The "Test sign in" from Entra ID will fail if SSO is not fully configured and enabled in Bruno
-   - Complete the Bruno SSO configuration first, then test from Entra ID
-4. **Check the full error code**: The error message may be truncated. Try:
+   - IdP test login will fail if SSO is not fully configured and enabled in Bruno
+   - Complete the Bruno SSO configuration first, then test from your IdP
+4. **Check the full error message**: The error message may be truncated. Try:
    - Opening the test in a new incognito/private browser window
    - Checking the browser console for the full error message
    - Looking at the Network tab in Developer Tools for the failed request
-5. **Common AADSTS error codes**:
-   - `AADSTS50011`: Reply URL mismatch
-   - `AADSTS75011`: Authentication method mismatch
-   - `AADSTS50105`: User not assigned to application
-   - `AADSTS700016`: Application not found in directory
+5. **Common error patterns**:
+   - Reply URL mismatch: Check ACS URL configuration
+   - Authentication method mismatch: Verify SAML 2.0 is configured
+   - User not assigned: Ensure user is assigned to the Bruno application
+   - Application not found: Verify application is properly configured
+
+<Callout type="warning">
+**Microsoft Entra ID Specific**: If you see `AADSTS` error codes:
+- `AADSTS50011`: Reply URL mismatch - verify the ACS URL in Basic SAML Configuration
+- `AADSTS75011`: Authentication method mismatch - ensure SAML 2.0 is selected
+- `AADSTS50105`: User not assigned - assign user/group to the Bruno application in Enterprise Applications
+- `AADSTS700016`: Application not found - verify the application exists and is properly configured
+- `AADSTS50020`: User account from identity provider does not exist - check user provisioning
+</Callout>
+
+<Callout type="warning">
+**Okta Specific**: Common Okta-specific issues:
+- **"Invalid SAML Response"**: Check that the Okta application's SAML settings match Bruno's requirements exactly
+- **"User not assigned"**: In Okta Admin → Applications → Bruno app → Assignments, ensure users/groups are assigned
+- **"Invalid audience"**: Verify the Audience URI in Okta matches Bruno's SP Issuer ID exactly
+- **"Invalid destination"**: Ensure the Single Sign On URL in Okta matches Bruno's ACS URL
+- **Preview SAML assertion**: Use Okta's "Preview SAML assertion" feature to verify attribute values before testing
+</Callout>
 
 <Callout type="info">
-**Testing Order**: Always complete the Bruno SSO configuration first before testing from Entra ID. The recommended testing flow is:
+**Testing Order**: Always complete the Bruno SSO configuration first before testing from your IdP. The recommended testing flow is:
 1. Configure SSO in Bruno and save
 2. Test login by clicking "Login with SSO" from Bruno's login page (SP-initiated)
-3. Once that works, test "Test sign in" from Entra ID (IdP-initiated)
+3. Once that works, test login from your IdP portal (IdP-initiated)
 </Callout>
 
 ### "SAML Response Validation Failed"
@@ -98,6 +104,13 @@ If you see repeated 500 errors on the `/login` endpoint, this usually indicates 
 2. Ensure you've copied the entire certificate including `-----BEGIN CERTIFICATE-----` and `-----END CERTIFICATE-----` lines
 3. Check that your IdP's certificate hasn't expired
 4. Verify your server's system clock is synchronized (NTP)
+
+<Callout type="warning">
+**Entra ID Specific**: Entra ID certificates auto-rotate. If you see certificate validation errors:
+- Check if Entra ID has issued a new certificate (Enterprise Applications → Bruno app → Single sign-on → SAML Certificates)
+- Download the new certificate and update it in Bruno's SSO configuration
+- Entra ID typically notifies admins 30 days before certificate expiration
+</Callout>
 
 ### "Invalid ACS URL" or "Redirect URI Mismatch"
 
@@ -123,7 +136,7 @@ Always copy the ACS URL directly from the Bruno SSO settings page rather than us
 ### "403 Forbidden" Error After Successful IdP Authentication
 
 **Symptoms:**
-- User successfully authenticates with their IdP (Okta, Entra ID, etc.)
+- User successfully authenticates with their IdP
 - User is redirected back to Bruno
 - Bruno shows a 403 Forbidden error or "Access Denied" message
 - Login does not complete
@@ -164,6 +177,23 @@ This is typically a **role mapping issue** - the role value sent by your IdP doe
    - ❌ Bad: `"admin"` (with quotes)
    - ✅ Good: `admin` (no quotes)
 
+<Callout type="warning">
+**Okta Specific**: For 403 errors in Okta:
+- Check the **Group Assignments** tab in your Okta Bruno application - users must be assigned either directly or through groups
+- Verify **Application Visibility** settings - if "Hide application for users" is enabled, users may not be able to access it
+- Check **Sign On Policy** - ensure there are no conditional access rules blocking the user
+- Use Okta's **System Log** (Reports → System Log) to see detailed authentication attempts and failures
+</Callout>
+
+<Callout type="warning">
+**Entra ID Specific**: For 403 errors in Entra ID:
+- Check **Users and groups** assignment in Enterprise Applications → Bruno app
+- Verify **Conditional Access policies** aren't blocking the user (Azure AD → Security → Conditional Access)
+- Check **User Risk Policy** and **Sign-in Risk Policy** if Identity Protection is enabled
+- Review **Sign-in logs** (Azure AD → Monitoring → Sign-ins) for detailed error information
+- Ensure the user's account is not disabled or requires password reset
+</Callout>
+
 <Callout type="info">
 **Quick Test**: If you're unsure about role mapping, temporarily add a wildcard or common value like `user` to both Admin Roles and User Roles fields in Bruno, then check what role value your IdP is actually sending in the SAML response.
 </Callout>
@@ -197,8 +227,25 @@ This is typically a **role mapping issue** - the role value sent by your IdP doe
    - **Admin Roles** field (for admin access), or
    - **User Roles** field (for standard access)
 5. Ensure role values are case-sensitive matches (e.g., `Engineering` ≠ `engineering`)
-6. For Okta: Verify the attribute statement has Name: `roles` and a Value that matches what you configured in Bruno
-7. For Entra ID: Verify the claim name is `roles` and the value matches what you configured in Bruno's role mapping
+6. For your IdP: Verify the attribute/claim name is `roles` and the value matches what you configured in Bruno's role mapping
+
+<Callout type="info">
+**Okta Role Debugging**: Use Okta's **Preview SAML assertion** feature:
+1. Go to Okta Admin → Applications → Bruno app → General tab
+2. Click **Preview SAML assertion**
+3. Select a test user to see exactly what role values will be sent
+4. Verify the `roles` attribute appears with the expected value
+5. Copy this exact value to Bruno's Admin Roles or User Roles field
+</Callout>
+
+<Callout type="info">
+**Entra ID Role Debugging**: Use the **Test single sign-on** feature:
+1. Go to Enterprise Applications → Bruno app → Single sign-on
+2. Click **Test single sign-on with Bruno**
+3. In the test results, expand **View SAML response** to see the actual claims being sent
+4. Look for the `roles` claim and note its value
+5. Ensure this exact value is configured in Bruno's role mapping fields
+</Callout>
 
 ### "Missing User Information" or "Name Not Displayed"
 
@@ -210,10 +257,28 @@ This is typically a **role mapping issue** - the role value sent by your IdP doe
 **Solutions:**
 1. Verify the `fullName` attribute is configured in your IdP's SAML attribute statements
 2. Ensure the attribute name is exactly `fullName` (case-sensitive)
-3. For Okta: Verify the attribute statement has Name: `fullName` and Value: `user.firstName+" "+user.lastName`
-4. For Entra ID: Verify the claim uses a transformation to combine first and last name
-5. Check that user profiles in your IdP have first name and last name populated
-6. Check the SAML response to confirm the `fullName` attribute is being sent
+3. Configure the attribute to combine first and last name (e.g., concatenation of first name + space + last name)
+4. Check that user profiles in your IdP have first name and last name populated
+5. Check the SAML response to confirm the `fullName` attribute is being sent
+
+<Callout type="info">
+**Okta fullName Configuration**: In Okta attribute statements:
+- **Name**: `fullName`
+- **Name format**: Unspecified
+- **Value**: `user.firstName+" "+user.lastName`
+- Alternative: `user.displayName` if your Okta users have display names configured
+</Callout>
+
+<Callout type="info">
+**Entra ID fullName Configuration**: In Entra ID claims configuration:
+- **Claim name**: `fullName`
+- **Source**: Transformation
+- **Transformation**: `Join()`
+- **Parameter 1**: `user.givenname`
+- **Separator**: ` ` (space)
+- **Parameter 2**: `user.surname`
+- Alternative: Use `user.displayname` if available and properly formatted
+</Callout>
 
 ## Configuration Verification Checklist
 
@@ -235,7 +300,7 @@ Use this checklist to verify your SAML SSO configuration:
 - [ ] SAML SSO enabled in Bruno License Portal
 - [ ] SP Issuer ID / Entity ID configured (must match IdP Entity ID exactly)
 - [ ] IdP Login URL entered correctly
-- [ ] IdP Entity ID entered correctly (for Entra ID)
+- [ ] IdP Entity ID entered correctly
 - [ ] IdP Certificate pasted correctly (including BEGIN/END lines)
 - [ ] **Admin Roles** configured with role values that should have admin access
 - [ ] **User Roles** configured with role values that should have user access
@@ -329,6 +394,21 @@ If you encounter certificate errors:
 3. Clear browser cookies and cache
 4. Ensure cookies are enabled in the browser
 
+<Callout type="info">
+**Okta Session Management**: Check these Okta settings:
+- **Global Session Policy** (Security → Authentication → Global Session Policy)
+- **Application Sign On Policy** (Applications → Bruno app → Sign On tab → Sign On Policy)
+- **Okta session lifetime** vs **Bruno session timeout** - the shorter one will take precedence
+</Callout>
+
+<Callout type="info">
+**Entra ID Session Management**: Check these Entra ID settings:
+- **Conditional Access policies** with session controls (Azure AD → Security → Conditional Access)
+- **Token lifetime policies** (Azure AD → Security → Token lifetime policies)
+- **User sign-in frequency** settings in Conditional Access
+- **Persistent browser session** settings
+</Callout>
+
 ### Session Not Ending When Expected
 
 **Possible Causes:**
@@ -342,53 +422,74 @@ If you encounter certificate errors:
 
 ## Attribute Configuration Troubleshooting
 
-### Okta Attribute Configuration
+### SAML Attribute Configuration
 
 **Issue**: Users not getting correct roles or missing name information
 
 **Solutions:**
-1. Verify the `roles` attribute statement is configured in Okta:
-   - Name: `roles`
-   - Name format: Unspecified
-   - Value: Can be any value (e.g., `"admin"`, `"Engineering"`, `user.department`, etc.)
-2. Verify the `fullName` attribute statement is configured in Okta:
-   - Name: `fullName`
-   - Name format: Unspecified
-   - Value: `user.firstName+" "+user.lastName`
-3. Check the attribute preview in Okta to see what values will be sent
-4. Ensure attribute names are case-sensitive and match exactly
+1. **Verify the `roles` attribute is configured in your IdP**:
+   - Attribute/Claim name: `roles`
+   - Value: Can be any value (e.g., `"admin"`, `"Engineering"`, department name, group name, etc.)
+   - Ensure the attribute is included in the SAML assertion
+2. **Verify the `fullName` attribute is configured in your IdP**:
+   - Attribute/Claim name: `fullName`
+   - Value: Combination of first and last name (e.g., "John Doe")
+   - Common configurations:
+     - Static concatenation: `firstName + " " + lastName`
+     - Transformation/expression to join name fields
+     - Direct mapping from a single name field
+3. **Check attribute preview/test in your IdP** to see what values will be sent
+4. **Ensure attribute names are case-sensitive and match exactly**
 5. **Verify role mapping in Bruno**: In Bruno License Portal → Settings → SSO:
-   - Check that the role value from Okta is listed in either "Admin Roles" or "User Roles"
-   - Example: If Okta sends `roles="Engineering"`, ensure `Engineering` is in one of the role fields in Bruno
+   - Check that the role value from your IdP is listed in either "Admin Roles" or "User Roles"
+   - Example: If your IdP sends `roles="Engineering"`, ensure `Engineering` is in one of the role fields in Bruno
 
-### Entra ID Attribute Configuration
+### Common IdP-Specific Configurations
 
-**Issue**: Users not getting correct roles or missing name information
+**For Okta:**
+- Attribute statements with Name format: Unspecified
+- `roles` value examples: `"admin"`, `user.department`, static values
+- `fullName` value: `user.firstName+" "+user.lastName`
 
-**Solutions:**
-1. Verify the `roles` claim is configured in Entra ID:
-   - Claim name: `roles`
-   - Source: Attribute or Transformation
-   - Value: Can be any value (e.g., static `admin`, `user.department`, group mapping, etc.)
-2. Verify the `fullName` claim is configured in Entra ID:
-   - Claim name: `fullName`
-   - Source: Transformation
-   - Transformation: Join() with `user.givenname`, space separator, and `user.surname`
-3. Check the SAML token preview in Entra ID to see what attributes will be sent
-4. Ensure claim names are case-sensitive and match exactly
-5. **Verify role mapping in Bruno**: In Bruno License Portal → Settings → SSO:
-   - Check that the role value from Entra ID is listed in either "Admin Roles" or "User Roles"
-   - Example: If Entra ID sends `roles="IT"`, ensure `IT` is in one of the role fields in Bruno
+**For Microsoft Entra ID:**
+- Claims configuration with source: Attribute or Transformation
+- `roles` value examples: static `admin`, `user.department`, group mappings
+- `fullName` transformation: Join() with `user.givenname`, space separator, and `user.surname`
+
+**For other SAML 2.0 providers:**
+- Configure SAML attribute statements or claims
+- Ensure attribute names match exactly: `roles` and `fullName`
+- Use appropriate value mappings for your user directory
+
+<Callout type="warning">
+**Okta Troubleshooting Tools**: Leverage these Okta-specific debugging features:
+- **System Log** (Reports → System Log): Search for authentication events and errors
+- **Preview SAML assertion**: Test attribute values before going live
+- **Application dashboard**: Monitor sign-in attempts and failures
+- **SAML Tracer browser extension**: Capture and analyze SAML requests/responses
+- **Okta Expression Language**: Use for complex attribute transformations
+</Callout>
+
+<Callout type="warning">
+**Entra ID Troubleshooting Tools**: Use these Entra ID-specific debugging features:
+- **Sign-in logs** (Azure AD → Monitoring → Sign-ins): Detailed authentication logs with error codes
+- **Audit logs** (Azure AD → Monitoring → Audit logs): Track configuration changes
+- **Test single sign-on**: Built-in testing tool with SAML response viewer
+- **Conditional Access insights**: See which policies are affecting sign-ins
+- **Identity Protection**: Monitor for risky sign-ins that might block SSO
+- **Enterprise Applications insights**: Application-specific usage and error analytics
+</Callout>
 
 ## Getting Additional Help
 
 If you've tried the troubleshooting steps above and still encounter issues:
 
-1. **Check Bruno Status**: Visit [status.usebruno.com](https://status.usebruno.com) for any ongoing incidents
-2. **Review Documentation**: Re-read the configuration guides for [Okta](./configure-saml-sso-with-okta) or [Entra ID](./configure-saml-sso-with-entra-id)
-3. **Contact Support**: Reach out to Bruno support with the following information:
+1. **Review Documentation**: Re-read the configuration guides for your specific IdP:
+   - [Configure SAML SSO with Okta](./configure-saml-sso-with-okta)
+   - [Configure SAML SSO with Entra ID](./configure-saml-sso-with-entra-id)
+2. **Contact Support**: Reach out to Bruno support with the following information:
    - Your domain ID
-   - Identity provider (Okta, Entra ID, etc.)
+   - Identity provider (Okta, Entra ID, or other SAML 2.0 provider)
    - Error messages you're seeing
    - Steps you've already tried
    - Screenshots of your configuration (redact sensitive information)
