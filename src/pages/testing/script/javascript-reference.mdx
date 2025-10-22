@@ -152,10 +152,23 @@ req.setHeaders({
 
 Get the current request body/payload
 
-**Example:**
+**Syntax:**
+```javascript
+req.getBody(options?)
+```
+
+**Parameters:**
+- `options` (object, optional): Configuration options
+  - `raw` (boolean): When `true`, returns the raw body without any parsing. When `false` or not provided, returns the parsed body (default behavior).
+
+**Examples:**
 
 ```javascript
+// Get parsed body (default)
 const body = req.getBody();
+
+// Get raw body without parsing
+const rawBody = req.getBody({ raw: true });
 ```
 
 ### `setBody`
@@ -325,10 +338,23 @@ let headers = res.getHeaders();
 
 Get the response data
 
-**Example:**
+**Syntax:**
+```javascript
+res.getBody(options?)
+```
+
+**Parameters:**
+- `options` (object, optional): Configuration options
+  - `raw` (boolean): When `true`, returns the raw response body without any parsing. When `false` or not provided, returns the parsed body (default behavior).
+
+**Examples:**
 
 ```javascript
+// Get parsed response data (default)
 let data = res.getBody();
+
+// Get raw response body without parsing
+let rawData = res.getBody({ raw: true });
 ```
 
 ### `getResponseTime`
