@@ -1,4 +1,5 @@
 import "@/app/globals.css";
+import "@/styles/mobile-sidebar.css";
 import { useConfig } from "nextra-theme-docs";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
