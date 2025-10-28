@@ -28,7 +28,7 @@ Here is a complete table for all available methods on the `req` object.
 | req.getHeaders()               | Get all request headers.                                             |
 | req.setHeader(name, value)     | Set a request header by name.                                        |
 | req.setHeaders(headers)        | Set multiple request headers.                                        |
-| req.getBody()                  | Get the current request body/payload.                                |
+| req.getBody(options?)          | Get the current request body/payload (supports raw option).          |
 | req.setBody(body)              | Set the request body/payload.                                        |
 | req.setMaxRedirects(count)     | Set the maximum number of redirects to follow.                       |
 | req.getTimeout()               | Get the current timeout value of the request.                        |
@@ -126,9 +126,19 @@ Below is the API documentation for the methods available on `req`
 
 ### Body Methods
 
-- **`getBody()`** - Get the current request body/payload.
+- **`getBody(options?)`** - Get the current request body/payload.
+  
+  **Parameters:**
+  - `options` (object, optional): Configuration options
+    - `raw` (boolean): When `true`, returns the raw body without any parsing. When `false` or not provided, returns the parsed body (default behavior).
+
+  **Examples:**
   ```javascript
+  // Get parsed body (default)
   const body = req.getBody();
+
+  // Get raw body without parsing
+  const rawBody = req.getBody({ raw: true });
   ```
 
 - **`setBody(body)`** - Set the request body/payload.
@@ -231,7 +241,7 @@ Here is a complete table for all available properties and methods on the `res` o
 | res.getStatusText()            | Get the response status text.                                                  |
 | res.getHeader(name)            | Get a specific response header by name.                                        |
 | res.getHeaders()               | Get all response headers.                                                      |
-| res.getBody()                  | Get the response body data.                                                    |
+| res.getBody(options?)          | Get the response body data (supports raw option).                              |
 | res.setBody(body)              | Set the response body data.                                                    |
 | res.getResponseTime()          | Get the response time in milliseconds.                                         |
 | res.getUrl()                   | Get the response URL (final URL after redirects).                              |
@@ -301,9 +311,19 @@ Below are the detailed descriptions for properties and methods available on the 
 
 ### Body Methods
 
-- **`getBody()`** - Get the response body data.
+- **`getBody(options?)`** - Get the response body data.
+  
+  **Parameters:**
+  - `options` (object, optional): Configuration options
+    - `raw` (boolean): When `true`, returns the raw response body without any parsing. When `false` or not provided, returns the parsed body (default behavior).
+
+  **Examples:**
   ```javascript
+  // Get parsed response data (default)
   let data = res.getBody();
+
+  // Get raw response body without parsing
+  let rawData = res.getBody({ raw: true });
   ```
 
 - **`setBody(body)`** - Set the response body data.
