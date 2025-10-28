@@ -9,11 +9,35 @@ Here is the complete set of API reference for the scripting feature in Bruno.
 
 The `req` variable represents the HTTP request object and is automatically available inside your scripting and testing context. It provides methods to access and modify the current request's properties such as URL, method, headers, body, and other configuration options before the request is sent to the server.
 
-Below is the API documentation for the methods available on `req`
-
 <Callout type="info">
   The `req` object is available in pre-request scripts and test scripts, allowing you to modify request properties before execution and access them after completion.
 </Callout>
+
+Here is a complete table for all available methods on the `req` object.
+
+| Method                         | Description                                                          |
+| ------------------------------ | -------------------------------------------------------------------- |
+| req.getUrl()                   | Get the current request URL.                                         |
+| req.setUrl(url)                | Set the current request URL.                                         |
+| req.getAuthMode()              | Get the current authentication mode.                                 |
+| req.getMethod()                | Get the current request method.                                      |
+| req.setMethod(method)          | Set the current request method.                                      |
+| req.getName()                  | Get the current request name.                                        |
+| req.getTags()                  | Get the current request tags as an array of strings.                 |
+| req.getHeader(name)            | Get the request header by name.                                      |
+| req.getHeaders()               | Get all request headers.                                             |
+| req.setHeader(name, value)     | Set a request header by name.                                        |
+| req.setHeaders(headers)        | Set multiple request headers.                                        |
+| req.getBody()                  | Get the current request body/payload.                                |
+| req.setBody(body)              | Set the request body/payload.                                        |
+| req.setMaxRedirects(count)     | Set the maximum number of redirects to follow.                       |
+| req.getTimeout()               | Get the current timeout value of the request.                        |
+| req.setTimeout(milliseconds)   | Set a timeout for the request.                                       |
+| req.getExecutionMode()         | Get the current active execution mode (runner or standalone).        |
+| req.getExecutionPlatform()     | Get the platform on which the request is being executed (app or cli).|
+| req.onFail(callback)           | Handle request errors with a custom callback function.               |
+
+Below is the API documentation for the methods available on `req`
 
 
 ### `getUrl`
@@ -277,19 +301,31 @@ The `res` variable represents the HTTP response object and is automatically avai
   The `res` object is only available in post-request scripts and test scripts, as it contains the response data from the completed request.
 </Callout>
 
-Below are the properties available on the `res` object.
+Here is a complete table for all available properties and methods on the `res` object.
 
-- `status`: The HTTP response status code (e.g., 200, 404, 500)
-- `statusText`: The HTTP response status text (e.g., "OK", "Not Found", "Internal Server Error")
-- `headers`: An object containing all response headers
-- `body`: The response body data (automatically parsed as JSON if the response is JSON)
-- `responseTime`: The total time taken for the request in milliseconds
+| Property / Method              | Description                                                                    |
+| ------------------------------ | ------------------------------------------------------------------------------ |
+| res.status                     | The HTTP response status code (e.g., 200, 404, 500).                          |
+| res.statusText                 | The HTTP response status text (e.g., "OK", "Not Found").                      |
+| res.headers                    | An object containing all response headers.                                     |
+| res.body                       | The response body data (automatically parsed as JSON if applicable).           |
+| res.responseTime               | The total time taken for the request in milliseconds.                          |
+| res.url                        | The final response URL (after following redirects).                            |
+| res.getStatus()                | Get the response status code.                                                  |
+| res.getStatusText()            | Get the response status text.                                                  |
+| res.getHeader(name)            | Get a specific response header by name.                                        |
+| res.getHeaders()               | Get all response headers.                                                      |
+| res.getBody()                  | Get the response body data.                                                    |
+| res.setBody(body)              | Set the response body data.                                                    |
+| res.getResponseTime()          | Get the response time in milliseconds.                                         |
+| res.getUrl()                   | Get the response URL (final URL after redirects).                              |
+| res.getSize()                  | Get the response size in bytes (returns object with body, headers, total).     |
 
 <Callout type="info">
   The `body` property is automatically parsed as JSON if the response has a JSON content type. For other content types, it will be a string.
 </Callout>
 
-Below are the methods available on the `res` object.
+Below are the detailed descriptions for properties and methods available on the `res` object.
 
 ### `getStatus`
 
