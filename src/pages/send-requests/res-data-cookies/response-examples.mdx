@@ -1,0 +1,69 @@
+import { Callout } from "nextra/components";
+
+# Response Examples
+
+Response examples allow you to save and document different response scenarios directly from your API requests. This feature makes it easy to capture, organize, and share various API response states without cluttering your main request.
+
+<Callout type="info">
+  Response examples are perfect for documenting success cases, error scenarios, edge cases, and different data states your API might return.
+</Callout>
+
+## What are Response Examples?
+
+Response examples are saved snapshots of API responses that are stored as sub-requests under your main request. Each example captures:
+
+- **Request details**: Parameters, headers, and body used to generate the response
+- **Response data**: The complete response returned by the API
+- **Response headers**: All headers returned with the response
+
+This makes it easy to:
+- Document different API behaviors
+- Share examples with team members
+- Test with realistic data
+- Compare responses over time
+- Maintain API documentation with real examples
+
+## Saving a Response as an Example
+
+When you execute a request and receive a response, you can save it as an example for future reference.
+
+### Steps to Save Response Example
+
+1. **Execute your request** and wait for the response
+2. **Locate the Save Response icon** in the Response tab (top-right corner)
+3. **Click the Save Response icon**
+
+![Save Response](/screenshots/send-request/res-data-and-cookie/save-res/save-response.webp)
+
+4. **Enter a name** for your example in the dialog that appears
+5. **Click Save** to create the example
+
+![Save Response Dialog](/screenshots/send-request/res-data-and-cookie/save-res/save-response-dialog.webp)
+
+<Callout type="success">
+  The example will be created as a sub-request under your main request and will be instantly accessible.
+</Callout>
+
+## Understanding Example Requests
+
+Once saved, example requests appear as nested items under your main request in the sidebar.
+
+![Response Example](/screenshots/send-request/res-data-and-cookie/save-res/save-response-example.webp)
+
+### Example Request Structure
+
+Example requests have a **simplified interface** with only the essential tabs:
+
+**Request Pane:**
+- **Params** - View the query parameters used
+- **Headers** - View the request headers sent
+- **Body** - View the request body (for POST, PUT, PATCH requests)
+
+**Response Pane:**
+- **Response** - View the saved response data
+- **Headers** - View the response headers received
+
+<Callout type="info">
+  Example requests are **read-only** by design. They serve as documentation and reference, not as executable requests.
+</Callout>
+

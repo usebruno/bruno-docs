@@ -26,10 +26,14 @@ When you import a WSDL file, Bruno automatically:
 1. Click on the three-dot menu next to any collection in the sidebar
 2. Select **Import Collection** from the dropdown menu
 
+![Import Collection Menu](/screenshots/get-started/import-export/import_collection/import_collection_main_menu.webp)
 
 ### Step 2: Choose WSDL Option
 
 1. In the Import Collection dialog, select the **WSDL** option
+
+![Import Dialog with WSDL Option](/screenshots/get-started/import-export/import_collection/import-modal.webp)
+
 2. You can either:
    - Click the upload area to browse for a local `.wsdl` file
    - Drag and drop a WSDL file directly into the dialog
@@ -49,35 +53,25 @@ When you import a WSDL file, Bruno automatically:
 
 You can also import WSDL files using the Bruno CLI, which is useful for automation and CI/CD workflows.
 
-<Tabs items={['Local File', 'URL']}>
-  <Tabs.Tab>
-  ### Import from Local File
+### Basic Command
 
-  ```bash
-  bru import wsdl --wsdl path/to/service.wsdl --output ./my-collection
-  ```
+```bash
+bru import wsdl path/to/service.wsdl --output ./my-collection
+```
 
-  **Parameters:**
-  - `--wsdl`: Path to your local WSDL file
-  - `--output`: Directory where the Bruno collection will be created
+### Example
 
-  </Tabs.Tab>
-  <Tabs.Tab>
-  ### Import from URL
+```bash
+# Import a WSDL file
+bru import wsdl ./services/calculator.wsdl --output ./calculator-collection
 
-  ```bash
-  bru import wsdl --wsdl https://example.com/service?wsdl --output ./my-collection
-  ```
+# Import with nested directory structure
+bru import wsdl ./wsdl-files/user-service.wsdl --output ./collections/soap/users
+```
 
-  **Parameters:**
-  - `--wsdl`: URL of the WSDL endpoint
-  - `--output`: Directory where the Bruno collection will be created
-
-  <Callout type="warning">
-    When importing from a URL, ensure the WSDL endpoint is publicly accessible or that you have proper network access.
-  </Callout>
-  </Tabs.Tab>
-</Tabs>
+<Callout type="info">
+  For detailed CLI import options and examples, see the [CLI Import Guide](/bru-cli/import).
+</Callout>
 
 ## Programmatic Conversion
 
@@ -143,179 +137,3 @@ SOAPAction: "http://example.com/ServiceName/OperationName"
   </soap:Body>
 </soap:Envelope>
 ```
-
-## Error Handling
-
-Bruno provides clear error messages for common WSDL import issues:
-
-### Invalid WSDL Structure
-
-```
-Error: Invalid WSDL format - Missing required definitions
-```
-
-**Solution:** Ensure your WSDL file is well-formed and contains all required elements (definitions, types, messages, portType, binding, service).
-
-### Unsupported WSDL Features
-
-```
-Error: WSDL feature not supported - [feature name]
-```
-
-**Solution:** Some advanced WSDL features may not be fully supported. Consider simplifying the WSDL or creating requests manually.
-
-### Network Errors (URL Import)
-
-```
-Error: Failed to fetch WSDL from URL
-```
-
-**Solution:** Check your network connection, verify the URL is correct, and ensure the WSDL endpoint is accessible.
-
-## Best Practices
-
-### 1. Review Generated Requests
-
-After importing, review each generated request to:
-- Verify the SOAP envelope structure matches your service requirements
-- Add authentication headers if needed (API keys, tokens, etc.)
-- Customize parameter values in the request body
-
-### 2. Use Environments for Variables
-
-For dynamic values like endpoints or authentication tokens:
-
-```xml
-<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-  <soap:Header>
-    <AuthToken>{{apiToken}}</AuthToken>
-  </soap:Header>
-  <soap:Body>
-    <GetUser xmlns="{{serviceNamespace}}">
-      <UserId>{{userId}}</UserId>
-    </GetUser>
-  </soap:Body>
-</soap:Envelope>
-```
-
-### 3. Organize Large WSDL Imports
-
-For WSDLs with many operations:
-- Use folders to group related operations
-- Add descriptive names to requests
-- Document any customizations in request notes
-
-### 4. Handle Complex Types
-
-If your WSDL includes complex types or nested schemas:
-- Check the generated XML structure carefully
-- Refer to the WSDL schema documentation for type definitions
-- Use Bruno's XML validation to ensure proper formatting
-
-## Limitations
-
-### Current Limitations
-
-1. **SOAP Version**: Currently supports SOAP 1.1 and 1.2 envelopes
-2. **WS-Security**: Basic authentication is supported; advanced WS-Security features may require manual configuration
-3. **Attachments**: SOAP with Attachments (SwA) and MTOM are not automatically configured
-4. **Complex Schemas**: Very complex XML schemas may require manual adjustment
-
-### Workarounds
-
-For features not fully supported:
-- Manually edit the generated SOAP envelope in the request body
-- Add required headers in the Headers tab
-- Use pre-request scripts for dynamic SOAP header generation
-
-## Example: Complete WSDL Import Workflow
-
-Here's a complete example of importing and using a WSDL file:
-
-### 1. Import the WSDL
-
-```bash
-bru import wsdl --wsdl https://api.example.com/calculator.wsdl --output ./calculator-collection
-```
-
-### 2. Generated Collection Structure
-
-```
-calculator-collection/
-├── bruno.json
-├── Add/
-│   └── request.bru
-├── Subtract/
-│   └── request.bru
-├── Multiply/
-│   └── request.bru
-└── Divide/
-    └── request.bru
-```
-
-### 3. Customize Request (Add Operation)
-
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-  <soap:Body>
-    <Add xmlns="http://example.com/calculator">
-      <intA>{{number1}}</intA>
-      <intB>{{number2}}</intB>
-    </Add>
-  </soap:Body>
-</soap:Envelope>
-```
-
-### 4. Configure Environment
-
-```json
-{
-  "number1": "10",
-  "number2": "5",
-  "serviceUrl": "https://api.example.com/calculator/soap"
-}
-```
-
-### 5. Execute Request
-
-Click **Send** and view the SOAP response in the Response tab.
-
-## Related Documentation
-
-- [SOAP Request Guide](../send-requests/soap/soap-request) - Learn how to manually create and configure SOAP requests
-- [Bruno CLI Import](../bru-cli/import) - Complete CLI import command reference
-- [Converters Overview](./overview) - Information about other import formats
-- [Variables](../variables/overview) - Using variables in SOAP requests
-- [Environments](../variables/environments) - Managing multiple environments for SOAP services
-
-## Troubleshooting
-
-### WSDL Parsing Errors
-
-If you encounter parsing errors:
-
-1. **Validate your WSDL**: Use an online WSDL validator to check for syntax errors
-2. **Check XML encoding**: Ensure the WSDL file uses UTF-8 encoding
-3. **Verify namespaces**: All XML namespaces should be properly defined
-
-### Missing Operations
-
-If some operations are missing after import:
-
-1. Check if the WSDL contains multiple services
-2. Verify the port bindings are correctly defined
-3. Look for any parsing warnings in the console
-
-### Incorrect SOAP Envelope
-
-If the generated SOAP envelope is not correct:
-
-1. Check the WSDL schema definitions for the operation
-2. Verify the SOAP binding style (document vs. rpc)
-3. Manually adjust the envelope structure if needed
-
-<Callout type="tip">
-  For complex WSDL issues, consider reaching out to the Bruno community on [GitHub Discussions](https://github.com/usebruno/bruno/discussions) or [Discord](https://discord.com/invite/KgcZUncpjq).
-</Callout>
-
