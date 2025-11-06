@@ -1,7 +1,7 @@
 const meta = {
   "overview": "Overview",
   "res-data": "Response Data",
-  "response-examples": "Response Examples",
+  "response-examples": "Request/Response Examples",
   "cookies": "Cookies",
   "debugging": "Debugging"
 };
