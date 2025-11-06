@@ -1,6 +1,6 @@
 # Bruno Docs 📝
 
-The official [Bruno Documentation](https://docs.usebruno.com/) repository!
+The official [Bruno Documentation](https://docs.usebruno.com/) repository.
 
 ## Contributing
 
