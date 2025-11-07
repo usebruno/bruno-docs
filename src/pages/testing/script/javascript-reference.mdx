@@ -479,14 +479,18 @@ Below is the API documentation for the methods available on `bru`
   console.log('Current directory:', currentDir);
   ```
 
-### Process Environment Variables
+### Variables
+
+Bruno provides a comprehensive variable system that allows you to manage and access different types of variables throughout your scripts. These include process environment variables, environment variables, collection variables, folder variables, request variables, and runtime variables.
+
+**Process Environment Variables**
 
 - **`getProcessEnv(key)`** - Get the Node process environment variable. This allows secret token usage without committing secrets to version control.
   ```javascript
   let secret_token = bru.getProcessEnv("secret_access_token");
   ```
 
-### Environment Variables
+**Environment Variables**
 
 - **`getEnvName()`** - Retrieves the current environment name.
   ```javascript
@@ -544,7 +548,7 @@ Below is the API documentation for the methods available on `bru`
   bru.setGlobalEnvVar("val", "bruno");
   ```
 
-### Collection Variables
+**Collection Variables**
 
 - **`getCollectionVar(key)`** - Get the collection variable.
   ```javascript
@@ -557,14 +561,14 @@ Below is the API documentation for the methods available on `bru`
   console.log('Current collection:', collectionName);
   ```
 
-### Folder Variables
+**Folder Variables**
 
 - **`getFolderVar(key)`** - Get the folder variable.
   ```javascript
   let company = bru.getFolderVar("company");
   ```
 
-### Request Variables
+**Request Variables**
 
 - **`getRequestVar(key)`** - Get the request variable.
   ```javascript
@@ -572,7 +576,7 @@ Below is the API documentation for the methods available on `bru`
   let destination = bru.getRequestVar("destination");
   ```
 
-### Runtime Variables
+**Runtime Variables**
 
 - **`hasVar(key)`** - Check if a runtime variable exists.
   ```javascript
@@ -604,6 +608,10 @@ Below is the API documentation for the methods available on `bru`
 
 ### Request Execution & Order
 
+This section covers methods for executing requests and controlling the execution flow in Bruno, including collection runner utilities.
+
+**Running Requests**
+
 - **`runRequest(requestPathName)`** - Execute any request in the collection and retrieve the response directly within the script.
 
   <Callout type="warning" emoji="">
@@ -614,6 +622,8 @@ Below is the API documentation for the methods available on `bru`
   ```javascript
   const requestResponse = await bru.runRequest("echo/echo json");
   ```
+
+**Controlling Execution Order**
 
 - **`setNextRequest(requestName)`** - Change the order of request execution. By default, the collection runner (UI) and the CLI run requests in order. You can change the order by calling `setNextRequest` with the name of the next request to be run. This works only in a post-request script or test-script.
 
@@ -636,12 +646,12 @@ Below is the API documentation for the methods available on `bru`
   bru.setNextRequest(null);
   ```
 
-### Collection Runner Utilities
-
 - **`bru.runner.setNextRequest(requestName)`** - Alter the order of requests by specifying the name of the next request to execute. This function is applicable only within post-request scripts or test scripts.
   ```javascript
   bru.runner.setNextRequest("Get process status");
   ```
+
+**Collection Runner Utilities**
 
 - **`bru.runner.skipRequest()`** - Skip the execution of the current request. Use this in the pre-request script section. This function is valid only within the context of a collection run.
   ```javascript
@@ -680,6 +690,8 @@ Bruno provides Cookie Jar APIs that enable programmatic cookie management in req
   Cookie management APIs are available in pre-request scripts, post-request scripts, and test scripts.
 </Callout>
 
+**Creating a Cookie Jar**
+
 - **`cookies.jar()`** - Create a cookie jar instance for managing cookies.
   
   **Returns:** A cookie jar instance with methods for cookie management
@@ -687,7 +699,7 @@ Bruno provides Cookie Jar APIs that enable programmatic cookie management in req
   const jar = bru.cookies.jar();
   ```
 
-#### Cookie Jar Methods
+**Cookie Jar Methods**
 
 Once you have a cookie jar instance, you can use the following methods:
 
