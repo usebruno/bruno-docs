@@ -111,11 +111,12 @@ export const Navbar = () => {
       sidebar.style.height = '100vh';
       sidebar.style.width = '280px';
       sidebar.style.zIndex = '50';
-      sidebar.style.background = 'var(--nx-bg-color, #ffffff)';
-      sidebar.style.borderRight = '1px solid var(--nx-border-color, #e5e7eb)';
+      sidebar.style.background = 'hsl(var(--background))';
+      sidebar.style.borderRight = '1px solid hsl(var(--border))';
       sidebar.style.boxShadow = '2px 0 8px rgba(0, 0, 0, 0.1)';
       sidebar.style.overflowY = 'auto';
       sidebar.style.transition = 'transform 0.3s ease-in-out';
+      sidebar.style.color = 'hsl(var(--foreground))';
       
       const isOpen = sidebar.classList.contains('open') || sidebar.getAttribute('data-open') === 'true';
       
@@ -155,7 +156,7 @@ export const Navbar = () => {
           closeButton.style.cursor = 'pointer';
           closeButton.style.padding = '8px';
           closeButton.style.borderRadius = '4px';
-          closeButton.style.color = 'var(--nx-text-color, #374151)';
+          closeButton.style.color = 'hsl(var(--foreground))';
           closeButton.style.zIndex = '51';
           closeButton.style.display = 'flex';
           closeButton.style.alignItems = 'center';
@@ -220,12 +221,13 @@ export const Navbar = () => {
               newSidebar.style.height = '100vh';
               newSidebar.style.width = '280px';
               newSidebar.style.zIndex = '50';
-              newSidebar.style.background = 'var(--nx-bg-color, #ffffff)';
-              newSidebar.style.borderRight = '1px solid var(--nx-border-color, #e5e7eb)';
+              newSidebar.style.background = 'hsl(var(--background))';
+              newSidebar.style.borderRight = '1px solid hsl(var(--border))';
               newSidebar.style.boxShadow = '2px 0 8px rgba(0, 0, 0, 0.1)';
               newSidebar.style.overflowY = 'auto';
               newSidebar.style.transition = 'transform 0.3s ease-in-out';
               newSidebar.style.transform = 'translateX(0)';
+              newSidebar.style.color = 'hsl(var(--foreground))';
               
               // Add close button to the sidebar
               const closeButton = document.createElement('button');
@@ -244,7 +246,7 @@ export const Navbar = () => {
               closeButton.style.cursor = 'pointer';
               closeButton.style.padding = '8px';
               closeButton.style.borderRadius = '4px';
-              closeButton.style.color = 'var(--nx-text-color, #374151)';
+              closeButton.style.color = 'hsl(var(--foreground))';
               closeButton.style.zIndex = '51';
               closeButton.style.display = 'flex';
               closeButton.style.alignItems = 'center';
