@@ -3,7 +3,7 @@ import { Tabs } from 'nextra/components'
 
 # Bruno Converters
 
-Bruno converter is a standalone NPM package that provides programmatic conversion of various API specification formats to Bruno collections. This package allows you to convert Postman collections, Insomnia collections, OpenAPI specifications, and Postman environments into Bruno collection format.
+Bruno converter is a standalone NPM package that provides programmatic conversion of various API specification formats to Bruno collections. This package allows you to convert Postman collections, Insomnia collections, OpenAPI specifications, WSDL files, and Postman environments into Bruno collection format.
 
 ## Installation
 
@@ -45,6 +45,7 @@ For more details, visit the official [NPM Page for Bruno Converters](https://www
 1. [Postman to Bruno](./postman-to-bruno)
 2. [Insomnia to Bruno](./insomnia-to-bruno)
 3. [OpenAPI to Bruno](./openapi-to-bruno)
+4. [WSDL to Bruno](./wsdl-to-bruno)
 
 ## API Reference
 
@@ -75,3 +76,10 @@ Converts an OpenAPI specification to a Bruno collection.
 
 **Parameters:**
 - `openApiSpec`: The OpenAPI specification JSON object
+
+### `wsdlToBruno(wsdlContent: string)`
+
+Converts a WSDL file to a Bruno collection with SOAP requests.
+
+**Parameters:**
+- `wsdlContent`: The WSDL file content as a string
