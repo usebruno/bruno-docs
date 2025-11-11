@@ -1,3 +1,5 @@
+import { Callout } from "nextra/components";
+
 # Environment Variables
 
 Environment variables are variables that are scoped to an environment, such as local development or production. They are useful for storing variables that can be re-used across the collection that are different depending on the environment. An example would be the host url of the server you want to test.
@@ -32,3 +34,7 @@ vars {
   host: http://localhost:8787
 }
 ```
+
+<Callout type="info">
+  Check out the [Collection Variables](/variables/collection-variables#import-export-collection-variables) and [Global Environment Variables](/variables/global-environment-variables#import-export-global-environment-variables) documentation for import and export options.
+</Callout>
