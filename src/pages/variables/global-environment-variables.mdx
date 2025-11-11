@@ -45,3 +45,41 @@ Your global environment variable is now created and can be accessed across your 
 To use a global environment variable, reference it using the format `{{var_name}}` in any request or collection. These variables can be combined with other variables and used throughout your workspace, making them ideal for consistent value sharing.
 
 ![Environment Variables location](/screenshots/variables/env-action.webp)
+
+## Import/Export Global Environment Variables
+
+You can import and export global environment variables to share them across teams or back them up for later use.
+
+### Accessing Import/Export Options
+
+1. Go to the **Environments** section (top right corner).
+
+![No-Environment](/screenshots/variables/no-environment.webp)
+
+2. Click on **Configure** to access the environment settings.
+
+3. You will see the **Import** and **Export** options in the bottom left corner.
+
+![Export Option](/screenshots/variables/click-export-option.webp)
+
+### Importing Environment Variables
+
+The import feature accepts environment files in both **Bruno** and **Postman** formats:
+
+1. Click on the **Import** button.
+2. Select the environment file you want to import
+3. The variables will be added to your global environment.
+
+### Exporting Environment Variables
+
+1. Click on the **Export** button.
+2. If you have multiple environments, select which environments you want to export.
+3. Choose the location where you want to save the exported JSON file.
+
+![Export Global Environment Location](/screenshots/variables/export-global-env-location.webp)
+
+4. The environment variables will be saved as a JSON file that can be shared or backed up.
+
+<Callout type="warning">
+  Secret variables (variables marked as secret) will not be included in the exported JSON file for security reasons.
+</Callout>
