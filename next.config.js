@@ -83,6 +83,12 @@ export default withNextra({
       { source: '/testing/javascript-reference', destination: '/testing/script/javascript-reference', permanent: true },
       { source: '/testing/assertions.html', destination: '/testing/tests/assertions', permanent: true },
       { source: '/testing/javascript-reference.html', destination: '/testing/script/javascript-reference', permanent: true },
+      
+      // Breadcrumb fix redirects - Issue #474
+      { source: '/testing', destination: '/testing/tests/introduction', permanent: true },
+      { source: '/testing/script', destination: '/testing/script/getting-started', permanent: true },
+      { source: '/testing/automate-test', destination: '/testing/automate-test/overview', permanent: true },
+      { source: '/testing/tests', destination: '/testing/tests/introduction', permanent: true },
 
       // - /license-management redirects (old structure to new structure)
       { source: '/license-management/license-management', destination: '/license-overview', permanent: true },

@@ -1,0 +1,55 @@
+import { Callout } from "nextra/components";
+
+# Import Export Environment Variables
+
+<Callout type="info">
+  Make sure you have Bruno version 2.14 or later installed to use this feature.
+</Callout>
+
+You can import and export environment variables (collection and global) to share them across teams or back them up for later use.
+
+## Accessing Import/Export Options
+
+1. Go to the **Environments** section (top right corner).
+
+![Environment Variables location](/screenshots/variables/env-action.webp)
+
+2. Click on **Configure** to access the environment settings.
+
+3. You will see the **Import** and **Export** options in the bottom left corner.
+
+![Export Option](/screenshots/variables/click-export-option.webp)
+
+## Importing Environment Variables
+
+The import feature accepts environment files in both **Bruno** and **Postman** formats.
+
+### Steps to Import
+
+1. Click on the **Import** button in the environment configuration screen.
+
+2. Select the environment file you want to import.
+3. The variables will be added to your environment (global or collection, depending on which you're configuring).
+
+![Import Environment](/screenshots/get-started/import-export/import_collection/import-env.webp)
+
+## Exporting Environment Variables
+
+### Steps to Export
+
+1. Go to the **Environments** section.
+2. Click on **Configure**.
+3. Click the **Export** button.
+4. If you have multiple environments, select which environments you want to export.
+5. Choose the location where you want to save the exported JSON file.
+
+![Export Collection Environment Location](/screenshots/variables/export-collection-env-location.webp)
+
+6. The environment variables will be saved as a JSON file that can be shared or backed up.
+
+The export procedure is the same for both collection and global environment variables.
+
+<Callout type="warning">
+  Secret variables (variables marked as secret) will not be included in the exported JSON file for security reasons.
+</Callout>
+
