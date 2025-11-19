@@ -80,7 +80,7 @@ function buildIndexCache(
 }
 
 function initializeIndexCache() {
-  const directoryPath = path.join(__dirname, "../../src/pages");
+  const directoryPath = path.join(__dirname, "../../content");
   const outputFilePath = path.join(
     __dirname,
     "../../src/lib/cache/indexCache.json",

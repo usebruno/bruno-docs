@@ -1,17 +1,16 @@
 import nextra from 'nextra';
 
 const withNextra = nextra({
-  theme: 'nextra-theme-docs',
-  themeConfig: './theme.config.tsx',
-  defaultShowCopyCode: true,
   latex: true,
   search: {
     codeblocks: false,
   },
+  contentDirBasePath: '/content',
 });
 
 export default withNextra({
   reactStrictMode: true,
+  transpilePackages: ['nextra', 'nextra-theme-docs'],
   webpack: (config, { isServer }) => {
     // Exclude node-specific modules from the client-side bundle
     if (!isServer) {

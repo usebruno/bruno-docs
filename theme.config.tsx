@@ -1,6 +1,5 @@
 import { DocsThemeConfig } from 'nextra-theme-docs'
 import { Navbar } from "./src/components/navbar";
-import { useRouter } from 'next/router';
 import { Head } from "./src/components/head";
 
 const config: DocsThemeConfig = {
