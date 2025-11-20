@@ -376,127 +376,35 @@ Below are the detailed descriptions for properties and methods available on the 
   });
   ```
 
-## Bru
+## Environments
 
-The `bru` variable is available inside your scripting and testing context.
-It exposes methods that allow you to interact with, e.g., process variables,
-environment variables and collection variables.
+The `bru` object provides methods for managing environments in Bruno. Environments allow you to maintain different configurations for various deployment stages (development, staging, production, etc.).
 
-Here is a complete table for all available methods with the `bru`.
+<Callout type="info">
+  Environment variables are specific to the selected environment and can be accessed across all requests in your collection.
+</Callout>
 
-| Title                            | Description                                               |
-| -------------------------------- | --------------------------------------------------------- |
-| bru.cwd()                        | Returns the current working directory.                    |
-| bru.getEnvName()                 | Retrieves the environment name.                           |
-| bru.getProcessEnv(key)           | Fetches the process environment variable for a given key. |
-| bru.hasEnvVar(key)               | Checks if the environment variable exists.                |
-| bru.getEnvVar(key)               | Retrieves the value of an environment variable.           |
-| bru.getFolderVar(key)            | Fetches a folder-specific variable by key.                |
-| bru.getCollectionVar(key)        | Retrieves the collection-level variable for the key.      |
-| bru.setEnvVar(key, value)        | Sets a new environment variable.                          |
-| bru.deleteEnvVar(key)            | Deletes a specific environment variable.                  |
-| bru.hasVar(key)                  | Checks if a variable exists.                              |
-| bru.getVar(key)                  | Retrieves the value of a variable.                        |
-| bru.setVar(key, value)           | Sets a new variable with a key-value pair.                |
-| bru.deleteVar(key)               | Deletes a specific variable.                              |
-| bru.deleteAllVars()              | Deletes all runtime variables.                                    |
-| bru.setNextRequest(requestName)  | Sets the next request to execute.                         |
-| req.disableParsingResponseJson() | Disables JSON response parsing for the request.           |
-| bru.getRequestVar(key)           | Retrieves the value of a request variable.                |
-| bru.runRequest(requestPathName)  | Executes a request by its path name.                      |
-| bru.getAssertionResults()        | Retrieves the results of assertions.                      |
-| bru.getTestResults()             | Fetches the test                                          |
-| bru.sendRequest(options, callback) | Sends a programmatic HTTP request within your script |
-| bru.getOauth2CredentialVar(key)  | Retrieves an OAuth2 credential variable value.            |
-| bru.getCollectionName()          | Retrieves the current collection name.                    |
-| bru.cookies.jar()                | Creates a cookie jar instance for managing cookies.        |
+Here are all available environment-related methods:
 
+| Method                     | Description                                               |
+| -------------------------- | --------------------------------------------------------- |
+| bru.getEnvName()           | Retrieves the environment name.                           |
+| bru.hasEnvVar(key)         | Checks if the environment variable exists.                |
+| bru.getEnvVar(key)         | Retrieves the value of an environment variable.           |
+| bru.setEnvVar(key, value)  | Sets a new environment variable.                          |
+| bru.deleteEnvVar(key)      | Deletes a specific environment variable.                  |
+| bru.getGlobalEnvVar(key)   | Get the Bruno global environment variable.                |
+| bru.setGlobalEnvVar(key, value) | Set the Bruno global environment variable.           |
 
-Below is the API documentation for the methods available on `bru`
-
-### HTTP Request Methods
-
-- **`sendRequest(options, callback)`** - Send a programmatic HTTP request within your script. This allows you to make additional API calls during script execution.
-  
-  **Parameters:**
-  - `method`: HTTP method (GET, POST, PUT, etc.)
-  - `url`: The URL to send the request to
-  - `headers`: (Optional) Request headers
-  - `data`: (Optional) Request data. Can be a string or object
-  - `timeout`: (Optional) Request timeout in milliseconds
-  - `callback`: Function to handle the response with signature `(err, res)`
-
-  **Example:**
-  ```javascript
-  await bru.sendRequest({
-    method: 'POST',
-    url: 'https://echo.usebruno.com',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    data: { key: 'value' },
-  }, function (err, res) {
-    if (err) {
-      console.error('Error:', err);
-      return;
-    }
-    console.log('Response:', res.data);
-  });
-  ```
-
-### Helper Functions
-
-- **`sleep(milliseconds)`** - Pauses execution for the specified duration. This is useful for introducing delays or waiting for a specific amount of time before proceeding with the next operation.
-  ```javascript
-  await bru.sleep(3000);
-  ```
-
-- **`interpolate(string)`** - Evaluates dynamic variables and environment variables within a string. This function allows you to use Bruno's dynamic variables (like `{{$randomFirstName}}`) directly in your scripts.
-  ```javascript
-  // Generate a random first name
-  const firstName = bru.interpolate('{{$randomFirstName}}');
-  console.log('Random first name:', firstName);
-
-  // Generate a random email
-  const email = bru.interpolate('{{$randomEmail}}');
-
-  // Generate multiple dynamic values in one call
-  const userInfo = bru.interpolate(`
-    Name: {{$randomFullName}}
-    Job: {{$randomJobTitle}}
-    Email: {{$randomEmail}}
-  `);
-  ```
-
-- **`disableParsingResponseJson()`** - Prevent the automatic parsing of the JSON response body and work directly with the raw data. Use this in the pre-request script of the request.
-  ```javascript
-  bru.disableParsingResponseJson();
-  ```
-
-- **`cwd()`** - Returns the current working directory.
-  ```javascript
-  const currentDir = bru.cwd();
-  console.log('Current directory:', currentDir);
-  ```
-
-### Variables
-
-Bruno provides a comprehensive variable system that allows you to manage and access different types of variables throughout your scripts. These include process environment variables, environment variables, collection variables, folder variables, request variables, and runtime variables.
-
-**Process Environment Variables**
-
-- **`getProcessEnv(key)`** - Get the Node process environment variable. This allows secret token usage without committing secrets to version control.
-  ```javascript
-  let secret_token = bru.getProcessEnv("secret_access_token");
-  ```
-
-**Environment Variables**
+#### Environment Information
 
 - **`getEnvName()`** - Retrieves the current environment name.
   ```javascript
   const envName = bru.getEnvName();
   console.log('Current environment:', envName);
   ```
+
+#### Environment Variables
 
 - **`getEnvVar(key)`** - Get the Bruno environment variable.
   ```javascript
@@ -538,6 +446,8 @@ Bruno provides a comprehensive variable system that allows you to manage and acc
   bru.deleteEnvVar("access_token");
   ```
 
+#### Global Environment Variables
+
 - **`getGlobalEnvVar(key)`** - Get the Bruno global environment variable.
   ```javascript
   const val = bru.getGlobalEnvVar("val");
@@ -548,7 +458,38 @@ Bruno provides a comprehensive variable system that allows you to manage and acc
   bru.setGlobalEnvVar("val", "bruno");
   ```
 
-**Collection Variables**
+## Variables
+
+Bruno provides a comprehensive variable system that allows you to manage and access different types of variables throughout your scripts. Variables are resolved in a specific order of precedence, with runtime variables taking the highest priority.
+
+<Callout type="info">
+  Variable precedence (highest to lowest): Runtime Variables → Request Variables → Folder Variables → Collection Variables → Environment Variables
+</Callout>
+
+Here are all available variable-related methods:
+
+| Method                       | Description                                               |
+| ---------------------------- | --------------------------------------------------------- |
+| bru.getProcessEnv(key)       | Fetches the process environment variable for a given key. |
+| bru.getCollectionVar(key)    | Retrieves the collection-level variable for the key.      |
+| bru.getCollectionName()      | Retrieves the current collection name.                    |
+| bru.getFolderVar(key)        | Fetches a folder-specific variable by key.                |
+| bru.getRequestVar(key)       | Retrieves the value of a request variable.                |
+| bru.hasVar(key)              | Checks if a variable exists.                              |
+| bru.getVar(key)              | Retrieves the value of a variable.                        |
+| bru.setVar(key, value)       | Sets a new variable with a key-value pair.                |
+| bru.deleteVar(key)           | Deletes a specific variable.                              |
+| bru.deleteAllVars()          | Deletes all runtime variables.                            |
+| bru.getOauth2CredentialVar(key) | Retrieves an OAuth2 credential variable value.         |
+
+#### Process Environment Variables
+
+- **`getProcessEnv(key)`** - Get the Node process environment variable. This allows secret token usage without committing secrets to version control.
+  ```javascript
+  let secret_token = bru.getProcessEnv("secret_access_token");
+  ```
+
+#### Collection Variables
 
 - **`getCollectionVar(key)`** - Get the collection variable.
   ```javascript
@@ -561,14 +502,14 @@ Bruno provides a comprehensive variable system that allows you to manage and acc
   console.log('Current collection:', collectionName);
   ```
 
-**Folder Variables**
+#### Folder Variables
 
 - **`getFolderVar(key)`** - Get the folder variable.
   ```javascript
   let company = bru.getFolderVar("company");
   ```
 
-**Request Variables**
+#### Request Variables
 
 - **`getRequestVar(key)`** - Get the request variable.
   ```javascript
@@ -576,7 +517,9 @@ Bruno provides a comprehensive variable system that allows you to manage and acc
   let destination = bru.getRequestVar("destination");
   ```
 
-**Runtime Variables**
+#### Runtime Variables
+
+Runtime variables are temporary variables that exist only during the execution of your requests. They are commonly used to pass data between requests in a collection run.
 
 - **`hasVar(key)`** - Check if a runtime variable exists.
   ```javascript
@@ -606,24 +549,31 @@ Bruno provides a comprehensive variable system that allows you to manage and acc
   bru.deleteAllVars();
   ```
 
-### Request Execution & Order
+#### OAuth2 Credentials
 
-This section covers methods for executing requests and controlling the execution flow in Bruno, including collection runner utilities.
-
-**Running Requests**
-
-- **`runRequest(requestPathName)`** - Execute any request in the collection and retrieve the response directly within the script.
-
-  <Callout type="warning" emoji="">
-    Avoid using `bru.runRequest()` in **collection-level scripts**. Since collection scripts run for all requests, calling `bru.runRequest()` from a collection script will trigger the target request, which will also execute the collection script again, creating an infinite loop.
-  </Callout>
-
-  **Example:**
+- **`getOauth2CredentialVar(key)`** - Retrieve an OAuth2 credential variable value. This is useful for accessing OAuth2 tokens and credentials.
   ```javascript
-  const requestResponse = await bru.runRequest("echo/echo json");
+  const accessToken = bru.getOauth2CredentialVar("access_token");
   ```
 
-**Controlling Execution Order**
+## Runner
+
+The Runner API provides methods to control the execution flow of your collection runs. These methods are specifically designed for use within the collection runner context, allowing you to skip requests, change execution order, or stop the run entirely.
+
+<Callout type="warning">
+  Runner methods like `skipRequest()` and `stopExecution()` only work during collection runs and will have no effect when running individual requests.
+</Callout>
+
+Here are all available runner-related methods:
+
+| Method                           | Description                                               |
+| -------------------------------- | --------------------------------------------------------- |
+| bru.setNextRequest(requestName)  | Sets the next request to execute.                         |
+| bru.runner.setNextRequest(requestName) | Alter the order of requests by specifying the next request. |
+| bru.runner.skipRequest()         | Skip the execution of the current request.                |
+| bru.runner.stopExecution()       | Terminate a collection run.                               |
+
+#### Controlling Execution Order
 
 - **`setNextRequest(requestName)`** - Change the order of request execution. By default, the collection runner (UI) and the CLI run requests in order. You can change the order by calling `setNextRequest` with the name of the next request to be run. This works only in a post-request script or test-script.
 
@@ -651,7 +601,7 @@ This section covers methods for executing requests and controlling the execution
   bru.runner.setNextRequest("Get process status");
   ```
 
-**Collection Runner Utilities**
+#### Collection Runner Control
 
 - **`bru.runner.skipRequest()`** - Skip the execution of the current request. Use this in the pre-request script section. This function is valid only within the context of a collection run.
   ```javascript
@@ -663,7 +613,103 @@ This section covers methods for executing requests and controlling the execution
   bru.runner.stopExecution();
   ```
 
-### Test Utilities
+## Utilities
+
+The Utilities API provides a collection of helper functions for common tasks such as making HTTP requests, working with cookies, managing tests, and other utility operations.
+
+Here are all available utility methods:
+
+| Method                           | Description                                               |
+| -------------------------------- | --------------------------------------------------------- |
+| bru.sendRequest(options, callback) | Sends a programmatic HTTP request within your script.   |
+| bru.sleep(milliseconds)          | Pauses execution for the specified duration.              |
+| bru.interpolate(string)          | Evaluates dynamic variables within a string.              |
+| bru.disableParsingResponseJson() | Disables JSON response parsing for the request.           |
+| bru.cwd()                        | Returns the current working directory.                    |
+| bru.runRequest(requestPathName)  | Executes a request by its path name.                      |
+| bru.getAssertionResults()        | Retrieves the results of assertions.                      |
+| bru.getTestResults()             | Fetches the test results.                                 |
+| bru.cookies.jar()                | Creates a cookie jar instance for managing cookies.       |
+
+#### HTTP Request Methods
+
+- **`sendRequest(options, callback)`** - Send a programmatic HTTP request within your script. This allows you to make additional API calls during script execution.
+  
+  **Parameters:**
+  - `method`: HTTP method (GET, POST, PUT, etc.)
+  - `url`: The URL to send the request to
+  - `headers`: (Optional) Request headers
+  - `data`: (Optional) Request data. Can be a string or object
+  - `timeout`: (Optional) Request timeout in milliseconds
+  - `callback`: Function to handle the response with signature `(err, res)`
+
+  **Example:**
+  ```javascript
+  await bru.sendRequest({
+    method: 'POST',
+    url: 'https://echo.usebruno.com',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: { key: 'value' },
+  }, function (err, res) {
+    if (err) {
+      console.error('Error:', err);
+      return;
+    }
+    console.log('Response:', res.data);
+  });
+  ```
+
+#### Helper Functions
+
+- **`sleep(milliseconds)`** - Pauses execution for the specified duration. This is useful for introducing delays or waiting for a specific amount of time before proceeding with the next operation.
+  ```javascript
+  await bru.sleep(3000);
+  ```
+
+- **`interpolate(string)`** - Evaluates dynamic variables and environment variables within a string. This function allows you to use Bruno's dynamic variables (like `{{$randomFirstName}}`) directly in your scripts.
+  ```javascript
+  // Generate a random first name
+  const firstName = bru.interpolate('{{$randomFirstName}}');
+  console.log('Random first name:', firstName);
+
+  // Generate a random email
+  const email = bru.interpolate('{{$randomEmail}}');
+
+  // Generate multiple dynamic values in one call
+  const userInfo = bru.interpolate(`
+    Name: {{$randomFullName}}
+    Job: {{$randomJobTitle}}
+    Email: {{$randomEmail}}
+  `);
+  ```
+
+- **`disableParsingResponseJson()`** - Prevent the automatic parsing of the JSON response body and work directly with the raw data. Use this in the pre-request script of the request.
+  ```javascript
+  bru.disableParsingResponseJson();
+  ```
+
+- **`cwd()`** - Returns the current working directory.
+  ```javascript
+  const currentDir = bru.cwd();
+  console.log('Current directory:', currentDir);
+  ```
+
+#### Request Execution
+
+- **`runRequest(requestPathName)`** - Execute any request in the collection and retrieve the response directly within the script.
+
+  <Callout type="warning" emoji="">
+    Avoid using `bru.runRequest()` in **collection-level scripts**. Since collection scripts run for all requests, calling `bru.runRequest()` from a collection script will trigger the target request, which will also execute the collection script again, creating an infinite loop.
+  </Callout>
+
+  **Example:**
+  ```javascript
+  const requestResponse = await bru.runRequest("echo/echo json");
+  ```
+
+#### Test Utilities
 
 - **`getTestResults()`** - Obtain the test results of a request. Use this within test scripts.
   ```javascript
@@ -675,14 +721,7 @@ This section covers methods for executing requests and controlling the execution
   const assertionResults = await bru.getAssertionResults();
   ```
 
-### OAuth2 Credentials
-
-- **`getOauth2CredentialVar(key)`** - Retrieve an OAuth2 credential variable value. This is useful for accessing OAuth2 tokens and credentials.
-  ```javascript
-  const accessToken = bru.getOauth2CredentialVar("access_token");
-  ```
-
-### Cookie Management
+#### Cookie Management
 
 Bruno provides Cookie Jar APIs that enable programmatic cookie management in request scripts. These APIs allow you to set, get, and delete cookies programmatically using a cookie jar instance.
 
@@ -690,7 +729,7 @@ Bruno provides Cookie Jar APIs that enable programmatic cookie management in req
   Cookie management APIs are available in pre-request scripts, post-request scripts, and test scripts.
 </Callout>
 
-**Creating a Cookie Jar**
+##### Creating a Cookie Jar
 
 - **`cookies.jar()`** - Create a cookie jar instance for managing cookies.
   
@@ -699,7 +738,7 @@ Bruno provides Cookie Jar APIs that enable programmatic cookie management in req
   const jar = bru.cookies.jar();
   ```
 
-**Cookie Jar Methods**
+##### Cookie Jar Methods
 
 Once you have a cookie jar instance, you can use the following methods:
 
