@@ -45,7 +45,7 @@ function readAndFlattenDirectory(
       return; // Skip processing _meta.js file-cache
     }
     if (stats.isDirectory()) {
-      const pathParts = itemPath.split("pages/");
+      const pathParts = itemPath.split("content/");
       const lastPart = pathParts.pop() || "";
       const dirParts = lastPart.split("/");
       const actualParentName = dirParts[0] || "";
@@ -57,7 +57,7 @@ function readAndFlattenDirectory(
       Object.assign(files, nestedFiles);
     } else {
       const content = fs.readFileSync(itemPath, "utf-8");
-      const pathParts = itemPath.split("pages/");
+      const pathParts = itemPath.split("content/");
       const lastPart = pathParts.pop() || "";
       const path = lastPart.replace(/\.(md|mdx)$/, "");
       files[path] = {
@@ -76,7 +76,7 @@ function readAndFlattenDirectory(
 }
 
 function initializeFileCache() {
-  const directoryPath = path.join(__dirname, "../../src/pages");
+  const directoryPath = path.join(__dirname, "../../content");
   const outputFilePath = path.join(
     __dirname,
     "../../src/lib/cache/fileCache.json",

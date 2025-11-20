@@ -3,7 +3,12 @@ import { fontFamily } from "tailwindcss/defaultTheme";
 
 const config = {
   darkMode: ["class"],
-  content: ["./src/**/*.{ts,tsx,md,mdx}", "./theme.config.tsx"],
+  content: [
+    "./src/**/*.{ts,tsx,md,mdx}",
+    "./content/**/*.{md,mdx}",
+    "./theme.config.tsx",
+    "./mdx-components.tsx"
+  ],
   fontFamily: {
     sans: ["var(--font-sans)", ...fontFamily.sans],
   },

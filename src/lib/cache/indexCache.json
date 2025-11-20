@@ -1,6 +1,13 @@
 [
   {
     "name": {
+      "title": "Homepage",
+      "display": "hidden"
+    },
+    "path": "."
+  },
+  {
+    "name": {
       "title": "Getting Started",
       "type": "separator"
     },
@@ -77,43 +84,6 @@
         ]
       },
       {
-        "name": "Variables",
-        "children": [
-          {
-            "name": "Overview",
-            "path": "get-started/variables/overview"
-          },
-          {
-            "name": "Environment Variables",
-            "path": "get-started/variables/environment-variables"
-          },
-          {
-            "name": "Global Environment Variables",
-            "path": "get-started/variables/global-environment-variables"
-          },
-          {
-            "name": "Collection Variables",
-            "path": "get-started/variables/collection-variables"
-          },
-          {
-            "name": "Folder Variables",
-            "path": "get-started/variables/folder-variables"
-          },
-          {
-            "name": "Request Variables",
-            "path": "get-started/variables/request-variables"
-          },
-          {
-            "name": "Runtime Variables",
-            "path": "get-started/variables/runtime-variables"
-          },
-          {
-            "name": "Process Environment Variables",
-            "path": "get-started/variables/process-env"
-          }
-        ]
-      },
-      {
         "name": "Configure",
         "children": [
           {
@@ -135,6 +105,13 @@
         "path": "get-started/javascript-sandbox"
       }
     ]
+  },
+  {
+    "name": {
+      "title": "Core Features",
+      "type": "separator"
+    },
+    "path": "core-features"
   },
   {
     "name": "Send Requests",
@@ -159,12 +136,16 @@
             "path": "send-requests/REST/parameters"
           },
           {
-            "name": "Request Headers",
+            "name": "Headers",
             "path": "send-requests/REST/req-header"
           },
           {
             "name": "Body Data",
             "path": "send-requests/REST/body-data"
+          },
+          {
+            "name": "Settings",
+            "path": "send-requests/REST/request-settings"
           },
           {
             "name": "Code Generator",
@@ -182,56 +163,105 @@
           {
             "name": "GraphQL API",
             "path": "send-requests/graphql/graphql-api"
+          },
+          {
+            "name": "GraphQL Variables",
+            "path": "send-requests/graphql/graphql-variables"
           }
         ]
       },
       {
         "name": "SOAP",
+        "children": []
+      },
+      {
+        "name": "GRPC",
         "children": [
           {
-            "name": "SOAP Request",
-            "path": "send-requests/soap/soap-request"
+            "name": "Overview",
+            "path": "send-requests/grpc/overview"
+          },
+          {
+            "name": "Create Request",
+            "path": "send-requests/grpc/grpc-request"
+          },
+          {
+            "name": "Proto Files",
+            "path": "send-requests/grpc/grpc-proto"
+          },
+          {
+            "name": "Streams",
+            "path": "send-requests/grpc/grpc-streams"
+          }
+        ]
+      },
+      {
+        "name": "WebSocket",
+        "children": [
+          {
+            "name": "Overview",
+            "path": "send-requests/websocket/overview"
+          },
+          {
+            "name": "Request Interface",
+            "path": "send-requests/websocket/ws-interface"
+          },
+          {
+            "name": "Create Request",
+            "path": "send-requests/websocket/create-request"
+          },
+          {
+            "name": "Message Types",
+            "path": "send-requests/websocket/message-types"
           }
         ]
       },
       {
         "name": "Response Data and Cookies",
-        "children": [
-          {
-            "name": "Overview",
-            "path": "send-requests/res-data-cookies/overview"
-          },
-          {
-            "name": "Response Data",
-            "path": "send-requests/res-data-cookies/res-data"
-          },
-          {
-            "name": "Cookies",
-            "path": "send-requests/res-data-cookies/cookies"
-          },
-          {
-            "name": "Debugging",
-            "children": [
-              {
-                "name": "DevTools",
-                "path": "send-requests/res-data-cookies/debugging/devtools"
-              },
-              {
-                "name": "Timeline",
-                "path": "send-requests/res-data-cookies/debugging/timeline"
-              }
-            ]
-          }
-        ]
+        "children": []
       }
     ]
   },
   {
-    "name": {
-      "title": "Core Features",
-      "type": "separator"
-    },
-    "path": "core-features"
+    "name": "Variables",
+    "children": [
+      {
+        "name": "Overview",
+        "path": "variables/overview"
+      },
+      {
+        "name": "Environment Variables",
+        "path": "variables/environment-variables"
+      },
+      {
+        "name": "Global Environment Variables",
+        "path": "variables/global-environment-variables"
+      },
+      {
+        "name": "Collection Variables",
+        "path": "variables/collection-variables"
+      },
+      {
+        "name": "Folder Variables",
+        "path": "variables/folder-variables"
+      },
+      {
+        "name": "Request Variables",
+        "path": "variables/request-variables"
+      },
+      {
+        "name": "Runtime Variables",
+        "path": "variables/runtime-variables"
+      },
+      {
+        "name": "Process Environment Variables",
+        "path": "variables/process-env"
+      },
+      {
+        "name": "Variables Interpolation",
+        "path": "variables/interpolation"
+      }
+    ]
   },
   {
     "name": "Git Integration & Collaboration",
@@ -262,6 +292,14 @@
         ]
       },
       {
+        "name": "GitLab",
+        "path": "git-integration/gitlab"
+      },
+      {
+        "name": "Bitbucket",
+        "path": "git-integration/bitbucket"
+      },
+      {
         "name": "Fetch in Bruno Button",
         "path": "git-integration/embed-bruno-collection"
       }
@@ -280,10 +318,6 @@
           {
             "name": "Assertions",
             "path": "testing/tests/assertions"
-          },
-          {
-            "name": "Data Driven Testing",
-            "path": "testing/tests/data-driven-testing"
           }
         ]
       },
@@ -297,6 +331,10 @@
           {
             "name": "Script Flow",
             "path": "testing/script/script-flow"
+          },
+          {
+            "name": "Request Chaining",
+            "path": "testing/script/request-chaining"
           },
           {
             "name": "JavaScript File",
@@ -347,6 +385,10 @@
                 "path": "testing/script/response/response-query"
               }
             ]
+          },
+          {
+            "name": "Dynamic Variables",
+            "path": "testing/script/dynamic-variables"
           }
         ]
       },
@@ -364,6 +406,10 @@
           {
             "name": "Manual Testing",
             "path": "testing/automate-test/manual-test"
+          },
+          {
+            "name": "Data Driven Testing",
+            "path": "testing/automate-test/data-driven-testing"
           }
         ]
       }
@@ -385,69 +431,86 @@
         "path": "secrets-management/secret-variables"
       },
       {
-        "name": "Hashicorp Vault",
-        "children": [
-          {
-            "name": "Overview",
-            "path": "secrets-management/hashicorp-vault/overview"
-          },
-          {
-            "name": "Adding a Secret Provider",
-            "path": "secrets-management/hashicorp-vault/adding-a-secret-provider"
-          },
-          {
-            "name": "Configuring and Fetching Secrets",
-            "path": "secrets-management/hashicorp-vault/configuring-and-fetching-secrets"
-          },
-          {
-            "name": "Using Secrets",
-            "path": "secrets-management/hashicorp-vault/using-secrets"
-          },
-          {
-            "name": "Using with CLI",
-            "path": "secrets-management/hashicorp-vault/using-with-cli"
-          }
-        ]
+        "name": "Secret Masking",
+        "path": "secrets-management/secret-masking"
       },
       {
-        "name": "AWS Secrets Manager (Experimental)",
+        "name": "Secret Managers",
         "children": [
           {
             "name": "Overview",
-            "path": "secrets-management/aws-secrets-manager/overview"
+            "path": "secrets-management/secret-managers/overview"
           },
           {
-            "name": "Adding a Secret Provider",
-            "path": "secrets-management/aws-secrets-manager/adding-a-secret-provider"
+            "name": "HashiCorp Vault",
+            "children": [
+              {
+                "name": "Overview",
+                "path": "secrets-management/secret-managers/hashicorp-vault/overview"
+              },
+              {
+                "name": "Adding a Secret Provider",
+                "path": "secrets-management/secret-managers/hashicorp-vault/adding-a-secret-provider"
+              },
+              {
+                "name": "Configuring and Fetching Secrets",
+                "path": "secrets-management/secret-managers/hashicorp-vault/configuring-and-fetching-secrets"
+              },
+              {
+                "name": "Using Secrets",
+                "path": "secrets-management/secret-managers/hashicorp-vault/using-secrets"
+              },
+              {
+                "name": "Using with CLI",
+                "path": "secrets-management/secret-managers/hashicorp-vault/using-with-cli"
+              }
+            ]
           },
           {
-            "name": "Configuring and Fetching Secrets",
-            "path": "secrets-management/aws-secrets-manager/configuring-and-fetching-secrets"
+            "name": "AWS Secrets Manager",
+            "children": [
+              {
+                "name": "Overview",
+                "path": "secrets-management/secret-managers/aws-secrets-manager/overview"
+              },
+              {
+                "name": "Adding a Secret Provider",
+                "path": "secrets-management/secret-managers/aws-secrets-manager/adding-a-secret-provider"
+              },
+              {
+                "name": "Configuring and Fetching Secrets",
+                "path": "secrets-management/secret-managers/aws-secrets-manager/configuring-and-fetching-secrets"
+              },
+              {
+                "name": "Using Secrets",
+                "path": "secrets-management/secret-managers/aws-secrets-manager/using-secrets"
+              }
+            ]
           },
           {
-            "name": "Using Secrets",
-            "path": "secrets-management/aws-secrets-manager/using-secrets"
-          }
-        ]
-      },
-      {
-        "name": "Azure Key Vault (Experimental)",
-        "children": [
-          {
-            "name": "Overview",
-            "path": "secrets-management/azure-key-vault/overview"
-          },
-          {
-            "name": "Adding a Secret Provider",
-            "path": "secrets-management/azure-key-vault/adding-a-secret-provider"
-          },
-          {
-            "name": "Configuring and Fetching Secrets",
-            "path": "secrets-management/azure-key-vault/configuring-and-fetching-secrets"
-          },
-          {
-            "name": "Using Secrets",
-            "path": "secrets-management/azure-key-vault/using-secrets"
+            "name": "Azure Key Vault",
+            "children": [
+              {
+                "name": "Overview",
+                "path": "secrets-management/secret-managers/azure-key-vault/overview"
+              },
+              {
+                "name": "Adding a Secret Provider",
+                "path": "secrets-management/secret-managers/azure-key-vault/adding-a-secret-provider"
+              },
+              {
+                "name": "Configuring and Fetching Secrets",
+                "path": "secrets-management/secret-managers/azure-key-vault/configuring-and-fetching-secrets"
+              },
+              {
+                "name": "Using Secrets",
+                "path": "secrets-management/secret-managers/azure-key-vault/using-secrets"
+              },
+              {
+                "name": "Azure CLI Authentication",
+                "path": "secrets-management/secret-managers/azure-key-vault/cli-authentication"
+              }
+            ]
           }
         ]
       }
@@ -461,7 +524,7 @@
         "path": "auth/overview"
       },
       {
-        "name": "OAuth 2.0",
+        "name": "OAuth 2.0 (v1.x.x)",
         "children": [
           {
             "name": "Overview",
@@ -482,31 +545,27 @@
         ]
       },
       {
-        "name": "OAuth 2.0 (Experimental)",
+        "name": "OAuth 2.0 (v2.x.x)",
         "children": [
           {
             "name": "Overview",
-            "path": "auth/oauth2-experimental/overview"
+            "path": "auth/oauth2-2.0/overview"
           },
           {
-            "name": "Collection Level Configuration",
-            "path": "auth/oauth2-experimental/collection-level-configuration"
-          },
-          {
-            "name": "Request Level Configuration",
-            "path": "auth/oauth2-experimental/request-level-configuration"
+            "name": "OAuth 2.0",
+            "path": "auth/oauth2-2.0/collection-level-configuration"
           },
           {
             "name": "Authorization Code",
-            "path": "auth/oauth2-experimental/authorization-code"
+            "path": "auth/oauth2-2.0/authorization-code"
           },
           {
             "name": "Client Credentials",
-            "path": "auth/oauth2-experimental/client-credentials"
+            "path": "auth/oauth2-2.0/client-credentials"
           },
           {
             "name": "Password Credentials",
-            "path": "auth/oauth2-experimental/password-credentials"
+            "path": "auth/oauth2-2.0/password-credentials"
           }
         ]
       },
@@ -525,6 +584,10 @@
       {
         "name": "Digest",
         "path": "auth/digest"
+      },
+      {
+        "name": "NTLM",
+        "path": "auth/ntlm"
       },
       {
         "name": "Add and Manage Certificates",
@@ -566,6 +629,18 @@
       {
         "name": "Overview",
         "path": "open-api/overview"
+      },
+      {
+        "name": "Import an OpenAPI Spec",
+        "path": "open-api/importOAS"
+      },
+      {
+        "name": "Export a Collection as OpenAPI Spec",
+        "path": "open-api/exportOAS"
+      },
+      {
+        "name": "Create an OpenAPI Spec",
+        "path": "open-api/createOAS"
       }
     ]
   },
@@ -577,11 +652,43 @@
     "path": "developer-tools"
   },
   {
-    "name": "Bruno's CLI",
+    "name": "Bruno CLI",
     "children": [
       {
         "name": "Overview",
         "path": "bru-cli/overview"
+      },
+      {
+        "name": "Installation",
+        "path": "bru-cli/installation"
+      },
+      {
+        "name": "Command Options",
+        "path": "bru-cli/commandOptions"
+      },
+      {
+        "name": "Run a Collection",
+        "path": "bru-cli/runCollection"
+      },
+      {
+        "name": "Import Data",
+        "path": "bru-cli/import"
+      },
+      {
+        "name": "Generate Reports",
+        "path": "bru-cli/builtInReporters"
+      },
+      {
+        "name": "Proxy & mTLS",
+        "path": "bru-cli/proxyConfiguration"
+      },
+      {
+        "name": "GitHub Actions",
+        "path": "bru-cli/gitHubCLI"
+      },
+      {
+        "name": "Jenkins CI",
+        "path": "bru-cli/jenkins"
       }
     ]
   },
@@ -611,38 +718,111 @@
     ]
   },
   {
+    "name": "Converters",
+    "children": [
+      {
+        "name": "Overview",
+        "path": "converters/overview"
+      },
+      {
+        "name": "Postman to Bruno",
+        "path": "converters/postman-to-bruno"
+      },
+      {
+        "name": "Insomnia to Bruno",
+        "path": "converters/insomnia-to-bruno"
+      },
+      {
+        "name": "OpenAPI to Bruno",
+        "path": "converters/openapi-to-bruno"
+      },
+      {
+        "name": "WSDL to Bruno",
+        "path": "converters/wsdl-to-bruno"
+      }
+    ]
+  },
+  {
+    "name": "VS Code Extension",
+    "children": []
+  },
+  {
+    "name": {
+      "title": "License Management",
+      "type": "separator"
+    },
+    "path": "license-management-section"
+  },
+  {
+    "name": "Overview",
+    "path": "license-overview"
+  },
+  {
+    "name": "End Users",
+    "children": [
+      {
+        "name": "Activate License",
+        "path": "license-end-users/activate-license"
+      }
+    ]
+  },
+  {
+    "name": "License Administrators",
+    "children": [
+      {
+        "name": "License Portal",
+        "path": "license-administrators/license-portal"
+      },
+      {
+        "name": "SAML Single Sign-On (SSO)",
+        "children": [
+          {
+            "name": "Overview",
+            "path": "license-administrators/saml-sso/overview"
+          },
+          {
+            "name": "Configure SAML SSO with Okta",
+            "path": "license-administrators/saml-sso/configure-saml-sso-with-okta"
+          },
+          {
+            "name": "Configure SAML SSO with Entra ID",
+            "path": "license-administrators/saml-sso/configure-saml-sso-with-entra-id"
+          },
+          {
+            "name": "Troubleshooting",
+            "path": "license-administrators/saml-sso/troubleshooting"
+          }
+        ]
+      },
+      {
+        "name": "SCIM Provisioning",
+        "children": [
+          {
+            "name": "Overview",
+            "path": "license-administrators/scim-provisioning/overview"
+          },
+          {
+            "name": "Configure SCIM with Okta",
+            "path": "license-administrators/scim-provisioning/configure-scim-with-okta"
+          },
+          {
+            "name": "Configure SCIM with Entra ID",
+            "path": "license-administrators/scim-provisioning/configure-scim-with-entra-id"
+          },
+          {
+            "name": "Bruno SCIM API",
+            "path": "license-administrators/scim-provisioning/bruno-scim-api"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "name": {
       "title": "Other",
       "type": "separator"
     },
     "path": "other"
-  },
-  {
-    "name": "License Management",
-    "children": [
-      {
-        "name": "Overview",
-        "path": "license-management/overview"
-      },
-      {
-        "name": "End Users",
-        "children": [
-          {
-            "name": "Activate License",
-            "path": "license-management/end-users/activate-license"
-          }
-        ]
-      },
-      {
-        "name": "License Administrators",
-        "children": [
-          {
-            "name": "License Portal",
-            "path": "license-management/license-administrators/license-portal"
-          }
-        ]
-      }
-    ]
   },
   {
     "name": "Advanced Guides",
@@ -654,6 +834,10 @@
       {
         "name": "Visualize",
         "path": "advanced-guides/visualize"
+      },
+      {
+        "name": "Bruno Starter Guide",
+        "path": "advanced-guides/starter-guide"
       }
     ]
   }

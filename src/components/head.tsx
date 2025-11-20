@@ -1,9 +1,5 @@
-import { useConfig } from 'nextra-theme-docs'
-
 export const Head = () => {
-  const frontmatter = useConfig()
-
-  const title = ("Bruno Docs | ").concat(frontmatter.title) ?? "Bruno Docs"
+  const title = "Bruno Docs"
   
   return(
     <>
