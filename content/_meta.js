@@ -50,4 +50,4 @@ export default {
     "type": "separator"
   },
   "advanced-guides": "Advanced Guides"
-} 
+};

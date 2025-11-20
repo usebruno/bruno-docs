@@ -4,4 +4,4 @@ export default {
   "language": "Language",
   "tag-reference": "Tag Reference",
   "syntax-highlighting": "Syntax Highlighting"
-} 
+};

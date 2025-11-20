@@ -27,8 +27,11 @@ function readMetaFile(directoryPath: string): { [key: string]: string } {
   if (fs.existsSync(metaJsPath)) {
     const metaContent = fs.readFileSync(metaJsPath, "utf-8");
     try {
-      // Remove export default and parse the object
-      const cleanContent = metaContent.replace(/export\s+default\s+/, '');
+      // Remove export default and trailing semicolon, then parse the object
+      const cleanContent = metaContent
+        .replace(/export\s+default\s+/, '')
+        .replace(/;[\s]*$/, '')
+        .trim();
       return JSON.parse(cleanContent);
     } catch (error) {
       console.error(`Error parsing meta file at ${metaJsPath}:`, error);

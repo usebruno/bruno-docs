@@ -8,4 +8,4 @@ export default {
   "proxyConfiguration": "Proxy & mTLS",
   "gitHubCLI": "GitHub Actions",
   "jenkins": "Jenkins CI"
-}
+};

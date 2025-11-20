@@ -4,4 +4,4 @@ export default {
   "authorization-code": "Authorization Code",
   "client-credentials": "Client Credentials",
   "password-credentials": "Password Credentials"
-} 
+};

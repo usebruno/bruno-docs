@@ -1,8 +1,7 @@
-import { DocsThemeConfig } from 'nextra-theme-docs'
 import { Navbar } from "./src/components/navbar";
 import { Head } from "./src/components/head";
 
-const config: DocsThemeConfig = {
+const config = {
   logo: <span>Bruno Docs</span>,
   project: {
     link: "https://github.com/usebruno/bruno",

@@ -6,4 +6,4 @@ export default {
   "grpc": "GRPC",
   "websocket": "WebSocket",
   "res-data-cookies": "Response Data and Cookies"
-} 
+};

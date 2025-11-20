@@ -8,4 +8,4 @@ export default {
   "digest": "Digest",
   "ntlm":"NTLM",
   "add-and-manage-certs": "Add and Manage Certificates"
-} 
+};

@@ -4,4 +4,4 @@ export default {
   "configure": "Configure",
   "history": "Request History",
   "javascript-sandbox": "Safe Mode vs Developer Mode"
-} 
+};

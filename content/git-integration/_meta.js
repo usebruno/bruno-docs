@@ -5,4 +5,4 @@ export default {
   "gitlab": "GitLab",
   "bitbucket": "Bitbucket",
   "embed-bruno-collection": "Fetch in Bruno Button"
-} 
+};

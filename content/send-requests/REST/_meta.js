@@ -6,4 +6,4 @@ export default {
   "body-data": "Body Data",
   "request-settings": "Settings",
   "code-generator": "Code Generator"
-} 
+};

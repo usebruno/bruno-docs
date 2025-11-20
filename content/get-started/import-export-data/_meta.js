@@ -3,4 +3,4 @@ export default {
   "export-collections": "Export Collections",
   "postman-migration": "Postman Migration",
   "script-translator": "Script Translator"
-} 
+};

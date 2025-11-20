@@ -11,4 +11,4 @@ export default {
   "request": "Request",
   "response": "Response",
   "dynamic-variables": "Dynamic Variables"
-} 
+};

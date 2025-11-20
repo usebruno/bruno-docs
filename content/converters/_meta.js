@@ -4,4 +4,4 @@ export default {
     "insomnia-to-bruno": "Insomnia to Bruno",
     "openapi-to-bruno": "OpenAPI to Bruno",
     "wsdl-to-bruno": "WSDL to Bruno"
-}
+};

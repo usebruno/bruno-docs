@@ -4,4 +4,4 @@ export default {
   "configuring-and-fetching-secrets": "Configuring and Fetching Secrets",
   "using-secrets": "Using Secrets",
   "using-with-cli": "Using with CLI"
-} 
+};

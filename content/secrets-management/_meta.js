@@ -4,4 +4,4 @@ export default {
   "secret-variables": "Secret Variables",
   "secret-masking": "Secret Masking",
   "secret-managers": "Secret Managers"
-} 
+};

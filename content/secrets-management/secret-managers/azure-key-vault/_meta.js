@@ -4,4 +4,4 @@ export default {
   "configuring-and-fetching-secrets": "Configuring and Fetching Secrets",
   "using-secrets": "Using Secrets",
   "cli-authentication": "Azure CLI Authentication"
-} 
+};

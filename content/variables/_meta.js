@@ -8,4 +8,4 @@ export default {
   "runtime-variables": "Runtime Variables",
   "process-env": "Process Environment Variables",
    "interpolation":"Variables Interpolation"
-} 
+};
