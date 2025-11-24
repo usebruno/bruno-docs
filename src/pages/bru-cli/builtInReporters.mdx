@@ -1,3 +1,5 @@
+import { Callout } from 'nextra/components'
+
 # Generating Reports
 
 Bruno CLI provides built-in support for generating reports in three formats: **JSON**, **JUnit**, and **HTML**. These reports help with analyzing test results and integrating with various CI/CD tools.
@@ -44,6 +46,10 @@ bru run --reporter-json results.json --reporter-junit results.xml --reporter-htm
 ```
 
 This command will create three files: `results.json, results.xml, and results.html`, allowing you to analyze the results in different formats as needed.
+
+<Callout type="info">
+  **Secret Masking in Reports:** When running CLI and generating reports, sensitive data like secrets can be automatically masked to prevent exposure. Learn more about [Secret Masking](/secrets-management/secret-masking).
+</Callout>
 
 ## Skipping Specific Headers in the Report
 
