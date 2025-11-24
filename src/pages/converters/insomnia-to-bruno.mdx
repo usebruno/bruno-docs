@@ -12,11 +12,12 @@ const brunoCollection = insomniaToBruno(insomniaCollection);
 ```javascript showLineNumbers filename="insomnia-to-bruno.js"
 const { insomniaToBruno } = require('@usebruno/converters');
 const { readFile, writeFile } = require('fs/promises');
+const path = require('path');
 
 async function convertInsomniaToBruno(inputFile, outputFile) {
   try {
     const inputData = await readFile(inputFile, 'utf8');
-    const brunoCollection = insomniaToBruno(JSON.parse(inputData));
+    const brunoCollection = await insomniaToBruno(JSON.parse(inputData));
     await writeFile(outputFile, JSON.stringify(brunoCollection, null, 2));
     console.log('Insomnia conversion successful!');
   } catch (error) {
@@ -24,6 +25,8 @@ async function convertInsomniaToBruno(inputFile, outputFile) {
   }
 }
 
-
-convertInsomniaToBruno('path/to/insomnia-collection.json', 'path/to/bruno-collection.json');
+convertInsomniaToBruno(
+  path.join(__dirname, 'demo_collection.insomnia_collection.json'),
+  path.join(__dirname, 'demo_collection.bruno_collection.json')
+);
 ```
