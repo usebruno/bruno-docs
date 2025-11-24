@@ -432,6 +432,7 @@ Here are all available environment-related methods:
     let data = res.getBody();
     let token = bru.setEnvVar("access_token", data.token, { persist: true });
   }
+  onResponse(res);
   ```
 
 - **`hasEnvVar(key)`** - Check if the environment variable exists.
