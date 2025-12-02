@@ -41,3 +41,17 @@ Raw Data allows you to send data in its raw, unprocessed form in the body of an 
 4. Save and execute the request.
 
 ![raw-data](/screenshots/send-request/rest/raw-data.webp)
+
+### Other (File / Binary / No Body)
+
+The **Other** option on the **Body** tab provides quick choices to send a file or to send no body.
+
+1. Navigate to the **Body** tab.
+2. From the dropdown, choose **Other**.
+3. Two controls are available:
+   - **File / Binary**: Send a file directly as the request body. Click **Select File** (or drag-and-drop) to pick the file. Bruno sends the file as-is (Content-Type will be inferred or set it in **Headers**).
+   - **No Body**: Send the request with an empty body (useful for requests that require no payload).
+4. (optional) Verify the **Content-Type** header if your server expects a specific media type for the uploaded file.
+5. Save and execute the request.
+
+![other-file-binary](/screenshots/send-request/rest/other-file-binary.webp)
