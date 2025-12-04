@@ -70,23 +70,17 @@ If you use the same prompt variable (like <PromptVar>Username</PromptVar>) multi
 
 You will only be prompted for "Username" once, and the value will be used in both locations.
 
-### Canceling the Prompt
+### Edge Cases
 
+**Empty Values:**  
+If you leave a prompt variable blank (without entering any value), it will be replaced with an empty string in the request.
+
+**Canceling the Prompt:**  
 If you cancel the prompt dialog, the request will not be sent.
 
-## Behavior in CLI and Runners
+## Behavior in Automated Environments
 
-<Callout type="warning">
-  Prompt variables are only available when executing requests interactively in the Bruno. They are **not supported** in automated execution environments.
-</Callout>
-
-### Bruno CLI
-
-When running collections via Bruno CLI, any requests containing prompt variables will be **skipped** and marked as `skipped` in the CLI output. This is because CLI does not support interactive prompting.
-
-### Collection Runner
-
-Similarly, when running collections using the Bruno Runner, requests containing prompt variables will be **skipped** and marked as `skipped` in the run results.
+When running collections via **Bruno CLI** or the **Collection Runner**, any requests containing prompt variables will be **skipped** and marked as `skipped` in the output. This is because these automated environments do not support interactive prompting.
 
 ## Viewing Prompt Variables
 
