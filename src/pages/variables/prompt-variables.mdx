@@ -1,0 +1,94 @@
+import { Callout } from "nextra/components";
+import { PromptVar } from "@/components/PromptVar";
+
+# Prompt Variables
+
+## Overview
+
+Prompt variables are **ephemeral variables** in Bruno that allow you to provide values interactively at the time a request is executed. Unlike other variable types, prompt variables do not have predefined values and are not persisted. They exist only for the duration of a single request execution.
+
+Prompt variables are ideal for:
+- Sensitive data you don't want to save in your collection
+- Ad-hoc values that change frequently
+- Scenarios where you want to manually provide input before sending a request
+
+## Syntax
+
+Prompt variables use the following syntax:
+
+<div style={{ marginTop: '1em', marginBottom: '1em' }}>
+  <PromptVar>Prompt Message</PromptVar>
+</div>
+
+- The `?` indicates this is a prompt variable
+- The text after `?` is the message shown to you in the prompt dialog
+
+Prompt variables are highlighted in blue in the Bruno UI.
+
+![Prompt Variable Syntax](/screenshots/variables/prompt-var.webp)
+
+## Using Prompt Variables
+
+You can use prompt variables anywhere markup variables are supported in Bruno, including:
+- URLs and query parameters
+- Headers
+- Request bodies
+- Authentication fields
+
+### How It Works
+
+When you execute a request containing prompt variables, Bruno displays a modal dialog listing all prompt variables with their prompt messages. You provide values for each variable before the request is sent.
+
+**Example:**
+
+If your request body contains a prompt variable like <PromptVar>Prompt Var</PromptVar>:
+
+```json
+{
+  "title": "{{?Prompt Var}}"
+}
+```
+
+Bruno will display a prompt dialog asking for "Prompt Var" before sending the request.
+
+![Prompt Variable Dialog](/screenshots/variables/prompt-var-dialog-value.webp)
+
+### Deduplication
+
+If you use the same prompt variable (like <PromptVar>Username</PromptVar>) multiple times in a request, Bruno will only prompt you once and substitute the value everywhere it appears.
+
+**Example:**
+
+```json
+{
+  "user": "{{?Username}}",
+  "profile": {
+    "name": "{{?Username}}"
+  }
+}
+```
+
+You will only be prompted for "Username" once, and the value will be used in both locations.
+
+### Canceling the Prompt
+
+If you cancel the prompt dialog, the request will not be sent.
+
+## Behavior in CLI and Runners
+
+<Callout type="warning">
+  Prompt variables are only available when executing requests interactively in the Bruno. They are **not supported** in automated execution environments.
+</Callout>
+
+### Bruno CLI
+
+When running collections via Bruno CLI, any requests containing prompt variables will be **skipped** and marked as `skipped` in the CLI output. This is because CLI does not support interactive prompting.
+
+### Collection Runner
+
+Similarly, when running collections using the Bruno Runner, requests containing prompt variables will be **skipped** and marked as `skipped` in the run results.
+
+## Viewing Prompt Variables
+
+Prompt variables are ephemeral and only exist during request execution. They are not displayed in the variables viewer and are not accessible in scripts (pre-request or post-response scripts).
+
