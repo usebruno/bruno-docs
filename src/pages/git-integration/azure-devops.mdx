@@ -19,7 +19,12 @@ To get started, you have to create a project/repository on Azure DevOps. Follow 
 5. Navigate to **Repos** in the left sidebar
 6. If you need to create a new repository within the project, click **+ New repository**
 
+![azure-devops-clone-url](/screenshots/git-integration/bitbucket-gitlab/ado-new-repo.webp)
+
 Once you have a repository, click on the **Clone** button in the top-right corner and copy the SSH URL, which looks similar to:
+
+![azure-devops-clone-url](/screenshots/git-integration/bitbucket-gitlab/ado-clone-ssh.webp)
+
 
 ```bash
 git@ssh.dev.azure.com:v3/<organization>/<project>/<repo-name>
@@ -53,6 +58,8 @@ ssh-add ~/.ssh/id_ed25519_azuredevops
 4. Paste your `id_ed25519_azuredevops.pub` content in the **Public Key Data** field
 5. Click **Add**
 
+![azure-devops-add-ssh-key](/screenshots/git-integration/bitbucket-gitlab/ado-add-ssh-key.webp)
+
 ## Use Azure DevOps with Bruno
 
 1. Create a Collection inside Bruno (if you haven't already)
@@ -61,5 +68,7 @@ ssh-add ~/.ssh/id_ed25519_azuredevops
 4. Add **origin** as the name of the remote and paste your repository URL (copied previously)
 
 Now you can perform push, pull, and other Git operations directly from Bruno.
+ 
+![bruno-git-operations](/screenshots/git-integration/bitbucket-gitlab/bruno-git-operations.webp)
 
 For more detailed information about Git operations in Bruno, check out the [Collaboration via GUI documentation](/git-integration/using-gui/intro).
