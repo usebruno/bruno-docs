@@ -16,11 +16,12 @@ import { Tabs } from 'nextra/components'
   ```javascript showLineNumbers filename="postman-to-bruno.js"
   const { postmanToBruno } = require('@usebruno/converters');
   const { readFile, writeFile } = require('fs/promises');
+  const path = require('path');
 
   async function convertPostmanToBruno(inputFile, outputFile) {
     try {
       const inputData = await readFile(inputFile, 'utf8');
-      const brunoCollection = postmanToBruno(JSON.parse(inputData));
+      const brunoCollection = await postmanToBruno(JSON.parse(inputData));
       await writeFile(outputFile, JSON.stringify(brunoCollection, null, 2));
       console.log('Conversion successful!');
     } catch (error) {
@@ -28,8 +29,10 @@ import { Tabs } from 'nextra/components'
     }
   }
 
-  // Usage example
-  convertPostmanToBruno('path/to/postman-collection.json', 'path/to/bruno-collection.json');
+  convertPostmanToBruno(
+    path.join(__dirname, 'demo_collection.postman_collection.json'),
+    path.join(__dirname, 'demo_collection.bruno_collection.json')
+  );
   ```
   </Tabs.Tab>
   <Tabs.Tab>
@@ -44,11 +47,12 @@ import { Tabs } from 'nextra/components'
   ```javascript showLineNumbers filename="postman-env-to-bruno.js"
   const { postmanToBrunoEnvironment } = require('@usebruno/converters');
   const { readFile, writeFile } = require('fs/promises');
+  const path = require('path');
 
   async function convertPostmanEnvironment(inputFile, outputFile) {
     try {
       const inputData = await readFile(inputFile, 'utf8');
-      const brunoEnvironment = postmanToBrunoEnvironment(JSON.parse(inputData));
+      const brunoEnvironment = await postmanToBrunoEnvironment(JSON.parse(inputData));
       await writeFile(outputFile, JSON.stringify(brunoEnvironment, null, 2));
       console.log('Environment conversion successful!');
     } catch (error) {
@@ -56,8 +60,10 @@ import { Tabs } from 'nextra/components'
     }
   }
 
-  
-  convertPostmanEnvironment('path/to/postman-environment.json', 'path/to/bruno-environment.json');
+  convertPostmanEnvironment(
+    path.join(__dirname, 'demo_environment.postman_environment.json'),
+    path.join(__dirname, 'demo_environment.bruno_environment.json')
+  );
   ```
   </Tabs.Tab>
 </Tabs>

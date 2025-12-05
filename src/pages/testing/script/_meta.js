@@ -1,6 +1,7 @@
 export default {
   "getting-started": "Getting Started",
   "script-flow": "Script Flow",
+  "request-chaining": "Request Chaining",
   "js-file": "JavaScript File",
   "vars": "Variables",
   "whitelisting-modules": "Whitelisting Modules",

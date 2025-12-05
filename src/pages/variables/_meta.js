@@ -6,6 +6,7 @@ export default {
   "folder-variables": "Folder Variables",
   "request-variables": "Request Variables",
   "runtime-variables": "Runtime Variables",
+  "prompt-variables": "Prompt Variables",
   "process-env": "Process Environment Variables",
-   "interpolation":"Variables Interpolation"
+  "interpolation": "Variables Interpolation"
 } 

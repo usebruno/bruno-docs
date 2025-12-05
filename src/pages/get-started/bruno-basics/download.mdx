@@ -65,6 +65,9 @@ Bruno can be installed via direct download or through package managers on suppor
     # Add the Bruno repository key
     curl -fsSL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x9FA6017ECABE0266" | gpg --dearmor | sudo tee /etc/apt/keyrings/bruno.gpg > /dev/null
     
+    # Set permissions for the GPG key file
+    sudo chmod 644 /etc/apt/keyrings/bruno.gpg
+    
     # Add the Bruno repository
     echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/bruno.gpg] http://debian.usebruno.com/ bruno stable" | sudo tee /etc/apt/sources.list.d/bruno.list
     

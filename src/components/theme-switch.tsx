@@ -18,7 +18,7 @@ export const ModeToggle: React.FC<{ className?: string }> = ({
   const { setTheme } = useTheme();
 
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild className={className}>
         <Button variant="ghost" className="w-7 sm:w-9 px-0">
           <Sun className="h-5 sm:h-[1.2rem] w-5 sm:w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />

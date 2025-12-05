@@ -1,0 +1,187 @@
+import { Callout } from "nextra/components";
+
+# Request Chaining
+
+Request chaining in Bruno allows you to execute multiple requests in sequence, pass data between them, and control the flow of your API testing workflow. This powerful feature enables you to build complex test scenarios where the output of one request becomes the input for the next.
+
+## Overview
+
+Bruno provides several methods for request chaining:
+
+- **`bru.runRequest()`** - Execute requests within your collection
+- **`bru.sendRequest()`** - Send programmatic HTTP requests
+- **`bru.runner.setNextRequest()`** - Control request execution order in collection runs
+
+## `bru.runRequest()`
+
+Execute any request in your collection and retrieve the response directly within your script.
+
+<Callout type="warning" emoji="">
+  Avoid using `bru.runRequest()` in **collection-level scripts**. Since collection scripts run for all requests, calling `bru.runRequest()` from a collection script will trigger the target request, which will also execute the collection script again, creating an infinite loop.
+</Callout>
+
+### Syntax
+
+```javascript showLineNumbers
+const requestResponse = await bru.runRequest(
+  "absolute/path/to/a/request/from/collection/root"
+);
+```
+
+### Parameters
+
+- **requestPath**: The absolute path to the request from the collection root (string)
+
+### Returns
+
+Returns a response object containing:
+- `status`: HTTP status code
+- `statusText`: HTTP status text
+- `headers`: Response headers object
+- `body`: Response body (automatically parsed if JSON)
+- `responseTime`: Response time in milliseconds
+
+### Examples
+
+#### Basic Request Execution
+
+```javascript showLineNumbers {2,5-6}
+// Execute a request and get the response
+const response = await bru.runRequest("auth/login");
+
+// Check if login was successful
+if (response.status === 200) {
+  const data = response.body;
+  bru.setVar("authToken", data.token);
+  console.log("Login successful, token saved");
+} else {
+  console.error("Login failed:", response.statusText);
+}
+```
+
+## `bru.sendRequest()`
+
+Send a programmatic HTTP request within your script. This allows you to make additional API calls during script execution.
+
+### Syntax
+
+```javascript showLineNumbers 
+await bru.sendRequest({
+  method: string,
+  url: string,
+  headers?: object,
+  data?: string | object,
+  timeout?: number
+}, callback)
+```
+
+### Parameters
+
+- **method**: HTTP method (GET, POST, PUT, DELETE, etc.)
+- **url**: The URL to send the request to
+- **headers**: (Optional) Request headers object
+- **data**: (Optional) Request data. Can be a string or object
+- **timeout**: (Optional) Request timeout in milliseconds
+- **callback**: Function to handle the response with signature `(err, res)`
+
+### Examples
+
+#### Basic HTTP Request
+
+```javascript showLineNumbers {1,8-9}
+await bru.sendRequest({
+  method: 'GET',
+  url: 'https://api.example.com/users',
+  headers: {
+    'Authorization': 'Bearer ' + bru.getVar('authToken'),
+    'Content-Type': 'application/json'
+  }
+}, function (err, res) {
+  if (err) {
+    console.error('Error:', err);
+    return;
+  }
+  console.log('Users:', res.data);
+  bru.setVar('users', res.data);
+});
+```
+
+#### POST Request with Data
+
+```javascript showLineNumbers {1-4,13}
+const userData = {
+  name: 'John Doe',
+  email: 'john@example.com'
+};
+
+await bru.sendRequest({
+  method: 'POST',
+  url: 'https://api.example.com/users',
+  headers: {
+    'Authorization': 'Bearer ' + bru.getVar('authToken'),
+    'Content-Type': 'application/json'
+  },
+  data: userData,
+  timeout: 10000
+}, function (err, res) {
+  if (err) {
+    console.error('Error creating user:', err);
+    return;
+  }
+  
+  if (res.status === 201) {
+    console.log('User created:', res.data);
+    bru.setVar('newUserId', res.data.id);
+  }
+});
+```
+
+## `bru.runner.setNextRequest()`
+
+Control the order in which requests are executed during collection runs. This allows you to skip requests or change the execution flow based on conditions.
+
+<Callout type="info">
+  `bru.runner.setNextRequest()` works only in **post-request scripts** or **test scripts**.
+</Callout>
+
+### Syntax
+
+```javascript showLineNumbers
+bru.runner.setNextRequest("request-name");
+```
+
+### Parameters
+
+- **requestName**: The name of the next request to execute (string) or `null` to stop execution
+
+### How it works
+
+- `setNextRequest` works with **single requests** - it executes the current request first, then jumps to the specified request
+- It **skips** all requests between the current one and the target request
+- The target request must exist in the collection and be specified by its exact name
+- **For requests inside folders**: Use just the request name (e.g., "request-name"), not the full path
+
+### Examples
+
+#### Conditional Request Execution
+
+```javascript showLineNumbers
+// In post-request script
+const response = res.getBody();
+
+if (response.status === 'active') {
+  // Continue to next request
+  bru.runner.setNextRequest("process-active-user");
+} else if (response.status === 'inactive') {
+  // Skip to different request
+  bru.runner.setNextRequest("handle-inactive-user");
+} else {
+  // Stop execution
+  bru.runner.setNextRequest(null);
+}
+```
+
+- **Use `bru.runRequest()`** for requests within your collection (faster, uses existing configuration)
+- **Use `bru.sendRequest()`** for external APIs or when you need custom request configuration
+- **Avoid nested loops** that could cause infinite request chains
+

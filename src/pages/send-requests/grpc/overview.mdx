@@ -3,23 +3,15 @@ import BrunoButton from '@/components/BrunoButton';
 
 # Overview 
 
-<Callout emoji=""> gRPC is available in beta mode in [Bruno 2.10.0](https://www.usebruno.com/downloads) and higher versions. You need to navigate to **Preferences** > **Beta** and enable the gRPC checkbox to enable beta support. </Callout> 
+<Callout type="info">
+    GRPC support is available from Bruno 2.10.0.
+</Callout>
 
 gRPC (Google Remote Procedure Call) is a modern, high-performance Remote Procedure Call (RPC) framework developed by Google. It's designed for efficient communication when one service needs to interact with another. Imagine your Authentication Service needs to tell your Notification Service to send an OTP. 
 
 In a high-traffic scenario, traditional request-response calls (like REST over HTTP/1.1) can be less efficient and introduce latency. gRPC solves this by faster communication, efficient data transfer and streaming capabilities. 
 
-## Enable gRPC Support 
-
-To use gRPC features in Bruno, you need to enable gRPC support in the beta features: 
-
-1. Open Bruno and go to **Preferences** 
-2. Navigate to the **Beta** tab and check the **Enable** checkbox 
-
-Once enabled, you'll be able to create and send gRPC requests in your collections. 
-
-![Enable gRPC Support](/screenshots/send-request/grpc/1-enable.grpc-support.webp) 
-
+## Launch gRPC in Bruno
 Explore our sample [gRPC collection](https://github.com/bruno-collections/gRPC-api-collection) to get started: 
 
 1. Click the **Fetch in Bruno** button below 

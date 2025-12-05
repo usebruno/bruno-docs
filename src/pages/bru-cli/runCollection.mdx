@@ -61,7 +61,7 @@ This will execute the collection twice. This is useful for load testing or when 
 
 ## Running a Collection with Environments
 
-You can run a collection using environment variables from a `.bru` file. This allows you to attach environments via the CLI from anywhere in the filesystem.
+You can run a collection using environment variables from either a `.bru` file or a `.json` file. This allows you to attach environments via the CLI from anywhere in the filesystem.
 
 ### Using Environment Files
 
@@ -84,6 +84,42 @@ bru run --env-file /Users/username/projects/api-testing/environments/prod.bru
 <Callout type="info">
   The environment file should be in Bruno's `.bru` format. Make sure the file contains valid environment variables and their values.
 </Callout>
+
+### Using JSON Environment Files
+
+<Callout type="info">
+  This feature requires [Bruno CLI <strong><sup>↗</sup></strong>](https://www.npmjs.com/package/@usebruno/cli) version 2.13.0 or higher.
+</Callout>
+
+Bruno CLI now supports JSON environment files, which is particularly useful for global environments created in the Bruno app. This bridges the gap between UI-only global environments and CLI-based workflows.
+
+To use a JSON environment file:
+
+```bash copy
+bru run --env-file /path/to/environment.json
+```
+
+#### JSON Environment File Format
+
+The JSON environment file should follow Bruno's environment schema:
+
+```json copy
+{
+  "name": "My Environment",
+  "variables": [
+    { 
+      "name": "host", 
+      "value": "https://api.example.com", 
+      "enabled": true 
+    },
+    { 
+      "name": "api_key", 
+      "value": "your-api-key-here", 
+      "enabled": true 
+    }
+  ]
+}
+```
 
 ### Using Environments Names
 
@@ -129,7 +165,7 @@ Run only requests that have at least one matching tag.
 bru run --tags=smoke,sanity
 ```
 
-#### Exclude Tags
+### Exclude Tags
 
 Skip requests that have ANY of the specified tags:
 
@@ -137,7 +173,7 @@ Skip requests that have ANY of the specified tags:
 bru run --exclude-tags=skip,draft
 ```
 
-#### Combined Filtering
+### Combined Filtering
 
 You can combine include and exclude filters:
 

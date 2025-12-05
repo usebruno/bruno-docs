@@ -1,0 +1,125 @@
+import { Callout } from "nextra/components";
+
+# WebSocket Message Types
+
+Bruno supports various message types for WebSocket communication, allowing you to send and receive different data formats based on your application's requirements.
+
+## Supported Message Types
+
+Bruno supports the following WebSocket message types:
+
+### Text Messages
+Plain text messages for simple communication and human-readable data exchange.
+
+**Characteristics:**
+- **Format**: UTF-8 encoded text
+- **Use Case**: Simple messages, commands, status updates
+- **Size**: Limited by WebSocket frame size (typically 64KB)
+- **Encoding**: UTF-8
+
+**Example Text Messages:**
+```
+Hello, WebSocket server!
+PING
+GET_STATUS
+USER_JOINED:john_doe
+```
+
+**When to Use:**
+- Simple commands or instructions
+- Status messages and notifications
+- Human-readable communication
+- Protocol-level messages (PING/PONG)
+
+### JSON Messages
+Structured data in JSON format for complex data exchange and API-like communication.
+
+**Characteristics:**
+- **Format**: JSON (JavaScript Object Notation)
+- **Use Case**: Structured data, API responses, complex objects
+- **Validation**: JSON syntax validation and formatting
+- **Size**: Limited by WebSocket frame size
+
+**Example JSON Messages:**
+```json
+{
+  "type": "message",
+  "content": "Hello from Bruno!",
+  "timestamp": "2025-01-09T10:30:00Z",
+  "user": {
+    "id": 123,
+    "name": "Bruno User"
+  }
+}
+```
+
+**Chat Application Example:**
+```json
+{
+  "type": "chat_message",
+  "room": "general",
+  "user": "john_doe",
+  "message": "Hello everyone!",
+  "timestamp": 1704795000000
+}
+```
+
+**API Response Example:**
+```json
+{
+  "status": "success",
+  "data": {
+    "user_id": 123,
+    "balance": 1000.50,
+    "currency": "USD"
+  },
+  "message": "Balance retrieved successfully"
+}
+```
+
+**When to Use:**
+- Structured data exchange
+- API-like communication
+- Complex objects and arrays
+- When you need data validation
+
+### XML Messages
+Structured data in XML format for legacy systems and XML-based protocols.
+
+**Characteristics:**
+- **Format**: XML (eXtensible Markup Language)
+- **Use Case**: SOAP messages, legacy systems, XML-based APIs
+- **Validation**: XML syntax validation and formatting
+- **Size**: Limited by WebSocket frame size
+
+**Example XML Messages:**
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<message>
+  <type>notification</type>
+  <content>Hello from Bruno!</content>
+  <timestamp>2025-01-09T10:30:00Z</timestamp>
+  <user>
+    <id>123</id>
+    <name>Bruno User</name>
+  </user>
+</message>
+```
+
+**SOAP Message Example:**
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <GetUserRequest>
+      <userId>123</userId>
+    </GetUserRequest>
+  </soap:Body>
+</soap:Envelope>
+```
+
+**When to Use:**
+- Legacy systems requiring XML format
+- SOAP-based WebSocket services
+- XML-based messaging protocols
+- When working with systems that expect XML
