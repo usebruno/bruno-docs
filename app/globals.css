@@ -1,0 +1,67 @@
+@import 'tailwindcss';
+
+/* Import Nextra theme styles */
+@import 'nextra-theme-docs/style.css';
+
+@variant dark (&:where(.dark *));
+
+:root {
+  --nextra-content-width: 90rem; /* 1440px max width for content */
+}
+
+/* Bruno-specific styling */
+body {
+  font-feature-settings:
+    'rlig' 1,
+    'calt' 1;
+}
+
+/* Add spacing between breadcrumb/navigation and page title */
+article h1:first-child {
+  margin-top: 1.5rem;
+}
+
+/* Make the copy page dropdown more opaque */
+[data-headlessui-state],
+[data-radix-popper-content-wrapper] > div,
+[role="menu"],
+[role="listbox"],
+.nextra-menu,
+div[class*="backdrop-blur"] {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(255 255 255 / 100%) !important;
+  backdrop-filter: blur(14px) saturate(150%) !important;
+}
+
+:is(.dark, .dark *) [data-headlessui-state],
+:is(.dark, .dark *) [data-radix-popper-content-wrapper] > div,
+:is(.dark, .dark *) [role="menu"],
+:is(.dark, .dark *) [role="listbox"],
+:is(.dark, .dark *) .nextra-menu,
+:is(.dark, .dark *) div[class*="backdrop-blur"] {
+  background-color: rgb(17 17 17 / 100%) !important;
+}
+
+/* Hide external link arrows in navbar only - target links with text (not icon-only links) */
+header nav a[target="_blank"]:not([aria-label]) > svg,
+header a[href^="http"]:not([aria-label]) > svg {
+  display: none !important;
+}
+
+/* Add border to search box */
+[data-pagefind-ui] input,
+button[aria-label*="Search"],
+.nextra-search input,
+.nextra-search button,
+input[placeholder*="Search"] {
+  border: 1px solid #e5e7eb !important;
+  border-radius: 0.5rem !important;
+}
+
+.dark [data-pagefind-ui] input,
+.dark button[aria-label*="Search"],
+.dark .nextra-search input,
+.dark .nextra-search button,
+.dark input[placeholder*="Search"] {
+  border-color: #374151 !important;
+}
