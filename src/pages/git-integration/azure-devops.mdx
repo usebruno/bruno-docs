@@ -1,0 +1,65 @@
+# Collaboration via Azure DevOps
+
+Azure DevOps is a comprehensive suite of development tools provided by Microsoft that enables teams to plan, develop, test, and deliver software efficiently. It offers integrated services including Azure Repos for Git repositories, Azure Pipelines for CI/CD, Azure Boards for work tracking, and more—making it a complete DevOps platform for enterprise teams.
+
+Bruno's Git functionality allows you to work with Azure DevOps to manage, collaborate, and maintain your API development workflow.
+
+## Configure Azure DevOps
+
+You need to set up an SSH key with Azure DevOps. While you can also set up personal access tokens (HTTPS), this requires you to enter your token on every operation. SSH is a more convenient and secure way to work with Azure DevOps.
+
+### Create Repository on Azure DevOps
+
+To get started, you have to create a project/repository on Azure DevOps. Follow these steps:
+
+1. Log into your Azure DevOps account at [dev.azure.com](https://dev.azure.com) (create one if you don't have one)
+2. Click on **+ New project** or select an existing project
+3. If creating a new project, fill in the required fields (Project name, Description, Visibility)
+4. Click **Create**
+5. Navigate to **Repos** in the left sidebar
+6. If you need to create a new repository within the project, click **+ New repository**
+
+Once you have a repository, click on the **Clone** button in the top-right corner and copy the SSH URL, which looks similar to:
+
+```bash
+git@ssh.dev.azure.com:v3/<organization>/<project>/<repo-name>
+```
+
+### Configure SSH Key
+
+Follow these steps to configure an SSH key on your local system:
+
+#### 1. Generate SSH Key
+
+Open your terminal and execute:
+
+```bash
+ssh-keygen -t ed25519 -C "your_email@example.com" -f ~/.ssh/id_ed25519_azuredevops
+```
+
+#### 2. Add SSH Key to SSH Agent
+
+Add the SSH key to your SSH agent so it can be used for authentication:
+
+```bash
+ssh-add ~/.ssh/id_ed25519_azuredevops
+```
+
+#### 3. Add the SSH Key to Your Azure DevOps Account
+
+1. Go to **Azure DevOps** > **User Settings** (click your avatar in the top-right) > **SSH public keys**
+2. Click **+ New Key**
+3. Give your key a name (e.g., "Bruno Development")
+4. Paste your `id_ed25519_azuredevops.pub` content in the **Public Key Data** field
+5. Click **Add**
+
+## Use Azure DevOps with Bruno
+
+1. Create a Collection inside Bruno (if you haven't already)
+2. Click on the **Git** icon (next to Safe Mode) and select **Initialize repo**
+3. Click on **main** and select **Remotes** from the dropdown
+4. Add **origin** as the name of the remote and paste your repository URL (copied previously)
+
+Now you can perform push, pull, and other Git operations directly from Bruno.
+
+For more detailed information about Git operations in Bruno, check out the [Collaboration via GUI documentation](/git-integration/using-gui/intro).
