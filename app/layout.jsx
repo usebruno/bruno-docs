@@ -80,7 +80,7 @@ export default async function RootLayout({ children }) {
             defaultMenuCollapseLevel: 1
           }}
           footer={false}
-          search={<Search placeholder="Search Bruno docs..." />}
+          search={<Search placeholder="Search docs..." />}
         >
           {children}
         </Layout>
