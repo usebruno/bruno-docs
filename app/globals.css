@@ -79,8 +79,20 @@ input[placeholder*="Search"] {
   background-color: transparent !important;
 }
 
+/* Search results - title default state */
+.nextra-search-results [class*="font-semibold"],
+.nextra-search-results a > div:first-child {
+  color: #1f2937 !important;
+}
+
+.dark .nextra-search-results [class*="font-semibold"],
+.dark .nextra-search-results a > div:first-child {
+  color: #e5e7eb !important;
+}
+
 /* Search results - title on hover */
-.nextra-search-results a:hover [class*="font-semibold"] {
+.nextra-search-results a:hover [class*="font-semibold"],
+.nextra-search-results a:hover > div:first-child {
   color: #E89B2F !important;
 }
 
