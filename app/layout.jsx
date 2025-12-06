@@ -2,6 +2,7 @@ import { Layout, Navbar } from 'nextra-theme-docs'
 import { getPageMap } from 'nextra/page-map'
 import { Search } from 'nextra/components'
 import Image from 'next/image'
+import { CustomMobileNav } from '@/components/custom-mobile-nav'
 import './globals.css'
 
 export const metadata = {
@@ -48,6 +49,7 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en" dir="ltr" suppressHydrationWarning>
       <body>
+        <CustomMobileNav />
         <Layout
           pageMap={pageMap}
           navbar={
