@@ -1,14 +1,11 @@
-import nextra from 'nextra';
+import nextra from 'nextra'
 
 const withNextra = nextra({
-  theme: 'nextra-theme-docs',
-  themeConfig: './theme.config.tsx',
-  defaultShowCopyCode: true,
   latex: true,
   search: {
-    codeblocks: false,
-  },
-});
+    codeblocks: false
+  }
+})
 
 export default withNextra({
   reactStrictMode: true,
@@ -18,21 +15,36 @@ export default withNextra({
       config.externals.push({
         'node:os': 'os',
         'node:path': 'path',
-        'node:worker_threads': 'worker_threads'
+        'node:worker_threads': 'worker_threads',
+        'fs': 'fs',
+        'child_process': 'child_process',
+        'net': 'net',
+        'tls': 'tls'
       });
     }
 
     config.resolve.fallback = {
       ...config.resolve.fallback,
+      fs: false,
       os: false,
       path: false,
-      worker_threads: false
+      worker_threads: false,
+      child_process: false,
+      net: false,
+      tls: false,
+      crypto: false,
+      constants: false,
+      stream: false,
+      util: false,
+      assert: false,
+      buffer: false
     };
 
     return config;
   },
-
-  // Define the redirects in next.config.js
+  experimental: {
+    optimizePackageImports: ['@monaco-editor/react']
+  },
   async redirects() {
     return [
       { source: '/introduction', destination: '/introduction/what-is-bruno', permanent: true },
@@ -83,7 +95,7 @@ export default withNextra({
       { source: '/testing/javascript-reference', destination: '/testing/script/javascript-reference', permanent: true },
       { source: '/testing/assertions.html', destination: '/testing/tests/assertions', permanent: true },
       { source: '/testing/javascript-reference.html', destination: '/testing/script/javascript-reference', permanent: true },
-      
+
       // Breadcrumb fix redirects - Issue #474
       { source: '/testing', destination: '/testing/tests/introduction', permanent: true },
       { source: '/testing/script', destination: '/testing/script/getting-started', permanent: true },
@@ -178,4 +190,4 @@ export default withNextra({
       { source: '/send-requests/res-data-cookies/debugging/bru-console', destination: '/send-requests/res-data-cookies/debugging/dev-tools', permanent: true },
     ];
   },
-});
+})

@@ -1,0 +1,112 @@
+import Video from "../../../components/Video";
+
+## Initializing Git
+
+Initializing Git in Bruno is the first step towards managing your API collections with version control. It's easy and quick to set up. Follow the steps below to initialize Git.
+
+1. Launch the **Bruno app**.
+2. Navigate to the collection you want to initialize with Git.
+3. Click on the **Git Icon** in the top-right corner of the navbar.
+
+![Initialize Git](/screenshots/git-integration/git-gui/1-init-git.webp)
+
+4. Click the **Initialize** button to set up your collection with Git.
+
+![Click Init Button](/screenshots/git-integration/git-gui/2-click-init-button.webp)
+
+This allows you to perform other Git operations such as adding, committing, pushing, pulling changes, and more.
+
+## Connecting to Remote Repository
+
+Once you have initialized your collection, the next step is to connect it to a remote Git repository.
+You can directly connect to remote repository from Bruno using Git GUI feature.
+
+To connect Bruno to GitHub, you need to set up either an SSH key or a Personal Access Token (PAT) on GitHub. Follow this [official GitHub guide <strong><sup>↗</sup></strong>](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) to set it up.
+
+1. Create empty Git repository on your GitHub.
+2. Open **Git initialized** Bruno collection.
+3. Click on **Quick Links** (bottom-left corner).
+4. Select **Remotes** from the dropdown.
+
+![Add Remote Option](/screenshots/git-integration/git-gui/5-add-remote-option.webp)
+
+5. Click on **Add Remote** button.
+6. Enter **Remote Name** and **URL** (Https or SSH) and click on save.
+
+
+![Add Remote Dialog Box](/screenshots/git-integration/git-gui/6-add-remote-dialogbox.webp)
+
+
+
+
+After completing the above steps, your collection will be connected to GitHub. We have to **add and commit** (see below) some changes to pushed collection to GitHub.
+
+
+Once your collection is connected to the remote repository, you can manage it directly from the Bruno app.
+
+## Adding and Committing Changes
+
+Once you've made changes to your collection in Bruno, you can easily commit those changes using the Git UI. This allows you to track changes and collaborate with your team efficiently.
+
+Follow these steps to add and commit changes:
+
+1. Go to **Git UI**. 
+2. Click on **Add Icon** to stage your changes.
+
+![Stage Changes](/screenshots/git-integration/git-gui/3-stage-changes.webp)
+
+4. Click on **Commit Changes** button.
+5. Write a Commit Message and click **Commit**.
+
+![Commit Changes](/screenshots/git-integration/git-gui/4-commit-changes.webp)
+
+> You can commit all changes in a single click by pressing the **Add All Changes** button.
+
+By following these steps, your changes are now committed and tracked in Git, ready to be pushed or shared with others.
+
+## Pushing and Pulling Changes
+
+The GUI-based Git integration in Bruno allows both engineering and non-engineering teams to work together in a fast, efficient, and accurate manner. This integration ensures that your collections remain consistently up-to-date across all team members.
+
+> Before you can push or pull changes, ensure that the **remote repository** is linked to your project.
+
+### Pushing Changes
+
+Push your local changes to the remote repository with just a few clicks.
+
+1. Click on **Git UI** and toggle **Check for Updates** button.
+2. Select **Push to** and confirm the **Remote Server** configurations.
+3. Click on **Push** button.
+
+![Push Pull](/screenshots/git-integration/git-gui/8-push-pull.webp)
+
+Now you can see all your local changes pushed to the remote repository.
+
+> Follow Consumer guide to learn about pulling changes feature.
+
+## Branch Creation and Checkout
+
+With branches in **Bruno**, you can manage your code effectively by isolating different features or tasks.
+
+### Creating Branches
+
+Follow the below steps to create branches in Bruno.
+
+1. Go to **Git UI**.
+2. Click on **main** and select **Create Branch** from dropdown.
+3. Enter **Branch Name**.
+4. Click on **Save** button.
+
+![Create Branch](/screenshots/git-integration/git-gui/7-create-branch.webp)
+
+Once the branch is created, you can start making changes to the branch.
+
+### Branch Checkout
+
+1. Click on **main**.
+2. Select the branch you want to switch.
+
+![Create Branch](/screenshots/git-integration/git-gui/9-branch-checkout.webp)
+
+3. Now you're switched to your selected branch.
+
