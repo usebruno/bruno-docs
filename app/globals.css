@@ -79,6 +79,23 @@ input[placeholder*="Search"] {
   background-color: transparent !important;
 }
 
+/* Search results - section header (page title grouping) */
+.nextra-search-results > ul > li > div:first-child {
+  font-size: 0.7rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  color: #6b7280 !important;
+  padding: 0.5rem 0 0.25rem 0 !important;
+  border-bottom: 1px solid #e5e7eb !important;
+  margin-bottom: 0.25rem !important;
+}
+
+.dark .nextra-search-results > ul > li > div:first-child {
+  color: #9ca3af !important;
+  border-bottom-color: #374151 !important;
+}
+
 /* Search results - title default state */
 .nextra-search-results [class*="font-semibold"],
 .nextra-search-results a > div:first-child {
