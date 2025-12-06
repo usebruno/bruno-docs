@@ -11,9 +11,8 @@ const GoogleAnalytics = () => {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const win = window as any;
-    if (typeof window !== "undefined" && win.gtag) {
-      win.gtag('config', GA_MEASUREMENT_ID, {
+    if (typeof window !== "undefined" && window.gtag) {
+      window.gtag('config', GA_MEASUREMENT_ID, {
         page_path: pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : ''),
         send_page_view: true
       });

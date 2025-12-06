@@ -315,9 +315,10 @@ export const Navbar = () => {
         </div>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex" style={{
+        <div className="desktop-nav" style={{
+          display: 'flex',
           alignItems: 'center',
-          gap: '16px'
+          gap: '16px',
         }}>
           {navigationLinks.map((link) => (
             <Link
@@ -333,8 +334,8 @@ export const Navbar = () => {
                 borderRadius: '6px',
                 transition: 'background-color 0.2s'
               }}
-              onMouseOver={(e) => (e.target as HTMLElement).style.backgroundColor = '#f3f4f6'}
-              onMouseOut={(e) => (e.target as HTMLElement).style.backgroundColor = 'transparent'}
+              onMouseOver={(e) => (e.currentTarget as HTMLElement).style.backgroundColor = '#f3f4f6'}
+              onMouseOut={(e) => (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent'}
             >
               {link.label}
             </Link>
@@ -365,8 +366,8 @@ export const Navbar = () => {
               textDecoration: 'none',
               color: '#374151'
             }}
-            onMouseOver={(e) => (e.target as HTMLElement).style.backgroundColor = '#f3f4f6'}
-            onMouseOut={(e) => (e.target as HTMLElement).style.backgroundColor = 'transparent'}
+            onMouseOver={(e) => (e.currentTarget as HTMLElement).style.backgroundColor = '#f3f4f6'}
+            onMouseOut={(e) => (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent'}
           >
             <Github style={{ height: '20px', width: '20px' }} />
           </Link>

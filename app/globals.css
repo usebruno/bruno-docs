@@ -42,10 +42,17 @@ div[class*="backdrop-blur"] {
   background-color: rgb(17 17 17 / 100%) !important;
 }
 
-/* Hide external link arrows in navbar only - target links with text (not icon-only links) */
-header nav a[target="_blank"]:not([aria-label]) > svg,
-header a[href^="http"]:not([aria-label]) > svg {
+/* Hide external link arrows in navbar only - not the GitHub/Discord icons */
+.nextra-navbar nav > div a[href^="http"] > svg:not([aria-label]),
+.nextra-navbar a[href^="http"]:has(span) > svg {
   display: none !important;
+}
+
+/* Hide desktop nav on mobile */
+@media (max-width: 768px) {
+  .desktop-nav {
+    display: none !important;
+  }
 }
 
 /* Add border to search box */
@@ -64,4 +71,32 @@ input[placeholder*="Search"] {
 .dark .nextra-search button,
 .dark input[placeholder*="Search"] {
   border-color: #374151 !important;
+}
+
+/* Search results - highlighted/matched text (the search term) */
+.nextra-search-results mark {
+  color: #E89B2F !important;
+  background-color: transparent !important;
+}
+
+/* Search results - title on hover */
+.nextra-search-results a:hover [class*="font-semibold"] {
+  color: #E89B2F !important;
+}
+
+/* TOC (On This Page) - active item */
+.nextra-toc a[aria-current="true"],
+.nextra-toc li a.active,
+.nextra-toc a[class*="text-primary"],
+nav[aria-label="table of contents"] a[aria-current="true"] {
+  color: #E89B2F !important;
+}
+
+/* Mobile nav - make completely opaque */
+.nextra-mobile-nav {
+  background-color: rgb(255 255 255) !important;
+}
+
+.dark .nextra-mobile-nav {
+  background-color: rgb(17 17 17) !important;
 }
