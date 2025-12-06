@@ -125,3 +125,8 @@ nav[aria-label="table of contents"] a[aria-current="true"] {
     display: none !important;
   }
 }
+
+/* Discord icon brand color */
+.nextra-navbar a[href*="discord"] svg {
+  color: #5865F2 !important;
+}
