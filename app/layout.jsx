@@ -3,6 +3,7 @@ import { getPageMap } from 'nextra/page-map'
 import { Search } from 'nextra/components'
 import Image from 'next/image'
 import { CustomMobileNav } from '@/components/custom-mobile-nav'
+import GoogleAnalytics from '@/components/google-analytics'
 import './globals.css'
 
 export const metadata = {
@@ -49,6 +50,7 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en" dir="ltr" suppressHydrationWarning>
       <body>
+        <GoogleAnalytics />
         <CustomMobileNav />
         <Layout
           pageMap={pageMap}
