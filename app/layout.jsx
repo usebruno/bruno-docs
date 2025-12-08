@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { Layout, Navbar } from 'nextra-theme-docs'
 import { getPageMap } from 'nextra/page-map'
 import { Search } from 'nextra/components'
@@ -80,7 +81,11 @@ export default async function RootLayout({ children }) {
             defaultMenuCollapseLevel: 1
           }}
           footer={false}
-          search={<Search placeholder="Search docs..." />}
+          search={
+            <Suspense fallback={<div className="h-8 w-48 animate-pulse bg-gray-200 dark:bg-gray-700 rounded" />}>
+              <Search placeholder="Search docs..." />
+            </Suspense>
+          }
         >
           {children}
         </Layout>
