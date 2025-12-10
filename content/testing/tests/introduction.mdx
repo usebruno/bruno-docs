@@ -2,39 +2,226 @@ import { Callout } from "nextra/components";
 
 # Testing
 
-<Callout emoji="">
-  Bruno uses the [Chai library <strong><sup>↗</sup></strong>](https://www.chaijs.com/), so you can follow the
-  same syntax for writing assertions in your tests.
+<Callout type="warning" emoji="">
+  Bruno uses the [Chai library <strong><sup>↗</sup></strong>](https://www.chaijs.com/) for assertions. All Chai expect syntax works in Bruno tests.
 </Callout>
 
-Bruno supports writing automation test scripts in JavaScript for your API requests to assert its behaviour.
-
-Some of the benefits include
-
-- Increased efficiency: The tests can be run repeatedly, reducing the time and effort required for manual testing.
-- Increased coverage: Automated tests can cover a larger range of scenarios and edge cases compared to manual testing.
-- Continuous integration/continuous delivery (CI/CD): Automated API tests can be integrated into a CI/CD pipeline, ensuring that API changes are thoroughly tested before deployment.
-- Easier maintenance: Automated tests can be easily updated as the API evolves, reducing the maintenance burden compared to manual tests.
-- Easier regression testing: Automated tests can be easily repeated after changes are made to the API, reducing the time required for regression testing.
-
-**Example:**
-
-```javascript
-test("should be able to login", function () {
-  expect(res.getStatus()).to.equal(200);
-});
-
-test("should return json", function () {
-  expect(res.getBody()).to.eql({
-    hello: "Bruno",
-  });
-});
-```
-
-**Screenshot:**
+Write JavaScript test scripts to validate API responses, handle complex logic, and automate testing workflows.
 
 ![bru lang sample](/screenshots/test-script.webp)
 
-### Scripting API
+## Basic Test Structure
 
-Please see the [Scripting API](../script/javascript-reference) for a comprehensive set of methods that enable you to write custom JavaScript code to automate and test your API requests in Bruno. It allows you to manipulate request variables, modify headers, handle response data, and implement complex logic directly within your test scripts.
+```javascript
+test("test name", function () {
+  expect(res.getStatus()).to.equal(200);
+});
+```
+
+## Common Test Examples
+
+### Testing Status Codes
+
+```javascript
+test("should return success", function () {
+  expect(res.getStatus()).to.equal(200);
+});
+
+test("should not return server error", function () {
+  expect(res.getStatus()).to.not.equal(500);
+});
+```
+
+### Testing Response Body
+
+```javascript
+test("should return user data", function () {
+  const body = res.getBody();
+  
+  expect(body).to.have.property("id");
+  expect(body.name).to.equal("John Doe");
+  expect(body.email).to.contain("@example.com");
+});
+
+test("should return array of users", function () {
+  const users = res.getBody();
+  
+  expect(users).to.be.an("array");
+  expect(users).to.have.lengthOf(3);
+  expect(users[0]).to.have.property("id");
+});
+```
+
+### Testing Nested Objects
+
+```javascript
+test("should validate nested user profile", function () {
+  const body = res.getBody();
+  
+  expect(body.user.profile.name).to.equal("Alice");
+  expect(body.user.settings.theme).to.equal("dark");
+  expect(body.user.settings.notifications).to.be.true;
+});
+```
+
+### Testing with Conditional Logic
+
+```javascript
+test("should validate response based on status", function () {
+  const status = res.getStatus();
+  const body = res.getBody();
+  
+  if (status === 200) {
+    expect(body).to.have.property("data");
+    expect(body.data).to.not.be.empty;
+  } else if (status === 404) {
+    expect(body).to.have.property("error");
+    expect(body.error.message).to.contain("not found");
+  } else {
+    throw new Error(`Unexpected status code: ${status}`);
+  }
+});
+
+test("should validate user role permissions", function () {
+  const body = res.getBody();
+  
+  if (body.user.role === "admin") {
+    expect(body.user.permissions).to.include("write");
+    expect(body.user.permissions).to.include("delete");
+  } else if (body.user.role === "user") {
+    expect(body.user.permissions).to.include("read");
+    expect(body.user.permissions).to.not.include("delete");
+  }
+});
+```
+
+### Testing Arrays and Loops
+
+```javascript
+test("should validate all users have required fields", function () {
+  const users = res.getBody();
+  
+  users.forEach((user) => {
+    expect(user).to.have.property("id");
+    expect(user).to.have.property("email");
+    expect(user.email).to.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+  });
+});
+
+test("should find user by id", function () {
+  const users = res.getBody();
+  const targetUser = users.find((u) => u.id === 123);
+  
+  expect(targetUser).to.exist;
+  expect(targetUser.name).to.equal("John");
+});
+```
+
+### Testing Response Headers
+
+```javascript
+test("should have correct content type", function () {
+  expect(res.getHeader("content-type")).to.contain("application/json");
+});
+
+test("should include authentication headers", function () {
+  expect(res.getHeader("x-api-key")).to.exist;
+  expect(res.getHeader("authorization")).to.not.be.empty;
+});
+```
+
+### Testing Response Time
+
+```javascript
+test("should respond quickly", function () {
+  expect(res.getResponseTime()).to.be.lessThan(1000);
+});
+```
+
+### Advanced: Saving Values for Next Request
+
+```javascript
+test("should save token for next request", function () {
+  const body = res.getBody();
+  
+  expect(body).to.have.property("token");
+  expect(body.token).to.not.be.empty;
+  
+  // Save token to environment variable
+  bru.setVar("authToken", body.token);
+});
+
+test("should extract and save user ID", function () {
+  const body = res.getBody();
+  
+  if (body.users && body.users.length > 0) {
+    const firstUserId = body.users[0].id;
+    bru.setVar("userId", firstUserId);
+  }
+});
+```
+
+### Error Handling
+
+```javascript
+test("should handle missing fields gracefully", function () {
+  const body = res.getBody();
+  
+  if (!body.data) {
+    expect(body).to.have.property("error");
+    expect(body.error.code).to.be.oneOf([400, 404, 422]);
+  }
+});
+
+test("should validate error response structure", function () {
+  const status = res.getStatus();
+  
+  if (status >= 400) {
+    const body = res.getBody();
+    expect(body).to.have.property("error");
+    expect(body.error).to.have.property("message");
+    expect(body.error.message).to.be.a("string");
+  }
+});
+```
+
+## Common Chai Assertions
+
+```javascript
+// Equality
+expect(value).to.equal(expected);
+expect(value).to.not.equal(expected);
+expect(value).to.eql(expected); // deep equality
+
+// Type checking
+expect(value).to.be.a("string");
+expect(value).to.be.an("array");
+expect(value).to.be.true;
+expect(value).to.be.null;
+
+// Property checks
+expect(obj).to.have.property("key");
+expect(obj).to.have.all.keys("name", "email");
+
+// String checks
+expect(str).to.contain("substring");
+expect(str).to.match(/regex/);
+
+// Number comparisons
+expect(num).to.be.above(10);
+expect(num).to.be.below(100);
+expect(num).to.be.within(10, 100);
+
+// Array checks
+expect(arr).to.be.an("array");
+expect(arr).to.have.lengthOf(3);
+expect(arr).to.include("item");
+expect(arr).to.be.empty;
+```
+
+## Next Steps
+
+For more advanced scripting capabilities, see:
+- [Scripting API](../script/javascript-reference) - Full API reference
+- [Response Query](../script/response/response-query) - Query complex response data
+- [Variables](../script/vars) - Work with variables across requests
