@@ -1,4 +1,5 @@
 import { Callout } from "nextra/components";
+import PremiumBadge from "@/components/premium-badge";
 
 # Activating Your License
 
@@ -6,22 +7,54 @@ import { Callout } from "nextra/components";
 You must be on Bruno v.1.35.0 or higher to activate a license after December 1, 2024
 </Callout>
 
+## Activating with License Key
+
 If you've been provisioned a license, you should have received a license key via email. If you have not received a key and already checked your spam folder, please reach out to your license administrator.
 
 ### Step 1: Click on the Settings or Key icon in Bruno
 
-Both icons are located at the bottom left corner of the Bruno window. The Key icon will take you directly to the `License` section. If you choose to use the Settings icon, simply select `License` from the settings menu. 
+Both icons are located at the bottom left corner of the Bruno window. The Key icon will take you directly to the `License` section. If you choose to use the Settings icon, simply select `License` from the settings menu.
 
-### Step 2: Enter License Details 
+### Step 2: Enter License Details
 
 Enter your license key and associated email address
 
 ![login](/screenshots/license-management/activatelicense.webp)
 
 <Callout type="info">
-If your company uses a self-hosted licensing server, select `License Server` and enter the details provided to you by your License Administrator. 
+If your company uses a self-hosted licensing server, select `License Server` and enter the details provided to you by your License Administrator.
 </Callout>
 
-### Step 4: License Activated
+### Step 3: License Activated
 
 Once the license is activated, you will see a success message.
+
+## Activating with SSO <PremiumBadge noLink />
+
+<Callout type="info">
+SSO license activation is available for Ultimate Edition customers. Please see the [SAML SSO Overview](/license-administrators/saml-sso/overview) for more information.
+</Callout>
+
+### Step 1: Click on the Settings or Key icon in Bruno
+
+Both icons are located at the bottom left corner of the Bruno window. The Key icon will take you directly to the `License` section. If you choose to use the Settings icon, simply select `License` from the settings menu.
+
+### Step 2: Activate with SSO
+
+If your company has configured SSO for Bruno, select `SSO` and click `Activate License`.
+
+![login](/screenshots/license-management/activate-sso.webp)
+
+<Callout type="info">
+Your email needs to be part of the SSO configuration in order to activate your license, with the `User Role` mapped. See [Role Mapping](/license-administrators/saml-sso/overview#role-mapping) for details.
+</Callout>
+
+### Step 3: SSO Login
+
+You will be redirected to your corporate SSO login page. Enter your credentials to login. 
+
+A successful login message will be displayed.
+
+![login](/screenshots/license-management/activate-message-success.webp)
+
+Returning to Bruno, you will see the license as activated.
