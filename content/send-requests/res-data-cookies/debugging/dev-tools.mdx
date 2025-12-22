@@ -2,10 +2,12 @@ import { Callout } from 'nextra/components'
 
 # Dev Tools
 
-Bruno provides built-in Dev Tools to help you debug your APIs, catch bugs, test functionality, and get all essential details related to your API requests. The Dev Tools feature two main tabs:
+Bruno provides built-in Dev Tools to help you debug your APIs, catch bugs, test functionality, and get all essential details related to your API requests. The Dev Tools feature four main tabs:
 
 1. **Console** - For testing, scripting, and debugging
 2. **Network** - For analyzing network configurations and performance
+3. **Performance** - For monitoring request performance metrics
+4. **Terminal** - For executing git commands and terminal operations
 
 <Callout emoji="">
     The Dev Tools are available in [Bruno 2.8.0](https://www.usebruno.com/downloads) or higher versions.
@@ -42,6 +44,32 @@ The Network tab provides comprehensive insights into your API requests and respo
 This tab gives you complete visibility into the network layer of your API interactions, helping you validate response data and understand the full request lifecycle.
 
 ![Network Analysis](/screenshots/send-request/res-data-and-cookie/devtools/3-network.webp)
+
+## Performance
+
+The Performance tab allows you to monitor and analyze the performance metrics of your API requests. It's useful for:
+
+- **Request Timing**: View detailed timing information for each request phase
+- **Performance Analysis**: Identify bottlenecks and slow requests
+- **Optimization**: Understand where time is being spent in your API calls
+- **Benchmarking**: Compare performance across different requests and endpoints
+
+This tab helps you optimize your API interactions and identify performance issues that may impact your application.
+
+![Performance Metrics](/screenshots/send-request/res-data-and-cookie/devtools/4-performance.webp)
+
+## Terminal
+
+The Terminal tab provides a command-line interface within Bruno for executing git commands and terminal operations. It's useful for:
+
+- **Git Operations**: Execute git commands directly from Bruno (e.g., git checkout, git branch)
+- **Version Control**: Manage your API collection's version control without leaving Bruno
+- **Workflow Integration**: Streamline your development workflow by combining API testing with git operations
+- **Session Management**: View and manage multiple terminal sessions
+
+This tab integrates git functionality directly into your development environment, making it easier to manage collections that are version-controlled.
+
+![Terminal Interface](/screenshots/send-request/res-data-and-cookie/devtools/5-terminal.webp)
 
 
 
