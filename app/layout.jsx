@@ -1,6 +1,6 @@
 import { Layout, Navbar } from 'nextra-theme-docs'
 import { getPageMap } from 'nextra/page-map'
-import { Search } from 'nextra/components'
+import { Search, Banner } from 'nextra/components'
 import Image from 'next/image'
 import { CustomMobileNav } from '@/components/custom-mobile-nav'
 import GoogleAnalytics from '@/components/google-analytics'
@@ -82,6 +82,30 @@ export default async function RootLayout({ children }) {
           footer={false}
           search={<Search placeholder="Search docs..." />}
         >
+          <Banner 
+            storageKey="bruno-v3-preview-announcement"
+            style={{ 
+              background: 'linear-gradient(135deg, #ff9800 0%, #f57c00 100%)',
+              color: 'white'
+            }}
+          >
+            <a 
+              href="https://www.usebruno.com/v3-preview" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{ 
+                display: 'flex', 
+                justifyContent: 'center', 
+                alignItems: 'center', 
+                gap: '8px',
+                color: 'white',
+                textDecoration: 'none',
+                fontWeight: '500'
+              }}
+            >
+              🎉 Bruno V3 Early Preview is live! Be among the first to try Workspaces, YAML Support, Inbuilt Terminal, and more. Learn more ↗
+            </a>
+          </Banner>
           {children}
         </Layout>
       </body>
