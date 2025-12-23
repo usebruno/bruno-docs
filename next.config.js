@@ -186,8 +186,14 @@ export default withNextra({
       { source: '/secrets-management/hashicorp-vault/configuring-and-fetching-secrets', destination: '/secrets-management/secret-managers/hashicorp-vault/configuring-and-fetching-secrets', permanent: true },
 
       // Dev Tools redirects (from docs/dev-tool PR)
-      { source: '/send-requests/res-data-cookies/debugging/devtools', destination: '/send-requests/res-data-cookies/debugging/dev-utils', permanent: true },
-      { source: '/send-requests/res-data-cookies/debugging/bru-console', destination: '/send-requests/res-data-cookies/debugging/dev-tools', permanent: true },
+      { source: '/send-requests/res-data-cookies/debugging/devtools', destination: '/debugging/dev-utils', permanent: true },
+      { source: '/send-requests/res-data-cookies/debugging/bru-console', destination: '/debugging/dev-tools', permanent: true },
+
+      // Debugging section moved to Core Features
+      { source: '/send-requests/res-data-cookies/debugging/dev-utils', destination: '/debugging/dev-utils', permanent: true },
+      { source: '/send-requests/res-data-cookies/debugging/dev-tools', destination: '/debugging/dev-tools', permanent: true },
+      { source: '/send-requests/res-data-cookies/debugging/timeline', destination: '/debugging/timeline', permanent: true },
+      { source: '/send-requests/res-data-cookies/debugging', destination: '/debugging/dev-utils', permanent: true },
     ];
   },
 })

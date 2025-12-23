@@ -2,8 +2,7 @@ const meta = {
   "overview": "Overview",
   "res-data": "Response Data",
   "response-examples": "Request/Response Examples",
-  "cookies": "Cookies",
-  "debugging": "Debugging"
+  "cookies": "Cookies"
 };
 
-export default meta; 
+export default meta;
