@@ -20,6 +20,7 @@ export default {
   "testing": "Tests and Scripts",
   "secrets-management": "Secret Management",
   "auth": "Authentication & Authorization",
+  "debugging": "Debugging",
 
   "api-tools": {
     "title": "API Tools",
