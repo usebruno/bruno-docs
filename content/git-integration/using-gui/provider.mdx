@@ -1,62 +1,86 @@
 import Video from "../../../components/Video";
+import { Callout } from "nextra/components";
+import PremiumBadge from "../../../components/premium-badge";
 
-## Initializing Git
+# Provider Guide
+
+This guide covers Git operations for team members who create and share collections.
+
+## Free Features
+
+<Callout type="info">
+  The following features are available in the **free version** starting from Bruno 3.0.0.
+</Callout>
+
+### Initializing Git
 
 Initializing Git in Bruno is the first step towards managing your API collections with version control. It's easy and quick to set up. Follow the steps below to initialize Git.
 
 1. Launch the **Bruno app**.
 2. Navigate to the collection you want to initialize with Git.
 3. Click on the **Git Icon** in the top-right corner of the navbar.
+4. Click the **Initialize** button to set up your collection with Git.
 
 ![Initialize Git](/screenshots/git-integration/git-gui/1-init-git.webp)
 
-4. Click the **Initialize** button to set up your collection with Git.
+This allows you to perform other Git operations such as viewing diffs, pulling changes, and more.
 
-![Click Init Button](/screenshots/git-integration/git-gui/2-click-init-button.webp)
+### Viewing Diffs
 
-This allows you to perform other Git operations such as adding, committing, pushing, pulling changes, and more.
+Before committing changes, you can view the differences between your local changes and the previous version.
 
-## Connecting to Remote Repository
+1. Go to **Git UI**.
+2. Click on any modified file to see the diff view.
+3. Review the changes highlighted in the diff viewer.
+
+![View Diffs](/screenshots/git-integration/git-gui/2-git-view.webp)
+
+This helps you understand exactly what has changed before deciding to commit.
+
+---
+
+## Pro & Ultimate Features <PremiumBadge />
+
+<Callout type="info">
+  The following features require [Pro or Ultimate](https://www.usebruno.com/pricing) editions.
+</Callout>
+
+### Connecting to Remote Repository
 
 Once you have initialized your collection, the next step is to connect it to a remote Git repository.
-You can directly connect to remote repository from Bruno using Git GUI feature.
+You can directly connect to a remote repository from Bruno using the Git GUI feature.
 
-To connect Bruno to GitHub, you need to set up either an SSH key or a Personal Access Token (PAT) on GitHub. Follow this [official GitHub guide <strong><sup>↗</sup></strong>](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) to set it up.
+To connect Bruno to GitHub, you need to set up either an SSH key or a Personal Access Token (PAT) on GitHub. Follow this [official GitHub guide](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) to set it up.
 
-1. Create empty Git repository on your GitHub.
+1. Create an empty Git repository on GitHub.
 2. Open **Git initialized** Bruno collection.
 3. Click on **Quick Links** (bottom-left corner).
 4. Select **Remotes** from the dropdown.
 
 ![Add Remote Option](/screenshots/git-integration/git-gui/5-add-remote-option.webp)
 
-5. Click on **Add Remote** button.
-6. Enter **Remote Name** and **URL** (Https or SSH) and click on save.
-
+5. Click the **Add Remote** button.
+6. Enter **Remote Name** and **URL** (HTTPS or SSH) and click **Save**.
 
 ![Add Remote Dialog Box](/screenshots/git-integration/git-gui/6-add-remote-dialogbox.webp)
 
-
-
-
-After completing the above steps, your collection will be connected to GitHub. We have to **add and commit** (see below) some changes to pushed collection to GitHub.
-
+After completing the above steps, your collection will be connected to GitHub. We have to **add and commit** (see below) some changes to push the collection to GitHub.
 
 Once your collection is connected to the remote repository, you can manage it directly from the Bruno app.
 
-## Adding and Committing Changes
+### Adding and Committing Changes
 
 Once you've made changes to your collection in Bruno, you can easily commit those changes using the Git UI. This allows you to track changes and collaborate with your team efficiently.
 
 Follow these steps to add and commit changes:
 
-1. Go to **Git UI**. 
-2. Click on **Add Icon** to stage your changes.
+1. Go to **Git UI**.
+2. Click the **Add Icon** to stage your changes.
 
 ![Stage Changes](/screenshots/git-integration/git-gui/3-stage-changes.webp)
 
-4. Click on **Commit Changes** button.
-5. Write a Commit Message and click **Commit**.
+3. Click the **Commit Changes** button.
+4. Write a commit message and click **Commit**.
 
 ![Commit Changes](/screenshots/git-integration/git-gui/4-commit-changes.webp)
 
@@ -64,49 +88,89 @@ Follow these steps to add and commit changes:
 
 By following these steps, your changes are now committed and tracked in Git, ready to be pushed or shared with others.
 
-## Pushing and Pulling Changes
+### Pushing Changes
 
 The GUI-based Git integration in Bruno allows both engineering and non-engineering teams to work together in a fast, efficient, and accurate manner. This integration ensures that your collections remain consistently up-to-date across all team members.
 
 > Before you can push or pull changes, ensure that the **remote repository** is linked to your project.
 
-### Pushing Changes
-
 Push your local changes to the remote repository with just a few clicks.
 
-1. Click on **Git UI** and toggle **Check for Updates** button.
-2. Select **Push to** and confirm the **Remote Server** configurations.
-3. Click on **Push** button.
+1. Go to **Git UI** and click the **Fetch** button.
+2. Click the **Push** button.
 
 ![Push Pull](/screenshots/git-integration/git-gui/8-push-pull.webp)
 
 Now you can see all your local changes pushed to the remote repository.
 
-> Follow Consumer guide to learn about pulling changes feature.
+> Follow the Consumer guide to learn about the pulling changes feature.
 
-## Branch Creation and Checkout
+### Branch Creation and Checkout
 
 With branches in **Bruno**, you can manage your code effectively by isolating different features or tasks.
 
-### Creating Branches
+#### Creating Branches
 
-Follow the below steps to create branches in Bruno.
+Follow the steps below to create branches in Bruno.
 
 1. Go to **Git UI**.
-2. Click on **main** and select **Create Branch** from dropdown.
-3. Enter **Branch Name**.
-4. Click on **Save** button.
+2. In the bottom left corner, click on **main** (or the default branch name).
+3. Enter a **Branch Name**.
+4. Click the **Create branch** button.
 
 ![Create Branch](/screenshots/git-integration/git-gui/7-create-branch.webp)
 
 Once the branch is created, you can start making changes to the branch.
 
-### Branch Checkout
+#### Branch Checkout
 
 1. Click on **main**.
-2. Select the branch you want to switch.
+2. Select the branch you want to switch to.
 
 ![Create Branch](/screenshots/git-integration/git-gui/9-branch-checkout.webp)
 
 3. Now you're switched to your selected branch.
+
+### Stash Changes
+
+Stashing allows you to temporarily save your uncommitted local changes (both staged and unstaged modified tracked files) and revert your working directory to a clean state matching the last commit. This is especially useful for quickly switching context or handling urgent tasks without having to commit unfinished work. 
+
+1. Go to **Git UI**.
+2. When you have unstaged changes, click on **Stashes**.
+3. Enter a **Stash Message** and click the **Stash files** button.
+
+![Stash Changes](/screenshots/git-integration/git-gui/11-stash-files.webp)
+
+4. Your local changes are saved temporarily so you can work on something else or switch branches without losing your changes.
+5. Stashes can be viewed, deleted, or applied to restore your changes later.
+
+![Stash Changes](/screenshots/git-integration/git-gui/12-stash-options.webp)
+
+### Merge Conflict Resolution
+
+When conflicts arise during pull or stash operations, Bruno provides a visual conflict resolution interface.
+
+#### Conflict Detection
+
+When conflicts are detected, Bruno provides information and options to resolve conflicts:
+
+- **Commits behind and ahead of remote**
+- **Conflicting changes identified** 
+- **Abort** - Abort the operation and restore previous state
+
+![Conflict Detection](/screenshots/git-integration/git-gui/13-merge-remotes.webp)
+
+#### Visual Conflict Editor
+
+The conflict editor provides:
+
+- **File List** - Shows all conflicted and non-conflicted files with status indicators
+- **Diff View** - For each conflict, choose to:
+  - Accept Incoming (remote version)
+  - Accept Current (local version)
+  - Accept Both (merge both versions)
+
+Once all conflicts are resolved, enter a commit message and click the **Lock** icon to complete the merge.
+
+![Conflict Editor](/screenshots/git-integration/git-gui/14-merge-conflicts.webp)
 
