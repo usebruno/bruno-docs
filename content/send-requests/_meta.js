@@ -5,5 +5,6 @@ export default {
   "soap": "SOAP",
   "grpc": "GRPC",
   "websocket": "WebSocket",
-  "res-data-cookies": "Response Data and Cookies"
-} 
+  "res-data-cookies": "Response Data and Cookies",
+  "history": "Request History"
+}
