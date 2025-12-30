@@ -52,7 +52,18 @@ export default withNextra({
       { source: '/introduction/support', destination: '/introduction/feedback-community', permanent: true },
       { source: '/manifesto.html', destination: '/introduction/manifesto', permanent: true },
       { source: '/manifesto', destination: '/introduction/manifesto', permanent: true },
-      { source: '/get-started/bruno-basics', destination: '/get-started/bruno-basics/download', permanent: true },
+
+      // Flattened get-started redirects (pages moved up one level)
+      { source: '/get-started/bruno-basics', destination: '/bruno-basics/download', permanent: true },
+      { source: '/get-started/bruno-basics/:path*', destination: '/bruno-basics/:path*', permanent: true },
+      { source: '/get-started/import-export-data', destination: '/import-export-data/import-collections', permanent: true },
+      { source: '/get-started/import-export-data/:path*', destination: '/import-export-data/:path*', permanent: true },
+      { source: '/get-started/configure', destination: '/configure/settings', permanent: true },
+      { source: '/get-started/configure/:path*', destination: '/configure/:path*', permanent: true },
+      { source: '/get-started/javascript-sandbox', destination: '/configure/javascript-sandbox', permanent: true },
+      { source: '/javascript-sandbox', destination: '/configure/javascript-sandbox', permanent: true },
+      { source: '/testing/javascript-sandbox', destination: '/configure/javascript-sandbox', permanent: true },
+      { source: '/get-started/history', destination: '/bruno-basics/history', permanent: true },
 
       // OAuth2 Experimental to OAuth2 2.0 redirects
       { source: '/auth/oauth2-experimental', destination: '/auth/oauth2-2.0/overview', permanent: true },
@@ -64,11 +75,11 @@ export default withNextra({
       { source: '/auth/oauth2-experimental/client-credentials', destination: '/auth/oauth2-2.0/client-credentials', permanent: true },
       { source: '/auth/oauth2-experimental/password-credentials', destination: '/auth/oauth2-2.0/password-credentials', permanent: true },
 
-      // - /get-started links:
-      { source: '/tools/translator', destination: '/get-started/import-export-data/script-translator', permanent: true },
-      { source: '/migration-imports/postman', destination: '/get-started/import-export-data/postman-migration', permanent: true },
-      { source: '/migration-imports/introduction', destination: '/get-started/import-export-data/import-collections', permanent: true },
-      { source: '/get-started/import-export-data/safe-mode', destination: '/get-started/javascript-sandbox', permanent: true },
+      // - /get-started links (now flattened):
+      { source: '/tools/translator', destination: '/import-export-data/script-translator', permanent: true },
+      { source: '/migration-imports/postman', destination: '/import-export-data/postman-migration', permanent: true },
+      { source: '/migration-imports/introduction', destination: '/import-export-data/import-collections', permanent: true },
+      { source: '/get-started/import-export-data/safe-mode', destination: '/javascript-sandbox', permanent: true },
 
       // - /git-integration links:
       { source: '/git-integration/using-gui', destination: '/git-integration/using-gui/intro', permanent: true },
