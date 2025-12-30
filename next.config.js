@@ -63,7 +63,7 @@ export default withNextra({
       { source: '/get-started/javascript-sandbox', destination: '/configure/javascript-sandbox', permanent: true },
       { source: '/javascript-sandbox', destination: '/configure/javascript-sandbox', permanent: true },
       { source: '/testing/javascript-sandbox', destination: '/configure/javascript-sandbox', permanent: true },
-      { source: '/get-started/history', destination: '/bruno-basics/history', permanent: true },
+      { source: '/get-started/history', destination: '/send-requests/history', permanent: true },
 
       // OAuth2 Experimental to OAuth2 2.0 redirects
       { source: '/auth/oauth2-experimental', destination: '/auth/oauth2-2.0/overview', permanent: true },
@@ -79,7 +79,7 @@ export default withNextra({
       { source: '/tools/translator', destination: '/import-export-data/script-translator', permanent: true },
       { source: '/migration-imports/postman', destination: '/import-export-data/postman-migration', permanent: true },
       { source: '/migration-imports/introduction', destination: '/import-export-data/import-collections', permanent: true },
-      { source: '/get-started/import-export-data/safe-mode', destination: '/javascript-sandbox', permanent: true },
+      { source: '/get-started/import-export-data/safe-mode', destination: '/configure/javascript-sandbox', permanent: true },
 
       // - /git-integration links:
       { source: '/git-integration/using-gui', destination: '/git-integration/using-gui/intro', permanent: true },
