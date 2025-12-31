@@ -2,39 +2,128 @@ import { Callout } from "nextra/components";
 
 # Testing
 
-<Callout emoji="">
-  Bruno uses the [Chai library <strong><sup>↗</sup></strong>](https://www.chaijs.com/), so you can follow the
-  same syntax for writing assertions in your tests.
+<Callout type="warning" emoji="">
+  Bruno uses the [Chai library <strong><sup>↗</sup></strong>](https://www.chaijs.com/) for assertions. All Chai expect syntax works in Bruno tests.
 </Callout>
 
-Bruno supports writing automation test scripts in JavaScript for your API requests to assert its behaviour.
+Write JavaScript test scripts to validate API responses, handle complex logic, and automate testing workflows.
 
-Some of the benefits include
+![test-script](/screenshots/test-script.webp)
 
-- Increased efficiency: The tests can be run repeatedly, reducing the time and effort required for manual testing.
-- Increased coverage: Automated tests can cover a larger range of scenarios and edge cases compared to manual testing.
-- Continuous integration/continuous delivery (CI/CD): Automated API tests can be integrated into a CI/CD pipeline, ensuring that API changes are thoroughly tested before deployment.
-- Easier maintenance: Automated tests can be easily updated as the API evolves, reducing the maintenance burden compared to manual tests.
-- Easier regression testing: Automated tests can be easily repeated after changes are made to the API, reducing the time required for regression testing.
-
-**Example:**
+## Basic Test Structure
 
 ```javascript
-test("should be able to login", function () {
+test("test name", function () {
   expect(res.getStatus()).to.equal(200);
-});
-
-test("should return json", function () {
-  expect(res.getBody()).to.eql({
-    hello: "Bruno",
-  });
 });
 ```
 
-**Screenshot:**
+## Common Test Examples
+
+### Testing Status Codes
+
+```javascript
+test("should return success", function () {
+  expect(res.getStatus()).to.equal(200);
+});
+
+test("should not return server error", function () {
+  expect(res.getStatus()).to.not.equal(500);
+});
+```
+
+### Testing Response Body
+
+```javascript
+test("should return user data", function () {
+  const body = res.getBody();
+  
+  expect(body).to.have.property("id");
+  expect(body.name).to.equal("John Doe");
+  expect(body.email).to.contain("@example.com");
+});
+
+test("should return array of users", function () {
+  const users = res.getBody();
+  
+  expect(users).to.be.an("array");
+  expect(users).to.have.lengthOf(3);
+  expect(users[0]).to.have.property("id");
+});
+```
+
+### Testing Nested Objects
+
+```javascript
+test("should validate nested user profile", function () {
+  const body = res.getBody();
+  
+  expect(body.user.profile.name).to.equal("Alice");
+  expect(body.user.settings.theme).to.equal("dark");
+  expect(body.user.settings.notifications).to.be.true;
+});
+```
+
+### Testing with Conditional Logic
+
+```javascript
+test("should validate response based on status", function () {
+  const status = res.getStatus();
+  const body = res.getBody();
+  
+  if (status === 200) {
+    expect(body).to.have.property("data");
+    expect(body.data).to.not.be.empty;
+  } else if (status === 404) {
+    expect(body).to.have.property("error");
+    expect(body.error.message).to.contain("not found");
+  } else {
+    throw new Error(`Unexpected status code: ${status}`);
+  }
+});
+
+test("should validate user role permissions", function () {
+  const body = res.getBody();
+  
+  if (body.user.role === "admin") {
+    expect(body.user.permissions).to.include("write");
+    expect(body.user.permissions).to.include("delete");
+  } else if (body.user.role === "user") {
+    expect(body.user.permissions).to.include("read");
+    expect(body.user.permissions).to.not.include("delete");
+  }
+});
+```
+
+### Testing Arrays and Loops
+
+```javascript
+test("should validate all users have required fields", function () {
+  const users = res.getBody();
+  
+  users.forEach((user) => {
+    expect(user).to.have.property("id");
+    expect(user).to.have.property("email");
+    expect(user.email).to.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+  });
+});
+
+test("should find user by id", function () {
+  const users = res.getBody();
+  const targetUser = users.find((u) => u.id === 123);
+  
+  expect(targetUser).to.exist;
+  expect(targetUser.name).to.equal("John");
+});
+```
+
+### Testing Response Headers
 
 ![bru lang sample](/screenshots/get-started/bruno-basics/create_test/test-script.webp)
 
-### Scripting API
+## Next Steps
 
-Please see the [Scripting API](../script/javascript-reference) for a comprehensive set of methods that enable you to write custom JavaScript code to automate and test your API requests in Bruno. It allows you to manipulate request variables, modify headers, handle response data, and implement complex logic directly within your test scripts.
+For more advanced scripting capabilities, see:
+- [Scripting API](../script/javascript-reference) - Full API reference
+- [Response Query](../script/response/response-query) - Query complex response data
+- [Variables](../script/vars) - Work with variables across requests
