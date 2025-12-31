@@ -1,36 +1,45 @@
 # Timeline
 
-The **Timeline** tab provides detailed insights into the request's response. It includes crucial information such as the body, authentication details, variables, parameters, headers, and other necessary data to inspect and validate the expected response.
+The **Timeline** tab provides comprehensive insights into your API requests and responses. It displays detailed information about what was sent, what was received, and network-level details to help you debug and validate your API calls effectively.
 
-Additionally, the Timeline tab displays HTTP status codes, response time, and execution details for the request.
+## Timeline Structure
 
-## Response Structure
+The Timeline tab is organized into three categories:
 
-The Timeline tab is divided into two sections:
+1. **Request**
+2. **Response**
+3. **Network Logs**
 
-1. **Request Section (Green)**
-2. **Response Section (Purple)**
+![Response Timeline](/screenshots/send-request/res-data-and-cookie/res-timeline.webp)
 
-![timeline-tab](/screenshots/send-request/res-data-and-cookie/devtools/timeline/timeline.webp)
+### 1. Request Tab
 
-### 1. Request Section (Green)
+The Request tab displays everything that was sent with your API request:
 
-The Request section provides details about the request, including:
+- **URL** - The complete endpoint URL
+- **Query Parameters** - Query strings and path variables
+- **Request Body** - The data payload sent with the request
+- **Request Headers** - All headers included in the request
+- **Authentication** - Authentication details and credentials
+- **Variables** - Variables used in the request
 
-- URL
-- Query and path variables
-- Request body (data)
-- Headers
-- Authentication details
-- Other parameters sent with the request
+### 2. Response Tab
 
-### 2. Response Section (Purple)
+The Response tab shows all information received from the server:
 
-The Response section provides details about the response to the request, including:
+- **Status Code** - HTTP status code of the response
+- **Response Headers** - All headers returned by the server
+- **Response Body** - The complete response data
+- **Response Size** - Size of the response payload
+- **Execution Time** - Time taken to complete the request
 
-- Status code
-- Execution details
-- Response headers
-- Size of the response
+### 3. Network Logs Tab
 
-Additionally, we have included sample data for example in the image above to demonstrate how you can view both request and response parameters in the Timeline tab.
+The Network Logs tab provides low-level network insights for advanced debugging:
+
+- **Request/Response Flow** - Detailed timeline of the network transaction
+- **Network Timing** - Breakdown of connection, DNS, SSL, and transfer times
+- **Protocol Details** - HTTP version and connection information
+- **Debugging Information** - Additional network-level diagnostics
+
+This comprehensive view helps you identify performance bottlenecks, debug connection issues, and understand the complete lifecycle of your API requests.
