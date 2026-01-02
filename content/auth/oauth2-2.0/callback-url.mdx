@@ -1,0 +1,71 @@
+import { Callout } from "nextra/components";
+
+# Callback URL Configuration
+
+When using OAuth 2.0 with the System Browser option, you need to configure a callback URL that your OAuth provider will redirect to after authentication. Bruno provides a default callback URL, but you can also use your own custom callback server.
+
+## Default Callback URL
+
+Bruno provides a default callback URL for OAuth 2.0 flows:
+
+```
+https://oauth2.usebruno.com
+```
+
+Add this URL to your OAuth provider's list of allowed redirect URLs to use the System Browser option.
+
+## Custom Callback Server
+
+You may use your own hosted callback server or self-host one. Bruno will treat any configured callback URL as the OAuth redirect endpoint.
+
+### Option 1: Hosted Callback Server
+
+You can host your own callback server and configure that in Bruno. Bruno will use this custom callback endpoint to complete the OAuth flow securely within your network.
+
+**Configuration Steps:**
+
+1. Host your own callback server at your domain
+2. Configure Bruno with your hosted callback URL:
+   ```
+   https://your-company.com/oauth2/callback
+   ```
+3. Add the same URL to your OAuth provider's allowed redirect URLs
+
+### Option 2: Run a Local Callback Server
+
+If you have Node.js installed, you can quickly start a local callback server using:
+
+```bash
+npx @usebruno/oauth2-callback-server
+```
+
+This command starts a local server that automatically forwards OAuth redirects to Bruno via the deep link mechanism.
+
+**Configuration Steps:**
+
+1. Start the callback server using the command above
+2. Configure Bruno to use your local callback URL:
+   ```
+   http://localhost:3000/oauth2/callback
+   ```
+3. Add the same URL to your OAuth provider's allowed redirect URLs
+
+<Callout type="warning">
+Ensure your OAuth provider allows `localhost` redirect URLs.
+</Callout>
+
+## How the Callback Works
+
+1. The authorization server redirects the user to the configured callback URL after authentication
+2. The callback page immediately redirects to a Bruno custom URL scheme:
+   ```
+   bruno://app/oauth2/callback
+   ```
+3. Bruno receives the callback and:
+   - Validates the `state` parameter
+   - Performs the authorization code + PKCE token exchange locally
+
+<Callout type="info">
+All OAuth data remains on the user's machine. Tokens are never processed or stored by Bruno servers.
+</Callout>
+

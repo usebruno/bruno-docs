@@ -1,0 +1,75 @@
+import { Callout } from "nextra/components";
+
+# System Browser Support for OAuth 2.0
+
+Bruno provides a **System Browser** option for OAuth 2.0 Authorization Code authentication, allowing you to use your default system browser instead of the embedded Electron browser window.
+
+## Why Use System Browser?
+
+Using the system browser offers several advantages:
+
+- **Familiar UX**: Use your default browser with saved passwords and extensions
+- **Better Compatibility**: Some OAuth providers block or degrade embedded browsers
+- **Enhanced Security**: Leverage your browser's security features and session management
+
+## Enabling System Browser
+
+When configuring OAuth 2.0 in Bruno:
+
+1. Navigate to the OAuth 2.0 configuration settings
+2. Under **Callback URL**, select the **System Browser** option
+
+![System Browser Option](/screenshots/auth/system-browser.webp)
+
+3. Configure the callback URL (default: `https://oauth2.usebruno.com`)
+4. Add the callback URL to your OAuth provider's allowed redirect URLs
+
+<Callout type="info">
+The **Inbuilt browser** option is selected by default, maintaining existing behavior for users who prefer the embedded browser.
+</Callout>
+
+## How It Works
+
+When you select the System Browser option, the OAuth flow proceeds as follows:
+
+1. **Authorization Request**: Bruno initiates the OAuth flow and opens your system browser
+2. **User Authentication**: You authenticate in your system browser with your OAuth provider
+3. **Callback Redirect**: The authorization server redirects to the configured callback URL:
+   ```
+   https://oauth2.usebruno.com
+   ```
+4. **Deep Link Trigger**: The callback page redirects to Bruno's custom URL scheme:
+   ```
+   bruno://app/oauth2/callback
+   ```
+5. **Token Exchange**: Bruno receives the authorization code and:
+   - Validates the `state` parameter
+   - Performs the authorization code + PKCE token exchange locally
+   - Stores the access token securely
+
+<Callout type="info">
+All OAuth data remains on your machine. Tokens are never processed or stored by Bruno servers.
+</Callout>
+
+## OAuth Provider Configuration
+
+To use the System Browser option, add the following redirect URL to your OAuth provider configuration:
+
+```
+https://oauth2.usebruno.com
+```
+
+This is the default callback URL used by Bruno. You can also [configure a custom callback server](/auth/oauth2-2.0/callback-url) if needed.
+
+## Local Server Behavior
+
+When using System Browser:
+
+- A local HTTP server starts on `127.0.0.1:<port>` on the first OAuth flow
+- The server is reused for subsequent OAuth flows
+- The server stops automatically when Bruno closes
+
+## Custom Callback Servers
+
+For advanced use cases, you can use your own hosted callback server or run a local callback server. See the [Callback URL Configuration](/auth/oauth2-2.0/callback-url) guide for details.
+
