@@ -1,0 +1,221 @@
+# YAML Samples
+
+Here are sample YAML files showing common API request patterns.
+
+## GET Request
+
+```yaml
+meta:
+  name: Get User
+  seq: 1
+
+http:
+  method: get
+  url: https://api.github.com/users/usebruno
+```
+
+## GET with Headers
+
+```yaml
+meta:
+  name: Get with Headers
+  seq: 2
+
+http:
+  method: get
+  url: https://api.example.com/data
+  headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer topsecret
+```
+
+## GET with Query Parameters
+
+```yaml
+meta:
+  name: Search Users
+  seq: 3
+
+http:
+  method: get
+  url: https://api.example.com/users
+  params:
+    query:
+      - name: filter
+        value: active
+      - name: limit
+        value: "10"
+      - name: page
+        value: "1"
+        disabled: true
+```
+
+## GET with Path Parameters
+
+```yaml
+meta:
+  name: Get User by ID
+  seq: 4
+
+http:
+  method: get
+  url: https://api.example.com/users/:userId
+  params:
+    path:
+      - name: userId
+        value: "123"
+        description: The user's unique identifier
+```
+
+## POST with JSON Body
+
+```yaml
+meta:
+  name: Create User
+  seq: 5
+
+http:
+  method: post
+  url: https://api.example.com/users
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "John Doe",
+        "email": "john@example.com"
+      }
+```
+
+## POST with Form Data
+
+```yaml
+meta:
+  name: Upload Form
+  seq: 6
+
+http:
+  method: post
+  url: https://api.example.com/submit
+  body:
+    type: formUrlEncoded
+    data:
+      - name: username
+        value: johndoe
+      - name: password
+        value: secret123
+```
+
+## Request with Authentication
+
+```yaml
+meta:
+  name: Authenticated Request
+  seq: 7
+
+http:
+  method: get
+  url: https://api.example.com/protected
+  auth:
+    type: basic
+    basic:
+      username: admin
+      password: secret
+```
+
+## Request with Pre-Request Script
+
+```yaml
+meta:
+  name: Request with Script
+  seq: 8
+
+http:
+  method: post
+  url: https://api.example.com/data
+
+scripts:
+  pre-request: |-
+    // Set dynamic timestamp
+    const timestamp = Date.now();
+    bru.setVar("timestamp", timestamp);
+```
+
+## Request with Post-Response Script
+
+```yaml
+meta:
+  name: Login
+  seq: 9
+
+http:
+  method: post
+  url: https://api.example.com/login
+  body:
+    type: json
+    data: |-
+      {
+        "username": "johnnash",
+        "password": "governingdynamics"
+      }
+
+scripts:
+  post-response: |-
+    // Save token for subsequent requests
+    bru.setVar("token", res.body.token);
+```
+
+## Request with Tests
+
+```yaml
+meta:
+  name: Login with Tests
+  seq: 10
+
+http:
+  method: post
+  url: https://api.example.com/login
+  body:
+    type: json
+    data: |-
+      {
+        "username": "johnnash",
+        "password": "governingdynamics"
+      }
+
+tests: |-
+  test("should be able to login", function() {
+    expect(res.status).to.equal(201);
+  });
+
+  test("should receive the token", function() {
+    expect(res.body.token).to.be.a('string');
+  });
+```
+
+## Request with Variables
+
+```yaml
+meta:
+  name: Request with Variables
+  seq: 11
+
+http:
+  method: get
+  url: https://api.example.com/users
+
+vars:
+  pre-request:
+    - name: userId
+      value: "123"
+      description: User ID variable
+  post-response:
+    - name: token
+      value: res.body.token
+      disabled: false
+```
+

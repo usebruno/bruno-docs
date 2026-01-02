@@ -1,0 +1,138 @@
+import { Callout } from "nextra/components";
+
+# OpenCollection YAML Format
+
+<Callout type="info">
+  YAML support is available starting with Bruno 3.0.0. Bruno continues to support `.bru` files alongside the new YAML format.
+</Callout>
+
+Starting with Bruno 3.0.0, you can save your API request data using YAML (`.yml`) files as an alternative to the `.bru` format. This YAML format follows the [OpenCollection specification](https://spec.opencollection.com/), an **open specification created by Bruno** for defining executable API collections.
+
+## Why OpenCollection YAML?
+
+OpenCollection combines the power of an open specification with the industry-standard YAML format:
+
+### Open Specification
+
+- **Community-driven standard** — OpenCollection is an open specification created by Bruno, designed to be transparent and extensible
+- **No vendor lock-in** — Your API collections are stored in a well-documented, open format that you fully own and control
+- **Interoperability** — Build tooling, integrations, and workflows around a documented specification
+
+### Industry-Standard YAML Format
+
+- **Universal format** — YAML is one of the most widely adopted data serialization formats, used across the software industry
+- **Zero learning curve** — If you've worked with Kubernetes, Docker Compose, GitHub Actions, or countless other tools, you already know YAML
+- **Human-readable** — Clean, intuitive syntax that's easy to read, write, and review in pull requests
+
+### Seamless Tooling Integration
+
+Since everything is stored in standard YAML, you can leverage the entire ecosystem of existing tools:
+
+- **IDE support** — Native syntax highlighting in VS Code, JetBrains IDEs, Vim, and virtually any editor without additional extensions
+- **Linting & validation** — Use tools like `yamllint`, `prettier`, or custom JSON Schema validators
+- **Git integration** — GitHub, GitLab, and Bitbucket provide built-in YAML syntax highlighting and diff views for pull requests
+- **Scripting & automation** — Parse and manipulate collections with standard YAML libraries in any programming language (Python, Node.js, Go, etc.)
+- **CI/CD pipelines** — Easily integrate with existing pipeline tools that already understand YAML
+
+## OpenCollection vs OpenAPI
+
+OpenCollection and OpenAPI serve complementary purposes:
+
+| OpenAPI | OpenCollection |
+|---------|----------------|
+| Defines **what** your API is — the contract, schema, and structure | Defines **how** to use your API — scenarios, workflows, and execution |
+| API endpoints and HTTP methods | Business workflows and sequences |
+| Request and response schemas | Pre-request scripts and tests |
+| Authentication requirements | Environment variables and secrets |
+| Data types and validation rules | Runnable, shareable collections |
+
+**OpenAPI tells you the shape of the door. OpenCollection shows you how to walk through it.**
+
+<Callout type="tip">
+  Learn more about OpenCollection at [opencollection.com](https://www.opencollection.com/) and view the full specification at [spec.opencollection.com](https://spec.opencollection.com/).
+</Callout>
+
+## Quick Example
+
+Here's what a simple POST request looks like in YAML format:
+
+```yaml
+meta:
+  name: Create User
+  seq: 1
+
+http:
+  method: post
+  url: https://api.example.com/users
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "John Doe",
+        "email": "john@example.com"
+      }
+
+tests: |-
+  expect(res.status).to.equal(201);
+```
+
+Compare this to the equivalent `.bru` file:
+
+```bash
+meta {
+  name: Create User
+  seq: 1
+}
+
+post {
+  url: https://api.example.com/users
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "John Doe",
+    "email": "john@example.com"
+  }
+}
+
+tests {
+  expect(res.status).to.equal(201);
+}
+```
+
+## File Storage
+
+When using YAML format, your collections will be stored with `.yml` file extensions instead of `.bru`. The folder structure remains the same:
+
+```
+my-collection/
+├── bruno.json           # Collection configuration
+├── environments/
+│   └── development.yml
+├── users/
+│   ├── create-user.yml
+│   ├── get-user.yml
+│   └── delete-user.yml
+└── orders/
+    └── create-order.yml
+```
+
+## Migration
+
+Bruno supports both `.bru` and `.yml` formats, so you can migrate your collections gradually. Both formats can coexist within the same collection during the transition period.
+
+<Callout type="warning">
+  Migration tooling is planned for a future release. For now, you can manually convert files or create new requests using the YAML format.
+</Callout>
+
+## Resources
+
+- [OpenCollection Specification](https://spec.opencollection.com/)
+- [OpenCollection JSON Schema](https://schema.opencollection.com/)
