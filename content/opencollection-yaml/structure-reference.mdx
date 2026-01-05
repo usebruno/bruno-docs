@@ -1,0 +1,200 @@
+# YAML Structure Reference
+
+This page documents the structure of OpenCollection YAML files used in Bruno.
+
+## Top-Level Structure
+
+A Bruno YAML request file contains the following top-level sections:
+
+```yaml
+meta:        # Request metadata
+http:        # HTTP request configuration
+vars:        # Variables (pre-request and post-response)
+scripts:     # JavaScript scripts
+tests:       # Test assertions
+docs:        # Request documentation
+```
+
+## meta
+
+Store metadata about your request.
+
+```yaml
+meta:
+  name: Get Users
+  seq: 1
+  tags:
+    - smoke
+    - sanity
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `name` | string | The display name of the request |
+| `seq` | number | Sequence number that determines sort position in the UI |
+| `tags` | array | Tags for filtering requests during collection runs |
+
+## http
+
+The HTTP request configuration.
+
+```yaml
+http:
+  method: post
+  url: https://api.example.com/users
+  params:
+    query: [...]
+    path: [...]
+  headers: [...]
+  body:
+    type: json
+    data: "..."
+  auth:
+    type: basic
+    basic:
+      username: admin
+      password: secret
+```
+
+### http.method
+
+The HTTP method. Supported values: `get`, `post`, `put`, `patch`, `delete`, `options`, `head`, `trace`, `connect`.
+
+### http.params.query
+
+Query parameters as an array of objects.
+
+```yaml
+params:
+  query:
+    - name: filter
+      value: active
+      disabled: false
+    - name: limit
+      value: "10"
+```
+
+### http.params.path
+
+Path parameters for URL templates like `/users/:userId`.
+
+```yaml
+params:
+  path:
+    - name: userId
+      value: "123"
+      description: The user's unique identifier
+```
+
+### http.headers
+
+Request headers as an array of objects.
+
+```yaml
+headers:
+  - name: Content-Type
+    value: application/json
+    description: Content type header
+  - name: Accept
+    value: application/json
+    disabled: true
+```
+
+### http.body
+
+The request body configuration.
+
+```yaml
+body:
+  type: json
+  data: |-
+    {
+      "name": "John Doe"
+    }
+```
+
+| Body Type | Description |
+|-----------|-------------|
+| `json` | JSON body |
+| `text` | Plain text body |
+| `xml` | XML body |
+| `formUrlEncoded` | Form URL-encoded data |
+| `multipartForm` | Multipart form data |
+| `graphql` | GraphQL query |
+
+### http.auth
+
+Authentication configuration.
+
+```yaml
+auth:
+  type: basic
+  basic:
+    username: admin
+    password: secret
+```
+
+Supported auth types: `none`, `basic`, `bearer`, `digest`, `oauth2`, `awsv4`, `ntlm`.
+
+## vars
+
+Define variables that can be set before or after the request.
+
+```yaml
+vars:
+  pre-request:
+    - name: userId
+      value: "123"
+      description: User ID variable
+  post-response:
+    - name: token
+      value: res.body.token
+      disabled: false
+```
+
+## scripts
+
+JavaScript code to run before or after the request.
+
+```yaml
+scripts:
+  pre-request: |-
+    // Runs before the request
+    console.log('pre-request');
+    req.setHeader("X-Timestamp", Date.now());
+  post-response: |-
+    // Runs after the response
+    console.log('post-response');
+    bru.setVar("token", res.body.token);
+```
+
+## tests
+
+Test assertions using the Chai assertion library.
+
+```yaml
+tests: |-
+  test("should return 200", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("should have user data", function() {
+    expect(res.body.user).to.exist;
+  });
+```
+
+## docs
+
+Request-level documentation in Markdown format.
+
+```yaml
+docs: |-
+  # User Creation API
+
+  This endpoint creates a new user in the system.
+
+  ## Required Fields
+  - name: User's full name
+  - email: User's email address
+```
+

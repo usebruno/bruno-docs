@@ -34,6 +34,7 @@ export default {
   },
   "bru-cli": "Bruno CLI",
   "bru-lang": "Bru Lang",
+  "opencollection-yaml": "OpenCollection YAML",
   "converters": "Converters",
   "vs-code-extension": "VS Code Extension",
 
