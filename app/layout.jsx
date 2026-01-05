@@ -4,6 +4,7 @@ import { Search } from 'nextra/components'
 import Image from 'next/image'
 import { CustomMobileNav } from '@/components/custom-mobile-nav'
 import GoogleAnalytics from '@/components/google-analytics'
+import { ReleaseBanner } from '@/components/release-banner'
 import './globals.css'
 
 export const metadata = {
@@ -51,6 +52,7 @@ export default async function RootLayout({ children }) {
     <html lang="en" dir="ltr" suppressHydrationWarning>
       <body>
         <GoogleAnalytics />
+        <ReleaseBanner />
         <CustomMobileNav />
         <Layout
           pageMap={pageMap}

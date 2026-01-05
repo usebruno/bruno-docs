@@ -26,6 +26,36 @@ Variables in GraphQL allow you to create dynamic, reusable, and secure queries. 
 
 ![query-graphql](/screenshots/send-request/graphql/using-var-in-graphql.webp)
 
+**Example Query with Variables:**
+
+You can test this query using the Countries GraphQL API: `https://countries.trevorblades.com/graphql`
+
+```graphql
+query CountryQuery($code: ID!) {
+  country(code: $code) {
+    name
+    native
+    capital
+    emoji
+    currency
+    languages {
+      code
+      name
+    }
+  }
+}
+```
+
+**Variables (JSON format):**
+
+```json
+{
+  "code": "BR"
+}
+```
+
+In this example, the `$code` variable is defined as a required ID type (`ID!`), and its value `"BR"` is passed separately in the Variables section.
+
 4. **Execute the Request**:
    - Bruno will automatically combine your query and variables
    - The variables will be properly escaped and sent with the request

@@ -21,6 +21,28 @@ Bruno provides a dedicated section called **Query** where you can write and exec
 
 ![query-graphql](/screenshots/send-request/graphql/graphql-req-query.webp)
 
+**Example Query:**
+
+You can test this query using the Countries GraphQL API: `https://countries.trevorblades.com/graphql`
+
+```graphql
+query Query {
+  country(code: "BR") {
+    name
+    native
+    capital
+    emoji
+    currency
+    languages {
+      code
+      name
+    }
+  }
+}
+```
+
+This query fetches country information for Brazil (code: "BR"), including its name, native name, capital, emoji, currency, and languages.
+
 
 ## Get Started with GraphQL APIs
 
