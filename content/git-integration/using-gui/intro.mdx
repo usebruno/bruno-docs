@@ -1,9 +1,9 @@
 import PremiumBadge from "../../../components/premium-badge";
 import { Callout } from "nextra/components";
 
-# Collaboration via GUI <PremiumBadge />
+# Collaboration via GUI
 
-Bruno offers an intuitive **GUI-based Git collaboration** feature, available in the [Pro <strong><sup>↗</sup></strong>](https://www.usebruno.com/buy?plan=pro) and [Ultimate Editions <strong><sup>↗</sup></strong>](https://www.usebruno.com/buy?plan=ultimate). This feature makes it easier for both engineering and non-engineering teams to collaborate seamlessly on collections.
+Bruno offers an intuitive **GUI-based Git collaboration** feature that makes it easier for both engineering and non-engineering teams to collaborate seamlessly on collections.
 
 <Callout type="warning">
   Git must be
@@ -11,10 +11,39 @@ Bruno offers an intuitive **GUI-based Git collaboration** feature, available in 
   your machine to use this feature.
 </Callout>
 
-This feature includes following actions:
+## Feature Availability
 
-- [Initializing Git in a Collection](../using-gui/provider#initializing-git)
-- [Adding and Committing Changes](../using-gui/provider#adding-and-committing-changes)
-- [Pushing and Pulling Changes](../using-gui/provider#pushing-and-pulling-changes)
-- [Branch Creation and Checkout](../using-gui/provider#branch-creation-and-checkout)
-- [Cloning a Repository](./consumer#cloning-collections-from-github)
+<Callout type="info">
+  **Bruno 3.0.0+**: Core Git UI features are now available in the free version, making Git collaboration accessible to all users.
+</Callout>
+
+### Free Features (Bruno 3.0.0+)
+
+The following Git UI features are available in the free/open-source version of Bruno:
+
+| Feature | Description |
+|---------|-------------|
+| [Initialize Git](../using-gui/provider#initializing-git) | Set up version control for your collection |
+| [View Diffs](../using-gui/provider#adding-and-committing-changes) | See changes made to your collection files |
+| [Check for Updates](./consumer#pulling-changes) | Check if remote repository has new changes |
+| [Pull Changes](./consumer#pulling-changes) | Download and apply remote changes to your local collection |
+| [Clone Repository](./consumer#cloning-collections-from-github) | Clone a collection from a Git repository |
+
+### Pro & Ultimate Features <PremiumBadge noLink />
+
+The following advanced Git UI features require [Pro <strong><sup>↗</sup></strong>](https://www.usebruno.com/pricing) or [Ultimate <strong><sup>↗</sup></strong>](https://www.usebruno.com/pricing) editions:
+
+| Feature | Description |
+|---------|-------------|
+| [Add & Commit Changes](../using-gui/provider#adding-and-committing-changes) | Stage and commit your local changes |
+| [Push Changes](../using-gui/provider#pushing-and-pulling-changes) | Push local commits to remote repository |
+| [Branch Creation](../using-gui/provider#branch-creation-and-checkout) | Create new branches for features or fixes |
+| [Branch Checkout](../using-gui/provider#branch-creation-and-checkout) | Switch between different branches |
+| [Connect Remote](../using-gui/provider#connecting-to-remote-repository) | Add and manage remote repository connections |
+| Stash Changes | Temporarily save uncommitted changes before pulling |
+| Merge Conflict Resolution | Visual editor to resolve Git merge conflicts |
+
+## Quick Links
+
+- [Provider Guide](../using-gui/provider) - For team members creating and pushing collections
+- [Consumer Guide](./consumer) - For team members cloning and pulling collections

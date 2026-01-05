@@ -8,7 +8,9 @@ export default {
     "type": "separator"
   },
   "introduction": "Introduction",
-  "get-started": "Getting Started Guide",
+  "bruno-basics": "Bruno Basics",
+  "import-export-data": "Import or Export Data",
+  "configure": "Configure",
 
   "core-features": {
     "title": "Core Features",
@@ -20,6 +22,7 @@ export default {
   "testing": "Tests and Scripts",
   "secrets-management": "Secret Management",
   "auth": "Authentication & Authorization",
+  "debugging": "Debugging",
 
   "api-tools": {
     "title": "API Tools",

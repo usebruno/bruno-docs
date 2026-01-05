@@ -1,5 +1,6 @@
 export default {
   "download": "Download & Install",
+  "create-a-workspace": "Create a Workspace",
   "create-a-collection": "Create a Collection",
   "create-a-folder": "Create a Folder",
   "create-a-request": "Create a Request",

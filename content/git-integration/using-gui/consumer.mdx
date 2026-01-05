@@ -1,45 +1,59 @@
 import { Callout } from "nextra/components";
 
-## Cloning Collections from GitHub 
+# Consumer Guide
+
+This guide covers Git operations for team members who clone and consume shared collections.
+
+<Callout type="info">
+  All features on this page are available in the **free version** starting from Bruno 3.0.0.
+</Callout>
+
+## Cloning Collections from GitHub
 
 To clone a collection from GitHub into **Bruno**, you need to have an existing collection repository hosted on GitHub.
 
-<Callout type="info">
-  You must have an existing collection repository hosted on GitHub.
-</Callout>
+For example, you can use this [Bruno repository](https://github.com/usebruno/github-rest-api-collection) and follow the steps below.
 
-For example, you can use this [Bruno repository <strong><sup>↗</sup></strong>](https://github.com/usebruno/github-rest-api-collection) and follow the steps below.
-
-1. Launch **Bruno** and click on the **Main Menu** in the top-left corner.
-2. Click on **Import Collection** from the dropdown menu.
+1. Launch **Bruno** and click the **Import Collection** button in the Quick Actions section on the Overview page. Alternatively, click the **+** icon in the sidebar and select **Import collection**.
 
 ![Import Option](/screenshots/git-integration/git-gui/consumer/1-import-option.webp)
 
-3. Select **Clone Git Repository** from the available options.
+2. In the Import Collection dialog, select the **Git Repository** tab.
 
+3. Enter the **Git repository URL** and click the **Clone** button.
 ![Clone Repository](/screenshots/git-integration/git-gui/consumer/2-click-clone-repo.webp)
 
-4. Enter the above **GitHub Repository URL** and specify the **Location** where you want to save the cloned collection.
+4. Choose a **Location** to clone the collection to.
+![Choose Location](/screenshots/git-integration/git-gui/consumer/3-enter-repo-location.webp)
 
-![Enter Repository URL](/screenshots/git-integration/git-gui/consumer/3-enter-repo-url.webp)
-
-5. Click the **Clone** button to begin cloning the repository.
-6. After the cloning process completes, select the **Collection** you want to open and click **Open**.
+4. After the cloning process completes, select the **Collection** you want to open and click **Open**.
 
 ![Collection Open](/screenshots/git-integration/git-gui/consumer/4-collection-open.webp)
 
-You'll see your collection will be open in **Bruno**.
+Your collection will now be open in **Bruno**.
 
+## Checking for Updates
 
-### **Pulling Changes**
+You can check if there are new changes available in the remote repository.
+
+1. Go to **Git UI**.
+2. Click the **Fetch** button.
+3. Bruno will display if there are incoming changes available.
+
+This allows you to see if your team has pushed new changes before you pull them.
+
+## Pulling Changes
 
 Pull the latest changes from the remote repository to stay synchronized with your team.
 
 1. Go to **Git UI**.
-2. Toggle **Check for Updates** button.
-3. Select **Pull from** and confirm the **Remote Server** configurations.
-4. Click on **Pull** button.
+2. Click the **Fetch** button.
+3. Click the **Pull** button.
 
-![Pull Changes](/screenshots/git-integration/git-gui/10-pull-changes.webp)
+![Pull Changes](/screenshots/git-integration/git-gui/consumer/5-fetch-pull-repo.webp)
 
 Now you can see all your remote changes pulled in your collection.
+
+<Callout type="info">
+  If you have local uncommitted changes when pulling, you may be prompted to stash them first. The [Stash Changes](/git-integration/using-gui/provider#stash-changes) feature (Pro/Ultimate) helps manage this workflow.
+</Callout>
