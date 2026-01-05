@@ -4,25 +4,28 @@ import { Callout } from "nextra/components";
 
 Bruno provides a **System Browser** option for OAuth 2.0 Authorization Code authentication, allowing you to use your default system browser instead of the embedded Electron browser window.
 
-## Why Use System Browser?
-
-Using the system browser offers several advantages:
-
-- **Familiar UX**: Use your default browser with saved passwords and extensions
-- **Better Compatibility**: Some OAuth providers block or degrade embedded browsers
-- **Enhanced Security**: Leverage your browser's security features and session management
 
 ## Enabling System Browser
 
-When configuring OAuth 2.0 in Bruno:
+### Global Configuration (Recommended)
 
-1. Navigate to the OAuth 2.0 configuration settings
-2. Under **Callback URL**, select the **System Browser** option
+If you want to use Bruno System Browser OAuth2 for all your collections in workspace, you can enable it from **Preferences**. This will make System Browser available for the entire collection by default.
+
+1. Navigate to **Preferences** (located at the bottom of the left sidebar)
+2. Go to the **General** section
+3. Enable **Use System Browser for OAuth2**
+4. This setting will apply to all collections by default
+
+![Default Callback URL](/screenshots/auth/preferences-oauth-callback.webp)
+
+### General Configuration
+
+
+1. Navigate to the Auth tab at (request, folder or collection) level and selecet OAuth 2.0 as authentication method
+2. Under **Callback URL**, select the **Use System Browser for OAuth** option
 
 ![System Browser Option](/screenshots/auth/system-browser.webp)
 
-3. Configure the callback URL (default: `https://oauth2.usebruno.com`)
-4. Add the callback URL to your OAuth provider's allowed redirect URLs
 
 <Callout type="info">
 The **Inbuilt browser** option is selected by default, maintaining existing behavior for users who prefer the embedded browser.
@@ -36,7 +39,7 @@ When you select the System Browser option, the OAuth flow proceeds as follows:
 2. **User Authentication**: You authenticate in your system browser with your OAuth provider
 3. **Callback Redirect**: The authorization server redirects to the configured callback URL:
    ```
-   https://oauth2.usebruno.com
+   https://oauth.usebruno.com/callback
    ```
 4. **Deep Link Trigger**: The callback page redirects to Bruno's custom URL scheme:
    ```
@@ -51,25 +54,42 @@ When you select the System Browser option, the OAuth flow proceeds as follows:
 All OAuth data remains on your machine. Tokens are never processed or stored by Bruno servers.
 </Callout>
 
-## OAuth Provider Configuration
+## Custom Callback Server
 
-To use the System Browser option, add the following redirect URL to your OAuth provider configuration:
+You may use your own hosted callback server or self-host one. Bruno will treat any configured callback URL as the OAuth redirect endpoint.
 
+### Option 1: Hosted Callback Server
+
+You can host your own callback server and configure that in Bruno. Bruno will use this custom callback endpoint to complete the OAuth flow securely within your network.
+
+**Configuration Steps:**
+
+1. Host your own callback server at your domain
+2. Configure Bruno with your hosted callback URL:
+   ```
+   https://your-domain.com/oauth/callback
+   ```
+3. Add the same URL to your OAuth provider's allowed redirect URLs
+
+### Option 2: Run a Local Callback Server
+
+If you have Node.js installed, you can quickly start a local callback server using:
+
+```bash
+npx @usebruno/oauth-callback-server
 ```
-https://oauth2.usebruno.com
-```
 
-This is the default callback URL used by Bruno. You can also [configure a custom callback server](/auth/oauth2-2.0/callback-url) if needed.
+This command starts a local server that automatically forwards OAuth redirects to Bruno via the deep link mechanism.
 
-## Local Server Behavior
+**Configuration Steps:**
 
-When using System Browser:
+1. Start the callback server using the command above
+2. Configure Bruno to use your local callback URL:
+   ```
+   http://localhost:3000/oauth/callback
+   ```
+3. Add the same URL to your OAuth provider's allowed redirect URLs
 
-- A local HTTP server starts on `127.0.0.1:<port>` on the first OAuth flow
-- The server is reused for subsequent OAuth flows
-- The server stops automatically when Bruno closes
-
-## Custom Callback Servers
-
-For advanced use cases, you can use your own hosted callback server or run a local callback server. See the [Callback URL Configuration](/auth/oauth2-2.0/callback-url) guide for details.
-
+<Callout type="warning">
+Ensure your OAuth provider allows `localhost` redirect URLs.
+</Callout>

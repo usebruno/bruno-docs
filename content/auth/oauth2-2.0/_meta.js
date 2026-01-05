@@ -5,5 +5,4 @@ export default {
   "client-credentials": "Client Credentials",
   "password-credentials": "Password Credentials",
   "system-browser": "System Browser",
-  "callback-url": "Callback URL"
 } 
