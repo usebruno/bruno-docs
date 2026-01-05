@@ -129,6 +129,34 @@ If you need to use a specific environment, you can pass it with the `--env` opti
 bru run --env Local
 ```
 
+### Using Global/Workspace-Level Environments
+
+Bruno CLI now supports referencing global/workspace-level environments when running a collection. This feature allows you to use environment variables defined at the workspace level rather than at the collection level.
+
+#### Using Global Environments
+
+Use the `--global-env` flag to reference a global/workspace-level environment:
+
+```bash copy
+bru run --global-env Beta
+```
+
+#### Specifying Workspace Path
+
+When your collection is not located at the workspace root, use the `--workspace-path` flag to specify the workspace path:
+
+```bash copy
+bru run --global-env Beta --workspace-path path/to/workspace/from/collection/root
+```
+
+#### Combined Usage
+
+You can combine global environments with collection-level environments:
+
+```bash copy
+bru run --env Local --global-env Production
+```
+
 #### Passing Environment Variables
 
 <Callout type="info">

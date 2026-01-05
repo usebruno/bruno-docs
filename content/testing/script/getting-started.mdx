@@ -2,41 +2,4 @@
 
 Bruno allows you to write JavaScript code before sending a request (Pre-request) and after receiving a response (Post-response). Use scripts to generate dynamic data, manipulate requests, parse responses, and set variables.
 
-![pre-post-script](/screenshots/pre-post-script.webp)
-
-## Pre-request Scripts
-
-Pre-request scripts run before the request is sent. Use them to set headers, generate dynamic values, or modify the request.
-
-```javascript
-// Generate a timestamp
-const timestamp = Date.now();
-req.setHeader("X-Timestamp", timestamp);
-
-// Set a dynamic variable
-bru.setVar("requestId", `req-${timestamp}`);
-
-// Add authentication token
-const token = bru.getEnvVar("authToken");
-req.setHeader("Authorization", `Bearer ${token}`);
-```
-
-## Post-response Scripts
-
-Post-response scripts run after receiving the response. Use them to validate data, extract values, or set variables for subsequent requests.
-
-```javascript
-// Extract and save data from response
-const body = res.getBody();
-bru.setVar("userId", body.user.id);
-bru.setVar("accessToken", body.token);
-
-// Log response details
-console.log("Status:", res.getStatus());
-console.log("Response time:", res.getResponseTime(), "ms");
-
-// Conditional logic based on response
-if (res.getStatus() === 200) {
-  bru.setEnvVar("lastSuccessTime", new Date().toISOString());
-}
-```
+![bru lang sample](/screenshots/script/scripting.webp)

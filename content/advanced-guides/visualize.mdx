@@ -1,6 +1,6 @@
 # Response Visualization
 
-Bruno provides a powerful visualization feature that allows you to display API response data in a more readable and interactive format using the `bru.visualize` function.
+Bruno provides a powerful visualization feature that allows you to display API response data in a more readable and interactive format using the `bru.visualize` function. This feature supports multiple providers and formats to help you analyze and present your API data effectively.
 
 ```javascript
 bru.visualize(type, config)
@@ -29,7 +29,7 @@ You can render tables using different providers like `ag-grid` and `react-table`
 ![ag-grid](/screenshots/visualization/ag-grid.webp)
 
 
-```javascript
+```javascript copy
 const rowData = [
   { name: 'John Doe', age: 28, email: 'john@example.com', city: 'New York' },
   { name: 'Jane Smith', age: 32, email: 'jane@example.com', city: 'London' }
@@ -58,7 +58,7 @@ This will render a table using the ag-grid provider with filters enabled on all 
 ![react-table](/screenshots/visualization/react-table.webp)
 
 
-```javascript
+```javascript copy
 const rowData1 = Array.from({ length: 2500 })
   .map((_) => [
     { firstName: 'Tanner', lastName: 'Linsley', age: 24, visits: 100 },
@@ -102,7 +102,7 @@ You can also render custom HTML content using the html type. This allows for adv
 
 ![html](/screenshots/visualization/html.webp)
 
-```javascript
+```javascript copy
 const htmlString = `
 <html>
   <head>
@@ -134,13 +134,9 @@ This example will render an HTML table with predefined data using the html type.
 
 1. Add the visualization code to your request's script section
 2. Execute the request
-3. Click on the **Table** option (next to Raw)
+3. Your visualization will be displayed in the panel
 
-![View Table Option](/screenshots/visualization/1-view-table.webp)
-
-4. Your visualization will be displayed in the panel
-
-![Visualization Output](/screenshots/visualization/2-use-table.webp)
+![Visualization Output](/screenshots/visualization/1-use-table.webp)
 
 ### Parameters
 
