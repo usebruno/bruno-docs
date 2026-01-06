@@ -6,6 +6,12 @@ Bruno CLI allows you to run your API collections with ease, either by directly e
 
 This guide explains how to run entire collections, specific folders, and how to use data sources like CSV and JSON files to drive your API tests.
 
+<Callout type="warning" emoji="⚠️">
+  **v3.0.0 Breaking Change**
+  
+  Starting from Bruno CLI v3.0.0, the default runtime mode is **Safe Mode**. If your collection requires Developer Mode features (external npm packages, filesystem access), pass the `--sandbox=developer` flag: `bru run --sandbox=developer`
+</Callout>
+
 ## Basic Collection Execution
 
 To run an entire collection, navigate to your collection directory and use the `run` command:
