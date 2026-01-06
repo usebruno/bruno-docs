@@ -1,9 +1,16 @@
+import { Callout } from "nextra/components";
+
 # Bruno CLI
 
 With Bruno CLI, you can run your API collections with ease using simple command line commands.
 
 This makes it easier to test your APIs in different environments, automate your testing process, and integrate your API tests with your continuous integration and deployment workflows.
 
+<Callout type="warning" emoji="⚠️">
+  **v3.0.0 Breaking Change**
+  
+  Starting from Bruno CLI v3.0.0, the default runtime mode has changed from **Developer Mode** to **Safe Mode** for improved security. If you need to use Developer Mode features (external npm packages, filesystem access), you must explicitly pass the `--sandbox=developer` flag when running collections.
+</Callout>
 
 ## Key Features of Bruno CLI:
 
