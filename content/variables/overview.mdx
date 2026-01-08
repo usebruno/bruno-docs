@@ -8,17 +8,31 @@ Variables in the Bruno allow you to store dynamic values that can be reused acro
 
 There are 7 types of variables you can create:
 
-- [Global Environments Variables](./global-environment-variables.mdx)
-- [Environment Variables](./environment-variables.mdx)
-- [Collection Variables](./collection-variables.mdx)
-- [Folder Variables](./folder-variables.mdx)
-- [Request Variables](./request-variables.mdx)
+**For dynamic session values (tokens, extracted response data):**
 - [Runtime Variables](./runtime-variables.mdx)
+
+**For one-off values defined directly in a single request:**
+- [Request Variables](./request-variables.mdx)
+
+**For values shared across all requests in a folder:**
+- [Folder Variables](./folder-variables.mdx)
+
+**For environment-specific values (dev/staging/prod URLs):**
+- [Environment Variables](./environment-variables.mdx)
+
+**For values shared across a single collection:**
+- [Collection Variables](./collection-variables.mdx)
+
+**For values shared across all Bruno collections:**
+- [Global Environments Variables](./global-environment-variables.mdx)
+
+**For prompting user input when running requests:**
 - [Prompt Variables](./prompt-variables.mdx)
 
-Additionally, Process Environment Variables can be defined in an external environment configuration file:
+Additionally, for secrets (API keys, passwords, tokens), you can use Process Environment Variables stored in a `.env` file:
 
 - [Process Environment Variables](./process-env.mdx)
+
 
 ### Variable Precedence and Scope
 
