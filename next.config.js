@@ -133,6 +133,9 @@ export default withNextra({
       { source: '/cli/overview', destination: '/bru-cli/overview', permanent: true },
       { source: '/cli/overview.html', destination: '/bru-cli/overview', permanent: true },
 
+      // - /advanced-guides
+      { source: '/advanced-guides/working-with-bigint', destination: '/testing/script/javascript-reference#helper-functions', permanent: true },
+
       // - /bru-language
       { source: '/bru-language-tag-reference', destination: '/bru-lang/tag-reference', permanent: true },
       { source: '/bru-language-design', destination: '/bru-lang/language', permanent: true },
