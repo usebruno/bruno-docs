@@ -42,6 +42,8 @@ JWT_TOKEN=your_jwt_token_value
 API_KEY=your_api_key_value
 ```
 
+3. Add the environment variables `{{process.env.<secret-name>}}` to your environment. See [Creating an Environment Variable](/variables/environment-variables#creating-an-environment-variable).
+
 These secrets will be accessible in your Bruno collection via the `process.env` object.
 
 ![dot env vars](/screenshots/secret-variables/dot-env-vars.webp)
@@ -60,6 +62,8 @@ vars {
 ```
 
 In this example, the `JWT_TOKEN` secret from the `.env` file is referenced using `process.env.JWT_TOKEN`. This will be replaced with the actual value of `JWT_TOKEN` when the collection is executed.
+
+4. Use the secrets `{{SECRET_NAME}}` in Bruno. See [Using an Environment Variable](/variables/environment-variables#using-an-environment-variable).
 
 ## Managing Secrets
 
