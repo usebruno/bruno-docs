@@ -2,6 +2,10 @@ import { Callout } from "nextra/components";
 
 # Whitelisting Modules
 
+<Callout type="info">
+**Bruno v3.0.0 Update:** Starting with Bruno v3, we now use Node.js VM (Node VM) as the JavaScript sandbox. This means you no longer need to whitelist modules in most cases. The information on this page applies to Bruno v2 and earlier versions.
+</Callout>
+
 The scripts can use both [external libraries](external-libraries) (via package.json and npm install) and certain [built-in](inbuilt-libraries) modules in Node.js (like fs, path, etc.). However, for security reasons, not all built-in Node.js modules are made accessible by default in Bruno scripts.
 
 ## Why Whitelisting
