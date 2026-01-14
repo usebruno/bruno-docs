@@ -4,6 +4,7 @@ import { Search } from 'nextra/components'
 import Image from 'next/image'
 import { CustomMobileNav } from '@/components/custom-mobile-nav'
 import GoogleAnalytics from '@/components/google-analytics'
+import CRRelayTracker from '@/components/cr-relay-tracker'
 import { ReleaseBanner } from '@/components/release-banner'
 import './globals.css'
 
@@ -52,6 +53,7 @@ export default async function RootLayout({ children }) {
     <html lang="en" dir="ltr" suppressHydrationWarning>
       <body>
         <GoogleAnalytics />
+        <CRRelayTracker />
         <ReleaseBanner />
         <CustomMobileNav />
         <Layout
