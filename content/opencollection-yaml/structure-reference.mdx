@@ -7,32 +7,33 @@ This page documents the structure of OpenCollection YAML files used in Bruno.
 A Bruno YAML request file contains the following top-level sections:
 
 ```yaml
-meta:        # Request metadata
+info:        # Request metadata (name, type, seq, tags)
 http:        # HTTP request configuration
-vars:        # Variables (pre-request and post-response)
-scripts:     # JavaScript scripts
-tests:       # Test assertions
+runtime:     # Scripts and assertions
+settings:    # Request settings
 docs:        # Request documentation
 ```
 
-## meta
+## info
 
 Store metadata about your request.
 
 ```yaml
-meta:
+info:
   name: Get Users
+  type: http
   seq: 1
   tags:
     - smoke
-    - sanity
+    - regression
 ```
 
 | Field | Type | Description |
 |-------|------|-------------|
 | `name` | string | The display name of the request |
+| `type` | string | The request type (`http` for HTTP requests, `folder` for folders) |
 | `seq` | number | Sequence number that determines sort position in the UI |
-| `tags` | array | Tags for filtering requests during collection runs |
+| `tags` | array | Optional tags for filtering requests during collection runs |
 
 ## http
 
@@ -40,51 +41,45 @@ The HTTP request configuration.
 
 ```yaml
 http:
-  method: post
+  method: POST
   url: https://api.example.com/users
-  params:
-    query: [...]
-    path: [...]
   headers: [...]
+  params: [...]
   body:
     type: json
     data: "..."
   auth:
-    type: basic
-    basic:
-      username: admin
-      password: secret
+    type: bearer
+    token: "{{token}}"
 ```
 
 ### http.method
 
-The HTTP method. Supported values: `get`, `post`, `put`, `patch`, `delete`, `options`, `head`, `trace`, `connect`.
+The HTTP method. Supported values: `GET`, `POST`, `PUT`, `PATCH`, `DELETE`, `OPTIONS`, `HEAD`, `TRACE`, `CONNECT` (uppercase).
 
-### http.params.query
+### http.params
 
-Query parameters as an array of objects.
-
-```yaml
-params:
-  query:
-    - name: filter
-      value: active
-      disabled: false
-    - name: limit
-      value: "10"
-```
-
-### http.params.path
-
-Path parameters for URL templates like `/users/:userId`.
+Parameters as an array of objects with a `type` field to distinguish query vs path parameters.
 
 ```yaml
 params:
-  path:
-    - name: userId
-      value: "123"
-      description: The user's unique identifier
+  - name: filter
+    value: active
+    type: query
+  - name: limit
+    value: "10"
+    type: query
+  - name: id
+    value: "123"
+    type: path
 ```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `name` | string | The parameter name |
+| `value` | string | The parameter value |
+| `type` | string | Either `query` or `path` |
+| `disabled` | boolean | Whether the parameter is disabled (optional) |
 
 ### http.headers
 
@@ -94,11 +89,16 @@ Request headers as an array of objects.
 headers:
   - name: Content-Type
     value: application/json
-    description: Content type header
-  - name: Accept
-    value: application/json
+  - name: Authorization
+    value: Bearer {{token}}
     disabled: true
 ```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `name` | string | The header name |
+| `value` | string | The header value |
+| `disabled` | boolean | Whether the header is disabled (optional) |
 
 ### http.body
 
@@ -118,70 +118,111 @@ body:
 | `json` | JSON body |
 | `text` | Plain text body |
 | `xml` | XML body |
-| `formUrlEncoded` | Form URL-encoded data |
-| `multipartForm` | Multipart form data |
+| `form-urlencoded` | Form URL-encoded data |
+| `multipart-form` | Multipart form data |
 | `graphql` | GraphQL query |
 
 ### http.auth
 
-Authentication configuration.
+Authentication configuration. Credentials are specified directly under the `auth` object. Use `inherit` to inherit authentication from the parent folder or collection.
 
 ```yaml
+# Inherit from parent
+auth: inherit
+
+# Bearer token
+auth:
+  type: bearer
+  token: "{{token}}"
+
+# Basic authentication
 auth:
   type: basic
-  basic:
-    username: admin
-    password: secret
+  username: admin
+  password: secret
+
+# API Key
+auth:
+  type: apikey
+  key: x-api-key
+  value: "{{api-key}}"
+  placement: header
 ```
 
-Supported auth types: `none`, `basic`, `bearer`, `digest`, `oauth2`, `awsv4`, `ntlm`.
+Supported auth types: `none`, `inherit`, `basic`, `bearer`, `apikey`, `digest`, `oauth2`, `awsv4`, `ntlm`.
 
-## vars
+## runtime
 
-Define variables that can be set before or after the request.
+The runtime section contains scripts and assertions that execute during the request lifecycle.
+
+### runtime.scripts
+
+JavaScript code to run at different points in the request lifecycle.
 
 ```yaml
-vars:
-  pre-request:
-    - name: userId
-      value: "123"
-      description: User ID variable
-  post-response:
-    - name: token
-      value: res.body.token
-      disabled: false
+runtime:
+  scripts:
+    - type: before-request
+      code: |-
+        // Runs before the request
+        console.log('before-request');
+        req.setHeader("X-Timestamp", Date.now());
+    - type: after-response
+      code: |-
+        // Runs after the response
+        console.log('after-response');
+        bru.setVar("token", res.body.token);
+    - type: tests
+      code: |-
+        test("should return 200", function() {
+          expect(res.status).to.equal(200);
+        });
 ```
 
-## scripts
+| Script Type | Description |
+|-------------|-------------|
+| `before-request` | Runs before the request is sent |
+| `after-response` | Runs after the response is received |
+| `tests` | Test assertions using the Chai assertion library |
 
-JavaScript code to run before or after the request.
+### runtime.assertions
+
+Declarative assertions without writing JavaScript code.
 
 ```yaml
-scripts:
-  pre-request: |-
-    // Runs before the request
-    console.log('pre-request');
-    req.setHeader("X-Timestamp", Date.now());
-  post-response: |-
-    // Runs after the response
-    console.log('post-response');
-    bru.setVar("token", res.body.token);
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.body.name
+      operator: isString
 ```
 
-## tests
+| Field | Type | Description |
+|-------|------|-------------|
+| `expression` | string | The value to evaluate (e.g., `res.status`, `res.body.name`) |
+| `operator` | string | The comparison operator (`eq`, `neq`, `isString`, `isNumber`, etc.) |
+| `value` | string | The expected value (for comparison operators) |
 
-Test assertions using the Chai assertion library.
+## settings
+
+Request-level settings.
 
 ```yaml
-tests: |-
-  test("should return 200", function() {
-    expect(res.status).to.equal(200);
-  });
-
-  test("should have user data", function() {
-    expect(res.body.user).to.exist;
-  });
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
 ```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `encodeUrl` | boolean | Whether to URL-encode the request URL |
+| `timeout` | number | Request timeout in milliseconds (0 = no timeout) |
+| `followRedirects` | boolean | Whether to follow HTTP redirects |
+| `maxRedirects` | number | Maximum number of redirects to follow |
 
 ## docs
 
@@ -197,4 +238,3 @@ docs: |-
   - name: User's full name
   - email: User's email address
 ```
-

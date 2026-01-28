@@ -57,16 +57,14 @@ OpenCollection and OpenAPI serve complementary purposes:
 Here's what a simple POST request looks like in YAML format:
 
 ```yaml
-meta:
+info:
   name: Create User
+  type: http
   seq: 1
 
 http:
-  method: post
+  method: POST
   url: https://api.example.com/users
-  headers:
-    - name: Content-Type
-      value: application/json
   body:
     type: json
     data: |-
@@ -74,25 +72,33 @@ http:
         "name": "John Doe",
         "email": "john@example.com"
       }
+  auth: inherit
 
-tests: |-
-  expect(res.status).to.equal(201);
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("should return 201", function() {
+          expect(res.status).to.equal(201);
+        });
+
+settings:
+  encodeUrl: true
 ```
 
 Compare this to the equivalent `.bru` file:
 
-```bash
+```bru
 meta {
   name: Create User
+  type: http
   seq: 1
 }
 
 post {
   url: https://api.example.com/users
-}
-
-headers {
-  Content-Type: application/json
+  body: json
+  auth: inherit
 }
 
 body:json {
@@ -103,25 +109,45 @@ body:json {
 }
 
 tests {
-  expect(res.status).to.equal(201);
+  test("should return 201", function() {
+    expect(res.status).to.equal(201);
+  });
 }
 ```
 
 ## File Storage
 
-When using YAML format, your collections will be stored with `.yml` file extensions instead of `.bru`. The folder structure remains the same:
+When using YAML format, your collections will be stored with `.yml` file extensions instead of `.bru`. The folder structure uses `opencollection.yml` as the collection root file:
 
 ```
 my-collection/
-├── bruno.json           # Collection configuration
+├── opencollection.yml   # Collection configuration (YAML format)
 ├── environments/
 │   └── development.yml
 ├── users/
+│   ├── folder.yml       # Folder configuration
 │   ├── create-user.yml
 │   ├── get-user.yml
 │   └── delete-user.yml
 └── orders/
     └── create-order.yml
+```
+
+Compare this to the `.bru` format structure which uses `bruno.json`:
+
+```
+my-collection/
+├── bruno.json           # Collection configuration (Bru format)
+├── collection.bru       # Collection-level settings
+├── environments/
+│   └── development.bru
+├── users/
+│   ├── folder.bru       # Folder configuration
+│   ├── create-user.bru
+│   ├── get-user.bru
+│   └── delete-user.bru
+└── orders/
+    └── create-order.bru
 ```
 
 ## Migration
