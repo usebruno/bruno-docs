@@ -5,6 +5,10 @@ import { Callout } from "nextra/components";
 
 The **Collection Runner** feature allows you to iterate over data files, making it easy to automate and manage data-driven requests. Bruno supports both CSV and JSON files for running requests, so you can efficiently run tests or process multiple data inputs.
 
+<Callout type="info">
+ Data-driven testing is currently available for **REST and GraphQL requests only**. gRPC and WebSocket requests will be automatically skipped during collection runs.
+</Callout>
+
 ## Introduction
 
 In this tutorial, we'll explore the Collection Runner feature, which enables you to run collections using custom data for each iteration.
