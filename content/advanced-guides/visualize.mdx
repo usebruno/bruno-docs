@@ -1,3 +1,5 @@
+import { Callout } from "nextra/components";
+
 # Response Visualization
 
 Bruno provides a powerful visualization feature that allows you to display API response data in a more readable and interactive format using the `bru.visualize` function. This feature supports multiple providers and formats to help you analyze and present your API data effectively.
@@ -71,16 +73,27 @@ const columnDefinitions1 = [
   {
     id: "firstName",
     cell: (info) => info.getValue(),
-    header: () => `<span className="flex flex-start">First Name</span>`,
+    header: "First Name",
     meta: { filterVariant: "text" },
   },
   {
     id: "lastName",
     cell: (info) => info.getValue(),
-    header: () => `<span className="flex flex-start">Last Name</span>`,
+    header: "Last Name",
     meta: { filterVariant: "text" },
   },
-  // Additional column definitions here...
+  {
+    id: "age",
+    cell: (info) => info.getValue(),
+    header: "Age",
+    meta: { filterVariant: "range" },
+  },
+  {
+    id: "visits",
+    cell: (info) => info.getValue(),
+    header: "Visits",
+    meta: { filterVariant: "range" },
+  }
 ];
 
 bru.visualize('table', {
@@ -90,7 +103,201 @@ bru.visualize('table', {
 });
 ```
 
+<Callout type="info">
+The `header` property only accepts **string values**. Use strings like `header: "Column Name"`.
+</Callout>
+
 This example renders a large table using the react-table provider, with custom headers and filter variants.
+
+## Using API Response Data
+
+One of the most powerful features of `bru.visualize` is the ability to transform API responses into visual tables. Here are practical examples of working with real API data:
+
+In Bruno, the parsed API response is stored in **`res.body`**
+
+```javascript
+// ✅ Correct
+const data = res.body;
+
+// ❌ Incorrect
+const data = res.data;
+```
+
+### Example 1: Simple User List API
+
+For an API that returns a list of users:
+
+```javascript copy
+// API URL: https://jsonplaceholder.typicode.com/users
+// First, let's check the response structure
+console.log('Response:', res);
+console.log('Response body:', res.body);
+
+// Bruno stores the parsed response in res.body
+const users = res.body;
+
+// Verify we have data
+if (!Array.isArray(users)) {
+  console.error('Expected array but got:', typeof users);
+  return;
+}
+
+console.log('Number of users:', users.length);
+
+const columnDefinitions = [
+  { field: "id", filter: true },
+  { field: "name", filter: true, floatingFilter: true },
+  { field: "email", filter: true, floatingFilter: true },
+  { field: "phone", filter: true },
+  { field: "website", filter: true }
+];
+
+bru.visualize('table', {
+  name: 'usersTable',
+  provider: 'ag-grid',
+  props: { 
+    rowData: users, 
+    columnDefinitions 
+  }
+});
+```
+
+### Example 2: Nested API Response Data
+
+For APIs returning nested objects, you can flatten the data before visualization:
+
+```javascript copy
+// API URL: https://jsonplaceholder.typicode.com/users
+// Bruno stores the parsed response in res.body
+const users = res.body;
+
+// Transform nested data into flat structure
+const flattenedData = users.map(user => ({
+  id: user.id,
+  name: user.name,
+  email: user.email,
+  city: user.address?.city || 'N/A',
+  company: user.company?.name || 'N/A',
+  phone: user.phone
+}));
+
+const columnDefinitions = [
+  { field: "id", filter: true },
+  { field: "name", filter: true, floatingFilter: true },
+  { field: "email", filter: true, floatingFilter: true },
+  { field: "city", filter: true, floatingFilter: true },
+  { field: "company", filter: true, floatingFilter: true },
+  { field: "phone", filter: true }
+];
+
+bru.visualize('table', {
+  name: 'usersWithDetails',
+  provider: 'ag-grid',
+  props: { 
+    rowData: flattenedData, 
+    columnDefinitions 
+  }
+});
+```
+
+### Example 3: Transforming Complex Data
+
+For complex responses that need transformation before visualization:
+
+```javascript copy
+// API URL: https://jsonplaceholder.typicode.com/posts
+// Bruno stores the parsed response in res.body
+const posts = res.body;
+
+// Transform and enhance data
+const tableData = posts.slice(0, 20).map((post, index) => ({
+  index: index + 1,
+  title: post.title.substring(0, 50) + '...', // Truncate long titles
+  body: post.body.substring(0, 100) + '...',   // Truncate body
+  userId: post.userId,
+  postId: post.id,
+  length: post.body.length
+}));
+
+const columnDefinitions = [
+  { field: "index", filter: false, width: 80 },
+  { field: "postId", filter: true, width: 100 },
+  { field: "userId", filter: true, width: 100 },
+  { field: "title", filter: true, floatingFilter: true, width: 300 },
+  { field: "body", filter: true, width: 400 },
+  { field: "length", filter: true, width: 100 }
+];
+
+bru.visualize('table', {
+  name: 'postsTable',
+  provider: 'ag-grid',
+  props: { 
+    rowData: tableData, 
+    columnDefinitions 
+  }
+});
+```
+
+### Example 4: Error Handling with API Data
+
+Always include error handling when working with API responses:
+
+```javascript copy
+try {
+  // Bruno stores the parsed response in res.body
+  // Check if response has data
+  if (!res.body) {
+    console.error('No response body found');
+    return;
+  }
+
+  const data = res.body;
+
+  // Check if data is an array (for direct array responses)
+  // or if it has a data property (for wrapped responses)
+  const rowData = Array.isArray(data) ? data : data.data;
+
+  if (!Array.isArray(rowData)) {
+    console.error('Invalid response format. Expected array but got:', typeof rowData);
+    console.log('Response structure:', data);
+    return;
+  }
+
+  // Verify data is not empty
+  if (rowData.length === 0) {
+    console.log('No data to visualize');
+    return;
+  }
+
+  console.log(`Visualizing ${rowData.length} records`);
+
+  const columnDefinitions = [
+    { field: "id", filter: true },
+    { field: "name", filter: true, floatingFilter: true },
+    { field: "email", filter: true, floatingFilter: true }
+  ];
+
+  bru.visualize('table', {
+    name: 'safeDataTable',
+    provider: 'ag-grid',
+    props: { 
+      rowData: rowData, 
+      columnDefinitions 
+    }
+  });
+} catch (error) {
+  console.error('Visualization error:', error.message);
+  console.error('Stack trace:', error.stack);
+}
+```
+
+When working with API responses:
+- Always verify the response structure before accessing nested properties
+- Use optional chaining (`?.`) to safely access nested data
+- Transform data to match your visualization needs
+- Add meaningful column headers using the `field` property
+- Enable filters for better data exploration
+
 
 ### HTML Visualization ('html')
 
@@ -129,6 +336,179 @@ bru.visualize('html', {
 ```
 
 This example will render an HTML table with predefined data using the html type.
+
+#### Using API Response Data with HTML
+
+You can dynamically generate HTML from API responses:
+
+```javascript copy
+// API URL: https://jsonplaceholder.typicode.com/users
+// Bruno stores the parsed response in res.body
+const users = res.body;
+
+// Generate table rows from API data
+const tableRows = users.slice(0, 10).map(user => `
+  <tr>
+    <td>${user.id}</td>
+    <td>${user.name}</td>
+    <td>${user.email}</td>
+    <td>${user.phone}</td>
+  </tr>
+`).join('');
+
+const htmlString = `
+<html>
+  <head>
+    <style>
+      body { font-family: Arial, sans-serif; padding: 20px; }
+      h1 { color: #333; }
+      table { 
+        width: 100%; 
+        border-collapse: collapse; 
+        margin-top: 20px;
+      }
+      th { 
+        background-color: #4CAF50; 
+        color: white; 
+        padding: 12px; 
+        text-align: left;
+      }
+      td { 
+        border: 1px solid #ddd; 
+        padding: 10px; 
+      }
+      tr:hover { background-color: #f5f5f5; }
+      .summary { 
+        background-color: #e3f2fd; 
+        padding: 15px; 
+        border-radius: 5px; 
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>User Report</h1>
+    <div class="summary">
+      <strong>Total Users:</strong> ${users.length}
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${tableRows}
+      </tbody>
+    </table>
+  </body>
+</html>
+`;
+
+bru.visualize('html', {
+  name: 'userReport',
+  content: htmlString
+});
+```
+
+#### Custom Dashboard with Statistics
+
+Create rich dashboards with API data:
+
+```javascript copy
+// Example with custom stats or API response
+// Bruno stores the parsed response in res.body
+const apiData = res.body;
+
+// Calculate or extract statistics from your API response
+const stats = {
+  totalRequests: apiData.length || 0,
+  successRate: 98.5,
+  avgResponseTime: 145
+};
+
+const htmlString = `
+<html>
+  <head>
+    <style>
+      body { 
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        padding: 20px; 
+        background-color: #f8f9fa;
+      }
+      .dashboard { 
+        max-width: 1200px; 
+        margin: 0 auto;
+      }
+      .header { 
+        text-align: center; 
+        margin-bottom: 30px;
+      }
+      .cards { 
+        display: grid; 
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+        gap: 20px; 
+        margin-bottom: 30px;
+      }
+      .card { 
+        background: white; 
+        padding: 20px; 
+        border-radius: 8px; 
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      .card-title { 
+        color: #666; 
+        font-size: 14px; 
+        margin-bottom: 10px;
+      }
+      .card-value { 
+        font-size: 32px; 
+        font-weight: bold; 
+        color: #333;
+      }
+      .card-trend { 
+        color: #4CAF50; 
+        font-size: 14px; 
+        margin-top: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dashboard">
+      <div class="header">
+        <h1>API Analytics Dashboard</h1>
+        <p>Last updated: ${new Date().toLocaleString()}</p>
+      </div>
+      <div class="cards">
+        <div class="card">
+          <div class="card-title">Total Requests</div>
+          <div class="card-value">${stats.totalRequests || 0}</div>
+          <div class="card-trend">↑ 12% from last week</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Success Rate</div>
+          <div class="card-value">${stats.successRate || 0}%</div>
+          <div class="card-trend">↑ 3% improvement</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Avg Response Time</div>
+          <div class="card-value">${stats.avgResponseTime || 0}ms</div>
+          <div class="card-trend">↓ 15ms faster</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+`;
+
+bru.visualize('html', {
+  name: 'dashboard',
+  content: htmlString
+});
+```
 
 ## Viewing Your Visualization
 
