@@ -55,9 +55,9 @@ project/
     └── utils.js
 ```
 
-#### 2. Configure bruno.json
+#### 2.1 Configure bruno.json
 
-In each collection's `bruno.json` file, add the `additionalContextRoots` configuration under the `scripts` object:
+In each BRU collection's `bruno.json` file, add the `additionalContextRoots` configuration under the `scripts` object:
 
 ```json showLineNumbers
 {
@@ -65,6 +65,18 @@ In each collection's `bruno.json` file, add the `additionalContextRoots` configu
     "additionalContextRoots": ["./path/to/shared/scripts"]
   }
 }
+```
+
+#### 2.2 Configure opencollection.yml
+
+In each YML collection's `opencollection.yml` file, add the `additionalContextRoots` configuration under the `extensions.bruno.scripts` object:
+
+```yml showLineNumbers
+extensions:
+  bruno:
+    scripts:
+      additionalContextRoots:
+        - "../scripts"
 ```
 
 #### 3. Create Shared Scripts
