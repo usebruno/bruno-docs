@@ -6,6 +6,10 @@ import { Callout } from "nextra/components";
     WebSocket support is available from Bruno 2.13.0.
 </Callout>
 
+<Callout type="warning">
+  WebSocket requests are automatically skipped during collection runs. This is because data-driven testing is currently supported only for REST and GraphQL requests.
+</Callout>
+
 Bruno now supports WebSocket connections, enabling you to test real-time communication protocols and bidirectional data exchange. This feature allows you to establish WebSocket connections, send messages, and receive responses in real-time.
 
 ## What are WebSockets?
