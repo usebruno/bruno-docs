@@ -30,6 +30,18 @@ Starting with Bruno v3, native ARM64 binaries are available for [Windows ARM64 d
     
     Download the latest Windows installer from the [official downloads page <strong><sup>↗</sup></strong>](https://www.usebruno.com/downloads).
     
+    <Callout type="info">
+      **Enterprise MSI Installation**
+      
+      When installing Bruno using an MSI installer, IT administrators can control auto-update behavior by passing the `AUTOUPDATE_ENABLED` flag during installation:
+      
+      - Set to `false` to disable auto-updates enterprise-wide
+      - If auto-updates are disabled by the enterprise, users cannot enable them manually
+      - If no enterprise setting exists, Bruno respects individual user preferences
+      
+      Example: `msiexec /i Bruno.msi AUTOUPDATE_ENABLED=false`
+    </Callout>
+    
     ### Using Package Managers
     
     **Chocolatey**

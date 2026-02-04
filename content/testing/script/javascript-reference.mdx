@@ -626,6 +626,7 @@ Here are all available utility methods:
 | bru.sleep(milliseconds)          | Pauses execution for the specified duration.              |
 | bru.interpolate(string)          | Evaluates dynamic variables within a string.              |
 | bru.disableParsingResponseJson() | Disables JSON response parsing for the request.           |
+| bru.isSafeMode()                 | Detects whether the script is running in Safe Mode.       |
 | bru.cwd()                        | Returns the current working directory.                    |
 | bru.runRequest(requestPathName)  | Executes a request by its path name.                      |
 | bru.getAssertionResults()        | Retrieves the results of assertions.                      |
@@ -642,9 +643,14 @@ Here are all available utility methods:
   - `headers`: (Optional) Request headers
   - `data`: (Optional) Request data. Can be a string or object
   - `timeout`: (Optional) Request timeout in milliseconds
+  - `httpsAgent`: (Optional) Custom HTTPS agent for TLS/SSL configuration
   - `callback`: Function to handle the response with signature `(err, res)`
 
-  **Example:**
+  <Callout type="info">
+    **TLS/SSL and Proxy Support**: Bruno automatically applies your configured TLS settings (Custom CA, SSL verification), proxy settings, and client certificates to `bru.sendRequest()` calls. You can override these by providing a custom `httpsAgent`.
+  </Callout>
+
+  **Basic Example:**
   ```javascript
   await bru.sendRequest({
     method: 'POST',
@@ -661,6 +667,67 @@ Here are all available utility methods:
     console.log('Response:', res.data);
   });
   ```
+
+  **TLS/SSL Configuration Example:**
+  
+  Bruno automatically applies your TLS/SSL settings to scripted requests. However, you can override these settings by providing a custom HTTPS agent:
+
+  ```javascript
+  const https = require('node:https');
+  
+  // Create custom HTTPS agent to disable SSL verification
+  const agent = new https.Agent({
+    rejectUnauthorized: false
+  });
+
+  try {
+    const res = await bru.sendRequest({
+      url: 'https://self-signed.badssl.com',
+      method: 'GET',
+      httpsAgent: agent
+    });
+    console.log('Response:', res.data);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+  ```
+
+  **Custom CA Certificate Example:**
+
+  ```javascript
+  const https = require('node:https');
+  const fs = require('fs');
+  const path = require('path');
+
+  // Load custom CA certificate
+  const ca = fs.readFileSync(path.join(bru.cwd(), 'certs', 'ca.pem'));
+
+  const agent = new https.Agent({
+    ca: ca,
+    rejectUnauthorized: true
+  });
+
+  try {
+    const res = await bru.sendRequest({
+      url: 'https://api.example.com/data',
+      method: 'GET',
+      httpsAgent: agent
+    });
+    console.log('Response:', res.data);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+  ```
+
+  <Callout type="warning">
+    **Developer Mode Required**: Custom HTTPS agents and filesystem access (for loading certificates) require [Developer Mode](/configure/javascript-sandbox#developer-mode).
+  </Callout>
+
+  **Automatic Settings Applied:**
+  - **Custom CA Certificates**: Bruno applies your configured CA certificates automatically
+  - **SSL Verification**: Your SSL verification settings (on/off) are respected
+  - **Proxy Configuration**: Your proxy settings are automatically used
+  - **Client Certificates**: Client certificate settings are applied when configured
 
 #### Helper Functions
 
@@ -696,6 +763,30 @@ Here are all available utility methods:
   const currentDir = bru.cwd();
   console.log('Current directory:', currentDir);
   ```
+
+- **`isSafeMode()`** - Detects whether the current script is running in Safe Mode or Developer Mode. Returns `true` if running in Safe Mode, `false` if running in Developer Mode.
+
+  **Use Case:** Some collections may require explicit Developer Mode features (filesystem access, external npm packages, system commands). By detecting the sandbox mode, you can:
+  - Log appropriate error messages when features are unavailable
+  - Provide fallback behavior for Safe Mode
+  - Ensure collection consumers are aware of mode requirements
+
+  **Example:**
+  ```javascript
+  if (bru.isSafeMode()) {
+    console.log('⚠️ This collection requires Developer Mode.');
+    console.log('Please switch to Developer Mode in collection settings.');
+  } else {
+    console.log('✓ Running in Developer Mode - all features available.');
+    // Proceed with Developer Mode features
+    const fs = require('fs');
+    const data = fs.readFileSync('./config.json', 'utf8');
+  }
+  ```
+
+  **Returns:** Boolean - `true` for Safe Mode, `false` for Developer Mode
+
+  **Learn more:** See [JavaScript Sandbox Configuration](/configure/javascript-sandbox#detecting-sandbox-mode-in-scripts) for details on sandbox modes.
 
 #### Request Execution
 
