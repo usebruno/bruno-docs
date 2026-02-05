@@ -37,3 +37,26 @@ JavaScript code has access to the filesystem, can execute system commands and ac
 <Callout type="warning">
   Developer Mode can be dangerous and should only be used when you fully understand the implications.
 </Callout>
+
+## Detecting Sandbox Mode in Scripts
+
+You can programmatically detect the current sandbox mode in your pre-request, post-request, and test scripts using the `bru.isSafeMode()` API.
+
+**Use Case:** Some collections may require explicit Developer Mode features. By detecting the sandbox mode, you can log appropriate error messages or take alternative actions when the collection is run in Safe Mode.
+
+**Example:**
+
+```javascript
+// Check if running in Safe Mode
+if (bru.isSafeMode()) {
+  console.log('⚠️ This collection requires Developer Mode.');
+  console.log('Please switch to Developer Mode to use filesystem and external packages.');
+} else {
+  console.log('✓ Running in Developer Mode - all features available.');
+  // Proceed with Developer Mode features
+  const fs = require('fs');
+  // ... use filesystem operations
+}
+```
+
+**API Reference:** See the complete documentation in [JavaScript API Reference](/testing/script/javascript-reference#detecting-sandbox-mode).
