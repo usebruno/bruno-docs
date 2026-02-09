@@ -1,0 +1,203 @@
+import { Callout } from "nextra/components";
+
+# Cursor 
+
+Cursor is a widely adopted AI code editor by developers. A powerful tool to automate your development workflow as well as remove the manual effort of writing code. With Bruno local first approach you can configure Cursor to automate your API development workflow. 
+
+## Configure Cursor with Bruno
+
+1. Download and install Cursor from [here](https://cursor.com/download).
+
+2. After installing Cursor, open in any Bruno collection and create `.cursor/rules/instructions.md` file. 
+
+<Callout type="warning" emoji="">
+You can write your own instructions for Cursor to follow while working on the collection or you can use the [default instructions provided by Bruno](https://github.com/bruno-collections/ai-assistant-prompts/tree/main/prompts/cursor). 
+
+</Callout>
+
+After creating the instructions file, you can start using Cursor to automate your API development workflow. 
+
+## Sample Prompts
+
+1. If you want to create a complete new Bruno collection for your backend API endpointts directly from source code, you can use the following prompt:
+
+```md copy
+Create Bruno collection for my backend API with relevant test cases and write docs for each request at request level.
+```
+
+2. If you alreday have a Bruno collection and want to write test cases:
+
+```md copy
+Write test cases for the all API endpoints in the collection and make sure to cover all the edge cases with different scenarios:
+```
+
+```json copy
+meta {
+  name: Create Data
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/data
+  body: json
+  auth: none
+}
+
+headers {
+  content-type: application/json
+  accept: application/json
+}
+
+body:json {
+  {
+    "name": "Sample Item",
+    "description": "This is a sample item created via Bruno",
+    "value": 100,
+    "category": "test"
+  }
+}
+
+script:pre-request {
+  // Generate dynamic test data
+  bru.setVar("timestamp", Date.now());
+  bru.setVar("randomValue", Math.floor(Math.random() * 1000));
+}
+
+tests {
+  test("Status code is 201 (Created)", function() {
+    expect(res.status).to.equal(201);
+  });
+
+  test("Response has success property", function() {
+    expect(res.body).to.have.property("success");
+    expect(res.body.success).to.be.true;
+  });
+
+  test("Response has message property", function() {
+    expect(res.body).to.have.property("message");
+    expect(res.body.message).to.equal("Data created successfully");
+  });
+
+  test("Response has data property", function() {
+    expect(res.body).to.have.property("data");
+    expect(res.body.data).to.be.an("object");
+  });
+
+  test("Created item has id", function() {
+    expect(res.body.data).to.have.property("id");
+    expect(res.body.data.id).to.be.a("string");
+  });
+
+  test("Created item has createdAt timestamp", function() {
+    expect(res.body.data).to.have.property("createdAt");
+    expect(res.body.data.createdAt).to.be.a("string");
+  });
+
+  test("Created item contains request data", function() {
+    expect(res.body.data).to.have.property("name");
+    expect(res.body.data.name).to.equal("Sample Item");
+    expect(res.body.data).to.have.property("description");
+    expect(res.body.data).to.have.property("value");
+  });
+
+  test("Response time is acceptable", function() {
+    expect(res.responseTime).to.be.below(1000);
+  });
+
+  test("Store created item ID for next request", function() {
+    if (res.body.data && res.body.data.id) {
+      bru.setVar("lastCreatedId", res.body.data.id);
+    }
+  });
+}
+
+
+```
+3. You can also write complete CI/CD pipeline for your API tests using Bruno CLI. The instructions file contains the guide to write a CI/CD pipeline to generate test reports and store it in a remote storage.
+
+```md copy
+Write a CI/CD pipeline for my API tests using Bruno CLI to generate test reports.
+```
+```yaml copy
+
+name: API Tests
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm install
+      if: hashFiles('package.json') != ''
+    
+    - name: Install Bruno CLI
+      run: npm install -g @usebruno/cli
+    
+    - name: Start API server
+      run: |
+        npm start &
+        echo $! > server.pid
+      env:
+        PORT: 3000
+        NODE_ENV: test
+    
+    - name: Wait for server to be ready
+      run: |
+        echo "Waiting for server to start..."
+        timeout 30 bash -c 'until curl -f http://localhost:3000 > /dev/null 2>&1; do sleep 1; done'
+        echo "Server is ready!"
+    
+    - name: Run API Tests with Development Environment
+      run: |
+        cd bruno-api-collection
+        bru run --env development --sandbox=developer --reporter-html results.html
+      continue-on-error: false
+    
+    - name: Stop API server
+      if: always()
+      run: |
+        if [ -f server.pid ]; then
+          kill $(cat server.pid) || true
+          rm server.pid
+        fi
+    
+    - name: Upload Test Results
+      uses: actions/upload-artifact@v4
+      with:
+        name: api-test-results
+        path: bruno-api-collection/results.html
+        retention-days: 30
+    
+    - name: Display Test Summary
+      if: always()
+      run: |
+        if [ -f bruno-api-collection/results.html ]; then
+          echo "✅ Test results generated successfully"
+          echo "📊 Results file: bruno-api-collection/results.html"
+        else
+          echo "❌ Test results file not found"
+          exit 1
+        fi
+
+
+```
+
+There are plenty of other examples and usecases to automate your API development workflow with Bruno and Cursor and boost your developer productivity by removing the manual efforts.

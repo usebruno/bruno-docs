@@ -35,6 +35,7 @@
     "title": "Developer Tools",
     "type": "separator"
   },
+  "agents": "Agents",
   "bru-cli": "Bruno CLI",
   "bru-lang": "Bru Lang",
   "opencollection-yaml": "OpenCollection YAML",
