@@ -1,4 +1,4 @@
-import { FileTree } from "nextra/components";
+import { FileTree, Callout } from "nextra/components";
 
 # Secrets Management
 
@@ -89,7 +89,9 @@ This happens because Bruno interprets dots as object path separators. Square bra
 
 ## Manage Environment Credentials
 
-Starting with Bruno v3.1.0, you can create, view, and delete environment variables directly from Bruno at the workspace level without manually editing `.env` files.
+<Callout type="info">
+**Bruno v3.1.0**: You can now create, view, and delete environment variables directly from Bruno at the workspace level without manually editing `.env` files.
+</Callout>
 
 ### Accessing Environment Variables
 
