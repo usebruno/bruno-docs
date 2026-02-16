@@ -19,6 +19,10 @@ Here is a complete table for all available methods on the `req` object.
 | ------------------------------ | -------------------------------------------------------------------- |
 | req.getUrl()                   | Get the current request URL.                                         |
 | req.setUrl(url)                | Set the current request URL.                                         |
+| req.getHost()                  | Get the hostname from the request URL.                               |
+| req.getPath()                  | Get the path from the request URL.                                   |
+| req.getQueryString()           | Get the raw query string from the request URL.                       |
+| req.getPathParams()            | Extract path parameters using the path template.                     |
 | req.getAuthMode()              | Get the current authentication mode.                                 |
 | req.getMethod()                | Get the current request method.                                      |
 | req.setMethod(method)          | Set the current request method.                                      |
@@ -49,6 +53,40 @@ Below is the API documentation for the methods available on `req`
 - **`setUrl(url)`** - Set the current request URL.
   ```javascript
   req.setUrl("https://api.github.com/search/repositories?q=vue");
+  ```
+
+- **`getHost()`** - Get the hostname from the request URL.
+  ```javascript
+  const host = req.getHost();
+  console.log("Host:", host);
+  // Example output: "api.example.com"
+  ```
+
+- **`getPath()`** - Get the path from the request URL.
+  ```javascript
+  const path = req.getPath();
+  console.log("Path:", path);
+  // Example output: "/api/v1/users/123"
+  ```
+
+- **`getQueryString()`** - Get the raw query string from the request URL.
+  ```javascript
+  const queryString = req.getQueryString();
+  console.log("Query String:", queryString);
+  // Example output: "page=1&limit=10&sort=asc"
+  ```
+
+- **`getPathParams()`** - Extract path parameters using the path template defined in the request.
+  ```javascript
+  // For a URL like: https://api.example.com/users/123/orders/456
+  // With path template: /users/:userId/orders/:orderId
+  
+  const pathParams = req.getPathParams();
+  console.log("Path Variables:", pathParams.toObject());
+  // Output: { userId: "123", orderId: "456" }
+  
+  // Access specific path parameter
+  console.log("User ID:", pathParams.toObject().userId);
   ```
 
 ### HTTP Method
