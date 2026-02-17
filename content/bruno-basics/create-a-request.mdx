@@ -25,6 +25,54 @@ Let's walk through how to create your first request:
 
 You have successfully created your first request in Bruno! Feel free to add headers, query parameters, and a request body to your request, or play around with the other options available.
 
+## Quick Create via Inline "+" Button
+
+<Callout type="info">
+**Quick Request Creation**: Bruno (v3.1.0+) offers a faster way to create requests directly from the request tabs using the inline "+" button.
+</Callout>
+
+For rapid prototyping and testing, you can create requests inline without going through the full creation dialog:
+
+### Creating HTTP Requests (Default)
+
+- **Click on the "+" icon** next to the request tabs to instantly create an HTTP request
+
+### Creating Other Request Types
+
+To create GraphQL, gRPC, or WebSocket requests:
+
+1. **Right-click the "+" icon** next to the request tabs
+2. A **toolbar appears** with all request type options:
+   - **HTTP**
+   - **GraphQL**
+   - **gRPC**
+   - **WebSocket**
+
+![Inline Request Creation](/screenshots/get-started/bruno-basics/create_request/5-inline-request.webp)
+
+3. **Click on any option** to instantly create a new request of that type
+
+### How It Works
+
+When you create a request using the inline "+" button:
+
+- A new **"Untitled"** request opens immediately in a new tab
+- The request is **filled with presets** if configured in your collection settings
+- **No file is created yet** in your collection folder - the request exists only in memory
+- The request **automatically inherits all collection-level settings** (authentication, headers, etc.)
+
+### Saving Your Request
+
+Before the request is persisted to your collection:
+
+1. You can **rename the request** from "Untitled" to any name you prefer
+2. Make changes, add parameters, test the request
+3. When you're ready to save, Bruno will prompt you to:
+   - **Choose a location**: Save to the collection root or a specific folder
+   - **Confirm the name**: The request name you've set will be used
+
+This workflow allows you to quickly experiment with requests and only save them when you're satisfied with the setup.
+
 ## Custom Request Filenames
 
 <Callout type="info">

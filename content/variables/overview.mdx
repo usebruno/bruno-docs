@@ -1,3 +1,5 @@
+import { Callout } from "nextra/components";
+
 # Variables
 
 ### Overview
@@ -94,6 +96,35 @@ Each variable has its own storage location either within your collection file or
   </table>
 </div>
 
+### Environment Color Coding
+
+<Callout type="info">
+ Environment color coding is now available (v3.1.0+) for Environment Variables and Global Environment Variables, making it easier to visually identify and distinguish between different environments.
+</Callout>
+
+Bruno allows you to customize the visual appearance of your environments using color coding. This feature helps you quickly identify which environment you're currently working with, reducing the risk of accidentally running requests against the wrong environment.
+
+#### Color Customization
+
+You can assign a custom color to each environment:
+
+1. Navigate to environment settings (top right corner)
+2. Click the brush icon next to the environment and select a color from the color picker component
+3. If no color is selected, a default color will be assigned
+
+![Color Picker](/screenshots/variables/color-coding-env-click-pencil-icon.webp)
+
+#### Color-Coded Visual Indicators
+
+Once colors are assigned, they appear in multiple places throughout the interface:
+
+**Environment Selector Dropdown**: A small color swatch is displayed next to each environment name, making it easy to distinguish between environments at a glance.
+
+**Active Environment Indicator**: The currently selected environment's color is prominently displayed in the environment pill in the tabs UI, providing constant visual feedback about which environment you're working with.
+
+![Environment Color Coding](/screenshots/variables/view-color-coding-env.webp)
+
+This visual system helps prevent mistakes when switching between development, staging, and production environments, especially in fast-paced workflows.
 
 ### Variable Data Type
 

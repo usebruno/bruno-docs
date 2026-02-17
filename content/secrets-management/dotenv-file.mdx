@@ -1,4 +1,4 @@
-import { FileTree } from "nextra/components";
+import { FileTree, Callout } from "nextra/components";
 
 # Secrets Management
 
@@ -86,4 +86,26 @@ example.test=mysecretvalue
 ```
 
 This happens because Bruno interprets dots as object path separators. Square brackets tell Bruno to treat the entire string as a single variable name.
+
+## Manage Environment Credentials
+
+<Callout type="info">
+**Bruno v3.1.0**: You can now create, view, and delete environment variables directly from Bruno at the workspace level without manually editing `.env` files.
+</Callout>
+
+### Accessing Environment Variables
+
+1. Navigate to **Workspace** → **Global Environment** section
+
+![Create Environment File](/screenshots/secret-variables/1-create-env-file.webp)
+
+2. Create or edit environment variables with your credentials
+
+![Create Environment Variables](/screenshots/secret-variables/2-create-env-vars.webp)
+
+3. Use these variables across all collections in your workspace using `{{process.env.<variable-name>}}` syntax.
+
+![Use Environment Variables](/screenshots/secret-variables/3-use-env-vars.webp)
+
+This feature provides a centralized UI to create, view, and delete environment credentials directly from Bruno, eliminating the need to manually edit `.env` files while maintaining the same security and accessibility benefits.
 

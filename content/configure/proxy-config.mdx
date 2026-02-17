@@ -1,8 +1,14 @@
+import { Callout } from "nextra/components";
+
 # Configuring Proxy Settings in Bruno
 
 A proxy is an intermediary server that sits between a client application (like Bruno) and the destination server that the client is communicating with (like an API). The proxy server acts as a security barrier, making requests on your behalf to websites and other internet resources, and preventing others from accessing your internal network.
 
-If your machine sits behind a corporate network or firewall, you may need to configure the proxy settings in Bruno in order for requests to be made. By default, Proxy is set to off.
+If your machine sits behind a corporate network or firewall, you may need to configure the proxy settings in Bruno in order for requests to be made.
+
+<Callout type="info">
+Starting from v3.1.0+, **System Proxy is enabled by default for new users** and Existing users retain their current preference settings.
+</Callout>
 
 Below are steps for configuring your proxy settings at different levels within Bruno.
 
