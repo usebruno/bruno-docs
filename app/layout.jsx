@@ -5,7 +5,6 @@ import Image from 'next/image'
 import { CustomMobileNav } from '@/components/custom-mobile-nav'
 import GoogleAnalytics from '@/components/google-analytics'
 import CRRelayTracker from '@/components/cr-relay-tracker'
-import { WebinarBanner } from '@/components/webinar-banner'
 import './globals.css'
 
 export const metadata = {
@@ -54,7 +53,6 @@ export default async function RootLayout({ children }) {
       <body>
         <GoogleAnalytics />
         <CRRelayTracker />
-        <WebinarBanner />
         <CustomMobileNav />
         <Layout
           pageMap={pageMap}
