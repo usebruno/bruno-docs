@@ -1,0 +1,45 @@
+import { FileTree } from "nextra/components";
+import { Callout } from "nextra/components";
+
+# GitHub Copilot
+
+VS code is known as the most popular code editor by developers. Its opensource and free to use. VS code has built in GitHub Copilot support for AI code completion and you can configure it to use Bruno as your AI agent.
+
+GitHub Copilot is a powerful AI agent that can help you write code faster and more efficiently. 
+
+## Configure GitHub Copilot with Bruno
+
+1. Download and install VS Code from [here](https://code.visualstudio.com/download).
+
+2. After installing VS Code, install [GitHub Copilot extension](https://marketplace.visualstudio.com/items?itemName=GitHub.copilot).
+
+3. Create a `copilot-instructions.md` file inside the `.github` folder at the root of your project.
+
+Your project folder structure should look like this:
+
+<FileTree>
+  <FileTree.Folder name="my-project" defaultOpen>
+    <FileTree.Folder name=".github" defaultOpen>
+      <FileTree.File name="copilot-instructions.md" />
+    </FileTree.Folder>
+    <FileTree.Folder name="src" defaultOpen>
+      <FileTree.Folder name="routes">
+        <FileTree.File name="users.js" />
+        <FileTree.File name="auth.js" />
+      </FileTree.Folder>
+      <FileTree.File name="app.js" />
+      <FileTree.File name="server.js" />
+    </FileTree.Folder>
+    <FileTree.File name="package.json" />
+    <FileTree.File name=".gitignore" />
+  </FileTree.Folder>
+</FileTree>
+
+<Callout type="warning" emoji="">
+You can write your own instructions for Copilot to follow while working on the collection or you can use the [default instructions provided by Bruno](https://github.com/bruno-collections/ai-assistant-prompts/tree/main/prompts/copilot/.github/copilot-instructions.md).
+</Callout>
+
+## Use Cases
+
+
+

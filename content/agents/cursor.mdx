@@ -1,0 +1,125 @@
+import { Callout } from "nextra/components";
+import { FileTree } from "nextra/components";
+
+# Cursor 
+
+Cursor is a widely adopted AI code editor by developers. A powerful tool to automate your development workflow as well as remove the manual effort of writing code. With Bruno local first approach you can configure Cursor to automate your API development workflow. 
+
+## Configure Cursor with Bruno
+
+1. Download and install Cursor from [here](https://cursor.com/download).
+
+2. After installing Cursor, open your project and create a `.cursor/rules/instructions.md` file.
+
+Your project folder structure should look like this:
+
+<FileTree>
+  <FileTree.Folder name="my-project" defaultOpen>
+    <FileTree.Folder name=".cursor" defaultOpen>
+      <FileTree.Folder name="rules" defaultOpen>
+        <FileTree.File name="instructions.md" />
+      </FileTree.Folder>
+    </FileTree.Folder>
+    <FileTree.Folder name="src" defaultOpen>
+      <FileTree.Folder name="routes">
+        <FileTree.File name="users.js" />
+        <FileTree.File name="auth.js" />
+      </FileTree.Folder>
+      <FileTree.File name="app.js" />
+      <FileTree.File name="server.js" />
+    </FileTree.Folder>
+    <FileTree.File name="package.json" />
+    <FileTree.File name=".gitignore" />
+  </FileTree.Folder>
+</FileTree>
+
+<Callout type="warning" emoji="">
+You can write your own instructions for Cursor to follow while working on the collection or you can use the [default instructions provided by Bruno](https://github.com/bruno-collections/ai-assistant-prompts/tree/main/prompts/cursor). 
+</Callout>
+
+After creating the instructions file, you can start using Cursor to automate your API development workflow. 
+
+## Use Cases
+
+1. If you want to create a complete new Bruno collection for your backend API endpointts directly from source code, you can use the following prompt:
+
+```md copy
+Create Bruno collection for my backend API with relevant test cases and write docs for each request at request level.
+```
+
+Cursor will analyze your source code and generate a Bruno collection like this:
+
+<FileTree>
+  <FileTree.Folder name="my-project" defaultOpen>
+    <FileTree.Folder name=".cursor" defaultOpen>
+      <FileTree.Folder name="rules" defaultOpen>
+        <FileTree.File name="instructions.md" />
+      </FileTree.Folder>
+    </FileTree.Folder>
+    <FileTree.Folder name="src" defaultOpen>
+      <FileTree.Folder name="routes">
+        <FileTree.File name="users.js" />
+        <FileTree.File name="auth.js" />
+      </FileTree.Folder>
+      <FileTree.File name="app.js" />
+      <FileTree.File name="server.js" />
+    </FileTree.Folder>
+    <FileTree.Folder name="bruno-collection" defaultOpen>
+      <FileTree.Folder name="environments" defaultOpen>
+        <FileTree.File name="local.bru" />
+        <FileTree.File name="prod.bru" />
+      </FileTree.Folder>
+      <FileTree.File name="auth-api.bru" />
+      <FileTree.File name="product.bru" />
+      <FileTree.File name="user.bru" />
+      <FileTree.File name="bruno.json" />
+    </FileTree.Folder>
+    <FileTree.File name="package.json" />
+    <FileTree.File name=".gitignore" />
+  </FileTree.Folder>
+</FileTree>
+
+2. You can also write complete CI/CD pipeline for your API tests using Bruno CLI. The instructions file contains the guide to write a CI/CD pipeline to generate test reports and store it in a remote storage.
+
+```md copy
+Create fully functional CI/CD pipeline for my API tests using Bruno CLI to generate test reports.
+```
+
+Cursor will generate a GitHub Actions workflow file in your project like this:
+
+<FileTree>
+  <FileTree.Folder name="my-project" defaultOpen>
+    <FileTree.Folder name=".cursor" defaultOpen>
+      <FileTree.Folder name="rules" defaultOpen>
+        <FileTree.File name="instructions.md" />
+      </FileTree.Folder>
+    </FileTree.Folder>
+    <FileTree.Folder name=".github" defaultOpen>
+      <FileTree.Folder name="workflows" defaultOpen>
+        <FileTree.File name="api-tests.yml" />
+      </FileTree.Folder>
+    </FileTree.Folder>
+    <FileTree.Folder name="src">
+      <FileTree.Folder name="routes">
+        <FileTree.File name="users.js" />
+        <FileTree.File name="auth.js" />
+      </FileTree.Folder>
+      <FileTree.File name="app.js" />
+      <FileTree.File name="server.js" />
+    </FileTree.Folder>
+    <FileTree.Folder name="bruno-collection">
+      <FileTree.Folder name="environments">
+        <FileTree.File name="local.bru" />
+        <FileTree.File name="prod.bru" />
+      </FileTree.Folder>
+      <FileTree.File name="auth-api.bru" />
+      <FileTree.File name="product.bru" />
+      <FileTree.File name="user.bru" />
+      <FileTree.File name="bruno.json" />
+    </FileTree.Folder>
+    <FileTree.File name="package.json" />
+    <FileTree.File name=".gitignore" />
+  </FileTree.Folder>
+</FileTree>
+
+There are plenty of other examples and usecases to automate your API development workflow with Bruno and Cursor and boost your developer productivity by removing the manual efforts.
