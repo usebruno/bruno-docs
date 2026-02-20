@@ -2,32 +2,43 @@ import { Callout } from "nextra/components";
 
 # How to Use OAuth2 for the Authorization Code Grant Type
 
-OAuth2 authentication can be implemented in various ways, depending on the collection structure and specific requirements. You can configure OAuth2 authentication at collection, folder, and request level.
+OAuth2 can be configured in multiple ways, making it adaptable to your needs. You can configure OAuth2 auth at collection, folder, and request level.
 
 ## OAuth2 Configuration
 
-Select `OAuth 2.0` as the authentication method and set the grant type to `Authorization Code`. Fill in the following fields:
+Select `OAuth 2.0` as the auth method and set the grant type to `Authorization Code`. Fill in the following fields:
 
-- **Callback URL**: The URL where you want to receive the authorization code
-- **Authorization URL**: The endpoint for authorization
-- **Access Token URL**: The endpoint to exchange the code for a token
-- **Client ID**: Your application's client identifier
-- **Client Secret**: Your application's client secret
-- **Scope**: The requested scope
-- **State**: An opaque value to maintain state between the request and callback
-- **Add Credentials to**: Choose how to send credentials (Request Body or Basic Auth Header)
+- **Callback URL**: Also known as **Redirect URI**, this URL must be configured with the IdP*
+- **Authorization URL**: The IdP's authorization endpoint, often named **/auth** or **/authorization**
+- **Access Token URL**: The IdP's token endpoint, often named **/token**
+- **Client ID**: Also known as **App ID**, the IdP-supplied client identifier
+- **Client Secret**: Also known as **App Secret**, the IdP-supplied client secret
+- **Scope**: The requested scope(s) for the access
+- **State**: Can be a random value or transfer data
+- **Add Credentials to**: Choose how to add the access token to requests (in the Request Body or a Basic Auth Header)
 
-Enable **Use PKCE** if your OAuth provider supports and requires PKCE (Proof Key for Code Exchange).
+For Bruno's purposes, this can be any URL because the redirect will be intercepted before getting there (see [Understanding Callback URLs](#understanding-callback-urls-redirect-uris)). However, it still must match a **Callback URL** (or **Redirect URI**) configured with the IdP.
+
+*The IdP (Identity Provider) is the OAuth2 authorization provider (like Azure, Google, Facebook, etc.) managing access to the API.*
+
+### Use PKCE
+
+Enable "Use PKCE" if your OAuth provider supports it as a recommended best security practice.
 
 ## Understanding Callback URLs (Redirect URIs)
 
 The **Callback URL** (also known as **Redirect URI**) is a critical component of the OAuth2 authorization code flow. Here's what you need to know:
 
-### What is a Callback URL?
+### How Bruno Handles Callback URLs
 
-The callback URL is the address where the OAuth2 provider (like Azure, Google, Facebook, etc.) will redirect the browser after successful authentication. This redirect contains a sensitive authorization code that Bruno extracts to complete the authentication process.
+Bruno does not actually redirect to the Callback URL. Instead, Bruno effectively serves as the redirect endpoint by intercepting the redirect attempt from the OAuth2 IdP (Identity Provider). That's how Bruno is able to handle the authorization code exchange and receive the access token.
 
-[Learn more about Callback URLs](/auth/oauth2-2.0/system-browser#custom-callback-server)
+This means:
+- **Bruno Support all formats**: It can handle any callback URL format that your OAuth2 provider allows
+- **Callback URL isn't actually hit**: Bruno never actually navigates to the Callback URL
+- **Security maintained**: The auth process is handled securely
+
+
 
 ## Browser Support
  Bruno supports oauth2 authentication using system browser and inbuilt browser[default]. You can enable system browser by selecting the **System Browser** option in the **Callback URL** section.
