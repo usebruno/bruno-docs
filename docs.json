@@ -812,7 +812,7 @@
     }
   },
   "appearance": {
-    "default": "dark",
+    "default": "system",
     "strict": false
   },
   "navbar": {
