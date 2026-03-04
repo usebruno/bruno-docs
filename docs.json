@@ -861,6 +861,11 @@
     "suggestEdit": true,
     "raiseIssue": true
   },
+  "integrations": {
+    "ga4": {
+      "measurementId": "G-EB5Y7HLTX3"
+    }
+  },
   "redirects": [
     {
       "source": "/introduction",
