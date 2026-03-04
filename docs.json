@@ -314,6 +314,7 @@
                     "group": "AI Agents",
                     "pages": [
                       "agents/overview",
+                      "agents/use-cases",
                       "agents/cursor",
                       "agents/vs-code",
                       "agents/codex",
