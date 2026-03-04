@@ -28,13 +28,13 @@ Microsoft Entra ID queries the Bruno SCIM endpoint every 40 minutes for assigned
    - Select **Integrate any other application you don't find in the gallery (Non-gallery)**
    - Click **Create**
 
-<Image src="/images/screenshots/sso-scim-management/entra/entra-sso-1.webp" alt="Configure custom application in Entra ID" width={800} height={600} className="rounded mt-4" />
+![Configure custom application in Entra ID](/images/screenshots/sso-scim-management/entra/entra-sso-1.webp)
 
 ## Configure automatic provisioning
 
 1. In your newly created (or existing) Enterprise Application, select **Provisioning** from the left navigation menu
 
-<Image src="/images/screenshots/sso-scim-management/entra/entra-scim-3.webp" alt="Select Automatic provisioning mode" width={800} height={600} className="rounded mt-4" />
+![Select Automatic provisioning mode](/images/screenshots/sso-scim-management/entra/entra-scim-3.webp)
 
 2. In the **Provisioning Mode** dropdown, select **Automatic**
 
@@ -42,7 +42,7 @@ Microsoft Entra ID queries the Bruno SCIM endpoint every 40 minutes for assigned
    - **Tenant URL**: `https://license.usebruno.com/scim/v2`
    - **Secret Token**: Enter the SCIM API key you generated in the [prerequisites step](./overview#enabling-scim-provisioning)
 
-<Image src="/images/screenshots/sso-scim-management/entra/entra-scim-4.webp" alt="Configure admin credentials" width={800} height={600} className="rounded mt-4" />
+![Configure admin credentials](/images/screenshots/sso-scim-management/entra/entra-scim-4.webp)
 
 4. Click **Test Connection** to verify that Microsoft Entra ID can connect to Bruno's SCIM endpoint
 5. If the test is successful, click **Save** to save the admin credentials
@@ -55,14 +55,14 @@ Attribute mappings control how user data from Microsoft Entra ID is mapped to Br
 
 1. Under the **Mappings** section, click **Provision Microsoft Entra ID Users**
 
-<Image src="/images/screenshots/sso-scim-management/entra/entra-scim-5.webp" alt="Configure user mappings" width={800} height={600} className="rounded mt-4" />
+![Configure user mappings](/images/screenshots/sso-scim-management/entra/entra-scim-5.webp)
 
 2. Under **Target Object Actions**, ensure the following are enabled:
    - **Create**
    - **Update**
    - **Delete**
 
-<Image src="/images/screenshots/sso-scim-management/entra/entra-scim-7.webp" alt="Configure attribute mappings" width={800} height={600} className="rounded mt-4" />
+![Configure attribute mappings](/images/screenshots/sso-scim-management/entra/entra-scim-7.webp)
 
 3. Under **Attribute Mappings**, configure the following mappings. **You must remove any existing attribute mappings that are not on this list** to avoid conflicts:
 
@@ -75,7 +75,7 @@ Attribute mappings control how user data from Microsoft Entra ID is mapped to Br
    | `name.givenName` | `givenName` | Direct | No | Always |
    | `name.familyName` | `surname` | Direct | No | Always |
 
-<Image src="/images/screenshots/sso-scim-management/entra/entra-scim-8.webp" alt="Configure attribute mappings" width={800} height={600} className="rounded mt-4" />
+![Configure attribute mappings](/images/screenshots/sso-scim-management/entra/entra-scim-8.webp)
 
 <Warning>
 **Important**:
@@ -97,7 +97,7 @@ Attribute mappings control how user data from Microsoft Entra ID is mapped to Br
 
 3. Set **Provisioning Status** to **On**
 
-<Image src="/images/screenshots/sso-scim-management/entra/entra-scim-6.webp" alt="Enable provisioning" width={800} height={600} className="rounded mt-4" />
+![Enable provisioning](/images/screenshots/sso-scim-management/entra/entra-scim-6.webp)
 
 4. Click **Save**
 
@@ -115,7 +115,7 @@ The initial provisioning cycle will begin immediately. Microsoft Entra ID will c
 
 5. Assigned users will receive an email with their **License Key** once the provisioning cycle completes
 
-<Image src="/images/screenshots/sso-scim-management/okta/okta-swa-12.webp" alt="License portal login" width={800} height={600} className="rounded mt-4" />
+![License portal login](/images/screenshots/sso-scim-management/okta/okta-swa-12.webp)
 
 <Info>
 **Note**: Microsoft Entra ID syncs changes every 40 minutes. For immediate provisioning of specific users, you can use the [on-demand provisioning feature](https://learn.microsoft.com/entra/identity/app-provisioning/provision-on-demand) in Microsoft Entra ID.
@@ -129,7 +129,7 @@ The initial provisioning cycle will begin immediately. Microsoft Entra ID will c
 
 3. The user's license will be deactivated during the next provisioning cycle (within 40 minutes), and they will receive an email notification
 
-<Image src="/images/screenshots/sso-scim-management/okta/okta-swa-14.webp" alt="License portal login" width={800} height={600} className="rounded mt-4" />
+![License portal login](/images/screenshots/sso-scim-management/okta/okta-swa-14.webp)
 
 <Info>
 **Note**: Microsoft Entra ID syncs changes every 40 minutes. For immediate provisioning of specific users, you can use the [on-demand provisioning feature](https://learn.microsoft.com/entra/identity/app-provisioning/provision-on-demand) in Microsoft Entra ID.
