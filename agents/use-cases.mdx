@@ -96,4 +96,64 @@ The agent can generate a workflow file (e.g. GitHub Actions) in your project:
   </Tree.Folder>
 </Tree>
 
-For best results, ensure your agent's instruction file (e.g. Cursor's `instructions.md`, Claude's `CLAUDE.md`, or Codex's `AGENTS.md`) includes [Bruno's default prompts](https://github.com/bruno-collections/ai-assistant-prompts) or your own guidance for working with Bruno collections and CLI.
+## Example: Write automated test cases
+
+You can ask your AI agent to write test cases for each API in your Bruno collection, including different edge cases.
+
+### Prompt
+
+Use a prompt like:
+
+```md
+Write test cases for each API in my Bruno collection. Include happy-path checks and different edge cases (error responses, missing fields, invalid data, response time, headers).
+```
+
+The agent generates test scripts. Bruno uses the [Chai library](https://www.chaijs.com/) for assertions—all Chai `expect` syntax works in Bruno tests. The agent can produce tests such as:
+
+**Status codes and response body (happy path):**
+
+```javascript
+test("should return success", function () {
+  expect(res.getStatus()).to.equal(200);
+});
+
+test("should return user data", function () {
+  const body = res.getBody();
+  expect(body).to.have.property("id");
+  expect(body.name).to.equal("John Doe");
+  expect(body.email).to.contain("@example.com");
+});
+```
+
+**Edge cases (error responses, conditional logic):**
+
+```javascript
+test("should validate response based on status", function () {
+  const status = res.getStatus();
+  const body = res.getBody();
+
+  if (status === 200) {
+    expect(body).to.have.property("data");
+    expect(body.data).to.not.be.empty;
+  } else if (status === 404) {
+    expect(body).to.have.property("error");
+    expect(body.error.message).to.contain("not found");
+  } else {
+    throw new Error(`Unexpected status code: ${status}`);
+  }
+});
+
+test("should validate error response structure", function () {
+  const status = res.getStatus();
+  if (status >= 400) {
+    const body = res.getBody();
+    expect(body).to.have.property("error");
+    expect(body.error).to.have.property("message");
+    expect(body.error.message).to.be.a("string");
+  }
+});
+```
+
+For more test patterns (headers, response time, arrays and loops, saving variables for the next request), see the [Testing introduction](/testing/tests/introduction).
+
+
