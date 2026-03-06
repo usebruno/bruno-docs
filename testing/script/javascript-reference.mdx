@@ -425,9 +425,7 @@ Here are all available environment-related methods:
 | bru.deleteAllEnvVars()     | Deletes all environment variables in the current environment. |
 | bru.getGlobalEnvVar(key)   | Get the Bruno global environment variable.                |
 | bru.setGlobalEnvVar(key, value) | Set the Bruno global environment variable.           |
-| bru.deleteGlobalEnvVar(key) | Deletes a specific global environment variable.         |
 | bru.getAllGlobalEnvVars()  | Retrieves all global environment variables as an object.  |
-| bru.deleteAllGlobalEnvVars() | Deletes all global environment variables.               |
 
 #### Environment Information
 
@@ -503,20 +501,10 @@ Here are all available environment-related methods:
   bru.setGlobalEnvVar("val", "bruno");
   ```
 
-- **`deleteGlobalEnvVar(key)`** - Delete a specific global environment variable.
-  ```javascript
-  bru.deleteGlobalEnvVar("api_key");
-  ```
-
 - **`getAllGlobalEnvVars()`** - Get all global environment variables as an object.
   ```javascript
   const globalVars = bru.getAllGlobalEnvVars();
   console.log(globalVars);
-  ```
-
-- **`deleteAllGlobalEnvVars()`** - Delete all global environment variables.
-  ```javascript
-  bru.deleteAllGlobalEnvVars();
   ```
 
 ## Variables
@@ -534,11 +522,7 @@ Here are all available variable-related methods:
 | bru.getProcessEnv(key)       | Fetches the process environment variable for a given key. |
 | bru.getCollectionName()      | Retrieves the current collection name.                    |
 | bru.getCollectionVar(key)    | Retrieves the collection-level variable for the key.      |
-| bru.setCollectionVar(key, value) | Sets a collection-level variable.                     |
 | bru.hasCollectionVar(key)    | Checks if a collection variable exists.                   |
-| bru.deleteCollectionVar(key) | Deletes a specific collection variable.                   |
-| bru.deleteAllCollectionVars() | Deletes all collection variables.                        |
-| bru.getAllCollectionVars()   | Retrieves all collection variables as an object.         |
 | bru.getFolderVar(key)        | Fetches a folder-specific variable by key.                |
 | bru.getRequestVar(key)       | Retrieves the value of a request variable.                |
 | bru.hasVar(key)              | Checks if a variable exists.                              |
@@ -565,32 +549,11 @@ Here are all available variable-related methods:
   let namespace = bru.getCollectionVar("namespace");
   ```
 
-- **`setCollectionVar(key, value)`** - Set a collection-level variable.
-  ```javascript
-  bru.setCollectionVar("namespace", "production");
-  ```
-
 - **`hasCollectionVar(key)`** - Check if a collection variable exists.
   ```javascript
   if (bru.hasCollectionVar("namespace")) {
     console.log("Namespace is set");
   }
-  ```
-
-- **`deleteCollectionVar(key)`** - Delete a specific collection variable.
-  ```javascript
-  bru.deleteCollectionVar("namespace");
-  ```
-
-- **`deleteAllCollectionVars()`** - Delete all collection variables.
-  ```javascript
-  bru.deleteAllCollectionVars();
-  ```
-
-- **`getAllCollectionVars()`** - Get all collection variables as an object.
-  ```javascript
-  const collectionVars = bru.getAllCollectionVars();
-  console.log(collectionVars);
   ```
 
 - **`getCollectionName()`** - Retrieve the name of the current collection.
