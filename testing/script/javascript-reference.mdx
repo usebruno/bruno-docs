@@ -33,7 +33,7 @@ Here is a complete table for all available methods on the `req` object.
 | req.getHeaders()               | Get all request headers.                                             |
 | req.setHeader(name, value)     | Set a request header by name.                                        |
 | req.setHeaders(headers)        | Set multiple request headers.                                        |
-| req.getBody()                  | Get the current request body/payload.                                |
+| req.getBody(options?)          | Get the current request body/payload (supports raw option).          |
 | req.setBody(body)              | Set the request body/payload.                                        |
 | req.setMaxRedirects(count)     | Set the maximum number of redirects to follow.                       |
 | req.getTimeout()               | Get the current timeout value of the request.                        |
@@ -167,9 +167,17 @@ Below is the API documentation for the methods available on `req`
 
 - **`getBody(options?)`** - Get the current request body/payload.
 
-  **Example:**
+  **Parameters:**
+  - `options` (object, optional): Configuration options
+    - `raw` (boolean): When `true`, returns the raw body without any parsing. When `false` or not provided, returns the parsed body (default behavior).
+
+  **Examples:**
   ```javascript
-  const body = req.getBody();
+  // Get parsed body (default)
+  const body = req.getBody(); // Returns the parsed body
+
+  // Get raw body without parsing
+  const rawBody = req.getBody({ raw: true }); // Returns the raw body
   ```
 
 - **`setBody(body)`** - Set the request body/payload.
