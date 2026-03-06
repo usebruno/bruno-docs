@@ -804,7 +804,8 @@
   },
   "logo": {
     "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "dark": "/logo/dark.svg",
+    "href": "https://www.usebruno.com"
   },
   "api": {
     "mdx": {
@@ -812,7 +813,7 @@
     }
   },
   "appearance": {
-    "default": "dark",
+    "default": "system",
     "strict": false
   },
   "navbar": {
@@ -859,6 +860,11 @@
     "thumbsRating": true,
     "suggestEdit": true,
     "raiseIssue": true
+  },
+  "integrations": {
+    "ga4": {
+      "measurementId": "G-EB5Y7HLTX3"
+    }
   },
   "redirects": [
     {
