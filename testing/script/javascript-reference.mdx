@@ -33,6 +33,8 @@ Here is a complete table for all available methods on the `req` object.
 | req.getHeaders()               | Get all request headers.                                             |
 | req.setHeader(name, value)     | Set a request header by name.                                        |
 | req.setHeaders(headers)        | Set multiple request headers.                                        |
+| req.deleteHeader(name)         | Remove a request header by name.                                     |
+| req.deleteHeaders([names])      | Remove multiple request headers by name.                             |
 | req.getBody(options?)          | Get the current request body/payload (supports raw option).          |
 | req.setBody(body)              | Set the request body/payload.                                        |
 | req.setMaxRedirects(count)     | Set the maximum number of redirects to follow.                       |
@@ -161,6 +163,16 @@ Below is the API documentation for the methods available on `req`
     "content-type": "application/json",
     "transaction-id": "foobar",
   });
+  ```
+
+- **`deleteHeader(name)`** - Remove a request header by name.
+  ```javascript
+  req.deleteHeader("x-custom-header");
+  ```
+
+- **`deleteHeaders(names)`** - Remove multiple request headers by name. Pass an array of header names to remove.
+  ```javascript
+  req.deleteHeaders(["authorization", "accept", "api-key"]);
   ```
 
 ### Body Methods
