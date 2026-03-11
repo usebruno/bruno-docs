@@ -15,9 +15,7 @@ Prompt variables are ideal for:
 
 Prompt variables use the following syntax:
 
-<div style={{ marginTop: '1em', marginBottom: '1em' }}>
-  <PromptVar>Prompt Message</PromptVar>
-</div>
+`{{?Prompt Message}}`
 
 - The `?` indicates this is a prompt variable
 - The text after `?` is the message shown to you in the prompt dialog
@@ -40,7 +38,7 @@ When you execute a request containing prompt variables, Bruno displays a modal d
 
 **Example:**
 
-If your request body contains a prompt variable like <PromptVar>Prompt Var</PromptVar>:
+If your request body contains a prompt variable like `{{?Prompt Var}}`:
 
 ```json
 {
@@ -56,7 +54,7 @@ Bruno will display a prompt dialog asking for "Prompt Var" before sending the re
 
 ### Deduplication
 
-If you use the same prompt variable (like <PromptVar>Username</PromptVar>) multiple times in a request, Bruno will only prompt you once and substitute the value everywhere it appears.
+If you use the same prompt variable (like `{{?Username}}`) multiple times in a request, Bruno will only prompt you once and substitute the value everywhere it appears.
 
 **Example:**
 
