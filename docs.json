@@ -132,6 +132,7 @@
                       "variables/folder-variables",
                       "variables/request-variables",
                       "variables/runtime-variables",
+                      "variables/prompt-variables",
                       "variables/process-env",
                       "variables/interpolation"
                     ]
