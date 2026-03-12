@@ -1,0 +1,60 @@
+---
+title: "OpenAPI Sync"
+sidebarTitle: "OpenAPI Sync"
+---
+
+OpenAPI Sync keeps your Bruno collection aligned with a remote OpenAPI/Swagger spec. It tracks changes with version control, removes the manual effort of re-importing when the spec changes, and helps teams stay in sync—you can update the collection in one action instead of re-importing manually.
+
+## Connect to OpenAPI Sync
+
+1. Click on the **context menu**  (**`···`**) in your collection.
+2. Select option **OpenAPI Sync (Beta)**.
+3. You have two options:
+   - **Add URL** – Enter the remote OpenAPI spec URL, or
+   - **Upload file** – Upload an OpenAPI spec file from your machine.
+4. Click **Connect**.
+
+The OpenAPI Sync UI opens and connects your collection to the spec.
+
+## OpenAPI Sync UI at a glance
+
+The UI shows a summary of sync status:
+
+| Term | Meaning |
+|------|--------|
+| **Total in Collection** | Total number of endpoints in your collection. |
+| **In Sync with Spec** | Endpoints where your local collection matches the OpenAPI spec. |
+| **Changed in Collection** | Changes you made locally in Bruno (URL, params, headers, body, etc.). |
+| **Spec Updated Pending** | Changes from the remote spec that are not yet applied locally. |
+
+Use **Check for updates** (on the right) to pull the latest changes from the remote spec. Use **View spec** to open or inspect the OpenAPI spec.
+
+## Tabs in OpenAPI Sync
+
+### 1. Overview
+
+Your dashboard: summary of sync status, pending spec updates, and local collection changes. Shows **last synced** time and **spec version** (or title) so you know which spec version the collection is based on.
+
+### 2. Collection Changes
+
+Shows **your local collection changes** in Bruno:
+
+- **Deleted** – Endpoints or fields removed in your collection.
+- **Added** – Endpoints or fields added in your collection.
+
+Only **body, URL, params, and headers** are tracked here. Tests, scripts, test assertions, and other request settings are **not** tracked in this tab.
+
+### 3. Spec Updated
+
+Shows when the **remote spec has been updated** and changes are pending. You can:
+
+- **Sync collection** – Apply the remote spec changes to your local collection (sync local with remote).
+- Choose whether to **sync or not** after reviewing what will change.
+
+## What gets updated when you sync
+
+- **From spec:** URLs, parameters, request bodies, and folder/request structure are regenerated from the latest spec.
+- **Preserved:** Your tests, scripts, and assertions are kept.
+- **Stored locally:** The latest spec is saved under `collection/resources/spec/` for offline use.
+
+When you run **Update Collection from OpenAPI** (or Sync collection), Bruno fetches the remote spec, compares it with your working collection, and shows a diff (new, modified, conflicting, and local-only endpoints) so you can review and accept changes before they are applied.
