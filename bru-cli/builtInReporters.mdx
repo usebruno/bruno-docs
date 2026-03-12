@@ -67,3 +67,32 @@ To exclude all headers from the report, use the `--reporter-skip-all-headers` op
 bru run --reporter-html results.html --reporter-skip-all-headers
 ```
 
+## Skipping Request and Response Bodies in the Report
+
+Reports can include large request and response payloads. Use these flags to omit bodies and keep report files smaller:
+
+| Option | Description |
+| ------ | ----------- |
+| `--reporter-skip-request-body` | Omits request bodies from reports |
+| `--reporter-skip-response-body` | Omits response bodies from reports |
+| `--reporter-skip-body` | Shorthand: omits both request and response bodies from reports |
+
+**Behavior:**
+
+| Flags used | Result |
+| ---------- | ------ |
+| Both `--reporter-skip-request-body` and `--reporter-skip-response-body` | Omits both request and response bodies |
+| Neither (default) | Reports include both request and response bodies |
+
+**Examples:**
+
+```bash copy
+# Omit only request bodies
+bru run --reporter-html results.html --reporter-skip-request-body
+
+# Omit only response bodies
+bru run --reporter-html results.html --reporter-skip-response-body
+
+# Omit both (shorthand)
+bru run --reporter-html results.html --reporter-skip-body
+```
