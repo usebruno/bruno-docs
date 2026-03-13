@@ -40,19 +40,20 @@ There are two ways to connect to OpenAPI Sync:
 
 ![Enable Check for Spec Updates on import](/images/screenshots/open-api/openapi-sync/enable-check-for-spec-updates.webp)
 
-If you have the same endpoints in your OpenAPI spec and collection, you don't need to sync. If the endpoints don't match, then you have to perform initial sync changes with the collection.
+If you have the same endpoints in your OpenAPI spec and collection, you don't need to sync. If the endpoints don't match, then you have to perform **Initial Sync** changes with the collection.
+
+![review and sync collection](/images/screenshots/open-api/openapi-sync/review-and-sync-collection.webp)
 
 <Warning>
-**Use with caution.** OpenAPI Sync is a **beta feature**. Syncing is **irreversible**, once the collection is overwritten, data cannot be retrieved. Ensure you have a backup or are comfortable with the spec replacing your collection structure before you sync.
+**Beta feature:** OpenAPI Sync is in beta. When you sync, your collection is updated from the spec—your tests and scripts are preserved. We recommend backing up your collection or reviewing the spec before your first sync so you're comfortable with the result.
 </Warning>
-
 
 
 ## OpenAPI Sync UI at a glance
 
 The UI shows a summary of sync status:
 
-![review and sync collection](/images/screenshots/open-api/openapi-sync/review-and-sync-collection.webp)
+![openapi sync ui at a glance](/images/screenshots/open-api/openapi-sync/openapi-sync-ui.webp)
 
 ### 1. Overview
 
@@ -87,11 +88,13 @@ Shows when the **remote spec has been updated** and changes are pending. You can
 - **Accept All** – Accept all the changes 
 - **Keep Current** – Keep the current changes 
 
-![Spec Updated tab](/images/screenshots/open-api/openapi-sync/spec-updates-tab.webp)
+![Spec Updated tab](/images/screenshots/open-api/openapi-sync/view-spec-updates.webp)
 
 Click **Confirm and Sync Collection** to apply the remote spec changes to your local collection.
 
 ![Confirm and sync collection](/images/screenshots/open-api/openapi-sync/confirm-and-sync-collection.webp)
+
+![after sync updates](/images/screenshots/open-api/openapi-sync/after-sync-updates.webp)
 
 <Info>
 **Merge conflicts:** If you're working on the same file and there are changes in the remote spec, you may see conflicts. Review each change in the Spec Updated tab and accept or reject as needed.
@@ -103,7 +106,7 @@ Click **Confirm and Sync Collection** to apply the remote spec changes to your l
 - **Preserved:** Your tests, scripts, and assertions are kept.
 - **Stored locally:** The latest spec is saved under `collection/resources/spec/` for offline use.
 
-## Auto update settings
+## Connection Settings
 
 OpenAPI Sync checks for spec updates automatically **every 5 minutes**. You can control this setting as follows:
 
@@ -125,3 +128,5 @@ To view and inspect the OpenAPI spec:
 ![view openapu spec](/images/screenshots/open-api/openapi-sync/view-openapi-spec.webp)
 
 Its **read only** SwaggerUI-like interface to the OpenAPI spec.
+
+Please share your feedback or report issues [here](https://github.com/usebruno/bruno/discussions/7401).
