@@ -1,0 +1,107 @@
+---
+title: "OpenAPI Sync (Beta)"
+description: "Keep your Bruno collection synchronized with an OpenAPI specification"
+---
+
+OpenAPI Sync allows you to connect your Bruno collection to an OpenAPI specification and automatically detect changes. When your API spec is updated, Bruno identifies new, modified, and removed endpoints, letting you sync your collection with a single click while preserving your tests, assertions, and scripts.
+
+<Info>
+  OpenAPI Sync is currently in Beta. [Share feedback](https://github.com/usebruno/bruno/discussions/7401) to help improve this feature.
+</Info>
+
+## Key features
+
+- **Automatic change detection** — detect new, modified, and removed endpoints
+- **Track local changes** — see how your collection differs from the spec
+- **Selective sync** — review changes and choose which updates to apply
+- **Preserve customizations** — your tests, assertions, and scripts are never overwritten
+
+## Connect to an OpenAPI spec
+
+1. Open your collection in Bruno
+2. Click the collection menu (three dots) and select **OpenAPI Sync**
+3. Choose your source:
+   - **URL**: Enter the URL of your OpenAPI specification (e.g., `https://api.example.com/openapi.json`)
+   - **File**: Select a local OpenAPI specification file (JSON or YAML)
+4. Click **Connect**
+
+<Note>
+  Bruno supports OpenAPI 3.x specifications in JSON or YAML format.
+</Note>
+
+## Understanding the sync interface
+
+Once connected, the OpenAPI Sync tab displays three main sections:
+
+### Overview
+
+The overview shows your sync status at a glance:
+
+- **Total in Collection** — endpoints currently in your collection
+- **In Sync with Spec** — endpoints that match the latest spec
+- **Changed in Collection** — endpoints modified, deleted, or added locally since last sync
+- **Spec Updates Pending** — spec changes available to sync
+
+The overview also shows spec details including version, endpoint count, last sync time, and auto-check settings.
+
+### Collection changes
+
+This tab shows endpoints in your collection that differ from the stored spec:
+
+- **Modified** — endpoints you've changed locally
+- **Deleted** — endpoints you've removed from the collection
+- **Not in Spec** — endpoints that exist only in your collection
+
+### Spec updates
+
+This tab shows changes available from the remote spec:
+
+- **New in Spec** — endpoints added to the spec
+- **Updated in Spec** — endpoints modified in the spec
+- **Removed from Spec** — endpoints no longer in the spec
+
+## Syncing your collection
+
+When updates are available:
+
+1. Go to the **Spec Updates** tab
+2. Review each change — you can expand endpoints to see detailed diffs
+3. For each endpoint, choose to:
+   - **Accept** — apply the spec change to your collection
+   - **Skip** — keep your current version
+4. Click **Sync Collection** to apply your selections
+
+### Handling conflicts
+
+When an endpoint has been modified in both the spec and your collection, Bruno marks it as a conflict. You must resolve all conflicts before syncing by choosing either the spec version or your local version.
+
+### What gets updated during sync
+
+When you sync an endpoint, Bruno updates:
+- Request method and URL
+- Query parameters and path parameters
+- Headers
+- Request body
+- Authentication settings
+
+Bruno preserves and never overwrites:
+- Tests
+- Pre-request and post-response scripts
+- Assertions
+- Custom documentation
+
+## Connection settings
+
+Click the settings icon in the sync header to configure:
+
+- **Source URL** — update the OpenAPI spec location
+- **Auto Check** — automatically check for updates (default: every 5 minutes)
+
+## Disconnecting
+
+To disconnect OpenAPI Sync from your collection:
+
+1. Open the sync settings
+2. Click **Disconnect**
+
+This removes the sync configuration but keeps your collection endpoints intact.
