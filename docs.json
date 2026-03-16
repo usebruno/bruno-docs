@@ -1146,6 +1146,11 @@
       "source": "/license-management/license-administrators/scim-provisioning/bruno-scim-api",
       "destination": "/license-administrators/scim-provisioning/bruno-scim-api",
       "permanent": true
+    },
+    {
+      "source": "/to/embed-bruno-collection",
+      "destination": "/git-integration/embed-bruno-collection",
+      "permanent": true
     }
   ]
 }
