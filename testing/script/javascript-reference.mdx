@@ -973,6 +973,19 @@ Once you have a cookie jar instance, you can use the following methods:
   jar.deleteCookies("https://example.com");
   ```
 
+- **`jar.hasCookie(url, name)`** - Check whether a cookie with the given name exists for a specific URL.
+  
+  **Returns:** `true` if the cookie exists, `false` otherwise
+
+  **Example:**
+  ```javascript
+  const jar = bru.cookies.jar();
+  const exists = await jar.hasCookie("https://example.com", "sessionId");
+  if (exists) {
+    console.log("Session cookie exists");
+  }
+  ```
+
 - **`jar.clear()`** - Clear all cookies from the cookie jar.
   ```javascript
   const jar = bru.cookies.jar();
