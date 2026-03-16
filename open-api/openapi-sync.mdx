@@ -1,0 +1,123 @@
+---
+title: "OpenAPI sync"
+sidebarTitle: "Sync with an OpenAPI spec"
+description: "Keep your Bruno collection synchronized with a remote or local OpenAPI specification using the OpenAPI Sync beta feature."
+---
+
+OpenAPI Sync maintains a persistent link between a Bruno collection and an OpenAPI 3.x specification. Unlike a [one-time import](/open-api/importOAS), it enables you to detect changes on either side over time and selectively reconcile them.
+
+<Info>
+OpenAPI Sync is a **Beta** feature. You must enable it in **Preferences > Beta** before using it.
+</Info>
+
+## How it works
+
+OpenAPI Sync performs a three-way comparison between:
+
+1. **Stored spec** -- a snapshot saved at the time of the last sync (the baseline)
+2. **Remote spec** -- the current version from the source URL or local file
+3. **Collection on disk** -- the actual request files in your Bruno collection
+
+This three-way approach lets Bruno determine what changed in the spec, what changed in the collection, and where conflicts exist.
+
+**What gets synced:** URL, HTTP method, parameters, headers, body (mode, form fields, JSON schema), auth (mode and config), and documentation.
+
+**What is always preserved:** Tests, scripts, assertions, variables, and request settings are never overwritten during sync.
+
+## Prerequisites
+
+- Bruno with the OpenAPI Sync beta feature enabled (**Preferences > Beta**)
+- A valid OpenAPI 3.x specification (JSON or YAML) accessible via URL or local file path
+- An existing Bruno collection to connect
+
+## Connect a spec
+
+<Steps>
+  <Step title="Open the OpenAPI sync tab">
+    Right-click your collection in the sidebar and select **OpenAPI** (marked with a Beta badge).
+  </Step>
+  <Step title="Choose a source">
+    Select either **URL** or **File** mode:
+    - **URL**: Paste an HTTP/HTTPS URL pointing to your OpenAPI spec
+    - **File**: Browse and select a local `.json`, `.yaml`, or `.yml` file
+  </Step>
+  <Step title="Connect">
+    Click **Connect**. Bruno validates the spec (Swagger 2.0 is not supported) and saves the sync configuration to your collection's `bruno.json`.
+  </Step>
+</Steps>
+
+Once connected, Bruno saves the spec as a baseline and opens the sync dashboard with three tabs: **Overview**, **Collection Changes**, and **Spec Updates**.
+
+## The sync dashboard
+
+### Overview tab
+
+The Overview tab provides a summary of your sync status:
+
+- **Endpoint counts** -- Total, In Sync, Changed, and Pending endpoints
+- **Spec details** -- Title, version, description, source URL, last sync date
+- **Auto-check status** -- Whether automatic polling is enabled and at what interval
+- **Contextual banners** -- Alerts when spec updates are available or the stored spec needs attention
+
+### Collection Changes tab
+
+This tab shows how your collection has drifted from the last synced spec:
+
+- **Modified in collection** -- Endpoints you've edited locally. You can **Reset** individual endpoints or all at once to match the spec.
+- **Deleted from collection** -- Spec endpoints you've removed locally. You can **Restore** them individually or all at once.
+- **Added to collection** -- Endpoints that exist locally but not in the spec. You can **Delete** them individually or all at once.
+
+Use **Revert All to Spec** to reset all local changes at once.
+
+### Spec Updates tab
+
+This tab shows changes detected in the remote spec since your last sync:
+
+- **New in spec** -- Endpoints added to the spec. Choose to **Add** or **Skip** each one.
+- **Updated in spec** -- Endpoints modified in the spec. Choose to **Update** (accept incoming changes) or **Keep Current**. Endpoints modified on both sides are flagged as conflicts.
+- **Removed from spec** -- Endpoints no longer in the spec. Choose to **Delete** or **Keep**.
+
+You can expand each endpoint row to view a visual diff of the changes. Use **Accept All** or **Skip All** for bulk decisions.
+
+## Sync your collection
+
+Once you've made your decisions in the Spec Updates tab:
+
+1. Click **Sync Collection**
+2. Review the confirmation summary showing endpoints to add, update, delete, and keep
+3. Click **Confirm** to apply changes
+
+After syncing, the new spec becomes your baseline and the sync status resets.
+
+## Check for updates
+
+Updates are detected in two ways:
+
+- **Automatic polling** -- When enabled, Bruno checks for spec changes in the background at your configured interval. This uses a lightweight hash comparison and does not compute a full diff.
+- **Manual check** -- Click **Check for updates** in the sync header to trigger a full comparison that shows exactly what changed.
+
+## Configuration
+
+Sync settings are stored in your collection's `bruno.json` under the `openapi` key:
+
+| Setting | Default | Description |
+| --- | --- | --- |
+| `sourceUrl` | (required) | URL or local file path to the OpenAPI spec. Local paths are stored as relative paths for git compatibility and resolved at runtime. |
+| `groupBy` | `tags` | How endpoints are organized into folders. Options: `tags` (by OpenAPI tags) or `path` (by URL path structure). |
+| `autoCheck` | `true` | Whether to automatically poll for spec changes in the background. |
+| `autoCheckInterval` | `5` | How often to check for updates, in minutes. Options: 5, 15, 30, or 60. |
+
+You can also modify `sourceUrl`, `autoCheck`, and `autoCheckInterval` from the **Connection Settings** modal accessible from the sync header menu.
+
+## Disconnect sync
+
+To disconnect OpenAPI Sync from a collection:
+
+1. Open the sync header menu
+2. Select **Disconnect Sync**
+
+This removes the sync configuration and deletes the stored spec baseline. Your collection remains intact.
+
+## Restore a missing spec
+
+If the stored spec file is missing (for example, after clearing app data), the Spec Updates tab shows a **Restore Spec File** button. Clicking it re-downloads the spec from the source to re-establish the baseline for drift tracking.
