@@ -302,7 +302,8 @@
                       "open-api/overview",
                       "open-api/importOAS",
                       "open-api/exportOAS",
-                      "open-api/createOAS"
+                      "open-api/createOAS",
+                      "open-api/openapi-sync"
                     ]
                   }
                 ]
