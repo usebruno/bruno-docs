@@ -120,3 +120,7 @@ With environments properly configured, your API requests will work seamlessly ac
 <Info>
 Note - Bruno environment names and variables must only contain alphanumeric characters, "-", "_", "." and cannot start with a digit. Non-conforming characters (such as "/") will be converted to "-". 
 </Info>
+
+<Info>
+Postman allows variable values to be numbers, booleans, or objects, but Bruno stores all variable values as strings. During import, non-string values are automatically converted — for example, `5000` becomes `"5000"`, `true` becomes `"true"`, and objects are serialized as JSON strings.
+</Info>
