@@ -1005,6 +1005,32 @@ Once you have a cookie jar instance, you can use the following methods:
   }
   ```
 
+- **`jar.hasCookie(url, name, callback)`** - Check whether a cookie with the given name exists for a specific URL. Optionally accepts a callback as the third argument; if omitted, returns a Promise.
+  
+  **Returns (Promise):** `true` if the cookie exists, `false` otherwise.
+
+  **Callback (optional):** `function(error, exists)` - when provided, called with `error` (null on success) and `exists` (boolean).
+
+  **Example (Promise):**
+  ```javascript
+  const jar = bru.cookies.jar();
+  const exists = await jar.hasCookie("https://example.com", "sessionId");
+  if (exists) {
+    console.log("Session cookie exists");
+  }
+  ```
+
+  **Example (callback):**
+  ```javascript
+  const jar = bru.cookies.jar();
+  jar.hasCookie("https://testbench-sanity.usebruno.com", "existing_cookie", function(error, exists) {
+    test("should work with callback pattern", function() {
+      expect(error).to.be.null;
+      expect(exists).to.be.true;
+    });
+  });
+  ```
+
 - **`jar.getCookies(url)`** - Get all cookies for a specific URL.
   
   **Returns:** Array of cookie objects or empty array if no cookies found
