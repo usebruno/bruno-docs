@@ -11,16 +11,24 @@ A collection in Bruno is a structured group of API requests, tests, and related 
 ## How to Create a Collection
 
 1. Open Bruno and navigate to the **home screen**
-2. Click on the `···` button and select `Create Collection` from dropdown.
+2. Click on the `···` button and select **Create Collection** from the dropdown.
 
-![create collection dialog](/images/screenshots/get-started/bruno-basics/create-collection/create-collection.webp)
+![Create collection](/images/screenshots/get-started/bruno-basics/create-collection/create-collection.webp)
 
-3. Enter a name for your collection
-4. Choose a location on your filesystem to store the collection
+3. Enter a name for your collection.
+4. **(Optional)** To store the collection at a custom location: click the **settings icon** (advanced options) and choose the desired folder on your system.
 
-![create collection dialog](/images/screenshots/get-started/bruno-basics/create-collection/save-collection.webp)
+![Advanced options – choose location](/images/screenshots/get-started/bruno-basics/create-collection/advanced-options.webp)
 
-5. Click **Create**
+<Info>
+  If you skip this, the collection is stored at the default location: `~/Documents/bruno` (e.g. `/Users/username/Documents/bruno`). You can view or change the default location in **Preferences** → **General** tab. See [Settings](/get-started/configure/settings#general).
+</Info>
+
+5. Choose or confirm the location on your filesystem for the collection.
+
+
+
+6. Click **Create**
 
 Congratulations! You have successfully created your first collection.
 
@@ -44,11 +52,7 @@ When you create a new collection or workspace, Bruno automatically generates a `
 
 ## Custom Collection Names
 
-<Info>
-  Starting with [Bruno v1.40.0 <strong><sup>↗</sup></strong>](https://www.usebruno.com/downloads), you can
-  now use special characters in collection names and customize how they appear in
-  the filesystem.
-</Info>
+
 
 You can use any characters in your collection names, including special characters like `/`, `[`, `]`, `*`, etc. Bruno automatically handles filesystem compatibility by replacing unsupported characters with `-` in the filenames while preserving your original collection name.
 
