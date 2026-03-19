@@ -58,6 +58,30 @@ You can access OAuth2 tokens in your scripts using the `bru.getOauth2CredentialV
 ```javascript
 bru.getOauth2CredentialVar('$oauth2.<Token ID>.access_token')
 ```
+
+### Resetting OAuth2 Credentials
+
+Use `bru.resetOauth2Credential(credentialId)` to programmatically clear existing OAuth2 credentials and trigger a fresh authentication cycle.
+
+```javascript
+bru.resetOauth2Credential("my-credential-id");
+```
+
+<Info>
+  Multiple requests can share the same `credentialId`. Resetting a credential ID will clear the credentials for **all** requests that use it.
+</Info>
+
+**Example — refresh on 401 Unauthorized:**
+
+```javascript
+if (res.getStatus() === 401) {
+  bru.resetOauth2Credential("my-credential-id");
+  console.log("OAuth2 credentials reset, fresh token will be fetched on next request");
+}
+```
+
+For the full list of OAuth2 scripting APIs, see the [JavaScript API Reference](/testing/script/javascript-reference#oauth2-credentials).
+
 ## Get Started with OAuth2
 
 Feel free to explore our OAuth2 tutorial collection to see practical examples and test different OAuth2 grant types:

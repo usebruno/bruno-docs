@@ -2,84 +2,93 @@
 title: "Create a Request"
 ---
 
-Bruno makes it easy to work with various API protocols - whether you're building RESTful services with HTTP, designing GraphQL APIs, or converting cURL commands into reusable requests. With support for all standard HTTP methods (GET, POST, PUT, DELETE, etc.), you can create, test, and manage your API requests efficiently.
+Bruno supports multiple ways to create API requests. You can work with HTTP, GraphQL, gRPC, WebSocket, or convert cURL commands into reusable requests.
 
-Let's walk through how to create your first request:
+**Three ways to create a request:**
 
-## Create a New Request in Bruno
+1. **[Within a collection](#1-create-a-request-within-a-collection)** – Create a new request from the collection menu (saved to that collection).
+2. **[Without a collection](#2-create-a-request-without-a-collection)** – Create an unsaved request from Workspace Home; save to a collection later (or discard).
+3. **[Inline "+" button](#3-create-a-request-with-the-inline-button)** – Create a new request from the "+" icon next to the request tabs (within a collection context).
 
-1. Go to your Collection, and click on the `···` button.
-2. Select `New Request` in the dropdown menu.
+---
+
+## 1. Create a request within a collection
+
+Create a new request that belongs to a collection from the start:
+
+1. Open your **Collection** and click the **`···`** button.
+2. Select **New Request** in the dropdown menu.
 
 ![create request dialog](/images/screenshots/get-started/bruno-basics/create_request/1-create-new-request.webp)
 
-3. In the dialog that appears, choose:
-   - Request Type (HTTP, GraphQL, or from cURL)
-   - Request Name
-   - HTTP Method (GET, POST, PUT, etc.)
-   - URL
+3. In the dialog, set:
+   - **Request Type** (HTTP, GraphQL, or from cURL)
+   - **Request Name**
+   - **HTTP Method** (GET, POST, PUT, etc.)
+   - **URL**
 
 ![create-new-request](/images/screenshots/get-started/bruno-basics/create_request/2-create-request.webp)
 
-4. Click `Create` to finish.
+4. Click **Create**.
 
-You have successfully created your first request in Bruno! Feel free to add headers, query parameters, and a request body to your request, or play around with the other options available.
+The request is created in your collection. You can add headers, query parameters, body, and other options as needed.
 
-## Quick Create via Inline "+" Button
+---
+
+## 2. Create a request without a collection
 
 <Info>
-**Quick Request Creation**: Bruno (v3.1.0+) offers a faster way to create requests directly from the request tabs using the inline "+" button.
+Send a request without creating or opening a collection first—useful for ad-hoc checks (e.g. verifying an endpoint) or quick cURL-style calls.
 </Info>
 
-For rapid prototyping and testing, you can create requests inline without going through the full creation dialog:
+1. Open **Workspace Home** and click the **"+"** icon in the tabs area.
 
-### Creating HTTP Requests (Default)
+![create request without a collection](/images/screenshots/get-started/bruno-basics/create_request/6-output-req-without-coll.webp)
 
-- **Click on the "+" icon** next to the request tabs to instantly create an HTTP request
+2. A new **unsaved request** opens in the editor (not tied to any collection).
+3. **Configure and run** the request: URL, method, headers, auth, body, scripts, and tests are all supported.
 
-### Creating Other Request Types
+![created request without a collection](/images/screenshots/get-started/bruno-basics/create_request/7-req-without-collection.webp)
 
-To create GraphQL, gRPC, or WebSocket requests:
+4. **Save (optional):** Click **Save** to open a modal where you can:
+   - Save to an **existing collection** from the list of open collections, or
+   - **Create a new collection** and save the request there.
+   If no collections are open, the flow defaults to creating a new collection. After saving, you're taken to the collection tab with the request open.
+5. **Find unsaved requests** again via the **Home** icon or the workspace/collection dropdown.
+6. **Closing the workspace** with unsaved requests open will prompt you that those requests will be lost unless you save them.
 
-1. **Right-click the "+" icon** next to the request tabs
-2. A **toolbar appears** with all request type options:
-   - **HTTP**
-   - **GraphQL**
-   - **gRPC**
-   - **WebSocket**
+---
+
+## 3. Create a request with the inline "+" button
+
+<Info>
+**Quick request creation (v3.1.0+):** Create requests from the **"+"** icon next to the request tabs—no collection menu needed. The new request inherits the current collection's settings.
+</Info>
+
+### Create an HTTP request
+
+- **Click the "+" icon** next to the request tabs to create a new HTTP request in a new tab.
+
+### Create GraphQL, gRPC, or WebSocket requests
+
+1. **Right-click the "+" icon** next to the request tabs.
+2. Choose the request type: **HTTP**, **GraphQL**, **gRPC**, or **WebSocket**.
 
 ![Inline Request Creation](/images/screenshots/get-started/bruno-basics/create_request/5-inline-request.webp)
 
-3. **Click on any option** to instantly create a new request of that type
+3. The new request opens in a new tab.
 
-### How It Works
+### How it works
 
-When you create a request using the inline "+" button:
+- A new **"Untitled"** request opens immediately; no file is created until you save.
+- The request **inherits collection-level settings** (auth, headers, etc.) and any **presets** from collection settings.
+- When you **Save**, Bruno prompts you to choose a location (collection root or folder) and confirm the name.
 
-- A new **"Untitled"** request opens immediately in a new tab
-- The request is **filled with presets** if configured in your collection settings
-- **No file is created yet** in your collection folder - the request exists only in memory
-- The request **automatically inherits all collection-level settings** (authentication, headers, etc.)
+This workflow is useful for rapid prototyping: create and run requests, then save only when you're satisfied.
 
-### Saving Your Request
-
-Before the request is persisted to your collection:
-
-1. You can **rename the request** from "Untitled" to any name you prefer
-2. Make changes, add parameters, test the request
-3. When you're ready to save, Bruno will prompt you to:
-   - **Choose a location**: Save to the collection root or a specific folder
-   - **Confirm the name**: The request name you've set will be used
-
-This workflow allows you to quickly experiment with requests and only save them when you're satisfied with the setup.
+---
 
 ## Custom Request Filenames
-
-<Info>
-  Starting with [Bruno v1.40.0 <strong><sup>↗</sup></strong>](https://www.usebruno.com/downloads), you can
-  now use special characters in request names and customize how they appear in
-  the filesystem.
-</Info>
 
 You can use any characters in your request names, including special characters like `/`, `[`, `]`, `*`, etc. Bruno automatically handles filesystem compatibility by replacing unsupported characters with `-` in the filenames while preserving your original request name.
 

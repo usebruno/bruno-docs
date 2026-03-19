@@ -1,0 +1,132 @@
+---
+title: "OpenAPI Sync"
+sidebarTitle: "OpenAPI Sync"
+---
+
+OpenAPI Sync keeps your Bruno collection aligned with a remote OpenAPI/Swagger spec. It tracks changes locally, removes the manual effort of re-importing when the spec changes, and helps teams stay in sync.
+
+<Info>
+Open Source edition allows **5 syncs per month**. For unlimited syncs, you need [Bruno Pro or Ultimate](https://www.usebruno.com/pricing).
+</Info>
+
+## Connect to OpenAPI Sync
+
+There are two ways to connect to OpenAPI Sync:
+1. [Existing Collection](#existing-collection)
+2. [New Import](#new-import)
+
+### Existing Collection
+
+1. Click on the **context menu**  (**`···`**) in your collection.
+2. Select option **OpenAPI (Beta)**.
+
+![Click context menu and select OpenAPI Sync](/images/screenshots/open-api/openapi-sync/click-context-menu-openapi-sync.webp)
+
+3. You have two options:
+   - **Add URL** – Enter the remote OpenAPI spec URL, or
+   - **Upload file** – Upload an OpenAPI spec file from your machine.
+
+![Enter URL or upload file and connect](/images/screenshots/open-api/openapi-sync/enter-url-file-connect-openapisync.webp)
+
+4. Click **Connect**.
+
+### New Import
+
+1. Import collection with OpenAPI spec file or URL.
+
+![Import new collection with OpenAPI Sync](/images/screenshots/open-api/openapi-sync/import-new-collection-openapi-sync.webp)
+
+2. Enable option **Check for Spec Updates** to automatically connect to OpenAPI Sync.
+
+![Enable Check for Spec Updates on import](/images/screenshots/open-api/openapi-sync/enable-check-for-spec-updates.webp)
+
+If you have the same endpoints in your OpenAPI spec and collection, you don't need to sync. If the endpoints don't match, then you have to perform **Initial Sync** changes with the collection.
+
+![review and sync collection](/images/screenshots/open-api/openapi-sync/review-and-sync-collection.webp)
+
+<Warning>
+**Beta feature:** OpenAPI Sync is in beta. When you sync, your collection is updated from the spec—your tests and scripts are preserved. We recommend backing up your collection or reviewing the spec before your first sync so you're comfortable with the result.
+</Warning>
+
+
+## OpenAPI Sync UI at a glance
+
+The UI shows a summary of sync status:
+
+![openapi sync ui at a glance](/images/screenshots/open-api/openapi-sync/openapi-sync-ui.webp)
+
+### 1. Overview
+
+Your dashboard: summary of sync status, pending spec updates, and local collection changes. Shows **last synced** time and **spec version** (or title) so you know which spec version the collection is based on.
+
+| Term | Meaning |
+|------|--------|
+| **Total in Collection** | Total number of endpoints in your collection. |
+| **In Sync with Spec** | Endpoints where your local collection matches the OpenAPI spec. |
+| **Changed in Collection** | Changes you made locally in Bruno (URL, params, headers, body, etc.). |
+| **Spec Updated Pending** | Changes from the remote spec that are not yet applied locally. |
+
+
+### 2. Collection Changes
+
+Shows **your local collection changes** in Bruno:
+
+- **Deleted** – Endpoints or fields removed in your collection.
+- **Added** – Endpoints or fields added in your collection.
+- **Modified** – Endpoints or fields modified in your collection.
+
+Only **body, URL, params, and headers** are tracked here. Tests, scripts, test assertions, and other request settings are **not** tracked in this tab. You can reset, open and view the changes.
+
+![Collection Changes tab](/images/screenshots/open-api/openapi-sync/collection-changes-tab.webp)
+
+### 3. Spec Updated
+
+Shows when the **remote spec has been updated** and changes are pending. You can:
+
+- **Sync collection** – Apply the remote spec changes to your local collection 
+- **Skip All** – Skip all the changes and continue with your local collection
+- **Accept All** – Accept all the changes 
+- **Keep Current** – Keep the current changes 
+
+![Spec Updated tab](/images/screenshots/open-api/openapi-sync/view-spec-updates.webp)
+
+Click **Confirm and Sync Collection** to apply the remote spec changes to your local collection.
+
+![Confirm and sync collection](/images/screenshots/open-api/openapi-sync/confirm-and-sync-collection.webp)
+
+![after sync updates](/images/screenshots/open-api/openapi-sync/after-sync-updates.webp)
+
+<Info>
+**Merge conflicts:** If you're working on the same file and there are changes in the remote spec, you may see conflicts. Review each change in the Spec Updated tab and accept or reject as needed.
+</Info>
+
+## What gets updated when you sync
+
+- **From spec:** URLs, parameters, request bodies, and folder/request structure are regenerated from the latest spec.
+- **Preserved:** Your tests, scripts, and assertions are kept.
+- **Stored locally:** The latest spec is saved under `collection/resources/spec/` for offline use.
+
+## Connection Settings
+
+OpenAPI Sync checks for spec updates automatically **every 5 minutes**. You can control this setting as follows:
+
+1. Click the context menu (**`···`**) next to **View spec**.
+
+![Context menu next to View spec](/images/screenshots/open-api/openapi-sync/disconnect-sync-option.webp)
+
+2. Select **Edit connection settings**.
+
+![Edit connection settings – auto check for updates](/images/screenshots/open-api/openapi-sync/auto-check-update-settings.webp)
+
+In the connection settings you can enable or disable automatic checks, disconnect sync and adjust when Bruno looks for spec updates.
+
+## Inspect Spec
+
+To view and inspect the OpenAPI spec:
+1. Click **View spec** on the top right-hand side of the OpenAPI Sync UI. 
+
+![view openapu spec](/images/screenshots/open-api/openapi-sync/view-openapi-spec.webp)
+
+Its **read only** SwaggerUI-like interface to the OpenAPI spec.
+
+Please share your feedback or report issues [here](https://github.com/usebruno/bruno/discussions/7401).

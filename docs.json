@@ -302,7 +302,8 @@
                       "open-api/overview",
                       "open-api/importOAS",
                       "open-api/exportOAS",
-                      "open-api/createOAS"
+                      "open-api/createOAS",
+                      "open-api/openapi-sync"
                     ]
                   }
                 ]
@@ -806,7 +807,7 @@
   "logo": {
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg",
-    "href": "https://www.usebruno.com"
+    "href": "/"
   },
   "api": {
     "mdx": {

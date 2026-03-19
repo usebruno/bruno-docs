@@ -33,7 +33,9 @@ Here is a complete table for all available methods on the `req` object.
 | req.getHeaders()               | Get all request headers.                                             |
 | req.setHeader(name, value)     | Set a request header by name.                                        |
 | req.setHeaders(headers)        | Set multiple request headers.                                        |
-| req.getBody(options?)          | Get the current request body/payload.                                        |
+| req.deleteHeader(name)         | Remove a request header by name.                                     |
+| req.deleteHeaders([names])      | Remove multiple request headers by name.                             |
+| req.getBody(options?)          | Get the current request body/payload (supports raw option).          |
 | req.setBody(body)              | Set the request body/payload.                                        |
 | req.setMaxRedirects(count)     | Set the maximum number of redirects to follow.                       |
 | req.getTimeout()               | Get the current timeout value of the request.                        |
@@ -163,13 +165,31 @@ Below is the API documentation for the methods available on `req`
   });
   ```
 
+- **`deleteHeader(name)`** - Remove a request header by name.
+  ```javascript
+  req.deleteHeader("x-custom-header");
+  ```
+
+- **`deleteHeaders(names)`** - Remove multiple request headers by name. Pass an array of header names to remove.
+  ```javascript
+  req.deleteHeaders(["authorization", "accept", "api-key"]);
+  ```
+
 ### Body Methods
 
 - **`getBody(options?)`** - Get the current request body/payload.
 
-  **Example:**
+  **Parameters:**
+  - `options` (object, optional): Configuration options
+    - `raw` (boolean): When `true`, returns the raw body without any parsing. When `false` or not provided, returns the parsed body (default behavior).
+
+  **Examples:**
   ```javascript
-  const body = req.getBody();
+  // Get parsed body (default)
+  const body = req.getBody(); // Returns the parsed body
+
+  // Get raw body without parsing
+  const rawBody = req.getBody({ raw: true }); // Returns the raw body
   ```
 
 - **`setBody(body)`** - Set the request body/payload.
@@ -272,7 +292,7 @@ Here is a complete table for all available properties and methods on the `res` o
 | res.getStatusText()            | Get the response status text.                                                  |
 | res.getHeader(name)            | Get a specific response header by name.                                        |
 | res.getHeaders()               | Get all response headers.                                                      |
-| res.getBody()          | Get the response body data.                                                  |
+| res.getBody()                  | Get the response body data.                                                    |
 | res.setBody(body)              | Set the response body data.                                                    |
 | res.getResponseTime()          | Get the response time in milliseconds.                                         |
 | res.getUrl()                   | Get the response URL (final URL after redirects).                              |
@@ -416,8 +436,11 @@ Here are all available environment-related methods:
 | bru.getEnvVar(key)         | Retrieves the value of an environment variable.           |
 | bru.setEnvVar(key, value)  | Sets a new environment variable.                          |
 | bru.deleteEnvVar(key)      | Deletes a specific environment variable.                  |
+| bru.getAllEnvVars()        | Retrieves all environment variables as an object.        |
+| bru.deleteAllEnvVars()     | Deletes all environment variables in the current environment. |
 | bru.getGlobalEnvVar(key)   | Get the Bruno global environment variable.                |
 | bru.setGlobalEnvVar(key, value) | Set the Bruno global environment variable.           |
+| bru.getAllGlobalEnvVars()  | Retrieves all global environment variables as an object.  |
 
 #### Environment Information
 
@@ -470,6 +493,17 @@ Here are all available environment-related methods:
   bru.deleteEnvVar("access_token");
   ```
 
+- **`getAllEnvVars()`** - Get all environment variables in the current environment as an object.
+  ```javascript
+  const allVars = bru.getAllEnvVars();
+  console.log(allVars); // { access_token: "...", base_url: "..." }
+  ```
+
+- **`deleteAllEnvVars()`** - Delete all environment variables in the current environment.
+  ```javascript
+  bru.deleteAllEnvVars();
+  ```
+
 #### Global Environment Variables
 
 - **`getGlobalEnvVar(key)`** - Get the Bruno global environment variable.
@@ -480,6 +514,12 @@ Here are all available environment-related methods:
 - **`setGlobalEnvVar(key, value)`** - Set the Bruno global environment variable.
   ```javascript
   bru.setGlobalEnvVar("val", "bruno");
+  ```
+
+- **`getAllGlobalEnvVars()`** - Get all global environment variables as an object.
+  ```javascript
+  const globalVars = bru.getAllGlobalEnvVars();
+  console.log(globalVars);
   ```
 
 ## Variables
@@ -495,16 +535,19 @@ Here are all available variable-related methods:
 | Method                       | Description                                               |
 | ---------------------------- | --------------------------------------------------------- |
 | bru.getProcessEnv(key)       | Fetches the process environment variable for a given key. |
-| bru.getCollectionVar(key)    | Retrieves the collection-level variable for the key.      |
 | bru.getCollectionName()      | Retrieves the current collection name.                    |
+| bru.getCollectionVar(key)    | Retrieves the collection-level variable for the key.      |
+| bru.hasCollectionVar(key)    | Checks if a collection variable exists.                   |
 | bru.getFolderVar(key)        | Fetches a folder-specific variable by key.                |
 | bru.getRequestVar(key)       | Retrieves the value of a request variable.                |
 | bru.hasVar(key)              | Checks if a variable exists.                              |
 | bru.getVar(key)              | Retrieves the value of a variable.                        |
 | bru.setVar(key, value)       | Sets a new variable with a key-value pair.                |
+| bru.getAllVars()             | Retrieves all runtime variables as an object.             |
 | bru.deleteVar(key)           | Deletes a specific variable.                              |
 | bru.deleteAllVars()          | Deletes all runtime variables.                            |
 | bru.getOauth2CredentialVar(key) | Retrieves an OAuth2 credential variable value.         |
+| bru.resetOauth2Credential(credentialId) | Resets an OAuth2 credential so it can be re-authorized. |
 | bru.getSecretVar(key)         | Retrieves a secret variable from a configured secret manager. |
 
 #### Process Environment Variables
@@ -519,6 +562,13 @@ Here are all available variable-related methods:
 - **`getCollectionVar(key)`** - Get the collection variable.
   ```javascript
   let namespace = bru.getCollectionVar("namespace");
+  ```
+
+- **`hasCollectionVar(key)`** - Check if a collection variable exists.
+  ```javascript
+  if (bru.hasCollectionVar("namespace")) {
+    console.log("Namespace is set");
+  }
   ```
 
 - **`getCollectionName()`** - Retrieve the name of the current collection.
@@ -574,11 +624,22 @@ Runtime variables are temporary variables that exist only during the execution o
   bru.deleteAllVars();
   ```
 
+- **`getAllVars()`** - Get all runtime variables as an object.
+  ```javascript
+  const allRuntimeVars = bru.getAllVars();
+  console.log(allRuntimeVars);
+  ```
+
 #### OAuth2 Credentials
 
 - **`getOauth2CredentialVar(key)`** - Retrieve an OAuth2 credential variable value. This is useful for accessing OAuth2 tokens and credentials.
   ```javascript
   const accessToken = bru.getOauth2CredentialVar("access_token");
+  ```
+
+- **`resetOauth2Credential(credentialId)`** - Reset (clear) an OAuth2 credential so it can be re-authorized. Use this when you need to force a new token fetch or clear stored credentials.
+  ```javascript
+  bru.resetOauth2Credential("my-credential-id");
   ```
 
 #### Secret Variables
@@ -942,6 +1003,32 @@ Once you have a cookie jar instance, you can use the following methods:
     console.log("Session ID:", sessionCookie.value);
     console.log("Expires:", sessionCookie.expires);
   }
+  ```
+
+- **`jar.hasCookie(url, name, callback)`** - Check whether a cookie with the given name exists for a specific URL. Optionally accepts a callback as the third argument; if omitted, returns a Promise.
+  
+  **Returns (Promise):** `true` if the cookie exists, `false` otherwise.
+
+  **Callback (optional):** `function(error, exists)` - when provided, called with `error` (null on success) and `exists` (boolean).
+
+  **Example (Promise):**
+  ```javascript
+  const jar = bru.cookies.jar();
+  const exists = await jar.hasCookie("https://example.com", "sessionId");
+  if (exists) {
+    console.log("Session cookie exists");
+  }
+  ```
+
+  **Example (callback):**
+  ```javascript
+  const jar = bru.cookies.jar();
+  jar.hasCookie("https://testbench-sanity.usebruno.com", "existing_cookie", function(error, exists) {
+    test("should work with callback pattern", function() {
+      expect(error).to.be.null;
+      expect(exists).to.be.true;
+    });
+  });
   ```
 
 - **`jar.getCookies(url)`** - Get all cookies for a specific URL.
