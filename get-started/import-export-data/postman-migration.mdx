@@ -49,7 +49,7 @@ You can export a data dump of all your collections and environments in Postman. 
 - Designate a location for the collections and press `import`
 
 <Info>
-  Although we have a translator for Postman scripts, it's always good practice to review the collections after import, especially if you are using deprecated Postman syntax in your scripts.
+  Bruno automatically translates common Postman script APIs (such as `pm.test`, `pm.environment`, `pm.globals`, `pm.collectionVariables`, and `pm.response`) to their Bruno equivalents during import. Any unsupported `pm.*` API calls are left as-is in your scripts. These untranslated calls will cause runtime errors when the script runs, so you should review your imported scripts and manually update any remaining `pm.*` references. See the [Scripts Translator](/get-started/import-export-data/script-translator) page for the full list of supported translations.
 </Info>
 
 ## Environment Import and Export
