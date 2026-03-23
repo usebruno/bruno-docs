@@ -5,24 +5,43 @@ sidebarTitle: "Data Driven Testing"
 
 The **Collection Runner** feature allows you to iterate over data files, making it easy to automate and manage data-driven requests. Bruno supports both CSV and JSON files for running requests, so you can efficiently run tests or process multiple data inputs.
 
+## How request bodies and data files work together
+
+Understanding this avoids the most common confusion with data-driven runs:
+
+1. **The data file does not replace your request body.**  
+   Uploading CSV/JSON does not merge row objects into the body or overwrite a hardcoded JSON payload. Row values are available as **iteration variables** for each run.
+
+2. **To use row values in the body, reference them explicitly** with `{{columnName}}` (same names as CSV headers or JSON object keys). Example: `"name": "{{name}}"` uses the `name` field from the current row.
+
+3. **If the body has no `{{...}}` placeholders** for your data columns, Bruno sends **exactly the body you typed on every iteration**. The file still controls **how many iterations** run, but each request uses the same static payload. In the runner, the **Data** column shows the **current iteration’s row** (iteration data), not “the body Bruno built from the file.”
+
+4. **In scripts**, read the current row with `bru.runner.iterationData.get("columnName")` (or build the body there with `req.setBody(...)`). See [Runner iteration utilities](#runner-iteration-utilities) below.
+
+<Info>
+  A plain body like `{"name": "morpheus", "job": "leader"}` is fine for a **single** request or when you want **the same body every time** while the runner still steps through rows (e.g. for side effects or tests only). To send **different `name` / `job` per row**, the body must use `{{name}}` and `{{job}}` (or set the body from a script).
+</Info>
+
 ## Introduction
 
-In this tutorial, we'll explore the Collection Runner feature, which enables you to run collections using custom data for each iteration.
+In this tutorial, we'll use the Collection Runner with a CSV or JSON file so each iteration sends **different** `name` and `job` values to `https://reqres.in/api/users`.
 
 ## Steps to Get Started
 
 1. Open the Bruno app.
-2. Create a collection called `runner-example`
-3. Create a POST request and name it `runner-request`
-4. Use the URL: `https://reqres.in/api/users`
-5. Select the JSON format for the request body and add the following data:
+2. Create a collection called `runner-example`.
+3. Create a POST request and name it `runner-request`.
+4. Use the URL: `https://reqres.in/api/users`.
+5. Set the request body to **JSON** and use **placeholders** that match your data file columns (`name` and `job`):
 
 ```json
 {
-    "name": "morpheus",
-    "job": "leader"
+  "name": "{{name}}",
+  "job": "{{job}}"
 }
 ```
+
+For a one-off request **without** a data file, you could use fixed values instead (e.g. `morpheus` / `leader`); that is unrelated to substituting CSV/JSON rows.
 
 ## Using the Collection Runner
 
@@ -77,12 +96,13 @@ Once the execution is complete, you can review the results for each individual r
 
 #### How to Use Variables from CSV/JSON Files
 
-When you upload a CSV or JSON file, the variables within the file can be accessed using the `{{var}}` syntax.
-You can access these variables dynamically in your requests and use them within Bruno.
+When you upload a CSV or JSON file, each **column** (CSV) or **object key** (JSON) becomes an iteration variable. Use the `{{variableName}}` syntax in the URL, headers, or body so each iteration sends that row’s values.
 
 ![Variable Usage](/images/screenshots/collection-runner/data-driven-testing/5-variable-usage.webp)
 
 ##### Accessing Variables in Request Body
+
+Template the body with names that match your file:
 
 ```json showLineNumbers filename="request-body"
 {
@@ -91,9 +111,9 @@ You can access these variables dynamically in your requests and use them within 
 }
 ```
 
-In this example, `{{name}}` and `{{email}}` will be replaced by the actual values from the uploaded JSON file.
+For a given iteration, Bruno resolves those placeholders from the current row—for example:
 
-```json showLineNumbers filename="request-body"
+```json showLineNumbers filename="resolved-example-one-iteration"
 {
   "name": "John Doe",
   "email": "john.doe@example.com"
@@ -102,14 +122,14 @@ In this example, `{{name}}` and `{{email}}` will be replaced by the actual value
 
 ##### Accessing Variables in Scripts
 
-You can also access these variables directly in your pre-request or post-response scripts using `bru.getVar()`.
+In pre-request or post-response scripts, read the current iteration with **`bru.runner.iterationData.get("columnName")`**. Depending on your setup, **`bru.getVar()`** may also reflect runner variables.
 
 ```javascript
-console.log(bru.getVar("name")); // Outputs: John Doe
-console.log(bru.getVar("email")); // Outputs: john.doe@example.com
+console.log(bru.runner.iterationData.get("name"));
+console.log(bru.getVar("name")); // May match iteration data when exposed by the runner
 ```
 
-When you run the request, you'll see the output of these variables in the console.
+When you run the collection, check the **Timeline** for the **actual request body** sent on each iteration.
 
 ### Using the Bruno CLI
 
@@ -120,9 +140,11 @@ When you run the request, you'll see the output of these variables in the consol
 bru run --reporter-html results.html --csv-file-path /path/to/csv/file.csv
 ```
 
-<Video src="/assets/demo-csv-runner-cli.mp4" />
+
 
 It will create a `results.html` file in your Bruno collection's root directory. You can view this file in your browser.
+
+For how to open and use test reports in the Bruno app (including downloaded HTML reports), see **[View test report](./manual-test#view-test-report)**.
 
 ### Command Overview
 
@@ -228,7 +250,9 @@ user2,pass456
 
 ### Notes
 
-- Variables removed with `unset()` only affect the current iteration
-- Each iteration runs with fresh data from the file
-- Supports both CSV and JSON data files
-- Data is automatically loaded from the attached file at the start of each iteration
+- Variables removed with `unset()` only affect the current iteration.
+- Each iteration runs with fresh data from the file.
+- Supports both CSV and JSON data files.
+- Data is automatically loaded from the attached file at the start of each iteration.
+- **Iteration count** comes from the number of rows (CSV) or objects (JSON) in the file.
+- **The request body is not ignored:** if you use no `{{}}` references, the same static body is sent every time; the data file still drives how many times the request runs and what appears under **Data** for each iteration.
