@@ -155,9 +155,13 @@ my-collection/
 
 Bruno supports both `.bru` and `.yml` formats, so you can migrate your collections gradually. Both formats can coexist within the same collection during the transition period.
 
-<Warning>
-  Migration tooling is planned for a future release. For now, you can manually convert files or create new requests using the YAML format.
-</Warning>
+### Cross-collection drag and drop
+
+When you drag a request from one collection to another that uses a different format (e.g., `.bru` to `.yml` or vice versa), Bruno automatically converts the request file to the target collection's format. This lets you migrate individual requests between formats without manual conversion.
+
+<Note>
+  Moving folders between collections with different formats is not supported. Only individual requests can be converted automatically during cross-collection moves.
+</Note>
 
 ## Resources
 
