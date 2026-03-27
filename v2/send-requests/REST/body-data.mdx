@@ -22,6 +22,10 @@ Used for sending files along with form data, allowing multiple parts with differ
 
 ![multipart-data](/v2/images/screenshots/send-request/rest/multipart-data.webp)
 
+<Tip>
+  You can use variable interpolation in both parameter values and file attachment paths. For example, setting a file value to `{{filePath}}` resolves the variable at runtime, letting you dynamically control which file is uploaded based on your environment or script variables.
+</Tip>
+
 #### 2. URL Encoded
 
 It is commonly used for simple form submissions where data is sent as key-value pairs. Each key and value are separated by an equal sign (=), and multiple pairs are separated by an ampersand (&).
