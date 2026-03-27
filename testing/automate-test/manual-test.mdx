@@ -45,47 +45,56 @@ After the test report is generated, you can download it as an HTML document (`re
 
 ![details-test-reports.webp](/images/screenshots/testing/4-details-test-reports.webp)
 
-## Managing Request Execution
+## Configuring a collection run
 
-Bruno allows you to filter which requests to run in your collection using tags. You can add tags to your requests and then filter them during collection runs.
+When you open the Collection Runner, you see a configuration view before starting the run. This view has two main areas: run settings on the left and request selection on the right.
 
-<Info>
-  This feature requires Bruno version 2.8.0 or higher.
-</Info>
+### Timings
 
-### Tag-Based Request Filtering
+Under the **Timings** section, set the **Delay between requests (ms)** to add a pause between each request execution. This is useful when working with rate-limited APIs.
 
-When running a collection in the Bruno app, you can filter requests by tags:
+### Tag-based request filtering
 
-1. **Add tags to your requests**: Go to request settings and add tags to categorize your requests
-   
+Under the **Filters** section, you can filter which requests to include or exclude by tag.
+
+1. **Add tags to your requests**: go to a request's settings tab and add tags to categorize it.
+
 ![Add Tags to Requests](/images/screenshots/collection-runner/1-add-tags.webp)
 
-2. **Go to Collection Runner**: Open the collection runner to start filtering requests
-3. **Use tag filter options**: Use the tag filter options to include or exclude requests based on their tags
-4. **Run filtered collection**: Only requests matching your tag criteria will be executed
+2. **Set include or exclude tags** in the Filters section of the runner:
+   - **Include tags** — only requests that have the specified tags will be eligible to run.
+   - **Exclude tags** — requests that have the specified tags will be skipped.
+   - A tag cannot appear in both lists at the same time.
 
 ![Run Collection with Tags](/images/screenshots/collection-runner/2-run-collection-tags.webp)
 
-#### Tag Filtering Options
-
-- **Include tags**: Only run requests that have ALL of the specified tags
-- **Exclude tags**: Skip requests that have ANY of the specified tags
-- **Combined filtering**: Use both include and exclude filters together
+When tag filters are active, requests that don't match the criteria are automatically deselected in the request selection panel. Removing the tag filters re-selects them.
 
 Learn more about tag filtering in Bruno CLI in the [CLI tag filtering documentation](/bru-cli/runCollection#filtering-requests-with-tags).
 
-### Reordering Request Execution
+### Request selection and ordering
 
-You can reorder, select, and deselect requests by enabling the **Configure requests to run** option in the Collection Runner. This feature allows you to:
+The right side of the configuration view lists all requests in the collection. You can:
 
-- **Select specific requests** to execute while ignoring others
-- **Reorder requests** to control the execution sequence
-- **Customize test runs** without modifying the collection structure
+- **Select or deselect** individual requests using checkboxes.
+- **Select All / Deselect All** using the toggle at the top.
+- **Drag and drop** requests to reorder the execution sequence.
+- **Reset** the list to restore the original collection order and re-select all requests.
 
-By default, the Collection Runner executes all requests in the collection. When you enable request configuration, only the selected requests will be executed.
+WebSocket and gRPC requests are not supported by the Collection Runner and appear disabled.
 
-![Reorder Requests](/images/screenshots/testing/reorder-req.webp)
+Your selection and ordering are preserved across sessions, so returning to the runner restores your previous configuration.
+
+## Filtering results
+
+After a run completes, you can filter the results using the filter bar at the top of the results view:
+
+- **All** — shows every executed request.
+- **Passed** — shows only requests where all tests and assertions passed.
+- **Failed** — shows only requests where any test or assertion failed, or an error occurred.
+- **Skipped** — shows only requests that were skipped during execution.
+
+Each filter button displays a count badge showing how many requests match that filter. You can click on a request's status code to open a detailed response pane on the right side.
 
 ## View Test Report
 
