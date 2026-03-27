@@ -16,9 +16,12 @@ The built-in Collection Runner supports **unlimited** runs.
 
 ![Collection Runner icon in the top bar](/images/screenshots/get-started/bruno-basics/run_collection/runnericon.webp)
 
-2. **Configure the run** (optional): In the runner, set **parameters**, choose a **delay** between requests, and adjust any other options you need.
+2. **Configure the run** (optional): Before starting a run, you can customize it using the configuration panel:
+   - **Timings** — set a delay (in milliseconds) between requests.
+   - **Filters** — use include or exclude tags to control which requests run. See [tag-based filtering](/testing/automate-test/manual-test#tag-based-request-filtering) for details.
+   - **Request selection** — select, deselect, or drag-and-drop to reorder requests in the right panel. WebSocket and gRPC requests are not supported and appear disabled.
 
-3. **Start the run** to execute the collection from the runner.
+3. **Start the run** by clicking **Run _N_ Request(s)** to execute the selected requests.
 
 <Warning>
   The Collection Runner does not include gRPC and WebSocket requests. Only HTTP requests will be executed when running a collection.
