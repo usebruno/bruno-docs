@@ -732,6 +732,8 @@ Here are all available utility methods:
 | bru.runRequest(requestPathName)  | Executes a request by its path name.                      |
 | bru.getAssertionResults()        | Retrieves the results of assertions.                      |
 | bru.getTestResults()             | Fetches the test results.                                 |
+| bru.utils.minifyJson(json)       | Minifies a JSON string or object.                         |
+| bru.utils.minifyXml(xml)         | Minifies an XML string.                                   |
 | bru.cookies.jar()                | Creates a cookie jar instance for managing cookies.       |
 
 #### HTTP Request Methods
@@ -913,6 +915,55 @@ Here are all available utility methods:
   ```javascript
   const assertionResults = await bru.getAssertionResults();
   ```
+
+#### Data Formatting Utilities
+
+The `bru.utils` namespace provides helper methods for formatting and minifying data.
+
+- **`utils.minifyJson(json)`** - Minifies a JSON string or object by removing all unnecessary whitespace.
+
+  **Parameters:**
+  - `json` (string or object): The JSON data to minify. Accepts either a parsed object or a JSON string.
+
+  **Returns:** A minified JSON string.
+
+  **Examples:**
+  ```javascript
+  // Minify a JSON object
+  const minified = bru.utils.minifyJson({ name: "Bruno", version: "1.0" });
+  console.log(minified); // '{"name":"Bruno","version":"1.0"}'
+
+  // Minify a JSON string
+  const minified = bru.utils.minifyJson('{\n  "name": "Bruno",\n  "version": "1.0"\n}');
+  console.log(minified); // '{"name":"Bruno","version":"1.0"}'
+  ```
+
+  <Warning>
+    Throws an error if the input is `null`, `undefined`, or an invalid JSON string. Only accepts strings and objects.
+  </Warning>
+
+- **`utils.minifyXml(xml)`** - Minifies an XML string by removing indentation and line breaks.
+
+  **Parameters:**
+  - `xml` (string): The XML string to minify.
+
+  **Returns:** A minified XML string.
+
+  **Example:**
+  ```javascript
+  const xml = `
+    <root>
+      <name>Bruno</name>
+      <version>1.0</version>
+    </root>
+  `;
+  const minified = bru.utils.minifyXml(xml);
+  console.log(minified); // '<root><name>Bruno</name><version>1.0</version></root>'
+  ```
+
+  <Warning>
+    Throws an error if the input is `null`, `undefined`, or not a string.
+  </Warning>
 
 #### Cookie Management
 
