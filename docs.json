@@ -83,7 +83,8 @@
                         "pages": [
                           "send-requests/graphql/overview",
                           "send-requests/graphql/graphql-api",
-                          "send-requests/graphql/graphql-variables"
+                          "send-requests/graphql/graphql-variables",
+                          "send-requests/graphql/query-builder"
                         ]
                       },
                       {
