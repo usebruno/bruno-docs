@@ -35,8 +35,9 @@ A path parameter is a dynamic value embedded directly in the URL path of an API 
 ### How Path Parameters Work
 
 1. Path parameters are embedded directly in the URL path.
-2. They are represented as placeholders preceded by a colon (:).
-3. When making the request, the placeholder is replaced with a dynamic value, which is part of the URL.
+2. They are represented as placeholders preceded by a colon (`:`).
+3. Parameter names must start with a letter or underscore, followed by alphanumeric characters or underscores (e.g., `:id`, `:userId`, `:_type`). A colon followed by a digit (e.g., `:00`) is not treated as a path parameter.
+4. When making the request, the placeholder is replaced with a dynamic value, which is part of the URL.
 
 **Example**:
 
@@ -45,6 +46,10 @@ https://api.example.com/users/:id
 ```
 
 `:id` is a path parameter.
+
+<Note>
+Colons followed by digits in URLs (such as in datetime values like `T00:00:00`) are not interpreted as path parameters.
+</Note>
 
 ### Create Path Parameters in Bruno
 
