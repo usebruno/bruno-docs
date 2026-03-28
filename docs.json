@@ -191,7 +191,8 @@
                               "testing/script/response/response-query"
                             ]
                           },
-                          "testing/script/vars"
+                          "testing/script/vars",
+                          "testing/script/whitelisting-modules"
                         ]
                       },
                       {
@@ -417,9 +418,10 @@
                 "icon": "graduation-cap",
                 "pages": [
                   "advanced-guides/starter-guide",
-              "advanced-guides/visualize"
-            ]
-          }
+                  "advanced-guides/visualize",
+                  "advanced-guides/working-with-bigint"
+                ]
+              }
         ]
       },
       {
