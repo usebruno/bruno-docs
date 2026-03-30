@@ -921,8 +921,13 @@
       "permanent": true
     },
     {
-      "source": "/get-started/history",
-      "destination": "/send-requests/history",
+      "source": "/introduction",
+      "destination": "/introduction/what-is-bruno",
+      "permanent": true
+    },
+    {
+      "source": "/import-export-data/postman-migration",
+      "destination": "/get-started/import-export-data/postman-migration",
       "permanent": true
     },
     {
