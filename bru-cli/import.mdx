@@ -1,9 +1,13 @@
+---
+title: "Import data"
+sidebarTitle: "Import Data"
+---
 
 Bruno CLI allows you to import API specifications directly into Bruno collections from the command line, which can be integrated into CI/CD pipelines whenever API changes are committed.
 
-## Importing OpenAPI Specifications
+## Importing OpenAPI specifications
 
-### Option 1: Import to Bruno Collection
+### Option 1: Import to Bruno collection
 
 This will import the OpenAPI specification (supports both YAML and JSON formats) and generate a Bruno collection in the specified output directory.
 
@@ -19,7 +23,7 @@ Where:
 - `<preferred-location>`: Directory where you want to save the collection
 - `--collection-name`: Custom name for the collection
 
-### Option 2: Import to Single JSON File
+### Option 2: Import to single JSON file
 
 This will import the OpenAPI specification and generate a Bruno collection as a single JSON file at the specified location.
 
@@ -35,8 +39,10 @@ Where:
 - `<preferred-location>`: Base path and filename for your JSON output
 - `--collection-name`: Custom name for the collection
 
----
-title: "Import Data"
+### Response examples
+
+When importing an OpenAPI specification, any [response examples](/send-requests/res-data-cookies/response-examples) defined in the source collection are preserved and written to the generated `.bru` files. This means example request/response pairs are carried over automatically during CLI import, so you don't lose documentation context when converting collections.
+
 ## Importing WSDL (SOAP APIs)
 
 This will import the WSDL file and generate a Bruno collection with SOAP requests in the specified output directory.
