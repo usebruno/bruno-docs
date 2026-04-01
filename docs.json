@@ -20,7 +20,8 @@
               {
                 "group": "Introduction",
                 "pages": [
-                  "introduction/what-is-bruno",
+                  "introduction/getting-started",
+                  "get-started/bruno-basics/download",
                   "introduction/manifesto",
                   "introduction/feedback-community"
                 ]
@@ -28,7 +29,6 @@
                   {
                     "group": "Bruno Basics",
                     "pages": [
-                      "get-started/bruno-basics/download",
                       "get-started/bruno-basics/create-a-workspace",
                       "get-started/bruno-basics/create-a-collection",
                       "get-started/bruno-basics/create-a-folder",
@@ -882,12 +882,12 @@
   "redirects": [
     {
       "source": "/introduction",
-      "destination": "/introduction/what-is-bruno",
+      "destination": "/introduction/getting-started",
       "permanent": true
     },
     {
-      "source": "/introduction/getting-started",
-      "destination": "/introduction/what-is-bruno",
+      "source": "/introduction/what-is-bruno",
+      "destination": "/introduction/getting-started",
       "permanent": true
     },
     {
