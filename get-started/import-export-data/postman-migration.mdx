@@ -20,6 +20,10 @@ The collection will be downloaded as a JSON file.
 
 Now simply follow the instructions for [Importing Collections](/get-started/import-export-data/import-collections) and you're done!
 
+<Info>
+  Postman allows non-string values (such as numbers or booleans) in request headers, query parameters, path parameters, and body fields. Bruno expects all of these values to be strings, so during import they are automatically converted — for example, `100` becomes `"100"` and `null` becomes an empty string `""`.
+</Info>
+
 ## Export Data Dump
 
 <Callout type="default">
