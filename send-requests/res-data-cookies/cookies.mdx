@@ -51,4 +51,16 @@ You can update and delete cookie(s) by clicking the icons next to it.
 
 ![cookie-delete](/images/screenshots/send-request/res-data-and-cookie/cookies/6-delete-cookie.webp)
 
+## Cookies in collection runs
+
+When you run a collection (via the Collection Runner or the [Bruno CLI](/bru-cli/overview)), Bruno automatically saves and forwards cookies between requests. This includes cookies set by responses with **any** status code — 2XX, 4XX, and 5XX responses all have their `Set-Cookie` headers processed.
+
+To disable automatic cookie handling in the CLI, use the `--disable-cookies` flag:
+
+```bash
+bru run --disable-cookies
+```
+
+In the desktop app, you can toggle cookie storage off in **Settings > General**.
+
 To manage cookies programmatically, see the [Cookie Management](/testing/script/javascript-reference#cookie-management) section in the JavaScript API Reference.
