@@ -965,6 +965,22 @@ Once you have a cookie jar instance, you can use the following methods:
   });
   ```
 
+  <Info>
+    **`__Host-` prefixed cookies:** Bruno supports storing cookies with the `__Host-` prefix via the script API. Per the cookie spec, `__Host-` cookies must be host-only (no explicit `domain`). When you set a cookie whose name starts with `__Host-`, Bruno automatically omits the `domain` attribute so it is derived from the request URL. Do not set a `domain` property on `__Host-` prefixed cookies — if you do, the cookie will be rejected.
+  </Info>
+
+  ```javascript
+  // Example: setting a __Host- prefixed cookie
+  const jar = bru.cookies.jar();
+  jar.setCookie("https://example.com", {
+    key: "__Host-SESSION",
+    value: "token123",
+    path: "/",
+    secure: true
+    // Do not set 'domain' — it is derived from the URL automatically
+  });
+  ```
+
 - **`jar.setCookies(url, cookies)`** - Set multiple cookies at once using an array of cookie objects.
   
   **Parameters:**
