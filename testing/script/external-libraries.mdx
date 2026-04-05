@@ -19,18 +19,24 @@ Before you begin, ensure that you have the following:
 
 The folder structure for this example will be:
 
-<FileTree>
-  <FileTree.Folder name="bruno-collection" defaultOpen>
-    <FileTree.Folder name="api-testing" />
-    <FileTree.File name="openspec.yaml" />
-    <FileTree.File name=".spectral.yml" />
-    <FileTree.File name="package.json" />
-    <FileTree.File name="bruno.json" />
-    <FileTree.Folder name="node_modules">
-      <FileTree.File name="spectral-cli" />
-    </FileTree.Folder>
-  </FileTree.Folder>
-</FileTree>
+<Tree>
+  <Tree.Folder name="bruno-collection" defaultOpen>
+    <Tree.Folder name="api-testing">
+      <Tree.File name="request.bru" />
+    </Tree.Folder>
+    <Tree.File name="openspec.yaml" />
+    <Tree.File name=".spectral.yml" />
+    <Tree.File name="package.json" />
+    <Tree.File name="bruno.json" />
+    <Tree.Folder name="node_modules">
+      <Tree.Folder name="@stoplight">
+        <Tree.Folder name="spectral-cli">
+          <Tree.File name="package.json" />
+        </Tree.Folder>
+      </Tree.Folder>
+    </Tree.Folder>
+  </Tree.Folder>
+</Tree>
 
 ## Configuration
 
