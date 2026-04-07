@@ -2,10 +2,10 @@
 title: "External Libraries"
 ---
 
-Bruno allows you to load any npm module/package for use in your scripting workflows.
+Bruno allows you to load any npm module or package for use in your scripting workflows.
 
 <Warning>
-Always turn on [Developer Mode](/get-started/configure/javascript-sandbox) when using external libraries in Bruno.
+Always turn on [Developer Mode](/get-started/configure/javascript-sandbox) when using external libraries in Bruno. 
 </Warning>
 
 ## Prerequisites
@@ -15,80 +15,107 @@ Before you begin, ensure that you have the following:
 1. Node.js installed on your system.
 2. Bruno installed.
 
-## Project Structure
+## Project structure
 
-The folder structure for this example will be:
+The folder structure for this example will look like this:
 
 <Tree>
   <Tree.Folder name="bruno-collection" defaultOpen>
-    <Tree.Folder name="api-testing">
-      <Tree.File name="request.bru" />
+    <Tree.Folder name="external-lib" defaultOpen>
+      <Tree.File name="echo-api.bru" />
+      <Tree.File name="auth.bru" />
     </Tree.Folder>
-    <Tree.File name="openspec.yaml" />
-    <Tree.File name=".spectral.yml" />
+    <Tree.File name="data.csv" />
     <Tree.File name="package.json" />
     <Tree.File name="bruno.json" />
+    <Tree.File name=".gitignore" />
     <Tree.Folder name="node_modules">
-      <Tree.Folder name="@stoplight">
-        <Tree.Folder name="spectral-cli">
-          <Tree.File name="package.json" />
-        </Tree.Folder>
-      </Tree.Folder>
+      
     </Tree.Folder>
+
+   
+    
   </Tree.Folder>
 </Tree>
 
 ## Configuration
 
-You need to initialize `package.json` file inside your collection.
+You need a `package.json` file at the root of your Bruno collection.
 
-Navigate to your Bruno collection directory in the terminal.
+1. Open your collection folder in **Bruno** or in an editor such as **VS Code**.
+2. Open the integrated terminal (in Bruno or your editor) and go to the collection root:
 
 ```bash
 cd path/to/your/bruno-collection
 ```
 
-Initialize `package.json` file inside your collection.
+3. Initialize `package.json`:
 
 ```bash
 npm init -y
 ```
 
-Now you can install any npm package or module to use in your collection.
-
-## Spectral Integration
-
-In this example we're using [Spectral CLI <strong><sup>↗</sup></strong>](https://github.com/stoplightio/spectral?tab=readme-ov-file) as a npm package which help you to validate OpenSpec API YAML or JSON files with the built-in ruleset.
-
-You need to have OpenAPI JSON or YAML file to work with spectral or you can download from [here <strong><sup>↗</sup></strong>](https://github.com/ganesh-bruno/spectral-example) as example.
-
-### Spectral CLI Setup
-
-You can install `spectral-cli` by running following command:
+4. Install the package (run this in the same terminal, from the collection root):
 
 ```bash
-npm install @stoplight/spectral-cli
+npm install csv-parse
 ```
 
-Run this command in your terminal to initialize `.spectral.yml` file which is predefined ruleset.
+5. Confirm **`csv-parse`** appears under `dependencies` in `package.json`, for example:
 
-```js copy
-echo 'extends: ["spectral:oas", "spectral:asyncapi", "spectral:arazzo"]' > .spectral.yaml
+```json
+"dependencies": {
+  "csv-parse": "^6.2.1"
+}
 ```
 
-Validate your **openapi.yaml** file from Bruno collection by running following CLI command:
+Exact versions may differ; what matters is that the dependency is listed after a successful install.
 
-```js copy
-spectral lint openspec.yaml --r .spectral.yaml
+6. In Bruno, enable **[Developer Mode](/get-started/configure/javascript-sandbox)** for the collection so `require()` can load packages from `node_modules`.
+
+## Example: Parse CSV with csv-parse
+
+This example uses [csv-parse <strong><sup>↗</sup></strong>](https://www.npmjs.com/package/csv-parse) to turn CSV text into JavaScript objects, then sends the first row as JSON on the request. See the [npm package page <strong><sup>↗</sup></strong>](https://www.npmjs.com/package/csv-parse) for options, streaming APIs, and more.
+
+Use a **Pre Request** script with **Developer Mode** on:
+
+```javascript
+const { parse } = require('csv-parse/sync');
+
+const csvData = `name,email
+Smith,smith@example.com
+John,john@example.com`;
+
+const records = parse(csvData, {
+  columns: true,
+  skip_empty_lines: true
+});
+
+req.setHeader('Content-Type', 'application/json');
+req.setBody(records[0]);
 ```
 
-## Output Overview
+![Bruno Pre Request script using an external library (csv-parse)](/images/screenshots/script/external-lib.webp)
 
-After following the process outlined above, warning messages will be displayed on the CLI such as duplicates and empty tags. This is how you can validate your OpenSpec files using Spectral.
+`records[0]` is the first data row as an object (for example `{ name: 'Smith', email: 'smith@example.com' }`) because `columns: true` uses the first line as headers.
 
-```bash
-openspec.yaml:
- 2:6  warning  info-contact    Info object must have "contact" object.      info
- 10:9 warning  operation-tags  Operation must have non-empty "tags" array.  paths./pets.get
- 36:9 warning  operation-tags  Operation must have non-empty "tags" array.  paths./pets/{petId}.get
+### Reading CSV from a file
+
+You can also pass CSV from a file in your collection (path is relative to the collection root):
+
+```javascript
+const fs = require('fs');
+const path = require('path');
+const { parse } = require('csv-parse/sync');
+
+const csvData = fs.readFileSync(path.join(__dirname, 'data.csv'), 'utf8');
+const records = parse(csvData, {
+  columns: true,
+  skip_empty_lines: true
+});
+
+req.setHeader('Content-Type', 'application/json');
+req.setBody(records[0]);
 ```
+
+Adjust the path to match where you store your `.csv` file.
