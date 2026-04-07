@@ -1,3 +1,6 @@
+---
+title: "Command Options"
+---
 
 Bruno CLI provides a variety of command options to help you customize your API testing and execution process. These options allow you to specify environments, configure reports, handle security, and much more. Below is a comprehensive list of available options:
 
@@ -76,11 +79,17 @@ bru run -h
 
 ### Import options
 
+Used with `bru import openapi` (and related import commands). Run `bru import openapi -h` for the full list.
+
 | Option                       | Details                                                                       |
 | ---------------------------- | ----------------------------------------------------------------------------- |
-| `--source [string]`         | Path to the OpenAPI specification file (YAML or JSON)                         |
-| `--output-file [string]`    | Output file to export as Bruno collection in JSON format                      |
-| `--collection-name [string]` | Name for the imported collection from OpenAPI                                 |
+| `-s`, `--source [string]`   | Path or URL to the OpenAPI specification (YAML or JSON)                       |
+| `-o`, `--output [string]`   | Output **directory** for a collection on disk (folder import)                 |
+| `-f`, `--output-file [string]` | Output **file** path for a single Bruno collection JSON export            |
+| `-n`, `--collection-name [string]` | Name for the imported collection                                    |
+| `--collection-format [string]` | **OpenAPI folder import only:** `bru` (classic `.bru` files) or `opencollection` ([OpenCollection YAML](/opencollection-yaml/overview)). Default: `opencollection`. |
+| `--insecure`                | Skip TLS verification when `--source` is an `https://` URL                     |
+| `-g`, `--group-by [string]` | OpenAPI only: group requests by `tags` or `path` (default: `tags`)          |
 
 ## Examples
 
@@ -109,8 +118,6 @@ bru run folder1 folder2
 bru run folder1 request1.bru folder2 request2.bru
 ```
 
----
-title: "Command Options"
 ## Next Steps
 
 Now that you're familiar with the command options, explore these guides to get the most out of Bruno CLI:
