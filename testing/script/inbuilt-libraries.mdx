@@ -23,6 +23,36 @@ console.log('Test passed!');
 ```
 You can include this code in the pre-request script section of Bruno to test it out.
 
+## jsonwebtoken
+
+[jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) lets you create signed JWTs with `jwt.sign`. In a **Pre Request** script you might sign only a sensitive field (here the `token` string), then put that JWT back on your payload and send it as JSON.
+
+```js copy
+const jwt = require('jsonwebtoken');
+
+const payload = {
+  name: 'usebruno',
+  id: 100,
+  token: 'abc1234'
+};
+
+const secret = 'your-secret';
+
+// Sign only the token value (claims embedded in the JWT)
+const signedToken = jwt.sign({ token: payload.token }, secret);
+
+// Send the rest of the fields unchanged, with `token` replaced by the JWT
+const updatedPayload = {
+  ...payload,
+  token: signedToken
+};
+
+req.setHeader('Content-Type', 'application/json');
+req.setBody(updatedPayload);
+```
+
+Use a real secret from your environment or collection variables in practice and never commit secrets in scripts.
+
 Below is the list of inbuilt libraries supported by Bruno.
 
 - [axios](https://www.npmjs.com/package/axios) - Promise based HTTP client for the browser and node.js

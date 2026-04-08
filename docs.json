@@ -328,11 +328,11 @@
                     "pages": [
                       "bru-cli/overview",
                       "bru-cli/installation",
+                      "bru-cli/commandOptions",
                       "bru-cli/runCollection",
                       "bru-cli/builtInReporters",
-                      "bru-cli/commandOptions",
-                      "bru-cli/proxyConfiguration",
                       "bru-cli/import",
+                      "bru-cli/proxyConfiguration",
                       "bru-cli/gitHubCLI",
                       "bru-cli/jenkins"
                     ]
