@@ -6,14 +6,14 @@ sidebarTitle: "Import an OpenAPI Spec"
 Bruno provides seamless integration with OpenAPI Specification (OAS), allowing you to import API definitions through both files and URLs. This feature enables you to quickly create collections in Bruno by leveraging existing OpenAPI documentation.
 
 <Info>
-Bruno supports importing OpenAPI Specification (OAS) V3 files only.
+Bruno supports importing both **OpenAPI 3.x** and **Swagger 2.0** specifications.
 </Info>
 
 ## Prerequisites
 
 Before importing an OpenAPI specification, ensure you have:
-- A valid OpenAPI V3 specification file (YAML or JSON format)
-- Or a publicly accessible URL containing the OpenAPI specification
+- A valid OpenAPI 3.x or Swagger 2.0 specification file (YAML or JSON format)
+- Or a publicly accessible URL containing the specification
 
 ## Import Methods
 
@@ -106,10 +106,31 @@ paths:
 
 ![OpenAPI Import Dialog](/images/screenshots/open-api/openapi-import.webp)
 
+## Swagger 2.0 support
+
+Bruno automatically detects whether your specification is Swagger 2.0 or OpenAPI 3.x and converts it accordingly. The import workflow is the same for both versions — you can use either file or URL import.
+
+When importing a Swagger 2.0 spec, Bruno converts the following:
+
+- **Endpoints** — all paths and operations
+- **Parameters** — query, path, header, and form parameters (including enums and collection formats)
+- **Request bodies** — JSON, form data, and file uploads
+- **Authentication** — Basic, API Key, and OAuth2 (authorization code, implicit, password, and client credentials flows)
+- **Response examples** — extracted from the `examples` and `schema` fields
+- **Folder grouping** — both tag-based and path-based grouping are supported
+- **Server URL** — constructed from `host`, `basePath`, and `schemes`
+
+<Warning>
+[OpenAPI Sync](/open-api/openapi-sync) is not supported for Swagger 2.0 specifications. If you need sync capabilities, convert your spec to OpenAPI 3.x first.
+</Warning>
+
 ## Example OpenAPI Specifications
 
 You can test the import functionality using these example OpenAPI specifications:
 
-1. **Petstore API**:
+1. **Petstore API (OpenAPI 3.x)**:
    - URL: `https://petstore3.swagger.io/api/v3/openapi.json`
    - Description: A sample API for a pet store
+2. **Petstore API (Swagger 2.0)**:
+   - URL: `https://petstore.swagger.io/v2/swagger.json`
+   - Description: The classic Petstore example in Swagger 2.0 format
