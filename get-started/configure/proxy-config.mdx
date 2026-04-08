@@ -76,7 +76,20 @@ Below are instructions on proxy settings at the collection level:
 4. Enter the **Hostname, Port, Protocol, Username, and Password** if needed.
 5. Click **Save** to apply the settings.
 
-## 7. Saving Proxy Configuration
+## 7. Proxy support for gRPC requests
+
+Bruno's proxy settings apply to both HTTP and gRPC requests. However, gRPC proxy support has the following limitations:
+
+- **Only HTTP proxies are supported** — gRPC connections use HTTP CONNECT tunneling. SOCKS4, SOCKS5, and HTTPS proxy protocols are not supported for gRPC. If you configure one of these protocols, gRPC requests will bypass the proxy and connect directly.
+- **Authentication is supported** — proxy username and password work the same as for HTTP requests.
+- **Bypass rules apply** — the bypass proxy list is respected for gRPC requests.
+- **System proxy mode** — when set to "System Proxy", gRPC uses the standard `http_proxy`/`https_proxy` environment variables. Only HTTP-protocol system proxies are used; non-HTTP system proxies are ignored.
+
+<Note>
+If your proxy is configured with a SOCKS or HTTPS protocol, gRPC requests will connect directly without going through the proxy. HTTP/REST requests are unaffected and will continue to use the configured proxy protocol.
+</Note>
+
+## 8. Saving proxy configuration
 
 After entering the proxy details, click the **Save** button to apply the changes. Your proxy settings are now configured in Bruno.
 
