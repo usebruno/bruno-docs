@@ -708,22 +708,191 @@ Here are all available utility methods:
 
 #### Cookie Management
 
-Bruno provides Cookie Jar APIs that enable programmatic cookie management in request scripts. These APIs allow you to set, get, and delete cookies programmatically using a cookie jar instance.
+Bruno provides two approaches for programmatic cookie management in request scripts:
+
+- **Direct access** via `bru.cookies` — read and write cookies scoped to the current request URL
+- **Cookie jar** via `bru.cookies.jar()` — manage cookies across any URL
 
 <Info>
   Cookie management APIs are available in pre-request scripts, post-request scripts, and test scripts.
 </Info>
 
-##### Creating a Cookie Jar
+##### Direct cookie access
 
-- **`cookies.jar()`** - Create a cookie jar instance for managing cookies.
+The `bru.cookies` object provides methods to read and write cookies for the current request URL. Each cookie is an object with properties: `key`, `value`, `domain`, `path`, `secure`, `httpOnly`, and `expires`.
+
+###### Reading cookies
+
+Read methods are synchronous and return data immediately.
+
+- **`bru.cookies.get(name)`** - Get the value of a cookie by name.
+
+  **Returns:** The cookie value as a string, or `undefined` if not found
+  ```javascript
+  const sessionId = bru.cookies.get("sessionId");
+  console.log("Session ID:", sessionId);
+  ```
+
+- **`bru.cookies.has(name)`** - Check if a cookie exists.
+
+  **Returns:** `true` if the cookie exists, `false` otherwise
+  ```javascript
+  if (bru.cookies.has("sessionId")) {
+    console.log("Session cookie is set");
+  }
+  ```
+
+- **`bru.cookies.has(name, value)`** - Check if a cookie exists with a specific value.
+
+  **Returns:** `true` if the cookie exists and its value matches
+  ```javascript
+  if (bru.cookies.has("theme", "dark")) {
+    console.log("Dark theme cookie is set");
+  }
+  ```
+
+- **`bru.cookies.one(name)`** - Get the full cookie object by name.
+
+  **Returns:** The cookie object or `undefined` if not found
+  ```javascript
+  const cookie = bru.cookies.one("sessionId");
+  console.log(cookie.key, cookie.value, cookie.domain);
+  ```
+
+- **`bru.cookies.all()`** - Get all cookies for the current request URL.
+
+  **Returns:** Array of cookie objects
+  ```javascript
+  const cookies = bru.cookies.all();
+  cookies.forEach(c => console.log(c.key, c.value));
+  ```
+
+- **`bru.cookies.count()`** - Get the number of cookies.
+
+  **Returns:** Number of cookies
+  ```javascript
+  console.log("Cookie count:", bru.cookies.count());
+  ```
+
+- **`bru.cookies.idx(index)`** - Get a cookie by its positional index.
+
+  **Returns:** The cookie object or `undefined` if out of bounds
+  ```javascript
+  const first = bru.cookies.idx(0);
+  ```
+
+- **`bru.cookies.toObject()`** - Get all cookies as a key-value map.
+
+  **Returns:** An object where keys are cookie names and values are cookie values
+  ```javascript
+  const obj = bru.cookies.toObject();
+  // { sessionId: "abc123", theme: "dark" }
+  ```
+
+- **`bru.cookies.toString()`** - Get cookies as a semicolon-separated string.
+
+  **Returns:** A string like `sessionId=abc123; theme=dark`
+  ```javascript
+  console.log(bru.cookies.toString());
+  ```
+
+- **`bru.cookies.toJSON()`** - Get a cloned array of all cookie objects, suitable for serialization.
+
+  **Returns:** Array of cookie objects
+  ```javascript
+  console.log(JSON.stringify(bru.cookies.toJSON()));
+  ```
+
+###### Searching and iterating
+
+- **`bru.cookies.find(predicate)`** - Find the first cookie matching a condition.
+
+  **Returns:** The cookie object or `undefined`
+  ```javascript
+  const secureCookie = bru.cookies.find(c => c.secure === true);
+  ```
+
+- **`bru.cookies.filter(predicate)`** - Filter cookies matching a condition.
+
+  **Returns:** Array of matching cookie objects
+  ```javascript
+  const httpOnlyCookies = bru.cookies.filter(c => c.httpOnly === true);
+  ```
+
+- **`bru.cookies.each(fn)`** - Iterate over all cookies.
+  ```javascript
+  bru.cookies.each((cookie, index) => {
+    console.log(index, cookie.key, cookie.value);
+  });
+  ```
+
+- **`bru.cookies.map(fn)`** - Map cookies to a new array.
+
+  **Returns:** Array of mapped values
+  ```javascript
+  const names = bru.cookies.map(c => c.key);
+  ```
+
+- **`bru.cookies.reduce(fn, initialValue)`** - Reduce cookies to a single value.
+  ```javascript
+  const summary = bru.cookies.reduce((acc, c) => acc + c.key + "=" + c.value + "; ", "");
+  ```
+
+- **`bru.cookies.indexOf(cookie)`** - Find the index of a cookie by key and value.
+
+  **Returns:** The index, or `-1` if not found
+  ```javascript
+  const idx = bru.cookies.indexOf({ key: "sessionId", value: "abc123" });
+  ```
+
+###### Writing cookies
+
+Write methods are asynchronous. Use `await` or provide a callback.
+
+- **`bru.cookies.add(cookieObject)`** - Add a cookie.
+  ```javascript
+  await bru.cookies.add({ key: "lang", value: "en" });
+  ```
+
+- **`bru.cookies.upsert(cookieObject)`** - Add or update a cookie. If a cookie with the same key exists, its value is replaced.
+  ```javascript
+  await bru.cookies.upsert({ key: "lang", value: "fr" });
+  ```
+
+- **`bru.cookies.remove(name)`** - Remove a cookie by name.
+  ```javascript
+  await bru.cookies.remove("lang");
+  ```
+
+- **`bru.cookies.delete(name)`** - Alias for `remove()`.
+  ```javascript
+  await bru.cookies.delete("lang");
+  ```
+
+- **`bru.cookies.clear()`** - Remove all cookies for the current request URL only.
+
+  <Warning>
+    `bru.cookies.clear()` only removes cookies scoped to the current request URL. To clear cookies across all domains, use `jar.clear()` instead.
+  </Warning>
+
+  ```javascript
+  await bru.cookies.clear();
+  ```
+
+##### Cookie jar
+
+The cookie jar lets you manage cookies for any URL, not just the current request.
+
+###### Creating a cookie jar
+
+- **`bru.cookies.jar()`** - Create a cookie jar instance for managing cookies.
   
   **Returns:** A cookie jar instance with methods for cookie management
   ```javascript
   const jar = bru.cookies.jar();
   ```
 
-##### Cookie Jar Methods
+###### Cookie jar methods
 
 Once you have a cookie jar instance, you can use the following methods:
 
@@ -826,7 +995,22 @@ Once you have a cookie jar instance, you can use the following methods:
   jar.deleteCookies("https://example.com");
   ```
 
-- **`jar.clear()`** - Clear all cookies from the cookie jar.
+- **`jar.hasCookie(url, name)`** - Check if a cookie exists for a specific URL.
+
+  **Returns:** `true` if the cookie exists, `false` otherwise
+
+  **Example:**
+  ```javascript
+  const jar = bru.cookies.jar();
+  const exists = await jar.hasCookie("https://example.com", "sessionId");
+  ```
+
+- **`jar.clear()`** - Clear all cookies from the cookie jar across all domains.
+
+  <Warning>
+    Unlike `bru.cookies.clear()` which only affects the current request URL, `jar.clear()` removes cookies for **all** domains.
+  </Warning>
+
   ```javascript
   const jar = bru.cookies.jar();
   jar.clear();
