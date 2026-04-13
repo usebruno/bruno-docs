@@ -7,4 +7,31 @@ import { Translator } from "/snippets/translator.jsx";
 Welcome to the **Postman** to **Bruno** scripts translator.
 This is the same function that runs behind the **Import Postman Collection** feature in Bruno.
 
+## Supported translations
+
+The translator converts the following Postman `pm.*` APIs to their Bruno equivalents:
+
+| Postman API | Bruno equivalent |
+|---|---|
+| `pm.test("name", function() {` | `test("name", function() {` |
+| `pm.response.to.have.status(200)` | `expect(res.getStatus()).to.equal(200)` |
+| `pm.response.json()` | `res.getBody()` |
+| `pm.response.text()` | `res.getBody()` |
+| `pm.response.responseSize` | `res.getSize()` |
+| `pm.environment.set("key", value)` | `bru.setEnvVar("key", value)` |
+| `pm.environment.get("key")` | `bru.getEnvVar("key")` |
+| `pm.globals.set("key", value)` | `bru.setVar("key", value)` |
+| `pm.globals.get("key")` | `bru.getVar("key")` |
+| `pm.collectionVariables.set("key", value)` | `bru.setVar("key", value)` |
+| `pm.collectionVariables.get("key")` | `bru.getVar("key")` |
+| `pm.expect(pm.response.responseTime).to.be.below(N)` | `expect(res.getResponseTime()).to.be.below(N)` |
+| `pm.response.to.have.header("name")` | `expect(res.getHeader("name")).to.exist` |
+| `pm.expect(x).to.eql(y)` | `expect(x).to.equal(y)` |
+
+<Warning>
+  Any `pm.*` calls not listed above are left unchanged in the translated output. These unsupported calls (such as `pm.sendRequest()`, `pm.cookies`, `pm.variables`, or `pm.iterationData`) will cause runtime errors in Bruno and need to be manually rewritten using the [Bruno scripting API](/testing/script/javascript-reference).
+</Warning>
+
+## Try it out
+
 <Translator />

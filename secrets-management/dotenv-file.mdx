@@ -16,19 +16,23 @@ In **Bruno**, you can store your secrets (e.g., API keys, JWT tokens) in a `.env
 
 Below is an example folder structure for your collection:
 
-<FileTree.Folder name="bruno-collection" defaultOpen>
-  <FileTree.Folder name="api-folder">
-    <FileTree.Folder name="customer-api" />
-    <FileTree.Folder name="emp-api">
-      <FileTree.File name="details.bru" />
-    </FileTree.Folder>
-    <FileTree.File name="lib.js" />
-  </FileTree.Folder>
-  <FileTree.File name=".env" />
-  <FileTree.File name=".gitignore" />
-  <FileTree.File name="bruno.json" />
-  <FileTree.File name="package.json" />
-</FileTree.Folder>
+<Tree>
+  <Tree.Folder name="bruno-collection" defaultOpen>
+    <Tree.Folder name="api-folder">
+      <Tree.Folder name="customer-api">
+        <Tree.File name="example.bru" />
+      </Tree.Folder>
+      <Tree.Folder name="emp-api">
+        <Tree.File name="details.bru" />
+      </Tree.Folder>
+      <Tree.File name="lib.js" />
+    </Tree.Folder>
+    <Tree.File name=".env" />
+    <Tree.File name=".gitignore" />
+    <Tree.File name="bruno.json" />
+    <Tree.File name="package.json" />
+  </Tree.Folder>
+</Tree>
 
 ## Creating and Using the `.env` File
 

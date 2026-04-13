@@ -2,7 +2,22 @@
 title: "Dev Tools"
 ---
 
-Bruno provides built-in Dev Tools to help you debug your APIs, catch bugs, test functionality, and get all essential details related to your API requests. The Dev Tools feature four main tabs:
+Bruno provides built-in Dev Tools to help you debug your APIs, catch bugs, test functionality, and get all essential details related to your API requests.
+
+## Script errors
+
+When a pre-request script, post-response script, or test fails, Bruno displays an inline error card directly in the response pane. Each error card includes:
+
+- **Error source** -- identifies whether the error originated from a request, folder, or collection-level script, with a clickable file path that navigates you to the exact script location.
+- **Code snippet** -- shows the lines of code surrounding the error, with the failing line highlighted. Line numbers match what you see in the script editor.
+- **Error message** -- displays the error type and message (e.g., `ReferenceError: undefinedVar is not defined`).
+- **Stack trace** -- a collapsible section with the full stack trace for deeper investigation.
+
+If errors occur in multiple script phases (for example, both a pre-request script and a test), each error gets its own card. You can dismiss individual error cards by clicking the close button.
+
+## Dev Tools tabs
+
+The Dev Tools feature four main tabs:
 
 1. **Console** - For testing, scripting, and debugging
 2. **Network** - For analyzing network configurations and performance

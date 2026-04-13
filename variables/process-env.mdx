@@ -14,19 +14,23 @@ To create process environment variables, you can add a .env file to the root of 
 
 In your Bruno collection, the structure might look like this:
 
-<FileTree.Folder name="bruno-collection" defaultOpen>
-  <FileTree.Folder name="api-folder">
-    <FileTree.Folder name="customer-api" />
-    <FileTree.Folder name="emp-api">
-      <FileTree.File name="details.bru" />
-    </FileTree.Folder>
-    <FileTree.File name="lib.js" />
-  </FileTree.Folder>
-  <FileTree.File name=".gitignore" />
-  <FileTree.File name="bruno.json" />
-  <FileTree.File name="package.json" />
-  <FileTree.File name=".env" />
-</FileTree.Folder>
+<Tree>
+  <Tree.Folder name="bruno-collection" defaultOpen>
+    <Tree.Folder name="api-folder" defaultOpen>
+      <Tree.Folder name="customer-api">
+        <Tree.File name="example.bru" />
+      </Tree.Folder>
+      <Tree.Folder name="emp-api">
+        <Tree.File name="details.bru" />
+      </Tree.Folder>
+      <Tree.File name="lib.js" />
+    </Tree.Folder>
+    <Tree.File name=".env" />
+    <Tree.File name=".gitignore" />
+    <Tree.File name="bruno.json" />
+    <Tree.File name="package.json" />
+  </Tree.Folder>
+</Tree>
 
 In the `.env` file, you would store a key-value pair, like this:
 

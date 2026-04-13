@@ -22,6 +22,8 @@
                 "pages": [
                   "introduction/what-is-bruno",
                   "introduction/starter-guide",
+                  "introduction/getting-started",
+                  "get-started/bruno-basics/download",
                   "introduction/manifesto",
                   "introduction/feedback-community"
                 ]
@@ -29,7 +31,6 @@
                   {
                     "group": "Bruno Basics",
                     "pages": [
-                      "get-started/bruno-basics/download",
                       "get-started/bruno-basics/create-a-workspace",
                       "get-started/bruno-basics/create-a-collection",
                       "get-started/bruno-basics/create-a-folder",
@@ -329,11 +330,11 @@
                     "pages": [
                       "bru-cli/overview",
                       "bru-cli/installation",
+                      "bru-cli/commandOptions",
                       "bru-cli/runCollection",
                       "bru-cli/builtInReporters",
-                      "bru-cli/commandOptions",
-                      "bru-cli/proxyConfiguration",
                       "bru-cli/import",
+                      "bru-cli/proxyConfiguration",
                       "bru-cli/gitHubCLI",
                       "bru-cli/jenkins"
                     ]
@@ -882,12 +883,12 @@
   "redirects": [
     {
       "source": "/introduction",
-      "destination": "/introduction/what-is-bruno",
+      "destination": "/introduction/getting-started",
       "permanent": true
     },
     {
-      "source": "/introduction/getting-started",
-      "destination": "/introduction/what-is-bruno",
+      "source": "/introduction/what-is-bruno",
+      "destination": "/introduction/getting-started",
       "permanent": true
     },
     {
@@ -921,8 +922,8 @@
       "permanent": true
     },
     {
-      "source": "/get-started/history",
-      "destination": "/send-requests/history",
+      "source": "/import-export-data/postman-migration",
+      "destination": "/get-started/import-export-data/postman-migration",
       "permanent": true
     },
     {

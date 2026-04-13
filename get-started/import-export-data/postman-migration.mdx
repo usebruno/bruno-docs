@@ -4,6 +4,13 @@ title: "Migrating from Postman"
 
 Bruno makes migrating from Postman easy. All you need to do is export your collections and environments and import them to Bruno.
 
+<iframe
+  className="w-full aspect-video rounded-xl"
+  src="https://www.youtube.com/embed/2SbKuBLR99U"
+  title="Migrating from Postman to Bruno"
+  allowFullScreen
+/>
+
 ## Collection Export
 
 Open Postman and select the collection you want to migrate. Click on the `···` followed by `View more actions` to open the dropdown menu and scroll down until you find `Export`, then click on it.
@@ -40,7 +47,7 @@ You can export a data dump of all your collections and environments in Postman. 
 
 **To import your Data Dump to Bruno:**
 
-- Open the import menu and select `Postman Data Export`
+- Open the import menu and select `Import Collections`
 
 - Select the zip file where the export was saved
 
@@ -48,8 +55,12 @@ You can export a data dump of all your collections and environments in Postman. 
 
 - Designate a location for the collections and press `import`
 
+![bulk import](/images/screenshots/migration/bulk-import.webp)
+
 <Info>
-  Although we have a translator for Postman scripts, it's always good practice to review the collections after import, especially if you are using deprecated Postman syntax in your scripts.
+  Bruno automatically translates common Postman script APIs (such as `pm.test`, `pm.environment`, `pm.globals`, `pm.collectionVariables`, and `pm.response`) to their Bruno equivalents during import.
+  
+  See the [Scripts Translator](/get-started/import-export-data/script-translator) page for the full list of supported translations.
 </Info>
 
 ## Environment Import and Export
