@@ -20,6 +20,8 @@
               {
                 "group": "Introduction",
                 "pages": [
+                  "introduction/what-is-bruno",
+                  "introduction/starter-guide",
                   "introduction/getting-started",
                   "get-started/bruno-basics/download",
                   "introduction/manifesto",
@@ -416,8 +418,7 @@
                 "group": "Advanced Guides",
                 "icon": "graduation-cap",
                 "pages": [
-                  "advanced-guides/starter-guide",
-              "advanced-guides/visualize"
+                  "advanced-guides/visualize"
             ]
           }
         ]
@@ -1163,6 +1164,11 @@
     {
       "source": "/to/embed-bruno-collection",
       "destination": "/git-integration/embed-bruno-collection",
+      "permanent": true
+    },
+    {
+      "source": "/advanced-guides/starter-guide",
+      "destination": "/introduction/starter-guide",
       "permanent": true
     }
   ]
