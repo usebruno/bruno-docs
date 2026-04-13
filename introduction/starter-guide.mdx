@@ -2,19 +2,20 @@
 title: "Bruno Starter Guide"
 ---
 
-Bruno offers a fast, Git-friendly approach to API development that's fundamentally different from traditional API clients. This hands-on path walks you through **13 challenges**—from your first request to scripting, tests, the Collection Runner, docs, Git, OpenAPI import, and the CLI.
+Bruno is a fast, Git-friendly API client. This guide walks you through **11 short challenges**—from a new collection through environments, tests, scripts, Git, then **Timeline / debugging**, the **Collection Runner**, the CLI, and exporting OpenAPI.
 
 ## Prerequisites
 
-- Basic familiarity with HTTP and REST  
-- [Bruno installed](https://www.usebruno.com/downloads) (v3.0.0)
-- **Git** (optional, for the Git challenge)
+- Basic idea of what HTTP and REST are  
+- [Bruno installed](https://www.usebruno.com/downloads) (v3.x)  
+- **Git** (only needed for the Git challenge)  
+- **Node.js** (only needed for the CLI challenge)
 
-## Getting Started
+## Getting started
 
-Import the **Bruno Starter Guide** collection:
+Use the official **Bruno Starter Guide** collection (structured requests, notes, and **solution** folders):
 
-1. Use **Fetch in Bruno** below, **or** clone the [GitHub repo](https://github.com/bruno-collections/bruno-starter-guide).
+1. **Fetch in Bruno** below, **or** clone [bruno-starter-guide](https://github.com/bruno-collections/bruno-starter-guide).
 
 <div className="flex justify-center my-10">
   <a href="https://fetch.usebruno.com?url=https%3A%2F%2Fgithub.com%2Fbruno-collections%2Fbruno-starter-guide.git" target="_blank" rel="noopener noreferrer">
@@ -28,72 +29,57 @@ Import the **Bruno Starter Guide** collection:
   </a>
 </div>
 
-The repo includes structured challenges, sample requests, per-challenge notes, and **solution** folders. Open the collection in Bruno and work at your own pace.
-
-## Challenge path
-
-Complete the challenges in order; each builds on the previous ones.
+Work through the challenges **in order**. Each step assumes the previous one.
 
 ---
 
-## 1. Create your first request
+## 1. Create a collection
 
-### What you'll learn
+**Goal:** Have a folder Bruno treats as a collection.
 
-Navigate the UI, create a request, set method and URL, and send a successful call.
+1. Open Bruno (workspace home).  
+2. Click **+** icon (top-left) → **Create collection**.  
 
-### Instructions
+![Create collection from the + menu](/images/screenshots/starter-guide/create-collection-icon.webp)
 
-1. Open Bruno (**Workspace Home** or your workspace).
-2. Create a request (e.g. **+** on the tab bar, or **`···` → New Request** on a collection).
-3. Set method to **GET** and URL to `https://api.github.com/users/usebruno`.
-4. Execute the request.
+3. Enter a name **Bruno Starter Guide** and hit enter.
 
-You should see a **200** response with GitHub user JSON.
+![Name and create the collection](/images/screenshots/starter-guide/provide-collection-name.webp)
 
-### Success criteria
+4. optional: click the **settings icon** (advanced options) and choose the desired folder on your system.
 
-- Request is created and runs successfully  
-- Response status is **200**
+**Done when:** The collection appears in the sidebar and you can add requests under it.
 
 ---
 
-## 2. Creating environments
+## 2. Create a request
 
-### What you'll learn
+**Goal:** Send your first request from the collection.
 
-Create an environment, add variables, use `{{variable}}` in the URL, and switch environments from the dropdown.
+1. Click on the collection contex menu (...) → create a **New Request**.  
+2. Set method **GET** and URL `https://api.github.com/users/usebruno` with name `usebruno-github`. 
 
-### Instructions
+![Choose HTTP and create the request](/images/screenshots/starter-guide/select-http-create-req.webp) 
 
-1. Open the **environment** control (top right as **No Environment**).
-2. Click on **Create** in **Collections** section.
-3. Name it `echo-bruno` and add a variable:
-   - **Key:** `base-url`  
-   - **Value:** `https://api.github.com/users/usebruno`
-4. Save, select **`echo-bruno`** in the environment dropdown.
-5. Edit your request URL to `{{base-url}}` and run it again.
+3. Execute the request.
 
-You should still get **200** with the same payload as challenge 1.
+![Execute the request](/images/screenshots/starter-guide/execute-req.webp)
 
-### Success criteria
 
-- Environment `echo-bruno` exists with `base-url`  
-- Request uses `{{base-url}}` and returns **200**
+**Done when:** Status **200** and you see JSON for the `usebruno` user.
 
 ---
 
-## 3. Send API requests with data
+## 3. Send a request with data
 
-### What you'll learn
+**Goal:** Use **POST** with a **JSON** body.
 
-Use **POST**, send a **JSON** body, and read the echoed response.
+1. Create a new request → method **POST**, URL `https://echo.usebruno.com` and name it as `echo-bru`.  
 
-### Instructions
+![Create the echo POST request](/images/screenshots/starter-guide/create-echo-bru-req.webp)
 
-1. Create a new request (method **POST**, URL `https://echo.usebruno.com`).
-2. Open the **Body** tab → **JSON**.
-3. Paste:
+2. Go to **Body** tab and select → **JSON** as a option, 
+3. Add the following JSON data to the body of the request:
 
 ```json
 {
@@ -102,345 +88,212 @@ Use **POST**, send a **JSON** body, and read the echoed response.
 }
 ```
 
-4. Send the request.
+3. Execute the request.
 
-The response body should echo what you sent.
+![Send the echo request](/images/screenshots/starter-guide/execute-echo-bru-req.webp)
 
-### Success criteria
 
-- POST with JSON body configured  
-- Response reflects the same JSON fields
+**Done when:** The response body echoes the same JSON fields you sent.
 
 ---
 
-## 4. Response handling and debugging
+## 4. Create an environment
 
-### What you'll learn
+**Goal:** Store a **base URL** once and reuse it with `{{variable}}`.
 
-Change the outgoing body from a **Pre-request** script with `req`, then inspect **Timeline** (and DevTools if needed) for debugging.
+1. Open **Environments** settings (top-right — **No environment**).  
 
-### Instructions
+![Create an environment on the collection](/images/screenshots/starter-guide/create-env-collection.webp)
 
-<Info>
-  The `req` object is available in the **Pre-request** script, not in the Test tab.
-</Info>
+2. Create an environment for this collection (e.g. `local`) and add:  
+   - **Key:** `base-url`  
+   - **Value:** `https://echo.usebruno.com`  
 
-1. Reuse the request from challenge 3 (POST to `https://echo.usebruno.com`).
-2. Open **Script** → **Pre-request** and add:
+![Name the environment and set base-url](/images/screenshots/starter-guide/provide-name-env.-base-url.webp)
 
-```js
-const body = {
-  name: "Bruno Starter Guide",
-  "task id": "04",
-};
+3. click the **Save** button.
 
-req.setBody(body);
-console.log(body);
-```
+4. Select that environment, then set your **echo-bru** request URL to `{{base-url}}` and send again.
 
-3. Send the request.
+![Select the environment and use it on the request](/images/screenshots/starter-guide/use-collection-env.webp)
 
-Confirm the response matches `req.setBody`. Use the **Timeline** tab for request/response and network detail.
+**Done when:** The GET still returns **200** using only `{{base-url}}`.
 
-### Success criteria
-
-- Status **200**  
-- Response body matches the pre-request `req.setBody` payload  
-- You can inspect details in **Timeline**
+More: [Environment variables](/variables/environment-variables)
 
 ---
 
-## 5. Authentication (Bearer token)
+## 5. Write a test case
 
-### What you'll learn
+**Goal:** One **Assert** row and one **Tests** snippet.
 
-Attach **Bearer token** auth on a request and call a protected-style endpoint.
+1. Open your **echo-bru** request.  
+2. Go to **Assert** tab and enter below details: 
 
-### Instructions
+| Expression | Operator | Value |
+|------------|----------|-------|
+| `res.status` | `equals` | `200` |
+| `res.body.title` | `equals` | `Bruno` |
 
-1. Create a **GET** request to `https://httpbin.org/bearer`.
-2. Open **Auth** → **Bearer Token**.
-3. Set token to `password1234` (demo value for httpbin).
-4. Send the request.
+3. Execute the request and go to **Tests** tab in response section to confirm the assert passes (green).
+![Assert tab](/images/screenshots/starter-guide/write-test-1-assert.webp)
 
-The JSON response should show authenticated access and echo the token pattern httpbin returns.
 
-### Success criteria
-
-- Bearer auth is configured  
-- Response indicates successful authenticated call
-
----
-
-## 6. Secret management
-
-### What you'll learn
-
-Mark an environment variable as **Secret**, reference it in JSON, and see masked values in the UI while the correct value is sent.
-
-### Instructions
-
-1. Open environments → select **`echo-bruno`**.
-2. Add variable **`my_secret_key`** = `usebruno` and enable **Secret**.
-3. Create **POST** to `https://echo.usebruno.com` (echo endpoint; your `echo-bruno` env is still selected for variables).
-4. **Body** → **JSON**:
-
-```json
-{
-  "secret": "{{my_secret_key}}"
-}
-```
-
-5. Send the request.
-
-The echoed JSON should include `"secret": "usebruno"` (matching the variable value).
-
-### Success criteria
-
-- Variable is marked **Secret**  
-- Body uses `{{my_secret_key}}`  
-- Response reflects the secret value was sent
-
----
-
-## 7. Request scripting
-
-### What you'll learn
-
-Use **Pre-request** to read `req` (URL, method) and **Post-response** to log response data.
-
-### Instructions
-
-1. Use a request with **`echo-bruno`** and URL `{{base-url}}` (GET is fine).
-2. **Pre-request** script:
+4. Go to **Tests** tab and copy below snippet:
 
 ```javascript
-const reqUrl = req.url;
-const reqMethod = req.method;
-console.log(reqUrl);
-console.log(reqMethod);
-```
-
-3. **Post-response** script:
-
-```js
-console.log(res.body);
-```
-
-4. Send the request and open **DevTools** / console to see the logs.
-
-### Success criteria
-
-- Pre-request runs without errors  
-- Post-response logs appear in the console  
-- Logged URL/method match the request
-
----
-
-## 8. Test assertions
-
-### What you'll learn
-
-Use the **Assert** tab for quick checks and the **Tests** tab with Chai `expect` for scripted checks.
-
-### Instructions
-
-1. Open the **POST** request from challenge 3 (echo + JSON body from that challenge).
-2. **Assert** tab — add rows:
-
-| Expr | Operator | Value |
-|------|----------|-------|
-| `res.status` | equals | `200` |
-| `res.body.title` | equals | `Bruno` |
-
-3. **Tests** tab — add:
-
-```js
 test("body has title", function () {
   expect(res.getBody()).to.have.property("title");
-});
+  });
 ```
 
-4. Save and send.
+4. Execute the request and confirm tests pass (green).
 
-Confirm **Assert** passes and **Tests** show green.
+![Tests tab and results](/images/screenshots/starter-guide/write-test-2.webp)
 
-### Success criteria
+**Done when:** Asserts and tests stay green on send.
 
-- Assert rules pass  
-- Both tests pass on send
-
----
-
-## 9. Collection Runner
-
-### What you'll learn
-
-Run multiple requests in sequence from the **Collection Runner** and inspect each result.
-
-### Instructions
-
-1. Create a collection (click **+** icon from top left corner) named `collection-runner`.
-2. Create a request: from collection context menu **`···`** with name `echo-bruno`, **POST**, URL `https://echo.usebruno.com` (add a minimal body if you like).
-3. Open the collection **`···`** menu → **Run** (or use the **Collection Runner** icon in the top bar)
-4. Start the run and watch requests execute in order.
-
-Add more requests to the same collection to see multiple steps in one run.
-
-### Success criteria
-
-- Runner starts  
-- Requests run in sequence  
-- You can open each run line and inspect responses
-
-<Warning>
-  The Collection Runner runs **HTTP** requests only (not gRPC/WebSocket). See [Run a collection](/get-started/bruno-basics/run-a-collection).
-</Warning>
+More: [Tests introduction](/testing/tests/introduction) · [Assertions](/testing/tests/assertions)
 
 ---
 
-## 10. API documentation
+## 6. Write a script
 
-### What you'll learn
-
-Add **Markdown** docs at collection, folder, and request level.
-
-### Instructions
-
-**Collection**
-
-1. Select the collection → open **Settings** / overview.
-2. Edit **Documentation** (pencil icon) and append:
-
-```md
-## Bruno Starter Guide Progress
-
-1. Name: <your name>
-2. Task: API documentation
-3. Mood: 😎
-```
-
-**Folder** (optional)
-
-1. Right-click a folder → **Settings** → **Docs**.
-2. Add a short markdown description.
-
-**Request**
-
-1. Open a request → **Docs** tab → **Edit**.
-2. Add purpose, parameters, or example notes in markdown.
-
-### Success criteria
-
-- Collection docs updated  
-- At least one folder or request has docs (recommended for both)
-
----
-
-## 11. Git collaboration
-
-### What you'll learn
-
-Initialize Git on the collection folder, commit, add **GitHub** as `origin`, and push.
-
-### Instructions
+**Goal:** Use **Pre-request** and **Post-response** with `req` / `res`.
 
 <Info>
-  **Bruno 3.0.0+:** core Git UI (initialize, diff, pull, clone, etc.) is available in the open-source edition. See [Git integration (GUI)](/git-integration/using-gui/intro).
+  `req` shapes the outgoing request (**Pre-request**). `res` is available after the response (**Post-response** / tests).
 </Info>
 
-1. Click the **Git** icon (near the top bar; beside **Safe Mode**).
-2. **Initialize Git repository** for the collection folder.
-3. Make an edit, then stage + commit from the **Git** panel **or** from a terminal in the collection folder:
+1. Open your **echo-bru** request.  
+2. Go to tab **Script** → **Pre-request** and enter below snippet:
 
-```bash
-git add .
-git commit -m "Initial commit: Bruno starter collection"
+```javascript
+req.setBody({
+  "title":"<your name>",
+  "msg":"<your message>"
+})
 ```
+3. Execute the request and check the response.
 
-4. On GitHub, create an empty repo (e.g. `bruno-git-collab`), copy its HTTPS URL.
-5. In Bruno **Remotes** → **Add remote** (`origin` + URL) **or**:
+![Pre-request script](/images/screenshots/starter-guide/write-script.webp)
 
-```bash
-git remote add origin https://github.com/yourusername/bruno-git-collab.git
-git branch -M main
-git push -u origin main
-```
+**Done when:** You see method/URL before the call and body (or status) after.
 
-### Success criteria
-
-- Repo initialized on the collection  
-- At least one commit  
-- Remote added and push succeeds (or you’ve completed the UI steps up to push)
-
-For advanced Git workflows, use the **CLI** alongside Bruno. More detail: [Using the Git UI](/git-integration/using-gui/intro).
+More: [JavaScript Reference](/testing/script/javascript-reference)
 
 ---
 
-## 12. OpenAPI integration
+## 7. Debugging and response timeline
 
-### What you'll learn
+**Goal:** Read the response, use **Timeline** and **DevTools** when something looks wrong, and know where to look for common issues.
 
-Import an **OpenAPI** spec from URL or file, explore generated folders/requests, and send a generated request.
+1. Run a request **echo-bru**.  
+2. Open the **Timeline** and click on the recent executed request.
+3. Go to **Network** tab and review phases (DNS, connect, TLS, transfer).  
+4. Use **DevTools** (bottom-right corner) to see the console when scripts run or when you need deeper details.
 
-### Instructions
+![Timeline and DevTools tabs](/images/screenshots/starter-guide/timeline-devtool-tab.webp)
 
-1. Pick a spec (e.g. [Petstore JSON](https://petstore.swagger.io/v2/swagger.json) or any **OpenAPI 3** file).
-2. **Import Collection**: top-left **`···`** → **Import Collection** 
-3. Go to **URL**, paste the **URL** and complete the wizard, and save the new collection.
-4. Open a generated request (e.g. a **GET** under **pet**), review path/params, and **Send**.
+**Done when:** You can read status + body and use Timeline (and console when needed) to narrow down problems.
 
-### Success criteria
-
-- Spec imports without errors  
-- Structure matches tags/paths from the spec  
-- At least one request returns a valid response
-
-**Learn more:** [OpenAPI import](/open-api/importOAS)
+More: [Timeline](/send-requests/res-data-cookies/debugging/timeline)
 
 ---
 
-## 13. CLI automation
+## 8. Collection Runner
 
-### What you'll learn
+**Goal:** Run several requests in sequence.
 
-Install **`@usebruno/cli`**, run **`bru run`** from the collection root, and optionally pass **`--env`** for a named environment.
+1. Go to the collection context menu (...) and select **Run**.  
 
-### Prerequisites
+![Run the collection from the context menu](/images/screenshots/starter-guide/collection-runner.webp)
 
-- **Node.js** installed  
-- A collection folder on disk (e.g. cloned starter guide)
+2. Click on the **Run**  button to start the run.
 
-### Instructions
+![Run the collection](/images/screenshots/starter-guide/collection-runner-in-action.webp)
 
-1. Install globally:
+**Done when:** All selected requests run in order and you can open each result.
 
+---
+
+## 9. Git collaboration
+
+**Goal:** Track the collection folder with Git and connect a remote (e.g. GitHub).
+
+<Info>
+  **Bruno 3.0+:** Git basic UI features are available in the open-source app. See [Git integration (GUI)](/git-integration/using-gui/intro).
+</Info>
+
+1. Open the **Git** panel (top bar) and click **Initialize** to turn the collection folder into a repository.
+
+![Initialize Git on the collection](/images/screenshots/starter-guide/git-init.webp)
+
+2. Stage and commit your changes from the Git panel (or use `git add` / `git commit` in a terminal).
+
+![Stage and commit in the Git panel](/images/screenshots/starter-guide/git-stage-commit-changes.webp)
+
+3. Go to [GitHub](https://github.com/)
+   - Create an empty repository (click on the **+** button and select **New repository**)
+   - Enter name and other details and copy the HTTPS URL
+   ```bash
+   https://github.com/yourusername/bruno-starter-guide.git
+   ```
+    - Go to collection **Git** panel and Add **`origin`** under **Remotes** in the Git sidebar
+    - Push your default branch
+
+**Done when:** You have at least one commit and `git push` (or the UI equivalent) succeeds.
+
+More: [Using the Git UI](/git-integration/using-gui/intro)
+
+---
+
+## 10. Run a request through the CLI
+
+**Goal:** Install **Bruno CLI** and run the collection from a terminal. You need to make sure you have installed Node.js on your system.
+
+1. Install Bruno CLI: 
 ```bash
 npm install -g @usebruno/cli
-```
-
-2. `cd` into the **root of your Bruno collection** (folder that contains `bruno.json` or your collection layout).
-
-3. Run all requests:
-
+```  
+2. Open terminal and Go to the **Bruno Starter Guide** collection (folder with `bruno.json`).  
+3. Run all requests: 
 ```bash
 bru run
-```
-
-4. To use a specific environment (e.g. `echo-bruno`):
-
+```  
+4. Optional: run with a named environment e.g. 
 ```bash
-bru run --env echo-bruno
+bru run --env local
 ```
 
-See [Bruno CLI](/bru-cli/overview) for reporters, filters, and CI usage.
+**Done when:** `bru run` finishes and results match what you see in the app (including variables when you pass `--env`).
 
-### Success criteria
-
-- CLI installs  
-- `bru run` completes from the collection directory  
-- With `--env`, variables resolve as in the app
+More: [Bruno CLI](/bru-cli/overview) · [Installation](/bru-cli/installation)
 
 ---
 
-**You’ve finished all 13 challenges.** For the official collection and solutions, use the [Bruno Starter Guide repository](https://github.com/bruno-collections/bruno-starter-guide).
+## 11. OpenAPI specifications
+
+**Goal:** Export your collection as an **OpenAPI** document (shareable API description).
+
+1. Open the collection **···** menu → **Share** → **Export**.
+2. Click on the **OpenAPI Specification** option and enter the name of the file and location.  
+3. Click on the **Proceed** button to export the collection as OpenAPI Specification.
+
+![Export the collection as OpenAPI Specification](/images/screenshots/starter-guide/export-collection-to-oas.webp)
+
+**Done when:** The OpenAPI file is created where you chose and opens without errors (you can open it in an editor or import it elsewhere to validate).
+
+To **import** an existing OpenAPI spec into Bruno instead, see [OpenAPI import](/open-api/importOAS) and [Import collections](/get-started/import-export-data/import-collections).
+
+---
+
+## What to learn next (optional)
+
+- **Auth** — [Authentication](/auth/overview)  
+- **Secrets** — [.env and secret managers](/secrets-management/dotenv-file)  
+- **Collection / request docs** — Markdown in **Docs** tabs
+
+---
+
+**Finished all 11?** Keep practicing with the [Bruno Starter Guide repo](https://github.com/bruno-collections/bruno-starter-guide).
