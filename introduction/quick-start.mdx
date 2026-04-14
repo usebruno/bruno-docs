@@ -67,75 +67,107 @@ Congratulations! You have successfully created your first collection. The UI sho
 **Objective:** Create and execute your first request from the collection.
 
 1. Click on the collection contex menu (...) → create a **New Request**.  
-2. Set method **GET** and URL `https://api.github.com/users/usebruno` with name `usebruno-github`. 
 
-![Choose HTTP and create the request](/images/screenshots/starter-guide/select-http-create-req.webp) 
+![create-request](/images/screenshots/quick-start/02-create-a-request/01-new-request.webp)
 
-3. Execute the request.
+2. Select 
+- `type` HTTP - (GraphQL, gRPC, WebSocket, or cURL is also supported)
+- `Request Name` as `github-api`
+- `URL` as `https://api.github.com/users/usebruno`.
 
-![Execute the request](/images/screenshots/starter-guide/execute-req.webp)
+![name-api](/images/screenshots/quick-start/02-create-a-request/02-name-api.webp)
 
+3. Send the request by clicking the arrow button or pressing Cmd/Ctrl + Enter.
 
-**Done when:** Status **200** and you see JSON for the `usebruno` user.
+![execute-request](/images/screenshots/quick-start/02-create-a-request/03-execute-req.webp)
+
+You have successfully sent your first request. The UI should look like this:
+
+![after-request](/images/screenshots/quick-start/02-create-a-request/04-after-req.webp)
+
+**Success Criteria:** 
+- Status is **200** (Green text - 200 OK)
+- Response body with details of the `usebruno` user.
 
 ---
 
 ## 3. Send a request with data
 
-**Goal:** Use **POST** with a **JSON** body.
+**Objective:** Create a request with **POST** method and send data with API request.
 
-1. Create a new request → method **POST**, URL `https://echo.usebruno.com` and name it as `echo-bru`.  
+1. Create a new request with:
+   - Request type as **HTTP**
+   - Request name as `echo-bru` 
+   - method as **POST**
+   - URL as `https://echo.usebruno.com`
+  
 
-![Create the echo POST request](/images/screenshots/starter-guide/create-echo-bru-req.webp)
+![create-request-with-data](/images/screenshots/quick-start/03-send-a-request-with-data/01-create-echo-bru.webp)
 
-2. Go to **Body** tab and select → **JSON** as a option, 
+2. Go to **Body** tab and select → **JSON** as a option
+
+![select-json-as-body](/images/screenshots/quick-start/03-send-a-request-with-data/02-select-json-body-option.webp)
+
 3. Add the following JSON data to the body of the request:
 
 ```json
 {
   "title": "Bruno",
-  "role": "Loved by developers. Built for developers."
+  "msg": "Loved by developers. Built for developers."
 }
 ```
 
-3. Execute the request.
+3. Execute the request by clicking the arrow button or pressing Cmd/Ctrl + Enter.
 
-![Send the echo request](/images/screenshots/starter-guide/execute-echo-bru-req.webp)
+![Send data to the API](/images/screenshots/quick-start/03-send-a-request-with-data/03-send-json-data.webp)
 
+You have successfully sent **JSON** data to the API. This is Bruno echo endpoint, so you will receive the same data in the response.
 
-**Done when:** The response body echoes the same JSON fields you sent.
+**Success Criteria:** 
+- JSON data is sent to the API.
+- Response body contains the same JSON data.
 
 ---
 
 ## 4. Create an environment
 
-**Goal:** Store a **base URL** once and reuse it with `{{variable}}`.
+**Objective:** Create a environment variable to store a **URL** and reuse it with `{{baseUrl}}`.
 
 1. Open **Environments** settings (top-right — **No environment**).  
 
-![Create an environment on the collection](/images/screenshots/starter-guide/create-env-collection.webp)
+![no-environment](/images/screenshots/quick-start/04-create-env/01-no-environment.webp)
 
-2. Create an environment for this collection (e.g. `local`) and add:  
-   - **Key:** `base-url`  
-   - **Value:** `https://echo.usebruno.com`  
+2. Click on **Create** button in **Collection** section 
+3. Name the environment as `local` in environments popup
 
-![Name the environment and set base-url](/images/screenshots/starter-guide/provide-name-env.-base-url.webp)
+![create-environment](/images/screenshots/quick-start/04-create-env/02-create-local-environment.webp)
+   
+3. Add a below variable to the environment:
+   - **Name:** `baseURL`
+   - **Value:** `https://echo.usebruno.com`
+
+![add-key-value-to-environment](/images/screenshots/quick-start/04-create-env/03-add-key-value.webp)
 
 3. click the **Save** button.
 
-4. Select that environment, then set your **echo-bru** request URL to `{{base-url}}` and send again.
+4. Go back to `echo-bru` request and set the `URL` to `{{baseURL}}` and select the `local` environment from the environment dropdown.
 
-![Select the environment and use it on the request](/images/screenshots/starter-guide/use-collection-env.webp)
+![after-baseur](/images/screenshots/quick-start/04-create-env/04-after-baseurl.webp)
 
-**Done when:** The GET still returns **200** using only `{{base-url}}`.
+You have successfully created your first environment variable and reused it in the request. Bruno supports multiple types of variables, read more about them: [Environment variables](/variables/overview)
 
-More: [Environment variables](/variables/environment-variables)
+**Success Criteria:** 
+- Environment is created with the name `local`.
+- Environment variable `baseURL` is added with the value `https://echo.usebruno.com`.
+- Request `echo-bru` is executed successfully with the `URL` set to `{{baseURL}}`
+- Response status is **200**.
+
 
 ---
 
 ## 5. Write a test case
 
-**Goal:** One **Assert** row and one **Tests** snippet.
+**Objective:** write a assertion and test script to validate the response of the request.
 
 1. Open your **echo-bru** request.  
 2. Go to **Assert** tab and enter below details: 
