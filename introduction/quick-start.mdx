@@ -178,84 +178,134 @@ You have successfully created your first environment variable and reused it in t
 | `res.body.title` | `equals` | `Bruno` |
 
 3. Execute the request and go to **Tests** tab in response section to confirm the assert passes (green).
-![Assert tab](/images/screenshots/starter-guide/write-test-1-assert.webp)
+
+![write-assertion](/images/screenshots/quick-start/05-write-test-case/01-write-assert.webp)
 
 
-4. Go to **Tests** tab and copy below snippet:
+4. Go to **Tests** tab in request section   and copy and paste below snippet:
 
 ```javascript
 test("body has title", function () {
   expect(res.getBody()).to.have.property("title");
   });
+
+test("200 status code", function () {
+  expect(res.getStatus()).to.eql(200);
+});
 ```
 
-4. Execute the request and confirm tests pass (green).
+4. Execute the request (Cmd/Ctrl + Enter) and confirm tests pass (green).
 
-![Tests tab and results](/images/screenshots/starter-guide/write-test-2.webp)
+![write-test-case](/images/screenshots/quick-start/05-write-test-case/02-write-test-case.webp)
 
-**Done when:** Asserts and tests stay green on send.
+**Success Criteria:** 
+- Assert and Tests passes (green) without any errors.
 
-More: [Tests introduction](/testing/tests/introduction) · [Assertions](/testing/tests/assertions)
+Read more about test and assertions: [Tests introduction](/testing/tests/introduction) 
 
 ---
 
 ## 6. Write a script
 
-**Goal:** Use **Pre-request** and **Post-response** with `req` / `res`.
+**Objective:** Send request with pre-request script to set the body of the request.
 
 <Info>
-  `req` shapes the outgoing request (**Pre-request**). `res` is available after the response (**Post-response** / tests).
+  `req` object is only available in pre-request script.
 </Info>
 
-1. Open your **echo-bru** request.  
+1. Create a new request with:
+   - Request type as **HTTP**
+   - Request name as `script-request`
+   - method as **POST**
+   - URL as `https://echo.usebruno.com`
+
+![create-script-req](/images/screenshots/quick-start/06-write-script/01-create-script-req.webp)
+  
 2. Go to tab **Script** → **Pre-request** and enter below snippet:
 
 ```javascript
 req.setBody({
-  "title":"<your name>",
+  "name":"<your name>",
   "msg":"<your message>"
 })
+
+req.setHeader("Content-Type", "application/json");
+req.setBody(body);
+console.log(req.getName())
 ```
-3. Execute the request and check the response.
+3. Execute the request and response body should be set to the body of the request.
 
-![Pre-request script](/images/screenshots/starter-guide/write-script.webp)
+![after-script](/images/screenshots/quick-start/06-write-script/02-after-script.webp)
 
-**Done when:** You see method/URL before the call and body (or status) after.
+Open devtools from bottom-right corner and you will see the console output of the script.
 
-More: [JavaScript Reference](/testing/script/javascript-reference)
+Congrtas, you have successfully written a script to set the body of the request with header values and console logs visible in the devtools.
 
----
+**Success Criteria:** 
+- Script is executed successfully and console output is visible in the devtools.
+- Response body is set to the body of the request with `req.setBody()` function.
+- Header is set to the json content type with `req.setHeader()` function.
 
-## 7. Debugging and response timeline
-
-**Goal:** Read the response, use **Timeline** and **DevTools** when something looks wrong, and know where to look for common issues.
-
-1. Run a request **echo-bru**.  
-2. Open the **Timeline** and click on the recent executed request.
-3. Go to **Network** tab and review phases (DNS, connect, TLS, transfer).  
-4. Use **DevTools** (bottom-right corner) to see the console when scripts run or when you need deeper details.
-
-![Timeline and DevTools tabs](/images/screenshots/starter-guide/timeline-devtool-tab.webp)
-
-**Done when:** You can read status + body and use Timeline (and console when needed) to narrow down problems.
-
-More: [Timeline](/send-requests/res-data-cookies/debugging/timeline)
+Read more about script: [JavaScript Reference](/testing/script/javascript-reference)
 
 ---
+
+## 7. Authentication
+
+**Objective:** Send a request with authentication to the API.
+
+1. Create a new request with:
+   - Request type as **HTTP**
+   - Request name as `auth-request`
+   - method as **GET**
+   - URL as `https://httpbin.org/basic-auth/usebruno/1234`
+
+![create-auth-req](/images/screenshots/quick-start/07-authentication/01-create-auth-req.webp)
+
+2. Go to request **Auth** tab and select **Basic Auth** from the Auth Type dropdown list.
+
+![select-basic-auth](/images/screenshots/quick-start/07-authentication/02-select-basic-auth.webp)
+
+3. Enter the username and password as `usebruno` and `1234` respectively.
+4. Execute the request (Cmd/Ctrl + Enter). 
+
+![enter-password](/images/screenshots/quick-start/07-authentication/03-enter-password.webp)
+
+You'll see the authenticated as true in the response body.
+You have successfully sent a request with authentication to the API. 
+
+**Success Criteria:** 
+- Authentication is set to the basic auth with the username and password.
+- Response body contains the authenticated as true.
+
+Read more about authentication: [Authentication](/auth/overview)
 
 ## 8. Collection Runner
 
-**Goal:** Run several requests in sequence.
+**Objective:** Run all requests in the collection using collection runner.
 
 1. Go to the collection context menu (...) and select **Run**.  
 
-![Run the collection from the context menu](/images/screenshots/starter-guide/collection-runner.webp)
+![select-run](/images/screenshots/quick-start/08-collection-runner/01-select-run.webp)
 
-2. Click on the **Run**  button to start the run.
+2. Click on **Configure requests to run** and select all requests in the collection.
 
-![Run the collection](/images/screenshots/starter-guide/collection-runner-in-action.webp)
+![config-req](/images/screenshots/quick-start/08-collection-runner/02-config-req.webp)
 
-**Done when:** All selected requests run in order and you can open each result.
+3. Click **Run Selected Requests** button to start the run.
+
+![run-select-req](/images/screenshots/quick-start/08-collection-runner/03-run-select-req.webp)
+
+You'll see all requests running one by one in the collection runner.
+
+![after-run](/images/screenshots/quick-start/08-collection-runner/04-after-run.webp)
+
+**Success Criteria:** 
+- All requests are running one by one in the collection runner.
+- Response status is **200** for all requests.
+- Response body contains the data of the request.
+
+Read more about collection runner: [Collection Runner](/collection-runner/overview)
 
 ---
 
