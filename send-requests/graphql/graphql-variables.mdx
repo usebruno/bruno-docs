@@ -11,54 +11,23 @@ Variables in GraphQL allow you to create dynamic, reusable, and secure queries. 
 
 ## Adding Variables to Your GraphQL Request
 
-1. **Create a GraphQL Request**:
-   - Open Bruno and create a new GraphQL request
-   - Select the appropriate HTTP method (usually POST)
+1. Create a GraphQL Request
+2. Add variables in the **Variables** section (bottom of query section)
+3. Write your query or mutation with variables using the `$` prefix to declare variables and reference variables using the `$variableName` syntax.
 
-2. **Define Variables**:
-   - Go to the `Variables` section
-   - Add your variables in JSON format
-   - Each variable should match the type defined in your query
-
-  ![query-graphql](/images/screenshots/send-request/graphql/adding-var-graphql.webp)
-
-3. **Write Your Query with Variables**:
-   - Use the `$` prefix to declare variables
-   - Reference variables in your query using the `$variableName` syntax
-
-![query-graphql](/images/screenshots/send-request/graphql/using-var-in-graphql.webp)
-
-**Example Query with Variables:**
-
-You can test this query using the Countries GraphQL API: `https://countries.trevorblades.com/graphql`
-
-```graphql
-query CountryQuery($code: ID!) {
-  country(code: $code) {
-    name
-    native
-    capital
-    emoji
-    currency
-    languages {
-      code
-      name
-    }
-  }
-}
-```
+![variables-section](/images/screenshots/send-request/graphql/06-variables.webp)
 
 **Variables (JSON format):**
 
 ```json
 {
-  "code": "BR"
+  "title": "usebruno",
+  "userId": "1"
 }
 ```
 
-In this example, the `$code` variable is defined as a required ID type (`ID!`), and its value `"BR"` is passed separately in the Variables section.
+In this example, the `$usebruno` and `$userId` are variables defined as a string and number respectively, and its value `"usebruno"` and `1` are passed separately in the Variables section.
 
-4. **Execute the Request**:
-   - Bruno will automatically combine your query and variables
-   - The variables will be properly escaped and sent with the request
+
+
 
