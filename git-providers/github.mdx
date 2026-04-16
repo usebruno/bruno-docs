@@ -1,0 +1,119 @@
+---
+title: "GitHub provider in Bruno"
+sidebarTitle: "GitHub"
+---
+
+
+You can still import any Git repo by URL from the **Git repository** tab (copy/paste `https://github.com/...` or `git@github.com:...`). The **GitHub** tab adds search, account scope, and smoother clone → **pick Bruno collections** flows on top of that.
+
+---
+
+## Access and import public repositories
+
+Public repositories on GitHub are searchable from Bruno without signing in.
+
+1. Open **Import collection** (for example from the workspace **+** menu or collection import entry point).
+2. Select the **GitHub** tab (separate from **File**, **Git repository**, and **URL**).
+3. Use the scope control (for example **All of GitHub**) and the search field to find a repo—e.g. `usebruno/bruno` or keywords. Results list public projects with language, stars, and forks.
+4. Choose a repository. Bruno **clones** it to the folder you pick (**Clone to location** → **Browse** if needed).
+5. After clone, Bruno **scans** the repo and lists **Bruno collections** found inside. Select one or more (for example an OAuth or starter collection) and click **Open** to add them to your workspace.
+
+
+<Tip>
+  If you only see public repos or search feels limited, continue to [Private repositories and authentication](#private-repositories-and-authentication) to connect your GitHub account.
+</Tip>
+
+---
+
+## Private repositories and authentication
+
+Private repositories and **organization-scoped** search need GitHub to know who you are. Bruno supports:
+
+- **Personal Access Token (PAT)** — recommended for most users.
+- **GitHub CLI (`gh`)** — sign in with the official CLI; Bruno can use that session.
+
+After you connect:
+
+- You can import **private** repos and narrow search to **your user** and **organizations** you belong to (dropdown entries such as **you**, **org**).
+- You can scope search to an org (for example `teambruno`) and see private repos (often shown with a lock icon in the list).
+
+---
+
+## Configure a Personal Access Token (recommended)
+
+Use a PAT when you want predictable, documented access for Bruno on your machine.
+
+### 1. Open Git provider settings
+
+1. Open **Preferences** (or **Settings**).
+2. Go to **Git providers** in the sidebar.
+3. Select **GitHub**.
+
+
+### 2. Enable GitHub
+
+1. Turn **Enabled** on.
+2. Open the **Personal Access Token** tab (next to **GitHub CLI**).
+
+
+
+### 3. Create and paste the token
+
+1. Click **Generate a token on GitHub** (or open [GitHub token settings](https://github.com/settings/tokens) yourself).
+2. Sign in to GitHub and create a token with the scopes your org requires (repo read for private repos; follow your company policy for fine-grained vs classic tokens).
+3. Copy the token value, return to Bruno, paste it into **Enter your GitHub personal access token**, and complete any confirmation step.
+4. You should see a **connected** state (for example **Connected as @your-username via Personal Access Token**) with options to **Refresh** or **Clear token** when you need to rotate credentials.
+
+
+### 4. Import again from the GitHub tab
+
+Return to **Import collection** → **GitHub**. Use the scope dropdown to pick **your user** or an **organization**. Private repositories should appear in search results; clone and select collections as in [Access and import public repositories](#access-and-import-public-repositories).
+
+<Info>
+  **Organizations** may require extra steps on GitHub (for example **SSO authorization** for the token, or org approval for fine-grained tokens). If clone or search fails, check the error message and your org’s GitHub settings.
+</Info>
+
+---
+
+## GitHub Enterprise and custom API URL
+
+For **GitHub Enterprise Server** (self-hosted) or a different API base than public GitHub, set the REST **API URL** Bruno uses for search and repo metadata.
+
+1. In **Preferences** → **Git providers** → **GitHub**, connect with PAT or CLI as above.
+2. Expand **Advanced**.
+3. Replace the default **`https://api.github.com`** with your Enterprise API root. For **GitHub Enterprise Server**, the REST API is often at `https://<your-hostname>/api/v3`. Your administrator or [About GitHub’s REST APIs](https://docs.github.com/en/enterprise-server/rest) for your Enterprise version documents the exact base URL.
+
+
+After saving, org-scoped search and private repos on that host should resolve against your Enterprise instance instead of [api.github.com](https://api.github.com).
+
+---
+
+## GitHub CLI (alternative)
+
+If you prefer not to paste a PAT:
+
+1. In **Preferences** → **Git providers** → **GitHub**, open the **GitHub CLI** tab.
+2. Install **GitHub CLI** if needed (on macOS with Homebrew, `brew install gh` is typical—Bruno may show an **Install** action and a note that Homebrew can be installed for you).
+3. Run `gh auth login` in a terminal if prompted, then use **Refresh** in Bruno until the CLI reports signed in.
+
+
+We still **recommend a PAT** for straightforward setup, rotation, and use in environments where the CLI is not installed.
+
+---
+
+## Quick comparison
+
+| Goal | What to use |
+| ---- | ----------- |
+| Import a **public** repo by search | **GitHub** tab, scope **All of GitHub**, no login |
+| Import **private** or **org** repos | Enable **GitHub** under **Git providers** + **PAT** (recommended) or **GitHub CLI** |
+| **Enterprise** GitHub host | Same + **Advanced** → set **API URL** to your server’s API base |
+| Any Git URL without search | **Git repository** tab + paste URL |
+
+---
+
+## Related reading
+
+- [Git integration overview](/git-integration/overview) — init, remotes, commit, push, pull.  
+- [Collaboration via GUI — Provider](/git-integration/using-gui/provider) — remotes and Git workflow with a GitHub remote.  
+- [Fetch in Bruno](/git-integration/embed-bruno-collection) — one-click open for a GitHub repo from a README or site.

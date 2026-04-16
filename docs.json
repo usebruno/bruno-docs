@@ -157,6 +157,13 @@
                     ]
                   },
                   {
+                    "group": "Git Providers",
+                    "pages": [
+                      "git-providers/overview",
+                      "git-providers/github"
+                    ]
+                  },
+                  {
                     "group": "Tests and Scripts",
                     "pages": [
                       {
