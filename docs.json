@@ -21,6 +21,7 @@
                 "group": "Introduction",
                 "pages": [
                   "introduction/getting-started",
+                  "introduction/quick-start",
                   "get-started/bruno-basics/download",
                   "introduction/manifesto",
                   "introduction/feedback-community"

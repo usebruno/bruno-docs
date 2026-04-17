@@ -1,0 +1,468 @@
+---
+title: "Quick Start"
+---
+
+
+Bruno is a Git-friendly, local-first, open-source API client designed for developers. This guide will take you from the basics to more advanced features, helping you build a strong understanding of the Bruno.
+
+By completing the challenges in this guide, you’ll learn how to create simple API requests and gradually move on to writing more complex scripts.
+
+## Prerequisites
+
+- Basic idea of what HTTP and REST are  
+- [Bruno installed](https://www.usebruno.com/downloads) (v3.x)  
+- **Git** (only needed for the Git challenge)  
+- **Node.js** (only needed for the CLI challenge)
+
+## Getting started
+
+You can refer to the **[Bruno Starter Guide](https://github.com/bruno-collections/bruno-starter-guide)** collection for solutions:
+
+1. **Fetch in Bruno** button to open the collection in Bruno, **or** git clone the repository [Bruno Starter Guide](https://github.com/bruno-collections/bruno-starter-guide).
+
+<div className="flex justify-center my-10">
+  <a href="https://fetch.usebruno.com?url=https%3A%2F%2Fgithub.com%2Fbruno-collections%2Fbruno-starter-guide.git" target="_blank" rel="noopener noreferrer">
+    <img
+      src="https://fetch.usebruno.com/button.svg"
+      alt="Fetch in Bruno"
+      style={{ width: '160px', height: '40px' }}
+      width="160"
+      height="40"
+      noZoom
+    />
+  </a>
+</div>
+
+Work through the challenges **in order**. Each step assumes the previous one.
+
+---
+
+## 1. Create a collection
+
+**Objective:** Create a collection (sequence of requests) to store your API requests.
+
+1. Open Bruno (workspace home).  
+2. Click **+** icon (top-left) → **Create collection**.
+
+![click-icon](/images/screenshots/quick-start/01-create-a-collection/01-click-icon-to-create-collection.webp)
+
+3. Enter a name **Bruno Starter Guide** (click on settings icon for advanced options) and choose the desired folder on your system.
+
+![name-collection](/images/screenshots/quick-start/01-create-a-collection/02-name-collection.webp)
+
+4. Select file format (YAML or BRU -> YAML recommended) and click **Create**.
+
+![store-collection](/images/screenshots/quick-start/01-create-a-collection/03-store-collection.webp)
+
+Congratulations! You have successfully created your first collection. The UI should look like this:
+
+![after-collection](/images/screenshots/quick-start/01-create-a-collection/04-after-collection.webp)
+
+**Success Criteria:** 
+- Collection is visible in the sidebar with name **Bruno Starter Guide**.
+- Collection is created with the desired file format (YAML recommended).
+---
+
+## 2. Create a request
+
+**Objective:** Create and execute your first request from the collection.
+
+1. Click on the collection contex menu (...) → create a **New Request**.  
+
+![create-request](/images/screenshots/quick-start/02-create-a-request/01-new-request.webp)
+
+2. Select 
+- `type` HTTP - (GraphQL, gRPC, WebSocket, or cURL is also supported)
+- `Request Name` as `github-api`
+- `URL` as `https://api.github.com/users/usebruno`.
+
+![name-api](/images/screenshots/quick-start/02-create-a-request/02-name-api.webp)
+
+3. Send the request by clicking the arrow button or pressing Cmd/Ctrl + Enter.
+
+![execute-request](/images/screenshots/quick-start/02-create-a-request/03-execute-req.webp)
+
+You have successfully sent your first request. The UI should look like this:
+
+![after-request](/images/screenshots/quick-start/02-create-a-request/04-after-req.webp)
+
+**Success Criteria:** 
+- Status is **200** (Green text - 200 OK)
+- Response body with details of the `usebruno` user.
+
+---
+
+## 3. Send a request with data
+
+**Objective:** Create a request with **POST** method and send data with API request.
+
+1. Create a new request with:
+   - Request type as **HTTP**
+   - Request name as `echo-bru` 
+   - method as **POST**
+   - URL as `https://echo.usebruno.com`
+  
+
+![create-request-with-data](/images/screenshots/quick-start/03-send-a-request-with-data/01-create-echo-bru.webp)
+
+2. Go to **Body** tab and select → **JSON** as a option
+
+![select-json-as-body](/images/screenshots/quick-start/03-send-a-request-with-data/02-select-json-body-option.webp)
+
+3. Add the following JSON data to the body of the request:
+
+```json
+{
+  "title": "Bruno",
+  "msg": "Loved by developers. Built for developers."
+}
+```
+
+3. Execute the request by clicking the arrow button or pressing Cmd/Ctrl + Enter.
+
+![Send data to the API](/images/screenshots/quick-start/03-send-a-request-with-data/03-send-json-data.webp)
+
+You have successfully sent **JSON** data to the API. This is Bruno echo endpoint, so you will receive the same data in the response.
+
+**Success Criteria:** 
+- JSON data is sent to the API.
+- Response body contains the same JSON data.
+
+---
+
+## 4. Create an environment
+
+**Objective:** Create a environment variable to store a **URL** and reuse it with `{{baseUrl}}`.
+
+1. Open **Environments** settings (top-right — **No environment**).  
+
+![no-environment](/images/screenshots/quick-start/04-create-env/01-no-environment.webp)
+
+2. Click on **Create** button in **Collection** section 
+3. Name the environment as `local` in environments popup
+
+![create-environment](/images/screenshots/quick-start/04-create-env/02-create-local-environment.webp)
+   
+3. Add a below variable to the environment:
+   - **Name:** `baseURL`
+   - **Value:** `https://echo.usebruno.com`
+
+![add-key-value-to-environment](/images/screenshots/quick-start/04-create-env/03-add-key-value.webp)
+
+3. click the **Save** button.
+
+4. Go back to `echo-bru` request and set the `URL` to `{{baseURL}}` and select the `local` environment from the environment dropdown.
+
+![after-baseur](/images/screenshots/quick-start/04-create-env/04-after-baseurl.webp)
+
+You have successfully created your first environment variable and reused it in the request. Bruno supports multiple types of variables, read more about them: [Environment variables](/variables/overview)
+
+**Success Criteria:** 
+- Environment is created with the name `local`.
+- Environment variable `baseURL` is added with the value `https://echo.usebruno.com`.
+- Request `echo-bru` is executed successfully with the `URL` set to `{{baseURL}}`
+- Response status is **200**.
+
+
+---
+
+## 5. Write a test case
+
+**Objective:** write a assertion and test script to validate the response of the request.
+
+1. Open your **echo-bru** request.  
+2. Go to **Assert** tab and enter below details: 
+
+| Expression | Operator | Value |
+|------------|----------|-------|
+| `res.status` | `equals` | `200` |
+| `res.body.title` | `equals` | `Bruno` |
+
+3. Execute the request and go to **Tests** tab in response section to confirm the assert passes (green).
+
+![write-assertion](/images/screenshots/quick-start/05-write-test-case/01-write-assert.webp)
+
+
+4. Go to **Tests** tab in request section   and copy and paste below snippet:
+
+```javascript
+test("body has title", function () {
+  expect(res.getBody()).to.have.property("title");
+  });
+
+test("200 status code", function () {
+  expect(res.getStatus()).to.eql(200);
+});
+```
+
+4. Execute the request (Cmd/Ctrl + Enter) and confirm tests pass (green).
+
+![write-test-case](/images/screenshots/quick-start/05-write-test-case/02-write-test-case.webp)
+
+**Success Criteria:** 
+- Assert and Tests passes (green) without any errors.
+
+Read more about test and assertions: [Tests introduction](/testing/tests/introduction) 
+
+---
+
+## 6. Write a script
+
+**Objective:** Send request with pre-request script to set the body of the request.
+
+<Info>
+  `req` object is only available in pre-request script.
+</Info>
+
+1. Create a new request with:
+   - Request type as **HTTP**
+   - Request name as `script-request`
+   - method as **POST**
+   - URL as `https://echo.usebruno.com`
+
+![create-script-req](/images/screenshots/quick-start/06-write-script/01-create-script-req.webp)
+  
+2. Go to tab **Script** → **Pre-request** and enter below snippet:
+
+```javascript
+req.setBody({
+  "name":"<your name>",
+  "msg":"<your message>"
+})
+
+req.setHeader("Content-Type", "application/json");
+req.setBody(body);
+console.log(req.getName())
+```
+3. Execute the request and response body should be set to the body of the request.
+
+![after-script](/images/screenshots/quick-start/06-write-script/02-after-script.webp)
+
+Open devtools from bottom-right corner and you will see the console output of the script.
+
+Congrtas, you have successfully written a script to set the body of the request with header values and console logs visible in the devtools.
+
+**Success Criteria:** 
+- Script is executed successfully and console output is visible in the devtools.
+- Response body is set to the body of the request with `req.setBody()` function.
+- Header is set to the json content type with `req.setHeader()` function.
+
+Read more about script: [JavaScript Reference](/testing/script/javascript-reference)
+
+---
+
+## 7. Authentication
+
+**Objective:** Send a request with authentication to the API.
+
+1. Create a new request with:
+   - Request type as **HTTP**
+   - Request name as `auth-request`
+   - method as **GET**
+   - URL as `https://httpbin.org/basic-auth/usebruno/1234`
+
+![create-auth-req](/images/screenshots/quick-start/07-authentication/01-create-auth-req.webp)
+
+2. Go to request **Auth** tab and select **Basic Auth** from the Auth Type dropdown list.
+
+![select-basic-auth](/images/screenshots/quick-start/07-authentication/02-select-basic-auth.webp)
+
+3. Enter the username and password as `usebruno` and `1234` respectively.
+4. Execute the request (Cmd/Ctrl + Enter). 
+
+![enter-password](/images/screenshots/quick-start/07-authentication/03-enter-password.webp)
+
+You'll see the authenticated as true in the response body.
+You have successfully sent a request with authentication to the API. 
+
+**Success Criteria:** 
+- Authentication is set to the basic auth with the username and password.
+- Response body contains the authenticated as true.
+
+Read more about authentication: [Authentication](/auth/overview)
+
+## 8. Collection Runner
+
+**Objective:** Run all requests in the collection using collection runner.
+
+1. Go to the collection context menu (...) and select **Run**.  
+
+![select-run](/images/screenshots/quick-start/08-collection-run/01-select-run.webp)
+
+2. Click on **Configure requests to run** and select all requests in the collection.
+
+![config-req](/images/screenshots/quick-start/08-collection-run/02-config-req.webp)
+
+3. Click **Run Selected Requests** button to start the run.
+
+![run-select-req](/images/screenshots/quick-start/08-collection-run/03-run-select-req.webp)
+
+You'll see all requests running one by one in the collection runner.
+
+![after-run](/images/screenshots/quick-start/08-collection-run/04-after-run.webp)
+
+**Success Criteria:** 
+- All requests are running one by one in the collection runner.
+- Response status is **200** for all requests.
+- Response body contains the data of the request.
+
+Read more about collection runner: [Collection Runner](/collection-runner/overview)
+
+---
+
+## 9. API Documentation
+**Objective:** Create automated API documentation for the collection.
+
+1. Go to collection context menu (...) and select **Generate Docs**.
+
+![collecting-settings](/images/screenshots/quick-start/09-api-docs/01-api-docs.webp)
+
+2. Click on the **Generate** button to generate automated API documentation.
+
+![generate-docs](/images/screenshots/quick-start/09-api-docs/02-generate-docs.webp)
+
+3. Save the documentation file (html) to your desired location.
+
+You have successfully generated automated API documentation for the collection. The generated documentation is in html format and can be opened in any browser. 
+
+You can share it with your team or deploy it to your own server.  
+
+![after-generate-docs](/images/screenshots/quick-start/09-api-docs/03-after-generated-docs.webp)
+
+Click on **Try** button to open it as API playground.
+
+![try-docs](/images/screenshots/quick-start/09-api-docs/04-after-try-playground.webp)
+
+**Success Criteria:** 
+- API documentation is created for the collection.
+- HTML file is generated with the content of the collection.
+
+Read more about API documentation: [API Documentation](/api-docs/overview)
+
+## 10. Git collaboration
+
+**Objective:** Initialize Bruno collection to a Git repository and push it to GitHub.
+
+<Info>
+  **Bruno 3.0+:** Git basic UI features are available in the open-source app. See [Git integration (GUI)](/git-integration/using-gui/intro).
+</Info>
+
+1. Open the **Git** panel (top bar) and click **Initialize** to turn the collection folder into a repository.
+
+![Initialize-git](/images/screenshots/quick-start/10-git-collab/01-init-git.webp)
+
+2. Stage and commit your changes from the Git panel (or use `git add` / `git commit` in a terminal).
+
+![stage-changes](/images/screenshots/quick-start/10-git-collab/02-commiit-changes.webp)
+
+3. Go to [GitHub](https://github.com/)
+   - Create an empty repository (click on the **+** button and select **New repository**)
+   - Enter name **bruno-starter-guide** and other details and copy the HTTPS URL
+   ```bash
+   https://github.com/yourusername/bruno-starter-guide.git
+   ```
+4. Go to collection **Git** panel and click on **Remotes** from bottom-left corner.
+
+![add-remotes](/images/screenshots/quick-start/10-git-collab/03-add-remotes.webp)
+
+5. Click on **Add Remote** button and enter the following details:
+   - **Remote Name:** `origin`
+   - **URL:** `https://github.com/yourusername/bruno-starter-guide.git`
+
+![add-remote](/images/screenshots/quick-start/10-git-collab/04-add-remote.webp)
+
+5 Push your default (main) branch to the remote repository.
+
+![push-changes](/images/screenshots/quick-start/10-git-collab/05-push-changes.webp)
+
+Go to your remote repository and you will see the collection is pushed to the remote repository. You can share it with your team and collaborate on it.  
+
+**Success Criteria:** 
+- Git repository is initialized for the collection.
+- Remote repository is created and connected.
+- Collection is pushed to the remote repository.
+
+More: [Using the Git UI](/git-integration/using-gui/intro)
+
+---
+
+## 11. Run a request through the CLI
+
+**Objective:** Install **Bruno CLI** and run the all requests in the collection from a terminal.
+
+<Note>
+  You need to make sure you have installed Node.js on your system.
+</Note>
+
+1. Install Bruno CLI: 
+```bash
+npm install -g @usebruno/cli
+```  
+2. Open terminal and Go to the **Bruno Starter Guide** collection (folder with `bruno.json`). 
+
+```bash
+cd path/to/bruno-starter-guide
+```
+
+3. Run all requests: 
+```bash
+bru run
+```  
+4. Optional: run with a named environment e.g. 
+```bash
+bru run --env local
+```
+
+You will see all requests running one by one in the collection runner with execution summary table with metrics and results.
+
+**Success Criteria:** 
+- All requests are running one by one in the collection runner.
+- Response status is **200** for all requests.
+- Response body contains the data of the request.
+
+More: [Bruno CLI](/bru-cli/overview)
+
+---
+
+## 12. OpenAPI specifications
+
+**Objective:** Export your collection as an **OpenAPI** document (shareable API description).
+
+1. Open the collection context menu (...) and select **Share** option.
+
+![select-oas](/images/screenshots/quick-start/12-oas/01-select-share.webp)
+
+2. Go to **Export** tab, select **OpenAPI Specification** option and click on **Proceed** button.  
+
+![export-openapi](/images/screenshots/quick-start/12-oas/02-openapi-export.webp)
+
+3. Enter the name of the file and location and click on **Create** button.
+
+![save-oas](/images/screenshots/quick-start/12-oas/03-save-oas.webp)
+
+You have successfully exported your collection as an OpenAPI document. The OpenAPI file is created with `.yaml` extension and stored in you file system.
+
+You can view and import the OpenAPI file in Bruno. Please refer to [OpenAPI Specification](/open-api/overview) for more details.
+
+**Success Criteria:** 
+- OpenAPI file is created where you chose and opens without errors 
+- Export OpenAPI file with `.yaml` extension.
+
+More: [OpenAPI Specification](/open-api/overview)
+
+---
+
+Congratulations on completing the Quick Start guide! You have learned the basics of Bruno and how to use it to create API requests. Feel free to dive into the advanced guides to learn more about Bruno.
+
+- **Auth** — [Authentication](/auth/overview)  
+- **Secrets** — [.env and secret managers](/secrets-management/dotenv-file)  
+- **Collection / request docs** — Markdown in **Docs** tabs
+
+
+## Submit Challenge
+
+If you have completed all the challenges, you can submit your challenge by exporting your collection as an OpenAPI document (refer challenge 12) and submitting it to the `submissions` folder with your name `<your-name.yaml>` in **bruno-starter-guide** repository.
+
+
+---
+
