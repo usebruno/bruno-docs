@@ -822,7 +822,7 @@ Here are all available utility methods:
 | bru.runRequest(requestPathName)  | Executes a request by its path name.                      |
 | bru.getAssertionResults()        | Retrieves the results of assertions.                      |
 | bru.getTestResults()             | Fetches the test results.                                 |
-| bru.cookies.jar()                | Creates a cookie jar instance for managing cookies.       |
+| bru.cookies              | Request-scoped helpers on `bru.cookies` (read / iterate / write) and optional `bru.cookies.jar()`. |
 
 ### `bru.sendRequest(options, callback?)`
 
@@ -962,11 +962,89 @@ Get assertion results for the current request (use in **test** scripts).
 const assertionResults = await bru.getAssertionResults();
 ```
 
-Cookie jar APIs work in pre-request, post-request, and test scripts.
+## Cookies
+
+Cookie helpers on **`bru.cookies`** are **scoped to the current request URL** automatically. You can **read** and **iterate** cookies synchronously, and **write** changes with `async` methods that persist to Bruno’s underlying cookie storage—without constructing a jar or repeating the URL on every call.
 
 <Info>
-  Create a jar with `bru.cookies.jar()`, then call methods on the returned instance.
+  For advanced flows (explicit URL, multiple sites in one script), you can still use **`bru.cookies.jar()`** below; the jar API is unchanged.
 </Info>
+
+### Why use request-scoped helpers?
+
+**Jar-based (still valid):** you create a jar, pass the site URL into each call.
+
+```javascript
+const jar = bru.cookies.jar();
+const session = await jar.getCookie("https://example.com", "session");
+const hasAuth = await jar.hasCookie("https://example.com", "auth");
+await jar.setCookie("https://example.com", "token", "abc123");
+```
+
+**Request-scoped (simpler):** Bruno uses the active request URL for you.
+
+```javascript
+const session = bru.cookies.get("session");
+const hasAuth = bru.cookies.has("auth");
+await bru.cookies.add({ key: "token", value: "abc123" });
+
+bru.cookies.each((c) => console.log(c.key, c.value));
+const authCookies = bru.cookies.filter((c) => c.key.startsWith("auth_"));
+const asObject = bru.cookies.toObject();
+```
+
+Use whichever style fits your script; both operate on the same stored cookies for the request.
+
+### Read methods (sync)
+
+| Method | Description |
+| ------ | ----------- |
+| `bru.cookies.get(name)` | Cookie **value** for `name` at the current request URL (`undefined` when missing). |
+| `bru.cookies.has(name)` | `true` if a cookie with that name exists. |
+| `bru.cookies.has(name, value)` | `true` if a cookie exists with that **name** and **value**. |
+| `bru.cookies.one(id)` | Look up a cookie entry by **id** when entries expose ids. |
+| `bru.cookies.all()` | All cookie entries for the scoped URL. |
+| `bru.cookies.count()` | Number of cookies. |
+| `bru.cookies.idx(n)` | Cookie at numeric index `n`. |
+| `bru.cookies.indexOf(item)` | Index of a given cookie entry. |
+| `bru.cookies.toObject()` | Plain object: cookie **name** → **value** (handy for logging or assertions). |
+| `bru.cookies.toString()` | String representation of the cookie set. |
+
+### Iteration methods (sync)
+
+| Method | Description |
+| ------ | ----------- |
+| `bru.cookies.each(fn)` | Invoke `fn` for each cookie (e.g. `(c) => { ... }` with `c.key` / `c.value`). |
+| `bru.cookies.find(fn)` | First cookie matching the predicate. |
+| `bru.cookies.filter(fn)` | All cookies matching the predicate. |
+| `bru.cookies.map(fn)` | Map each cookie to a new value. |
+| `bru.cookies.reduce(fn, initial)` | Reduce over cookies. |
+
+### Write methods (async)
+
+These update the persisted jar for the scoped URL—use **`await`** in async scripts.
+
+| Method | Description |
+| ------ | ----------- |
+| `await bru.cookies.add(obj)` | Add a cookie; `obj` includes at least **`key`** and **`value`** (plus optional `domain`, `path`, `expires`, `maxAge`, `secure`, `httpOnly`, `sameSite`, etc., when supported). |
+| `await bru.cookies.upsert(obj)` | Add or replace a cookie with the same identity rules as your Bruno version. |
+| `await bru.cookies.remove(name)` | Remove by cookie name. |
+| `await bru.cookies.delete(name)` | Same intent as `remove` (alias for ergonomics). |
+| `await bru.cookies.clear()` | Remove all cookies for the scoped context. |
+
+```javascript
+await bru.cookies.add({ key: "session", value: res.body.sessionId, path: "/", maxAge: 3600 });
+```
+
+### Where it runs
+
+Request-scoped cookie helpers are available in **pre-request**, **post-response**, and **test** scripts in both the **Node VM** runtime and the **QuickJS** sandbox, matching the environments where your other `bru.*` script APIs run.
+
+---
+
+### Cookie jar (`bru.cookies.jar()`)
+
+Low-level jar APIs work in pre-request, post-request, and test scripts. Create a jar when you need an explicit URL or jar instance not tied to a single request context.
 
 ### `bru.cookies.jar()`
 
