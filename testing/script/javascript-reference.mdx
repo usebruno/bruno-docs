@@ -1014,11 +1014,11 @@ Use whichever style fits your script; both operate on the same stored cookies fo
 
 | Method | Description |
 | ------ | ----------- |
-| `bru.cookies.each(fn)` | Invoke `fn` for each cookie (e.g. `(c) => { ... }` with `c.key` / `c.value`). |
-| `bru.cookies.find(fn)` | First cookie matching the predicate. |
-| `bru.cookies.filter(fn)` | All cookies matching the predicate. |
-| `bru.cookies.map(fn)` | Map each cookie to a new value. |
-| `bru.cookies.reduce(fn, initial)` | Reduce over cookies. |
+| `bru.cookies.each(fn)` | Synchronously iterates over all cookies and calls the provided function `fn(cookie)` for each one. Useful for logging or processing each cookie in turn. |
+| `bru.cookies.find(fn)` | Returns the first cookie that matches the predicate function `fn(cookie)`. If no cookie matches, returns `undefined`. |
+| `bru.cookies.filter(fn)` | Returns an array of all cookies for which the predicate function `fn(cookie)` returns `true`. |
+| `bru.cookies.map(fn)` | Maps each cookie to a new value by applying the function `fn(cookie)`, returning an array of the results. |
+| `bru.cookies.reduce(fn, initial)` | Reduces the list of cookies to a single value using the reducer function `fn(acc, cookie)`, starting with `initial` as the accumulator. |
 
 ### Write methods (async)
 
