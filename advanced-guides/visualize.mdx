@@ -9,17 +9,16 @@ Bruno provides a powerful visualization feature that allows you to display API r
 bru.visualize(type, config)
 ```
 
-1. **type**: The type of visualization to render (e.g., 'table', 'html').
+1. **type**(string): The type of visualization to render (e.g., 'table', 'html').
 
-2. **config**: Depends on `type`:
+2. **config**(object): Depends on `type`:
 
     - **`table`**: **name**, **provider** (`ag-grid`, `react-table`), **props**.
     - **`html` (raw HTML)**: **name**, **content** — unchanged from earlier releases.
-    - **`html` (Handlebars)**: **name**, **template** (Handlebars string), **data** (object passed into the template), optional **options**. Handlebars is compiled server-side; the Visualize tab receives rendered HTML plus **rawData** for Postman-style callbacks (see below).
+    - **`html` (Handlebars)**: **name**, **template** (Handlebars string), **data** (object passed into the template), optional **options**. 
+    
+    Handlebars is compiled server-side; the Visualize tab receives rendered HTML plus **rawData** for Postman-style callbacks (see below).
 
-<Warning>
-  **Handlebars HTML mode** is **not available in QuickJS (safe mode)**. If safe mode is on, Bruno throws a clear error—use the full JavaScript sandbox for Handlebars visualizations, or switch to raw **`content`** HTML. See [JavaScript sandbox](/get-started/configure/javascript-sandbox).
-</Warning>
 
 ## Supported Visualization Types and Providers
 
@@ -165,9 +164,9 @@ bru.visualize('html', {
 });
 ```
 
-Bruno compiles **template** with **data** on the server and opens the result in the **Visualize** tab. **`rawData`** is passed alongside rendered HTML so Postman-compatible scripts in the webview can call **`pm.getData(callback)`** and receive that payload inside the template context.
+Bruno compiles **template** with **data** on the server and opens the result in the **Visualize** tab. **`rawData`** is passed alongside rendered HTML.
 
-#### Clear visualizations — `bru.clearVisualizations()`
+#### `bru.clearVisualizations()`
 
 Clears every visualization registered for the **current request** and resets the internal list (same idea as Postman’s `pm.visualizer.clear()`).
 
