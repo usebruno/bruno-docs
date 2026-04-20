@@ -939,11 +939,11 @@ See [JavaScript Sandbox](/get-started/configure/javascript-sandbox#detecting-san
 Run another request in the collection by path/name and await its response.
 
 <Warning>
-  Do not call from **collection-level** scripts — it can cause a recursive loop.
+  Do not call from **collection-level** scripts, it can cause a recursive loop and make sure to use double quotes for the request-name.
 </Warning>
 
 ```javascript
-const requestResponse = await bru.runRequest("echo/echo json");
+const requestResponse = await bru.runRequest("auth-api");
 ```
 
 ### `bru.getTestResults()`
