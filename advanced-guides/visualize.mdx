@@ -9,15 +9,16 @@ Bruno provides a powerful visualization feature that allows you to display API r
 bru.visualize(type, config)
 ```
 
-1. **type**: The type of visualization to render (e.g., 'table', 'html').
+1. **type**(string): The type of visualization to render (e.g., 'table', 'html').
 
-2. **config**: A configuration object that includes:
+2. **config**(object): Depends on `type`:
 
-    - **name**: The name of the visualization instance.
+    - **`table`**: **name**, **provider** (`ag-grid`, `react-table`), **props**.
+    - **`html` (raw HTML)**: **name**, **content** — unchanged from earlier releases.
+    - **`html` (Handlebars)**: **name**, **template** (Handlebars string), **data** (object passed into the template), optional **options**. 
+    
+    Handlebars is compiled server-side; the Visualize tab receives rendered HTML plus **rawData** for Postman-style callbacks (see below).
 
-    - **provider**: The rendering library or provider used to display the visualization (e.g., 'ag-grid', 'react-table').
-
-    - **props**: Additional properties required by the provider to configure the visualization.
 
 ## Supported Visualization Types and Providers
 
@@ -110,11 +111,13 @@ The `header` property only accepts **string values**. Use strings like `header: 
 
 This example renders a large table using the react-table provider, with custom headers and filter variants.
 
-### HTML Visualization ('html')
+### HTML visualization (`'html'`)
 
-You can also render custom HTML content using the html type. This allows for advanced templating and formatting, such as generating a data table or a report.
+You can render either **raw HTML** (existing behavior) or a **Handlebars** template with structured **data**.
 
-#### Using **HTML** String
+#### Raw HTML (`content`)
+
+Pass a full HTML string. This mode works in **QuickJS safe mode** and behaves as before.
 
 *Example:*
 
@@ -147,6 +150,43 @@ bru.visualize('html', {
 ```
 
 This example will render an HTML table with predefined data using the html type.
+
+#### Handlebars template (`template`, `data`, `options`)
+
+Use Handlebars when you want a small template plus JSON data instead of building HTML strings in script:
+
+```javascript copy
+bru.visualize('html', {
+  name: 'userCard',
+  template: '<div><h1>{{title}}</h1><p>{{message}}</p></div>',
+  data: { title: 'Hello', message: res.body?.name || 'Guest' },
+  options: {} // optional; mirrors Postman’s third argument when used
+});
+```
+
+Bruno compiles **template** with **data** on the server and opens the result in the **Visualize** tab. **`rawData`** is passed alongside rendered HTML.
+
+#### `bru.clearVisualizations()`
+
+Clears every visualization registered for the **current request** and resets the internal list (same idea as Postman’s `pm.visualizer.clear()`).
+
+```javascript copy
+bru.clearVisualizations();
+```
+
+#### Postman `pm.visualizer` mapping
+
+When you **import** a Postman collection, script calls are translated automatically:
+
+| Postman | Bruno |
+| -------- | ------ |
+| `pm.visualizer.set(template, data)` | `bru.visualize('html', { template, data })` (plus `name` when you author in Bruno) |
+| `pm.visualizer.set(template, data, options)` | `bru.visualize('html', { template, data, options })` |
+| `pm.visualizer.clear()` | `bru.clearVisualizations()` |
+
+**Export** from Bruno back to Postman performs the **inverse** mapping for the same patterns. Table visualizations (**ag-grid**, **react-table**) and raw **`content`** HTML are unchanged by this translation.
+
+Import/export translation is covered by the collection converters; see **[Postman migration](/get-started/import-export-data/postman-migration)** and **[Converters overview](/converters/overview)**.
 
 ## Using API Response Data
 
@@ -523,14 +563,17 @@ bru.visualize('html', {
 
 | Name     | Type     | Description                                                                                     |
 |----------|----------|-------------------------------------------------------------------------------------------------|
-| `type`   | `string` | The type of visualization to render. Supported values: `'table'`, `'html'`.                     |
-| `config` | `object` | Configuration object for the visualization. See below for available properties.                 |
+| `type`   | `string` | Visualization kind: `'table'` or `'html'`.                                                     |
+| `config` | `object` | See **Config properties** below. Table vs HTML use different fields.                            |
 
-### Config Properties
+### Config properties
 
-| Property   | Type     | Description                                                                                     |
-|------------|----------|-------------------------------------------------------------------------------------------------|
-| `name`     | `string` | Name of the visualization instance.                                                             |
-| `provider` | `string` | The provider or rendering engine to use for the visualization. E.g., `'ag-grid'`, `'react-table'`. |
-| `props`    | `object` | Additional properties required by the provider to configure the visualization.                  |
-| `content`  | `string` | (For `html` type only) The HTML content to render.                                             |
+| Property    | Type     | Used with | Description |
+|-------------|----------|-----------|-------------|
+| `name`      | `string` | `table`, `html` | Instance label in the Visualize tab. |
+| `provider`  | `string` | `table` only | `ag-grid` or `react-table`. |
+| `props`     | `object` | `table` only | Provider-specific row/column config. |
+| `content`   | `string` | `html` (raw) | Full HTML string (safe mode OK). |
+| `template`  | `string` | `html` (Handlebars) | Handlebars source (not in QuickJS safe mode). |
+| `data`      | `object` | `html` (Handlebars) | Template context / Postman `data` argument. |
+| `options`   | `object` | `html` (Handlebars, optional) | Extra Handlebars options; mirrors Postman’s third argument when present. |

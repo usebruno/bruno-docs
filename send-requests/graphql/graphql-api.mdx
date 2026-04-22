@@ -7,44 +7,71 @@ import { BrunoButton } from "/snippets/BrunoButton.jsx";
 
 Bruno provides the capability to send GraphQL requests, allowing you to interact with APIs that use the GraphQL query language.
 
-### Create GraphQL request
+## Create GraphQL request
 
-1. Create new request inside collection.
-2. Select **GraphQL** as request type.
-3. Provide **URL** and **Name** in the input box.
-4. Click on **Create** button.
+1. Create new request from collection context menu (...) and select **New Request**.
+2. Select **GraphQL** as request type with:
+    - **URL**: The URL of the GraphQL endpoint.
+    - **Name**: The name of the request.
+3. Click on **Create** button.
 
 ![create-graphql-request](/images/screenshots/send-request/graphql/create-graphql-request.webp)
 
-The default method for working with GraphQL APIs is POST, but you can adjust it based on your preferences.
 
-### GraphQL request with query
+## GraphQL request with query
 
-Bruno provides a dedicated section called **Query** where you can write and execute all your GraphQL queries. This section is designed to make it easy for you to interact with the GraphQL API by allowing you to define the data you want to retrieve or manipulate.
+After creating the request:
+- Go to **Query** section where you can write and execute all your GraphQL queries
+- You can also use the **Variables** section to pass variables to your query
 
-![query-graphql](/images/screenshots/send-request/graphql/graphql-req-query.webp)
+![query-graphql](/images/screenshots/send-request/graphql/02-gql-query.webp)
 
 **Example Query:**
 
-You can test this query using the Countries GraphQL API: `https://countries.trevorblades.com/graphql`
+You can test this query using the below GraphQL API: `https://graphqlzero.almansi.me/api`
 
 ```graphql
-query Query {
-  country(code: "BR") {
-    name
-    native
-    capital
-    emoji
-    currency
-    languages {
-      code
-      name
+query Albums {
+  albums {
+    data {
+      id
+      title
     }
   }
 }
 ```
 
-This query fetches country information for Brazil (code: "BR"), including its name, native name, capital, emoji, currency, and languages.
+##  Query builder
+
+**Query builder** is a tool that helps you build your GraphQL queries easily. It allows you to select the fields you want to retrieve from the API and generate the query for you. Follow the below steps to use Query builder in Bruno.
+
+1. Click on **query builder** icon next to prettify icon.
+
+![gql-builder](/images/screenshots/send-request/graphql/03-gql-builder.webp)
+
+2. Select the fields you want to retrieve from the API and generate the query for you.
+
+<Note>
+  You can also use the **Search** input to search for the fields you want to retrieve from the API.
+</Note>
+
+![gql-builder-ui](/images/screenshots/send-request/graphql/04-gql-builder-ui.webp)
+
+3. Click on **Send** button to execute the query.
+
+### Query Builder with mutations
+
+Mutation is use to modify data in the GraphQL API. Follow the below steps to use Mutation in Query builder.
+
+1. Click on **Mutation** from query builder.
+
+2. Select the fields you want to modify/update from the API and generate the query for you.
+
+3. Execute the request by clicking on **Send** button.
+
+![mutation-builder](/images/screenshots/send-request/graphql/05-gql-mutations.webp)
+
+
 
 ## Get Started with GraphQL APIs
 

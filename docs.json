@@ -158,6 +158,13 @@
                     ]
                   },
                   {
+                    "group": "Git Providers",
+                    "pages": [
+                      "git-providers/overview",
+                      "git-providers/github"
+                    ]
+                  },
+                  {
                     "group": "Tests and Scripts",
                     "pages": [
                       {
@@ -259,6 +266,7 @@
                       "auth/digest",
                       "auth/aws-signature",
                       "auth/ntlm",
+                      "auth/oauth1",
                       {
                         "group": "OAuth 2.0",
                         "pages": [

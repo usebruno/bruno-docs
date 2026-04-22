@@ -2,11 +2,15 @@
 title: "Overview"
 ---
 
-Bruno can send requests using GraphQL, an open-source query language and runtime for APIs.
+Bruno can send requests using GraphQL, an open-source query language and runtime for APIs. Each GraphQL request has a URL (the data endpoint) and a query (defining the data to retrieve or modify).
 
-## GraphQL request
+## GraphQL request interface
 
-GraphQL APIs let clients request only the data they need through a single endpoint. It’s schema-driven, allowing clients to introspect and avoid overfetching or underfetching data. Each GraphQL request has a URL (the data endpoint) and a query (defining the data to retrieve or modify).
+GraphQL APIs let clients request only the data they need through a single endpoint. It’s schema-driven, allowing clients to introspect and avoid overfetching or underfetching data. 
+
+**Query builder** is also supported to help you build your queries easily. 
+
+![gql-interface](/images/screenshots/send-request/graphql/01-gql-interface.webp)
 
 The API schema defines available fields, and the request may include authentication, headers, and settings as needed.
 
