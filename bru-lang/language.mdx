@@ -24,6 +24,50 @@ headers {
 ```
 Any key in the dictionary block can be prefixed with `~` to indicate that it is disabled.
 
+### Annotations
+Entries in a dictionary block can have annotations. Annotations are placed on the line above the key-value pair they apply to, prefixed with `@`.
+
+```bru
+headers {
+  @description('Content type for JSON requests')
+  content-type: application/json
+  @deprecated
+  ~old-header: old-value
+}
+```
+
+An annotation can have:
+- **No argument** — acts as a flag (e.g. `@string`, `@deprecated`)
+- **A string argument** — wrapped in single or double quotes (e.g. `@description('my header')`)
+- **An unquoted argument** — for simple values like numbers (e.g. `@version(2)`)
+- **A multiline argument** — wrapped in triple single quotes for values spanning multiple lines:
+  ```bru
+  headers {
+    @description('''
+      This header is used
+      for authentication
+    ''')
+    Authorization: Bearer {{token}}
+  }
+  ```
+
+Annotations are supported in all dictionary blocks, including `headers`, `params:query`, `params:path`, `vars:pre-request`, `vars:post-response`, `body:form-urlencoded`, `body:multipart-form`, `assert`, and environment `vars`.
+
+Multiple annotations can be stacked above a single entry:
+```bru
+headers {
+  @string
+  @description('API version')
+  x-api-version: 2
+}
+```
+
+<Warning>
+Annotations must appear on their own line above the entry. Inline annotations (e.g. `@string key: value`) are not supported and will cause a parse error.
+</Warning>
+
+If an entry has no annotations, the output is unchanged — this preserves backward compatibility with existing `.bru` files.
+
 ### Text block
 A text block is a set of lines
 ```bash
