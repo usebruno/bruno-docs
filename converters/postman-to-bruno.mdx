@@ -1,6 +1,7 @@
 ---
 title: "Postman Conversions"
 sidebarTitle: "Postman to Bruno"
+description: "Convert Postman collections and environments to Bruno format using the @usebruno/converters package."
 ---
 
 <Tabs>
@@ -13,7 +14,7 @@ sidebarTitle: "Postman to Bruno"
   const brunoCollection = postmanToBruno(postmanCollection);
   ```
 
-  ```javascript
+  ```javascript postman-to-bruno.js
   const { postmanToBruno } = require('@usebruno/converters');
   const { readFile, writeFile } = require('fs/promises');
   const path = require('path');
@@ -44,7 +45,7 @@ sidebarTitle: "Postman to Bruno"
   const brunoEnvironment = postmanToBrunoEnvironment(postmanEnvironment);
   ```
 
-  ```javascript 
+  ```javascript postman-env-to-bruno.js
   const { postmanToBrunoEnvironment } = require('@usebruno/converters');
   const { readFile, writeFile } = require('fs/promises');
   const path = require('path');
@@ -67,3 +68,35 @@ sidebarTitle: "Postman to Bruno"
   ```
   </Tab>
 </Tabs>
+
+## Conversion behavior
+
+The converter handles several differences between the Postman and Bruno data formats automatically.
+
+### Non-string value coercion
+
+Postman's schema allows numeric and other non-string values in fields like header values, query parameters, form fields, and authentication credentials. Bruno expects all of these to be strings.
+
+During conversion, non-string values are automatically coerced:
+- Numbers (e.g., `5000`) become their string equivalent (`"5000"`)
+- Objects are serialized as JSON strings
+- `null` or `undefined` values default to an empty string (or a field-specific fallback for auth fields)
+
+This applies to:
+- Request headers, query parameters, and path parameters
+- URL-encoded and multipart form body fields
+- Authentication fields across all auth types (Basic, Bearer, AWS Signature v4, API Key, Digest, OAuth 1.0, and OAuth 2.0)
+- Example request and response fields
+
+### Header format normalization
+
+Postman's v2.1 schema permits headers in several formats. The converter normalizes all of them into Bruno's standard array-of-objects format:
+
+| Postman header format | Example |
+| --- | --- |
+| Array of objects (most common) | `[{ "key": "Content-Type", "value": "application/json" }]` |
+| Mixed array of strings and objects | `["Content-Type: application/json", { "key": "Accept", "value": "*/*" }]` |
+| Single concatenated string | `"Content-Type: application/json\r\nAccept: */*"` |
+| `null` | Treated as an empty header list |
+
+This normalization is applied to request headers, example request headers, and example response headers.
