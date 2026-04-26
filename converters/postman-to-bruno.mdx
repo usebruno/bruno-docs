@@ -67,3 +67,9 @@ sidebarTitle: "Postman to Bruno"
   ```
   </Tab>
 </Tabs>
+
+## Type coercion
+
+The converter automatically handles non-string values that may appear in Postman collections. Numeric and boolean values in headers, query parameters, path parameters, form body fields, and authentication fields are coerced to strings during conversion. Null or undefined values default to empty strings (or appropriate fallback values for auth fields).
+
+Postman collections may also store headers in non-standard formats such as concatenated strings (`"Content-Type: application/json\r\nAccept: */*"`) or mixed arrays of strings and objects. The converter normalizes all header formats into consistent key-value pairs.
