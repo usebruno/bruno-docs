@@ -40,6 +40,8 @@ Returns a response object containing:
 - `headers`: Response headers object
 - `body`: Response body (automatically parsed if JSON)
 - `responseTime`: Response time in milliseconds
+- `duration`: Request duration in milliseconds (alias for `responseTime`)
+- `size`: Response body size in bytes (0 for failed or skipped requests)
 
 ### Examples
 
