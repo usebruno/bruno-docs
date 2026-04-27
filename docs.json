@@ -425,7 +425,6 @@
                 "group": "Advanced Guides",
                 "icon": "graduation-cap",
                 "pages": [
-                  "advanced-guides/starter-guide",
               "advanced-guides/visualize"
             ]
           }
@@ -889,6 +888,11 @@
     }
   },
   "redirects": [
+    {
+      "source": "/advanced-guides/starter-guide",
+      "destination": "/introduction/quick-start",
+      "permanent": true
+    },
     {
       "source": "/introduction",
       "destination": "/introduction/getting-started",
