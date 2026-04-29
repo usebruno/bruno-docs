@@ -33,10 +33,10 @@ bru.visualize(type, config)
 | `props`     | `object` | `table` only | Provider-specific row/column config. |
 | `content`   | `string` | `html` (raw) | Full HTML string (safe mode OK). |
 | `template`  | `string` | `html` (Handlebars) | Handlebars source (not in QuickJS safe mode). |
-| `data`      | `object` | `html` (Handlebars) | Template context / Postman `data` argument. |
-| `options`   | `object` | `html` (Handlebars, optional) | Extra Handlebars options; mirrors Postman’s third argument when present. |
+| `data`      | `object` | `html` (Handlebars) | Template context object — values are available as `{{key}}` inside the template. |
+| `options`   | `object` | `html` (Handlebars, optional) | `Handlebars.compile()` options. Accepts a safe subset of options (see below). |
 
-Handlebars is compiled server-side; the Visualize tab receives rendered HTML plus **rawData** for Postman-style callbacks (see below).
+Handlebars is compiled server-side; the Visualize tab receives the rendered HTML.
 
 
 ## Supported Visualization Types and Providers
@@ -177,17 +177,52 @@ bru.visualize('html', {
   name: 'userCard',
   template: '<div><h1>{{title}}</h1><p>{{message}}</p></div>',
   data: { title: "Bruno", message: res.body.msg },
-  options: {} // optional; mirrors Postman’s third argument when used
+  options: {} // optional; see Handlebars compile options below
 });
 ```
 <Warning>
 Make sure to use `Post-script` while using `res.body` for visualization data.
 </Warning>
 
-Above example require `msg` properties in the response body.
+Above example requires a `msg` property in the response body.
 
+Bruno compiles **template** with **data** server-side and renders the result in the **Visualize** tab.
 
-Bruno compiles **template** with **data** on the server and opens the result in the **Visualize** tab. **`rawData`** is passed alongside rendered HTML.
+#### Handlebars compile options
+
+The `options` field maps directly to [`Handlebars.compile()` options](https://handlebarsjs.com/api-reference/compilation.html). Bruno allows a safe subset:
+
+| Option | Description |
+|---|---|
+| `noEscape` | Skip HTML escaping of output values. |
+| `strict` | Throw on missing fields instead of rendering empty. |
+| `assumeObjects` | Skip object existence checks on paths. |
+| `preventIndent` | Disable auto-indent for partials. |
+| `ignoreStandalone` | Disable standalone tag removal. |
+| `explicitPartialContext` | Disable implicit context for partials. |
+| `knownHelpersOnly` | Only allow pre-registered helpers (compile-time optimization). |
+
+The following options are **excluded** regardless: `data`, `compat`, `knownHelpers`, `allowProtoPropertiesByDefault`, and `allowProtoMethodsByDefault` — these can alter template resolution in unexpected ways or weaken prototype-traversal protections.
+
+**`dangerouslyAllowAllOptions`**
+
+To bypass the allowlist entirely and pass any `Handlebars.compile()` option, set `dangerouslyAllowAllOptions: true` inside `options`:
+
+```javascript copy
+bru.visualize('html', {
+  name: 'userCard',
+  template: '<div><h1>{{title}}</h1><p>{{body}}</p></div>',
+  data: { title: 'Bruno', body: res.body.msg },
+  options: {
+    strict: true,
+    dangerouslyAllowAllOptions: true
+  }
+});
+```
+
+<Warning>
+Use `dangerouslyAllowAllOptions` only when you fully control the template and data. Enabling excluded options like `allowProtoPropertiesByDefault` can expose prototype-traversal vulnerabilities.
+</Warning>
 
 #### `bru.clearVisualizations()`
 
