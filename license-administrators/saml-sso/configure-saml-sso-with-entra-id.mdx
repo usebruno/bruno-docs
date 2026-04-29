@@ -90,7 +90,7 @@ In the **Attributes & Claims** section:
 | Claim Name | Source Attribute | Notes |
 |------------|------------------|-------|
 | **Unique User Identifier (Name ID)** | `user.mail` | Required for user identification. |
-| **roles** | Static value, user attribute, or transformation - e.g., `user.assignedroles`, `user.department`, `user.jobtitle`, etc. | Any role value from Entra ID. Can be mapped to existing user attributes or group membership. |
+| **roles** or **groups** | `user.assignedroles`, `user.groups`, or other attribute | Use `roles` with App Roles (`user.assignedroles`), OR use `groups` via "Add a group claim" for AD/Entra groups. See details below. |
 | **fullName** | Transformation: `user.givenname + " " + user.surname` or equivalent attribute | Represents the combined user's first and last name. |
 
 #### Configuring the `Unique User Identifier (Name ID)` claim
@@ -104,7 +104,16 @@ This claim is required for user identification. It will be mapped to the user's 
 
 ![Configure unique user identifier in Entra ID](/images/screenshots/sso-scim-management/entra/entra-sso-6.webp)
 
-#### Configuring the `roles` claim
+#### Configuring Role or Group Claims
+
+Bruno needs to know what role a user should have (admin or standard user). You can send this information using **either** of two approaches — choose the one that fits your organization:
+
+- **Option A: Use App Roles or User Attributes** — Create a `roles` claim mapped to App Roles, user attributes like `user.department`, or static values
+- **Option B: Use Entra ID Group Claims** — Send existing AD/Entra ID group memberships directly in the SAML assertion
+
+Both approaches are equally valid. Choose based on how your organization already manages access.
+
+##### Option A: Using App Roles or User Attributes
 
 The `roles` claim will represent the user's roles in Bruno. This role value will be mapped to Bruno access levels for the License Portal and for License Activation. These roles could be hardcoded, mapped to existing user attributes, originate from [App Roles](https://learn.microsoft.com/en-us/entra/external-id/customers/how-to-use-app-roles-customers#app-roles), etc.
 
@@ -122,6 +131,53 @@ On the **Attributes & Claims** page:
 ![Configure roles claim in Entra ID](/images/screenshots/sso-scim-management/entra/entra-sso-7.webp)
 
 **Important**: The role value sent by Entra ID will be mapped to Bruno access levels in the License Portal's SSO Settings. You'll configure which role values correspond to admin or user access in Bruno (see Step 2 in the Bruno configuration section below).
+
+##### Option B: Using Entra ID Group Claims
+
+If your organization already has Active Directory or Entra ID groups set up for managing access (e.g., `Bruno-Admins`, `Bruno-Users`), you can use **Group Claims** to send group membership directly in the SAML assertion.
+
+<Info>
+Bruno's backend recognizes SAML attributes named `role`, `roles`, `group`, or `groups` (case-insensitive) for role mapping.
+</Info>
+
+**On the Attributes & Claims page:**
+
+1. Click **"Add a group claim"** (not "Add new claim")
+
+2. Under "Which groups associated with the user should be returned in the claim?", select **"Groups assigned to the application"**
+   - Do **not** select "All groups" or "Security groups" — this can include unrelated groups and may hit Entra ID's 150-group limit for SAML tokens
+
+3. Configure the **Source attribute** based on your group type:
+   - **Cloud-only Entra ID groups**: Select `Cloud-only group display names`
+   - **On-premises AD groups** (synced via Entra Connect): Select `sAMAccountName`
+   - If unsure, try `Cloud-only group display names` first
+
+4. Expand **Advanced options** and ensure:
+   - **"Filter groups" is unchecked** — if checked with empty or incorrect filter fields, no groups will be included in the SAML response
+   - **"Customize the name of the group claim"** is checked
+   - Set the **Name** to `groups` (Bruno recognizes `groups`, `group`, `roles`, and `role` as valid claim names)
+
+5. Click **Save**
+
+<Warning>
+**Important:** The group must be **assigned to the Enterprise Application** in Entra ID. Go to your Bruno Enterprise Application → **Users and groups** → click **Add user/group** and add the relevant groups. Simply being a member of the AD group is not enough — the group must be explicitly assigned to the application.
+</Warning>
+
+After saving, your finalized Attributes & Claims using group claims should look like:
+
+| Claim Name | Type | Value |
+|---|---|---|
+| **Unique User Identifier (Name ID)** | SAML | `user.mail` |
+| **groups** | SAML | `user.groups` |
+| **fullName** | SAML | `Join (user.givenname, " ", user.surname)` |
+
+Then in the Bruno License Portal under **Settings → SSO → Role Mapping**, enter the **exact group display names** as they appear in Entra ID:
+- **Admin Roles**: e.g., `Bruno-Admins` or `Your-Company_Bruno_Admin`
+- **User Roles**: e.g., `Bruno-Users` or `Your-Company_Bruno_Users`
+
+<Warning>
+Role values are case-sensitive and must match exactly with the group names in Entra ID.
+</Warning>
 
 **Example Scenarios:**
 - If you set a static value of `Engineering`, you'll add the value `Engineering` in the Bruno License Portal to the corresponding Admin or User role field
@@ -152,12 +208,13 @@ On the **Attributes & Claims** page:
 Return to the **Attributes & Claims** page and verify the following:
 
 1. Any other claims that are not shown below have been deleted
-2. The `Unique User Identifier (Name ID)`, `roles`, and `fullName` claims are configured as shown above
+2. The `Unique User Identifier (Name ID)` and `fullName` claims are configured
+3. Either `roles` (Option A), `groups` (Option B), or both are configured based on your chosen approach
 
 ![Finalized attributes and claims configuration in Entra ID](/images/screenshots/sso-scim-management/entra/entra-sso-9.webp)
 
 <Warning>
-**Important**: Both `roles` and `fullName` attributes are required for Bruno SAML SSO to function correctly. The attribute names are case-sensitive and must match the appropriate values configured in Entra ID.
+**Important**: A role or group claim (`roles` or `groups`) and the `fullName` attribute are required for Bruno SAML SSO to function correctly. The attribute names are case-sensitive and must match the appropriate values configured in Entra ID.
 </Warning>
 
 {/* TODO: Add screenshot - entra-attributes-claims.png

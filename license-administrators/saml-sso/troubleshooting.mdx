@@ -681,6 +681,75 @@ If you encounter certificate errors:
 - **Enterprise Applications insights**: Application-specific usage and error analytics
 </Warning>
 
+## Troubleshooting Entra ID Group Claims
+
+If you're using Entra ID group claims instead of App Roles, these additional troubleshooting steps apply.
+
+### No Groups Appearing in the SAML Response
+
+**Symptoms:** SSO redirects to Entra ID successfully, user authenticates, but Bruno shows "SSO Login failed" or "You do not have necessary permissions". Decoded SAML response has no `groups` or `roles` attribute in the `<AttributeStatement>`.
+
+**Possible Causes and Fixes:**
+
+1. **No group claim configured**
+   - You need to explicitly add a group claim via "Add a group claim" in Attributes & Claims
+   - Entra ID does not send group information by default
+   - **Fix:** Follow the [Group Claims configuration guide](./configure-saml-sso-with-entra-id#option-b-using-entra-id-group-claims)
+
+2. **"Filter groups" is checked with empty/incorrect filters**
+   - Under Advanced options in the Group Claims panel, if "Filter groups" is checked but the filter fields are empty or misconfigured, all groups will be filtered out
+   - **Fix:** Uncheck "Filter groups" unless you specifically need to filter
+
+3. **Group not assigned to the Enterprise Application**
+   - Even if users are members of the AD group, the group must also be assigned to the Bruno Enterprise Application under **Users and groups**
+   - **Fix:** Go to Enterprise Application → Users and groups → Add the group
+
+4. **Wrong source attribute for cloud-only groups**
+   - If using `sAMAccountName` but your groups are cloud-only Entra ID groups (not synced from on-prem AD), no group names will be resolved
+   - **Fix:** Switch to `Cloud-only group display names` or check "Emit group name for cloud-only groups"
+
+5. **Selected wrong group type**
+   - At the top of the Group Claims panel, ensure you selected "Groups assigned to the application" (not "None", "Security groups", or "All groups")
+
+### How to Inspect the SAML Response
+
+To diagnose group claim issues, inspect the actual SAML response:
+
+1. Open Chrome DevTools → **Network** tab
+2. Check **"Preserve log"** (important — the redirect will clear the log otherwise)
+3. Attempt the SSO login
+4. After the failure, find the POST request to `license.usebruno.com/api/v2/auth/sso/saml/acs/...`
+5. In the **Payload** tab, copy the `SAMLResponse` value
+6. Decode it at [samltool.io](https://samltool.io) or [samltool.com/decode.php](https://www.samltool.com/decode.php)
+7. Look for the `<AttributeStatement>` section — verify a `groups` or `roles` attribute is present with the expected group names
+
+### Group Name Doesn't Match Bruno Role Mapping
+
+**Symptoms:** Groups appear in the SAML response but SSO still fails with "You do not have necessary permissions".
+
+**Cause:** The group name in the SAML assertion doesn't exactly match what's configured in Bruno's Admin Roles or User Roles fields. Values are case-sensitive.
+
+**Fix:** Compare the exact group name from the decoded SAML response with the values in Bruno License Portal → Settings → SSO → Role Mapping. They must match exactly, including casing and spacing.
+
+### Claim Name Not Recognized by Bruno
+
+**Symptoms:** A `groups` attribute is present in the SAML response with correct values, but Bruno still rejects the user.
+
+**Cause:** The claim name may be a full URI (e.g., `http://schemas.microsoft.com/ws/2008/06/identity/claims/groups`) instead of a simple name. Bruno only recognizes: `role`, `roles`, `group`, `groups` (case-insensitive).
+
+**Fix:** In the Group Claims configuration, check **"Customize the name of the group claim"** and set the Name to `groups`. Without this customization, Entra ID uses the full URI format which Bruno does not match.
+
+<Info>
+**Quick Checklist for Group Claims:**
+- "Add a group claim" was used (not "Add new claim")
+- "Groups assigned to the application" is selected
+- "Filter groups" is unchecked under Advanced options
+- "Customize the name of the group claim" is checked and Name is set to `groups`
+- Source attribute matches your group type (cloud-only vs on-prem)
+- The group is assigned to the Enterprise Application (not just users being members)
+- Group name in Bruno role mapping matches exactly (case-sensitive)
+</Info>
+
 ## Getting Additional Help
 
 If you've tried the troubleshooting steps above and still encounter issues:
