@@ -213,8 +213,8 @@ console.log(`Total iterations: ${total}`);
 const username = bru.runner.iterationData.get("username");
 const password = bru.runner.iterationData.get("password");
 
-// Use in request
-bru.request.setBody({
+// Use in request (pre-request script only)
+req.setBody({
     username: username,
     password: password
 });
