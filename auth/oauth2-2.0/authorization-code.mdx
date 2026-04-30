@@ -7,9 +7,11 @@ OAuth2 can be configured in multiple ways, making it adaptable to your needs. Yo
 
 ## OAuth2 Configuration
 
-Select `OAuth 2.0` as the auth method and set the grant type to `Authorization Code`. Fill in the following fields:
+1. Go to **Collection Settings** and navigate to the **Auth** tab.
+2. Select `OAuth 2.0` as the auth method and set the grant type to `Authorization Code`. 
+3. Fill in the following fields:
 
-- **Callback URL**: Also known as **Redirect URI**, this URL must be configured with the IdP*
+- **Callback URL**: Also known as **Redirect URI**, this URL must be configured with the IdP* (Identity Provider)
 - **Authorization URL**: The IdP's authorization endpoint, often named **/auth** or **/authorization**
 - **Access Token URL**: The IdP's token endpoint, often named **/token**
 - **Client ID**: Also known as **App ID**, the IdP-supplied client identifier
@@ -18,6 +20,8 @@ Select `OAuth 2.0` as the auth method and set the grant type to `Authorization C
 - **State**: Can be a random value or transfer data
 - **Add Credentials to**: Choose how to add the access token to requests (in the Request Body or a Basic Auth Header)
 
+![oauth2-configuration](/images/screenshots/auth/authorization-type/01-oauth2-configuration.webp)
+
 For Bruno's purposes, this can be any URL because the redirect will be intercepted before getting there (see [Understanding Callback URLs](#understanding-callback-urls-redirect-uris)). However, it still must match a **Callback URL** (or **Redirect URI**) configured with the IdP.
 
 *The IdP (Identity Provider) is the OAuth2 authorization provider (like Azure, Google, Facebook, etc.) managing access to the API.*
@@ -25,6 +29,8 @@ For Bruno's purposes, this can be any URL because the redirect will be intercept
 ### Use PKCE
 
 Enable "Use PKCE" if your OAuth provider supports it as a recommended best security practice.
+
+![02-pkce-toggle](/images/screenshots/auth/authorization-type/02-pkce-toggle.webp)
 
 ## Understanding Callback URLs (Redirect URIs)
 
@@ -48,6 +54,8 @@ Learn more about [System Browser Support](/auth/oauth2-2.0/system-browser)
 
 Before getting the access token, configure how you want to use it in your requests:
 
+![03-token-management](/images/screenshots/auth/authorization-type/03-token-management.webp)
+
 1. **Token Usage Configuration**:
    - **Add token to**: Specify how the token should be included in requests:
      - **Headers**: Adds the token to request headers with a configurable prefix (default: `"Bearer"`).
@@ -69,6 +77,11 @@ If you use the same Token ID in multiple OAuth requests, Bruno will overwrite th
 
 2. Click **Get Access Token** to obtain and store the token.
 
-<Info>
+![04-access-token](/images/screenshots/auth/authorization-type/04-access-token.webp)
+
+<Tip>
   You can click the 'Clear Cache' button to remove the stored token and request a new one.
-</Info>
+  - Read more about [using tokens](/auth/oauth2-2.0/collection-level-configuration#using-oauth2-tokens) in scripts and variables.
+
+</Tip>
+
