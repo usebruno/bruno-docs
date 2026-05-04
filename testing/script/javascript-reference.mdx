@@ -105,15 +105,16 @@ console.log("Query String:", queryString);
 Extract path parameters using the path template defined in the request.
 
 ```javascript
-// For a URL like: https://api.example.com/users/123/orders/456
-// With path template: /users/:userId/orders/:orderId
+// For a URL like: https://echo.usebruno.com/:hello
+// With path: /:hello/usebruno
 
 const pathParams = req.getPathParams();
-console.log("Path Variables:", pathParams.toObject());
-// Output: { userId: "123", orderId: "456" }
+console.log("Path Variables:", pathParams);
+// Output: [0:{ "name": "hello", "value": "usebruno", "type": "path" }]
 
 // Access specific path parameter
-console.log("User ID:", pathParams.toObject().userId);
+console.log("Value:", pathParams[0].value);
+// Output: "usebruno"
 ```
 
 ### `req.getMethod()`
