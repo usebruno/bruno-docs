@@ -19,6 +19,10 @@ You can refer to the **[Bruno Starter Guide](https://github.com/bruno-collection
 
 **Fetch in Bruno** button to open the collection in Bruno, **or** git clone the repository [Bruno Starter Guide](https://github.com/bruno-collections/bruno-starter-guide).
 
+<Tip>
+Use the **[Bruno Starter Guide](https://github.com/bruno-collections/bruno-starter-guide)** collection as a reference solution while following this guide. If you get stuck at any step, open the collection to see the expected request setup.
+</Tip>
+
 <div className="flex justify-center my-10">
   <a href="https://fetch.usebruno.com?url=https%3A%2F%2Fgithub.com%2Fbruno-collections%2Fbruno-starter-guide.git" target="_blank" rel="noopener noreferrer">
     <img
@@ -73,7 +77,7 @@ Congratulations! You have successfully created your first collection. The UI sho
 
 2. Select:
 - `type` HTTP - (GraphQL, gRPC, WebSocket, or cURL is also supported)
-- `Request Name` as `github-api`
+- `Request Name` as `01-github-api`
 - `URL` as `https://api.github.com/users/usebruno`.
 
 ![name-api](/images/screenshots/quick-start/02-create-a-request/02-name-api.webp)
@@ -99,7 +103,7 @@ You have successfully sent your first request. The UI should look like this:
 
 1. Create a new request with:
    - Request type as **HTTP**
-   - Request name as `echo-bru` 
+   - Request name as `02-echo-bru` 
    - method as **POST**
    - URL as `https://echo.usebruno.com`
   
@@ -153,7 +157,7 @@ You have successfully sent **JSON** data to the API. This is Bruno's echo endpoi
 
 5. Click the **Save** button.
 
-6. Go back to `echo-bru` request and set the `URL` to `{{baseURL}}` and select the `local` environment from the environment dropdown.
+6. Go back to `02-echo-bru` request and set the `URL` to `{{baseURL}}` and select the `local` environment from the environment dropdown.
 
 ![after-baseur](/images/screenshots/quick-start/04-create-env/04-after-baseurl.webp)
 
@@ -162,7 +166,7 @@ You have successfully created your first environment variable and reused it in t
 **Success Criteria:** 
 - Environment is created with the name `local`.
 - Environment variable `baseURL` is added with the value `https://echo.usebruno.com`.
-- Request `echo-bru` is executed successfully with the `URL` set to `{{baseURL}}`
+- Request `02-echo-bru` is executed successfully with the `URL` set to `{{baseURL}}`
 - Response status is **200**.
 
 
@@ -172,7 +176,7 @@ You have successfully created your first environment variable and reused it in t
 
 **Objective:** Write an assertion and test script to validate the response of the request.
 
-1. Open your **echo-bru** request.  
+1. Open your **02-echo-bru** request.  
 2. Go to the **Assert** tab and enter the following details:
 
 | Expression | Operator | Value |
@@ -218,7 +222,7 @@ Read more about test and assertions: [Tests introduction](/testing/tests/introdu
 
 1. Create a new request with:
    - Request type as **HTTP**
-   - Request name as `script-request`
+   - Request name as `03-script-request`
    - method as **POST**
    - URL as `https://echo.usebruno.com`
 
@@ -259,7 +263,7 @@ Read more about script: [JavaScript Reference](/testing/script/javascript-refere
 
 1. Create a new request with:
    - Request type as **HTTP**
-   - Request name as `auth-request`
+   - Request name as `04-auth-request`
    - method as **GET**
    - URL as `https://httpbin.org/basic-auth/usebruno/1234`
 
