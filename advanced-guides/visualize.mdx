@@ -14,10 +14,29 @@ bru.visualize(type, config)
 2. **config**(object): Depends on `type`:
 
     - **`table`**: **name**, **provider** (`ag-grid`, `react-table`), **props**.
-    - **`html` (raw HTML)**: **name**, **content** — unchanged from earlier releases.
+    - **`html` (raw HTML)**: **name**, **content**
     - **`html` (Handlebars)**: **name**, **template** (Handlebars string), **data** (object passed into the template), optional **options**. 
-    
-    Handlebars is compiled server-side; the Visualize tab receives rendered HTML plus **rawData** for Postman-style callbacks (see below).
+
+### Parameters
+
+| Name     | Type     | Description                                                                                     |
+|----------|----------|-------------------------------------------------------------------------------------------------|
+| `type`   | `string` | Visualization kind: `'table'` or `'html'`.                                                     |
+| `config` | `object` | See **Config properties** below. Table vs HTML use different fields.                            |
+
+### Config properties
+
+| Property    | Type     | Used with | Description |
+|-------------|----------|-----------|-------------|
+| `name`      | `string` | `table`, `html` | Instance label in the Visualize tab. |
+| `provider`  | `string` | `table` only | `ag-grid` or `react-table`. |
+| `props`     | `object` | `table` only | Provider-specific row/column config. |
+| `content`   | `string` | `html` (raw) | Full HTML string (safe mode OK). |
+| `template`  | `string` | `html` (Handlebars) | Handlebars source (not in QuickJS safe mode). |
+| `data`      | `object` | `html` (Handlebars) | Template context object — values are available as `{{key}}` inside the template. |
+| `options`   | `object` | `html` (Handlebars, optional) | `Handlebars.compile()` options. Accepts a safe subset of options (see below). |
+
+Handlebars is compiled server-side; the Visualize tab receives the rendered HTML.
 
 
 ## Supported Visualization Types and Providers
@@ -25,6 +44,16 @@ bru.visualize(type, config)
 ### Table Visualization ('table')
 
 You can render tables using different providers like `ag-grid` and `react-table`.
+
+**Syntax**:
+```js
+bru.visualize('table', { // type
+  // config
+  name: '<name>', // name of the visualization
+  provider: '<provider-type>', // provider type (ag-grid, react-table)
+  props: { <rowData>, <columnDefinitions> } // provider-specific row/column config
+});
+```
 
 #### Using **ag-grid**
 
@@ -63,45 +92,22 @@ This will render a table using the ag-grid provider with filters enabled on all 
 
 
 ```javascript copy
-const rowData1 = Array.from({ length: 2500 })
-  .map((_) => [
-    { firstName: 'Tanner', lastName: 'Linsley', age: 24, visits: 100 },
-    { firstName: 'Tandy', lastName: 'Miller', age: 40, visits: 40 },
-    { firstName: 'Joe', lastName: 'Dirte', age: 45, visits: 20 },
-  ]).flat();
+const rowData = [
+  { name: 'John Doe', age: 28, email: 'john@example.com', city: 'New York' },
+  { name: 'Jane Smith', age: 32, email: 'jane@example.com', city: 'London' },
+];
 
-
-const columnDefinitions1 = [
-  {
-    id: "firstName",
-    cell: (info) => info.getValue(),
-    header: "First Name",
-    meta: { filterVariant: "text" },
-  },
-  {
-    id: "lastName",
-    cell: (info) => info.getValue(),
-    header: "Last Name",
-    meta: { filterVariant: "text" },
-  },
-  {
-    id: "age",
-    cell: (info) => info.getValue(),
-    header: "Age",
-    meta: { filterVariant: "range" },
-  },
-  {
-    id: "visits",
-    cell: (info) => info.getValue(),
-    header: "Visits",
-    meta: { filterVariant: "range" },
-  }
+const columnDefinitions = [
+  { id: 'name',  header: 'name',  cell: (info) => info.getValue(), meta: { filterVariant: 'text' } },
+  { id: 'age',   header: 'age',   cell: (info) => info.getValue(), meta: { filterVariant: 'range' } },
+  { id: 'email', header: 'email', cell: (info) => info.getValue(), meta: { filterVariant: 'text' } },
+  { id: 'city',  header: 'city',  cell: (info) => info.getValue(), meta: { filterVariant: 'text' } },
 ];
 
 bru.visualize('table', {
   name: 'table2',
   provider: 'react-table',
-  props: { rowData: rowData1, columnDefinitions: columnDefinitions1 }
+  props: { rowData, columnDefinitions }
 });
 ```
 
@@ -109,15 +115,24 @@ bru.visualize('table', {
 The `header` property only accepts **string values**. Use strings like `header: "Column Name"`.
 </Info>
 
-This example renders a large table using the react-table provider, with custom headers and filter variants.
+This renders a table with text and range filters. `filterVariant: 'text'` adds a search box; `filterVariant: 'range'` adds Min/Max inputs.
 
 ### HTML visualization (`'html'`)
 
-You can render either **raw HTML** (existing behavior) or a **Handlebars** template with structured **data**.
+You can render either **raw HTML**  or a **Handlebars** template with structured **data**.
+
+**Synatx**
+
+```js
+bru.visualize('html', { // type
+  name: '<title>', // name of the visualization
+  content: `<raw-html>` // or <template>, <data>, <options> (handlebars)
+});
+```
 
 #### Raw HTML (`content`)
 
-Pass a full HTML string. This mode works in **QuickJS safe mode** and behaves as before.
+You can pass a full HTML string to the `content` property to render a raw HTML.
 
 *Example:*
 
@@ -129,8 +144,8 @@ const htmlString = `
   <head>
     <style>
       table { width: 100%; border-collapse: collapse; }
-      th, td { border: 1px solid black; padding: 8px; }
-      th { background-color: #f2f2f2; }
+      th, td { border: 1px solid #888888; padding: 8px; color: #cccccc; }
+      th { background-color: #555555; color: #ffffff; }
     </style>
   </head>
   <body>
@@ -155,16 +170,59 @@ This example will render an HTML table with predefined data using the html type.
 
 Use Handlebars when you want a small template plus JSON data instead of building HTML strings in script:
 
+![handlebar](/images/screenshots/visualization/handlebar.webp)
+
 ```javascript copy
 bru.visualize('html', {
   name: 'userCard',
   template: '<div><h1>{{title}}</h1><p>{{message}}</p></div>',
-  data: { title: 'Hello', message: res.body?.name || 'Guest' },
-  options: {} // optional; mirrors Postman’s third argument when used
+  data: { title: "Bruno", message: res.body.msg },
+  options: {} // optional; see Handlebars compile options below
+});
+```
+<Warning>
+Make sure to use `Post-script` while using `res.body` for visualization data.
+</Warning>
+
+Above example requires a `msg` property in the response body.
+
+Bruno compiles **template** with **data** server-side and renders the result in the **Visualize** tab.
+
+#### Handlebars compile options
+
+The `options` field maps directly to [`Handlebars.compile()` options](https://handlebarsjs.com/api-reference/compilation.html). Bruno allows a safe subset:
+
+| Option | Description |
+|---|---|
+| `noEscape` | Skip HTML escaping of output values. |
+| `strict` | Throw on missing fields instead of rendering empty. |
+| `assumeObjects` | Skip object existence checks on paths. |
+| `preventIndent` | Disable auto-indent for partials. |
+| `ignoreStandalone` | Disable standalone tag removal. |
+| `explicitPartialContext` | Disable implicit context for partials. |
+| `knownHelpersOnly` | Only allow pre-registered helpers (compile-time optimization). |
+
+The following options are **excluded** regardless: `data`, `compat`, `knownHelpers`, `allowProtoPropertiesByDefault`, and `allowProtoMethodsByDefault` — these can alter template resolution in unexpected ways or weaken prototype-traversal protections.
+
+**`dangerouslyAllowAllOptions`**
+
+To bypass the allowlist entirely and pass any `Handlebars.compile()` option, set `dangerouslyAllowAllOptions: true` inside `options`:
+
+```javascript copy
+bru.visualize('html', {
+  name: 'userCard',
+  template: '<div><h1>{{title}}</h1><p>{{body}}</p></div>',
+  data: { title: 'Bruno', body: res.body.msg },
+  options: {
+    strict: true,
+    dangerouslyAllowAllOptions: true
+  }
 });
 ```
 
-Bruno compiles **template** with **data** on the server and opens the result in the **Visualize** tab. **`rawData`** is passed alongside rendered HTML.
+<Warning>
+Use `dangerouslyAllowAllOptions` only when you fully control the template and data. Enabling excluded options like `allowProtoPropertiesByDefault` can expose prototype-traversal vulnerabilities.
+</Warning>
 
 #### `bru.clearVisualizations()`
 
@@ -184,287 +242,33 @@ When you **import** a Postman collection, script calls are translated automatica
 | `pm.visualizer.set(template, data, options)` | `bru.visualize('html', { template, data, options })` |
 | `pm.visualizer.clear()` | `bru.clearVisualizations()` |
 
-**Export** from Bruno back to Postman performs the **inverse** mapping for the same patterns. Table visualizations (**ag-grid**, **react-table**) and raw **`content`** HTML are unchanged by this translation.
 
-Import/export translation is covered by the collection converters; see **[Postman migration](/get-started/import-export-data/postman-migration)** and **[Converters overview](/converters/overview)**.
+Read more from **[Postman migration](/get-started/import-export-data/postman-migration)** and **[Converters overview](/converters/overview)**.
 
-## Using API Response Data
+## Examples
 
 One of the most powerful features of `bru.visualize` is the ability to transform API responses into visual tables. Here are practical examples of working with real API data:
 
+<Warning>
 In Bruno, the parsed API response is stored in **`res.body`**
-
-```javascript
-// ✅ Correct
-const data = res.body;
-
-// ❌ Incorrect
-const data = res.data;
-```
-
-### Example 1: Simple User List API
-
-For an API that returns a list of users:
-
-```javascript copy
-// API URL: https://jsonplaceholder.typicode.com/users
-// First, let's check the response structure
-console.log('Response:', res);
-console.log('Response body:', res.body);
-
-// Bruno stores the parsed response in res.body
-const users = res.body;
-
-// Verify we have data
-if (!Array.isArray(users)) {
-  console.error('Expected array but got:', typeof users);
-  return;
-}
-
-console.log('Number of users:', users.length);
-
-const columnDefinitions = [
-  { field: "id", filter: true },
-  { field: "name", filter: true, floatingFilter: true },
-  { field: "email", filter: true, floatingFilter: true },
-  { field: "phone", filter: true },
-  { field: "website", filter: true }
-];
-
-bru.visualize('table', {
-  name: 'usersTable',
-  provider: 'ag-grid',
-  props: { 
-    rowData: users, 
-    columnDefinitions 
-  }
-});
-```
-
-### Example 2: Nested API Response Data
-
-For APIs returning nested objects, you can flatten the data before visualization:
-
-```javascript copy
-// API URL: https://jsonplaceholder.typicode.com/users
-// Bruno stores the parsed response in res.body
-const users = res.body;
-
-// Transform nested data into flat structure
-const flattenedData = users.map(user => ({
-  id: user.id,
-  name: user.name,
-  email: user.email,
-  city: user.address?.city || 'N/A',
-  company: user.company?.name || 'N/A',
-  phone: user.phone
-}));
-
-const columnDefinitions = [
-  { field: "id", filter: true },
-  { field: "name", filter: true, floatingFilter: true },
-  { field: "email", filter: true, floatingFilter: true },
-  { field: "city", filter: true, floatingFilter: true },
-  { field: "company", filter: true, floatingFilter: true },
-  { field: "phone", filter: true }
-];
-
-bru.visualize('table', {
-  name: 'usersWithDetails',
-  provider: 'ag-grid',
-  props: { 
-    rowData: flattenedData, 
-    columnDefinitions 
-  }
-});
-```
-
-### Example 3: Transforming Complex Data
-
-For complex responses that need transformation before visualization:
-
-```javascript copy
-// API URL: https://jsonplaceholder.typicode.com/posts
-// Bruno stores the parsed response in res.body
-const posts = res.body;
-
-// Transform and enhance data
-const tableData = posts.slice(0, 20).map((post, index) => ({
-  index: index + 1,
-  title: post.title.substring(0, 50) + '...', // Truncate long titles
-  body: post.body.substring(0, 100) + '...',   // Truncate body
-  userId: post.userId,
-  postId: post.id,
-  length: post.body.length
-}));
-
-const columnDefinitions = [
-  { field: "index", filter: false, width: 80 },
-  { field: "postId", filter: true, width: 100 },
-  { field: "userId", filter: true, width: 100 },
-  { field: "title", filter: true, floatingFilter: true, width: 300 },
-  { field: "body", filter: true, width: 400 },
-  { field: "length", filter: true, width: 100 }
-];
-
-bru.visualize('table', {
-  name: 'postsTable',
-  provider: 'ag-grid',
-  props: { 
-    rowData: tableData, 
-    columnDefinitions 
-  }
-});
-```
-
-### Example 4: Error Handling with API Data
-
-Always include error handling when working with API responses:
-
-```javascript copy
-try {
-  // Bruno stores the parsed response in res.body
-  // Check if response has data
-  if (!res.body) {
-    console.error('No response body found');
-    return;
-  }
-
-  const data = res.body;
-
-  // Check if data is an array (for direct array responses)
-  // or if it has a data property (for wrapped responses)
-  const rowData = Array.isArray(data) ? data : data.data;
-
-  if (!Array.isArray(rowData)) {
-    console.error('Invalid response format. Expected array but got:', typeof rowData);
-    console.log('Response structure:', data);
-    return;
-  }
-
-  // Verify data is not empty
-  if (rowData.length === 0) {
-    console.log('No data to visualize');
-    return;
-  }
-
-  console.log(`Visualizing ${rowData.length} records`);
-
-  const columnDefinitions = [
-    { field: "id", filter: true },
-    { field: "name", filter: true, floatingFilter: true },
-    { field: "email", filter: true, floatingFilter: true }
-  ];
-
-  bru.visualize('table', {
-    name: 'safeDataTable',
-    provider: 'ag-grid',
-    props: { 
-      rowData: rowData, 
-      columnDefinitions 
-    }
-  });
-} catch (error) {
-  console.error('Visualization error:', error.message);
-  console.error('Stack trace:', error.stack);
-}
-```
-
-When working with API responses:
-- Always verify the response structure before accessing nested properties
-- Use optional chaining (`?.`) to safely access nested data
-- Transform data to match your visualization needs
-- Add meaningful column headers using the `field` property
-- Enable filters for better data exploration
+</Warning>
 
 
-### Using API Response Data with HTML
-
-You can dynamically generate HTML from API responses:
-
-```javascript copy
-// API URL: https://jsonplaceholder.typicode.com/users
-// Bruno stores the parsed response in res.body
-const users = res.body;
-
-// Generate table rows from API data
-const tableRows = users.slice(0, 10).map(user => `
-  <tr>
-    <td>${user.id}</td>
-    <td>${user.name}</td>
-    <td>${user.email}</td>
-    <td>${user.phone}</td>
-  </tr>
-`).join('');
-
-const htmlString = `
-<html>
-  <head>
-    <style>
-      body { font-family: Arial, sans-serif; padding: 20px; }
-      h1 { color: #333; }
-      table { 
-        width: 100%; 
-        border-collapse: collapse; 
-        margin-top: 20px;
-      }
-      th { 
-        background-color: #4CAF50; 
-        color: white; 
-        padding: 12px; 
-        text-align: left;
-      }
-      td { 
-        border: 1px solid #ddd; 
-        padding: 10px; 
-      }
-      tr:hover { background-color: #f5f5f5; }
-      .summary { 
-        background-color: #e3f2fd; 
-        padding: 15px; 
-        border-radius: 5px; 
-        margin-bottom: 20px;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>User Report</h1>
-    <div class="summary">
-      <strong>Total Users:</strong> ${users.length}
-    </div>
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Phone</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${tableRows}
-      </tbody>
-    </table>
-  </body>
-</html>
-`;
-
-bru.visualize('html', {
-  name: 'userReport',
-  content: htmlString
-});
-```
-
-#### Custom Dashboard with Statistics
+### Custom Dashboard with Statistics
 
 Create rich dashboards with API data:
 
-```javascript copy
-// Example with custom stats or API response
-// Bruno stores the parsed response in res.body
-const apiData = res.body;
+1. Create or use existing request.
+2. Go to request -> **Script** (post-response) tab and add the following code:
+3. Click on **Send** button to execute the request.
 
-// Calculate or extract statistics from your API response
+![custom dashboard](/images/screenshots/visualization/custom-dashboard.webp)
+
+
+```javascript copy
+
+const apiData = res.body
+
 const stats = {
   totalRequests: apiData.length || 0,
   successRate: 98.5,
@@ -551,29 +355,167 @@ bru.visualize('html', {
 });
 ```
 
-## Viewing Your Visualization
+### Using API Response Data with Table
 
-1. Add the visualization code to your request's script section
-2. Execute the request
-3. Your visualization will be displayed in the panel
+Render a live API response directly as an interactive table with sorting and filtering using `ag-grid`.
 
-![Visualization Output](/images/screenshots/visualization/bru-visualize-html.webp)
+![table-data](/images/screenshots/visualization/table-data.webp)
 
-### Parameters
+```javascript copy
+// API URL: https://jsonplaceholder.typicode.com/users
+// Bruno stores the parsed response in res.body
+const users = res.body;
 
-| Name     | Type     | Description                                                                                     |
-|----------|----------|-------------------------------------------------------------------------------------------------|
-| `type`   | `string` | Visualization kind: `'table'` or `'html'`.                                                     |
-| `config` | `object` | See **Config properties** below. Table vs HTML use different fields.                            |
+const rowData = users.map(user => ({
+  id:       user.id,
+  name:     user.name,
+  email:    user.email,
+  phone:    user.phone,
+  city:     user.address.city,
+  company:  user.company.name,
+}));
 
-### Config properties
+const columnDefinitions = [
+  { field: 'id',      headerName: 'ID',      width: 70,  filter: false },
+  { field: 'name',    headerName: 'Name',    filter: true, floatingFilter: true },
+  { field: 'email',   headerName: 'Email',   filter: true, floatingFilter: true },
+  { field: 'phone',   headerName: 'Phone',   filter: true },
+  { field: 'city',    headerName: 'City',    filter: true, floatingFilter: true },
+  { field: 'company', headerName: 'Company', filter: true, floatingFilter: true },
+];
 
-| Property    | Type     | Used with | Description |
-|-------------|----------|-----------|-------------|
-| `name`      | `string` | `table`, `html` | Instance label in the Visualize tab. |
-| `provider`  | `string` | `table` only | `ag-grid` or `react-table`. |
-| `props`     | `object` | `table` only | Provider-specific row/column config. |
-| `content`   | `string` | `html` (raw) | Full HTML string (safe mode OK). |
-| `template`  | `string` | `html` (Handlebars) | Handlebars source (not in QuickJS safe mode). |
-| `data`      | `object` | `html` (Handlebars) | Template context / Postman `data` argument. |
-| `options`   | `object` | `html` (Handlebars, optional) | Extra Handlebars options; mirrors Postman’s third argument when present. |
+bru.visualize('table', {
+  name: 'usersTable',
+  provider: 'ag-grid',
+  props: { rowData, columnDefinitions }
+});
+```
+
+
+### Bar Chart
+
+Render a bar chart using [Chart.js](https://www.chartjs.org/) loaded via CDN. Uses static data by default — swap in `res.body` values for live API data.
+
+![bar chart](/images/screenshots/visualization/bar-chart.webp)
+
+```javascript copy
+// Static data — replace with values from your API response
+const labels = ['January', 'February', 'March', 'April', 'May', 'June'];
+const values = [120, 95, 160, 140, 180, 210];
+
+// To use live API data instead, replace the two lines above with:
+// const labels = res.body.map(item => item.month);
+// const values = res.body.map(item => item.count);
+
+const html = `
+<html>
+  <head>
+    <style>
+      body { margin: 0; padding: 24px; background: #1a1a2e; color: #e0e0e0; font-family: Arial, sans-serif; }
+      h2   { text-align: center; margin-bottom: 20px; color: #a0c4ff; }
+      .wrap { max-width: 680px; margin: 0 auto; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h2>Monthly API Requests</h2>
+      <canvas id="chart"></canvas>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      new Chart(document.getElementById('chart'), {
+        type: 'bar',
+        data: {
+          labels: ${JSON.stringify(labels)},
+          datasets: [{
+            label: 'Requests',
+            data: ${JSON.stringify(values)},
+            backgroundColor: 'rgba(100, 160, 255, 0.75)',
+            borderColor: 'rgba(100, 160, 255, 1)',
+            borderWidth: 1,
+            borderRadius: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { labels: { color: '#ccc' } } },
+          scales: {
+            x: { ticks: { color: '#aaa' }, grid: { color: '#333' } },
+            y: { ticks: { color: '#aaa' }, grid: { color: '#333' }, beginAtZero: true }
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
+`;
+
+bru.visualize('html', { name: 'barChart', content: html });
+```
+
+### Pie Chart
+
+Render a pie chart using [Chart.js](https://www.chartjs.org/) via CDN. Uses static data by default — swap in `res.body` values for live API data.
+
+![pie chart](/images/screenshots/visualization/pie-chart.webp)
+
+```javascript copy
+// Static data — replace with values from your API response
+const labels = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'];
+const values = [540, 320, 180, 95, 65];
+
+// To use live API data instead, replace the two lines above with:
+// const labels = res.body.map(item => item.method);
+// const values = res.body.map(item => item.count);
+
+const html = `
+<html>
+  <head>
+    <style>
+      body { margin: 0; padding: 24px; background: #1a1a2e; color: #e0e0e0; font-family: Arial, sans-serif; }
+      h2   { text-align: center; margin-bottom: 20px; color: #a0c4ff; }
+      .wrap { max-width: 480px; margin: 0 auto; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h2>API Requests by Method</h2>
+      <canvas id="chart"></canvas>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      new Chart(document.getElementById('chart'), {
+        type: 'pie',
+        data: {
+          labels: ${JSON.stringify(labels)},
+          datasets: [{
+            data: ${JSON.stringify(values)},
+            backgroundColor: [
+              'rgba(100, 160, 255, 0.85)',
+              'rgba(255, 140, 100, 0.85)',
+              'rgba(100, 220, 160, 0.85)',
+              'rgba(255, 100, 130, 0.85)',
+              'rgba(200, 160, 255, 0.85)'
+            ],
+            borderColor: '#1a1a2e',
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: { color: '#ccc', padding: 16 }
+            }
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
+`;
+
+bru.visualize('html', { name: 'pieChart', content: html });
+```
+
