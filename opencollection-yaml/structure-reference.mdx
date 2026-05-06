@@ -154,9 +154,21 @@ auth:
   key: x-api-key
   value: "{{api-key}}"
   placement: header
+
+# OAuth 1.0
+auth:
+  type: oauth1
+  consumerKey: "{{consumer_key}}"
+  consumerSecret: "{{consumer_secret}}"
+  accessToken: "{{access_token}}"
+  accessTokenSecret: "{{token_secret}}"
+  signatureMethod: HMAC-SHA1
+  version: "1.0"
+  placement: header
+  includeBodyHash: false
 ```
 
-Supported auth types: `none`, `inherit`, `basic`, `bearer`, `apikey`, `digest`, `oauth2`, `awsv4`, `ntlm`.
+Supported auth types: `none`, `inherit`, `basic`, `bearer`, `apikey`, `digest`, `oauth1`, `oauth2`, `awsv4`, `ntlm`, `wsse`.
 
 ## runtime
 
