@@ -3,7 +3,23 @@ title: "Response Visualization"
 sidebarTitle: "Visualizer"
 ---
 
+import { BrunoButton } from "/snippets/BrunoButton.jsx";
+
 Bruno provides a powerful visualization feature that allows you to display API response data in a more readable and interactive format using the `bru.visualize` function. This feature supports multiple providers and formats to help you analyze and present your API data effectively.
+
+## Try it out
+
+Explore the [response-visualizer](https://github.com/bruno-collections/response-visualizer) sample collection to see tables, charts, and HTML views in action:
+
+<BrunoButton
+  collectionUrl="https://github.com/bruno-collections/response-visualizer.git"
+  width={160}
+  height={40}
+/>
+
+## Overview
+
+The `bru.visualize` function allows you to display API response data in a more readable and interactive format using the `bru.visualize` function. This feature supports multiple providers and formats to help you analyze and present your API data effectively.
 
 ```javascript
 bru.visualize(type, config)
@@ -39,7 +55,7 @@ bru.visualize(type, config)
 Handlebars is compiled server-side; the Visualize tab receives the rendered HTML.
 
 
-## Supported Visualization Types and Providers
+## Supported Visualization
 
 ### Table Visualization ('table')
 
@@ -518,4 +534,3 @@ const html = `
 
 bru.visualize('html', { name: 'pieChart', content: html });
 ```
-
