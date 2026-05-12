@@ -3,8 +3,20 @@ title: "Authentication in Bruno"
 sidebarTitle: "Overview"
 ---
 
+import { BrunoButton } from "/snippets/BrunoButton.jsx";
+
 Bruno allows you to send authentication details with your API requests.
 Authentication methods can be set on the request level or collection level, if you want all of your requests to use the same method.
+
+## Try it out
+
+Explore the [oauth-keycloak](https://github.com/bruno-collections/oauth-keyclock) sample collections for real-world OAuth2 flows to walk through each grant type step by step:
+
+<BrunoButton
+  collectionUrl="https://github.com/bruno-collections/oauth-keyclock.git"
+  width={160}
+  height={40}
+/>
 
 <Info>
   Some APIs will require a digital certificate to establish a client's identity.

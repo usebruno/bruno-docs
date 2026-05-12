@@ -7,6 +7,16 @@ import { BrunoButton } from "/snippets/BrunoButton.jsx";
 
 This document describes the OAuth 2 implementation available in Bruno. This approach simplifies authentication handling with automatic token management and flexible configuration options.
 
+## Try it out
+
+Explore the [oauth-keycloak](https://github.com/bruno-collections/oauth-keyclock) sample collections for real-world OAuth2 flows to walk through each grant type step by step:
+
+<BrunoButton
+  collectionUrl="https://github.com/bruno-collections/oauth-keyclock.git"
+  width={160}
+  height={40}
+/>
+
 ## Overview
 
 Bruno supports OAuth 2 authentication at collection, folder and request levels:
@@ -81,14 +91,3 @@ if (res.getStatus() === 401) {
 ```
 
 For the full list of OAuth2 scripting APIs, see the [JavaScript API Reference](/testing/script/javascript-reference#oauth2-credentials).
-
-## Get Started with OAuth2
-
-Feel free to explore our OAuth2 tutorial collection to see practical examples and test different OAuth2 grant types:
-
-<BrunoButton 
-  collectionUrl="https://github.com/bruno-collections/bruno-oauth2-tutorial-collection"
-  width={160}
-  height={40}
-/>
-

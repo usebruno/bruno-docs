@@ -2,9 +2,21 @@
 title: "Configuring Proxy Settings in Bruno"
 ---
 
+import { BrunoButton } from "/snippets/BrunoButton.jsx";
+
 A proxy is an intermediary server that sits between a client application (like Bruno) and the destination server that the client is communicating with (like an API). The proxy server acts as a security barrier, making requests on your behalf to websites and other internet resources, and preventing others from accessing your internal network.
 
 If your machine sits behind a corporate network or firewall, you may need to configure the proxy settings in Bruno in order for requests to be made.
+
+## Try it out
+
+Try the [proxy_configuration](https://github.com/bruno-collections/proxy_configuration) sample collection to see proxy setups in action:
+
+<BrunoButton
+  collectionUrl="https://github.com/bruno-collections/proxy_configuration.git"
+  width={160}
+  height={40}
+/>
 
 <Info>
 Starting from v3.1.0+, **System Proxy is enabled by default for new users** and Existing users retain their current preference settings.
