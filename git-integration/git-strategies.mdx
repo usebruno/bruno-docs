@@ -7,26 +7,6 @@ Bruno was designed to fit naturally into developer workflows. Some teams prefer 
 
 There are two primary strategies to consider when using Bruno with Git. Picking the right one early saves you from messy remote origin conflicts down the line.
 
-```mermaid
-flowchart TD
-    A([Bruno]) --> B{Choose a Git Strategy}
-
-    B -->|Monorepo / Single source of truth| C[Workspace-level Git]
-    B -->|Microservices / Independent services| D[Collection-level Git]
-
-    C --> C1[One repository\nAll collections live together]
-    C1 --> C2[Auth · Payments · OTP · Notifications · ...]
-
-    D --> D1[(Auth Repo)]
-    D --> D2[(Payments Repo)]
-    D --> D3[(OTP Repo)]
-
-    C2 --> T[Collaborate with Team\nGitHub · GitLab · Bitbucket]
-    D1 --> T
-    D2 --> T
-    D3 --> T
-```
-
 ---
 
 ## Workspace-level Git
@@ -65,25 +45,6 @@ With collection-level Git, you initialize Git **inside a specific collection**. 
 3. Each collection has its own remote — push, pull, and collaborate independently per service.
 
 ![collection-level-git](/images/screenshots/git-integration/git-strategies/collection-level-git.webp)
-
----
-
-## What to avoid
-
-<Warning>
-**Do not mix both strategies in the same workspace.**
-
-Even though Bruno technically lets you initialize Git at the collection level while a workspace-level Git repo already exists, doing so creates **nested Git repositories**. This leads to:
-
-- Multiple conflicting remote origins in the same directory tree
-- Commits in the inner repo being invisible to the outer repo (Git ignores nested `.git` folders)
-- Unexpected behaviour when pushing, pulling, or cloning
-- Confusion for teammates who clone the workspace repo and find collections in a detached Git state
-
-**Pick one strategy and stick to it:**
-- Either initialize Git at the workspace level and manage everything from there, **or**
-- Initialize Git at the collection level for each collection with its own independent remote origin.
-</Warning>
 
 ---
 
