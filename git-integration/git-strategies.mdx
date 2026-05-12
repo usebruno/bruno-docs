@@ -1,0 +1,104 @@
+---
+title: "Choosing a Git Strategy"
+sidebarTitle: "Git Strategies"
+---
+
+Bruno was designed to fit naturally into developer workflows. Some teams prefer to keep collections and workspaces alongside the code they are testing while others prefer to keep them in a separate repository to keep things isolated. The flexibility means it is really up to you and what fits your workflow best.
+
+There are two primary strategies to consider when using Bruno with Git. Picking the right one early saves you from messy remote origin conflicts down the line.
+
+```mermaid
+flowchart TD
+    A([Bruno]) --> B{Choose a Git Strategy}
+
+    B -->|Monorepo / Single source of truth| C[Workspace-level Git]
+    B -->|Microservices / Independent services| D[Collection-level Git]
+
+    C --> C1[One repository\nAll collections live together]
+    C1 --> C2[Auth · Payments · OTP · Notifications · ...]
+
+    D --> D1[(Auth Repo)]
+    D --> D2[(Payments Repo)]
+    D --> D3[(OTP Repo)]
+
+    C2 --> T[Collaborate with Team\nGitHub · GitLab · Bitbucket]
+    D1 --> T
+    D2 --> T
+    D3 --> T
+```
+
+---
+
+## Workspace-level Git
+
+With workspace-level Git, you initialize Git at the **workspace root**. Every collection inside that workspace is tracked under a single repository — one remote origin, one commit history, one place for your team to collaborate.
+
+**Best suited for:**
+- Monorepos where API collections live alongside your main source code
+- Teams that want a single source of truth for all their API tests
+- Projects where all services are tightly coupled and released together
+
+**How it works:**
+
+1. Open Bruno and go to your workspace.
+2. Initialize Git at the workspace level (via the Git panel or CLI at the workspace directory).
+3. All collections under that workspace are tracked automatically.
+4. Push to GitHub, GitLab, Bitbucket, or any Git provider — your team can clone and immediately open the workspace in Bruno.
+
+![workspace-level-git](/images/screenshots/git-integration/git-strategies/workspace-level-git.webp)
+
+---
+
+## Collection-level Git
+
+With collection-level Git, you initialize Git **inside a specific collection**. Each collection has its own remote origin, completely independent of other collections.
+
+**Best suited for:**
+- Microservices architectures where each service is deployed and versioned independently
+- Teams that own separate services (e.g. Auth team, Payments team, OTP team) and want isolated API test repositories
+- Connecting a Bruno collection directly to an existing source code repository so it lives alongside that service
+
+**How it works:**
+
+1. Open a collection in Bruno.
+2. Initialize Git inside that collection folder (or point it to an existing repo).
+3. Each collection has its own remote — push, pull, and collaborate independently per service.
+
+![collection-level-git](/images/screenshots/git-integration/git-strategies/collection-level-git.webp)
+
+---
+
+## What to avoid
+
+<Warning>
+**Do not mix both strategies in the same workspace.**
+
+Even though Bruno technically lets you initialize Git at the collection level while a workspace-level Git repo already exists, doing so creates **nested Git repositories**. This leads to:
+
+- Multiple conflicting remote origins in the same directory tree
+- Commits in the inner repo being invisible to the outer repo (Git ignores nested `.git` folders)
+- Unexpected behaviour when pushing, pulling, or cloning
+- Confusion for teammates who clone the workspace repo and find collections in a detached Git state
+
+**Pick one strategy and stick to it:**
+- Either initialize Git at the workspace level and manage everything from there, **or**
+- Initialize Git at the collection level for each collection with its own independent remote origin.
+</Warning>
+
+---
+
+## Quick comparison
+
+| | Workspace-level Git | Collection-level Git |
+|---|---|---|
+| **Git init location** | Workspace root | Inside each collection |
+| **Remote origins** | One | One per collection |
+| **Best for** | Monorepos, tightly coupled services | Microservices, independent teams |
+| **Team access** | Clone once, get all collections | Clone per service |
+| **Co-locate with source code** | Workspace alongside main repo | Collection alongside service repo |
+
+---
+
+<Info>
+For step-by-step setup instructions, see [Collaboration via CLI](/git-integration/using-cli) or [Collaboration via GUI](/git-integration/using-gui).
+</Info>
