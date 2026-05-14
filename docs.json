@@ -400,6 +400,7 @@
                     "group": "License Administrators",
                     "pages": [
                       "license-administrators/license-portal",
+                      "license-administrators/self-hosted-licensing",
                       {
                         "group": "SAML SSO",
                         "pages": [
