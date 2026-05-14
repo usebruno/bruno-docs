@@ -34,6 +34,98 @@ console.log(req.headers);
 } */
 ```
 
+## `headerList`
+
+The `req.headerList` property exposes a structured, writable API for managing request headers. All key lookups are case-insensitive. The existing `req.headers` raw object remains untouched for backward compatibility — both are kept in sync.
+
+```javascript
+// Read
+req.headerList.get('Content-Type');              // 'application/json'
+req.headerList.has('Authorization');             // true
+req.headerList.one('Content-Type');              // { key: 'Content-Type', value: 'application/json' }
+req.headerList.all();                            // [{ key, value }, ...]
+req.headerList.count();                          // 3
+
+// Search
+req.headerList.find(h => h.key.startsWith('X-'));
+req.headerList.filter(h => h.value.includes('json'));
+req.headerList.indexOf('Content-Type');
+
+// Iteration
+req.headerList.forEach((h, i) => { /* ... */ });
+req.headerList.map(h => h.key);
+req.headerList.reduce((acc, h) => acc, {});
+
+// Transform
+req.headerList.toObject();                       // { 'Content-Type': 'application/json', ... }
+req.headerList.toString();                       // 'Content-Type: application/json\n...'
+
+// Write
+req.headerList.append({ key: 'X-Custom', value: 'val' });
+req.headerList.append('X-Custom: val');          // string format
+req.headerList.append('X-Custom', 'val');        // two-arg form
+req.headerList.set({ key: 'Content-Type', value: 'text/plain' });
+req.headerList.set('Content-Type', 'text/plain');
+req.headerList.delete('X-Custom');
+req.headerList.delete(h => h.key.startsWith('X-'));
+req.headerList.clear();
+req.headerList.populate([{ key: 'A', value: '1' }]);
+req.headerList.repopulate([{ key: 'A', value: '1' }]);
+```
+
+### Method Reference
+
+#### Read
+
+| Method | Returns | Description |
+| --- | --- | --- |
+| `get(name)` | `string \| undefined` | Value of the first header matching the key |
+| `one(name)` | `object \| undefined` | Full header object `{ key, value }` for the matching key |
+| `all()` | `object[]` | Cloned array of all header objects `{ key, value, disabled? }` |
+| `count()` | `number` | Number of headers (including disabled) |
+
+#### Search
+
+| Method | Returns | Description |
+| --- | --- | --- |
+| `has(name)` | `boolean` | `true` if a header with that key exists |
+| `has(name, value)` | `boolean` | `true` if key exists and value matches exactly |
+| `find(fn, context?)` | `object \| undefined` | First header where the predicate returns truthy |
+| `filter(fn, context?)` | `object[]` | All headers where the predicate returns truthy |
+| `indexOf(item)` | `number` | Index of a header by string key or `{ key, value }` object; `-1` if not found |
+
+#### Iteration
+
+| Method | Returns | Description |
+| --- | --- | --- |
+| `forEach(fn, context?)` | `void` | Calls `fn(header, index)` for every header |
+| `map(fn, context?)` | `any[]` | Returns a new array of mapped values |
+| `reduce(fn, initial?, context?)` | `any` | Reduces headers to a single value |
+
+#### Transform
+
+| Method | Returns | Description |
+| --- | --- | --- |
+| `toObject()` | `object` | Plain `{ key: value }` map |
+| `toString()` | `string` | HTTP wire format `Key: Value\n...` (skips disabled headers) |
+| `toJSON()` | `object[]` | Same as `all()` — suitable for `JSON.stringify()` |
+
+#### Write
+
+| Method | Returns | Description |
+| --- | --- | --- |
+| `append(headerObj \| name, value?)` | `void` | Sets a header; accepts `{ key, value }`, `"Key: Value"` string, or `(name, value)` two-arg form. Bruno does not support duplicate header keys, so `append()` overwrites any existing header with the same key. |
+| `set(headerObj \| name, value?)` | `boolean \| null` | Sets or replaces a header. Returns `true` if new, `false` if updated, `null` if input was nil. |
+| `delete(predicate, context?)` | `void` | Deletes header(s) by key string, `{ key }` object, or predicate function |
+| `clear()` | `void` | Removes all headers (enabled and disabled) |
+| `populate(items \| string)` | `void` | Adds items from an array or multi-line string, skipping keys that already exist |
+| `repopulate(items \| string)` | `void` | Clears all headers, then populates with new items |
+| `assimilate(source, prune?)` | `void` | Merges headers from a PropertyList or array; if `prune` is `true`, removes headers not present in source |
+
+<Tip>
+  Disabled headers are surfaced via `req.headerList` with `{ disabled: true }` on the entry — you can query or filter them just like enabled headers. The HTTP wire-format `toString()` skips disabled headers.
+</Tip>
+
 ## Method
 
 The `method` property of the `req` object specifies the HTTP method used for the request. Common HTTP methods include "GET", "POST", "PUT", "DELETE", etc. The method indicates the type of action the request wishes to perform on the resource. The value of the `method` property should be a string representing the desired HTTP method for the request.
