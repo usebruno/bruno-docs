@@ -219,6 +219,86 @@ expect(arr).to.include("item");
 expect(arr).to.be.empty;
 ```
 
+## Bruno-specific assertions
+
+In addition to the standard Chai assertions, Bruno registers custom assertions for working with JSON response bodies.
+
+### `jsonBody`
+
+Use `jsonBody` to validate the response body against a value or to check for the existence of a nested property. This assertion mirrors Postman's `pm.response.to.have.jsonBody(...)` API and is convenient for collections imported from Postman.
+
+```javascript
+test("body is valid JSON", function () {
+  // Passes when the body is a JSON object or array
+  expect(res.getBody()).to.have.jsonBody();
+});
+
+test("body deep equals expected object", function () {
+  expect(res.getBody()).to.have.jsonBody({
+    id: 1,
+    name: "Alice"
+  });
+});
+
+test("body has a nested property", function () {
+  // Supports dot notation, numeric brackets, and quoted bracket keys
+  expect(res.getBody()).to.have.jsonBody("user.profile.email");
+  expect(res.getBody()).to.have.jsonBody("items[0].id");
+  expect(res.getBody()).to.have.jsonBody('data["a.b"].name');
+});
+
+test("nested property equals value", function () {
+  expect(res.getBody()).to.have.jsonBody("user.profile.name", "Alice");
+});
+
+test("body should not have property", function () {
+  expect(res.getBody()).to.not.have.jsonBody("error");
+});
+```
+
+| Call | Behavior |
+|------|----------|
+| `jsonBody()` | Asserts the body is a JSON object or array |
+| `jsonBody(object)` | Deep equality against the supplied object |
+| `jsonBody("path")` | Asserts the nested property exists |
+| `jsonBody("path", value)` | Asserts the nested property equals the supplied value |
+
+All variants support negation via `.not` (for example, `to.not.have.jsonBody("key")`).
+
+### `jsonSchema`
+
+Use `jsonSchema` to validate a response body against a [JSON Schema](https://json-schema.org/). Bruno uses [Ajv](https://ajv.js.org/) under the hood, so any JSON Schema draft supported by Ajv works here. An optional second argument forwards options to the Ajv instance.
+
+```javascript
+test("body matches schema", function () {
+  const schema = {
+    type: "object",
+    required: ["id", "name", "email"],
+    properties: {
+      id: { type: "number" },
+      name: { type: "string" },
+      email: { type: "string", format: "email" }
+    }
+  };
+
+  expect(res.getBody()).to.have.jsonSchema(schema);
+});
+
+test("body matches schema with Ajv options", function () {
+  const schema = {
+    type: "object",
+    properties: {
+      createdAt: { type: "string", format: "date-time" }
+    }
+  };
+
+  // Pass Ajv options as the second argument
+  expect(res.getBody()).to.have.jsonSchema(schema, { strict: false });
+});
+```
+
+When the body fails validation, the assertion error includes the Ajv validation errors so you can quickly see which fields are missing or have the wrong type.
+
 ## Next Steps
 
 For more advanced scripting capabilities, see:
