@@ -51,3 +51,7 @@ You can use `process.env.<secret-name>` throughout your Bruno collection to secu
 <Info>
 Starting from Bruno **v3.1.0**, you can create and manage `.env` files directly inside Bruno at workspace level. Check the [Secret Management - Dotenv File](/secrets-management/dotenv-file) section for more details.
 </Info>
+
+### Using process.env in global environments
+
+Process environment variables can also be referenced inside [global environment variable](/variables/global-environment-variables) values. Bruno resolves `{{process.env.VAR_NAME}}` references from the workspace-level `.env` file, allowing you to use secrets in global environments without exposing them in version control.
