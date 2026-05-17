@@ -427,7 +427,8 @@
                 "group": "Advanced Guides",
                 "icon": "graduation-cap",
                 "pages": [
-              "advanced-guides/visualize"
+              "advanced-guides/visualize",
+              "advanced-guides/working-with-bigint"
             ]
           }
         ]

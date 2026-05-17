@@ -2,13 +2,51 @@
 title: "Working with BigInt"
 ---
 
-When your response data contains `BigInt`, the parsed value may become corrupted because Bruno parses the response data by default, which can lead to a loss of fidelity.
-This occurs because `JSON.parse()` does not handle `BigInt` values correctly by default.
+When your response data contains very large integers (`BigInt`), the parsed values may become corrupted. This is because Bruno automatically parses JSON responses using standard JavaScript `JSON.parse()`, which has a precision limit.
 
-However, if you need access to the raw response data (for example, if it contains `BigInt`), you can bypass the parsing step.
+### The Problem
 
-To prevent automatic parsing and work directly with the raw response data, add the below expression to the `pre-request` script.
+JavaScript numbers are double-precision floats. The maximum safe integer in JavaScript is `9007199254740991` (`Number.MAX_SAFE_INTEGER`). Any integer larger than this will lose precision during automatic parsing.
 
-```js
+For example, if your API returns:
+```json
+{
+  "id": 9907199254740993
+}
+```
+
+Standard parsing will corrupt the value:
+```javascript
+// Automatically parsed by standard JSON.parse()
+res.getBody().id // Returns: 9907199254740992 (fidelity lost!)
+```
+
+### The Solution: Bypassing Automatic Parsing
+
+If your API endpoints return high-precision integers (like Snowflake IDs, Twitter IDs, or database 64-bit auto-increments), you can prevent automatic JSON parsing.
+
+To tell Bruno to treat the response body as plain text/raw data, add the following expression to your **Pre-request** script:
+
+```javascript
 req.disableParsingResponseJson();
+```
+
+### Accessing the Raw Data
+
+Once automatic parsing is disabled:
+1. The **Response panel** in the GUI will safely display the raw unparsed JSON without losing precision.
+2. In your **Post-response** or **Test** scripts, `res.getBody()` will return the raw response string instead of a parsed JavaScript object. 
+
+You can then process the string using a library like `json-bigint` or custom regex/parsing logic in your scripts:
+
+```javascript
+// Access the raw string body
+const rawBodyString = res.getBody(); 
+
+// Example: Parse using a custom parser or match the big integer using regex
+const idMatch = rawBodyString.match(/"id":\s*(\d+)/);
+if (idMatch) {
+  const rawId = idMatch[1]; // "9907199254740993" as a safe string
+  console.log("Safely retrieved BigInt ID:", rawId);
+}
 ```
