@@ -6,7 +6,7 @@ sidebarTitle: "Codex"
 [Codex](https://openai.com/codex) is OpenAI's AI-powered coding agent. It reads custom instructions from `AGENTS.md` before doing any work, so you can give it project-specific guidance. With Bruno's local-first approach, you can add an `AGENTS.md` at your project root so Codex understands how to generate and work with Bruno collections.
 
 <Info>
-  Codex discovers instructions in this order: global `~/.codex/AGENTS.md`, See [Custom instructions with AGENTS.md](https://developers.openai.com/codex/guides/agents-md/) for full details.
+  Codex discovers instructions in this order: global `~/.codex/AGENTS.md`, then repo-root `AGENTS.md`, then `AGENTS.md` files in subdirectories. See [Custom instructions with AGENTS.md](https://developers.openai.com/codex/guides/agents-md/) for full details.
 </Info>
 
 ## Configure Codex with Bruno
