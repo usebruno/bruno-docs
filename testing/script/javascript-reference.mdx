@@ -35,6 +35,7 @@ Here is a complete table for all available methods on the `req` object.
 | req.setHeaders(headers)        | Set multiple request headers.                                        |
 | req.deleteHeader(name)         | Remove a request header by name.                                     |
 | req.deleteHeaders([names])      | Remove multiple request headers by name.                             |
+| req.headerList                 | PropertyList interface — rich read, search, iteration, transform, and write methods for request headers. |
 | req.getBody(options?)          | Get the current request body/payload (supports raw option).          |
 | req.setBody(body)              | Set the request body/payload.                                        |
 | req.setMaxRedirects(count)     | Set the maximum number of redirects to follow.                       |
@@ -259,6 +260,169 @@ Removes multiple request headers in one call. Pass an array of header names to r
 req.deleteHeaders(["authorization", "x-internal-trace", "x-api-key"]);
 ```
 
+### `req.headerList`
+
+`req.headerList` exposes the full **PropertyList** interface for request headers, giving you richer querying, iteration, and bulk-mutation capabilities beyond the basic `getHeader` / `setHeader` methods. All key lookups are **case-insensitive** per the HTTP spec.
+
+<Info>
+`req.headerList` is available in **pre-request** and **test** scripts. Changes made via write methods take effect before the request is sent.
+</Info>
+
+#### Read methods
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `req.headerList.get(name)` | `string \| undefined` | Value of the first header matching the key. |
+| `req.headerList.one(name)` | `object \| undefined` | Full header object `{ key, value }` for the matching key. |
+| `req.headerList.all()` | `object[]` | Cloned array of all header objects `{ key, value, disabled? }`. |
+| `req.headerList.count()` | `number` | Number of headers, including disabled ones. |
+
+```javascript
+// Read the value of a single header
+const contentType = req.headerList.get("content-type");
+console.log("Content-Type:", contentType);
+// Output: "application/json"
+
+// Get the full header object (key + value pair)
+const authHeader = req.headerList.one("authorization");
+console.log("Auth header object:", authHeader);
+// Output: { key: "authorization", value: "Bearer abc123" }
+
+// List every header before the request is sent
+const allHeaders = req.headerList.all();
+console.log(`Sending ${req.headerList.count()} headers:`, allHeaders);
+```
+
+#### Search methods
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `req.headerList.has(name)` | `boolean` | `true` if any header with that key exists. |
+| `req.headerList.has(name, value)` | `boolean` | `true` if a header with that key **and** exact value exists. |
+| `req.headerList.has(object)` | `boolean` | `true` if a header matching `object.key` exists. |
+| `req.headerList.find(fn, context?)` | `object \| undefined` | First header for which the predicate returns truthy. |
+| `req.headerList.filter(fn, context?)` | `object[]` | All headers for which the predicate returns truthy. |
+| `req.headerList.indexOf(item)` | `number` | Index of a header by string key or `{ key, value }` object; `-1` if not found. |
+
+```javascript
+// Guard: only set x-request-id if it isn't already present
+if (!req.headerList.has("x-request-id")) {
+  req.headerList.add("x-request-id", bru.interpolate("{{$guid}}"));
+}
+
+// Check for a specific key + value combination
+if (req.headerList.has("content-type", "application/json")) {
+  console.log("JSON request — body will be parsed.");
+}
+
+// Find the first custom header (anything starting with "x-")
+const firstCustom = req.headerList.find(h => h.key.startsWith("x-"));
+console.log("First custom header:", firstCustom);
+
+// Collect all disabled headers for debugging
+const disabled = req.headerList.filter(h => h.disabled === true);
+console.log("Disabled headers:", disabled);
+```
+
+#### Iteration methods
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `req.headerList.each(fn, context?)` | `void` | Calls `fn(header, index)` for every header. |
+| `req.headerList.map(fn, context?)` | `any[]` | Returns a new array of mapped values. |
+| `req.headerList.reduce(fn, initial?, context?)` | `any` | Reduces all headers to a single value. |
+
+```javascript
+// Log every header with its position
+req.headerList.each((h, i) => {
+  console.log(`[${i}] ${h.key}: ${h.value}`);
+});
+
+// Extract just the header keys
+const keys = req.headerList.map(h => h.key);
+console.log("Header keys:", keys);
+// Output: ["content-type", "authorization", "x-request-id"]
+
+// Build a summary string of enabled headers
+const summary = req.headerList.reduce((acc, h) => {
+  if (!h.disabled) acc[h.key] = h.value;
+  return acc;
+}, {});
+console.log("Active headers:", summary);
+```
+
+#### Transform methods
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `req.headerList.toObject(excludeDisabled?, caseSensitive?, multiValue?, sanitizeKeys?)` | `object` | Plain `{ key: value }` map. |
+| `req.headerList.toString()` | `string` | HTTP wire format `Key: Value\n...`, skipping disabled headers. |
+| `req.headerList.toJSON()` | `object[]` | Same as `all()` — suitable for `JSON.stringify()`. |
+
+```javascript
+// Convert to a plain object for logging or assertion
+const headersObj = req.headerList.toObject();
+console.log("Headers as object:", headersObj);
+// Output: { "content-type": "application/json", "authorization": "Bearer abc..." }
+
+// Exclude disabled headers and preserve case
+const activeHeaders = req.headerList.toObject(true, true);
+
+// HTTP wire format (useful for debugging proxy issues)
+console.log(req.headerList.toString());
+// Output:
+// Content-Type: application/json
+// Authorization: Bearer abc123
+```
+
+#### Write methods
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `req.headerList.add(headerObj \| name, value?)` | `void` | Sets a header. Accepts `{ key, value }`, a `"Key: Value"` string, or `(name, value)` two-arg form. Overwrites an existing header with the same key. |
+| `req.headerList.upsert(headerObj \| name, value?)` | `boolean \| null` | Sets or replaces a header. Returns `true` if new, `false` if updated, `null` if input was nil. |
+| `req.headerList.remove(predicate, context?)` | `void` | Deletes headers by key string, `{ key }` object, or predicate function. |
+| `req.headerList.clear()` | `void` | Removes all headers, including disabled ones. |
+| `req.headerList.populate(items \| string)` | `void` | Adds items from an array or multi-line string, skipping keys that already exist. |
+| `req.headerList.repopulate(items \| string)` | `void` | Clears all headers, then populates with new items. |
+| `req.headerList.assimilate(source, prune?)` | `void` | Merges headers from a PropertyList or array. When `prune` is `true`, removes any headers not present in the source. |
+
+```javascript
+// Add a single header (two-arg form)
+req.headerList.add("x-correlation-id", bru.getVar("correlationId"));
+
+// Add using an object
+req.headerList.add({ key: "x-feature-flag", value: "dark-mode" });
+
+// Add from a raw HTTP-style string
+req.headerList.add("Accept: application/json");
+
+// Upsert — set if new, update if exists; returns true/false
+const wasNew = req.headerList.upsert("x-api-version", "2");
+console.log("Was a new header?", wasNew); // true or false
+
+// Remove by key name
+req.headerList.remove("x-internal-debug");
+
+// Remove all headers matching a predicate
+req.headerList.remove(h => h.key.startsWith("x-legacy-"));
+
+// Populate from an array — skips keys already present
+req.headerList.populate([
+  { key: "accept-language", value: "en-US" },
+  { key: "cache-control", value: "no-cache" },
+]);
+
+// Replace everything with a fresh set
+req.headerList.repopulate([
+  { key: "content-type", value: "application/json" },
+  { key: "authorization", value: "Bearer " + bru.getEnvVar("token") },
+]);
+
+// Merge headers from another list; remove anything not in the source
+req.headerList.assimilate(otherHeaderList, true);
+```
+
 ### `req.getBody(options?)`
 
 Returns the current request body. For JSON content types, Bruno automatically parses and returns the body as an object. Pass `{ raw: true }` to get the raw string instead.
@@ -391,6 +555,7 @@ Here is a complete table for all available properties and methods on the `res` o
 | res.getStatusText()            | Get the response status text.                                                  |
 | res.getHeader(name)            | Get a specific response header by name.                                        |
 | res.getHeaders()               | Get all response headers.                                                      |
+| res.headerList                 | PropertyList interface — rich read, search, iteration, and transform methods for response headers (read-only). |
 | res.getBody()                  | Get the response body data.                                                    |
 | res.setBody(body)              | Set the response body data.                                                    |
 | res.getResponseTime()          | Get the response time in milliseconds.                                         |
@@ -535,6 +700,130 @@ console.log("All response headers:", headers);
 test("should return a request-id header", () => {
   expect(res.getHeaders()).to.have.property("x-request-id");
 });
+```
+
+### `res.headerList`
+
+`res.headerList` exposes the full **PropertyList** interface for response headers, giving you richer querying and iteration capabilities beyond `getHeader` / `getHeaders`. All key lookups are **case-insensitive** per the HTTP spec.
+
+<Warning>
+`res.headerList` is **read-only**. Calling any write method (`add`, `upsert`, `remove`, `clear`, `populate`, `repopulate`, `assimilate`) throws a `"HeaderList is read-only"` error. Use `req.headerList` when you need to mutate headers.
+</Warning>
+
+<Info>
+`res.headerList` is available in **post-request** and **test** scripts.
+</Info>
+
+#### Read methods
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `res.headerList.get(name)` | `string \| undefined` | Value of the first response header matching the key. |
+| `res.headerList.one(name)` | `object \| undefined` | Full header object `{ key, value }` for the matching key. |
+| `res.headerList.all()` | `object[]` | Cloned array of all response header objects `{ key, value }`. |
+| `res.headerList.count()` | `number` | Number of response headers. |
+
+```javascript
+// Read the Content-Type value
+const contentType = res.headerList.get("content-type");
+console.log("Content-Type:", contentType);
+// Output: "application/json; charset=utf-8"
+
+// Get the full header object
+const rateLimit = res.headerList.one("x-rate-limit-remaining");
+console.log("Rate limit header:", rateLimit);
+// Output: { key: "x-rate-limit-remaining", value: "42" }
+
+// Log how many headers the server returned
+console.log(`Server returned ${res.headerList.count()} headers.`);
+```
+
+#### Search methods
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `res.headerList.has(name)` | `boolean` | `true` if any response header with that key exists. |
+| `res.headerList.has(name, value)` | `boolean` | `true` if a header with that key **and** exact value exists. |
+| `res.headerList.has(object)` | `boolean` | `true` if a header matching `object.key` exists. |
+| `res.headerList.find(fn, context?)` | `object \| undefined` | First response header for which the predicate returns truthy. |
+| `res.headerList.filter(fn, context?)` | `object[]` | All response headers for which the predicate returns truthy. |
+| `res.headerList.indexOf(item)` | `number` | Index of a header by string key or `{ key, value }` object; `-1` if not found. |
+
+```javascript
+// Assert a required security header is present
+test("should include strict transport security", () => {
+  expect(res.headerList.has("strict-transport-security")).to.be.true;
+});
+
+// Check for a specific cache-control directive
+if (res.headerList.has("cache-control", "no-store")) {
+  console.log("Response must not be cached.");
+}
+
+// Find the first Set-Cookie header
+const setCookie = res.headerList.find(h => h.key === "set-cookie");
+if (setCookie) {
+  bru.setVar("rawCookie", setCookie.value);
+}
+
+// Collect all x-* custom headers from the response
+const customHeaders = res.headerList.filter(h => h.key.startsWith("x-"));
+console.log("Custom response headers:", customHeaders);
+```
+
+#### Iteration methods
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `res.headerList.each(fn, context?)` | `void` | Calls `fn(header, index)` for every response header. |
+| `res.headerList.map(fn, context?)` | `any[]` | Returns a new array of mapped values. |
+| `res.headerList.reduce(fn, initial?, context?)` | `any` | Reduces all response headers to a single value. |
+
+```javascript
+// Log every response header
+res.headerList.each((h, i) => {
+  console.log(`[${i}] ${h.key}: ${h.value}`);
+});
+
+// Build a list of header names for assertion
+const headerNames = res.headerList.map(h => h.key);
+test("should include required security headers", () => {
+  expect(headerNames).to.include("content-security-policy");
+  expect(headerNames).to.include("x-content-type-options");
+});
+
+// Sum up all numeric rate-limit headers
+const rateLimitTotal = res.headerList.reduce((acc, h) => {
+  if (h.key.startsWith("x-rate-limit")) acc[h.key] = Number(h.value);
+  return acc;
+}, {});
+console.log("Rate limit info:", rateLimitTotal);
+```
+
+#### Transform methods
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `res.headerList.toObject(excludeDisabled?, caseSensitive?, multiValue?, sanitizeKeys?)` | `object` | Plain `{ key: value }` map. |
+| `res.headerList.toString()` | `string` | HTTP wire format `Key: Value\n...`. |
+| `res.headerList.toJSON()` | `object[]` | Same as `all()` — suitable for `JSON.stringify()`. |
+
+```javascript
+// Convert response headers to a plain object for assertions
+const headersObj = res.headerList.toObject();
+test("should return JSON content type", () => {
+  expect(headersObj["content-type"]).to.include("application/json");
+});
+
+// Serialize headers to HTTP wire format for logging
+console.log("Response headers (wire format):\n" + res.headerList.toString());
+// Output:
+// Content-Type: application/json; charset=utf-8
+// X-Request-Id: txn_abc123
+// X-Rate-Limit-Remaining: 42
+
+// Save the full header list for debugging a flaky test
+bru.setVar("lastResponseHeaders", JSON.stringify(res.headerList.toJSON()));
 ```
 
 ### `res.getBody()`
