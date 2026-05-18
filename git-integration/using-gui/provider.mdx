@@ -220,3 +220,39 @@ The conflict editor provides:
 Once all conflicts are resolved, enter a commit message and click the **Lock** icon to complete the merge.
 
 ![Conflict Editor](/images/screenshots/git-integration/git-gui/14-merge-conflicts.webp)
+
+---
+
+### Request Git History
+
+The **History** tab inside the Git UI lets you browse the full commit history of any individual request. You can see every commit that touched that request — complete with commit message, author, date, and short hash — and click any commit to inspect the exact diff.
+
+#### Viewing commit history for a request
+
+1. Open the collection in Bruno and navigate to any request.
+2. Click the **History** tab in the request panel (alongside Params, Body, Headers, etc.).
+
+If Git has not been initialized for the collection yet, the tab shows the **Not a git repository** prompt with an **Initialize Git** button.
+
+![History tab — commit list](/images/screenshots/git-integration/git-gui/request-git-history.webp)
+
+Once Git is initialized and you have at least one commit, the History tab lists every commit that modified the current request:
+
+| Column | Description |
+|--------|-------------|
+| **Message** | The commit message |
+| **Author** | The Git author name |
+| **Date** | Relative timestamp (e.g. "Few seconds ago") |
+| **Hash** | Shortened commit SHA |
+
+![History tab — no git repository](/images/screenshots/git-integration/git-gui/request-history-message.webp)
+
+#### Inspecting a commit diff
+
+Click any row in the commit list to open the diff for that commit. Bruno displays the file-level diff — additions and deletions — for the selected commit, using the same text and visual diff viewer available elsewhere in the Git UI.
+
+![History tab — commit diff](/images/screenshots/git-integration/git-gui/request-history-diff.webp)
+
+<Tip>
+Request-level history is particularly useful during code review or debugging — you can pinpoint exactly when a URL, header, or body parameter changed and who changed it, without scanning through the full collection history.
+</Tip>
