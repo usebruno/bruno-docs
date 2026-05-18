@@ -338,6 +338,7 @@
                     "pages": [
                       "bru-cli/overview",
                       "bru-cli/installation",
+                      "bru-cli/docker",
                       "bru-cli/commandOptions",
                       "bru-cli/runCollection",
                       "bru-cli/builtInReporters",
