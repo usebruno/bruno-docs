@@ -1,0 +1,148 @@
+---
+title: "Docker Image"
+sidebarTitle: "Docker"
+---
+
+Bruno publishes official Docker images for the Bruno CLI, letting you run collections in containers without installing Node.js or npm on the host. This is useful for CI/CD pipelines and local environments where you want a reproducible runtime.
+
+## Registries
+
+The images are published to both Docker Hub and GitHub Container Registry:
+
+```bash
+docker pull usebruno/cli:latest
+docker pull ghcr.io/usebruno/cli:latest
+```
+
+## Variants
+
+Two base-image variants are available:
+
+| Variant | Base image | When to use |
+|---------|------------|-------------|
+| **Alpine** (default) | `node:22-alpine` | Smallest image (~141 MB). Use this unless you have a specific reason not to. |
+| **Debian** | `node:22-slim` | Larger image (~200 MB+). Use if you hit SSL, glibc, or native module compatibility issues. |
+
+## Tags
+
+| Tag | Example | Variant |
+|-----|---------|---------|
+| `latest` | `usebruno/cli:latest` | alpine |
+| `<version>` | `usebruno/cli:3.3.0` | alpine |
+| `<major.minor>` | `usebruno/cli:3.3` | alpine |
+| `<major>` | `usebruno/cli:3` | alpine |
+| `<version>-alpine` | `usebruno/cli:3.3.0-alpine` | alpine |
+| `<version>-debian` | `usebruno/cli:3.3.0-debian` | debian |
+| `debian` | `usebruno/cli:debian` | debian |
+
+<Info>
+  Pin to an exact version (for example, `usebruno/cli:3.3.0`) in production CI to avoid surprise updates. Use `<major.minor>` if you want patch updates automatically.
+</Info>
+
+## Image details
+
+All variants share the same runtime properties:
+
+- **Entrypoint:** `bru`
+- **Working directory:** `/bruno`
+- **User:** `node` (UID 1000, non-root)
+- **Architectures:** `linux/amd64`, `linux/arm64`
+
+## Running a collection
+
+Mount your collection directory to `/bruno` and pass `bru` arguments directly after the image name.
+
+```bash
+# collection at your current directory
+docker run --rm -v $(pwd):/bruno usebruno/cli run --env staging
+
+# collection in a subfolder
+docker run --rm -v $(pwd):/bruno usebruno/cli run ./api-tests --env staging
+
+# single request file
+docker run --rm -v $(pwd):/bruno usebruno/cli run ./api-tests/login.bru --env staging
+```
+
+<Info>
+  The examples above use `$(pwd)`, which works in Bash, Zsh, Git Bash, and WSL. On Windows native shells, substitute `$(pwd)` with `${PWD}` (PowerShell) or `%cd%` (CMD).
+</Info>
+
+## Passing variables
+
+Override variables at runtime using `--env-var`, or load them from an env file:
+
+```bash
+# override a single variable
+docker run --rm \
+  -v $(pwd):/bruno \
+  usebruno/cli run --env staging --env-var API_KEY=your_key
+
+# override multiple variables
+docker run --rm \
+  -v $(pwd):/bruno \
+  usebruno/cli run --env staging \
+  --env-var BASE_URL=https://api.example.com \
+  --env-var API_KEY=secret123
+
+# load variables from a file
+docker run --rm \
+  -v $(pwd):/bruno \
+  --env-file .env \
+  usebruno/cli run --env staging
+```
+
+## Saving test results
+
+Write reports to your mounted collection directory:
+
+```bash
+# JSON report
+docker run --rm \
+  -v $(pwd):/bruno \
+  usebruno/cli run --env staging --output results.json --format json
+
+# JUnit XML report (for CI test reporters)
+docker run --rm \
+  -v $(pwd):/bruno \
+  usebruno/cli run --env staging --output results.xml --format junit
+```
+
+## CI/CD integration
+
+### GitHub Actions
+
+```yaml
+jobs:
+  api-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Bruno collection
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/bruno \
+            usebruno/cli:3.3 run --env staging --output results.xml --format junit
+
+      - name: Publish Test Report
+        uses: dorny/test-reporter@v3
+        if: always()
+        with:
+          name: Bruno Test Results
+          path: results.xml
+          reporter: java-junit
+```
+
+### GitLab CI
+
+```yaml
+api-tests:
+  image: usebruno/cli:3.3
+  script:
+    - bru run --env staging --output results.xml --format junit
+  artifacts:
+    reports:
+      junit: results.xml
+```
+
+For more configuration options, see [Command Options](/bru-cli/commandOptions) and [Running a Collection](/bru-cli/runCollection).
