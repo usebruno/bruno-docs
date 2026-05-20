@@ -25,6 +25,28 @@ With workspace-level Git, you initialize Git at the **workspace root**. Every co
 3. All collections under that workspace are tracked automatically.
 4. Push to GitHub, GitLab, Bitbucket, or any Git provider — your team can clone and immediately open the workspace in Bruno.
 
+**File structure:**
+
+```
+my-workspace/
+├── .git/                        # Git repository at workspace root
+├── workspace.yml
+├── collections/
+│   ├── auth-service/
+│   │   ├── opencollection.yml
+│   │   ├── environments/
+│   │   │   └── development.yml
+│   │   └── users/
+│   │       ├── create-user.yml
+│   │       └── get-user.yml
+│   └── payment-service/
+│       ├── opencollection.yml
+│       ├── environments/
+│       │   └── development.yml
+│       └── orders/
+│           └── create-order.yml
+```
+
 ![workspace-level-git](/images/screenshots/git-integration/git-strategies/workspace-level-git.webp)
 
 ---
@@ -44,79 +66,102 @@ With collection-level Git, you initialize Git **inside a specific collection**. 
 2. Initialize Git inside that collection folder (or point it to an existing repo).
 3. Each collection has its own remote — push, pull, and collaborate independently per service.
 
+**File structure:**
+
+```
+auth-service/
+├── .git/                        # Git repository inside the collection
+├── opencollection.yml
+├── environments/
+│   └── development.yml
+└── users/
+    ├── create-user.yml
+    └── get-user.yml
+```
+
 ![collection-level-git](/images/screenshots/git-integration/git-strategies/collection-level-git.webp)
 
 ---
 
-## Git-backed collections in a YAML workspace
+## Initialize Separate Git Repositories in Workspace
 
-This strategy lets you keep a single **YAML-based workspace** (`workspace.yml`) while giving each collection its own **independent Git remote**. The workspace itself may or may not be tracked in Git — what matters is that every collection declares its own `git:` URL inside `workspace.yml`. Bruno uses that URL to clone, pull, and track each collection separately.
+This strategy lets you link separate Git repositories to individual collections within a workspace that is already initialized with Git. You can keep common services tracked under the workspace repository while linking specific collections to their own independent Git remotes.
 
-This is the right approach when your collections are already living in separate repositories (owned by separate teams) but you still want one workspace file that ties them all together — without forcing everyone into a single monorepo.
+<Info>
+  This strategy only works with YAML-based workspaces.
+</Info>
 
 **Best suited for:**
-- Teams where each service already has its own repository and the collection lives alongside that service's code
-- Workspaces that reference collections from multiple GitHub organizations or owners
-- Users who want to share a `workspace.yml` so teammates can clone all collections from one starting point, without bundling everything into one repo
+- Teams where most collections belong together but one or two collections need their own repository
+- Projects that share a workspace but have a collection tied to a separate service's source code repository
+- Gradually migrating collections from a shared workspace repo into independent repos
 
 **How it works:**
 
-1. Create or open a YAML-based workspace in Bruno (one that uses `workspace.yml`).
-2. For each collection you want to back with Git, add a `git:` field in `workspace.yml` pointing to its remote URL:
+1. Open Bruno and go to your workspace settings (click on home icon).
+2. Initialize Git at the workspace level (via the Git panel or CLI at the workspace directory).
+3. All collections under that workspace are tracked automatically.
+4. To link a separate Git repository to a specific collection, go to workspace overview and click on the `...` menu on the collection you want to initialize separately and select **Connect to Git**.
+
+![connect-to-git-context-menu](/images/screenshots/git-integration/git-strategies/connect-git.webp)
+
+5. Enter the Git remote URL and click **Connect**.
+
+![connect-to-git-dialog](/images/screenshots/git-integration/git-strategies/git-remote-url.webp)
+
+6. After connecting, a Git icon will appear next to the collection name in the workspace overview.
+7. Your `workspace.yml` file will be updated with the Git remote URL for that collection:
 
 ```yaml
+opencollection: 1.0.0
+info:
+  name: "my-workspace"
+  type: workspace
+
 collections:
-  - name: "Auth API"
-    path: "collections/auth"
-    git: "https://github.com/your-org/auth-collection"
-
-  - name: "Payments API"
-    path: "collections/payments"
-    git: "https://github.com/your-org/payments-collection"
-
-  - name: "OTP Service"
-    path: "collections/otp"
-    git: "https://github.com/your-org/otp-collection"
+  - name: "auth-service"
+    path: "collections/auth-service"
+  - name: "payment-service"
+    path: "collections/payment-service"
+    remote: "https://github.com/<username>/<repository-name>.git"
 ```
 
-3. Each collection with a `git:` entry is treated as an independently cloned repository at its `path` location.
-4. Collections that have a `git:` URL but have not been cloned yet appear **grayed out** in the Bruno sidebar, with a **Clone** button. Clicking it clones the collection from the remote into the specified `path`.
-5. Once cloned, all standard Git operations (commit, push, pull, branch) work independently for each collection through Bruno's Git UI.
+**What to expect:**
 
-**Initializing an existing collection with a separate remote:**
+- When you push the workspace to a remote repository, **all collections are tracked except the collection that is initialized separately**. The separately linked collection will not be part of the workspace's Git history — it has its own independent remote.
+- Git history is **managed separately** — the workspace Git panel shows history for workspace-tracked collections, and the collection Git panel shows history for the independently linked collection.
 
-If you already have a collection inside your workspace and want to connect it to its own remote (even after the workspace is already initialized), open that collection's Git panel and connect it to a remote origin. Bruno will then write the `git:` field back to `workspace.yml` automatically:
+**Workspace file structure** (Git initialized at the root with two collections):
 
-```yaml
-collections:
-  - name: "Coll"
-    path: "collections/coll"
-    git: "https://github.com/naman-bruno/coll"
+```
+my-workspace/
+├── .git/                            # Workspace Git repository
+├── workspace.yml
+├── collections/
+│   ├── auth-service/                # Tracked by workspace Git
+│   │   ├── opencollection.yml
+│   │   ├── environments/
+│   │   │   └── development.yml
+│   │   └── users/
+│   │       ├── create-user.yml
+│   │       └── get-user.yml
+│   └── payment-service/             # Linked to separate Git repo (excluded from workspace Git)
+│       ├── .git/                    # Separate Git repository
+│       ├── opencollection.yml
+│       ├── environments/
+│       │   └── development.yml
+│       └── orders/
+│           └── create-order.yml
 ```
 
-<Info>
-Only **YAML-based collections** support the `git:` field in `workspace.yml`. Filesystem-based collections (opened directly from a folder) do not use `workspace.yml` and are not affected by this pattern.
-</Info>
+**Collection file structure** (independently linked collection):
 
-<Warning>
-If your workspace root is already tracked in Git (workspace-level Git), adding per-collection `git:` remotes creates **nested repositories** inside the workspace repo. This leads to the same nested `.git` conflicts described above. Choose one approach: either track everything from the workspace root, **or** use per-collection remotes declared in `workspace.yml`.
-</Warning>
-
----
-
-## Quick comparison
-
-| | Workspace-level Git | Collection-level Git | YAML workspace + per-collection Git |
-|---|---|---|---|
-| **Git init location** | Workspace root | Inside each collection | Per collection, declared in `workspace.yml` |
-| **Remote origins** | One | One per collection | One per collection |
-| **Best for** | Monorepos, tightly coupled services | Microservices, independent teams | Mixed ownership — one workspace, many repos |
-| **Team access** | Clone once, get all collections | Clone per service | Share `workspace.yml`; Bruno clones each collection |
-| **Co-locate with source code** | Workspace alongside main repo | Collection alongside service repo | Collection alongside service repo |
-| **Requires `workspace.yml`** | No | No | Yes |
-
----
-
-<Info>
-For step-by-step setup instructions, see [Collaboration via CLI](/git-integration/using-cli) or [Collaboration via GUI](/git-integration/using-gui).
-</Info>
+```
+payment-service/
+├── .git/                            # Own Git repository with independent remote
+├── opencollection.yml
+├── environments/
+│   └── development.yml
+└── orders/
+    └── create-order.yml
+```
