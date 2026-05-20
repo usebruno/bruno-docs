@@ -52,6 +52,107 @@ test("should return array of users", function () {
 });
 ```
 
+### Validating the JSON Body with `jsonBody`
+
+Bruno provides a custom Chai assertion `jsonBody` to make response-body checks more readable. It's the native Bruno equivalent of Postman's `pm.response.to.have.jsonBody(...)`, and supports four call shapes:
+
+```javascript
+test("body is JSON", function () {
+  expect(res.getBody()).to.have.jsonBody();
+});
+
+test("body deep-equals an object", function () {
+  expect(res.getBody()).to.have.jsonBody({ id: 1, name: "Alice" });
+});
+
+test("a nested path exists", function () {
+  expect(res.getBody()).to.have.jsonBody("user.id");
+});
+
+test("a nested path equals a value", function () {
+  expect(res.getBody()).to.have.jsonBody("user.id", 123);
+});
+```
+
+Negation is supported across all variants:
+
+```javascript
+test("body is not the legacy shape", function () {
+  expect(res.getBody()).to.not.have.jsonBody({ legacy: true });
+});
+
+test("debug field is not exposed", function () {
+  expect(res.getBody()).to.not.have.jsonBody("internal.debugInfo");
+});
+```
+
+<Tip>
+**Migrating from Postman?** When you import a Postman collection, Bruno automatically translates `pm.response.to.have.jsonBody(...)` (and `pm.response.to.not.have.jsonBody(...)`) into `expect(res.getBody()).to.have.jsonBody(...)`. No manual rewriting needed.
+</Tip>
+
+### Validating against a JSON Schema with `jsonSchema`
+
+For contract testing, use the `jsonSchema` assertion to validate a response against a [JSON Schema](https://json-schema.org/) document. Bruno uses [Ajv](https://ajv.js.org/) under the hood, so all modern JSON Schema drafts are supported (**04, 06, 07, 2019-09, 2020-12**) along with the full [ajv-formats](https://ajv.js.org/packages/ajv-formats.html) library.
+
+```javascript
+test("response matches the user schema", function () {
+  const userSchema = {
+    type: "object",
+    required: ["id", "email"],
+    properties: {
+      id: { type: "integer" },
+      email: { type: "string", format: "email" },
+      createdAt: { type: "string", format: "date-time" },
+      website: { type: "string", format: "uri" }
+    }
+  };
+
+  expect(res.getBody()).to.have.jsonSchema(userSchema);
+});
+```
+
+#### Built-in formats
+
+Common `ajv-formats` validators are available out of the box, including `email`, `date`, `date-time`, `time`, `uri`, `uri-reference`, `uuid`, `ipv4`, `ipv6`, `hostname`, and `regex`.
+
+```javascript
+test("user has a valid email and signup date", function () {
+  expect(res.getBody()).to.have.jsonSchema({
+    type: "object",
+    properties: {
+      email: { type: "string", format: "email" },
+      signupDate: { type: "string", format: "date-time" }
+    }
+  });
+});
+```
+
+#### Passing Ajv options
+
+You can pass any [Ajv options](https://ajv.js.org/options.html) as a second argument — useful, for example, to collect every validation error rather than failing on the first one:
+
+```javascript
+test("collect every schema violation", function () {
+  expect(res.getBody()).to.have.jsonSchema(userSchema, { allErrors: true });
+});
+```
+
+#### Negation
+
+```javascript
+test("response should not match the legacy v1 schema", function () {
+  expect(res.getBody()).to.not.have.jsonSchema(legacyV1Schema);
+});
+```
+
+<Info>
+Like `jsonBody`, the `jsonSchema` assertion runs in both the **Safe Mode** and the **Developer Mode**, and Postman's `pm.response.to.have.jsonSchema(schema)` is automatically translated to `expect(res.getBody()).to.have.jsonSchema(schema)` on import.
+</Info>
+
+<Warning>
+Earlier versions of Bruno used `tv4` for schema validation, which only supports JSON Schema **draft-04**. The new Ajv-based `jsonSchema` assertion is the recommended way to validate schemas going forward and supports drafts **04, 06, 07, 2019-09, and 2020-12**.
+</Warning>
+
 ### Testing Nested Objects
 
 ```javascript
@@ -217,6 +318,14 @@ expect(arr).to.be.an("array");
 expect(arr).to.have.lengthOf(3);
 expect(arr).to.include("item");
 expect(arr).to.be.empty;
+
+// Bruno-specific: JSON body and schema validation
+expect(res.getBody()).to.have.jsonBody();                  // body is JSON
+expect(res.getBody()).to.have.jsonBody({ id: 1 });         // deep-equals
+expect(res.getBody()).to.have.jsonBody("user.id");         // path exists
+expect(res.getBody()).to.have.jsonBody("user.id", 123);    // path equals value
+expect(res.getBody()).to.have.jsonSchema(schema);          // validate via Ajv
+expect(res.getBody()).to.have.jsonSchema(schema, { allErrors: true });
 ```
 
 ## Next Steps
