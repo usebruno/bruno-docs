@@ -7,35 +7,6 @@ Bruno was designed to fit naturally into developer workflows. Some teams prefer 
 
 There are three strategies to consider when using Bruno with Git. Picking the right one early saves you from messy remote origin conflicts down the line.
 
-```mermaid
-flowchart TD
-    A([Bruno]) --> B{Choose a Git Strategy}
-
-    B -->|Monorepo / Single source of truth| C[Workspace-level Git]
-    B -->|Microservices / Independent teams| D[Collection-level Git]
-    B -->|Mixed ownership / YAML workspace| E[YAML workspace + per-collection Git]
-
-    C --> C1[One repository\nAll collections live together]
-    C1 --> C2[Auth · Payments · OTP · ...]
-
-    D --> D1[(Auth Repo)]
-    D --> D2[(Payments Repo)]
-    D --> D3[(OTP Repo)]
-
-    E --> E1[workspace.yml declares\ngit: URL per collection]
-    E1 --> E2[(Auth Repo)]
-    E1 --> E3[(Payments Repo)]
-    E1 --> E4[(OTP Repo)]
-
-    C2 --> T[Collaborate with Team\nGitHub · GitLab · Bitbucket]
-    D1 --> T
-    D2 --> T
-    D3 --> T
-    E2 --> T
-    E3 --> T
-    E4 --> T
-```
-
 ---
 
 ## Workspace-level Git
