@@ -915,6 +915,7 @@ Here are all available environment-related methods:
 | bru.deleteAllEnvVars()     | Deletes all environment variables in the current environment. |
 | bru.getGlobalEnvVar(key)   | Get the Bruno global environment variable.                |
 | bru.setGlobalEnvVar(key, value) | Set the Bruno global environment variable.           |
+| bru.hasGlobalEnvVar(key)   | Checks if the global environment variable exists.         |
 | bru.getAllGlobalEnvVars()  | Retrieves all global environment variables as an object.  |
 
 ### `bru.getEnvName()`
@@ -1018,6 +1019,18 @@ Sets or updates a global environment variable. Useful for storing values that ne
 // Store a workspace-level token retrieved from an auth request
 const data = res.getBody();
 bru.setGlobalEnvVar("global_token", data.token);
+```
+
+### `bru.hasGlobalEnvVar(key)`
+
+Returns `true` if the global environment variable exists, `false` otherwise. Useful for guarding reads when a global variable may not have been set yet.
+
+```javascript
+if (bru.hasGlobalEnvVar("global_token")) {
+  req.setHeader("Authorization", "Bearer " + bru.getGlobalEnvVar("global_token"));
+} else {
+  console.warn("No global token found — request may fail authentication.");
+}
 ```
 
 ### `bru.getAllGlobalEnvVars()`
