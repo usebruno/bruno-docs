@@ -18,11 +18,19 @@ Used for sending files along with form data, allowing multiple parts with differ
 
 1. Navigate to the **Body** tab.
 2. Select **Multipart Form** from dropdown.
-3. Click on **Add File** and upload your file.
+3. Click on **Add File** and upload one or more files.
 4. (optional) You can also select **Add Param** for sending key-value pair data.
 5. Save and execute the request.
 
 ![multipart-data](/images/screenshots/send-request/rest/multipart-data.webp)
+
+#### Upload multiple files in a single field
+
+A file field can hold more than one file. Each selected file appears as a chip in the field — use the upload button to add more files, or the **×** on a chip to remove an individual file. Removing the last file converts the field back to a text param.
+
+- File paths are normalized relative to the collection so collections stay portable.
+- Selecting the same file again is deduplicated.
+- The `Content-Type` for the field is auto-detected from the file list; you can override it from the field's settings.
 
 #### 2. URL Encoded
 
