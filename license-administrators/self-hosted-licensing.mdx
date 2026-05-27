@@ -561,3 +561,93 @@ Bruno supports domain discovery, which automatically routes users to your organi
 3. After logging in through your IdP, users with the `bruno-license-user` role will be granted access and see the activation confirmation page.
 
 ![Successful license activation confirmation](/images/screenshots/self-host-guide/04-successfull-activation.webp)
+
+---
+
+## Changelog
+
+Release history for the Bruno Self-Hosted Licensing Server.
+
+### 1.17.0 <sub>(30 March 2026)</sub>
+
+- Display the app version in the admin dashboard
+
+### 1.16.2 <sub>(2 March 2026)</sub>
+
+- Fixed issue where license activation details were not persisted after restarting the app
+
+### 1.16.1 <sub>(19 February 2026)</sub>
+
+- Fixed license activation issue
+
+### 1.16.0 <sub>(6 February 2026)</sub>
+
+- Added user activation logs
+- Added dynamic version logs
+- Fixed issue with Docker image updates for default templates
+
+### 1.15.2 <sub>(16 January 2026)</sub>
+
+- Fixed issue with Docker image updates
+
+### 1.15.1 <sub>(14 January 2026)</sub>
+
+- Fixed session handling for SSO
+
+### 1.15.0 <sub>(9 January 2026)</sub>
+
+- Added refresh option for the license information
+
+### 1.14.0 <sub>(1 January 2026)</sub>
+
+- Added CSV export support for user data
+
+### 1.13.0 <sub>(4 November 2025)</sub>
+
+- Added SCIM support in SSO integration for automated user provisioning and enhanced identity management
+
+### 1.12.1 <sub>(17 October 2025)</sub>
+
+- Fixed duplicate license activation page after successful login
+
+### 1.12.0 <sub>(7 August 2025)</sub>
+
+- Support for customizing License Activation, Deactivation, and OTP emails
+
+### 1.11.0 <sub>(8 July 2025)</sub>
+
+- Support for in-app license activation using SSO
+- Users are now notified via email upon deactivation
+
+### 1.10.1 <sub>(10 June 2025)</sub>
+
+- Parse Group/Role attributes with list of values (SSO)
+
+### 1.10.0 <sub>(29 May 2025)</sub>
+
+- License keys are masked in the UI
+- Seat usage is now displayed in the UI
+
+### 1.9.3 <sub>(22 May 2025)</sub>
+
+- Retrieve role info from Groups attribute and validate accordingly (SAML, SSO)
+
+### 1.9.2 <sub>(9 May 2025)</sub>
+
+- Made Assertion signature non-mandatory (Response signature is required) for SSO
+
+### 1.9.1 <sub>(17 April 2025)</sub>
+
+- Fixed issue related to duplicate user during upload
+
+### 1.9.0 <sub>(4 April 2025)</sub>
+
+- SSO support for License Admins
+
+### 1.8.0 <sub>(28 March 2025)</sub>
+
+- SSL certificate configuration support
+
+### 1.7.0 <sub>(26 November 2024)</sub>
+
+- Status API — `/api/v1/status`
