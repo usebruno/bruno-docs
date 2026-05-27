@@ -46,16 +46,28 @@ This flow executes scripts in a more natural, linear order. After the **Request 
   If the `flow` property is not specified, Sandwich is used by default.
 </Callout>
 
-You can set the flow type (either `sandwich` or `sequential`) in your `bruno.json` configuration file:
+You can set the flow type (either `sandwich` or `sequential`) in your collection configuration file:
 
-```json showLineNumbers filename="bruno.json" {7}
-{
-  "scripts": {
-    "moduleWhitelist": ["crypto", "buffer", "form-data"],
-    "filesystemAccess": {
-      "allow": true
-    },
-    "flow": "sequential" // Or "sandwich"
-  }
-}
-```
+<Tabs>
+  <Tab title="YAML Collections (v3)">
+    ```yaml filename="opencollection.yml"
+    extensions:
+      bruno:
+        scripts:
+          flow: sequential  # Or "sandwich"
+    ```
+  </Tab>
+  <Tab title="Bru Collections">
+    ```json filename="bruno.json"
+    {
+      "scripts": {
+        "moduleWhitelist": ["crypto", "buffer", "form-data"],
+        "filesystemAccess": {
+          "allow": true
+        },
+        "flow": "sequential"
+      }
+    }
+    ```
+  </Tab>
+</Tabs>

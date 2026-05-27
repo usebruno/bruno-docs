@@ -82,7 +82,7 @@ Congratulations! You have successfully created your first collection. The UI sho
 
 ![name-api](/images/screenshots/quick-start/02-create-a-request/02-name-api.webp)
 
-3. Send the request by clicking the arrow button or pressing Cmd/Ctrl + Enter.
+3. Execute request by clicking on Send button or pressing Cmd/Ctrl + Enter.
 
 ![execute-request](/images/screenshots/quick-start/02-create-a-request/03-execute-req.webp)
 
@@ -123,7 +123,7 @@ You have successfully sent your first request. The UI should look like this:
 }
 ```
 
-4. Execute the request by clicking the arrow button or pressing Cmd/Ctrl + Enter.
+4. Execute request by clicking on Send button or pressing Cmd/Ctrl + Enter.
 
 ![Send data to the API](/images/screenshots/quick-start/03-send-a-request-with-data/03-send-json-data.webp)
 
@@ -455,6 +455,55 @@ You can view and import the OpenAPI file in Bruno. Please refer to [OpenAPI Spec
 - Exported OpenAPI file has a `.yaml` extension.
 
 More: [OpenAPI Specification](/open-api/overview)
+
+---
+
+## 13. Response Visualizer
+
+**Objective:** Use Bruno's response visualizer to render API response data as an interactive table.
+
+1. Create a new request with:
+   - Request type as **HTTP**
+   - Request name as `05-visualizer`
+   - method as **POST**
+   - URL as `https://echo.usebruno.com`
+
+2. Go to the **Script** → **Post-response** tab and enter the snippet below:
+
+```javascript
+const rowData = [
+  { id: 1, name: "John", role: "Developer" },
+  { id: 2, name: "Smith", role: "Designer" },
+  { id: 3, name: "Harry", role: "Product Manager" }
+];
+
+const columnDefinitions = [
+  { field: "id", filter: true, floatingFilter: true },
+  { field: "name", filter: true, floatingFilter: true },
+  { field: "role", filter: true, floatingFilter: true }
+];
+
+bru.visualize('table', {
+  name: 'tableEmp',
+  provider: 'ag-grid',
+  props: {
+    rowData,
+    columnDefinitions
+  }
+});
+```
+
+3. Execute request by clicking on Send button or pressing Cmd/Ctrl + Enter.
+
+4. Go to the **Visualize** tab in the response section to see the rendered table.
+
+![visualize-table](/images/screenshots/quick-start/13-visualizer/01-visualizer.webp)
+
+**Success Criteria:**
+- The post-response script runs without errors.
+- The **Visualize** tab displays an interactive table with three rows (John, Smith, Harry) and filterable columns.
+
+More: [Response Visualizer](/advanced-guides/visualize)
 
 ---
 
