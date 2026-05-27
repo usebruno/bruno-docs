@@ -143,6 +143,7 @@
                     "group": "Git Integration & Collaboration",
                     "pages": [
                       "git-integration/overview",
+                      "git-integration/git-strategies",
                       {
                         "group": "Using GUI",
                         "pages": [
