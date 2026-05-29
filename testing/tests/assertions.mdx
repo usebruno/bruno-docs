@@ -94,7 +94,16 @@ Learn more about `res()` in [Response Query](../script/response/response-query) 
 |------------|----------|-------|
 | `res.responseTime` | `lt` | `1000` |
 
-## Available Operators
+### JSON validation
+
+The `isJson` operator checks whether a value is a valid JSON object or array.
+
+| Expression | Operator | Result |
+|------------|----------|--------|
+| `res.body` | `isJson` | Passes if the response body is an object (`{}`) or an array (`[]`) |
+| `res.body.data` | `isJson` | Passes if `data` is an object or array |
+
+## Available operators
 
 - **Comparison**: `equals`, `notEquals`, `gt`, `gte`, `lt`, `lte`
 - **String**: `contains`, `notContains`, `startsWith`, `endsWith`, `matches`, `notMatches`
