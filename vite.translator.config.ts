@@ -70,14 +70,18 @@ export default defineConfig({
       'graceful-fs': 'node:fs',
     },
   },
+  // We're producing a library bundle, not a site. Disable publicDir so Vite
+  // doesn't try to mirror the repo-root /public into outDir (which lives
+  // inside /public and would otherwise copy itself recursively).
+  publicDir: false,
   build: {
     lib: {
-      entry: path.resolve(__dirname, 'entry.ts'),
+      entry: path.resolve(__dirname, 'tools/translator-bundle/entry.ts'),
       name: 'BrunoTranslator',
       formats: ['iife'],
       fileName: () => 'bruno-translator.js',
     },
-    outDir: path.resolve(__dirname, '../js/bruno-translator'),
+    outDir: path.resolve(__dirname, 'public/js/bruno-translator'),
     emptyOutDir: true,
     sourcemap: false,
     minify: 'esbuild',

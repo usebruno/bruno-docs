@@ -5,7 +5,8 @@
  * pre-bundled into a self-contained browser JS file at
  *   /public/js/bruno-translator/bruno-translator.js
  *
- * That bundle (built from /public/translator-bundle/) sets
+ * That bundle is built by /vite.translator.config.ts from the entry at
+ * /tools/translator-bundle/entry.ts, and sets
  * `window.__brunoTranslator.postmanTranslation` when it loads, which
  * guarantees this docs translator and the actual Bruno desktop app's
  * Postman import feature use the EXACT same conversion logic.
@@ -13,7 +14,7 @@
  * To rebuild the bundle after a @usebruno/converters version bump:
  *   npm run build:translator
  *
- * See /public/translator-bundle/README.md for details.
+ * See /tools/translator-bundle/README.md for details.
  */
 
 const TRANSLATOR_BUNDLE_URL = '/public/js/bruno-translator/bruno-translator.js';

@@ -3,6 +3,9 @@
 This folder builds a self-contained browser JS bundle that exposes
 `@usebruno/converters`' `postmanTranslation` function on `window`.
 
+The Vite config lives at the repo root (`/vite.translator.config.ts`); the
+browser entry point is [`./entry.ts`](./entry.ts) in this folder.
+
 The Mintlify snippet at [`/snippets/translator.jsx`](../../snippets/translator.jsx)
 loads the built bundle via a `<script>` tag and uses it to translate Postman
 scripts into Bruno scripts on the
@@ -27,11 +30,12 @@ Bruno desktop app's Postman import feature, with no drift between them.
 From the repo root:
 
 ```bash
+npm install
 npm run build:translator
 ```
 
-That installs deps inside this folder and produces
-`mintlify/public/js/bruno-translator/bruno-translator.js`.
+The Vite config (`/vite.translator.config.ts`) runs against the repo-root
+`package.json` and produces `public/js/bruno-translator/bruno-translator.js`.
 
 Commit the generated file alongside any version bump of `@usebruno/converters`.
 

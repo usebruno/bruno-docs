@@ -1,7 +1,7 @@
 /**
  * Browser entry for the Postman → Bruno script translator.
  *
- * This file is bundled by Vite (see ./vite.config.ts) into a single
+ * This file is bundled by Vite (see /vite.translator.config.ts) into a single
  * self-contained JS file that exposes the translator on `window`.
  *
  * The Mintlify snippet (`/snippets/translator.jsx`) loads the built bundle

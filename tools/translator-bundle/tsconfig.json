@@ -13,5 +13,5 @@
     "isolatedModules": true,
     "noEmit": true
   },
-  "include": ["entry.ts", "vite.config.ts"]
+  "include": ["entry.ts", "../../vite.translator.config.ts"]
 }
