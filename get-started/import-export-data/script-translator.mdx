@@ -27,6 +27,26 @@ The translator converts the following Postman `pm.*` APIs to their Bruno equival
 | `pm.expect(pm.response.responseTime).to.be.below(N)` | `expect(res.getResponseTime()).to.be.below(N)` |
 | `pm.response.to.have.header("name")` | `expect(res.getHeader("name")).to.exist` |
 | `pm.expect(x).to.eql(y)` | `expect(x).to.equal(y)` |
+| `pm.response.to.be.ok` | `expect(res.getStatus()).to.be.within(200, 299)` |
+| `pm.response.to.be.success` | `expect(res.getStatus()).to.be.within(200, 299)` |
+| `pm.response.to.be.info` | `expect(res.getStatus()).to.be.within(100, 199)` |
+| `pm.response.to.be.redirection` | `expect(res.getStatus()).to.be.within(300, 399)` |
+| `pm.response.to.be.clientError` | `expect(res.getStatus()).to.be.within(400, 499)` |
+| `pm.response.to.be.serverError` | `expect(res.getStatus()).to.be.within(500, 599)` |
+| `pm.response.to.be.error` | `expect(res.getStatus()).to.be.at.least(400)` |
+| `pm.response.to.be.accepted` | `expect(res.getStatus()).to.equal(202)` |
+| `pm.response.to.be.badRequest` | `expect(res.getStatus()).to.equal(400)` |
+| `pm.response.to.be.unauthorized` | `expect(res.getStatus()).to.equal(401)` |
+| `pm.response.to.be.forbidden` | `expect(res.getStatus()).to.equal(403)` |
+| `pm.response.to.be.notFound` | `expect(res.getStatus()).to.equal(404)` |
+| `pm.response.to.be.rateLimited` | `expect(res.getStatus()).to.equal(429)` |
+| `pm.response.to.be.withBody` | `expect(res.getBody()).to.not.equal(undefined)` |
+| `pm.setNextRequest("name")` | `bru.runner.setNextRequest("name")` |
+| `pm.setNextRequest(null)` | `bru.runner.stopExecution()` |
+
+<Info>
+  Negated forms of the status assertions above are also supported. Both positions of `.not` translate correctly — `pm.response.to.not.be.ok` and `pm.response.to.be.not.ok` both become `expect(res.getStatus()).to.not.be.within(200, 299)`. The same applies to `pm.response.to.not.have.status(...)`, `pm.response.to.not.have.header(...)`, and `pm.response.to.not.have.body(...)`.
+</Info>
 
 <Warning>
   Any `pm.*` calls not listed above are left unchanged in the translated output. These unsupported calls (such as `pm.sendRequest()`, `pm.cookies`, `pm.variables`, or `pm.iterationData`) will cause runtime errors in Bruno and need to be manually rewritten using the [Bruno scripting API](/testing/script/javascript-reference).

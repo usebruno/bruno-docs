@@ -39,10 +39,14 @@ Bruno provides four options for proxy mode:
 
 - **Off**: Disables proxy usage.
 - **On**: Enables proxy and routes requests through a manually configured proxy.
-- **System Proxy**: Uses the system-wide proxy settings.
+- **System Proxy**: Uses the system-wide proxy settings, including any OS-level [PAC](https://developer.mozilla.org/en-US/docs/Web/HTTP/Proxy_servers_and_tunneling/Proxy_Auto-Configuration_PAC_file) URL configured on macOS, Windows, or Linux.
 - **PAC**: Uses a [Proxy Auto-Configuration (PAC)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Proxy_servers_and_tunneling/Proxy_Auto-Configuration_PAC_file) file to determine the proxy for each request.
 
 Select **On** if you want to configure a custom proxy, or **PAC** if your network uses a PAC file for automatic proxy configuration.
+
+<Note>
+When **System Proxy** is selected, Bruno also honors any PAC URL configured at the OS level. The detected PAC URL is shown in the preferences panel (or `-` when unset).
+</Note>
 
 ## 3. Selecting Proxy Protocol
 
