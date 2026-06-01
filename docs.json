@@ -383,6 +383,12 @@
                       "vs-code-extension/install-config",
                       "vs-code-extension/send-req"
                     ]
+                  },
+                  {
+                    "group": "Integrations",
+                    "pages": [
+                      "integrations/docker"
+                    ]
                   }
                 ]
               },
