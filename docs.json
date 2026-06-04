@@ -344,6 +344,7 @@
                       "bru-cli/builtInReporters",
                       "bru-cli/import",
                       "bru-cli/proxyConfiguration",
+                      "bru-cli/docker",
                       "bru-cli/gitHubCLI",
                       "bru-cli/jenkins"
                     ]
@@ -382,12 +383,6 @@
                       "vs-code-extension/overview",
                       "vs-code-extension/install-config",
                       "vs-code-extension/send-req"
-                    ]
-                  },
-                  {
-                    "group": "Integrations",
-                    "pages": [
-                      "integrations/docker"
                     ]
                   }
                 ]
