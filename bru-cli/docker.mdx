@@ -37,14 +37,24 @@ Unsuffixed tags (`:latest`, `:3.4.2`, `:3.4`, `:3`) always resolve to the **Alpi
 
 ## Quick start
 
+Pull the image and verify it works:
+
 ```bash
 docker pull usebruno/cli:latest
-docker run --rm usebruno/cli --version
+docker run usebruno/cli --version
 ```
+
+`docker pull` downloads the image to your machine. `docker run` starts a container from that image — anything after the image name (`usebruno/cli`) is passed as arguments to `bru`, so `--version` prints the CLI version.
+
+<Tip>
+Adding `--rm` to `docker run` automatically removes the container after it exits. It's not required, but keeps your system tidy by avoiding a buildup of stopped containers.
+</Tip>
 
 ## Run a collection
 
-Mount your collection directory to `/bruno` and pass `bru` arguments directly — the image's `ENTRYPOINT` is already set to `bru`.
+The Docker container needs access to your collection files to run them. Use the `-v` (volume mount) flag to map a directory on your host to `/bruno` inside the container. The path should always be mapped to `/bruno` — that's the working directory the CLI expects.
+
+Since the image's entrypoint is already set to `bru`, running `usebruno/cli run` is the same as running `bru run` on your local machine. Any arguments you pass after the image name go straight to the CLI.
 
 <Tabs>
   <Tab title="Bash / Zsh / WSL">
