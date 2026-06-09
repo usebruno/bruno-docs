@@ -1513,7 +1513,7 @@ Executes another request in the collection by its name and returns its response.
 ```javascript
 // Run an auth request and use the token it returns
 const authResponse = await bru.runRequest("Login");
-const token = authResponse.body.token;
+const token = authResponse.data.token;
 req.setHeader("Authorization", "Bearer " + token);
 
 // Run a cleanup step after the main request
