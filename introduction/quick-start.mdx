@@ -231,14 +231,15 @@ Read more about test and assertions: [Tests introduction](/testing/tests/introdu
 2. Go to the **Script** → **Pre-request** tab and enter the snippet below:
 
 ```javascript
-req.setBody({
-  "name":"<your name>",
-  "msg":"<your message>"
-})
+const body = {
+  name: "Bruno",
+  msg: "I love opensource devtools"
+};
 
 req.setHeader("Content-Type", "application/json");
 req.setBody(body);
-console.log(req.getName())
+
+console.log(req.getName());
 ```
 3. Execute the request and verify that the response body matches the body of the request.
 
