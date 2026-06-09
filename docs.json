@@ -344,6 +344,7 @@
                       "bru-cli/builtInReporters",
                       "bru-cli/import",
                       "bru-cli/proxyConfiguration",
+                      "bru-cli/docker",
                       "bru-cli/gitHubCLI",
                       "bru-cli/jenkins"
                     ]
