@@ -63,6 +63,26 @@ You can export a data dump of all your collections and environments in Postman. 
   See the [Scripts Translator](/get-started/import-export-data/script-translator) page for the full list of supported translations.
 </Info>
 
+## npm packages used by Postman scripts
+
+When you import a Postman collection, Bruno scans the scripts for `pm.require()` and `require()` calls and groups any external packages it finds into a **Install packages** prompt. You'll see this dialog after the import completes whenever the collection references packages that need attention.
+
+The prompt can show up to three sections:
+
+- **Packages used in scripts** — npm packages referenced by the imported scripts that aren't yet installed in the collection's folder. Bruno can install them for you with a single click, or you can copy the suggested `npm install --save <packages>` command and run it yourself in a terminal.
+- **Libraries that need Developer Mode** — bundled libraries and Node.js built-ins (such as `lodash`, `moment`, `crypto`, or `fs`) that are only available when the collection runs in [Developer Mode](/get-started/configure/javascript-sandbox#developer-mode). Bruno offers a **Switch to Developer Mode** action when these are detected.
+- **Not supported in Bruno** — Postman-specific packages without a Bruno equivalent (for example, `postman-collection`, `postman-runtime`, `newman`, or `@postman/*` packages). Scripts that call these will fail at runtime and need to be rewritten.
+
+<Warning>
+  Only enable Developer Mode for collections you trust. In Developer Mode, scripts can access the filesystem and execute system commands. See the [JavaScript Sandbox](/get-started/configure/javascript-sandbox) page for details.
+</Warning>
+
+After Bruno finishes installing the requested packages, the prompt confirms the install and — if the collection is still in Safe Mode — offers to switch it to Developer Mode so the newly installed packages can be loaded by `require()` at runtime.
+
+If `npm` isn't on your `PATH`, the install step fails with a clear error. Install Node.js/npm, then either retry from the prompt or run the suggested command manually.
+
+Bulk imports queue one prompt per imported collection so you can review each one in turn.
+
 ## Environment Import and Export
 
 Environments in API clients are sets of variables that allow you to run requests against different server configurations (development, staging, production) without changing your request URLs.
