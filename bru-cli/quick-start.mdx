@@ -1,0 +1,353 @@
+---
+title: "CLI Quick Start"
+sidebarTitle: "Quick Start"
+---
+
+Bruno CLI lets you run API collections from the terminal — ideal for automation, CI/CD pipelines, and repeatable test runs. This guide walks you through installing the CLI, running collections, generating reports, and integrating with your workflow.
+
+## Prerequisites
+
+- A basic understanding of HTTP and REST
+- **[Node.js](https://nodejs.org/en/download/)** (v18 LTS or higher recommended)
+- **[Git](https://git-scm.com/install/)** (to clone the sample collection)
+
+
+## Getting started
+
+Use the **[Bruno Starter Guide](https://github.com/bruno-collections/bruno-starter-guide)** collection as the hands-on sample for this walkthrough. It contains example requests, tests, assertions, and a `local` environment — the same collection used in the [Bruno Quick Start](/introduction/quick-start).
+
+Clone the repository:
+
+```bash
+git clone https://github.com/bruno-collections/bruno-starter-guide.git
+cd bruno-starter-guide
+```
+
+<Tip>
+  Use the **[Bruno Starter Guide](https://github.com/bruno-collections/bruno-starter-guide)** as a reference while following this guide. If a step fails, open the collection in Bruno to compare your setup with the expected request configuration.
+</Tip>
+
+Work through the steps **in order**. Each step assumes the previous one.
+
+---
+
+## 1. Install Bruno CLI
+
+**Objective:** Install Bruno CLI globally and verify it is available in your terminal.
+
+<Tabs>
+  <Tab title="npm">
+    ```bash
+    npm install -g @usebruno/cli
+    ```
+  </Tab>
+  <Tab title="pnpm">
+    ```bash
+    pnpm install -g @usebruno/cli
+    ```
+  </Tab>
+  <Tab title="yarn">
+    ```bash
+    yarn global add @usebruno/cli
+    ```
+  </Tab>
+</Tabs>
+
+Verify the installation:
+
+```bash
+bru --version
+```
+
+You should see the installed version number (for example, `3.4.2`).
+
+**Success Criteria:**
+- `bru` command is available in your terminal.
+- `bru --version` prints a version number without errors.
+
+More: [Installation](/bru-cli/installation)
+
+---
+
+## 2. Run the entire collection
+
+**Objective:** Execute all requests in the Bruno Starter Guide collection from the command line.
+
+Make sure you are inside the cloned collection directory (the folder containing `opencollection.yml`):
+
+```bash
+cd path/to/bruno-starter-guide
+bru run
+```
+
+Bruno CLI runs each request sequentially and prints a summary table when finished:
+
+```
+01-github-api (200 OK) - 471 ms
+02-echo-bru (getaddrinfo ENOTFOUND {{baseurl}})
+03-script-request (200 OK) - 1186 ms
+...
+
+📊 Execution Summary
+┌───────────────┬────────────────────────┐
+│ Metric        │         Result         │
+├───────────────┼────────────────────────┤
+│ Status        │         ✗ FAIL         │
+├───────────────┼────────────────────────┤
+│ Requests      │ 5 (4 Passed, 1 Failed) │
+└───────────────┴────────────────────────┘
+```
+
+Some requests may fail without an environment — that is expected. You will fix this in the next step.
+
+**Success Criteria:**
+- `bru run` executes without installation errors.
+- CLI output lists all five requests in the collection.
+- An execution summary table is displayed at the end.
+
+More: [Command Examples](/bru-cli/runCollection)
+
+---
+
+## 3. Run with an environment
+
+**Objective:** Run the collection using the `local` environment so variable placeholders like `{{baseURL}}` resolve correctly.
+
+The Bruno Starter Guide includes a `local` environment at `environments/local.yml` with a `baseURL` variable. Activate it with the `--env` flag:
+
+```bash
+bru run --env local
+```
+
+With the environment applied, requests that depend on `{{baseURL}}` resolve and their tests and assertions run:
+
+```
+02-echo-bru (200 OK) - 1067 ms
+Tests
+   ✓ body has title
+   ✓ 200 status code
+Assertions
+   ✓ res.status: eq 200
+   ✓ res.body.title: eq Bruno
+```
+
+**Success Criteria:**
+- `bru run --env local` completes with **✓ PASS** in the execution summary.
+- Tests and assertions for `02-echo-bru` pass (green checkmarks).
+- All five requests show a successful status.
+
+More: [Environment Variables](/variables/environment-variables)
+
+---
+
+## 4. Run a single request
+
+**Objective:** Run one specific request instead of the entire collection.
+
+Specify the request file path after `bru run`:
+
+```bash
+bru run 01-github-api.yml
+```
+
+Bruno CLI executes only that request:
+
+```
+01-github-api (200 OK) - 148 ms
+
+📊 Execution Summary
+┌───────────────┬──────────────┐
+│ Status        │    ✓ PASS    │
+│ Requests      │ 1 (1 Passed) │
+└───────────────┴──────────────┘
+```
+
+You can also run multiple files or folders in one command:
+
+```bash
+bru run 01-github-api.yml 03-script-request.yml
+```
+
+**Success Criteria:**
+- Only the specified request runs.
+- Execution summary shows **1 (1 Passed)**.
+- Response status is **200 OK**.
+
+---
+
+## 5. Run requests with tests only
+
+**Objective:** Filter the collection run to requests that have tests or active assertions.
+
+Use the `--tests-only` flag to skip requests without tests:
+
+```bash
+bru run --env local --tests-only
+```
+
+Only `02-echo-bru` (which has tests and assertions) is executed:
+
+```
+02-echo-bru (200 OK) - 1158 ms
+Tests
+   ✓ body has title
+   ✓ 200 status code
+Assertions
+   ✓ res.status: eq 200
+   ✓ res.body.title: eq Bruno
+
+📊 Execution Summary
+│ Requests      │ 1 (1 Passed) │
+│ Tests         │     2/2      │
+│ Assertions    │     2/2      │
+```
+
+**Success Criteria:**
+- Only requests with tests or assertions are executed.
+- Tests show **2/2** passed.
+- Assertions show **2/2** passed.
+
+More: [Command Options](/bru-cli/commandOptions)
+
+---
+
+## 6. Generate test reports
+
+**Objective:** Export test results to HTML, JSON, and JUnit report files.
+
+Run the collection with reporter flags to write results to disk:
+
+```bash
+bru run --env local \
+  --reporter-html results.html \
+  --reporter-json results.json \
+  --reporter-junit results.xml
+```
+
+When the run completes, Bruno CLI writes the report files:
+
+```
+Wrote html results to results.html
+Wrote json results to results.json
+Wrote junit results to results.xml
+```
+
+Open `results.html` in a browser for a visual summary. Use `results.json` for programmatic analysis or `results.xml` for CI tools that consume JUnit format.
+
+**Success Criteria:**
+- `results.html`, `results.json`, and `results.xml` are created in the current directory.
+- HTML report opens in a browser and shows request results.
+- JSON and XML files contain test execution data.
+
+More: [Generating Reports](/bru-cli/builtInReporters)
+
+---
+
+## 7. Override environment variables
+
+**Objective:** Pass or override environment variables at runtime without editing environment files.
+
+Use the `--env-var` flag to set variables on the command line. This is useful for secrets and CI-specific values:
+
+```bash
+bru run --env local --env-var baseURL=https://echo.usebruno.com
+```
+
+You can chain multiple overrides:
+
+```bash
+bru run --env local \
+  --env-var baseURL=https://echo.usebruno.com \
+  --env-var API_KEY=your-key-here
+```
+
+<Info>
+  Variables marked as secrets in the Bruno app are not accessible via the CLI. Pass them directly with `--env-var`.
+</Info>
+
+**Success Criteria:**
+- Collection runs successfully with overridden variables.
+- No changes are required to environment files on disk.
+
+More: [Command Examples](/bru-cli/runCollection#passing-environment-variables)
+
+---
+
+## 8. Import an OpenAPI specification
+
+**Objective:** Create a Bruno collection from an OpenAPI spec using the CLI.
+
+Bruno CLI can import OpenAPI documents directly into a collection folder — useful for bootstrapping collections or CI pipelines that sync with API specs:
+
+```bash
+bru import openapi \
+  --source https://petstore3.swagger.io/api/v3/openapi.json \
+  --output ./petstore-api \
+  --collection-name "Petstore API"
+```
+
+Bruno CLI fetches the spec, converts it, and writes the collection:
+
+```
+Reading OpenAPI specification from https://petstore3.swagger.io/api/v3/openapi.json...
+Converting OpenAPI specification to Bruno format...
+Bruno collection created at ./petstore-api
+```
+
+Navigate into the new collection and run it:
+
+```bash
+cd petstore-api
+bru run
+```
+
+**Success Criteria:**
+- `petstore-api` directory is created with `opencollection.yml` and request files.
+- `bru run` inside the imported collection executes without import errors.
+
+More: [Import Data](/bru-cli/import)
+
+---
+
+## 9. Automate with CI/CD
+
+**Objective:** Understand how Bruno CLI fits into automated testing pipelines.
+
+Bruno CLI is designed for CI/CD. A typical GitHub Actions workflow:
+
+1. Checks out your repository
+2. Installs `@usebruno/cli`
+3. Runs `bru run` with environment and reporter flags
+4. Uploads the HTML report as a build artifact
+
+Example workflow snippet:
+
+```yaml
+- name: Install Bruno CLI
+  run: npm install -g @usebruno/cli
+
+- name: Run Bruno collection
+  working-directory: collections/my-api
+  run: |
+    bru run \
+      --env ci \
+      --reporter-html ../../reports/test-report.html \
+      --reporter-junit ../../reports/test-results.xml
+```
+
+**Success Criteria:**
+- You understand the basic CI/CD pattern for Bruno CLI.
+- You know where to find a complete GitHub Actions example.
+
+More: [GitHub Actions Integration](/bru-cli/gitHubCLI) · [Jenkins Integration](/bru-cli/jenkins) · [Docker](/bru-cli/docker)
+
+---
+
+Congratulations on completing the Bruno CLI Quick Start! You have learned how to install the CLI, run collections, use environments, generate reports, import OpenAPI specs, and integrate with CI/CD.
+
+**Next steps:**
+
+- [Command Options](/bru-cli/commandOptions) — full list of CLI flags
+- [Command Examples](/bru-cli/runCollection) — data-driven testing, tags, and parallel runs
+- [Proxy Configuration](/bru-cli/proxyConfiguration) — run collections behind a proxy
+- [Bruno Quick Start](/introduction/quick-start) — build the same collection in the Bruno app
