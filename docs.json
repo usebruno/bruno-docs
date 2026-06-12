@@ -345,7 +345,14 @@
                       "bru-cli/import",
                       "bru-cli/proxyConfiguration",
                       "bru-cli/docker",
-                      "bru-cli/gitHubCLI",
+                      {
+                        "group": "GitHub Actions",
+                        "pages": [
+                          "bru-cli/github-actions/overview",
+                          "bru-cli/github-actions/downstream-actions",
+                          "bru-cli/github-actions/manual-setup"
+                        ]
+                      },
                       "bru-cli/jenkins"
                     ]
                   },
@@ -892,6 +899,11 @@
     }
   },
   "redirects": [
+    {
+      "source": "/bru-cli/gitHubCLI",
+      "destination": "/bru-cli/github-actions/overview",
+      "permanent": true
+    },
     {
       "source": "/advanced-guides/starter-guide",
       "destination": "/introduction/quick-start",
