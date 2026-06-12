@@ -338,6 +338,7 @@
                     "group": "Bruno CLI",
                     "pages": [
                       "bru-cli/overview",
+                      "bru-cli/quick-start",
                       "bru-cli/installation",
                       "bru-cli/commandOptions",
                       "bru-cli/runCollection",
