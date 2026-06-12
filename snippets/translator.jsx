@@ -1,101 +1,28 @@
+/**
+ * Postman → Bruno script translator UI for the Mintlify docs.
+ *
+ * The actual translation logic lives in @usebruno/converters and is
+ * pre-bundled into a self-contained browser JS file at
+ *   /public/js/bruno-translator/bruno-translator.js
+ *
+ * That bundle is built by /vite.translator.config.ts from the entry at
+ * /tools/translator-bundle/entry.ts, and sets
+ * `window.__brunoTranslator.postmanTranslation` when it loads, which
+ * guarantees this docs translator and the actual Bruno desktop app's
+ * Postman import feature use the EXACT same conversion logic.
+ *
+ * To rebuild the bundle after a @usebruno/converters version bump:
+ *   npm run build:translator
+ *
+ * See /tools/translator-bundle/README.md for details.
+ */
+
+const TRANSLATOR_BUNDLE_URL = '/public/js/bruno-translator/bruno-translator.js';
+
 export const Translator = () => {
-  // Postman to Bruno script translator
-  const postmanTranslation = (script) => {
-    if (!script || script.trim() === '') {
-      return script;
-    }
-
-    try {
-      let translatedScript = script;
-
-      // Basic Postman to Bruno API conversions
-      const conversions = [
-        // Test function conversions
-        {
-          pattern: /pm\.test\s*\(\s*["'`]([^"'`]+)["'`]\s*,\s*function\s*\(\s*\)\s*\{/g,
-          replacement: 'test("$1", function() {'
-        },
-        // Response status conversions
-        {
-          pattern: /pm\.response\.to\.have\.status\((\d+)\)/g,
-          replacement: 'expect(res.getStatus()).to.equal($1)'
-        },
-        // Response body JSON access
-        {
-          pattern: /pm\.response\.json\(\)/g,
-          replacement: 'res.getBody()'
-        },
-        // Environment variable operations
-        {
-          pattern: /pm\.environment\.set\s*\(\s*["'`]([^"'`]+)["'`]\s*,\s*([^)]+)\)/g,
-          replacement: 'bru.setEnvVar("$1", $2)'
-        },
-        {
-          pattern: /pm\.environment\.get\s*\(\s*["'`]([^"'`]+)["'`]\s*\)/g,
-          replacement: 'bru.getEnvVar("$1")'
-        },
-        // Global variable operations
-        {
-          pattern: /pm\.globals\.set\s*\(\s*["'`]([^"'`]+)["'`]\s*,\s*([^)]+)\)/g,
-          replacement: 'bru.setVar("$1", $2)'
-        },
-        {
-          pattern: /pm\.globals\.get\s*\(\s*["'`]([^"'`]+)["'`]\s*\)/g,
-          replacement: 'bru.getVar("$1")'
-        },
-        // Collection variable operations
-        {
-          pattern: /pm\.collectionVariables\.set\s*\(\s*["'`]([^"'`]+)["'`]\s*,\s*([^)]+)\)/g,
-          replacement: 'bru.setVar("$1", $2)'
-        },
-        {
-          pattern: /pm\.collectionVariables\.get\s*\(\s*["'`]([^"'`]+)["'`]\s*\)/g,
-          replacement: 'bru.getVar("$1")'
-        },
-        // Response time assertions
-        {
-          pattern: /pm\.expect\s*\(\s*pm\.response\.responseTime\s*\)\.to\.be\.below\s*\(\s*(\d+)\s*\)/g,
-          replacement: 'expect(res.getResponseTime()).to.be.below($1)'
-        },
-        // Response header assertions
-        {
-          pattern: /pm\.response\.to\.have\.header\s*\(\s*["'`]([^"'`]+)["'`]\s*\)/g,
-          replacement: 'expect(res.getHeader("$1")).to.exist'
-        },
-        // Response body text
-        {
-          pattern: /pm\.response\.text\(\)/g,
-          replacement: 'res.getBody()'
-        },
-        // Basic expect conversions
-        {
-          pattern: /pm\.expect\s*\(\s*([^)]+)\s*\)\.to\.eql\s*\(\s*([^)]+)\s*\)/g,
-          replacement: 'expect($1).to.equal($2)'
-        },
-        {
-          pattern: /pm\.expect\s*\(\s*([^)]+)\s*\)\.to\.equal\s*\(\s*([^)]+)\s*\)/g,
-          replacement: 'expect($1).to.equal($2)'
-        },
-        // Response size
-        {
-          pattern: /pm\.response\.responseSize/g,
-          replacement: 'res.getSize()'
-        }
-      ];
-
-      // Apply all conversions
-      conversions.forEach(({ pattern, replacement }) => {
-        translatedScript = translatedScript.replace(pattern, replacement);
-      });
-
-      return translatedScript;
-    } catch (error) {
-      console.error('Translation error:', error);
-      return script;
-    }
-  };
-
   const [mounted, setMounted] = useState(false);
+  const [translatorReady, setTranslatorReady] = useState(false);
+  const [translatorError, setTranslatorError] = useState(null);
   const [pmCode, setPmCode] = useState('// translate your awesome code');
   const [translatedCode, setTranslatedCode] = useState('');
   const [layoutMode, setLayoutMode] = useState('col');
@@ -103,21 +30,55 @@ export const Translator = () => {
 
   useEffect(() => {
     setMounted(true);
-    // Load saved code
-    if (typeof window !== 'undefined') {
-      const savedPmCode = localStorage.getItem('pmCode');
-      if (savedPmCode) {
-        setPmCode(savedPmCode);
-      }
+    if (typeof window === 'undefined') return;
+
+    const savedPmCode = localStorage.getItem('pmCode');
+    if (savedPmCode) setPmCode(savedPmCode);
+
+    if (window.__brunoTranslator?.postmanTranslation) {
+      setTranslatorReady(true);
+      return;
     }
+
+    const existing = document.querySelector(`script[data-bruno-translator]`);
+    if (existing) {
+      const onReady = () => setTranslatorReady(true);
+      window.addEventListener('bruno-translator-ready', onReady, { once: true });
+      return () => window.removeEventListener('bruno-translator-ready', onReady);
+    }
+
+    const script = document.createElement('script');
+    script.src = TRANSLATOR_BUNDLE_URL;
+    script.async = true;
+    script.dataset.brunoTranslator = 'true';
+    script.onload = () => {
+      if (window.__brunoTranslator?.postmanTranslation) {
+        setTranslatorReady(true);
+      } else {
+        setTranslatorError(
+          'Translator bundle loaded but did not expose window.__brunoTranslator.'
+        );
+      }
+    };
+    script.onerror = () => {
+      setTranslatorError(
+        `Failed to load translator bundle from ${TRANSLATOR_BUNDLE_URL}. ` +
+          `Make sure you have run "npm run build:translator".`
+      );
+    };
+    document.head.appendChild(script);
   }, []);
 
   useEffect(() => {
-    if (mounted) {
-      const output = postmanTranslation(pmCode);
-      setTranslatedCode(output);
+    if (!mounted || !translatorReady) return;
+    try {
+      const output = window.__brunoTranslator.postmanTranslation(pmCode);
+      setTranslatedCode(output ?? '');
+    } catch (e) {
+      console.error('Translation error:', e);
+      setTranslatedCode(pmCode);
     }
-  }, [pmCode, mounted]);
+  }, [pmCode, mounted, translatorReady]);
 
   const savePmCode = (code) => {
     if (typeof window !== 'undefined') {
@@ -161,12 +122,7 @@ export const Translator = () => {
 
   if (!mounted) {
     return (
-      <div style={{ 
-        width: '100%', 
-        padding: '2rem', 
-        textAlign: 'center',
-        color: '#666'
-      }}>
+      <div style={{ width: '100%', padding: '2rem', textAlign: 'center', color: '#666' }}>
         Loading translator...
       </div>
     );
@@ -174,6 +130,33 @@ export const Translator = () => {
 
   return (
     <div style={{ width: '100%', marginTop: '1rem', marginBottom: '2rem' }}>
+      {translatorError && (
+        <div style={{
+          padding: '0.75rem 1rem',
+          marginBottom: '1rem',
+          backgroundColor: '#7F1D1D',
+          color: '#FCA5A5',
+          borderRadius: '0.5rem',
+          fontSize: '0.875rem'
+        }}>
+          {translatorError}
+        </div>
+      )}
+
+      {!translatorReady && !translatorError && (
+        <div style={{
+          padding: '0.75rem 1rem',
+          marginBottom: '1rem',
+          backgroundColor: isDark ? '#2D2D2D' : '#F3F4F6',
+          color: textColor,
+          borderRadius: '0.5rem',
+          fontSize: '0.875rem',
+          border: `1px solid ${borderColor}`
+        }}>
+          Loading the @usebruno/converters translation engine…
+        </div>
+      )}
+
       {/* Toolbar */}
       <div style={{
         display: 'flex',
@@ -205,7 +188,7 @@ export const Translator = () => {
               <option value="light">Light</option>
             </select>
           </label>
-          
+
           <div style={{ display: 'flex', gap: '0.25rem', border: `1px solid ${borderColor}`, borderRadius: '0.375rem', padding: '0.125rem' }}>
             <button
               onClick={() => setLayoutMode('col')}
@@ -390,7 +373,11 @@ export const Translator = () => {
               backgroundColor: bgColor,
               color: textColor
             }}
-            placeholder="Translated Bruno script will appear here..."
+            placeholder={
+              translatorReady
+                ? 'Translated Bruno script will appear here...'
+                : 'Waiting for translator engine to load...'
+            }
             spellCheck={false}
           />
         </div>
