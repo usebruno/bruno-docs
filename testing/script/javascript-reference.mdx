@@ -1357,9 +1357,13 @@ Here are all available utility methods:
 
 Send a programmatic HTTP request from your script. Supports `method`, `url`, `headers`, `data`, `timeout`, `httpsAgent`, and optional `callback(err, res)`; also supports `await` without a callback.
 
-<Info>
+<Note>
   Bruno applies your TLS (custom CA, SSL verification), proxy, and client certificate settings to `bru.sendRequest()` unless you override with `httpsAgent`.
-</Info>
+</Note>
+
+<Tip>
+  You can see the executed request using `sendRequest` in the [timeline tab](/send-requests/res-data-cookies/res-data#timeline) with `sendRequest` tag attached to it.
+</Tip>
 
 ```javascript
 await bru.sendRequest(
@@ -1394,6 +1398,10 @@ console.log("Response:", res.data);
 
 Custom CA (requires [Developer Mode](/get-started/configure/javascript-sandbox#developer-mode) for `fs`):
 
+<Warning>
+  Custom HTTPS agents and loading certificates from disk require [Developer Mode](/get-started/configure/javascript-sandbox#developer-mode).
+</Warning>
+
 ```javascript
 const https = require("node:https");
 const fs = require("fs");
@@ -1407,9 +1415,7 @@ const res = await bru.sendRequest({
 });
 ```
 
-<Warning>
-  Custom HTTPS agents and loading certificates from disk require [Developer Mode](/get-started/configure/javascript-sandbox#developer-mode).
-</Warning>
+
 
 ### `bru.sleep(milliseconds)`
 
@@ -1500,10 +1506,14 @@ Executes another request in the collection by its name and returns its response.
   Do not call `bru.runRequest()` from a collection-level pre-request script — it can cause an infinite recursive loop. Always use double quotes for the request name.
 </Warning>
 
+<Tip>
+  You can see the executed request using `runRequest` in the [timeline tab](/send-requests/res-data-cookies/res-data#timeline) with `runRequest` tag attached to it.
+</Tip>
+
 ```javascript
 // Run an auth request and use the token it returns
 const authResponse = await bru.runRequest("Login");
-const token = authResponse.body.token;
+const token = authResponse.data.token;
 req.setHeader("Authorization", "Bearer " + token);
 
 // Run a cleanup step after the main request
