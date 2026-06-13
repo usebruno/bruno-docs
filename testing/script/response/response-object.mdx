@@ -31,6 +31,74 @@ The `headers` property contains HTTP headers associated with the response. These
 
 The `status` property represents the HTTP status code of the response. It indicates the outcome of the request, such as success, redirection, client error, or server error.
 
+## `headerList`
+
+The `res.headerList` property exposes a structured, read-only API for inspecting response headers. All key lookups are case-insensitive. The existing `res.headers` raw object remains available unchanged.
+
+```javascript
+// Read
+res.headerList.get('content-type');              // 'application/json'
+res.headerList.has('x-request-id');              // true
+res.headerList.one('Cache-Control');             // { key: 'Cache-Control', value: 'no-cache' }
+res.headerList.all();                            // [{ key, value }, ...]
+res.headerList.count();                          // 2
+
+// Search
+res.headerList.find(h => h.key.toLowerCase() === 'content-type');
+res.headerList.filter(h => h.key.startsWith('x-'));
+res.headerList.indexOf('content-type');
+
+// Iteration
+res.headerList.forEach((h, i) => { /* ... */ });
+res.headerList.map(h => h.key);
+res.headerList.reduce((acc, h) => acc, {});
+
+// Transform
+res.headerList.toObject();                       // plain object map
+res.headerList.toString();                       // HTTP wire format
+```
+
+<Warning>
+  `res.headerList` is read-only. Calling write methods (`append`, `set`, `delete`, `clear`, `populate`, `repopulate`, `assimilate`) throws a `"HeaderList is read-only"` error.
+</Warning>
+
+### Method Reference
+
+#### Read
+
+| Method | Returns | Description |
+| --- | --- | --- |
+| `get(name)` | `string \| undefined` | Value of the first header matching the key |
+| `one(name)` | `object \| undefined` | Full header object `{ key, value }` for the matching key |
+| `all()` | `object[]` | Cloned array of all header objects `{ key, value }` |
+| `count()` | `number` | Number of headers |
+
+#### Search
+
+| Method | Returns | Description |
+| --- | --- | --- |
+| `has(name)` | `boolean` | `true` if a header with that key exists |
+| `has(name, value)` | `boolean` | `true` if key exists and value matches exactly |
+| `find(fn, context?)` | `object \| undefined` | First header where the predicate returns truthy |
+| `filter(fn, context?)` | `object[]` | All headers where the predicate returns truthy |
+| `indexOf(item)` | `number` | Index of a header by string key or `{ key, value }` object; `-1` if not found |
+
+#### Iteration
+
+| Method | Returns | Description |
+| --- | --- | --- |
+| `forEach(fn, context?)` | `void` | Calls `fn(header, index)` for every header |
+| `map(fn, context?)` | `any[]` | Returns a new array of mapped values |
+| `reduce(fn, initial?, context?)` | `any` | Reduces headers to a single value |
+
+#### Transform
+
+| Method | Returns | Description |
+| --- | --- | --- |
+| `toObject()` | `object` | Plain `{ key: value }` map |
+| `toString()` | `string` | HTTP wire format `Key: Value\n...` |
+| `toJSON()` | `object[]` | Same as `all()` — suitable for `JSON.stringify()` |
+
 ## Example Usage
 
 ```javascript
@@ -47,6 +115,7 @@ const res = {
 // Accessing response properties
 console.log(res.body); // Output: '{"message": "Hello, world!"}'
 console.log(res.headers['Content-Type']); // Output: 'application/json'
+console.log(res.headerList.get('content-type')); // Output: 'application/json' (case-insensitive)
 console.log(res.status); // Output: 200
 ```
 
