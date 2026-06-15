@@ -146,6 +146,26 @@ To import a workspace:
   For detailed instructions on importing and exporting workspaces, including Git-based workflows, see the [Import/Export Workspace Guide](/get-started/import-export-data/import-export-workspace).
 </Tip>
 
+## Moving an External Collection into a Workspace
+
+If a collection was opened from a location outside the workspace folder (for example, you opened it directly from a path on disk), you can move it into the active workspace so it can be managed as part of the workspace's Git setup.
+
+<Info>
+  The **Move into Workspace** action is only shown for collections that live outside the active workspace's root folder. Collections already inside the workspace will not show this option.
+</Info>
+
+To move an external collection into the active workspace:
+
+1. In the sidebar, hover over the collection and open the **collection actions** menu (the three-dot icon).
+2. Select **Move into Workspace**.
+3. Review the source path and the destination (`<workspace>/collections/<name>`), then click **Move**.
+
+Bruno moves the collection's files into `<workspace>/collections/<name>` and registers the new path in the workspace's `workspace.yml`. The collection is closed and re-opened from its new location, so any open request tabs for that collection will close.
+
+<Warning>
+  If the collection has unsaved changes, Bruno opens a confirmation dialog listing the affected requests. You can **Save All and Move**, **Discard All and Move**, or save transient (never-saved) requests individually before continuing.
+</Warning>
+
 ## Closing a Workspace
 
 To close a workspace (remove it from Bruno without deleting files):
