@@ -331,7 +331,8 @@
                       "agents/cursor",
                       "agents/vs-code",
                       "agents/codex",
-                      "agents/claude"
+                      "agents/claude",
+                      "agents/devin"
                     ]
                   },
                   {
