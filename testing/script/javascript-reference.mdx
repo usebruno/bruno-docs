@@ -1252,20 +1252,23 @@ console.log("Secret retrieved successfully");
 
 ## Runner
 
-The Runner API provides methods to control the execution flow of your collection runs. These methods are specifically designed for use within the collection runner context, allowing you to skip requests, change execution order, or stop the run entirely.
+The Runner API provides methods to control the execution flow of your collection runs. These methods are specifically designed for use within the collection runner context, allowing you to skip requests, change execution order, stop the run entirely, or read data from attached CSV/JSON files during data-driven runs.
 
 <Warning>
-  Runner methods like `skipRequest()` and `stopExecution()` only work during collection runs and will have no effect when running individual requests.
+  Runner methods like `skipRequest()`, `stopExecution()`, and `iterationData` only work during collection runs and will have no effect when running individual requests. `iterationData` is only populated when the collection runner is iterating over an attached data file.
 </Warning>
 
 Here are all available runner-related methods:
 
-| Method                           | Description                                               |
-| -------------------------------- | --------------------------------------------------------- |
-| bru.setNextRequest(requestName)  | Sets the next request to execute.                         |
+| Method / Property | Description |
+| --- | --- |
+| bru.setNextRequest(requestName) | Sets the next request to execute. |
 | bru.runner.setNextRequest(requestName) | Alter the order of requests by specifying the next request. |
-| bru.runner.skipRequest()         | Skip the execution of the current request.                |
-| bru.runner.stopExecution()       | Terminate a collection run.                               |
+| bru.runner.skipRequest() | Skip the execution of the current request. |
+| bru.runner.stopExecution() | Terminate a collection run. |
+| bru.runner.iterationData | Read and manipulate the current row from an attached CSV/JSON data file. |
+| bru.runner.iterationIndex | Zero-based index of the current iteration. |
+| bru.runner.totalIterations | Total number of iterations in the current run. |
 
 ### `bru.setNextRequest(requestName)`
 
@@ -1332,6 +1335,94 @@ if (bru.getVar("retries") >= 5) {
   console.error("Max retries reached — aborting.");
   bru.runner.stopExecution();
 }
+```
+
+### `bru.runner.iterationData`
+
+Object for accessing and manipulating the **current row** from an attached CSV or JSON data file during a [data-driven collection run](/testing/automate-test/data-driven-testing). Each column (CSV) or object key (JSON) in the file becomes a field you can read in scripts.
+
+Use in **pre-request**, **post-response**, or **test** scripts when the collection runner is iterating over a data file (UI runner or CLI with `--csv-file-path` / `--json-file-path`).
+
+<Info>
+  The data file does not automatically replace your request body. Use `{{columnName}}` in the request, or read values with `iterationData` and set the body in a script (for example with `req.setBody()`).
+</Info>
+
+#### `bru.runner.iterationData.has(key)`
+
+Returns `true` if the named field exists in the current iteration row.
+
+```javascript
+if (bru.runner.iterationData.has("username")) {
+  console.log("Username exists in current iteration");
+}
+```
+
+#### `bru.runner.iterationData.get(key?)`
+
+Returns a single field value when `key` is provided. Call without arguments to get all fields for the current row as an object.
+
+```javascript
+const username = bru.runner.iterationData.get("username");
+console.log(`Current username: ${username}`);
+
+const allData = bru.runner.iterationData.get();
+console.log("All iteration data:", allData);
+```
+
+#### `bru.runner.iterationData.stringify()`
+
+Returns the current iteration row as a JSON string.
+
+```javascript
+const jsonData = bru.runner.iterationData.stringify();
+console.log("JSON data:", jsonData);
+```
+
+#### `bru.runner.iterationData.unset(key)`
+
+Removes a field from the current iteration only. Does not modify the source data file or affect other iterations.
+
+```javascript
+bru.runner.iterationData.unset("password");
+```
+
+**Example:** build the request body from iteration data
+
+```javascript
+const username = bru.runner.iterationData.get("username");
+const password = bru.runner.iterationData.get("password");
+
+req.setBody({ username, password });
+```
+
+**Example:** conditional logic per iteration
+
+```javascript
+if (bru.runner.iterationIndex === 0) {
+  bru.runner.iterationData.unset("password");
+}
+
+if (bru.runner.iterationData.has("password")) {
+  console.log("Password available");
+}
+```
+
+### `bru.runner.iterationIndex`
+
+Zero-based index of the current iteration in a data-driven run.
+
+```javascript
+const currentIteration = bru.runner.iterationIndex;
+console.log(`Running iteration ${currentIteration}`);
+```
+
+### `bru.runner.totalIterations`
+
+Total number of iterations in the current data-driven run.
+
+```javascript
+const total = bru.runner.totalIterations;
+console.log(`Total iterations: ${total}`);
 ```
 
 ## Utilities
