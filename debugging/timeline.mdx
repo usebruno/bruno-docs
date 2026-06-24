@@ -45,3 +45,13 @@ The Network Logs tab provides low-level network insights for advanced debugging:
 * **Debugging Information** - Additional network-level diagnostics
 
 This comprehensive view helps you identify performance bottlenecks, debug connection issues, and understand the complete lifecycle of your API requests.
+
+## Scripted requests
+
+In addition to the main request you sent, the Timeline also shows HTTP requests made from within your scripts. Any call to `axios`, `bru.request`, or another HTTP client inside a pre-request script, post-response script, or test is captured as its own entry alongside the main request.
+
+Each scripted entry is labeled with the script phase it ran in (for example, `pre-request`, `post-response`, or `tests`) so you can trace exactly which script triggered each network call. OAuth2 token-fetch steps are also expanded inline under their parent request, making it easier to debug authentication flows.
+
+You can filter timeline entries by type and expand any row to inspect its headers, body, and network log.
+
+When you run a collection in the Runner, the Timeline shows scripted entries for each iteration alongside the main requests they belong to.
