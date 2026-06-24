@@ -243,7 +243,115 @@ More: [Generating Reports](/bru-cli/builtInReporters)
 
 ---
 
-## 7. Override environment variables
+## 7. Data-Driven Testing
+
+**Objective:** Create a CSV or JSON data file, use row values in the `02-echo-bru` request, and run it from the CLI with an HTML report.
+
+The Bruno Starter Guide includes `02-echo-bru`, a POST request to the [echo.usebruno.com](https://echo.usebruno.com) endpoint. You will send a different JSON body on each iteration using data from a file.
+
+### Update the request in Bruno
+
+1. Open the **Bruno Starter Guide** collection in Bruno.
+2. Open the **`02-echo-bru`** request.
+3. Select the **`local`** environment (top-right).
+4. Go to the **Body** tab and update the JSON to use placeholders that match your data file columns:
+
+```json
+{
+  "title": "{{title}}",
+  "msg": "{{msg}}"
+}
+```
+
+5. Save the request.
+
+<Tip>
+  The data file does not replace your request body automatically. Each column (CSV) or key (JSON) becomes an iteration variable. Use `{{columnName}}` in the body so Bruno sends that row's values on each run.
+</Tip>
+
+### Create a data file
+
+Create **one** of the following files in your collection folder (`bruno-starter-guide/`):
+
+<Tabs>
+  <Tab title="CSV">
+    Create `users.csv`:
+
+```csv
+title,msg
+Bruno,Loved by developers. Built for developers.
+Opensource,Git-friendly API client.
+CLI,Run collections from the terminal.
+```
+  </Tab>
+  <Tab title="JSON">
+    Create `users.json`:
+
+```json
+[
+  { "title": "Bruno", "msg": "Loved by developers. Built for developers." },
+  { "title": "Opensource", "msg": "Git-friendly API client." },
+  { "title": "CLI", "msg": "Run collections from the terminal." }
+]
+```
+  </Tab>
+</Tabs>
+
+### Try it in the Bruno app (optional)
+
+1. Open the collection **Runner** (runner icon in the top right corner).
+2. Attach `users.csv` or `users.json` as the data file.
+3. Select the **`local`** environment and click on  **Run** button.
+4. Review the **Timeline** to confirm each iteration sent a different `title` and `msg`.
+
+### Run from the CLI
+
+From the collection directory, run `02-echo-bru` once per data row and write an HTML report:
+
+<Tabs>
+  <Tab title="CSV">
+```bash
+bru run --env local 02-echo-bru.yml \
+  --csv-file-path users.csv \
+  --reporter-html results.html
+```
+  </Tab>
+  <Tab title="JSON">
+```bash
+bru run --env local 02-echo-bru.yml \
+  --json-file-path users.json \
+  --reporter-html results.html
+```
+  </Tab>
+</Tabs>
+
+Bruno CLI runs the request three times (once per row) and creates `results.html`:
+
+```
+02-echo-bru (200 OK) - 1067 ms
+02-echo-bru (200 OK) - 1042 ms
+02-echo-bru (200 OK) - 1038 ms
+
+📊 Execution Summary
+│ Status        │    ✓ PASS    │
+│ Requests      │ 3 (3 Passed) │
+
+Wrote html results to results.html
+```
+
+Open `results.html` in your browser for a visual summary of all three iterations. See [Generating Reports](/bru-cli/builtInReporters) for JSON, JUnit, and other reporter options.
+
+**Success Criteria:**
+- `users.csv` or `users.json` exists in the collection folder with `title` and `msg` columns.
+- `02-echo-bru` body uses `{{title}}` and `{{msg}}`.
+- CLI run completes with **3 (3 Passed)** in the execution summary.
+- `results.html` is created and shows one result per data row.
+
+More: [Data Driven Testing](/testing/automate-test/data-driven-testing) · [Command Examples](/bru-cli/runCollection#running-a-collection-with-a-csv-file) · [Generating Reports](/bru-cli/builtInReporters)
+
+---
+
+## 8. Override environment variables
 
 **Objective:** Pass or override environment variables at runtime without editing environment files.
 
@@ -261,9 +369,9 @@ bru run --env local \
   --env-var API_KEY=your-key-here
 ```
 
-<Info>
+<Tip>
   Variables marked as secrets in the Bruno app are not accessible via the CLI. Pass them directly with `--env-var`.
-</Info>
+</Tip>
 
 **Success Criteria:**
 - Collection runs successfully with overridden variables.
@@ -273,7 +381,7 @@ More: [Command Examples](/bru-cli/runCollection#passing-environment-variables)
 
 ---
 
-## 8. Import an OpenAPI specification
+## 9. Import an OpenAPI specification
 
 **Objective:** Create a Bruno collection from an OpenAPI spec using the CLI.
 
@@ -309,7 +417,7 @@ More: [Import Data](/bru-cli/import)
 
 ---
 
-## 9. Automate with CI/CD
+## 10. Automate with CI/CD
 
 **Objective:** Understand how Bruno CLI fits into automated testing pipelines.
 
@@ -343,11 +451,13 @@ More: [GitHub Actions Integration](/bru-cli/gitHubCLI) · [Jenkins Integration](
 
 ---
 
-Congratulations on completing the Bruno CLI Quick Start! You have learned how to install the CLI, run collections, use environments, generate reports, import OpenAPI specs, and integrate with CI/CD.
+Congratulations on completing the Bruno CLI Quick Start! You have learned how to install the CLI, run collections, use environments, generate reports, run data-driven tests, import OpenAPI specs, and integrate with CI/CD.
 
 **Next steps:**
 
 - [Command Options](/bru-cli/commandOptions) — full list of CLI flags
 - [Command Examples](/bru-cli/runCollection) — data-driven testing, tags, and parallel runs
+- [Data Driven Testing](/testing/automate-test/data-driven-testing) — CSV/JSON iteration in the app and CLI
+- [Generating Reports](/bru-cli/builtInReporters) — HTML, JSON, and JUnit reporters
 - [Proxy Configuration](/bru-cli/proxyConfiguration) — run collections behind a proxy
 - [Bruno Quick Start](/introduction/quick-start) — build the same collection in the Bruno app
