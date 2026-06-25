@@ -5,6 +5,8 @@ sidebarTitle: "Message Types"
 
 Bruno supports various message types for WebSocket communication, allowing you to send and receive different data formats based on your application's requirements.
 
+When a request contains multiple messages, the type is set per message — you can mix Text, JSON, and XML messages within the same WebSocket request. New messages default to **JSON**.
+
 ## Supported Message Types
 
 Bruno supports the following WebSocket message types:
