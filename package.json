@@ -31,7 +31,7 @@
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
-    "@usebruno/converters": "^0.19.0",
+    "@usebruno/converters": "^0.21.0",
     "prettier": "^3.0.0",
     "typescript": "~5.9.3",
     "vite": "^5.4.10",
