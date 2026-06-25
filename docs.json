@@ -410,6 +410,7 @@
                     "group": "License Administrators",
                     "pages": [
                       "license-administrators/license-portal",
+                      "license-administrators/billing",
                       "license-administrators/self-hosted-licensing",
                       {
                         "group": "SAML SSO",
