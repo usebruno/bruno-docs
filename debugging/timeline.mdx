@@ -56,7 +56,7 @@ The number on each tab is how many requests match that filter.
 
 | Tab | What it shows |
 | --- | --- |
-| **All** | Every HTTP request from the run including the main request plus any calls made from scripts (with or without `sendRequest` / `runRequest`). |
+| **All** | Every HTTP request from the run including the main request plus any calls made from scripts (with `sendRequest` / `runRequest`). |
 | **Request** | Only the **main request** — the HTTP call defined in the request URL bar (method, URL, body, and headers you configured in Bruno). |
 | **Pre-Request** | Only HTTP requests executed during the **pre-request script** phase (from `bru.sendRequest()` or `bru.runRequest()` before the main request is sent). |
 | **Post-Response** | Only HTTP requests executed during the **post-response** or **test** script phase (from `bru.sendRequest()` or `bru.runRequest()` after the main response returns). |
