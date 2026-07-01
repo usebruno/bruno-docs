@@ -1,10 +1,11 @@
 ---
 title: "Timeline"
+description: "Inspect the main request, script-triggered HTTP calls, and console output in one chronological view."
 ---
 
-The **Timeline** tab provides comprehensive insights into your API requests and responses. It displays detailed information about what was sent, what was received, and network-level details to help you debug and validate your API calls effectively.
+**Timeline** tab shows everything that happened during a request run. It includes the main HTTP call, any extra requests made from scripts, and the resolved request details for each step.
 
-## Timeline Structure
+## Timeline Interface
 
 The Timeline tab is organized into three categories:
 
@@ -12,8 +13,7 @@ The Timeline tab is organized into three categories:
 2. **Response**
 3. **Network Logs**
 
-![Response Timeline](/images/screenshots/send-request/res-data-and-cookie/res-timeline.webp)
-
+![Response Timeline](/images/screenshots/send-request/res-data-and-cookie/01-timeline.webp)
 ### 1. Request Tab
 
 The Request tab displays everything that was sent with your API request:
@@ -45,3 +45,21 @@ The Network Logs tab provides low-level network insights for advanced debugging:
 * **Debugging Information** - Additional network-level diagnostics
 
 This comprehensive view helps you identify performance bottlenecks, debug connection issues, and understand the complete lifecycle of your API requests.
+
+## Script Logs in Timeline
+
+When scripts use [`bru.sendRequest()`](/testing/script/javascript-reference#brusendrequestoptions-callback) or [`bru.runRequest()`](/testing/script/javascript-reference#brurunrequestrequestpathname), Timeline lists every HTTP call made during the run. Use the filter tabs to narrow the view.
+
+![Script Logs in Timeline](/images/screenshots/send-request/res-data-and-cookie/res-timeline.webp)
+
+The number on each tab is how many requests match that filter.
+
+| Tab | What it shows |
+| --- | --- |
+| **All** | Every HTTP request from the run including the main request plus any calls made from scripts (with `sendRequest` / `runRequest`). |
+| **Request** | Only the **main request** — the HTTP call defined in the request URL bar (method, URL, body, and headers you configured in Bruno). |
+| **Pre-Request** | Only HTTP requests executed during the **pre-request script** phase (from `bru.sendRequest()` or `bru.runRequest()` before the main request is sent). |
+| **Post-Response** | Only HTTP requests executed during the **post-response** or **test** script phase (from `bru.sendRequest()` or `bru.runRequest()` after the main response returns). |
+
+Click a row to expand it and inspect that call's request body, headers, response, and network timing. Use **Clear Timeline** to reset the list before the next run.
+
