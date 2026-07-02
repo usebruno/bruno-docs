@@ -1,0 +1,127 @@
+---
+title: "Devin"
+sidebarTitle: "Devin"
+---
+
+[Devin](https://devin.ai) is an AI software engineering agent by Cognition that can work autonomously on tasks across your codebase. Devin comes in two forms: **Devin Local** (Desktop and CLI) for working directly on your machine, and **Devin Cloud** for running tasks in a remote cloud environment. Both integrate seamlessly with Bruno's local-first, Git-based API collections.
+
+## Configure Devin Local with Bruno
+
+Devin Local runs directly on your machine through **Devin Desktop** (GUI) or **Devin CLI** (terminal). It reads project-specific instructions from `.agents/skills/` files.
+
+1. Install Devin Desktop from [devin.ai](https://devin.ai) or install the Devin CLI via your package manager.
+
+2. At your project root, create a `.agents/skills/` directory with a Bruno-specific instructions file:
+
+<Tree>
+  <Tree.Folder name="my-project" defaultOpen>
+    <Tree.Folder name=".agents" defaultOpen>
+      <Tree.Folder name="skills" defaultOpen>
+        <Tree.File name="bruno.md" />
+      </Tree.Folder>
+    </Tree.Folder>
+    <Tree.Folder name="src" defaultOpen>
+      <Tree.Folder name="routes">
+        <Tree.File name="users.js" />
+        <Tree.File name="auth.js" />
+      </Tree.Folder>
+      <Tree.File name="app.js" />
+      <Tree.File name="server.js" />
+    </Tree.Folder>
+    <Tree.Folder name="bruno-collection" defaultOpen>
+      <Tree.File name="opencollection.yml" />
+      <Tree.Folder name="environments">
+        <Tree.File name="Local.yml" />
+      </Tree.Folder>
+    </Tree.Folder>
+    <Tree.File name="package.json" />
+    <Tree.File name=".gitignore" />
+  </Tree.Folder>
+</Tree>
+
+3. Add Bruno-specific context to `.agents/skills/bruno.md`. You can use the [default instructions provided by Bruno](https://github.com/bruno-collections/ai-assistant-prompts/tree/main/prompts/devin) as a starting point, or write your own.
+
+<Warning>
+  Skills files are committed to your repository and shared with your team. Avoid putting secrets or environment-specific paths in skills files — use environment variables and Bruno's secret management instead.
+</Warning>
+
+After creating the instructions file, you can start using Devin to automate your API development workflow. See [Use cases](./use-cases) for example prompts and workflows.
+
+## Configure Devin Cloud with Bruno
+
+Devin Cloud runs tasks in a remote environment with access to a full VM, browser, and shell. Beyond skills files, Devin Cloud uses **Knowledge notes** and **Playbooks** to maintain persistent context about Bruno across sessions.
+
+Devin Cloud supports three layers of configuration:
+
+### 1. Skills Files (per-repository)
+
+Same as Devin Local — create `.agents/skills/bruno.md` in your project root. Devin Cloud reads these automatically when working in the repository. You can use the [default instructions provided by Bruno](https://github.com/bruno-collections/ai-assistant-prompts/tree/main/prompts/devin) as a starting point.
+
+### 2. Knowledge Notes (persistent context)
+
+Knowledge notes are persistent, reusable context that Devin Cloud retrieves automatically when relevant. Use them for team-wide conventions that apply across repositories:
+
+- **Bruno file format preferences** — Whether your team uses YAML (OpenCollection) or legacy Bru format
+- **Testing standards** — Required assertions, coverage expectations, naming conventions
+- **Environment conventions** — How your team names environments, manages secrets, structures collections
+- **CI/CD patterns** — Your team's preferred pipeline configuration for Bruno CLI
+
+Create Knowledge notes through the [Devin web interface](https://app.devin.ai) under **Settings > Knowledge**. Example:
+
+```markdown
+Title: Bruno API Collection Standards
+Trigger: When working with Bruno collections or API tests
+
+Our team uses Bruno v3.1+ with YAML/OpenCollection format.
+- Always include opencollection.yml with version 1.0.0
+- Environment files go in environments/ with PascalCase names
+- All requests must have at least one status code assertion
+- Use secret: true for any API keys or tokens in environment files
+- Run collections with: bru run --env <env-name> --reporter-html results.html
+```
+
+<Info>
+  Knowledge notes are automatically retrieved based on relevance — you don't need to reference them in prompts. Devin Cloud matches the task context to your notes and injects the right ones.
+</Info>
+
+### 3. Playbooks (reusable workflows)
+
+Playbooks are step-by-step procedures that Devin Cloud follows for recurring tasks. Use them for standardized Bruno workflows:
+
+- **New collection setup** — Steps to scaffold a Bruno collection with your team's conventions
+- **API test generation** — How to analyze source code and generate comprehensive Bruno tests
+- **Collection migration** — Process for converting Postman collections to Bruno format
+- **Release testing** — Running Bruno collections against staging/production environments
+
+Create Playbooks through the [Devin web interface](https://app.devin.ai) under **Settings > Playbooks**. Example:
+
+```markdown
+Title: Generate Bruno Collection from Backend API
+
+Steps:
+1. Read the project's route/controller files to identify all API endpoints
+2. Create a Bruno collection directory with opencollection.yml
+3. Generate environment files (Local.yml, Staging.yml, Production.yml)
+4. Create a .yml request file for each endpoint with:
+   - Correct HTTP method and URL using {{baseUrl}} variable
+   - Request headers and body based on the route definition
+   - Bearer token auth referencing {{authToken}}
+   - At least 3 test assertions (status code, response structure, response time)
+5. Add pre-request scripts for endpoints requiring authentication
+6. Run the collection with Bruno CLI to verify all requests are valid
+7. Commit and create a PR with the new collection
+```
+
+### When to Use Each Layer
+
+| Layer | Scope | Best For |
+|-------|-------|----------|
+| **Skills files** | Per-repository | Bruno format reference, project-specific conventions, file structure |
+| **Knowledge** | Cross-repository | Team standards, naming conventions, environment patterns |
+| **Playbooks** | Cross-repository | Repeatable multi-step workflows (scaffolding, migration, testing) |
+
+<Warning>
+  Skills files are version-controlled in your repo. Knowledge and Playbooks live in Devin's platform — they persist across sessions but aren't stored in your repository.
+</Warning>
+
+After configuring Devin Cloud, see [Use cases](./use-cases) for example prompts and workflows.
