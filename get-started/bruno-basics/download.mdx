@@ -104,6 +104,101 @@ Starting with Bruno v3, native ARM64 binaries are available for [Windows ARM64 d
 </Tabs>
 
 
+## Nightly Builds
+
+<Note>
+  Nightly builds are **pre-release** and may contain bugs. Use them to preview
+  upcoming features and provide feedback - not for production.
+</Note>
+
+Nightly builds are published automatically for early testing of upcoming features. To get started, visit the [bruno-nightly-builds <strong><sup>↗</sup></strong>](https://github.com/usebruno/bruno-nightly-builds) repository on GitHub and download the asset that matches your OS.
+
+<Tabs>
+  <Tab title="Bruno App">
+    Find the latest release in the [nightly builds repository <strong><sup>↗</sup></strong>](https://github.com/usebruno/bruno-nightly-builds/releases) and download the installer for your platform:
+
+    | Platform | File to download |
+    |----------|-----------------|
+    | macOS (Apple Silicon) | `.dmg` (arm64) |
+    | macOS (Intel) | `.dmg` (x64) |
+    | Windows | `.exe` or `.msi` installer |
+    | Linux | `.AppImage`, `.deb`, or `.rpm` |
+
+    Install it the same way as a regular Bruno release.
+  </Tab>
+  <Tab title="Bruno CLI">
+    The CLI nightly build is published as an npm tarball (`.tgz`). Installing it in an **isolated folder** keeps it separate from any globally installed version.
+
+    **1. Prepare a test folder**
+
+    Download the `.tgz` file from the [nightly builds repository <strong><sup>↗</sup></strong>](https://github.com/usebruno/bruno-nightly-builds/releases) and keep the original filename unchanged. Then create a clean folder and move the file into it:
+
+    ```bash
+    mkdir cli-portable-nightly
+    mv usebruno-cli-*.tgz cli-portable-nightly/
+    cd cli-portable-nightly
+    ```
+
+    **2. Install the bundle locally**
+
+    ```bash
+    npm init -y
+    npm install --offline ./usebruno-cli-<version>.tgz
+    ```
+
+    **3. Verify the installation**
+
+    ```bash
+    npx bru --version
+    # Expected output: the nightly version number, e.g. 3.5.0
+    ```
+
+    **4. Run your collection using the local CLI**
+
+    The nightly binary is installed inside `cli-portable-nightly/node_modules/.bin/bru`. When you want to run a collection that lives in a **different folder**, you must use the full absolute path to that binary. 
+    
+    Using `./node_modules/.bin/bru` only works from inside the `cli-portable-nightly` folder itself.
+
+    ```bash
+    # Step into your collection folder
+    cd /path/to/your-collection
+
+    # macOS / Linux — use the absolute path to the nightly binary
+    /path/to/cli-portable-nightly/node_modules/.bin/bru run --env <name>
+
+    # Windows
+    C:\path\to\cli-portable-nightly\node_modules\.bin\bru run --env <name>
+    ```
+
+    If you are not sure of the path, run `pwd` while inside `cli-portable-nightly` to get it:
+
+    ```bash
+    cd /path/to/cli-portable-nightly
+    pwd
+    # e.g. /Users/yourname/Downloads/cli-portable-nightly
+    ```
+
+    Then use that output as the prefix:
+
+    ```bash
+    cd /path/to/your-collection
+    /Users/yourname/Downloads/cli-portable-nightly/node_modules/.bin/bru run --env <name>
+    ```
+
+    <Tip>
+      To avoid typing the full path every time, export it as a shell variable for your session:
+
+      ```bash
+      export NIGHTLY_BRU=/Users/yourname/Downloads/cli-portable-nightly/node_modules/.bin/bru
+      cd /path/to/your-collection
+      $NIGHTLY_BRU run --env <name>
+      ```
+    </Tip>
+  </Tab>
+</Tabs>
+
+---
+
 ## Release Information
 
 Bruno follows semantic versioning. You can check the [GitHub Releases <strong><sup>↗</sup></strong>](https://github.com/usebruno/bruno/releases) page for:
