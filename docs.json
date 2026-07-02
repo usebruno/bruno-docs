@@ -1196,5 +1196,10 @@
       "destination": "/git-integration/embed-bruno-collection",
       "permanent": true
     }
-  ]
+  ],
+  "banner": {
+  "content": "Bruno V4 includes potentially breaking changes for existing users. [Read more](https://www.usebruno.com/v4-release) for details.",
+  "type": "warning",
+  "dismissible": true
+ }
 }
