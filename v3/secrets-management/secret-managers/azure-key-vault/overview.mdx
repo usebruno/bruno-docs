@@ -1,0 +1,35 @@
+---
+sidebarTitle: "Overview"
+---
+
+import { PremiumBadge } from "/snippets/premium-badge.jsx";
+import { BrunoButton } from "/snippets/BrunoButton.jsx";
+
+# Azure Key Vault <PremiumBadge noLink />
+
+Azure Key Vault is a secure and scalable service designed to store and retrieve sensitive information such as API keys, database credentials, and other secrets. 
+
+Bruno allows you to easily integrate with Azure Key Vault and securely access secrets during test execution without exposing them in test scripts or environment variables. 
+
+## Try it out
+
+Explore the [azure-vault](https://github.com/bruno-collections/azure-vault) sample collection to see Bruno's Azure Key Vault integration in action:
+
+<BrunoButton
+  collectionUrl="https://github.com/bruno-collections/azure-vault.git"
+  width={160}
+  height={40}
+/>
+
+This guide provides detailed steps to configure and utilize Azure Key Vault in Bruno.
+
+- [Adding a secret provider](./adding-a-secret-provider)
+- [Azure CLI Authentication](./cli-authentication)
+- [Configuring and fetching secrets](./configuring-and-fetching-secrets)
+- [Using secrets in Bruno](./using-secrets)
+
+<Info>
+Bruno requires two specific permissions to be able to work with Azure Key Vault:
+- Microsoft.KeyVault/vaults/secrets/read **to read secret values**
+- Microsoft.KeyVault/vaults/secrets/readMetadata/action **to list available secrets**
+</Info>

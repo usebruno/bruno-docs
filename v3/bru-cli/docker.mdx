@@ -1,0 +1,268 @@
+---
+title: "Docker Integration"
+sidebarTitle: "Docker"
+description: "Run Bruno CLI in Docker containers — no Node.js installation required."
+---
+
+Bruno CLI is available as an official Docker image. Pull it, mount your collection, and run — no Node.js or npm needed on the host.
+
+## Where to pull from
+
+| Registry | Image | Pull command |
+| --- | --- | --- |
+| Docker Hub | `usebruno/cli` | `docker pull usebruno/cli` |
+| GitHub Container Registry | `ghcr.io/usebruno/cli` | `docker pull ghcr.io/usebruno/cli` |
+
+Both registries receive identical images on every release.
+
+## Image variants
+
+| Variant | Base image | Size | When to use |
+| --- | --- | --- | --- |
+| **Alpine** (default) | `node:22-alpine` | ~141 MB | Best for most cases — smallest footprint. |
+| **Debian** | `node:22-slim` | ~162 MB | When Alpine hits SSL or glibc compatibility issues. |
+
+Both variants support `linux/amd64` and `linux/arm64`.
+
+## Tags
+
+| Style | Example | Behavior |
+| --- | --- | --- |
+| Exact | `usebruno/cli:3.4.2` | Immutable — recommended for production CI. |
+| Minor | `usebruno/cli:3.4` | Receives patch updates (3.4.x). |
+| Major | `usebruno/cli:3` | Receives any 3.x.x update. |
+| Latest | `usebruno/cli:latest` | Moves only when explicitly tagged. |
+
+Unsuffixed tags (`:latest`, `:3.4.2`, `:3.4`, `:3`) always resolve to the **Alpine** variant. Append `-debian` for the Debian variant (e.g. `usebruno/cli:3.4.2-debian`).
+
+## Quick start
+
+Pull the image and verify it works:
+
+```bash
+docker pull usebruno/cli:latest
+docker run usebruno/cli --version
+```
+
+`docker pull` downloads the image to your machine. `docker run` starts a container from that image — anything after the image name (`usebruno/cli`) is passed as arguments to `bru`, so `--version` prints the CLI version.
+
+<Tip>
+Adding `--rm` to `docker run` automatically removes the container after it exits. It's not required, but keeps your system tidy by avoiding a buildup of stopped containers.
+</Tip>
+
+## Run a collection
+
+The Docker container needs access to your collection files to run them. Use the `-v` (volume mount) flag to map a directory on your host to `/bruno` inside the container. The path should always be mapped to `/bruno` — that's the working directory the CLI expects.
+
+Since the image's entrypoint is already set to `bru`, running `usebruno/cli run` is the same as running `bru run` on your local machine. Any arguments you pass after the image name go straight to the CLI.
+
+<Tabs>
+  <Tab title="Bash / Zsh / WSL">
+```bash
+docker run --rm -v $(pwd):/bruno usebruno/cli run
+```
+  </Tab>
+  <Tab title="PowerShell">
+```powershell
+docker run --rm -v ${PWD}:/bruno usebruno/cli run
+```
+  </Tab>
+  <Tab title="Windows CMD">
+```cmd
+docker run --rm -v %cd%:/bruno usebruno/cli run
+```
+  </Tab>
+</Tabs>
+
+### Run a subfolder or single request
+
+```bash
+docker run --rm -v $(pwd):/bruno usebruno/cli run ./api-tests
+docker run --rm -v $(pwd):/bruno usebruno/cli run ./api-tests/login.bru
+```
+
+### Choose an environment
+
+```bash
+docker run --rm -v $(pwd):/bruno usebruno/cli run --env staging
+```
+
+### Pass environment variables
+
+```bash
+docker run --rm -v $(pwd):/bruno usebruno/cli run --env local --env-var API_KEY=secret123
+```
+
+### Generate a report
+
+```bash
+docker run --rm -v $(pwd):/bruno usebruno/cli run --reporter-junit results.xml
+```
+
+<Info>
+For all `bru run` options — environments, variables, reporters, tags, parallel execution, and more — see [Run Command Options](/bru-cli/runCollection).
+</Info>
+
+### Collection at a different path
+
+If your collection is not in the current directory, point Docker at its path:
+
+```bash
+docker run --rm -v /path/to/your/collection:/bruno usebruno/cli run
+```
+
+## Two usage patterns
+
+### Mount at runtime (no image build needed)
+
+Best for local development and ad-hoc runs.
+
+```bash
+cd ~/my-api-tests
+docker run --rm -v $(pwd):/bruno usebruno/cli run
+```
+
+### Bake collection into a custom image
+
+Best for CI pipelines and distributable test suites. Create a `Dockerfile` next to your `bruno.json`:
+
+```dockerfile
+FROM usebruno/cli:3.4.2-alpine
+
+COPY --chown=node:node . /bruno
+
+CMD ["run", ".", "--env", "ci"]
+```
+
+Build and run:
+
+```bash
+docker build -t my-team/api-tests:v1 .
+docker run --rm my-team/api-tests:v1
+```
+
+<Note>
+The base image runs as `USER node` (UID 1000) for security. Use `--chown=node:node` in `COPY` so the runtime user can write reports back to the mount.
+</Note>
+
+## CI/CD examples
+
+### GitHub Actions
+
+```yaml
+jobs:
+  api-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Bruno collection
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/bruno \
+            usebruno/cli:latest run \
+            --reporter-junit results.xml
+
+      - name: Publish test report
+        uses: dorny/test-reporter@v3
+        if: success() || failure()
+        with:
+          name: Bruno Test Results
+          path: results.xml
+          reporter: java-junit
+```
+
+### GitLab CI
+
+```yaml
+api-tests:
+  image: usebruno/cli:latest
+  script:
+    - bru run --reporter-junit results.xml
+  artifacts:
+    reports:
+      junit: results.xml
+```
+
+### Docker Compose
+
+```yaml
+services:
+  bruno-cli:
+    image: usebruno/cli:latest
+    volumes:
+      - ./collection:/bruno
+      - ./reports:/reports
+    command:
+      run .
+      -r
+      --env ci
+      --reporter-json /reports/results.json
+      --reporter-junit /reports/results.xml
+      --reporter-html /reports/results.html
+```
+
+```bash
+docker compose run bruno-cli
+```
+
+## Image details
+
+| Property | Value |
+| --- | --- |
+| Entrypoint | `bru` |
+| Working directory | `/bruno` |
+| Runtime user | `node` (UID 1000, non-root) |
+| Architectures | `linux/amd64`, `linux/arm64` |
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="UID mismatch on Linux hosts">
+    Files written by the container may appear owned by a foreign UID. Fix with:
+
+```bash
+docker run --rm \
+  -v $(pwd):/bruno \
+  --user "$(id -u):$(id -g)" \
+  usebruno/cli run --env ci
+```
+
+macOS Docker Desktop handles UID translation automatically.
+  </Accordion>
+
+  <Accordion title="SSL or glibc errors with Alpine">
+    The musl libc in Alpine can occasionally cause issues with native Node modules or SSL. Switch to the Debian variant:
+
+```bash
+docker run --rm -v $(pwd):/bruno usebruno/cli:3.4.2-debian run --env ci
+```
+  </Accordion>
+
+  <Accordion title="Windows drive letter conflicts with -v">
+    The `-v` flag uses a colon separator that collides with Windows drive letters. Use `--mount` instead:
+
+```bash
+docker run --rm \
+  --mount type=bind,source=C:\repo\collection,target=/bruno \
+  usebruno/cli run --env ci
+```
+
+Or run inside WSL where POSIX paths work directly.
+  </Accordion>
+
+  <Accordion title="Nested subfolders not running">
+    Bruno CLI's `run` is non-recursive by default. If your collection has nested subfolders, add `-r`:
+
+```bash
+docker run --rm -v $(pwd):/bruno usebruno/cli run my-folder -r --env staging
+```
+  </Accordion>
+</AccordionGroup>
+
+## Resources
+
+- [Docker Hub — usebruno/cli](https://hub.docker.com/r/usebruno/cli)
+- [GHCR — ghcr.io/usebruno/cli](https://github.com/usebruno/bruno/pkgs/container/cli)
+- [Bruno CLI docs](/bru-cli/overview)
+- [bruno-collections/bruno-cli-docker](https://github.com/bruno-collections/bruno-cli-docker) — ready-to-run demo

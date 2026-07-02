@@ -1,0 +1,64 @@
+---
+title: "Convert OpenAPI to Bruno collection"
+sidebarTitle: "OpenAPI to Bruno"
+---
+
+<Tabs>
+  <Tab title="JSON">
+  ### Convert OpenAPI JSON to Bruno collection
+
+  ```javascript
+  const { openApiToBruno } = require('@usebruno/converters');
+  
+  const brunoCollection = openApiToBruno(openApiSpecification);
+  ```
+
+  ```javascript 
+  const { openApiToBruno } = require('@usebruno/converters');
+  const { readFile, writeFile } = require('fs/promises');
+
+  async function convertOpenApiToBruno(inputFile, outputFile) {
+    try {
+      
+      const jsonContent = await readFile(inputFile, 'utf8');
+      
+      const openApiSpec = JSON.parse(jsonContent);
+      
+      const brunoCollection = openApiToBruno(openApiSpec);
+      
+      await writeFile(outputFile, JSON.stringify(brunoCollection, null, 2));
+      console.log('OpenAPI JSON conversion successful!');
+    } catch (error) {
+      console.error('Error during OpenAPI JSON conversion:', error);
+    }
+  }
+
+  
+  convertOpenApiToBruno('path/to/openapi-spec.json', 'path/to/bruno-collection.json');
+  ```
+  </Tab>
+  <Tab title="YAML">
+  ### Convert OpenAPI YAML to Bruno collection
+
+  ```javascript
+  const { openApiToBruno, yamlToJson } = require('@usebruno/converters');
+  const { readFile, writeFile } = require('fs/promises');
+
+async function testOpenApiConversion(yamlFile, outputFile) {
+  const yamlContent = await readFile(yamlFile, 'utf8');
+  const jsonSpec = yamlToJson(yamlContent);
+  if (jsonSpec) {
+    try {
+      const brunoCollection = openApiToBruno(jsonSpec);
+      await writeFile(outputFile, JSON.stringify(brunoCollection, null, 2));
+      console.log('Full conversion pipeline successful!');
+    } catch (error) {
+      console.error('Bruno conversion error:', error.message);
+    }
+  }
+}
+
+testOpenApiConversion('path/to/your/openapi.yaml', 'path/to/bruno-collection.json');
+```
+  </Tab>
+</Tabs>

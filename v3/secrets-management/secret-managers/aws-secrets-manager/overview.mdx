@@ -1,0 +1,28 @@
+---
+sidebarTitle: "Overview"
+---
+
+import { PremiumBadge } from "/snippets/premium-badge.jsx";
+import { BrunoButton } from "/snippets/BrunoButton.jsx";
+
+# AWS Secret Manager <PremiumBadge noLink />
+
+AWS Secrets Manager is a secure and scalable service designed to store and retrieve sensitive information such as API keys, database credentials, and other secrets. 
+
+Bruno allows you to easily integrate with AWS Secrets Manager and securely access secrets during test execution without exposing them in test scripts or environment variables. 
+
+## Try it out
+
+Explore the [aws-secret-manager](https://github.com/bruno-collections/aws-secret-manager) sample collection to see Bruno's AWS Secrets Manager integration in action:
+
+<BrunoButton
+  collectionUrl="https://github.com/bruno-collections/aws-secret-manager.git"
+  width={160}
+  height={40}
+/>
+
+This guide provides detailed steps to configure and utilize AWS Secrets Manager in Bruno.
+
+- [Adding a secret provider](./adding-a-secret-provider)
+- [Configuring and fetching secrets](./configuring-and-fetching-secrets)
+- [Using secrets in Bruno](./using-secrets)

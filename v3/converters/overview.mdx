@@ -1,0 +1,84 @@
+---
+title: "Bruno Converters"
+sidebarTitle: "Overview"
+---
+
+Bruno converter is a standalone NPM package that provides programmatic conversion of various API specification formats to Bruno collections. This package allows you to convert Postman collections, Insomnia collections, OpenAPI specifications, WSDL files, and Postman environments into Bruno collection format.
+
+## Installation
+
+<Info> 
+  Make sure you have Node.js (Node 18 or higher) installed on your local system. It is recommended to use the latest LTS version. 
+</Info>
+
+To install the Bruno Converters, use the node package manager of your choice:
+
+<Tabs>
+  <Tab title="pnpm">
+    ### Using pnpm
+
+    ```bash
+    pnpm install @usebruno/converters
+    ```
+  </Tab>
+  <Tab title="npm">
+    ### Using npm
+
+    ```bash
+    npm install @usebruno/converters
+    ```
+  </Tab>
+  <Tab title="yarn">
+    ### Using yarn
+
+    ```bash
+    yarn add @usebruno/converters
+    ```
+  </Tab>
+</Tabs>
+
+For more details, visit the official [NPM Page for Bruno Converters](https://www.npmjs.com/package/@usebruno/converters)
+
+## Conversions
+
+1. [Postman to Bruno](./postman-to-bruno)
+2. [Insomnia to Bruno](./insomnia-to-bruno)
+3. [OpenAPI to Bruno](./openapi-to-bruno)
+4. [WSDL to Bruno](./wsdl-to-bruno)
+
+## API Reference
+
+### `postmanToBruno(postmanCollection: object)`
+
+Converts a Postman collection to a Bruno collection.
+
+**Parameters:**
+- `postmanCollection`: The Postman collection JSON object
+
+### `postmanToBrunoEnvironment(postmanEnvironment: object)`
+
+Converts a Postman environment to a Bruno environment.
+
+**Parameters:**
+- `postmanEnvironment`: The Postman environment JSON object
+
+### `insomniaToBruno(insomniaCollection: object)`
+
+Converts an Insomnia collection to a Bruno collection.
+
+**Parameters:**
+- `insomniaCollection`: The Insomnia collection JSON object
+
+### `openApiToBruno(openApiSpec: object)`
+
+Converts an OpenAPI specification to a Bruno collection.
+
+**Parameters:**
+- `openApiSpec`: The OpenAPI specification JSON object
+
+### `wsdlToBruno(wsdlContent: string)`
+
+Converts a WSDL file to a Bruno collection with SOAP requests.
+
+**Parameters:**
+- `wsdlContent`: The WSDL file content as a string

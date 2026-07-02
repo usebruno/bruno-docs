@@ -1,0 +1,53 @@
+---
+title: "Collaboration via GUI"
+sidebarTitle: "Introduction"
+---
+
+import { PremiumBadge } from "/snippets/premium-badge.jsx";
+
+Bruno offers an intuitive **GUI-based Git collaboration** feature that makes it easier for both engineering and non-engineering teams to collaborate seamlessly on collections.
+
+<Warning>
+  Git must be
+  [installed **<sup>↗</sup>**](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) on
+  your machine to use this feature.
+</Warning>
+
+## Feature Availability
+
+<Info>
+  **Bruno 3.0.0+**: Core Git UI features are now available in the free version, making Git collaboration accessible to all users.
+</Info>
+
+### Free Features (Bruno 3.0.0+)
+
+The following Git UI features are available in the free/open-source version of Bruno:
+
+| Feature | Description |
+|---------|-------------|
+| [Initialize Git](./provider#initializing-git) | Set up version control for your collection |
+| [View Diffs](./provider#viewing-diffs) | See changes made to your collection files |
+| [Check for Updates](./consumer#checking-for-updates) | Check if remote repository has new changes |
+| [Pull Changes](./consumer#pulling-changes) | Download and apply remote changes to your local collection |
+| [Clone Repository](./consumer#cloning-collections-from-github) | Clone a collection from a Git repository |
+
+### Pro & Ultimate Features <PremiumBadge noLink />
+
+The following advanced Git UI features require [Pro **<sup>↗</sup>**](https://www.usebruno.com/pricing) or [Ultimate **<sup>↗</sup>**](https://www.usebruno.com/pricing) editions:
+
+| Feature | Description |
+|---------|-------------|
+| [Create GitHub Repository](./provider#create-a-new-github-repository-from-bruno) | Create a new GitHub repo and push your collection without leaving Bruno |
+| [Add & Commit Changes](./provider#adding-and-committing-changes) | Stage and commit your local changes |
+| [Push Changes](./provider#pushing-changes) | Push local commits to remote repository |
+| [Branch Creation](./provider#branch-creation-and-checkout) | Create new branches for features or fixes |
+| [Branch Checkout](./provider#branch-creation-and-checkout) | Switch between different branches |
+| [Connect Remote](./provider#connect-to-an-existing-repository) | Add and manage existing remote repository connections |
+| Stash Changes | Temporarily save uncommitted changes before pulling |
+| Merge Conflict Resolution | Visual editor to resolve Git merge conflicts |
+| [Request Git History](./provider#request-git-history) | Browse the full commit history for any individual request and inspect diffs |
+
+## Quick Links
+
+- [Provider Guide](./provider) - For team members creating and pushing collections
+- [Consumer Guide](./consumer) - For team members cloning and pulling collections

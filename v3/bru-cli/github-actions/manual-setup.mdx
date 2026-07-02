@@ -1,0 +1,177 @@
+---
+title: "Manual CLI Setup"
+sidebarTitle: "Manual CLI Setup"
+description: "Run Bruno collections in GitHub Actions without the official action by installing the CLI yourself."
+---
+
+If you prefer not to use the [official GitHub Action](/bru-cli/github-actions/overview), install Bruno CLI yourself. This is the same pattern every team copied before the official action existed: checkout, setup Node, install `@usebruno/cli`, run `bru`.
+
+## Prerequisites
+
+- [Git](https://git-scm.com/downloads) installed
+- A GitHub repository containing a Bruno workspace
+- [Node.js](https://nodejs.org/) (for installing the Bruno CLI)
+
+
+## Demo workspace
+
+<iframe
+  className="w-full aspect-video rounded-xl"
+  src="https://www.youtube.com/embed/UBAOzICJADs"
+  title="GitHub Actions Integration with Bruno"
+  allowFullScreen
+/>
+
+<Note>
+  To follow along with the video, clone the [Bruno Automation Demo Workspace](https://github.com/bruno-collections/bruno-automation-demo-workspace) and open it in Bruno.
+</Note>
+
+## Create the workflow
+
+1. Create the workflow directory:
+
+```bash
+mkdir -p .github/workflows
+```
+
+2. Create `.github/workflows/bruno-api-tests.yml`:
+
+```yaml
+name: Bruno API Tests
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  bruno-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+
+      - name: Install Bruno CLI
+        run: npm install -g @usebruno/cli
+
+      - name: Prepare report directory
+        run: mkdir -p reports
+
+      - name: Run Bruno demo collection
+        working-directory: collections/bruno-automation-demo
+        run: |
+          bru run \
+            --global-env ci \
+            --workspace-path ../.. \
+            --tags smoke,workflow,release-gate \
+            --env-var platform_name="GitHub Actions" \
+            --env-var build_id="${{ github.run_id }}" \
+            --env-var commit_sha="${{ github.sha }}" \
+            --reporter-html ../../reports/github-actions-report.html
+
+      - name: Upload Bruno report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v6
+        with:
+          name: bruno-report
+          path: reports/github-actions-report.html
+          if-no-files-found: error
+```
+
+### What this workflow does
+
+| Step | Purpose |
+| --- | --- |
+| **Check out repository** | Clones your repo so the runner has access to the workspace and collections. |
+| **Set up Node.js** | Installs Node.js, which is required to run the Bruno CLI. |
+| **Install Bruno CLI** | Installs `@usebruno/cli` globally via npm. |
+| **Prepare report directory** | Creates a `reports/` folder for the HTML test report. |
+| **Run Bruno demo collection** | Runs `bru run` from inside the collection directory. |
+| **Upload Bruno report** | Saves the HTML report as a downloadable GitHub Actions artifact. |
+
+### Key `bru run` flags
+
+- **`--global-env ci`** activates the `ci` [global environment](/variables/global-environment-variables) defined in `environments/ci.yml` at the workspace root.
+- **`--workspace-path ../..`** tells Bruno where the workspace root is relative to the collection directory. Required when running from inside a collection folder.
+- **`--tags smoke,workflow,release-gate`** runs only requests tagged with these values.
+- **`--env-var`** overrides environment variables at runtime, useful for injecting CI-specific values like the GitHub run ID and commit SHA.
+- **`--reporter-html`** generates an HTML report of the test results.
+
+For a full list of CLI options, see [Command Options](/bru-cli/commandOptions).
+
+## Run the workflow
+
+1. **Commit and push** your workflow file:
+
+```bash
+git add .github/workflows/bruno-api-tests.yml
+git commit -m "Add Bruno API test workflow"
+git push origin main
+```
+
+2. **Monitor the workflow**:
+   - Go to your GitHub repository and click the **Actions** tab.
+   - The workflow runs automatically on pushes and pull requests to `main`, or trigger it manually with **workflow_dispatch**.
+
+3. **View the report**:
+   - Once the run completes, click into the workflow run.
+   - Download the **bruno-report** artifact from the Artifacts section.
+   - Open `github-actions-report.html` in your browser for a visual summary of all test results.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Sandbox migration (Bruno CLI v3+)">
+    Bruno CLI v3 changed the default sandbox to Safe Mode. If your tests rely on Node built-ins (`require`, `Buffer`, etc.), add `--sandbox developer` to your `bru run` command:
+
+```yaml
+run: bru run --env ci --sandbox developer
+```
+  </Accordion>
+
+  <Accordion title="exit-code is non-zero but failed is 0">
+    The `bru` process crashed before writing JUnit, or wrote an empty report. Treat as a runtime error and check the step log for stderr. When using the official action, expand the `::group::` block in the action log to see the full `bru` invocation, including auto-injected flags.
+  </Accordion>
+
+  <Accordion title="Job failed before bru could run">
+    If the run log shows a red **Install Bruno CLI** step, the failure is in `npm install -g @usebruno/cli`, not in your collection.
+
+| stderr substring | Likely cause | Fix |
+| --- | --- | --- |
+| `E404` / `404 Not Found` | `bru-version` does not exist on npm | Pick a real version or use `latest` |
+| `ENOTFOUND` / `ETIMEDOUT` | Runner cannot reach `registry.npmjs.org` | Check corporate proxy or network policy |
+| `EACCES` | Self-hosted runner missing install permission | Adjust npm prefix or permissions |
+| `ENOSPC` | Self-hosted runner disk full | Clear disk space |
+| `EINTEGRITY` | Corrupted npm cache | Run `npm cache clean --force` and retry |
+  </Accordion>
+
+  <Accordion title="Common bru exit codes">
+| Code | Meaning |
+| --- | --- |
+| `0` | All requests, tests, and assertions passed |
+| `1` | One or more requests, tests, or assertions failed |
+| `4` | `bru` was invoked outside a collection root. Set `working-directory` to the collection dir |
+| `6` | Environment file not found. Check `environments/<env>` exists |
+| `12` | `--global-env` used without `--workspace-path`. Add `--workspace-path` |
+| `137` | Process killed (usually OOM). Use a bigger runner or split the collection |
+
+See the [action README](https://github.com/usebruno/bruno-cli-action#exit-code-reference) for the full exit-code table.
+  </Accordion>
+
+  <Accordion title="Network timeouts and proxies">
+    Bruno honours `HTTP_PROXY`, `HTTPS_PROXY`, and `NO_PROXY`. Set them via `env:` on the step or runner configuration.
+  </Accordion>
+</AccordionGroup>
+
+

@@ -1,0 +1,53 @@
+---
+title: "GraphQL Request"
+sidebarTitle: "GraphQL API"
+---
+
+import { BrunoButton } from "/snippets/BrunoButton.jsx";
+
+Bruno provides the capability to send GraphQL requests, allowing you to interact with APIs that use the GraphQL query language.
+
+
+## Create GraphQL request
+
+1. Create new request from collection context menu (...) and select **New Request**.
+2. Select **GraphQL** as request type with:
+    - **URL**: The URL of the GraphQL endpoint.
+    - **Name**: The name of the request.
+3. Click on **Create** button.
+
+![create-graphql-request](/images/screenshots/send-request/graphql/create-graphql-request.webp)
+
+
+## GraphQL request with query
+
+After creating the request:
+- Go to **Query** section where you can write and execute all your GraphQL queries
+- You can also use the **Variables** section to pass variables to your query
+
+![query-graphql](/images/screenshots/send-request/graphql/02-gql-query.webp)
+
+**Example Query:**
+
+You can test this query using the below GraphQL API: `https://graphqlzero.almansi.me/api`
+
+```graphql
+query Albums {
+  albums {
+    data {
+      id
+      title
+    }
+  }
+}
+```
+
+## Get Started with GraphQL APIs
+
+Explore our sample [REST and GraphQL collection](https://github.com/bruno-collections/rest-graphql-collection) to see practical examples and test GraphQL endpoints:
+
+<BrunoButton 
+  collectionUrl="https://github.com/bruno-collections/rest-graphql-collection"
+  width={160}
+  height={40}
+/>

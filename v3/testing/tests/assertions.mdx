@@ -1,0 +1,107 @@
+---
+title: "Assertions"
+---
+
+Assertions allow you to declaratively write tests without writing any code.
+
+## Getting Started
+
+1.  Open a request and click on the **Assert** tab
+2.  Add assertions by specifying:
+    - **Expression**: The value to test (e.g., `res.status`, `res.body.id`)
+    - **Operator**: The comparison operator
+    - **Value**: The expected value
+
+![bru assertions](/images/screenshots/get-started/bruno-basics/create_test/bru_test_assert.webp)
+
+## Common Examples
+
+### Basic Response Testing
+
+| Expression | Operator | Value |
+|------------|----------|-------|
+| `res.status` | `equals` | `200` |
+| `res.body.status` | `equals` | `success` |
+| `res.body.message` | `contains` | `created` |
+| `res.body.id` | `isNotEmpty` | |
+
+### Nested Objects
+
+```json
+{
+  "user": {
+    "profile": {
+      "name": "John",
+      "email": "john@example.com"
+    }
+  }
+}
+```
+
+| Expression | Operator | Value |
+|------------|----------|-------|
+| `res.body.user.profile.name` | `equals` | `John` |
+| `res.body.user.profile.email` | `contains` | `@example.com` |
+
+### Arrays
+
+```json
+{
+  "users": [
+    { "id": 1, "name": "Alice" },
+    { "id": 2, "name": "Bob" }
+  ]
+}
+```
+
+| Expression | Operator | Value |
+|------------|----------|-------|
+| `res.body.users` | `isNotEmpty` | |
+| `res.body.users[0].name` | `equals` | `Alice` |
+| `res.body.users[1].id` | `equals` | `2` |
+
+### Using res() Query
+
+For complex nested data, use the `res()` function:
+
+```json
+{
+  "order": {
+    "items": [
+      { "id": 1, "price": 29.99 },
+      { "id": 2, "price": 69.99 }
+    ]
+  }
+}
+```
+
+| Expression | Operator | Value |
+|------------|----------|-------|
+| `res('order.items[0].price')` | `equals` | `29.99` |
+| `res('..price')` | `isNotEmpty` | |
+
+Learn more about `res()` in [Response Query](../script/response/response-query) docs.
+
+### Response Headers
+
+| Expression | Operator | Value |
+|------------|----------|-------|
+| `res.headers['content-type']` | `contains` | `application/json` |
+
+### Response Time
+
+| Expression | Operator | Value |
+|------------|----------|-------|
+| `res.responseTime` | `lt` | `1000` |
+
+## Available Operators
+
+- **Comparison**: `equals`, `notEquals`, `gt`, `gte`, `lt`, `lte`
+- **String**: `contains`, `notContains`, `startsWith`, `endsWith`, `matches`, `notMatches`
+- **Type Checks**: `isNull`, `isNotEmpty`, `isEmpty`, `isDefined`, `isUndefined`
+- **Value Checks**: `isTruthy`, `isFalsy`, `isNumber`, `isString`, `isBoolean`, `isArray`, `isJson`
+- **Other**: `in`, `notIn`, `between`, `length`
+
+## Advanced Testing
+
+For complex test scenarios with custom logic, use [Test Scripts](./introduction) with JavaScript and Chai assertions.

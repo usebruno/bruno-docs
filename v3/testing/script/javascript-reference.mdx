@@ -1,0 +1,1830 @@
+---
+title: "JavaScript API Reference"
+sidebarTitle: "JavaScript Reference"
+---
+
+Bruno offers powerful scripting capabilities that allow you to extend and automate your API testing workflows.
+Here is the complete set of API reference for the scripting feature in Bruno.
+
+## Request
+
+The `req` variable represents the HTTP request object and is automatically available inside your scripting and testing context. It provides methods to access and modify the current request's properties such as URL, method, headers, body, and other configuration options before the request is sent to the server.
+
+<Warning>
+  The `req` object is available in pre-request scripts and test scripts, allowing you to modify request properties before execution and access them after completion.
+</Warning>
+
+Here is a complete table for all available methods on the `req` object.
+
+| Method                         | Description                                                          |
+| ------------------------------ | -------------------------------------------------------------------- |
+| req.getUrl()                   | Get the current request URL.                                         |
+| req.setUrl(url)                | Set the current request URL.                                         |
+| req.getHost()                  | Get the hostname from the request URL.                               |
+| req.getPath()                  | Get the path from the request URL.                                   |
+| req.getQueryString()           | Get the raw query string from the request URL.                       |
+| req.getPathParams()            | Extract path parameters using the path template.                     |
+| req.getAuthMode()              | Get the current authentication mode.                                 |
+| req.getMethod()                | Get the current request method.                                      |
+| req.setMethod(method)          | Set the current request method.                                      |
+| req.getName()                  | Get the current request name.                                        |
+| req.getTags()                  | Get the current request tags as an array of strings.                 |
+| req.getHeader(name)            | Get the request header by name.                                      |
+| req.getHeaders()               | Get all request headers.                                             |
+| req.setHeader(name, value)     | Set a request header by name.                                        |
+| req.setHeaders(headers)        | Set multiple request headers.                                        |
+| req.deleteHeader(name)         | Remove a request header by name.                                     |
+| req.deleteHeaders([names])      | Remove multiple request headers by name.                             |
+| req.headerList                 | PropertyList interface — rich read, search, iteration, transform, and write methods for request headers. |
+| req.getBody(options?)          | Get the current request body/payload (supports raw option).          |
+| req.setBody(body)              | Set the request body/payload.                                        |
+| req.setMaxRedirects(count)     | Set the maximum number of redirects to follow.                       |
+| req.getTimeout()               | Get the current timeout value of the request.                        |
+| req.setTimeout(milliseconds)   | Set a timeout for the request.                                       |
+| req.getExecutionMode()         | Get the current active execution mode (runner or standalone).        |
+| req.getExecutionPlatform()     | Get the platform on which the request is being executed (app or cli).|
+| req.onFail(callback)           | Handle request errors with a custom callback function.               |
+
+Below is the API documentation for the methods available on `req`.
+
+### `req.getUrl()`
+
+Returns the full URL of the current request, including any query parameters. Useful for logging, conditional logic, or passing the URL to another variable.
+
+```javascript
+const url = req.getUrl();
+console.log("Request URL:", url);
+// Output: "https://echo.usebruno.com"
+```
+
+### `req.setUrl(url)`
+
+Overrides the request URL with a new one. Use this in pre-request scripts when you need to dynamically compute or switch the endpoint before the request is sent.
+
+```javascript
+// Switch to a different environment endpoint dynamically
+const env = bru.getEnvVar("environment");
+if (env === "staging") {
+  req.setUrl("https://staging.api.example.com/users");
+} else {
+  req.setUrl("https://api.github.com/search/repositories?q=vue");
+}
+```
+
+### `req.getHost()`
+
+Get the hostname from the request URL.
+
+```javascript
+const host = req.getHost();
+console.log("Host:", host);
+// Example output: "api.example.com"
+```
+
+### `req.getPath()`
+
+Get the path from the request URL.
+
+```javascript
+const path = req.getPath();
+console.log("Path:", path);
+// Example output: "/api/v1/users/123"
+```
+
+### `req.getQueryString()`
+
+Get the raw query string from the request URL.
+
+```javascript
+const queryString = req.getQueryString();
+console.log("Query String:", queryString);
+// Example output: "page=1&limit=10&sort=asc"
+```
+
+### `req.getPathParams()`
+
+Extract path parameters using the path template defined in the request.
+
+```javascript
+// For a URL like: https://echo.usebruno.com/:hello
+// With path: /:hello/usebruno
+
+const pathParams = req.getPathParams();
+console.log("Path Variables:", pathParams);
+// Output: [0:{ "name": "hello", "value": "usebruno", "type": "path" }]
+
+// Access specific path parameter
+console.log("Value:", pathParams[0].value);
+// Output: "usebruno"
+```
+
+### `req.getMethod()`
+
+Returns the HTTP method of the current request (e.g. `"GET"`, `"POST"`, `"PUT"`, `"DELETE"`). Useful for logging or branching logic based on the request type.
+
+```javascript
+const method = req.getMethod();
+console.log("HTTP method:", method);
+// Output: "POST"
+```
+
+### `req.setMethod(method)`
+
+Overrides the HTTP method of the request. Useful when you need to conditionally switch a request's method in a pre-request script.
+
+```javascript
+// Upgrade to PATCH if an update flag is set
+const isPartialUpdate = bru.getVar("partialUpdate");
+if (isPartialUpdate) {
+  req.setMethod("PATCH");
+} else {
+  req.setMethod("POST");
+}
+```
+
+### `req.getName()`
+
+Returns the display name of the current request as defined in Bruno. Useful for logging or identifying which request is running in a shared script.
+
+```javascript
+const name = req.getName();
+console.log("Running request:", name);
+// Output: "Create User"
+```
+
+### `req.getAuthMode()`
+
+Returns a string representing the active authentication type for the request. Possible values: `"bearer"`, `"basic"`, `"oauth2"`, `"oauth1"`, `"awsv4"`, `"digest"`, `"wsse"`, or `"none"`.
+
+```javascript
+const authMode = req.getAuthMode();
+console.log("Auth mode:", authMode);
+// Output: "bearer"
+
+// Only inject a token header when no auth is already set
+if (authMode === "none") {
+  req.setHeader("x-api-key", bru.getEnvVar("apiKey"));
+}
+```
+
+### `req.getTags()`
+
+Get the current request tags as an array of strings. Useful for conditional logic, filtering, or organizing requests by tag.
+
+**Returns:** Array of strings representing the request tags.
+
+```javascript
+const tags = req.getTags();
+console.log("Request tags:", tags);
+
+if (tags.includes("smoke-test")) {
+  console.log("This is a smoke test request");
+}
+
+if (tags.includes("skip-in-ci")) {
+  bru.runner.skipRequest();
+}
+
+if (tags.includes("integration-test")) {
+  console.log("Running integration test validations");
+}
+```
+
+### `req.getHeader(name)`
+
+Returns the value of a specific request header by name. Returns `undefined` if the header does not exist. Header names are case-insensitive.
+
+```javascript
+const transactionId = req.getHeader("transaction-id");
+console.log("Transaction ID:", transactionId);
+// Output: "txn_abc123"
+
+// Only set the header if it hasn't been added already
+if (!req.getHeader("x-request-id")) {
+  req.setHeader("x-request-id", bru.interpolate("{{$guid}}"));
+}
+```
+
+### `req.getHeaders()`
+
+Returns an object containing all request headers as key-value pairs. Useful for logging or inspecting headers before the request is sent.
+
+```javascript
+const headers = req.getHeaders();
+console.log("All request headers:", headers);
+// Output: { "content-type": "application/json", "authorization": "Bearer abc..." }
+```
+
+### `req.setHeader(name, value)`
+
+Adds or updates a single request header. If the header already exists, its value is overwritten.
+
+```javascript
+// Inject an auth token from an environment variable
+req.setHeader("authorization", "Bearer " + bru.getEnvVar("access_token"));
+
+// Add a tracing header
+req.setHeader("x-trace-id", bru.interpolate("{{$guid}}"));
+```
+
+### `req.setHeaders(headers)`
+
+Adds or updates multiple request headers at once by passing an object. Existing headers with matching names are overwritten; others are left unchanged.
+
+```javascript
+req.setHeaders({
+  "content-type": "application/json",
+  "x-api-version": "2",
+  "transaction-id": bru.getVar("txnId"),
+});
+```
+
+### `req.deleteHeader(name)`
+
+Removes a single request header by name. Has no effect if the header does not exist.
+
+```javascript
+// Remove the authorization header to make an unauthenticated request
+req.deleteHeader("authorization");
+
+// Remove an internal header not needed for third-party APIs
+req.deleteHeader("x-internal-trace");
+```
+
+### `req.deleteHeaders(names)`
+
+Removes multiple request headers in one call. Pass an array of header names to remove.
+
+```javascript
+// Strip all auth and tracing headers before forwarding to an external service
+req.deleteHeaders(["authorization", "x-internal-trace", "x-api-key"]);
+```
+
+### `req.headerList`
+
+`req.headerList` exposes the full **PropertyList** interface for request headers, giving you richer querying, iteration, and bulk-mutation capabilities beyond the basic `getHeader` / `setHeader` methods. All key lookups are **case-insensitive** per the HTTP spec.
+
+<Info>
+`req.headerList` is available in **pre-request** and **test** scripts. Changes made via write methods take effect before the request is sent.
+</Info>
+
+#### Read methods
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `req.headerList.get(name)` | `string \| undefined` | Value of the first header matching the key. |
+| `req.headerList.one(name)` | `object \| undefined` | Full header object `{ key, value }` for the matching key. |
+| `req.headerList.all()` | `object[]` | Cloned array of all header objects `{ key, value, disabled? }`. |
+| `req.headerList.count()` | `number` | Number of headers, including disabled ones. |
+
+```javascript
+// Read the value of a single header
+const contentType = req.headerList.get("content-type");
+console.log("Content-Type:", contentType);
+// Output: "application/json"
+
+// Get the full header object (key + value pair)
+const authHeader = req.headerList.one("authorization");
+console.log("Auth header object:", authHeader);
+// Output: { key: "authorization", value: "Bearer abc123" }
+
+// List every header before the request is sent
+const allHeaders = req.headerList.all();
+console.log(`Sending ${req.headerList.count()} headers:`, allHeaders);
+```
+
+#### Search methods
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `req.headerList.has(name)` | `boolean` | `true` if any header with that key exists. |
+| `req.headerList.has(name, value)` | `boolean` | `true` if a header with that key **and** exact value exists. |
+| `req.headerList.has(object)` | `boolean` | `true` if a header matching `object.key` exists. |
+| `req.headerList.find(fn, context?)` | `object \| undefined` | First header for which the predicate returns truthy. |
+| `req.headerList.filter(fn, context?)` | `object[]` | All headers for which the predicate returns truthy. |
+| `req.headerList.indexOf(item)` | `number` | Index of a header by string key or `{ key, value }` object; `-1` if not found. |
+
+```javascript
+// Guard: only set x-request-id if it isn't already present
+if (!req.headerList.has("x-request-id")) {
+  req.headerList.add("x-request-id", bru.interpolate("{{$guid}}"));
+}
+
+// Check for a specific key + value combination
+if (req.headerList.has("content-type", "application/json")) {
+  console.log("JSON request — body will be parsed.");
+}
+
+// Find the first custom header (anything starting with "x-")
+const firstCustom = req.headerList.find(h => h.key.startsWith("x-"));
+console.log("First custom header:", firstCustom);
+
+// Collect all disabled headers for debugging
+const disabled = req.headerList.filter(h => h.disabled === true);
+console.log("Disabled headers:", disabled);
+```
+
+#### Iteration methods
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `req.headerList.each(fn, context?)` | `void` | Calls `fn(header, index)` for every header. |
+| `req.headerList.map(fn, context?)` | `any[]` | Returns a new array of mapped values. |
+| `req.headerList.reduce(fn, initial?, context?)` | `any` | Reduces all headers to a single value. |
+
+```javascript
+// Log every header with its position
+req.headerList.each((h, i) => {
+  console.log(`[${i}] ${h.key}: ${h.value}`);
+});
+
+// Extract just the header keys
+const keys = req.headerList.map(h => h.key);
+console.log("Header keys:", keys);
+// Output: ["content-type", "authorization", "x-request-id"]
+
+// Build a summary string of enabled headers
+const summary = req.headerList.reduce((acc, h) => {
+  if (!h.disabled) acc[h.key] = h.value;
+  return acc;
+}, {});
+console.log("Active headers:", summary);
+```
+
+#### Transform methods
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `req.headerList.toObject(excludeDisabled?, caseSensitive?, multiValue?, sanitizeKeys?)` | `object` | Plain `{ key: value }` map. |
+| `req.headerList.toString()` | `string` | HTTP wire format `Key: Value\n...`, skipping disabled headers. |
+| `req.headerList.toJSON()` | `object[]` | Same as `all()` — suitable for `JSON.stringify()`. |
+
+```javascript
+// Convert to a plain object for logging or assertion
+const headersObj = req.headerList.toObject();
+console.log("Headers as object:", headersObj);
+// Output: { "content-type": "application/json", "authorization": "Bearer abc..." }
+
+// Exclude disabled headers and preserve case
+const activeHeaders = req.headerList.toObject(true, true);
+
+// HTTP wire format (useful for debugging proxy issues)
+console.log(req.headerList.toString());
+// Output:
+// Content-Type: application/json
+// Authorization: Bearer abc123
+```
+
+#### Write methods
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `req.headerList.add(headerObj \| name, value?)` | `void` | Sets a header. Accepts `{ key, value }`, a `"Key: Value"` string, or `(name, value)` two-arg form. Overwrites an existing header with the same key. |
+| `req.headerList.upsert(headerObj \| name, value?)` | `boolean \| null` | Sets or replaces a header. Returns `true` if new, `false` if updated, `null` if input was nil. |
+| `req.headerList.remove(predicate, context?)` | `void` | Deletes headers by key string, `{ key }` object, or predicate function. |
+| `req.headerList.clear()` | `void` | Removes all headers, including disabled ones. |
+| `req.headerList.populate(items \| string)` | `void` | Adds items from an array or multi-line string, skipping keys that already exist. |
+| `req.headerList.repopulate(items \| string)` | `void` | Clears all headers, then populates with new items. |
+| `req.headerList.assimilate(source, prune?)` | `void` | Merges headers from a PropertyList or array. When `prune` is `true`, removes any headers not present in the source. |
+
+```javascript
+// Add a single header (two-arg form)
+req.headerList.add("x-correlation-id", bru.getVar("correlationId"));
+
+// Add using an object
+req.headerList.add({ key: "x-feature-flag", value: "dark-mode" });
+
+// Add from a raw HTTP-style string
+req.headerList.add("Accept: application/json");
+
+// Upsert — set if new, update if exists; returns true/false
+const wasNew = req.headerList.upsert("x-api-version", "2");
+console.log("Was a new header?", wasNew); // true or false
+
+// Remove by key name
+req.headerList.remove("x-internal-debug");
+
+// Remove all headers matching a predicate
+req.headerList.remove(h => h.key.startsWith("x-legacy-"));
+
+// Populate from an array — skips keys already present
+req.headerList.populate([
+  { key: "accept-language", value: "en-US" },
+  { key: "cache-control", value: "no-cache" },
+]);
+
+// Replace everything with a fresh set
+req.headerList.repopulate([
+  { key: "content-type", value: "application/json" },
+  { key: "authorization", value: "Bearer " + bru.getEnvVar("token") },
+]);
+
+// Merge headers from another list; remove anything not in the source
+req.headerList.assimilate(otherHeaderList, true);
+```
+
+### `req.getBody(options?)`
+
+Returns the current request body. For JSON content types, Bruno automatically parses and returns the body as an object. Pass `{ raw: true }` to get the raw string instead.
+
+**Parameters:**
+
+- `options` (object, optional): `raw` (boolean) — when `true`, returns the raw unparsed body string; otherwise returns the parsed object (default).
+
+```javascript
+// Get the parsed body object (for JSON content type)
+const body = req.getBody();
+console.log("Body title:", body.title);
+// Output: "Bruno"
+
+// Get raw body string (useful for non-JSON or binary data)
+const rawBody = req.getBody({ raw: true });
+console.log("Raw body:", rawBody);
+// Output: '{"title":"Bruno","role":"Developer"}'
+```
+
+### `req.setBody(body)`
+
+Replaces the request body with the provided value. For JSON content type, pass an object — Bruno will serialize it automatically. Only available in **pre-request scripts**.
+
+```javascript
+// Build the body dynamically from variables
+req.setBody({
+  username: bru.getEnvVar("username"),
+  password: bru.getEnvVar("password"),
+  requestedAt: new Date().toISOString(),
+});
+```
+
+### `req.setTimeout(milliseconds)`
+
+Sets a custom timeout (in milliseconds) for the request. If the server does not respond within the specified time, the request is aborted. Overrides the collection-level timeout for this request.
+
+```javascript
+// Allow up to 10 seconds for a slow endpoint
+req.setTimeout(10000);
+
+// Use a short timeout for health checks
+req.setTimeout(2000);
+```
+
+### `req.getTimeout()`
+
+Returns the current timeout value for the request in milliseconds. Useful for logging or conditionally changing the timeout.
+
+```javascript
+const timeout = req.getTimeout();
+console.log("Current timeout:", timeout);
+// Output: 5000
+
+if (timeout < 3000) {
+  req.setTimeout(10000); // Extend for slow environments
+}
+```
+
+### `req.setMaxRedirects(count)`
+
+Sets the maximum number of HTTP redirects Bruno will follow for this request. Set to `0` to disable following redirects entirely.
+
+```javascript
+// Follow up to 5 redirects
+req.setMaxRedirects(5);
+
+// Disable redirect following to inspect the 3xx response directly
+req.setMaxRedirects(0);
+```
+
+### `req.getExecutionMode()`
+
+Get the current active execution mode: `runner` (collection run) or `standalone` (single request).
+
+```javascript
+const executionMode = req.getExecutionMode();
+console.log(`Request is running in ${executionMode} mode`);
+```
+
+### `req.getExecutionPlatform()`
+
+Get the platform: `app` (desktop) or `cli` (Bruno CLI).
+
+```javascript
+const platform = req.getExecutionPlatform();
+console.log(`Request is running on ${platform} platform`);
+```
+
+### `req.onFail(callback)`
+
+Handle request errors with a custom callback. `error` includes details about the failure.
+
+```javascript
+req.onFail((error) => {
+  console.error("Request failed:", error.message);
+  console.log("Error details:", {
+    status: error.status,
+    statusText: error.statusText,
+    url: error.url,
+    method: error.method,
+  });
+  bru.setVar("lastError", error.message);
+});
+```
+
+<Warning>
+The `onFail` function is only available in Developer mode and should be called in pre-request scripts. When using Bruno CLI (v3.0.0+), pass the `--sandbox=developer` flag.
+</Warning>
+
+## Response
+
+The `res` variable represents the HTTP response object and is automatically available inside your scripting and testing context after a request is executed. It contains all the information about the response received from the server, including status codes, headers, body data, and timing information.
+
+<Info>
+  The `res` object is only available in post-request scripts and test scripts, as it contains the response data from the completed request.
+</Info>
+
+Here is a complete table for all available properties and methods on the `res` object.
+
+| Property / Method              | Description                                                                    |
+| ------------------------------ | ------------------------------------------------------------------------------ |
+| res.status                     | The HTTP response status code (e.g., 200, 404, 500).                          |
+| res.statusText                 | The HTTP response status text (e.g., "OK", "Not Found").                      |
+| res.headers                    | An object containing all response headers.                                     |
+| res.body                       | The response body data (automatically parsed as JSON if applicable).           |
+| res.responseTime               | The total time taken for the request in milliseconds.                          |
+| res.url                        | The final response URL (after following redirects).                            |
+| res.getStatus()                | Get the response status code.                                                  |
+| res.getStatusText()            | Get the response status text.                                                  |
+| res.getHeader(name)            | Get a specific response header by name.                                        |
+| res.getHeaders()               | Get all response headers.                                                      |
+| res.headerList                 | PropertyList interface — rich read, search, iteration, and transform methods for response headers (read-only). |
+| res.getBody()                  | Get the response body data.                                                    |
+| res.setBody(body)              | Set the response body data.                                                    |
+| res.getResponseTime()          | Get the response time in milliseconds.                                         |
+| res.getUrl()                   | Get the response URL (final URL after redirects).                              |
+| res.getSize()                  | Get the response size in bytes (returns object with body, headers, total).     |
+
+<Info>
+  The `body` property is automatically parsed as JSON if the response has a JSON content type. For other content types, it will be a string.
+</Info>
+
+Below are the detailed descriptions for properties and methods available on the `res` object.
+
+### `res.status`
+
+The HTTP response status code as a number (e.g., `200`, `201`, `400`, `404`, `500`). Equivalent to calling `res.getStatus()`.
+
+```javascript
+console.log(res.status); // 200
+
+// Use in test assertions
+test("should return 201 Created", () => {
+  expect(res.status).to.equal(201);
+});
+```
+
+### `res.statusText`
+
+The human-readable HTTP status message that accompanies the status code (e.g., `"OK"`, `"Created"`, `"Not Found"`).
+
+```javascript
+console.log(res.statusText); // "OK"
+
+test("status text should be OK", () => {
+  expect(res.statusText).to.equal("OK");
+});
+```
+
+### `res.headers`
+
+A plain object containing all response headers as key-value pairs. Header names are lowercased.
+
+```javascript
+console.log(res.headers);
+// Output: { "content-type": "application/json", "x-request-id": "abc123", ... }
+
+// Read a specific header directly
+const contentType = res.headers["content-type"];
+console.log("Content-Type:", contentType);
+```
+
+### `res.body`
+
+The response body, automatically parsed as a JavaScript object if the response has a JSON `Content-Type`. For all other content types, it is returned as a string.
+
+```javascript
+console.log(res.body);
+// Output: { id: 1, name: "John Doe", email: "john@example.com" }
+
+// Access a nested field
+console.log(res.body.data.token);
+
+// Save to a variable for use in later requests
+bru.setVar("userId", res.body.id);
+```
+
+### `res.responseTime`
+
+The total round-trip time in milliseconds from sending the request to receiving the full response.
+
+```javascript
+console.log(res.responseTime); // 245
+
+// Use in a performance assertion
+test("response should be fast", () => {
+  expect(res.responseTime).to.be.lessThan(1000);
+});
+```
+
+### `res.url`
+
+The final URL of the response after all redirects have been followed. If no redirects occurred, this is the same as the original request URL.
+
+```javascript
+console.log(res.url);
+// Output: "https://www.example.com/final-page"
+
+test("should resolve to the canonical URL", () => {
+  expect(res.url).to.include("example.com");
+});
+```
+
+### `res.getStatus()`
+
+Returns the HTTP response status code as a number. Equivalent to reading `res.status`.
+
+```javascript
+const status = res.getStatus();
+console.log("Status code:", status);
+// Output: 200
+
+test("should return success", () => {
+  expect(res.getStatus()).to.equal(200);
+});
+```
+
+### `res.getStatusText()`
+
+Returns the HTTP status message string. Equivalent to reading `res.statusText`.
+
+```javascript
+const statusText = res.getStatusText();
+console.log("Status text:", statusText);
+// Output: "Created"
+```
+
+### `res.getHeader(name)`
+
+Returns the value of a specific response header by name. Returns `undefined` if the header does not exist. Header lookup is case-insensitive.
+
+```javascript
+const transactionId = res.getHeader("x-transaction-id");
+console.log("Transaction ID:", transactionId);
+// Output: "txn_7f3c2e"
+
+// Save a server-generated token from the response header
+const newToken = res.getHeader("x-auth-token");
+if (newToken) {
+  bru.setEnvVar("access_token", newToken);
+}
+```
+
+### `res.getHeaders()`
+
+Returns an object containing all response headers as key-value pairs. Header names are lowercased.
+
+```javascript
+const headers = res.getHeaders();
+console.log("All response headers:", headers);
+// Output: { "content-type": "application/json", "x-rate-limit-remaining": "99", ... }
+
+// Assert a required header is present
+test("should return a request-id header", () => {
+  expect(res.getHeaders()).to.have.property("x-request-id");
+});
+```
+
+### `res.headerList`
+
+`res.headerList` exposes the full **PropertyList** interface for response headers, giving you richer querying and iteration capabilities beyond `getHeader` / `getHeaders`. All key lookups are **case-insensitive** per the HTTP spec.
+
+<Warning>
+`res.headerList` is **read-only**. Calling any write method (`add`, `upsert`, `remove`, `clear`, `populate`, `repopulate`, `assimilate`) throws a `"HeaderList is read-only"` error. Use `req.headerList` when you need to mutate headers.
+</Warning>
+
+<Info>
+`res.headerList` is available in **post-request** and **test** scripts.
+</Info>
+
+#### Read methods
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `res.headerList.get(name)` | `string \| undefined` | Value of the first response header matching the key. |
+| `res.headerList.one(name)` | `object \| undefined` | Full header object `{ key, value }` for the matching key. |
+| `res.headerList.all()` | `object[]` | Cloned array of all response header objects `{ key, value }`. |
+| `res.headerList.count()` | `number` | Number of response headers. |
+
+```javascript
+// Read the Content-Type value
+const contentType = res.headerList.get("content-type");
+console.log("Content-Type:", contentType);
+// Output: "application/json; charset=utf-8"
+
+// Get the full header object
+const rateLimit = res.headerList.one("x-rate-limit-remaining");
+console.log("Rate limit header:", rateLimit);
+// Output: { key: "x-rate-limit-remaining", value: "42" }
+
+// Log how many headers the server returned
+console.log(`Server returned ${res.headerList.count()} headers.`);
+```
+
+#### Search methods
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `res.headerList.has(name)` | `boolean` | `true` if any response header with that key exists. |
+| `res.headerList.has(name, value)` | `boolean` | `true` if a header with that key **and** exact value exists. |
+| `res.headerList.has(object)` | `boolean` | `true` if a header matching `object.key` exists. |
+| `res.headerList.find(fn, context?)` | `object \| undefined` | First response header for which the predicate returns truthy. |
+| `res.headerList.filter(fn, context?)` | `object[]` | All response headers for which the predicate returns truthy. |
+| `res.headerList.indexOf(item)` | `number` | Index of a header by string key or `{ key, value }` object; `-1` if not found. |
+
+```javascript
+// Assert a required security header is present
+test("should include strict transport security", () => {
+  expect(res.headerList.has("strict-transport-security")).to.be.true;
+});
+
+// Check for a specific cache-control directive
+if (res.headerList.has("cache-control", "no-store")) {
+  console.log("Response must not be cached.");
+}
+
+// Find the first Set-Cookie header
+const setCookie = res.headerList.find(h => h.key === "set-cookie");
+if (setCookie) {
+  bru.setVar("rawCookie", setCookie.value);
+}
+
+// Collect all x-* custom headers from the response
+const customHeaders = res.headerList.filter(h => h.key.startsWith("x-"));
+console.log("Custom response headers:", customHeaders);
+```
+
+#### Iteration methods
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `res.headerList.each(fn, context?)` | `void` | Calls `fn(header, index)` for every response header. |
+| `res.headerList.map(fn, context?)` | `any[]` | Returns a new array of mapped values. |
+| `res.headerList.reduce(fn, initial?, context?)` | `any` | Reduces all response headers to a single value. |
+
+```javascript
+// Log every response header
+res.headerList.each((h, i) => {
+  console.log(`[${i}] ${h.key}: ${h.value}`);
+});
+
+// Build a list of header names for assertion
+const headerNames = res.headerList.map(h => h.key);
+test("should include required security headers", () => {
+  expect(headerNames).to.include("content-security-policy");
+  expect(headerNames).to.include("x-content-type-options");
+});
+
+// Sum up all numeric rate-limit headers
+const rateLimitTotal = res.headerList.reduce((acc, h) => {
+  if (h.key.startsWith("x-rate-limit")) acc[h.key] = Number(h.value);
+  return acc;
+}, {});
+console.log("Rate limit info:", rateLimitTotal);
+```
+
+#### Transform methods
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `res.headerList.toObject(excludeDisabled?, caseSensitive?, multiValue?, sanitizeKeys?)` | `object` | Plain `{ key: value }` map. |
+| `res.headerList.toString()` | `string` | HTTP wire format `Key: Value\n...`. |
+| `res.headerList.toJSON()` | `object[]` | Same as `all()` — suitable for `JSON.stringify()`. |
+
+```javascript
+// Convert response headers to a plain object for assertions
+const headersObj = res.headerList.toObject();
+test("should return JSON content type", () => {
+  expect(headersObj["content-type"]).to.include("application/json");
+});
+
+// Serialize headers to HTTP wire format for logging
+console.log("Response headers (wire format):\n" + res.headerList.toString());
+// Output:
+// Content-Type: application/json; charset=utf-8
+// X-Request-Id: txn_abc123
+// X-Rate-Limit-Remaining: 42
+
+// Save the full header list for debugging a flaky test
+bru.setVar("lastResponseHeaders", JSON.stringify(res.headerList.toJSON()));
+```
+
+### `res.getBody()`
+
+Returns the response body. If the response has a JSON `Content-Type`, the body is automatically parsed into a JavaScript object. Otherwise, it returns the raw string.
+
+```javascript
+const data = res.getBody();
+console.log("Response body:", data);
+// Output: { id: 42, name: "Jane Smith", role: "admin" }
+
+// Extract and store a token from the response
+const token = res.getBody().token;
+bru.setEnvVar("access_token", token, { persist: true });
+```
+
+### `res.setBody(body)`
+
+Replaces the response body with a new value. This modifies the body as seen by downstream test scripts — it does **not** alter what was actually returned by the server.
+
+```javascript
+// Normalize the body shape before tests run
+const rawBody = res.getBody();
+res.setBody({
+  status: rawBody.status_code,
+  user: rawBody.data?.user ?? null,
+});
+```
+
+### `res.getUrl()`
+
+Get the response URL after redirects (same information as `res.url`).
+
+```javascript
+const responseUrl = res.getUrl();
+console.log("Response URL:", responseUrl);
+
+test("should end up at correct URL after redirects", () => {
+  const url = res.getUrl();
+  expect(url).to.equal("https://www.apple.com");
+});
+```
+
+### `res.getResponseTime()`
+
+Returns the total time taken for the request in milliseconds. Equivalent to reading `res.responseTime`.
+
+```javascript
+const responseTime = res.getResponseTime();
+console.log("Response time:", responseTime, "ms");
+// Output: "Response time: 312 ms"
+
+test("API should respond within 2 seconds", () => {
+  expect(res.getResponseTime()).to.be.lessThan(2000);
+});
+```
+
+### `res.getSize()`
+
+Get the response size in bytes. Returns `{ body, headers, total }`.
+
+```javascript
+const responseSize = res.getSize();
+
+test("Response body size is less than 1KB", () => {
+  const bodySize = res.getSize().body;
+  expect(bodySize).to.be.lessThan(1024);
+});
+```
+
+## Environments
+
+The `bru` object provides methods for managing environments in Bruno. Environments allow you to maintain different configurations for various deployment stages (development, staging, production, etc.).
+
+<Info>
+  Environment variables are specific to the selected environment and can be accessed across all requests in your collection.
+</Info>
+
+Here are all available environment-related methods:
+
+| Method                     | Description                                               |
+| -------------------------- | --------------------------------------------------------- |
+| bru.getEnvName()           | Retrieves the environment name.                           |
+| bru.hasEnvVar(key)         | Checks if the environment variable exists.                |
+| bru.getEnvVar(key)         | Retrieves the value of an environment variable.           |
+| bru.setEnvVar(key, value)  | Sets a new environment variable.                          |
+| bru.deleteEnvVar(key)      | Deletes a specific environment variable.                  |
+| bru.getAllEnvVars()        | Retrieves all environment variables as an object.        |
+| bru.deleteAllEnvVars()     | Deletes all environment variables in the current environment. |
+| bru.getGlobalEnvVar(key)   | Get the Bruno global environment variable.                |
+| bru.setGlobalEnvVar(key, value) | Set the Bruno global environment variable.           |
+| bru.hasGlobalEnvVar(key)   | Checks if the global environment variable exists.         |
+| bru.getAllGlobalEnvVars()  | Retrieves all global environment variables as an object.  |
+
+### `bru.getEnvName()`
+
+Retrieves the current environment name.
+
+```javascript
+const envName = bru.getEnvName();
+console.log("Current environment:", envName);
+```
+
+### `bru.getEnvVar(key)`
+
+Returns the value of an environment variable from the currently selected environment. Returns `undefined` if the variable does not exist or if no environment is selected.
+
+```javascript
+const baseUrl = bru.getEnvVar("baseUrl");
+console.log("Base URL:", baseUrl);
+// Output: "https://api.staging.example.com"
+
+const token = bru.getEnvVar("access_token");
+req.setHeader("Authorization", "Bearer " + token);
+```
+
+### `bru.setEnvVar(key, value, options?)`
+
+Set the Bruno environment variable. By default, variables are in-memory only; use `{ persist: true }` to save to disk.
+
+**Parameters:** `key` (string), `value` (any), `options.persist` (boolean, optional).
+
+```javascript
+bru.setEnvVar("sessionId", "temp");
+bru.setEnvVar("apiToken", "12345", { persist: true });
+
+function onResponse(res) {
+  let data = res.getBody();
+  bru.setEnvVar("access_token", data.token, { persist: true });
+}
+onResponse(res);
+```
+
+### `bru.hasEnvVar(key)`
+
+Returns `true` if the variable exists in the currently selected environment, `false` otherwise. Useful for guarding reads when a variable may not be set in every environment.
+
+```javascript
+if (bru.hasEnvVar("access_token")) {
+  req.setHeader("Authorization", "Bearer " + bru.getEnvVar("access_token"));
+} else {
+  console.warn("No access token found — request may fail authentication.");
+}
+```
+
+### `bru.deleteEnvVar(key)`
+
+Removes a specific variable from the current environment. Changes are in-memory only for the duration of the run unless the environment is re-saved.
+
+```javascript
+// Clean up a short-lived session token after it has been used
+bru.deleteEnvVar("session_token");
+```
+
+### `bru.getAllEnvVars()`
+
+Returns an object containing all variables in the currently selected environment as key-value pairs. Useful for debugging or iterating over environment config.
+
+```javascript
+const allVars = bru.getAllEnvVars();
+console.log("Environment variables:", allVars);
+// Output: { baseUrl: "https://api.example.com", access_token: "eyJ...", timeout: "5000" }
+```
+
+### `bru.deleteAllEnvVars()`
+
+Removes every variable from the currently selected environment. Use with caution — this affects all requests in the collection that rely on environment variables.
+
+<Warning>
+  This action clears all variables from the active environment. It cannot be undone within the same run.
+</Warning>
+
+```javascript
+// Reset the environment state at the start of a clean test suite
+bru.deleteAllEnvVars();
+```
+
+### `bru.getGlobalEnvVar(key)`
+
+Returns the value of a global environment variable. Global variables are shared across all environments and collections in the same Bruno workspace.
+
+```javascript
+const orgId = bru.getGlobalEnvVar("organizationId");
+console.log("Org ID:", orgId);
+// Output: "org_abc123"
+```
+
+### `bru.setGlobalEnvVar(key, value)`
+
+Sets or updates a global environment variable. Useful for storing values that need to be accessible across different environments or collections.
+
+```javascript
+// Store a workspace-level token retrieved from an auth request
+const data = res.getBody();
+bru.setGlobalEnvVar("global_token", data.token);
+```
+
+### `bru.hasGlobalEnvVar(key)`
+
+Returns `true` if the global environment variable exists, `false` otherwise. Useful for guarding reads when a global variable may not have been set yet.
+
+```javascript
+if (bru.hasGlobalEnvVar("global_token")) {
+  req.setHeader("Authorization", "Bearer " + bru.getGlobalEnvVar("global_token"));
+} else {
+  console.warn("No global token found — request may fail authentication.");
+}
+```
+
+### `bru.getAllGlobalEnvVars()`
+
+Returns an object of all global environment variables as key-value pairs.
+
+```javascript
+const globalVars = bru.getAllGlobalEnvVars();
+console.log("Global variables:", globalVars);
+// Output: { organizationId: "org_abc123", global_token: "eyJ..." }
+```
+
+## Variables
+
+Bruno provides a comprehensive variable system that allows you to manage and access different types of variables throughout your scripts. Variables are resolved in a specific order of precedence, with runtime variables taking the highest priority.
+
+<Info>
+  Variable precedence (highest to lowest): Runtime Variables → Request Variables → Folder Variables → Collection Variables → Environment Variables
+</Info>
+
+Here are all available variable-related methods:
+
+| Method                       | Description                                               |
+| ---------------------------- | --------------------------------------------------------- |
+| bru.getProcessEnv(key)       | Fetches the process environment variable for a given key. |
+| bru.getCollectionName()      | Retrieves the current collection name.                    |
+| bru.getCollectionVar(key)    | Retrieves the collection-level variable for the key.      |
+| bru.hasCollectionVar(key)    | Checks if a collection variable exists.                   |
+| bru.getFolderVar(key)        | Fetches a folder-specific variable by key.                |
+| bru.getRequestVar(key)       | Retrieves the value of a request variable.                |
+| bru.hasVar(key)              | Checks if a variable exists.                              |
+| bru.getVar(key)              | Retrieves the value of a variable.                        |
+| bru.setVar(key, value)       | Sets a new variable with a key-value pair.                |
+| bru.getAllVars()             | Retrieves all runtime variables as an object.             |
+| bru.deleteVar(key)           | Deletes a specific variable.                              |
+| bru.deleteAllVars()          | Deletes all runtime variables.                            |
+| bru.getOauth2CredentialVar(key) | Retrieves an OAuth2 credential variable value.         |
+| bru.resetOauth2Credential(credentialId) | Resets an OAuth2 credential so it can be re-authorized. |
+| bru.getSecretVar(key)         | Retrieves a secret variable from a configured secret manager. |
+
+### `bru.getProcessEnv(key)`
+
+Returns the value of a Node.js `process.env` variable. This lets you read OS-level environment variables (e.g. from a `.env` file loaded in your shell) without storing secrets in your collection files.
+
+```javascript
+// Read a secret from the host environment — never hardcode it in the collection
+const secretToken = bru.getProcessEnv("SECRET_ACCESS_TOKEN");
+req.setHeader("Authorization", "Bearer " + secretToken);
+
+// Useful in CI pipelines where secrets are injected as environment variables
+const dbPassword = bru.getProcessEnv("DB_PASSWORD");
+```
+
+### `bru.getCollectionVar(key)`
+
+Returns the value of a collection-level variable. Collection variables are defined in the collection settings and are shared across all requests and folders in the collection.
+
+```javascript
+const namespace = bru.getCollectionVar("namespace");
+console.log("Namespace:", namespace);
+// Output: "production"
+
+// Use collection var to build the request URL
+const baseUrl = bru.getCollectionVar("baseUrl");
+req.setUrl(`${baseUrl}/api/v1/users`);
+```
+
+### `bru.hasCollectionVar(key)`
+
+Returns `true` if a collection-level variable with the given key exists, `false` otherwise.
+
+```javascript
+if (bru.hasCollectionVar("namespace")) {
+  console.log("Namespace:", bru.getCollectionVar("namespace"));
+} else {
+  console.warn("Collection variable 'namespace' is not set.");
+}
+```
+
+### `bru.getCollectionName()`
+
+Returns the display name of the currently active collection. Useful for logging in shared scripts that run across multiple collections.
+
+```javascript
+const collectionName = bru.getCollectionName();
+console.log("Running in collection:", collectionName);
+// Output: "Payment API"
+```
+
+### `bru.getFolderVar(key)`
+
+Returns the value of a folder-level variable. Folder variables are defined in the folder settings and are only accessible to requests within that folder.
+
+```javascript
+const company = bru.getFolderVar("company");
+console.log("Company:", company);
+// Output: "Acme Corp"
+
+req.setHeader("x-company-id", bru.getFolderVar("companyId"));
+```
+
+### `bru.getRequestVar(key)`
+
+Returns the value of a request-level variable. Request variables are defined within a specific request and are only accessible in that request's scripts.
+
+```javascript
+const source = bru.getRequestVar("source");
+const destination = bru.getRequestVar("destination");
+console.log(`Routing from ${source} to ${destination}`);
+// Output: "Routing from warehouse-a to warehouse-b"
+```
+
+### `bru.hasVar(key)`
+
+Returns `true` if a runtime variable with the given key exists, `false` otherwise. Runtime variables are created with `bru.setVar()` and exist only for the duration of the collection run.
+
+```javascript
+// Guard downstream requests that depend on a variable set in a previous request
+if (bru.hasVar("userId")) {
+  console.log("User ID:", bru.getVar("userId"));
+} else {
+  console.error("userId not set — did the login request run first?");
+}
+```
+
+### `bru.getVar(key)`
+
+Returns the value of a runtime variable. Runtime variables are in-memory only and are used to share data between requests within a single collection run.
+
+```javascript
+// Retrieve an ID captured from a previous request
+const userId = bru.getVar("userId");
+console.log("Using user ID:", userId);
+// Output: "usr_7a4f2d"
+
+req.setUrl(`https://api.example.com/users/${userId}`);
+```
+
+### `bru.setVar(key, value)`
+
+Creates or updates a runtime variable. Runtime variables are temporary and only exist during the current collection run — use them to pass data from one request to the next.
+
+```javascript
+// Store the created resource's ID from the response to use in subsequent requests
+const data = res.getBody();
+bru.setVar("userId", data.id);
+console.log("Stored user ID:", data.id);
+
+// Also works with non-string values
+bru.setVar("retryCount", 0);
+bru.setVar("createdAt", new Date().toISOString());
+```
+
+### `bru.deleteVar(key)`
+
+Removes a single runtime variable by key. Has no effect if the variable does not exist.
+
+```javascript
+// Clean up a temporary flag after it has been used
+bru.deleteVar("skipAuth");
+bru.deleteVar("userId");
+```
+
+### `bru.deleteAllVars()`
+
+Removes all runtime variables. Use at the start of a run to ensure a clean state.
+
+```javascript
+// Reset all runtime state before beginning a new test scenario
+bru.deleteAllVars();
+```
+
+### `bru.getAllVars()`
+
+Returns an object containing all current runtime variables as key-value pairs. Useful for debugging mid-run state.
+
+```javascript
+const allRuntimeVars = bru.getAllVars();
+console.log("Current runtime variables:", allRuntimeVars);
+// Output: { userId: "usr_7a4f2d", authToken: "eyJ...", retryCount: 0 }
+```
+
+### `bru.getOauth2CredentialVar(key)`
+
+Returns the value of an OAuth2 credential variable (e.g. the current access token). This reads from the OAuth2 token store managed by Bruno's auth layer — not from environment or runtime variables.
+
+```javascript
+const accessToken = bru.getOauth2CredentialVar("access_token");
+console.log("OAuth2 token:", accessToken ? "present" : "missing");
+
+// Manually attach it to a header if needed
+req.setHeader("Authorization", "Bearer " + accessToken);
+```
+
+### `bru.resetOauth2Credential(credentialId)`
+
+Clears the stored OAuth2 tokens for the given credential ID, forcing Bruno to re-run the OAuth2 authorization flow on the next request that uses it.
+
+```javascript
+// Force re-authentication when a token has expired or been revoked
+bru.resetOauth2Credential("my-oauth2-credential");
+```
+
+### `bru.getSecretVar(key)`
+
+Retrieve a secret from a configured secret manager. Key pattern: `<secret-name>.<key-name>`.
+
+```javascript
+const apiKey = bru.getSecretVar("payment-service.api-key");
+req.setHeader("x-api-key", apiKey);
+
+const dbPassword = bru.getSecretVar("db-credentials.password");
+console.log("Secret retrieved successfully");
+```
+
+<Info>
+  Secrets must be configured in your collection's secret manager settings before they can be accessed via `bru.getSecretVar()`. See [Secret Managers](/secrets-management/secret-managers/overview) for setup details.
+</Info>
+
+## Runner
+
+The Runner API provides methods to control the execution flow of your collection runs. These methods are specifically designed for use within the collection runner context, allowing you to skip requests, change execution order, stop the run entirely, or read data from attached CSV/JSON files during data-driven runs.
+
+<Warning>
+  Runner methods like `skipRequest()`, `stopExecution()`, and `iterationData` only work during collection runs and will have no effect when running individual requests. `iterationData` is only populated when the collection runner is iterating over an attached data file.
+</Warning>
+
+Here are all available runner-related methods:
+
+| Method / Property | Description |
+| --- | --- |
+| bru.setNextRequest(requestName) | Sets the next request to execute. |
+| bru.runner.setNextRequest(requestName) | Alter the order of requests by specifying the next request. |
+| bru.runner.skipRequest() | Skip the execution of the current request. |
+| bru.runner.stopExecution() | Terminate a collection run. |
+| bru.runner.iterationData | Read and manipulate the current row from an attached CSV/JSON data file. |
+| bru.runner.iterationIndex | Zero-based index of the current iteration. |
+| bru.runner.totalIterations | Total number of iterations in the current run. |
+
+### `bru.setNextRequest(requestName)`
+
+Overrides the default sequential execution order — after the current request finishes, Bruno jumps to the named request instead of the next one in the list. Use in **post-request** or **test** scripts. Pass `null` to stop the run immediately after the current request.
+
+Use the request's **display name** exactly as it appears in Bruno (not a folder path).
+
+```javascript
+// Branch to a polling request after kicking off an async job
+const status = res.getStatus();
+if (status === 202) {
+  bru.setNextRequest("Poll Job Status");
+} else if (status >= 400) {
+  bru.setNextRequest(null); // Stop the run on error
+}
+
+// Retry loop — re-run the same request up to 3 times
+const retries = bru.getVar("retries") || 0;
+if (res.getBody().status === "pending" && retries < 3) {
+  bru.setVar("retries", retries + 1);
+  bru.setNextRequest("Check Job Status"); // Loop back
+}
+```
+
+### `bru.runner.setNextRequest(requestName)`
+
+Identical to `bru.setNextRequest()` — an alternative access path on the `bru.runner` object. Specify the next request to execute by its display name.
+
+```javascript
+// Jump to a status check after kicking off a background job
+bru.runner.setNextRequest("Get Process Status");
+```
+
+### `bru.runner.skipRequest()`
+
+Skips the current request entirely during a collection run — Bruno moves on to the next request without sending it. Call this in a **pre-request** script.
+
+```javascript
+// Skip requests tagged "slow-test" in CI environments
+if (req.getTags().includes("slow-test") && bru.getEnvVar("CI") === "true") {
+  bru.runner.skipRequest();
+}
+
+// Skip if a required variable is missing to avoid sending an incomplete request
+if (!bru.hasVar("userId")) {
+  console.warn("Skipping — userId not set by a previous request");
+  bru.runner.skipRequest();
+}
+```
+
+### `bru.runner.stopExecution()`
+
+Immediately stops the entire collection run. No further requests are executed after this call. Can be used in pre-request, post-response, or test scripts.
+
+```javascript
+// Abort the entire run if a critical auth request fails
+if (res.getStatus() !== 200) {
+  console.error("Authentication failed — stopping run.");
+  bru.runner.stopExecution();
+}
+
+// Stop after a maximum number of retries
+if (bru.getVar("retries") >= 5) {
+  console.error("Max retries reached — aborting.");
+  bru.runner.stopExecution();
+}
+```
+
+### `bru.runner.iterationData`
+
+Object for accessing and manipulating the **current row** from an attached CSV or JSON data file during a [data-driven collection run](/testing/automate-test/data-driven-testing). Each column (CSV) or object key (JSON) in the file becomes a field you can read in scripts.
+
+Use in **pre-request**, **post-response**, or **test** scripts when the collection runner is iterating over a data file (UI runner or CLI with `--csv-file-path` / `--json-file-path`).
+
+<Info>
+  The data file does not automatically replace your request body. Use `{{columnName}}` in the request, or read values with `iterationData` and set the body in a script (for example with `req.setBody()`).
+</Info>
+
+#### `bru.runner.iterationData.has(key)`
+
+Returns `true` if the named field exists in the current iteration row.
+
+```javascript
+if (bru.runner.iterationData.has("username")) {
+  console.log("Username exists in current iteration");
+}
+```
+
+#### `bru.runner.iterationData.get(key?)`
+
+Returns a single field value when `key` is provided. Call without arguments to get all fields for the current row as an object.
+
+```javascript
+const username = bru.runner.iterationData.get("username");
+console.log(`Current username: ${username}`);
+
+const allData = bru.runner.iterationData.get();
+console.log("All iteration data:", allData);
+```
+
+#### `bru.runner.iterationData.stringify()`
+
+Returns the current iteration row as a JSON string.
+
+```javascript
+const jsonData = bru.runner.iterationData.stringify();
+console.log("JSON data:", jsonData);
+```
+
+#### `bru.runner.iterationData.unset(key)`
+
+Removes a field from the current iteration only. Does not modify the source data file or affect other iterations.
+
+```javascript
+bru.runner.iterationData.unset("password");
+```
+
+**Example:** build the request body from iteration data
+
+```javascript
+const username = bru.runner.iterationData.get("username");
+const password = bru.runner.iterationData.get("password");
+
+req.setBody({ username, password });
+```
+
+**Example:** conditional logic per iteration
+
+```javascript
+if (bru.runner.iterationIndex === 0) {
+  bru.runner.iterationData.unset("password");
+}
+
+if (bru.runner.iterationData.has("password")) {
+  console.log("Password available");
+}
+```
+
+### `bru.runner.iterationIndex`
+
+Zero-based index of the current iteration in a data-driven run.
+
+```javascript
+const currentIteration = bru.runner.iterationIndex;
+console.log(`Running iteration ${currentIteration}`);
+```
+
+### `bru.runner.totalIterations`
+
+Total number of iterations in the current data-driven run.
+
+```javascript
+const total = bru.runner.totalIterations;
+console.log(`Total iterations: ${total}`);
+```
+
+## Utilities
+
+The Utilities API provides a collection of helper functions for common tasks such as making HTTP requests, working with cookies, managing tests, and other utility operations.
+
+Here are all available utility methods:
+
+| Method                           | Description                                               |
+| -------------------------------- | --------------------------------------------------------- |
+| bru.sendRequest(options, callback) | Sends a programmatic HTTP request within your script.   |
+| bru.sleep(milliseconds)          | Pauses execution for the specified duration.              |
+| bru.interpolate(string)          | Evaluates dynamic variables within a string.              |
+| bru.disableParsingResponseJson() | Disables JSON response parsing for the request.           |
+| bru.isSafeMode()                 | Detects whether the script is running in Safe Mode.       |
+| bru.cwd()                        | Returns the current working directory.                    |
+| bru.runRequest(requestPathName)  | Executes a request by its path name.                      |
+| bru.getAssertionResults()        | Retrieves the results of assertions.                      |
+| bru.getTestResults()             | Fetches the test results.                                 |
+| bru.cookies              | Request-scoped helpers on `bru.cookies` (read / iterate / write) and optional `bru.cookies.jar()`. |
+
+### `bru.sendRequest(options, callback?)`
+
+Send a programmatic HTTP request from your script. Supports `method`, `url`, `headers`, `data`, `timeout`, `httpsAgent`, and optional `callback(err, res)`; also supports `await` without a callback.
+
+<Note>
+  Bruno applies your TLS (custom CA, SSL verification), proxy, and client certificate settings to `bru.sendRequest()` unless you override with `httpsAgent`.
+</Note>
+
+<Tip>
+  You can see the executed request in the [Timeline](/debugging/timeline) tab with a `sendRequest` context badge.
+</Tip>
+
+```javascript
+await bru.sendRequest(
+  {
+    method: "POST",
+    url: "https://echo.usebruno.com",
+    headers: { "Content-Type": "application/json" },
+    data: { key: "value" },
+  },
+  function (err, res) {
+    if (err) {
+      console.error("Error:", err);
+      return;
+    }
+    console.log("Response:", res.data);
+  }
+);
+```
+
+Custom HTTPS agent (e.g. self-signed):
+
+```javascript
+const https = require("node:https");
+const agent = new https.Agent({ rejectUnauthorized: false });
+const res = await bru.sendRequest({
+  url: "https://self-signed.badssl.com",
+  method: "GET",
+  httpsAgent: agent,
+});
+console.log("Response:", res.data);
+```
+
+Custom CA (requires [Developer Mode](/get-started/configure/javascript-sandbox#developer-mode) for `fs`):
+
+<Warning>
+  Custom HTTPS agents and loading certificates from disk require [Developer Mode](/get-started/configure/javascript-sandbox#developer-mode).
+</Warning>
+
+```javascript
+const https = require("node:https");
+const fs = require("fs");
+const path = require("path");
+const ca = fs.readFileSync(path.join(bru.cwd(), "certs", "ca.pem"));
+const agent = new https.Agent({ ca, rejectUnauthorized: true });
+const res = await bru.sendRequest({
+  url: "https://api.example.com/data",
+  method: "GET",
+  httpsAgent: agent,
+});
+```
+
+
+
+### `bru.sleep(milliseconds)`
+
+Pauses script execution for the specified number of milliseconds. Use this to introduce a delay when polling a slow API or waiting for a background job to complete.
+
+```javascript
+// Wait 3 seconds before polling for job status
+await bru.sleep(3000);
+console.log("Resuming after delay...");
+
+// Progressive delay in a retry loop
+const retries = bru.getVar("retries") || 0;
+await bru.sleep(1000 * (retries + 1)); // 1s, 2s, 3s...
+```
+
+### `bru.interpolate(string)`
+
+Resolves Bruno dynamic variables (e.g. `{{$randomFirstName}}`, `{{baseUrl}}`) inside a string and returns the result. Useful when you need a variable-interpolated value inside a script, not just inside a request field.
+
+```javascript
+// Generate a random name for a test user
+const firstName = bru.interpolate("{{$randomFirstName}}");
+console.log("Random name:", firstName);
+// Output: "James"
+
+// Build a dynamic payload string with multiple variables
+const userInfo = bru.interpolate(`
+  Name: {{$randomFullName}}
+  Job: {{$randomJobTitle}}
+  Email: {{$randomEmail}}
+`);
+console.log(userInfo);
+// Output:
+//   Name: Clara Johnson
+//   Job: Senior Developer
+//   Email: clara.johnson@example.com
+```
+
+### `bru.disableParsingResponseJson()`
+
+Prevents Bruno from automatically parsing the response body as JSON, even when the `Content-Type` is `application/json`. After calling this, `res.getBody()` returns the raw string. Call this in a **pre-request** script.
+
+```javascript
+// Keep the raw JSON string to process with a custom parser
+bru.disableParsingResponseJson();
+
+// Then in the post-response script:
+// const rawString = res.getBody(); // returns string, not object
+```
+
+### `bru.cwd()`
+
+Returns the absolute path of the collection's root directory on disk. Useful when reading files (certificates, fixtures, config) relative to the collection in Developer Mode.
+
+```javascript
+const collectionDir = bru.cwd();
+console.log("Collection directory:", collectionDir);
+// Output: "/Users/me/projects/my-api-collection"
+
+// Load a local fixture file relative to the collection
+const fs = require("fs");
+const fixture = JSON.parse(fs.readFileSync(`${bru.cwd()}/fixtures/user.json`, "utf8"));
+req.setBody(fixture);
+```
+
+### `bru.isSafeMode()`
+
+Returns `true` when the script is running in **Safe Mode** (the default sandbox), or `false` when running in **Developer Mode** which enables `require()` and Node.js built-ins. Use this to branch logic based on the active sandbox.
+
+```javascript
+if (bru.isSafeMode()) {
+  console.log("Running in Safe Mode — require() is not available.");
+} else {
+  // Developer Mode: full Node.js access
+  const fs = require("fs");
+  const config = JSON.parse(fs.readFileSync(`${bru.cwd()}/config.json`, "utf8"));
+  bru.setVar("config", config);
+}
+```
+
+See [JavaScript Sandbox](/get-started/configure/javascript-sandbox#detecting-sandbox-mode-in-scripts).
+
+### `bru.runRequest(requestPathName)`
+
+Executes another request in the collection by its name and returns its response. Useful for chaining dependent requests inside a single script without relying on collection runner order.
+
+<Warning>
+  Do not call `bru.runRequest()` from a collection-level pre-request script — it can cause an infinite recursive loop. Always use double quotes for the request name.
+</Warning>
+
+<Tip>
+  You can see the executed request in the [Timeline](/debugging/timeline) tab with a `runRequest` context badge.
+</Tip>
+
+```javascript
+// Run an auth request and use the token it returns
+const authResponse = await bru.runRequest("Login");
+const token = authResponse.data.token;
+req.setHeader("Authorization", "Bearer " + token);
+
+// Run a cleanup step after the main request
+const cleanupResponse = await bru.runRequest("Delete Test User");
+console.log("Cleanup status:", cleanupResponse.status);
+```
+
+### `bru.getTestResults()`
+
+Returns the test results for the current request as an array of result objects. Each object contains the test name and its pass/fail status. Use in **test** scripts to inspect or log outcomes programmatically.
+
+```javascript
+const testResults = await bru.getTestResults();
+console.log("Test results:", testResults);
+// Output: [{ name: "status is 200", status: "pass" }, { name: "has token", status: "fail" }]
+
+// Log only failing tests
+testResults.filter(r => r.status === "fail").forEach(r => {
+  console.error("FAILED:", r.name);
+});
+```
+
+### `bru.getAssertionResults()`
+
+Returns the assertion results for the current request as an array of result objects, each describing the expression, expected value, actual value, and pass/fail status. Use in **test** scripts.
+
+```javascript
+const assertionResults = await bru.getAssertionResults();
+console.log("Assertion results:", assertionResults);
+// Output: [{ lhs: "res.status", operator: "eq", rhs: "200", status: "pass" }]
+
+// Count how many assertions failed
+const failures = assertionResults.filter(a => a.status === "fail");
+console.log(`${failures.length} assertion(s) failed`);
+```
+
+## Cookies
+
+Cookie helpers on **`bru.cookies`** are **scoped to the current request URL** automatically. You can **read** and **iterate** cookies synchronously, and **write** changes with `async` methods that persist to Bruno’s underlying cookie storage—without constructing a jar or repeating the URL on every call.
+
+<Info>
+  For advanced flows (explicit URL, multiple sites in one script), you can still use **`bru.cookies.jar()`** below; the jar API is unchanged.
+</Info>
+
+### Why use request-scoped helpers?
+
+**Jar-based (still valid):** you create a jar, pass the site URL into each call.
+
+```javascript
+const jar = bru.cookies.jar();
+const session = await jar.getCookie("https://example.com", "session");
+const hasAuth = await jar.hasCookie("https://example.com", "auth");
+await jar.setCookie("https://example.com", "token", "abc123");
+```
+
+**Request-scoped (simpler):** Bruno uses the active request URL for you.
+
+```javascript
+const session = bru.cookies.get("session");
+const hasAuth = bru.cookies.has("auth");
+await bru.cookies.add({ key: "token", value: "abc123" });
+
+bru.cookies.each((c) => console.log(c.key, c.value));
+const authCookies = bru.cookies.filter((c) => c.key.startsWith("auth_"));
+const asObject = bru.cookies.toObject();
+```
+
+Use whichever style fits your script; both operate on the same stored cookies for the request.
+
+### Read methods (sync)
+
+| Method | Description |
+| ------ | ----------- |
+| `bru.cookies.get(name)` | Cookie **value** for `name` at the current request URL (`undefined` when missing). |
+| `bru.cookies.has(name)` | `true` if a cookie with that name exists. |
+| `bru.cookies.has(name, value)` | `true` if a cookie exists with that **name** and **value**. |
+| `bru.cookies.one(id)` | Look up a cookie entry by **id** when entries expose ids. |
+| `bru.cookies.all()` | All cookie entries for the scoped URL. |
+| `bru.cookies.count()` | Number of cookies. |
+| `bru.cookies.idx(n)` | Cookie at numeric index `n`. |
+| `bru.cookies.indexOf(item)` | Index of a given cookie entry. |
+| `bru.cookies.toObject()` | Plain object: cookie **name** → **value** (handy for logging or assertions). |
+| `bru.cookies.toString()` | String representation of the cookie set. |
+
+### Iteration methods (sync)
+
+| Method | Description |
+| ------ | ----------- |
+| `bru.cookies.each(fn)` | Synchronously iterates over all cookies and calls the provided function `fn(cookie)` for each one. Useful for logging or processing each cookie in turn. |
+| `bru.cookies.find(fn)` | Returns the first cookie that matches the predicate function `fn(cookie)`. If no cookie matches, returns `undefined`. |
+| `bru.cookies.filter(fn)` | Returns an array of all cookies for which the predicate function `fn(cookie)` returns `true`. |
+| `bru.cookies.map(fn)` | Maps each cookie to a new value by applying the function `fn(cookie)`, returning an array of the results. |
+| `bru.cookies.reduce(fn, initial)` | Reduces the list of cookies to a single value using the reducer function `fn(acc, cookie)`, starting with `initial` as the accumulator. |
+
+### Write methods (async)
+
+These update the persisted jar for the scoped URL—use **`await`** in async scripts.
+
+| Method | Description |
+| ------ | ----------- |
+| `await bru.cookies.add(obj)` | Add a cookie; `obj` includes at least **`key`** and **`value`** (plus optional `domain`, `path`, `expires`, `maxAge`, `secure`, `httpOnly`, `sameSite`, etc., when supported). |
+| `await bru.cookies.upsert(obj)` | Add or replace a cookie with the same identity rules as your Bruno version. |
+| `await bru.cookies.remove(name)` | Remove by cookie name. |
+| `await bru.cookies.delete(name)` | Same intent as `remove` (alias for ergonomics). |
+| `await bru.cookies.clear()` | Remove all cookies for the scoped context. |
+
+```javascript
+await bru.cookies.add({ key: "session", value: res.body.sessionId, path: "/", maxAge: 3600 });
+```
+
+### Where it runs
+
+Request-scoped cookie helpers are available in **pre-request**, **post-response**, and **test** scripts in both the **Node VM** runtime and the **QuickJS** sandbox, matching the environments where your other `bru.*` script APIs run.
+
+---
+
+### Cookie jar (`bru.cookies.jar()`)
+
+Low-level jar APIs work in pre-request, post-request, and test scripts. Create a jar when you need an explicit URL or jar instance not tied to a single request context.
+
+### `bru.cookies.jar()`
+
+Create a cookie jar instance.
+
+```javascript
+const jar = bru.cookies.jar();
+```
+
+### `jar.setCookie(url, name, value)` / `jar.setCookie(url, cookieObject)`
+
+Set one cookie: either `(url, name, value)` or `(url, { key, value, domain, path, expires, maxAge, secure, httpOnly, sameSite })`.
+
+```javascript
+const jar = bru.cookies.jar();
+jar.setCookie("https://example.com", "sessionId", "abc123");
+jar.setCookie("https://example.com", {
+  key: "userToken",
+  value: "xyz789",
+  domain: "example.com",
+  path: "/api",
+  secure: true,
+  httpOnly: true,
+  maxAge: 3600,
+});
+```
+
+### `jar.setCookies(url, cookies)`
+
+Set multiple cookies from an array of cookie objects.
+
+```javascript
+const jar = bru.cookies.jar();
+jar.setCookies("https://example.com", [
+  { key: "sessionId", value: "abc123", secure: true, httpOnly: true },
+  { key: "userPreference", value: "dark-mode", path: "/", maxAge: 86400 },
+]);
+```
+
+### `jar.getCookie(url, name)`
+
+Get a cookie by name; returns the cookie object or `null`.
+
+```javascript
+const jar = bru.cookies.jar();
+const sessionCookie = await jar.getCookie("https://example.com", "sessionId");
+```
+
+### `jar.hasCookie(url, name, callback?)`
+
+Returns a Promise of `true`/`false`, or invokes `callback(error, exists)` if provided.
+
+```javascript
+const jar = bru.cookies.jar();
+const exists = await jar.hasCookie("https://example.com", "sessionId");
+
+jar.hasCookie("https://testbench-sanity.usebruno.com", "existing_cookie", function (error, exists) {
+  test("should work with callback pattern", function () {
+    expect(error).to.be.null;
+    expect(exists).to.be.true;
+  });
+});
+```
+
+### `jar.getCookies(url)`
+
+Get all cookies for a URL (array).
+
+```javascript
+const jar = bru.cookies.jar();
+const allCookies = await jar.getCookies("https://example.com");
+```
+
+### `jar.deleteCookie(url, name)`
+
+Delete one cookie. Domain/path must match how the cookie was set.
+
+<Warning>
+  Deletion only succeeds when domain and path match the stored cookie.
+</Warning>
+
+```javascript
+const jar = bru.cookies.jar();
+jar.deleteCookie("https://example.com", "sessionId");
+```
+
+### `jar.deleteCookies(url)`
+
+Remove all cookies for a URL.
+
+```javascript
+const jar = bru.cookies.jar();
+jar.deleteCookies("https://example.com");
+```
+
+### `jar.clear()`
+
+Clear every cookie in the jar.
+
+```javascript
+const jar = bru.cookies.jar();
+jar.clear();
+```
+

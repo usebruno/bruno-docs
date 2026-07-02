@@ -1,0 +1,111 @@
+---
+title: "DotEnv File"
+sidebarTitle: "DotEnv File"
+---
+
+Environment variables are used to store sensitive data such as API keys, tokens, and configuration settings outside the source code. This helps keep your code secure and makes it easier to manage different settings for various environments (e.g., local, staging, production).
+
+## DotEnv File for Secret Management
+
+In **Bruno**, you can store your secrets (e.g., API keys, JWT tokens) in a `.env` file located at the **root** of your collection folder. This approach is inspired by how developers typically manage secrets in their codebase.
+
+### Folder Structure Example
+
+Below is an example folder structure for your collection:
+
+<Tree>
+  <Tree.Folder name="bruno-collection" defaultOpen>
+    <Tree.Folder name="api-folder">
+      <Tree.Folder name="customer-api">
+        <Tree.File name="example.bru" />
+      </Tree.Folder>
+      <Tree.Folder name="emp-api">
+        <Tree.File name="details.bru" />
+      </Tree.Folder>
+      <Tree.File name="lib.js" />
+    </Tree.Folder>
+    <Tree.File name=".env" />
+    <Tree.File name=".gitignore" />
+    <Tree.File name="bruno.json" />
+    <Tree.File name="package.json" />
+  </Tree.Folder>
+</Tree>
+
+## Creating and Using the `.env` File
+
+1. Create a `.env` file manually in the root of your collection folder. This file will store your sensitive environment variables.
+
+2. Define your secrets in the `.env` file. For example:
+
+```bash filename=".env" showLineNumbers
+JWT_TOKEN=your_jwt_token_value
+API_KEY=your_api_key_value
+```
+
+These secrets will be accessible in your Bruno collection via the `process.env` object.
+
+![dot env vars](/images/screenshots/secret-variables/dot-env-vars.webp)
+
+Bruno will automatically load the secrets from this file and make them available to your collection via `process.env.<secret-name>`.
+
+Your environment file at `environments/local.bru` would look like
+
+```bash filename="local.bru"
+vars {
+  baseURL: https://echo.usebruno.com
+  JWT_TOKEN: {{process.env.JWT_TOKEN}}
+  API_KEY: {{process.env.API_KEY}}
+}
+
+```
+
+In this example, the `JWT_TOKEN` secret from the `.env` file is referenced using `process.env.JWT_TOKEN`. This will be replaced with the actual value of `JWT_TOKEN` when the collection is executed.
+
+## Managing Secrets
+
+1. Always add the `.env` file to your `.gitignore` file to ensure secrets are not accidentally pushed to version control.
+
+2. If you need to share the structure of your environment variables with other developers, create a `.env.sample` file without actual secret values.
+
+### Handling Variables with Dots
+
+When using environment variables that contain dots in their names, use square bracket notation:
+
+```bash
+# In .env file
+example.test=mysecretvalue
+```
+
+```javascript
+// In your request
+// Won't work
+"secret": "{{process.env.demo.example.test}}"
+
+// Works correctly
+"secret": "{{process.env['example.test']}}"
+```
+
+This happens because Bruno interprets dots as object path separators. Square brackets tell Bruno to treat the entire string as a single variable name.
+
+## Manage Environment Credentials
+
+<Info>
+**Bruno v3.1.0**: You can now create, view, and delete environment variables directly from Bruno at the workspace level without manually editing `.env` files.
+</Info>
+
+### Accessing Environment Variables
+
+1. Navigate to **Workspace** → **Global Environment** section
+
+![Create Environment File](/images/screenshots/secret-variables/1-create-env-file.webp)
+
+2. Create or edit environment variables with your credentials
+
+![Create Environment Variables](/images/screenshots/secret-variables/2-create-env-vars.webp)
+
+3. Use these variables across all collections in your workspace using `{{process.env.<variable-name>}}` syntax.
+
+![Use Environment Variables](/images/screenshots/secret-variables/3-use-env-vars.webp)
+
+This feature provides a centralized UI to create, view, and delete environment credentials directly from Bruno, eliminating the need to manually edit `.env` files while maintaining the same security and accessibility benefits.
+

@@ -1,0 +1,38 @@
+---
+title: "Claude"
+sidebarTitle: "Claude"
+---
+
+Claude is a powerful AI agent that can help you write code faster and more efficiently. It empowers developers, testers, and non-technical users to write code and automate their workflows.
+
+## Configure Claude with Bruno
+
+1. Download and install Claude from [here](https://claude.ai/download).
+
+2. After installing Claude, open your project and create a `.claude/CLAUDE.md` file at the root of your project.
+
+Your project folder structure should look like this:
+
+<Tree>
+  <Tree.Folder name="my-project" defaultOpen>
+    <Tree.Folder name=".claude" defaultOpen>
+      <Tree.File name="CLAUDE.md" />
+    </Tree.Folder>
+    <Tree.Folder name="src" defaultOpen>
+      <Tree.Folder name="routes">
+        <Tree.File name="users.js" />
+        <Tree.File name="auth.js" />
+      </Tree.Folder>
+      <Tree.File name="app.js" />
+      <Tree.File name="server.js" />
+    </Tree.Folder>
+    <Tree.File name="package.json" />
+    <Tree.File name=".gitignore" />
+  </Tree.Folder>
+</Tree>
+
+<Warning>
+  You can write your own instructions for Claude to follow while working on the collection or you can use the [default instructions provided by Bruno](https://github.com/bruno-collections/ai-assistant-prompts/blob/main/prompts/vscode/.vscode/ai-instructions.md).
+</Warning>
+
+For example workflows and prompts, see [Use cases](./use-cases).

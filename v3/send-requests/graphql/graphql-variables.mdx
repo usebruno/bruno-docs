@@ -1,0 +1,33 @@
+---
+title: "GraphQL Variables"
+---
+
+Variables in GraphQL allow you to create dynamic, reusable, and secure queries. Instead of embedding values directly in your query string, you can use variables to pass values separately. This approach offers several benefits:
+
+- **Security**: Prevents GraphQL injection attacks
+- **Reusability**: Same query can be used with different values
+- **Type Safety**: Variables are strongly typed
+- **Readability**: Makes queries cleaner and easier to understand
+
+## Adding Variables to Your GraphQL Request
+
+1. Create a GraphQL Request
+2. Add variables in the **Variables** section (bottom of query section)
+3. Write your query or mutation with variables using the `$` prefix to declare variables and reference variables using the `$variableName` syntax.
+
+![variables-section](/images/screenshots/send-request/graphql/06-variables.webp)
+
+**Variables (JSON format):**
+
+```json
+{
+  "title": "usebruno",
+  "userId": "1"
+}
+```
+
+In this example, the `$title` and `$userId` are variables defined as a string and number respectively, and its value `"usebruno"` and `1` are passed separately in the Variables section.
+
+
+
+

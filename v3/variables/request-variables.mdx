@@ -1,0 +1,26 @@
+---
+title: "Request Variables"
+---
+
+Request variables are variables that are scoped to a specific request. They are useful for storing variables that is used in a specific request.
+
+## Creating a Request Variable
+* Go to the Request 
+* Go to Vars Tab
+* Add your variable name, value in the Pre Request Vars section
+* Save your changes
+
+![Request Variables](/images/screenshots/variables/request-variables.webp)
+
+## Using a Request Variable
+You can use the `{{varName}}` syntax to use a request variable in a request.
+
+![Request Variables Usage](/images/screenshots/variables/request-variables-usage.webp)
+
+#### Access Request Variable inside scripts
+You can also use the `bru.getRequestVar()` function to get the value of a request variable and use it inside your scripts.
+
+```javascript
+let source = bru.getRequestVar("source");
+let destination = bru.getRequestVar("destination");
+```

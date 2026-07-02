@@ -1,0 +1,69 @@
+---
+title: "Postman Conversions"
+sidebarTitle: "Postman to Bruno"
+---
+
+<Tabs>
+  <Tab title="Collection">
+  ### Convert Postman collection to Bruno collection
+
+  ```javascript
+  const { postmanToBruno } = require('@usebruno/converters');
+
+  const brunoCollection = postmanToBruno(postmanCollection);
+  ```
+
+  ```javascript
+  const { postmanToBruno } = require('@usebruno/converters');
+  const { readFile, writeFile } = require('fs/promises');
+  const path = require('path');
+
+  async function convertPostmanToBruno(inputFile, outputFile) {
+    try {
+      const inputData = await readFile(inputFile, 'utf8');
+      const brunoCollection = postmanToBruno(JSON.parse(inputData));
+      await writeFile(outputFile, JSON.stringify(brunoCollection, null, 2));
+      console.log('Conversion successful!');
+    } catch (error) {
+      console.error('Error during conversion:', error);
+    }
+  }
+
+  convertPostmanToBruno(
+    path.join(__dirname, 'demo_collection.postman_collection.json'),
+    path.join(__dirname, 'demo_collection.bruno_collection.json')
+  );
+  ```
+  </Tab>
+  <Tab title="Environment">
+  ### Convert Postman Environment to Bruno Environment
+
+  ```javascript
+  const { postmanToBrunoEnvironment } = require('@usebruno/converters');
+
+  const brunoEnvironment = postmanToBrunoEnvironment(postmanEnvironment);
+  ```
+
+  ```javascript 
+  const { postmanToBrunoEnvironment } = require('@usebruno/converters');
+  const { readFile, writeFile } = require('fs/promises');
+  const path = require('path');
+
+  async function convertPostmanEnvironment(inputFile, outputFile) {
+    try {
+      const inputData = await readFile(inputFile, 'utf8');
+      const brunoEnvironment = await postmanToBrunoEnvironment(JSON.parse(inputData));
+      await writeFile(outputFile, JSON.stringify(brunoEnvironment, null, 2));
+      console.log('Environment conversion successful!');
+    } catch (error) {
+      console.error('Error during environment conversion:', error);
+    }
+  }
+
+  convertPostmanEnvironment(
+    path.join(__dirname, 'demo_environment.postman_environment.json'),
+    path.join(__dirname, 'demo_environment.bruno_environment.json')
+  );
+  ```
+  </Tab>
+</Tabs>

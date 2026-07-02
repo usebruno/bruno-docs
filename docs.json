@@ -11,8 +11,10 @@
   "navigation": {
     "versions": [
       {
-        "version": "v3",
-            "groups": [
+        "version": "v4",
+        "default": true,
+        "tag": "Latest",
+        "groups": [
           {
             "group": "Getting Started",
             "icon": "rocket",
@@ -27,795 +29,1089 @@
                   "introduction/feedback-community"
                 ]
               },
-                  {
-                    "group": "Bruno Basics",
-                    "pages": [
-                      "get-started/bruno-basics/create-a-workspace",
-                      "get-started/bruno-basics/create-a-collection",
-                      "get-started/bruno-basics/create-a-folder",
-                      "get-started/bruno-basics/create-a-request",
-                      "get-started/bruno-basics/create-a-test",
-                      "get-started/bruno-basics/run-a-collection"
-                    ]
-                  },
-                  {
-                    "group": "Import or Export Data",
-                    "pages": [
-                      "get-started/import-export-data/import-collections",
-                      "get-started/import-export-data/export-collections",
-                      "get-started/import-export-data/import-export-workspace",
-                      "get-started/import-export-data/import-export-environments",
-                      "get-started/import-export-data/postman-migration",
-                      "get-started/import-export-data/script-translator"
-                    ]
-                  },
-                  {
-                    "group": "Configure",
-                    "pages": [
-                      "get-started/configure/settings",
-                  "get-started/configure/proxy-config",
-                  "get-started/configure/javascript-sandbox"
-                    ]
-              }
+              {
+                "group": "Bruno Basics",
+                "pages": [
+                  "get-started/bruno-basics/create-a-workspace",
+                  "get-started/bruno-basics/create-a-collection",
+                  "get-started/bruno-basics/create-a-folder",
+                  "get-started/bruno-basics/create-a-request",
+                  "get-started/bruno-basics/create-a-test",
+                  "get-started/bruno-basics/run-a-collection"
                 ]
               },
               {
-                "group": "Core Features",
-                "icon": "zap",
+                "group": "Import or Export Data",
                 "pages": [
+                  "get-started/import-export-data/import-collections",
+                  "get-started/import-export-data/export-collections",
+                  "get-started/import-export-data/import-export-workspace",
+                  "get-started/import-export-data/import-export-environments",
+                  "get-started/import-export-data/postman-migration",
+                  "get-started/import-export-data/script-translator"
+                ]
+              },
+              {
+                "group": "Configure",
+                "pages": [
+                  "get-started/configure/settings",
+                  "get-started/configure/proxy-config",
+                  "get-started/configure/javascript-sandbox"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Core Features",
+            "icon": "zap",
+            "pages": [
+              {
+                "group": "Send Requests",
+                "pages": [
+                  "send-requests/overview",
                   {
-                    "group": "Send Requests",
+                    "group": "REST",
                     "pages": [
-                      "send-requests/overview",
-                      {
-                        "group": "REST",
-                        "pages": [
-                          "send-requests/REST/overview",
-                          "send-requests/REST/rest-api",
-                          "send-requests/REST/req-header",
-                          "send-requests/REST/parameters",
-                          "send-requests/REST/body-data",
-                          "send-requests/REST/request-settings",
-                          "send-requests/REST/code-generator"
-                        ]
-                      },
-                      {
-                        "group": "GraphQL",
-                        "pages": [
-                          "send-requests/graphql/overview",
-                          "send-requests/graphql/graphql-api",
-                          "send-requests/graphql/graphql-variables",
-                          "send-requests/graphql/query-builder"
-                        ]
-                      },
-                      {
-                        "group": "gRPC",
-                        "pages": [
-                          "send-requests/grpc/overview",
-                          "send-requests/grpc/grpc-request",
-                          "send-requests/grpc/grpc-proto",
-                          "send-requests/grpc/grpc-streams"
-                        ]
-                      },
-                      {
-                        "group": "WebSocket",
-                        "pages": [
-                          "send-requests/websocket/overview",
-                          "send-requests/websocket/create-request",
-                          "send-requests/websocket/ws-interface",
-                          "send-requests/websocket/message-types"
-                        ]
-                      },
-                      {
-                        "group": "SOAP",
-                        "pages": [
-                          "send-requests/soap/soap-request"
-                        ]
-                      },
-                      {
-                        "group": "Response Data & Cookies",
-                        "pages": [
-                          "send-requests/res-data-cookies/overview",
-                          "send-requests/res-data-cookies/res-data",
-                          "send-requests/res-data-cookies/cookies",
+                      "send-requests/REST/overview",
+                      "send-requests/REST/rest-api",
+                      "send-requests/REST/req-header",
+                      "send-requests/REST/parameters",
+                      "send-requests/REST/body-data",
+                      "send-requests/REST/request-settings",
+                      "send-requests/REST/code-generator"
+                    ]
+                  },
+                  {
+                    "group": "GraphQL",
+                    "pages": [
+                      "send-requests/graphql/overview",
+                      "send-requests/graphql/graphql-api",
+                      "send-requests/graphql/graphql-variables",
+                      "send-requests/graphql/query-builder"
+                    ]
+                  },
+                  {
+                    "group": "gRPC",
+                    "pages": [
+                      "send-requests/grpc/overview",
+                      "send-requests/grpc/grpc-request",
+                      "send-requests/grpc/grpc-proto",
+                      "send-requests/grpc/grpc-streams"
+                    ]
+                  },
+                  {
+                    "group": "WebSocket",
+                    "pages": [
+                      "send-requests/websocket/overview",
+                      "send-requests/websocket/create-request",
+                      "send-requests/websocket/ws-interface",
+                      "send-requests/websocket/message-types"
+                    ]
+                  },
+                  {
+                    "group": "SOAP",
+                    "pages": [
+                      "send-requests/soap/soap-request"
+                    ]
+                  },
+                  {
+                    "group": "Response Data & Cookies",
+                    "pages": [
+                      "send-requests/res-data-cookies/overview",
+                      "send-requests/res-data-cookies/res-data",
+                      "send-requests/res-data-cookies/cookies",
                       "send-requests/res-data-cookies/response-examples"
                     ]
                   },
                   "send-requests/history"
+                ]
+              },
+              {
+                "group": "Variables",
+                "pages": [
+                  "variables/overview",
+                  "variables/environment-variables",
+                  "variables/global-environment-variables",
+                  "variables/collection-variables",
+                  "variables/folder-variables",
+                  "variables/request-variables",
+                  "variables/runtime-variables",
+                  "variables/prompt-variables",
+                  "variables/process-env",
+                  "variables/interpolation"
+                ]
+              },
+              {
+                "group": "Git Integration & Collaboration",
+                "pages": [
+                  "git-integration/overview",
+                  "git-integration/git-strategies",
+                  {
+                    "group": "Using GUI",
+                    "pages": [
+                      "git-integration/using-gui/intro",
+                      "git-integration/using-gui/provider",
+                      "git-integration/using-gui/consumer"
+                    ]
+                  },
+                  "git-integration/using-cli",
+                  "git-integration/gitlab",
+                  "git-integration/bitbucket",
+                  "git-integration/azure-devops",
+                  "git-integration/embed-bruno-collection"
+                ]
+              },
+              {
+                "group": "Git Providers",
+                "pages": [
+                  "git-providers/overview",
+                  "git-providers/github"
+                ]
+              },
+              {
+                "group": "Tests and Scripts",
+                "pages": [
+                  {
+                    "group": "Tests",
+                    "pages": [
+                      "testing/tests/introduction",
+                      "testing/tests/assertions"
                     ]
                   },
                   {
-                    "group": "Variables",
+                    "group": "Scripts",
                     "pages": [
-                      "variables/overview",
-                      "variables/environment-variables",
-                      "variables/global-environment-variables",
-                      "variables/collection-variables",
-                      "variables/folder-variables",
-                      "variables/request-variables",
-                      "variables/runtime-variables",
-                      "variables/prompt-variables",
-                      "variables/process-env",
-                      "variables/interpolation"
-                    ]
-                  },
-                  {
-                    "group": "Git Integration & Collaboration",
-                    "pages": [
-                      "git-integration/overview",
-                      "git-integration/git-strategies",
+                      "testing/script/getting-started",
+                      "testing/script/javascript-reference",
+                      "testing/script/script-flow",
+                      "testing/script/inbuilt-libraries",
+                      "testing/script/external-libraries",
+                      "testing/script/js-file",
+                      "testing/script/dynamic-variables",
+                      "testing/script/request-chaining",
                       {
-                        "group": "Using GUI",
+                        "group": "Request",
                         "pages": [
-                          "git-integration/using-gui/intro",
-                          "git-integration/using-gui/provider",
-                          "git-integration/using-gui/consumer"
-                        ]
-                      },
-                      "git-integration/using-cli",
-                      "git-integration/gitlab",
-                      "git-integration/bitbucket",
-                      "git-integration/azure-devops",
-                      "git-integration/embed-bruno-collection"
-                    ]
-                  },
-                  {
-                    "group": "Git Providers",
-                    "pages": [
-                      "git-providers/overview",
-                      "git-providers/github"
-                    ]
-                  },
-                  {
-                    "group": "Tests and Scripts",
-                    "pages": [
-                      {
-                        "group": "Tests",
-                        "pages": [
-                          "testing/tests/introduction",
-                          "testing/tests/assertions"
-                        ]
-                      },
-                      {
-                        "group": "Scripts",
-                        "pages": [
-                          "testing/script/getting-started",
-                          "testing/script/javascript-reference",
-                          "testing/script/script-flow",
-                          "testing/script/inbuilt-libraries",
-                          "testing/script/external-libraries",
-                          "testing/script/js-file",
-                          "testing/script/dynamic-variables",
-                          "testing/script/request-chaining",
-                          {
-                            "group": "Request",
-                            "pages": [
-                              "testing/script/request/request-object",
-                              "testing/script/request/sync-requests"
-                            ]
-                          },
-                          {
-                            "group": "Response",
-                            "pages": [
-                              "testing/script/response/response-object",
-                              "testing/script/response/response-query"
-                            ]
-                          },
-                          "testing/script/vars"
+                          "testing/script/request/request-object",
+                          "testing/script/request/sync-requests"
                         ]
                       },
                       {
-                        "group": "Automate Tests",
+                        "group": "Response",
                         "pages": [
-                          "testing/automate-test/overview",
-                          "testing/automate-test/manual-test",
-                          "testing/automate-test/automate-test",
-                          "testing/automate-test/data-driven-testing"
+                          "testing/script/response/response-object",
+                          "testing/script/response/response-query"
+                        ]
+                      },
+                      "testing/script/vars"
+                    ]
+                  },
+                  {
+                    "group": "Automate Tests",
+                    "pages": [
+                      "testing/automate-test/overview",
+                      "testing/automate-test/manual-test",
+                      "testing/automate-test/automate-test",
+                      "testing/automate-test/data-driven-testing"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Secret Management",
+                "pages": [
+                  "secrets-management/overview",
+                  "secrets-management/secret-variables",
+                  "secrets-management/secret-masking",
+                  "secrets-management/dotenv-file",
+                  {
+                    "group": "Secret Managers",
+                    "pages": [
+                      "secrets-management/secret-managers/overview",
+                      {
+                        "group": "HashiCorp Vault",
+                        "pages": [
+                          "secrets-management/secret-managers/hashicorp-vault/overview",
+                          "secrets-management/secret-managers/hashicorp-vault/adding-a-secret-provider",
+                          "secrets-management/secret-managers/hashicorp-vault/configuring-and-fetching-secrets",
+                          "secrets-management/secret-managers/hashicorp-vault/using-secrets",
+                          "secrets-management/secret-managers/hashicorp-vault/using-with-cli"
+                        ]
+                      },
+                      {
+                        "group": "AWS Secrets Manager",
+                        "pages": [
+                          "secrets-management/secret-managers/aws-secrets-manager/overview",
+                          "secrets-management/secret-managers/aws-secrets-manager/adding-a-secret-provider",
+                          "secrets-management/secret-managers/aws-secrets-manager/configuring-and-fetching-secrets",
+                          "secrets-management/secret-managers/aws-secrets-manager/using-secrets"
+                        ]
+                      },
+                      {
+                        "group": "Azure Key Vault",
+                        "pages": [
+                          "secrets-management/secret-managers/azure-key-vault/overview",
+                          "secrets-management/secret-managers/azure-key-vault/adding-a-secret-provider",
+                          "secrets-management/secret-managers/azure-key-vault/configuring-and-fetching-secrets",
+                          "secrets-management/secret-managers/azure-key-vault/using-secrets",
+                          "secrets-management/secret-managers/azure-key-vault/cli-authentication"
                         ]
                       }
                     ]
-                  },
+                  }
+                ]
+              },
+              {
+                "group": "Authentication & Authorization",
+                "pages": [
+                  "auth/overview",
+                  "auth/basic",
+                  "auth/bearer",
+                  "auth/digest",
+                  "auth/aws-signature",
+                  "auth/ntlm",
+                  "auth/oauth1",
                   {
-                    "group": "Secret Management",
+                    "group": "OAuth 2.0",
                     "pages": [
-                      "secrets-management/overview",
-                      "secrets-management/secret-variables",
-                      "secrets-management/secret-masking",
-                      "secrets-management/dotenv-file",
-                      {
-                        "group": "Secret Managers",
-                        "pages": [
-                          "secrets-management/secret-managers/overview",
-                          {
-                            "group": "HashiCorp Vault",
-                            "pages": [
-                              "secrets-management/secret-managers/hashicorp-vault/overview",
-                              "secrets-management/secret-managers/hashicorp-vault/adding-a-secret-provider",
-                              "secrets-management/secret-managers/hashicorp-vault/configuring-and-fetching-secrets",
-                              "secrets-management/secret-managers/hashicorp-vault/using-secrets",
-                              "secrets-management/secret-managers/hashicorp-vault/using-with-cli"
-                            ]
-                          },
-                          {
-                            "group": "AWS Secrets Manager",
-                            "pages": [
-                              "secrets-management/secret-managers/aws-secrets-manager/overview",
-                              "secrets-management/secret-managers/aws-secrets-manager/adding-a-secret-provider",
-                              "secrets-management/secret-managers/aws-secrets-manager/configuring-and-fetching-secrets",
-                              "secrets-management/secret-managers/aws-secrets-manager/using-secrets"
-                            ]
-                          },
-                          {
-                            "group": "Azure Key Vault",
-                            "pages": [
-                              "secrets-management/secret-managers/azure-key-vault/overview",
-                              "secrets-management/secret-managers/azure-key-vault/adding-a-secret-provider",
-                              "secrets-management/secret-managers/azure-key-vault/configuring-and-fetching-secrets",
-                              "secrets-management/secret-managers/azure-key-vault/using-secrets",
-                              "secrets-management/secret-managers/azure-key-vault/cli-authentication"
-                            ]
-                          }
-                        ]
-                      }
+                      "auth/oauth2-2.0/overview",
+                      "auth/oauth2-2.0/collection-level-configuration",
+                      "auth/oauth2-2.0/authorization-code",
+                      "auth/oauth2-2.0/client-credentials",
+                      "auth/oauth2-2.0/password-credentials",
+                      "auth/oauth2-2.0/system-browser"
                     ]
                   },
-                  {
-                    "group": "Authentication & Authorization",
-                    "pages": [
-                      "auth/overview",
-                      "auth/basic",
-                      "auth/bearer",
-                      "auth/digest",
-                      "auth/aws-signature",
-                      "auth/ntlm",
-                      "auth/oauth1",
-                      {
-                        "group": "OAuth 2.0",
-                        "pages": [
-                          "auth/oauth2-2.0/overview",
-                          "auth/oauth2-2.0/collection-level-configuration",
-                          "auth/oauth2-2.0/authorization-code",
-                          "auth/oauth2-2.0/client-credentials",
-                          "auth/oauth2-2.0/password-credentials",
-                          "auth/oauth2-2.0/system-browser"
-                        ]
-                      },
-                      "auth/add-and-manage-certs"
-                    ]
+                  "auth/add-and-manage-certs"
+                ]
               },
               {
                 "group": "Debugging",
                 "pages": [
                   "debugging/timeline",
                   "debugging/dev-tools"
-                    ]
-                  }
+                ]
+              }
+            ]
+          },
+          {
+            "group": "API Tools",
+            "icon": "book-open",
+            "pages": [
+              {
+                "group": "Create Documentation",
+                "pages": [
+                  "api-docs/overview",
+                  "api-docs/workspace-docs",
+                  "api-docs/collection-docs",
+                  "api-docs/folder-docs",
+                  "api-docs/request-docs",
+                  "api-docs/auto-generate-docs"
                 ]
               },
               {
-                "group": "API Tools",
-                "icon": "book-open",
+                "group": "OpenAPI",
                 "pages": [
-                  {
-                    "group": "Create Documentation",
-                    "pages": [
-                      "api-docs/overview",
-                      "api-docs/workspace-docs",
-                      "api-docs/collection-docs",
-                      "api-docs/folder-docs",
-                      "api-docs/request-docs",
-                      "api-docs/auto-generate-docs"
-                    ]
-                  },
-                  {
-                    "group": "OpenAPI",
-                    "pages": [
-                      "open-api/overview",
-                      "open-api/importOAS",
-                      "open-api/exportOAS",
-                      "open-api/createOAS",
-                      "open-api/openapi-sync"
-                    ]
-                  }
+                  "open-api/overview",
+                  "open-api/importOAS",
+                  "open-api/exportOAS",
+                  "open-api/createOAS",
+                  "open-api/openapi-sync"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Developer Tools",
+            "icon": "code",
+            "pages": [
+              {
+                "group": "AI Agents",
+                "pages": [
+                  "agents/overview",
+                  "agents/use-cases",
+                  "agents/cursor",
+                  "agents/vs-code",
+                  "agents/codex",
+                  "agents/claude"
                 ]
               },
               {
-                "group": "Developer Tools",
-                "icon": "code",
+                "group": "Bruno CLI",
                 "pages": [
+                  "bru-cli/overview",
+                  "bru-cli/quick-start",
+                  "bru-cli/installation",
+                  "bru-cli/commandOptions",
+                  "bru-cli/runCollection",
+                  "bru-cli/builtInReporters",
+                  "bru-cli/import",
+                  "bru-cli/proxyConfiguration",
+                  "bru-cli/docker",
                   {
-                    "group": "AI Agents",
+                    "group": "GitHub Actions",
                     "pages": [
-                      "agents/overview",
-                      "agents/use-cases",
-                      "agents/cursor",
-                      "agents/vs-code",
-                      "agents/codex",
-                      "agents/claude"
+                      "bru-cli/github-actions/overview",
+                      "bru-cli/github-actions/downstream-actions",
+                      "bru-cli/github-actions/manual-setup"
                     ]
                   },
-                  {
-                    "group": "Bruno CLI",
-                    "pages": [
-                      "bru-cli/overview",
-                      "bru-cli/quick-start",
-                      "bru-cli/installation",
-                      "bru-cli/commandOptions",
-                      "bru-cli/runCollection",
-                      "bru-cli/builtInReporters",
-                      "bru-cli/import",
-                      "bru-cli/proxyConfiguration",
-                      "bru-cli/docker",
-                      {
-                        "group": "GitHub Actions",
-                        "pages": [
-                          "bru-cli/github-actions/overview",
-                          "bru-cli/github-actions/downstream-actions",
-                          "bru-cli/github-actions/manual-setup"
-                        ]
-                      },
-                      "bru-cli/jenkins"
-                    ]
-                  },
-                  {
-                    "group": "Bru Lang",
-                    "pages": [
-                      "bru-lang/overview",
-                      "bru-lang/language",
-                      "bru-lang/tag-reference",
-                      "bru-lang/samples",
-                      "bru-lang/syntax-highlighting"
-                    ]
-                  },
+                  "bru-cli/jenkins"
+                ]
+              },
+              {
+                "group": "Bru Lang",
+                "pages": [
+                  "bru-lang/overview",
+                  "bru-lang/language",
+                  "bru-lang/tag-reference",
+                  "bru-lang/samples",
+                  "bru-lang/syntax-highlighting"
+                ]
+              },
               {
                 "group": "OpenCollection YAML",
                 "pages": [
                   "opencollection-yaml/overview",
                   "opencollection-yaml/samples",
                   "opencollection-yaml/structure-reference"
-                    ]
-                  },
-                  {
-                    "group": "Converters",
-                    "pages": [
-                      "converters/overview",
-                      "converters/postman-to-bruno",
-                      "converters/insomnia-to-bruno",
-                      "converters/openapi-to-bruno",
-                      "converters/wsdl-to-bruno"
-                    ]
-                  },
-                  {
-                    "group": "VS Code Extension",
-                    "pages": [
-                      "vs-code-extension/overview",
-                      "vs-code-extension/install-config",
-                      "vs-code-extension/send-req"
-                    ]
-                  }
                 ]
               },
               {
-                "group": "License Management",
-                "icon": "key",
+                "group": "Converters",
                 "pages": [
-                  "license-overview",
-                  {
-                    "group": "End Users",
-                    "pages": [
-                      "license-end-users/activate-license"
-                    ]
-                  },
-                  {
-                    "group": "License Administrators",
-                    "pages": [
-                      "license-administrators/license-portal",
-                      "license-administrators/billing",
-                      "license-administrators/self-hosted-licensing",
-                      {
-                        "group": "SAML SSO",
-                        "pages": [
-                          "license-administrators/saml-sso/overview",
-                          "license-administrators/saml-sso/configure-saml-sso-with-okta",
-                          "license-administrators/saml-sso/configure-saml-sso-with-entra-id",
-                          "license-administrators/saml-sso/troubleshooting"
-                        ]
-                      },
-                      {
-                        "group": "SCIM Provisioning",
-                        "pages": [
-                          "license-administrators/scim-provisioning/overview",
-                          "license-administrators/scim-provisioning/configure-scim-with-okta",
-                          "license-administrators/scim-provisioning/configure-scim-with-entra-id",
-                          "license-administrators/scim-provisioning/bruno-scim-api"
-                        ]
-                      }
-                    ]
-                  }
+                  "converters/overview",
+                  "converters/postman-to-bruno",
+                  "converters/insomnia-to-bruno",
+                  "converters/openapi-to-bruno",
+                  "converters/wsdl-to-bruno"
                 ]
               },
               {
-                "group": "Advanced Guides",
-                "icon": "graduation-cap",
+                "group": "VS Code Extension",
                 "pages": [
+                  "vs-code-extension/overview",
+                  "vs-code-extension/install-config",
+                  "vs-code-extension/send-req"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "License Management",
+            "icon": "key",
+            "pages": [
+              "license-overview",
+              {
+                "group": "End Users",
+                "pages": [
+                  "license-end-users/activate-license"
+                ]
+              },
+              {
+                "group": "License Administrators",
+                "pages": [
+                  "license-administrators/license-portal",
+                  "license-administrators/billing",
+                  "license-administrators/self-hosted-licensing",
+                  {
+                    "group": "SAML SSO",
+                    "pages": [
+                      "license-administrators/saml-sso/overview",
+                      "license-administrators/saml-sso/configure-saml-sso-with-okta",
+                      "license-administrators/saml-sso/configure-saml-sso-with-entra-id",
+                      "license-administrators/saml-sso/troubleshooting"
+                    ]
+                  },
+                  {
+                    "group": "SCIM Provisioning",
+                    "pages": [
+                      "license-administrators/scim-provisioning/overview",
+                      "license-administrators/scim-provisioning/configure-scim-with-okta",
+                      "license-administrators/scim-provisioning/configure-scim-with-entra-id",
+                      "license-administrators/scim-provisioning/bruno-scim-api"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Advanced Guides",
+            "icon": "graduation-cap",
+            "pages": [
               "advanced-guides/visualize"
             ]
           }
         ]
       },
       {
-        "version": "v2",
-            "groups": [
+        "version": "v3",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "icon": "rocket",
+            "pages": [
               {
                 "group": "Introduction",
                 "pages": [
-                  "v2/introduction/what-is-bruno",
-                  "v2/introduction/manifesto",
-                  "v2/introduction/feedback-community"
+                  "v3/introduction/getting-started",
+                  "v3/introduction/quick-start",
+                  "v3/get-started/bruno-basics/download",
+                  "v3/introduction/manifesto",
+                  "v3/introduction/feedback-community"
                 ]
               },
               {
-            "group": "Getting Started",
+                "group": "Bruno Basics",
+                "pages": [
+                  "v3/get-started/bruno-basics/create-a-workspace",
+                  "v3/get-started/bruno-basics/create-a-collection",
+                  "v3/get-started/bruno-basics/create-a-folder",
+                  "v3/get-started/bruno-basics/create-a-request",
+                  "v3/get-started/bruno-basics/create-a-test",
+                  "v3/get-started/bruno-basics/run-a-collection"
+                ]
+              },
+              {
+                "group": "Import or Export Data",
+                "pages": [
+                  "v3/get-started/import-export-data/import-collections",
+                  "v3/get-started/import-export-data/export-collections",
+                  "v3/get-started/import-export-data/import-export-workspace",
+                  "v3/get-started/import-export-data/import-export-environments",
+                  "v3/get-started/import-export-data/postman-migration",
+                  "v3/get-started/import-export-data/script-translator"
+                ]
+              },
+              {
+                "group": "Configure",
+                "pages": [
+                  "v3/get-started/configure/settings",
+                  "v3/get-started/configure/proxy-config",
+                  "v3/get-started/configure/javascript-sandbox"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Core Features",
+            "icon": "zap",
+            "pages": [
+              {
+                "group": "Send Requests",
+                "pages": [
+                  "v3/send-requests/overview",
+                  {
+                    "group": "REST",
+                    "pages": [
+                      "v3/send-requests/REST/overview",
+                      "v3/send-requests/REST/rest-api",
+                      "v3/send-requests/REST/req-header",
+                      "v3/send-requests/REST/parameters",
+                      "v3/send-requests/REST/body-data",
+                      "v3/send-requests/REST/request-settings",
+                      "v3/send-requests/REST/code-generator"
+                    ]
+                  },
+                  {
+                    "group": "GraphQL",
+                    "pages": [
+                      "v3/send-requests/graphql/overview",
+                      "v3/send-requests/graphql/graphql-api",
+                      "v3/send-requests/graphql/graphql-variables",
+                      "v3/send-requests/graphql/query-builder"
+                    ]
+                  },
+                  {
+                    "group": "gRPC",
+                    "pages": [
+                      "v3/send-requests/grpc/overview",
+                      "v3/send-requests/grpc/grpc-request",
+                      "v3/send-requests/grpc/grpc-proto",
+                      "v3/send-requests/grpc/grpc-streams"
+                    ]
+                  },
+                  {
+                    "group": "WebSocket",
+                    "pages": [
+                      "v3/send-requests/websocket/overview",
+                      "v3/send-requests/websocket/create-request",
+                      "v3/send-requests/websocket/ws-interface",
+                      "v3/send-requests/websocket/message-types"
+                    ]
+                  },
+                  {
+                    "group": "SOAP",
+                    "pages": [
+                      "v3/send-requests/soap/soap-request"
+                    ]
+                  },
+                  {
+                    "group": "Response Data & Cookies",
+                    "pages": [
+                      "v3/send-requests/res-data-cookies/overview",
+                      "v3/send-requests/res-data-cookies/res-data",
+                      "v3/send-requests/res-data-cookies/cookies",
+                      "v3/send-requests/res-data-cookies/response-examples"
+                    ]
+                  },
+                  "v3/send-requests/history"
+                ]
+              },
+              {
+                "group": "Variables",
+                "pages": [
+                  "v3/variables/overview",
+                  "v3/variables/environment-variables",
+                  "v3/variables/global-environment-variables",
+                  "v3/variables/collection-variables",
+                  "v3/variables/folder-variables",
+                  "v3/variables/request-variables",
+                  "v3/variables/runtime-variables",
+                  "v3/variables/prompt-variables",
+                  "v3/variables/process-env",
+                  "v3/variables/interpolation"
+                ]
+              },
+              {
+                "group": "Git Integration & Collaboration",
+                "pages": [
+                  "v3/git-integration/overview",
+                  "v3/git-integration/git-strategies",
+                  {
+                    "group": "Using GUI",
+                    "pages": [
+                      "v3/git-integration/using-gui/intro",
+                      "v3/git-integration/using-gui/provider",
+                      "v3/git-integration/using-gui/consumer"
+                    ]
+                  },
+                  "v3/git-integration/using-cli",
+                  "v3/git-integration/gitlab",
+                  "v3/git-integration/bitbucket",
+                  "v3/git-integration/azure-devops",
+                  "v3/git-integration/embed-bruno-collection"
+                ]
+              },
+              {
+                "group": "Git Providers",
+                "pages": [
+                  "v3/git-providers/overview",
+                  "v3/git-providers/github"
+                ]
+              },
+              {
+                "group": "Tests and Scripts",
                 "pages": [
                   {
-                    "group": "Bruno Basics",
+                    "group": "Tests",
                     "pages": [
-                      "v2/get-started/bruno-basics/download",
-                      "v2/get-started/bruno-basics/create-a-collection",
-                      "v2/get-started/bruno-basics/create-a-folder",
-                      "v2/get-started/bruno-basics/create-a-request",
-                      "v2/get-started/bruno-basics/create-a-test",
-                      "v2/get-started/bruno-basics/run-a-collection"
+                      "v3/testing/tests/introduction",
+                      "v3/testing/tests/assertions"
                     ]
                   },
                   {
-                    "group": "Import or Export Data",
+                    "group": "Scripts",
                     "pages": [
-                      "v2/get-started/import-export-data/import-collections",
-                      "v2/get-started/import-export-data/export-collections",
-                      "v2/get-started/import-export-data/import-export-environments",
-                      "v2/get-started/import-export-data/postman-migration",
-                      "v2/get-started/import-export-data/script-translator"
+                      "v3/testing/script/getting-started",
+                      "v3/testing/script/javascript-reference",
+                      "v3/testing/script/script-flow",
+                      "v3/testing/script/inbuilt-libraries",
+                      "v3/testing/script/external-libraries",
+                      "v3/testing/script/js-file",
+                      "v3/testing/script/dynamic-variables",
+                      "v3/testing/script/request-chaining",
+                      {
+                        "group": "Request",
+                        "pages": [
+                          "v3/testing/script/request/request-object",
+                          "v3/testing/script/request/sync-requests"
+                        ]
+                      },
+                      {
+                        "group": "Response",
+                        "pages": [
+                          "v3/testing/script/response/response-object",
+                          "v3/testing/script/response/response-query"
+                        ]
+                      },
+                      "v3/testing/script/vars"
                     ]
                   },
                   {
-                    "group": "Configure",
+                    "group": "Automate Tests",
                     "pages": [
-                      "v2/get-started/configure/settings",
+                      "v3/testing/automate-test/overview",
+                      "v3/testing/automate-test/manual-test",
+                      "v3/testing/automate-test/automate-test",
+                      "v3/testing/automate-test/data-driven-testing"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Secret Management",
+                "pages": [
+                  "v3/secrets-management/overview",
+                  "v3/secrets-management/secret-variables",
+                  "v3/secrets-management/secret-masking",
+                  "v3/secrets-management/dotenv-file",
+                  {
+                    "group": "Secret Managers",
+                    "pages": [
+                      "v3/secrets-management/secret-managers/overview",
+                      {
+                        "group": "HashiCorp Vault",
+                        "pages": [
+                          "v3/secrets-management/secret-managers/hashicorp-vault/overview",
+                          "v3/secrets-management/secret-managers/hashicorp-vault/adding-a-secret-provider",
+                          "v3/secrets-management/secret-managers/hashicorp-vault/configuring-and-fetching-secrets",
+                          "v3/secrets-management/secret-managers/hashicorp-vault/using-secrets",
+                          "v3/secrets-management/secret-managers/hashicorp-vault/using-with-cli"
+                        ]
+                      },
+                      {
+                        "group": "AWS Secrets Manager",
+                        "pages": [
+                          "v3/secrets-management/secret-managers/aws-secrets-manager/overview",
+                          "v3/secrets-management/secret-managers/aws-secrets-manager/adding-a-secret-provider",
+                          "v3/secrets-management/secret-managers/aws-secrets-manager/configuring-and-fetching-secrets",
+                          "v3/secrets-management/secret-managers/aws-secrets-manager/using-secrets"
+                        ]
+                      },
+                      {
+                        "group": "Azure Key Vault",
+                        "pages": [
+                          "v3/secrets-management/secret-managers/azure-key-vault/overview",
+                          "v3/secrets-management/secret-managers/azure-key-vault/adding-a-secret-provider",
+                          "v3/secrets-management/secret-managers/azure-key-vault/configuring-and-fetching-secrets",
+                          "v3/secrets-management/secret-managers/azure-key-vault/using-secrets",
+                          "v3/secrets-management/secret-managers/azure-key-vault/cli-authentication"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Authentication & Authorization",
+                "pages": [
+                  "v3/auth/overview",
+                  "v3/auth/basic",
+                  "v3/auth/bearer",
+                  "v3/auth/digest",
+                  "v3/auth/aws-signature",
+                  "v3/auth/ntlm",
+                  "v3/auth/oauth1",
+                  {
+                    "group": "OAuth 2.0",
+                    "pages": [
+                      "v3/auth/oauth2-2.0/overview",
+                      "v3/auth/oauth2-2.0/collection-level-configuration",
+                      "v3/auth/oauth2-2.0/authorization-code",
+                      "v3/auth/oauth2-2.0/client-credentials",
+                      "v3/auth/oauth2-2.0/password-credentials",
+                      "v3/auth/oauth2-2.0/system-browser"
+                    ]
+                  },
+                  "v3/auth/add-and-manage-certs"
+                ]
+              },
+              {
+                "group": "Debugging",
+                "pages": [
+                  "v3/debugging/timeline",
+                  "v3/debugging/dev-tools"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "API Tools",
+            "icon": "book-open",
+            "pages": [
+              {
+                "group": "Create Documentation",
+                "pages": [
+                  "v3/api-docs/overview",
+                  "v3/api-docs/workspace-docs",
+                  "v3/api-docs/collection-docs",
+                  "v3/api-docs/folder-docs",
+                  "v3/api-docs/request-docs",
+                  "v3/api-docs/auto-generate-docs"
+                ]
+              },
+              {
+                "group": "OpenAPI",
+                "pages": [
+                  "v3/open-api/overview",
+                  "v3/open-api/importOAS",
+                  "v3/open-api/exportOAS",
+                  "v3/open-api/createOAS",
+                  "v3/open-api/openapi-sync"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Developer Tools",
+            "icon": "code",
+            "pages": [
+              {
+                "group": "AI Agents",
+                "pages": [
+                  "v3/agents/overview",
+                  "v3/agents/use-cases",
+                  "v3/agents/cursor",
+                  "v3/agents/vs-code",
+                  "v3/agents/codex",
+                  "v3/agents/claude"
+                ]
+              },
+              {
+                "group": "Bruno CLI",
+                "pages": [
+                  "v3/bru-cli/overview",
+                  "v3/bru-cli/quick-start",
+                  "v3/bru-cli/installation",
+                  "v3/bru-cli/commandOptions",
+                  "v3/bru-cli/runCollection",
+                  "v3/bru-cli/builtInReporters",
+                  "v3/bru-cli/import",
+                  "v3/bru-cli/proxyConfiguration",
+                  "v3/bru-cli/docker",
+                  {
+                    "group": "GitHub Actions",
+                    "pages": [
+                      "v3/bru-cli/github-actions/overview",
+                      "v3/bru-cli/github-actions/downstream-actions",
+                      "v3/bru-cli/github-actions/manual-setup"
+                    ]
+                  },
+                  "v3/bru-cli/jenkins"
+                ]
+              },
+              {
+                "group": "Bru Lang",
+                "pages": [
+                  "v3/bru-lang/overview",
+                  "v3/bru-lang/language",
+                  "v3/bru-lang/tag-reference",
+                  "v3/bru-lang/samples",
+                  "v3/bru-lang/syntax-highlighting"
+                ]
+              },
+              {
+                "group": "OpenCollection YAML",
+                "pages": [
+                  "v3/opencollection-yaml/overview",
+                  "v3/opencollection-yaml/samples",
+                  "v3/opencollection-yaml/structure-reference"
+                ]
+              },
+              {
+                "group": "Converters",
+                "pages": [
+                  "v3/converters/overview",
+                  "v3/converters/postman-to-bruno",
+                  "v3/converters/insomnia-to-bruno",
+                  "v3/converters/openapi-to-bruno",
+                  "v3/converters/wsdl-to-bruno"
+                ]
+              },
+              {
+                "group": "VS Code Extension",
+                "pages": [
+                  "v3/vs-code-extension/overview",
+                  "v3/vs-code-extension/install-config",
+                  "v3/vs-code-extension/send-req"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "License Management",
+            "icon": "key",
+            "pages": [
+              "v3/license-overview",
+              {
+                "group": "End Users",
+                "pages": [
+                  "v3/license-end-users/activate-license"
+                ]
+              },
+              {
+                "group": "License Administrators",
+                "pages": [
+                  "v3/license-administrators/license-portal",
+                  "v3/license-administrators/billing",
+                  "v3/license-administrators/self-hosted-licensing",
+                  {
+                    "group": "SAML SSO",
+                    "pages": [
+                      "v3/license-administrators/saml-sso/overview",
+                      "v3/license-administrators/saml-sso/configure-saml-sso-with-okta",
+                      "v3/license-administrators/saml-sso/configure-saml-sso-with-entra-id",
+                      "v3/license-administrators/saml-sso/troubleshooting"
+                    ]
+                  },
+                  {
+                    "group": "SCIM Provisioning",
+                    "pages": [
+                      "v3/license-administrators/scim-provisioning/overview",
+                      "v3/license-administrators/scim-provisioning/configure-scim-with-okta",
+                      "v3/license-administrators/scim-provisioning/configure-scim-with-entra-id",
+                      "v3/license-administrators/scim-provisioning/bruno-scim-api"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Advanced Guides",
+            "icon": "graduation-cap",
+            "pages": [
+              "v3/advanced-guides/visualize"
+            ]
+          }
+        ]
+      },
+      {
+        "version": "v2",
+        "groups": [
+          {
+            "group": "Introduction",
+            "pages": [
+              "v2/introduction/what-is-bruno",
+              "v2/introduction/manifesto",
+              "v2/introduction/feedback-community"
+            ]
+          },
+          {
+            "group": "Getting Started",
+            "pages": [
+              {
+                "group": "Bruno Basics",
+                "pages": [
+                  "v2/get-started/bruno-basics/download",
+                  "v2/get-started/bruno-basics/create-a-collection",
+                  "v2/get-started/bruno-basics/create-a-folder",
+                  "v2/get-started/bruno-basics/create-a-request",
+                  "v2/get-started/bruno-basics/create-a-test",
+                  "v2/get-started/bruno-basics/run-a-collection"
+                ]
+              },
+              {
+                "group": "Import or Export Data",
+                "pages": [
+                  "v2/get-started/import-export-data/import-collections",
+                  "v2/get-started/import-export-data/export-collections",
+                  "v2/get-started/import-export-data/import-export-environments",
+                  "v2/get-started/import-export-data/postman-migration",
+                  "v2/get-started/import-export-data/script-translator"
+                ]
+              },
+              {
+                "group": "Configure",
+                "pages": [
+                  "v2/get-started/configure/settings",
                   "v2/get-started/configure/proxy-config",
                   "v2/get-started/configure/javascript-sandbox"
-                    ]
-              }
                 ]
-              },
+              }
+            ]
+          },
+          {
+            "group": "Core Features",
+            "pages": [
               {
-                "group": "Core Features",
+                "group": "Send Requests",
                 "pages": [
+                  "v2/send-requests/overview",
                   {
-                    "group": "Send Requests",
+                    "group": "REST",
                     "pages": [
-                      "v2/send-requests/overview",
+                      "v2/send-requests/REST/overview",
+                      "v2/send-requests/REST/rest-api",
+                      "v2/send-requests/REST/req-header",
+                      "v2/send-requests/REST/parameters",
+                      "v2/send-requests/REST/body-data",
+                      "v2/send-requests/REST/request-settings",
+                      "v2/send-requests/REST/code-generator"
+                    ]
+                  },
+                  {
+                    "group": "GraphQL",
+                    "pages": [
+                      "v2/send-requests/graphql/overview",
+                      "v2/send-requests/graphql/graphql-api",
+                      "v2/send-requests/graphql/graphql-variables"
+                    ]
+                  },
+                  {
+                    "group": "gRPC",
+                    "pages": [
+                      "v2/send-requests/grpc/overview",
+                      "v2/send-requests/grpc/grpc-request",
+                      "v2/send-requests/grpc/grpc-proto",
+                      "v2/send-requests/grpc/grpc-streams"
+                    ]
+                  },
+                  {
+                    "group": "WebSocket",
+                    "pages": [
+                      "v2/send-requests/websocket/overview",
+                      "v2/send-requests/websocket/create-request",
+                      "v2/send-requests/websocket/ws-interface",
+                      "v2/send-requests/websocket/message-types"
+                    ]
+                  },
+                  {
+                    "group": "SOAP",
+                    "pages": [
+                      "v2/send-requests/soap/soap-request"
+                    ]
+                  },
+                  {
+                    "group": "Response Data & Cookies",
+                    "pages": [
+                      "v2/send-requests/res-data-cookies/overview",
+                      "v2/send-requests/res-data-cookies/res-data",
+                      "v2/send-requests/res-data-cookies/cookies",
+                      "v2/send-requests/res-data-cookies/response-examples",
                       {
-                        "group": "REST",
+                        "group": "Debugging",
                         "pages": [
-                          "v2/send-requests/REST/overview",
-                          "v2/send-requests/REST/rest-api",
-                          "v2/send-requests/REST/req-header",
-                          "v2/send-requests/REST/parameters",
-                          "v2/send-requests/REST/body-data",
-                          "v2/send-requests/REST/request-settings",
-                          "v2/send-requests/REST/code-generator"
+                          "v2/send-requests/res-data-cookies/debugging/dev-tools",
+                          "v2/send-requests/res-data-cookies/debugging/timeline"
                         ]
-                      },
-                      {
-                        "group": "GraphQL",
-                        "pages": [
-                          "v2/send-requests/graphql/overview",
-                          "v2/send-requests/graphql/graphql-api",
-                          "v2/send-requests/graphql/graphql-variables"
-                        ]
-                      },
-                      {
-                        "group": "gRPC",
-                        "pages": [
-                          "v2/send-requests/grpc/overview",
-                          "v2/send-requests/grpc/grpc-request",
-                          "v2/send-requests/grpc/grpc-proto",
-                          "v2/send-requests/grpc/grpc-streams"
-                        ]
-                      },
-                      {
-                        "group": "WebSocket",
-                        "pages": [
-                          "v2/send-requests/websocket/overview",
-                          "v2/send-requests/websocket/create-request",
-                          "v2/send-requests/websocket/ws-interface",
-                          "v2/send-requests/websocket/message-types"
-                        ]
-                      },
-                      {
-                        "group": "SOAP",
-                        "pages": [
-                          "v2/send-requests/soap/soap-request"
-                        ]
-                      },
-                      {
-                        "group": "Response Data & Cookies",
-                        "pages": [
-                          "v2/send-requests/res-data-cookies/overview",
-                          "v2/send-requests/res-data-cookies/res-data",
-                          "v2/send-requests/res-data-cookies/cookies",
-                          "v2/send-requests/res-data-cookies/response-examples",
-                          {
-                            "group": "Debugging",
-                            "pages": [
-                              "v2/send-requests/res-data-cookies/debugging/dev-tools",
-                              "v2/send-requests/res-data-cookies/debugging/timeline"
-                            ]
-                          }
-                        ]
+                      }
+                    ]
                   },
                   "v2/send-requests/history"
+                ]
+              },
+              {
+                "group": "Variables",
+                "pages": [
+                  "v2/variables/overview",
+                  "v2/variables/environment-variables",
+                  "v2/variables/global-environment-variables",
+                  "v2/variables/collection-variables",
+                  "v2/variables/folder-variables",
+                  "v2/variables/request-variables",
+                  "v2/variables/runtime-variables",
+                  "v2/variables/process-env",
+                  "v2/variables/interpolation"
+                ]
+              },
+              {
+                "group": "Git Integration & Collaboration",
+                "pages": [
+                  "v2/git-integration/overview",
+                  {
+                    "group": "Using GUI",
+                    "pages": [
+                      "v2/git-integration/using-gui/intro",
+                      "v2/git-integration/using-gui/provider",
+                      "v2/git-integration/using-gui/consumer"
+                    ]
+                  },
+                  "v2/git-integration/using-cli",
+                  "v2/git-integration/gitlab",
+                  "v2/git-integration/bitbucket",
+                  "v2/git-integration/embed-bruno-collection"
+                ]
+              },
+              {
+                "group": "Tests and Scripts",
+                "pages": [
+                  {
+                    "group": "Tests",
+                    "pages": [
+                      "v2/testing/tests/introduction",
+                      "v2/testing/tests/assertions"
                     ]
                   },
                   {
-                    "group": "Variables",
+                    "group": "Scripts",
                     "pages": [
-                      "v2/variables/overview",
-                      "v2/variables/environment-variables",
-                      "v2/variables/global-environment-variables",
-                      "v2/variables/collection-variables",
-                      "v2/variables/folder-variables",
-                      "v2/variables/request-variables",
-                      "v2/variables/runtime-variables",
-                      "v2/variables/process-env",
-                      "v2/variables/interpolation"
+                      "v2/testing/script/getting-started",
+                      "v2/testing/script/javascript-reference",
+                      "v2/testing/script/script-flow",
+                      "v2/testing/script/inbuilt-libraries",
+                      "v2/testing/script/external-libraries",
+                      "v2/testing/script/js-file",
+                      "v2/testing/script/dynamic-variables",
+                      "v2/testing/script/request-chaining",
+                      {
+                        "group": "Request",
+                        "pages": [
+                          "v2/testing/script/request/request-object",
+                          "v2/testing/script/request/sync-requests"
+                        ]
+                      },
+                      {
+                        "group": "Response",
+                        "pages": [
+                          "v2/testing/script/response/response-object",
+                          "v2/testing/script/response/response-query"
+                        ]
+                      },
+                      "v2/testing/script/vars"
                     ]
                   },
                   {
-                    "group": "Git Integration & Collaboration",
+                    "group": "Automate Tests",
                     "pages": [
-                      "v2/git-integration/overview",
-                      {
-                        "group": "Using GUI",
-                        "pages": [
-                          "v2/git-integration/using-gui/intro",
-                          "v2/git-integration/using-gui/provider",
-                          "v2/git-integration/using-gui/consumer"
-                        ]
-                      },
-                      "v2/git-integration/using-cli",
-                      "v2/git-integration/gitlab",
-                      "v2/git-integration/bitbucket",
-                      "v2/git-integration/embed-bruno-collection"
-                    ]
-                  },
-                  {
-                    "group": "Tests and Scripts",
-                    "pages": [
-                      {
-                        "group": "Tests",
-                        "pages": [
-                          "v2/testing/tests/introduction",
-                          "v2/testing/tests/assertions"
-                        ]
-                      },
-                      {
-                        "group": "Scripts",
-                        "pages": [
-                          "v2/testing/script/getting-started",
-                          "v2/testing/script/javascript-reference",
-                          "v2/testing/script/script-flow",
-                          "v2/testing/script/inbuilt-libraries",
-                          "v2/testing/script/external-libraries",
-                          "v2/testing/script/js-file",
-                          "v2/testing/script/dynamic-variables",
-                          "v2/testing/script/request-chaining",
-                          {
-                            "group": "Request",
-                            "pages": [
-                              "v2/testing/script/request/request-object",
-                              "v2/testing/script/request/sync-requests"
-                            ]
-                          },
-                          {
-                            "group": "Response",
-                            "pages": [
-                              "v2/testing/script/response/response-object",
-                              "v2/testing/script/response/response-query"
-                            ]
-                          },
-                          "v2/testing/script/vars"
-                        ]
-                      },
-                      {
-                        "group": "Automate Tests",
-                        "pages": [
-                          "v2/testing/automate-test/overview",
-                          "v2/testing/automate-test/manual-test",
-                          "v2/testing/automate-test/automate-test",
-                          "v2/testing/automate-test/data-driven-testing"
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    "group": "Secret Management",
-                    "pages": [
-                      "v2/secrets-management/overview",
-                      "v2/secrets-management/secret-variables",
-                      "v2/secrets-management/secret-masking",
-                      "v2/secrets-management/dotenv-file",
-                      {
-                        "group": "Secret Managers",
-                        "pages": [
-                          "v2/secrets-management/secret-managers/overview",
-                          {
-                            "group": "HashiCorp Vault",
-                            "pages": [
-                              "v2/secrets-management/secret-managers/hashicorp-vault/overview",
-                              "v2/secrets-management/secret-managers/hashicorp-vault/adding-a-secret-provider",
-                              "v2/secrets-management/secret-managers/hashicorp-vault/configuring-and-fetching-secrets",
-                              "v2/secrets-management/secret-managers/hashicorp-vault/using-secrets",
-                              "v2/secrets-management/secret-managers/hashicorp-vault/using-with-cli"
-                            ]
-                          },
-                          {
-                            "group": "AWS Secrets Manager",
-                            "pages": [
-                              "v2/secrets-management/secret-managers/aws-secrets-manager/overview",
-                              "v2/secrets-management/secret-managers/aws-secrets-manager/adding-a-secret-provider",
-                              "v2/secrets-management/secret-managers/aws-secrets-manager/configuring-and-fetching-secrets",
-                              "v2/secrets-management/secret-managers/aws-secrets-manager/using-secrets"
-                            ]
-                          },
-                          {
-                            "group": "Azure Key Vault",
-                            "pages": [
-                              "v2/secrets-management/secret-managers/azure-key-vault/overview",
-                              "v2/secrets-management/secret-managers/azure-key-vault/adding-a-secret-provider",
-                              "v2/secrets-management/secret-managers/azure-key-vault/configuring-and-fetching-secrets",
-                              "v2/secrets-management/secret-managers/azure-key-vault/using-secrets",
-                              "v2/secrets-management/secret-managers/azure-key-vault/cli-authentication"
-                            ]
-                          }
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    "group": "Authentication & Authorization",
-                    "pages": [
-                      "v2/auth/overview",
-                      "v2/auth/basic",
-                      "v2/auth/bearer",
-                      "v2/auth/digest",
-                      "v2/auth/aws-signature",
-                      "v2/auth/ntlm",
-                      {
-                        "group": "OAuth 2.0 (Legacy)",
-                        "pages": [
-                          "v2/auth/oauth2/overview",
-                          "v2/auth/oauth2/authorization-code",
-                          "v2/auth/oauth2/client-credentials",
-                          "v2/auth/oauth2/password-credentials"
-                        ]
-                      },
-                      {
-                        "group": "OAuth 2.0",
-                        "pages": [
-                          "v2/auth/oauth2-2.0/overview",
-                          "v2/auth/oauth2-2.0/collection-level-configuration",
-                          "v2/auth/oauth2-2.0/authorization-code",
-                          "v2/auth/oauth2-2.0/client-credentials",
-                          "v2/auth/oauth2-2.0/password-credentials"
-                        ]
-                      },
-                      "v2/auth/add-and-manage-certs"
+                      "v2/testing/automate-test/overview",
+                      "v2/testing/automate-test/manual-test",
+                      "v2/testing/automate-test/automate-test",
+                      "v2/testing/automate-test/data-driven-testing"
                     ]
                   }
                 ]
               },
               {
-                "group": "API Tools",
+                "group": "Secret Management",
                 "pages": [
+                  "v2/secrets-management/overview",
+                  "v2/secrets-management/secret-variables",
+                  "v2/secrets-management/secret-masking",
+                  "v2/secrets-management/dotenv-file",
                   {
-                    "group": "Create Documentation",
+                    "group": "Secret Managers",
                     "pages": [
-                      "v2/api-docs/overview",
-                      "v2/api-docs/collection-docs",
-                      "v2/api-docs/folder-docs",
-                      "v2/api-docs/request-docs"
-                    ]
-                  },
-                  {
-                    "group": "OpenAPI",
-                    "pages": [
-                      "v2/open-api/overview",
-                      "v2/open-api/importOAS",
-                      "v2/open-api/exportOAS",
-                      "v2/open-api/createOAS"
-                    ]
-                  }
-                ]
-              },
-              {
-                "group": "Developer Tools",
-                "pages": [
-                  {
-                    "group": "Bruno CLI",
-                    "pages": [
-                      "v2/bru-cli/overview",
-                      "v2/bru-cli/installation",
-                      "v2/bru-cli/runCollection",
-                      "v2/bru-cli/builtInReporters",
-                      "v2/bru-cli/commandOptions",
-                      "v2/bru-cli/proxyConfiguration",
-                      "v2/bru-cli/import",
-                      "v2/bru-cli/gitHubCLI",
-                      "v2/bru-cli/jenkins"
-                    ]
-                  },
-                  {
-                    "group": "Bru Lang",
-                    "pages": [
-                      "v2/bru-lang/overview",
-                      "v2/bru-lang/language",
-                      "v2/bru-lang/tag-reference",
-                      "v2/bru-lang/samples",
-                      "v2/bru-lang/syntax-highlighting"
-                    ]
-                  },
-                  {
-                    "group": "Converters",
-                    "pages": [
-                      "v2/converters/overview",
-                      "v2/converters/postman-to-bruno",
-                      "v2/converters/insomnia-to-bruno",
-                      "v2/converters/openapi-to-bruno",
-                      "v2/converters/wsdl-to-bruno"
-                    ]
-                  },
-                  {
-                    "group": "VS Code Extension",
-                    "pages": [
-                      "v2/vs-code-extension/overview",
-                      "v2/vs-code-extension/install-config",
-                      "v2/vs-code-extension/send-req"
-                    ]
-                  }
-                ]
-              },
-              {
-                "group": "License Management",
-                "pages": [
-                  "v2/license-overview",
-                  {
-                    "group": "End Users",
-                    "pages": [
-                      "v2/license-end-users/activate-license"
-                    ]
-                  },
-                  {
-                    "group": "License Administrators",
-                    "pages": [
-                      "v2/license-administrators/license-portal",
+                      "v2/secrets-management/secret-managers/overview",
                       {
-                        "group": "SAML SSO",
+                        "group": "HashiCorp Vault",
                         "pages": [
-                          "v2/license-administrators/saml-sso/overview",
-                          "v2/license-administrators/saml-sso/configure-saml-sso-with-okta",
-                          "v2/license-administrators/saml-sso/configure-saml-sso-with-entra-id",
-                          "v2/license-administrators/saml-sso/troubleshooting"
+                          "v2/secrets-management/secret-managers/hashicorp-vault/overview",
+                          "v2/secrets-management/secret-managers/hashicorp-vault/adding-a-secret-provider",
+                          "v2/secrets-management/secret-managers/hashicorp-vault/configuring-and-fetching-secrets",
+                          "v2/secrets-management/secret-managers/hashicorp-vault/using-secrets",
+                          "v2/secrets-management/secret-managers/hashicorp-vault/using-with-cli"
                         ]
                       },
                       {
-                        "group": "SCIM Provisioning",
+                        "group": "AWS Secrets Manager",
                         "pages": [
-                          "v2/license-administrators/scim-provisioning/overview",
-                          "v2/license-administrators/scim-provisioning/configure-scim-with-okta",
-                          "v2/license-administrators/scim-provisioning/configure-scim-with-entra-id",
-                          "v2/license-administrators/scim-provisioning/bruno-scim-api"
+                          "v2/secrets-management/secret-managers/aws-secrets-manager/overview",
+                          "v2/secrets-management/secret-managers/aws-secrets-manager/adding-a-secret-provider",
+                          "v2/secrets-management/secret-managers/aws-secrets-manager/configuring-and-fetching-secrets",
+                          "v2/secrets-management/secret-managers/aws-secrets-manager/using-secrets"
+                        ]
+                      },
+                      {
+                        "group": "Azure Key Vault",
+                        "pages": [
+                          "v2/secrets-management/secret-managers/azure-key-vault/overview",
+                          "v2/secrets-management/secret-managers/azure-key-vault/adding-a-secret-provider",
+                          "v2/secrets-management/secret-managers/azure-key-vault/configuring-and-fetching-secrets",
+                          "v2/secrets-management/secret-managers/azure-key-vault/using-secrets",
+                          "v2/secrets-management/secret-managers/azure-key-vault/cli-authentication"
                         ]
                       }
                     ]
@@ -823,9 +1119,148 @@
                 ]
               },
               {
-                "group": "Advanced Guides",
+                "group": "Authentication & Authorization",
                 "pages": [
-                  "v2/advanced-guides/starter-guide",
+                  "v2/auth/overview",
+                  "v2/auth/basic",
+                  "v2/auth/bearer",
+                  "v2/auth/digest",
+                  "v2/auth/aws-signature",
+                  "v2/auth/ntlm",
+                  {
+                    "group": "OAuth 2.0 (Legacy)",
+                    "pages": [
+                      "v2/auth/oauth2/overview",
+                      "v2/auth/oauth2/authorization-code",
+                      "v2/auth/oauth2/client-credentials",
+                      "v2/auth/oauth2/password-credentials"
+                    ]
+                  },
+                  {
+                    "group": "OAuth 2.0",
+                    "pages": [
+                      "v2/auth/oauth2-2.0/overview",
+                      "v2/auth/oauth2-2.0/collection-level-configuration",
+                      "v2/auth/oauth2-2.0/authorization-code",
+                      "v2/auth/oauth2-2.0/client-credentials",
+                      "v2/auth/oauth2-2.0/password-credentials"
+                    ]
+                  },
+                  "v2/auth/add-and-manage-certs"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "API Tools",
+            "pages": [
+              {
+                "group": "Create Documentation",
+                "pages": [
+                  "v2/api-docs/overview",
+                  "v2/api-docs/collection-docs",
+                  "v2/api-docs/folder-docs",
+                  "v2/api-docs/request-docs"
+                ]
+              },
+              {
+                "group": "OpenAPI",
+                "pages": [
+                  "v2/open-api/overview",
+                  "v2/open-api/importOAS",
+                  "v2/open-api/exportOAS",
+                  "v2/open-api/createOAS"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Developer Tools",
+            "pages": [
+              {
+                "group": "Bruno CLI",
+                "pages": [
+                  "v2/bru-cli/overview",
+                  "v2/bru-cli/installation",
+                  "v2/bru-cli/runCollection",
+                  "v2/bru-cli/builtInReporters",
+                  "v2/bru-cli/commandOptions",
+                  "v2/bru-cli/proxyConfiguration",
+                  "v2/bru-cli/import",
+                  "v2/bru-cli/gitHubCLI",
+                  "v2/bru-cli/jenkins"
+                ]
+              },
+              {
+                "group": "Bru Lang",
+                "pages": [
+                  "v2/bru-lang/overview",
+                  "v2/bru-lang/language",
+                  "v2/bru-lang/tag-reference",
+                  "v2/bru-lang/samples",
+                  "v2/bru-lang/syntax-highlighting"
+                ]
+              },
+              {
+                "group": "Converters",
+                "pages": [
+                  "v2/converters/overview",
+                  "v2/converters/postman-to-bruno",
+                  "v2/converters/insomnia-to-bruno",
+                  "v2/converters/openapi-to-bruno",
+                  "v2/converters/wsdl-to-bruno"
+                ]
+              },
+              {
+                "group": "VS Code Extension",
+                "pages": [
+                  "v2/vs-code-extension/overview",
+                  "v2/vs-code-extension/install-config",
+                  "v2/vs-code-extension/send-req"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "License Management",
+            "pages": [
+              "v2/license-overview",
+              {
+                "group": "End Users",
+                "pages": [
+                  "v2/license-end-users/activate-license"
+                ]
+              },
+              {
+                "group": "License Administrators",
+                "pages": [
+                  "v2/license-administrators/license-portal",
+                  {
+                    "group": "SAML SSO",
+                    "pages": [
+                      "v2/license-administrators/saml-sso/overview",
+                      "v2/license-administrators/saml-sso/configure-saml-sso-with-okta",
+                      "v2/license-administrators/saml-sso/configure-saml-sso-with-entra-id",
+                      "v2/license-administrators/saml-sso/troubleshooting"
+                    ]
+                  },
+                  {
+                    "group": "SCIM Provisioning",
+                    "pages": [
+                      "v2/license-administrators/scim-provisioning/overview",
+                      "v2/license-administrators/scim-provisioning/configure-scim-with-okta",
+                      "v2/license-administrators/scim-provisioning/configure-scim-with-entra-id",
+                      "v2/license-administrators/scim-provisioning/bruno-scim-api"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Advanced Guides",
+            "pages": [
+              "v2/advanced-guides/starter-guide",
               "v2/advanced-guides/visualize"
             ]
           }

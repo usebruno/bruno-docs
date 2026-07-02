@@ -1,0 +1,164 @@
+---
+title: "Create a Workspace"
+---
+
+A workspace in Bruno is a container that helps you organize multiple collections, API specifications, and environments together. Workspaces allow you to group related projects, making it easier to switch between different teams or projects while keeping your API development workflow organized.
+
+<Info>
+  Workspaces are available in [Bruno 3.0.0](https://www.usebruno.com/downloads) and higher versions.
+</Info>
+
+## Why Use Workspaces?
+
+Workspaces provide several benefits:
+
+- **Project Organization** - Group related collections together by project, team, or client
+- **Git Integration** - Store workspaces in version-controlled directories for easy collaboration
+- **Environment Isolation** - Each workspace can have its own global environments
+- **Quick Switching** - Easily switch between different projects without losing context
+- **Pin Favorites** - Pin frequently used workspaces for quick access
+
+## Types of Workspaces
+
+Bruno supports two types of workspaces:
+
+### Default Workspace
+
+The Default Workspace is automatically created when you first launch Bruno. It is stored in Bruno's application data folder and serves as your starting point. This workspace cannot be closed or deleted.
+
+### Custom Workspaces
+
+Custom workspaces are stored in a location of your choice on your filesystem. This makes them ideal for:
+
+- Syncing with version control systems like Git
+- Sharing with team members
+- Organizing collections by project or team
+
+## Workspace Structure
+
+When you create a workspace, Bruno creates the following structure on your filesystem:
+
+```
+my-workspace/
+├── workspace.yml        # Workspace configuration file
+├── collections/         # Directory for collections
+└── environments/        # Directory for global environments
+```
+
+The `workspace.yml` file contains the workspace configuration, including:
+
+- Workspace name
+- List of collections in the workspace
+- API specifications
+
+## How to Create a Workspace
+
+1. Open Bruno and click on the **workspace dropdown** in the top-left corner.
+2. Select **Create workspace** from the menu.
+
+![Create Workspace](/images/screenshots/get-started/bruno-basics/create-workspace/bruno_workspace-1.webp)
+
+3. Enter a **name** for your workspace (1-255 characters).
+4. **(Optional)** To store the workspace at a custom location: click the **settings icon** (advanced options) and choose the desired folder on your system.
+
+![Advanced options – choose location](/images/screenshots/get-started/bruno-basics/create-workspace/advanced.option.webp)
+
+<Info>
+  If you skip this, the workspace is stored at the default location: `~/Documents/bruno` (e.g. `/Users/username/Documents/bruno`). You can view or change the default location in **Preferences** → **General** tab. See [Settings](/get-started/configure/settings#general).
+</Info>
+
+5. Click **Browse** to choose or confirm the location on your filesystem (or use the default).
+6. Click **Create Workspace**.
+
+Bruno will create the workspace folder structure and automatically switch to the new workspace.
+
+<Warning>
+  Workspace names must be unique. You cannot create a workspace with the same name as an existing workspace.
+</Warning>
+
+## Managing Workspaces
+
+### Switching Between Workspaces
+
+1. Click on the **workspace dropdown** in the top-left corner
+2. Click on any workspace name to switch to it
+
+The active workspace is indicated with a checkmark.
+
+### Pinning Workspaces
+
+You can pin frequently used workspaces for quick access:
+
+1. Hover over a workspace in the dropdown menu
+2. Click the **pin icon** to pin or unpin the workspace
+
+Pinned workspaces appear at the top of the workspace list.
+
+### Managing Workspaces
+
+To access workspace management options:
+
+1. Click on the **workspace dropdown** in the top-left corner
+2. Select **Manage workspaces** from the menu
+
+From the Manage Workspace screen, you can:
+
+- **Open** - Switch to a different workspace
+- **Show in folder** - Open the workspace location in your file explorer
+- **Rename** - Change the workspace name (available from the workspace home screen)
+- **Close** - Remove the workspace from Bruno (files remain on disk)
+
+### Renaming a Workspace
+
+1. Open the workspace you want to rename
+2. Click on the **workspace home icon** (or navigate to the workspace overview)
+3. Click the **menu icon** (three dots) next to the workspace name
+4. Select **Rename** and enter the new name
+
+## Opening Workspaces
+
+<Warning>
+  Bruno's Free and Open Source versions support having two (2) Workspaces open at a time. If you'd like to have additional Workspaces open, consider upgrading to one of our [paid plans](https://www.usebruno.com/pricing).
+</Warning>
+
+If you have an existing workspace folder that you've either created or copied to your system (for example, cloned from a Git repository or received from a colleague in a .zip):
+
+1. Click on the **workspace dropdown** in the top-left corner
+2. Select **Open workspace** from the menu
+3. Navigate to and select the workspace folder containing `workspace.yml`
+4. Click **Open**
+
+Bruno will validate the workspace configuration and open it.
+
+## Importing a Workspace
+
+Workspaces can be imported from zip files or from git repositories.
+
+To import a workspace:
+
+1. Click on the **workspace dropdown** in the top-left corner
+2. Select **Import workspace** from the menu
+3. Follow the import wizard to complete the process from a `File` or `Git Repository`
+
+![Import Workspace](/images/screenshots/get-started/bruno-basics/create-workspace/bruno_workspace-import.webp)
+
+<Tip>
+  For detailed instructions on importing and exporting workspaces, including Git-based workflows, see the [Import/Export Workspace Guide](/get-started/import-export-data/import-export-workspace).
+</Tip>
+
+## Closing a Workspace
+
+To close a workspace (remove it from Bruno without deleting files):
+
+1. Open the workspace you want to close
+2. Navigate to the workspace overview
+3. Click the **menu icon** and select **Close**
+
+<Info>
+  Closing a workspace only removes it from Bruno's workspace list. The files remain on your filesystem and can be re-opened at any time.
+</Info>
+
+## Next Steps
+
+Once you've created a workspace, you can [create a collection](./create-a-collection) inside it to start organizing your API requests.
+

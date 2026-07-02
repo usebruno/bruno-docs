@@ -1,0 +1,196 @@
+---
+title: "GitHub Actions"
+sidebarTitle: "Overview"
+description: "Run Bruno collections in GitHub Actions workflows with the official Bruno CLI action."
+---
+
+[GitHub Actions](https://docs.github.com/en/actions) lets you automate API testing directly from your repository. Bruno ships an [official GitHub Action](https://github.com/marketplace/actions/bruno-cli) that installs `@usebruno/cli`, runs your `bru` command, and exposes machine-readable test counts. PR comments, annotations, artifact upload, and soft-fail behavior are handled by standard GitHub Actions ecosystem tools documented in [Pairing with downstream actions](/bru-cli/github-actions/downstream-actions).
+
+## Official GitHub Action
+
+| Property | Value |
+| --- | --- |
+| Marketplace | [Bruno CLI](https://github.com/marketplace/actions/bruno-cli) |
+| Repository | [usebruno/bruno-cli-action](https://github.com/usebruno/bruno-cli-action) |
+| Reference | `usebruno/bruno-cli-action@v1` |
+
+The action is a composite action. It prepends `bru` to your `command` input, auto-injects `--reporter-junit` when absent, parses the JUnit summary, and exposes `exit-code`, `passed`, `failed`, `total`, and `duration-ms` as step outputs. The workflow step fails naturally when `bru` exits non-zero.
+
+<Tip>
+  Write `run --env prod`, not `bru run --env prod`. The action prepends `bru` for you.
+</Tip>
+
+## Quick start
+
+```yaml
+name: API Tests
+on: [pull_request, push]
+
+jobs:
+  bruno:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: usebruno/bruno-cli-action@v1
+        with:
+          working-directory: tests/payments
+          command: 'run --env prod'
+```
+
+This minimal workflow installs the CLI, runs the collection, and populates count outputs. The step turns red on assertion failure and green on success. No PR comments, annotations, Step Summary, or uploaded artifacts are created by default. See [Pairing with downstream actions](/bru-cli/github-actions/downstream-actions) for those patterns.
+
+## How this workflow works
+
+A GitHub Actions workflow is a YAML file in `.github/workflows/`. Each line tells GitHub what to run and when. Here is what the quick start example means:
+
+| Line | What it does |
+| --- | --- |
+| `name: API Tests` | Display name shown in the GitHub Actions tab. You can pick any name. |
+| `on: [pull_request, push]` | When to run. This workflow triggers on every push and pull request. |
+| `jobs:` | A workflow is made of one or more jobs. |
+| `bruno:` | Job name. This is an identifier you choose (like `bruno` or `api-tests`). |
+| `runs-on: ubuntu-latest` | The virtual machine GitHub spins up to run your steps. `ubuntu-latest` is a standard Linux runner. |
+| `steps:` | Ordered list of tasks inside the job. They run top to bottom. |
+| `uses: actions/checkout@v6` | A reusable GitHub Action that clones your repository onto the runner so Bruno can read your collection files. |
+| `uses: usebruno/bruno-cli-action@v1` | Bruno's official action. Format is `owner/repo@version`: `usebruno` is the org, `bruno-cli-action` is the action repo, `@v1` pins the major version (gets compatible updates automatically). |
+| `with:` | Inputs you pass into the action, like function arguments. |
+| `working-directory: tests/payments` | The folder on the runner where Bruno runs. Point this at your collection root (the folder that contains `opencollection.yml` or `bruno.json`). Think of it as `cd tests/payments` before running `bru`. |
+| `command: 'run --env prod'` | The CLI command without the `bru` prefix. The action prepends `bru`, so this becomes `bru run --env prod`. `--env prod` selects the `prod` environment from your collection. |
+
+In plain terms: GitHub checks out your code, moves into your collection folder, installs Bruno CLI, runs your collection against the `prod` environment, and reports pass or fail.
+
+## Inputs
+
+| Input | Required | Default | Description |
+| --- | --- | --- | --- |
+| `command` | yes | — | The `bru` subcommand and flags (e.g. `run --env prod`). Reporter flags are optional; `--reporter-junit` is auto-injected if absent. |
+| `bru-version` | no | `latest` | Version of `@usebruno/cli` to install. |
+| `working-directory` | no | `.` | Shell working directory. Typically the Bruno collection root. |
+
+CLI flags such as `--env`, `--env-var`, `--tags`, `--bail`, `--sandbox`, and `--reporter-*` go in `command`, not as separate action inputs. Every CLI flag works the day it ships in the CLI.
+
+## Outputs
+
+Available as `${{ steps.<id>.outputs.<name> }}` in subsequent steps:
+
+| Output | Description |
+| --- | --- |
+| `exit-code` | Exit code from the `bru` process |
+| `passed` | Number of passed requests |
+| `failed` | Number of failed requests (assertion failures or runtime errors) |
+| `total` | Total requests run |
+| `duration-ms` | Total run duration in milliseconds |
+
+Report file paths are intentionally not outputs. Pass an explicit `--reporter-junit <path>` in `command` and reference that path in downstream steps.
+
+## Behavior
+
+**JUnit auto-injection (always-on).** If `command` does not contain `--reporter-junit`, the action appends `--reporter-junit "$RUNNER_TEMP/bruno-junit.xml"` before invoking `bru`. A minimal `command: 'run'` still produces count outputs. If you pass `--reporter-junit some/path.xml`, the action uses your path.
+
+**Exit code propagation.** The step succeeds on exit `0` and fails on non-zero. To continue the workflow past failures, use GitHub's built-in `continue-on-error: true` on the step.
+
+## Versioning
+
+| Tag | Behavior |
+| --- | --- |
+| `@v1` | Floating major tag. Receives every backwards-compatible release. |
+| `@v1.2.3` | Immutable. Pinned to a specific release. |
+
+The `v<major>` tag is retagged automatically on every published release.
+
+### Workspace structure
+
+The demo workspace is organized as a Bruno workspace with an OpenCollection layout:
+
+```
+bruno-automation-demo-workspace/
+├── .github/
+│   └── workflows/
+│       └── bruno-api-tests.yml
+├── collections/
+│   └── bruno-automation-demo/
+│       ├── 01-smoke-checks/
+│       ├── 02-ci-workflow/
+│       ├── 03-release-gates/
+│       ├── environments/
+│       │   ├── ci.bru
+│       │   ├── local.bru
+│       │   └── staging.bru
+│       └── opencollection.yml
+├── environments/
+│   ├── ci.yml
+│   ├── local.yml
+│   └── staging.yml
+├── workspace.yml
+└── reports/
+```
+
+Key items:
+- **`workspace.yml`** defines the workspace and points to the collection at `collections/bruno-automation-demo`.
+- **`environments/ci.yml`** is a [global environment](/variables/global-environment-variables) with variables like `bruno_echo_url`, `platform_name`, and `build_id`.
+- **`collections/bruno-automation-demo/`** contains folders of requests with tests and assertions.
+
+### Run the demo with the action
+
+```yaml
+name: Bruno API Tests
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  bruno-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - run: mkdir -p reports
+
+      - uses: usebruno/bruno-cli-action@v1
+        with:
+          working-directory: collections/bruno-automation-demo
+          command: >
+            run
+            --global-env ci
+            --workspace-path ../..
+            --tags smoke,workflow,release-gate
+            --env-var platform_name="GitHub Actions"
+            --env-var build_id="${{ github.run_id }}"
+            --env-var commit_sha="${{ github.sha }}"
+            --reporter-html ../../reports/github-actions-report.html
+
+      - uses: actions/upload-artifact@v6
+        if: ${{ !cancelled() }}
+        with:
+          name: bruno-report
+          path: reports/github-actions-report.html
+          if-no-files-found: error
+```
+
+**What this does:** A fuller real-world example using the demo workspace above. It runs tagged requests with a global environment, injects CI variables (`build_id`, `commit_sha`), generates an HTML report, and uploads it as an artifact.
+
+## Other CI platforms
+
+Bruno CLI also works on Jenkins, Azure DevOps, GitLab CI, and Bitbucket Pipelines via direct CLI invocation or the [Bruno CLI Docker image](/bru-cli/docker). See [Jenkins Integration](/bru-cli/jenkins) for Jenkins-specific examples.
+
+
+## Resources
+
+- [Bruno CLI on GitHub Marketplace](https://github.com/marketplace/actions/bruno-cli)
+- [usebruno/bruno-cli-action](https://github.com/usebruno/bruno-cli-action) (source and full recipe list)
+- [GitHub discussion #2635](https://github.com/usebruno/bruno/discussions/2635)
+- [Pairing with downstream actions](/bru-cli/github-actions/downstream-actions)
+- [Manual CLI setup](/bru-cli/github-actions/manual-setup)
+- [Bruno CLI Overview](/bru-cli/overview)
+- [Command Options](/bru-cli/commandOptions)
+- [Generating Reports](/bru-cli/builtInReporters)
+- [Global Environment Variables](/variables/global-environment-variables)
+- [GitHub Actions Documentation](https://docs.github.com/en/actions)

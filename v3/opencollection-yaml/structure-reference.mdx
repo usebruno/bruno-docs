@@ -1,0 +1,260 @@
+---
+title: "YAML Structure Reference"
+sidebarTitle: "Structure Reference"
+---
+
+This page documents the structure of OpenCollection YAML files used in Bruno.
+
+## Top-Level Structure
+
+A Bruno YAML request file contains the following top-level sections:
+
+```yaml
+info:        # Request metadata (name, type, seq, tags)
+http:        # HTTP request configuration
+runtime:     # Scripts and assertions
+settings:    # Request settings
+docs:        # Request documentation
+```
+
+## info
+
+Store metadata about your request.
+
+```yaml
+info:
+  name: Get Users
+  type: http
+  seq: 1
+  tags:
+    - smoke
+    - regression
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `name` | string | The display name of the request |
+| `type` | string | The request type (`http` for HTTP requests, `folder` for folders) |
+| `seq` | number | Sequence number that determines sort position in the UI |
+| `tags` | array | Optional tags for filtering requests during collection runs |
+
+## http
+
+The HTTP request configuration.
+
+```yaml
+http:
+  method: post
+  url: https://api.example.com/users
+  params:
+    query: [...]
+    path: [...]
+  headers: [...]
+  body:
+    type: json
+    data: "..."
+  auth:
+    type: basic
+    basic:
+      username: admin
+      password: secret
+```
+
+### http.method
+
+The HTTP method. Supported values: `GET`, `POST`, `PUT`, `PATCH`, `DELETE`, `OPTIONS`, `HEAD`, `TRACE`, `CONNECT` (uppercase).
+
+### http.params
+
+Parameters as an array of objects with a `type` field to distinguish query vs path parameters.
+
+```yaml
+params:
+  - name: filter
+    value: active
+    type: query
+  - name: limit
+    value: "10"
+    type: query
+  - name: id
+    value: "123"
+    type: path
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `name` | string | The parameter name |
+| `value` | string | The parameter value |
+| `type` | string | Either `query` or `path` |
+| `disabled` | boolean | Whether the parameter is disabled (optional) |
+
+### http.headers
+
+Request headers as an array of objects.
+
+```yaml
+headers:
+  - name: Content-Type
+    value: application/json
+  - name: Authorization
+    value: Bearer {{token}}
+    disabled: true
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `name` | string | The header name |
+| `value` | string | The header value |
+| `disabled` | boolean | Whether the header is disabled (optional) |
+
+### http.body
+
+The request body configuration.
+
+```yaml
+body:
+  type: json
+  data: |-
+    {
+      "name": "John Doe"
+    }
+```
+
+| Body Type | Description |
+|-----------|-------------|
+| `json` | JSON body |
+| `text` | Plain text body |
+| `xml` | XML body |
+| `form-urlencoded` | Form URL-encoded data |
+| `multipart-form` | Multipart form data |
+| `graphql` | GraphQL query |
+
+### http.auth
+
+Authentication configuration. Credentials are specified directly under the `auth` object. Use `inherit` to inherit authentication from the parent folder or collection.
+
+```yaml
+# Inherit from parent
+auth: inherit
+
+# Bearer token
+auth:
+  type: bearer
+  token: "{{token}}"
+
+# Basic authentication
+auth:
+  type: basic
+  username: admin
+  password: secret
+
+# API Key
+auth:
+  type: apikey
+  key: x-api-key
+  value: "{{api-key}}"
+  placement: header
+
+# OAuth 1.0
+auth:
+  type: oauth1
+  consumerKey: "{{consumer_key}}"
+  consumerSecret: "{{consumer_secret}}"
+  accessToken: "{{access_token}}"
+  accessTokenSecret: "{{token_secret}}"
+  signatureMethod: HMAC-SHA1
+  version: "1.0"
+  placement: header
+  includeBodyHash: false
+```
+
+Supported auth types: `none`, `inherit`, `basic`, `bearer`, `apikey`, `digest`, `oauth1`, `oauth2`, `awsv4`, `ntlm`, `wsse`.
+
+## runtime
+
+The runtime section contains scripts and assertions that execute during the request lifecycle.
+
+### runtime.scripts
+
+JavaScript code to run at different points in the request lifecycle.
+
+```yaml
+runtime:
+  scripts:
+    - type: before-request
+      code: |-
+        // Runs before the request
+        console.log('before-request');
+        req.setHeader("X-Timestamp", Date.now());
+    - type: after-response
+      code: |-
+        // Runs after the response
+        console.log('after-response');
+        bru.setVar("token", res.body.token);
+    - type: tests
+      code: |-
+        test("should return 200", function() {
+          expect(res.status).to.equal(200);
+        });
+```
+
+| Script Type | Description |
+|-------------|-------------|
+| `before-request` | Runs before the request is sent |
+| `after-response` | Runs after the response is received |
+| `tests` | Test assertions using the Chai assertion library |
+
+### runtime.assertions
+
+Declarative assertions without writing JavaScript code.
+
+```yaml
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.body.name
+      operator: isString
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `expression` | string | The value to evaluate (e.g., `res.status`, `res.body.name`) |
+| `operator` | string | The comparison operator (`eq`, `neq`, `isString`, `isNumber`, etc.) |
+| `value` | string | The expected value (for comparison operators) |
+
+## settings
+
+Request-level settings.
+
+```yaml
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `encodeUrl` | boolean | Whether to URL-encode the request URL |
+| `timeout` | number | Request timeout in milliseconds (0 = no timeout) |
+| `followRedirects` | boolean | Whether to follow HTTP redirects |
+| `maxRedirects` | number | Maximum number of redirects to follow |
+
+## docs
+
+Request-level documentation in Markdown format.
+
+```yaml
+docs: |-
+  # User Creation API
+
+  This endpoint creates a new user in the system.
+
+  ## Required Fields
+  - name: User's full name
+  - email: User's email address
+```
+
