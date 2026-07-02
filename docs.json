@@ -1198,7 +1198,7 @@
     }
   ],
   "banner": {
-  "content": "Bruno V4 includes breaking changes for existing users. [Read more](https://www.usebruno.com/v4-release) for details.",
+  "content": "Bruno V4 includes potentially breaking changes for existing users. [Read more](https://www.usebruno.com/v4-release) for details.",
   "type": "warning",
   "dismissible": true
  }
