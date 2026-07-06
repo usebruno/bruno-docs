@@ -5,7 +5,7 @@ The official [Bruno Documentation](https://docs.usebruno.com/) repository, built
 ## Contributing
 
 > [!NOTE]
-> Ensure that Node.js (version 19 or higher) is installed before proceeding.
+> Node.js **LTS version (v20 or v22 recommended)**. Node v25+ is not supported by Mintlify. 
 
 1. Clone the repository.
 ```shell

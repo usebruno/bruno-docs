@@ -9,7 +9,7 @@ Bruno provides two modes for executing JavaScript code in your collections:
 ![Javascript Sandbox](/images/screenshots/javascript-sandbox.webp)
 
 <Info>
-  **Bruno CLI v3.0.0 Update**: When using Bruno CLI, the default mode is now **Safe Mode**. To use Developer Mode features in CLI, you must pass the `--sandbox=developer` flag. Learn more in the [Bruno CLI documentation](/bru-cli/runCollection#running-with-developer-mode).
+  **Bruno CLI v3.0.0 Update**: When using Bruno, the default mode is now **Safe Mode**. To use Developer Mode features in CLI, you must pass the `--sandbox=developer` flag. See [How to Switch Modes](#how-to-switch-modes-in-bruno) below.
 </Info>
 
 ## Safe Mode
@@ -60,3 +60,36 @@ if (bru.isSafeMode()) {
 ```
 
 **API Reference:** See the complete documentation in [JavaScript API Reference](/testing/script/javascript-reference#detecting-sandbox-mode).
+
+## How to Switch Modes in Bruno
+
+You can switch between Safe Mode and Developer Mode in two ways- via App UI or CLI.
+
+**In the Bruno App**
+
+1. Open your collection in Bruno.
+2. Click the **JavaScript Sandbox** button in the top toolbar (the shield button, next to the Runner icon).
+3. A dropdown appears showing both modes. Select **Safe Mode** or **Developer Mode** as needed.
+
+![Switching JavaScript Sandbox modes in Bruno App](/images/screenshots/javascript-sandbox-GIF.gif)
+
+
+<Warning>
+  Developer Mode is scoped to the collection. Switching one collection does not affect others.
+</Warning>
+
+**In the Bruno CLI**
+
+When running collections via the CLI, Safe Mode is the default. To run in Developer Mode, pass the `--sandbox` flag:
+
+```bash
+bru run --sandbox=developer
+```
+
+To explicitly enforce Safe Mode (useful in CI environments where you want to guarantee no filesystem access):
+
+```bash
+bru run --sandbox=safe
+```
+
+Learn more in the [Bruno CLI documentation](/bru-cli/runCollection#running-with-developer-mode).
