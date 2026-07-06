@@ -1,0 +1,40 @@
+---
+title: "Authenticate with Akamai EdgeGrid"
+sidebarTitle: "Akamai EdgeGrid"
+---
+
+<Info>
+  Akamai EdgeGrid authentication is available as a **Beta** feature in Bruno.
+</Info>
+
+Akamai [EdgeGrid](https://techdocs.akamai.com/developer/docs/set-up-authentication-credentials) is the authentication scheme (`EG1-HMAC-SHA256`) required by Akamai's `{OPEN}` APIs. Bruno signs the request with your Akamai API client credentials and adds the `Authorization` header for you.
+
+You can set Akamai EdgeGrid auth at the **request**, **folder**, or **collection** level. Folders and requests can `Inherit` the credentials from a parent.
+
+## Akamai EdgeGrid in Bruno
+
+1. Open your request (or open folder/collection settings for shared auth).
+2. Navigate to the **Auth** tab.
+3. Select **Akamai EdgeGrid** from the dropdown list.
+4. Fill in the required fields:
+   - **Access Token** — the `access_token` from your Akamai API client credentials.
+   - **Client Token** — the `client_token` from your Akamai API client credentials.
+   - **Client Secret** — the `client_secret` from your Akamai API client credentials.
+
+<Info>
+  For extra security, integrate Bruno with your secret manager to store these values in a single location. See [Secrets Management](/secrets-management/secret-managers/hashicorp-vault/overview).
+</Info>
+
+## Advanced Settings
+
+Additional optional fields are available under **Advanced Settings**:
+
+- **Base URL** — Host used to build the signing string. Defaults to the request URL if not specified.
+- **Nonce** — A unique nonce for the request. Defaults to an auto-generated UUID v4 if not provided.
+- **Timestamp** — UTC timestamp of when the request is signed (`yyyyMMddTHH:mm:ss+0000`). Defaults to the current time if not provided.
+- **Headers to Sign** — Comma-separated list of request headers to include in the signature.
+- **Max Body Size** — Maximum message body size (in bytes) to include in the signature. Defaults to `131072`.
+
+<Tip>
+  Leave the optional fields blank to use Bruno's defaults. Set **Nonce** and **Timestamp** only when you need to reproduce a specific signature.
+</Tip>
