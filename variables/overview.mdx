@@ -52,50 +52,16 @@ When a variable is accessed, the following precedence is used to determine which
 
 Each variable has its own storage location either within your collection file or within the app's memory. **All storage is local.**
 
-<div style={{ display: 'flex', justifyContent: 'center', marginTop: '2em' }}>
-  <table style={{ borderCollapse: 'collapse', width: '600px', fontFamily: 'sans-serif', border: '1px solid #ddd' }}>
-    <thead>
-      <tr style={{ backgroundColor: '#f4aa4a', color: 'white' }}>
-        <th style={{ textAlign: 'left', padding: '8px', border: '1px solid #ddd', width: '50%' }}>Variable Type</th>
-        <th style={{ textAlign: 'left', padding: '8px', border: '1px solid #ddd', width: '50%' }}>Storage Location</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%' }}>Collection</td>
-        <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%' }}>`<collection-name>.bru`</td>
-      </tr>
-      <tr>
-        <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%' }}>Folder</td>
-        <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%' }}>`<folder-name>.bru`</td>
-      </tr>
-      <tr>
-        <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%' }}>Request</td>
-        <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%' }}>`<request-name>.bru`</td>
-      </tr>
-      <tr>
-        <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%' }}>Environment</td>
-        <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%' }}>`<env-name>.bru`</td>
-      </tr>
-      <tr>
-        <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%' }}>Runtime</td>
-        <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%' }}>Local storage</td>
-      </tr>
-      <tr>
-        <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%' }}>Global</td>
-        <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%' }}>Local storage</td>
-      </tr>
-      <tr>
-        <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%' }}>Prompt</td>
-        <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%' }}>Never stored</td>
-      </tr>
-      <tr style={{ backgroundColor: 'rgba(128, 128, 128, 0.1)' }}>
-        <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%' }}>Process Environment</td>
-        <td style={{ padding: '8px', border: '1px solid #ddd', width: '50%', fontStyle: 'italic' }}>Separate `.env` file</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+| Variable Type | Storage Location |
+|---|---|
+| Collection | `<collection-name>.bru` |
+| Folder | `<folder-name>.bru` |
+| Request | `<request-name>.bru` |
+| Environment | `<env-name>.bru` |
+| Runtime | Local storage |
+| Global | Local storage |
+| Prompt | Never stored |
+| Process Environment | Separate `.env` file |
 
 ### Environment Color Coding
 
