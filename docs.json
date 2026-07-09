@@ -268,6 +268,7 @@
                       "auth/digest",
                       "auth/aws-signature",
                       "auth/ntlm",
+                      "auth/akamai-edgegrid",
                       "auth/oauth1",
                       {
                         "group": "OAuth 2.0",
