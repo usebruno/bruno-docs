@@ -93,9 +93,44 @@ Once colors are assigned, they appear in multiple places throughout the interfac
 
 This visual system helps prevent mistakes when switching between development, staging, and production environments, especially in fast-paced workflows.
 
-### Variable Data Type
+### Variable Data Types
 
-All variables are stored as strings. Bruno does not infer or change the data type of the variable based on the value you set.
+<Info>
+  Typed variables are available in v3.1.0+. Earlier versions stored every variable as a string.
+</Info>
+
+Environment, collection, folder, and request variables can be tagged with a data type so they preserve their intended JavaScript type when used in requests and scripts. The supported types are:
+
+- `string` (default)
+- `number`
+- `boolean`
+- `object`
+
+#### Setting the data type from the UI
+
+Open the variables table (collection, folder, request, or environment settings) and use the type selector next to the value to switch between `string`, `number`, `boolean`, and `object`. Bruno coerces the entered text to the selected type at read time and shows a warning if the value can't be parsed as that type.
+
+#### How types are stored in `.bru` files
+
+Non-string types are persisted as an annotation prefix on the line above the variable. The default `string` type has no annotation.
+
+```bash filename="environments/local.bru"
+vars {
+  host: http://localhost:8787
+  @number
+  port: 8787
+  @boolean
+  debug: true
+  @object
+  feature_flags: {"newUi":true,"beta":false}
+}
+```
+
+The same annotation syntax applies to `vars`, `vars:pre-request`, and `vars:post-response` blocks inside collection, folder, and request `.bru` files.
+
+#### Inference from scripts
+
+When a script sets a variable to a non-string value (for example `bru.setEnvVar('port', 8787)`), Bruno infers the appropriate data type from the value and persists it alongside the variable.
 
 ### Debugging Variables in Console
 
