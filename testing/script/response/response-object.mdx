@@ -1,52 +1,56 @@
 ---
-title: "Response Object"
+title: "Response object"
+description: "Access response data including body, headers, status, and more in your scripts"
 ---
 
-The `res` object that is available inside the [vars](../vars), [assertions](../../tests/assertions), [scripting](../getting-started) and [testing](../../tests/introduction)
-contexts can be used to extract values from the response body, headers and status.
+The `res` object is available inside the [vars](../vars), [assertions](../../tests/assertions), [scripting](../getting-started), and [testing](../../tests/introduction) contexts. Use it to extract values from the response body, headers, and status.
 
-*Note that the `res` object is only available in the context of a request.*
+*The `res` object is only available in the context of a request.*
 
-You can also access it with [response queries](./response-query).
+You can also query nested response data using [response queries](./response-query).
 
-## Object Structure
+## Properties
 
-The `res` object has the following properties:
+| Property | Description |
+|---|---|
+| `res.status` | HTTP status code (e.g., `200`, `404`) |
+| `res.statusText` | HTTP status text (e.g., `"OK"`, `"Not Found"`) |
+| `res.headers` | Key-value pairs of HTTP response headers |
+| `res.body` | The parsed response body (string, object, etc.) |
+| `res.responseTime` | Time in milliseconds the request took to complete |
+| `res.url` | The full URL of the request |
 
-- `body`: Represents the response body containing data returned to the client.
-- `headers`: Contains key-value pairs representing HTTP headers associated with the response.
-- `status`: Represents the HTTP status code indicating the outcome of the request.
+## Methods
 
-## Property Descriptions
+| Method | Description |
+|---|---|
+| `res.getStatus()` | Returns the HTTP status code |
+| `res.getStatusText()` | Returns the HTTP status text |
+| `res.getHeader(name)` | Returns the value of a specific response header |
+| `res.getHeaders()` | Returns all response headers |
+| `res.getBody()` | Returns the response body |
+| `res.getResponseTime()` | Returns the response time in milliseconds |
+| `res.getUrl()` | Returns the request URL |
+| `res.setBody(data)` | Replaces the response body with new data |
+| `res.getSize()` | Returns an object with `header`, `body`, and `total` byte sizes |
 
-### `body`
-
-The `body` property of the `res` object contains the response data sent to the client. It can be a string, an object, or a stream, depending on the application's needs.
-
-### `headers`
-
-The `headers` property contains HTTP headers associated with the response. These headers provide metadata about the response, such as content type, encoding, and caching directives.
-
-### `status`
-
-The `status` property represents the HTTP status code of the response. It indicates the outcome of the request, such as success, redirection, client error, or server error.
-
-## Example Usage
+## Example usage
 
 ```javascript
-// Example response object
-const res = {
-  body: '{"message": "Hello, world!"}',
-  headers: {
-    'Content-Type': 'application/json',
-    'Cache-Control': 'no-cache',
-  },
-  status: 200,
-};
-
 // Accessing response properties
-console.log(res.body); // Output: '{"message": "Hello, world!"}'
-console.log(res.headers['Content-Type']); // Output: 'application/json'
-console.log(res.status); // Output: 200
+let status = res.status;               // 200
+let statusText = res.statusText;       // "OK"
+let contentType = res.headers['content-type']; // "application/json"
+let body = res.body;                   // { message: "Hello, world!" }
+let time = res.responseTime;           // 120
+let url = res.url;                     // "https://api.example.com/data"
+
+// Using getter methods
+let headerVal = res.getHeader('content-type');
+let allHeaders = res.getHeaders();
+let size = res.getSize(); // { header: 234, body: 1024, total: 1258 }
+
+// Modifying the response body for downstream scripts
+res.setBody({ message: "Modified response" });
 ```
 
