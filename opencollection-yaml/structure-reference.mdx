@@ -73,9 +73,11 @@ params:
   - name: filter
     value: active
     type: query
+    description: Filter results by status
   - name: limit
     value: "10"
     type: query
+    description: Maximum number of results to return
   - name: id
     value: "123"
     type: path
@@ -87,6 +89,7 @@ params:
 | `value` | string | The parameter value |
 | `type` | string | Either `query` or `path` |
 | `disabled` | boolean | Whether the parameter is disabled (optional) |
+| `description` | string | Human-readable description of the parameter's purpose (optional) |
 
 ### http.headers
 
@@ -96,8 +99,10 @@ Request headers as an array of objects.
 headers:
   - name: Content-Type
     value: application/json
+    description: Tells the server the format of the request body
   - name: Authorization
     value: Bearer {{token}}
+    description: Bearer token obtained after login
     disabled: true
 ```
 
@@ -106,6 +111,7 @@ headers:
 | `name` | string | The header name |
 | `value` | string | The header value |
 | `disabled` | boolean | Whether the header is disabled (optional) |
+| `description` | string | Human-readable description of the header's purpose (optional) |
 
 ### http.body
 
