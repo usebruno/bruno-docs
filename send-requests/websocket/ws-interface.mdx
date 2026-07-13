@@ -16,9 +16,12 @@ The WebSocket request interface consists of several key components:
 - **Disconnected**: Connection lost or manually closed
 
 ### Message Composition
-- **Message Type**: Choose between Text, JSON, XML
+- **Message Type**: Choose between Text, JSON, XML — set per message
 - **Message Editor**: Compose your message with syntax highlighting
-- **Send Button**: Send the composed message
+- **Send Button**: Send that individual message to the active connection
+- **Add Message**: Add additional messages to the same request
+- **Rename**: Double-click a message label to rename it
+- **Delete**: Remove a message individually (at least one message must remain)
 
 ### Message History
 - **Sent Messages**: All messages you've sent (marked with →)
@@ -34,11 +37,39 @@ The WebSocket request interface consists of several key components:
 2. **Monitor connection status** in the status indicator
 3. **View connection logs** for detailed connection information
 
+### Multiple Messages
+
+<Tip>
+Multiple message support is available from v4.0.0 and higher.
+</Tip>
+
+Bruno lets you compose and save multiple messages inside a single WebSocket request. This is useful for testing sequences, simulating different payload shapes, or keeping a library of reusable messages alongside one connection.
+
+**Working with multiple messages**
+
+1. Click **Add Message** to add a new message slot. Each message has its own format selector (Text, JSON, XML) and editor.
+
+![Add Message](/images/screenshots/v4/websockets/add-message.webp)
+
+2. Click the **Send** button on a specific message to send only that message to the active connection.
+
+![Send Message](/images/screenshots/v4/websockets/send-message.webp)
+
+3. **Double-click** a message label to rename it.
+
+![Rename Message](/images/screenshots/v4/websockets/rename-message.webp)
+
+4. To remove a message, click the **delete** icon. The last remaining message cannot be deleted.
+
+![Delete Message](/images/screenshots/v4/websockets/delete-message.webp)
+
+**Variable interpolation** works per message, so `{{token}}` and other variables are resolved individually when each message is sent.
+
 ### Sending Messages
 
 1. **Compose your message** in the message editor
 2. **Select message type** (Text, JSON, XML)
-3. **Click "Send"** to transmit the message
+3. **Click Send** button on the message you want to transmit
 4. **View sent message** in the message history
 
 ![Send WebSocket Request](/images/screenshots/send-request/ws/send-ws-req.webp)
@@ -56,3 +87,50 @@ The WebSocket request interface consists of several key components:
 3. **Message history** is preserved for review
 
 ![Disconect WS](/images/screenshots/send-request/ws/disconnect-ws.webp)
+
+## File Format
+
+Multiple messages are saved directly in your collection files so they are version-controllable and portable.
+
+<CodeGroup>
+```bru BRU format (.bru)
+meta {
+  name: web-socket
+  type: ws
+  seq: 1
+}
+
+ws {
+  url: wss://echo.websocket.org
+}
+
+body:ws {
+  message 1 [json] {
+    {"name":"Bruno"}
+  }
+
+  message 2 [json] {
+    {"msg":"The most loving API client by developers"}
+  }
+}
+```
+
+```yaml YAML format (.yml)
+info:
+  name: web-socket
+  type: ws
+  seq: 1
+
+ws:
+  url: wss://echo.websocket.org
+  messages:
+    - name: message 1
+      type: json
+      body: |-
+        {"name":"Bruno"}
+    - name: message 2
+      type: json
+      body: |-
+        {"msg":"The most loving API client by developers"}
+```
+</CodeGroup>

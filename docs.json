@@ -103,8 +103,8 @@
                     "group": "WebSocket",
                     "pages": [
                       "send-requests/websocket/overview",
-                      "send-requests/websocket/create-request",
                       "send-requests/websocket/ws-interface",
+                      "send-requests/websocket/create-request",
                       "send-requests/websocket/message-types"
                     ]
                   },
