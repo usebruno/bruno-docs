@@ -47,10 +47,6 @@ If you have the same endpoints in your OpenAPI spec and collection, you don't ne
 
 ![review and sync collection](/images/screenshots/open-api/openapi-sync/review-and-sync-collection.webp)
 
-<Warning>
-  **Beta feature:** OpenAPI Sync is in beta. When you sync, your collection is updated from the spec—your tests and scripts are preserved. We recommend backing up your collection or reviewing the spec before your first sync so you're comfortable with the result.
-</Warning>
-
 ## OpenAPI Sync UI at a glance
 
 The UI shows a summary of sync status:
@@ -76,7 +72,9 @@ Shows **your local collection changes** in Bruno:
 - **Added** – Endpoints or fields added in your collection.
 - **Modified** – Endpoints or fields modified in your collection.
 
-Only **body, URL, params, and headers** are tracked here. Tests, scripts, test assertions, and other request settings are **not** tracked in this tab. You can reset, open and view the changes.
+Only **body, URL, params, and headers** are tracked here. Tests, scripts, assertions, and request settings are not tracked.
+
+Auth config differences within the same auth mode (for example, changing an OAuth2 scope or token value) are not treated as drift. Only a change in auth mode is tracked as a modification. This means preserved auth values will not keep your collection in a permanent out-of-sync state.
 
 ![Collection Changes tab](/images/screenshots/open-api/openapi-sync/collection-changes-tab.webp)
 
@@ -98,14 +96,53 @@ Click **Confirm and Sync Collection** to apply the remote spec changes to your l
 ![after sync updates](/images/screenshots/open-api/openapi-sync/after-sync-updates.webp)
 
 <Info>
-  **Merge conflicts:** If you're working on the same file and there are changes in the remote spec, you may see conflicts. Review each change in the Spec Updated tab and accept or reject as needed.
+  When you and the spec both changed the same field, Bruno keeps your value by default and surfaces the difference in the per-endpoint review so you can decide what to keep.
 </Info>
 
-## What gets updated when you sync
+## Sync vs Reset
 
-- **From spec:** URLs, parameters, request bodies, and folder/request structure are regenerated from the latest spec.
-- **Preserved:** Your tests, scripts, and assertions are kept.
-- **Stored locally:** The latest spec is saved under `collection/resources/spec/` for offline use.
+OpenAPI Sync offers two ways to apply spec changes, each serving a different purpose.
+
+### Sync
+
+Sync reconciles your collection structure with the spec while keeping the values you have entered. It does not overwrite your work.
+
+**JSON body**
+
+Fields that still exist in the spec keep your values. Fields the spec adds are inserted with the spec's example or default value. Fields the spec removes are dropped. Variable references like `{{baseUrl}}` or `{{token}}` are preserved exactly as written.
+
+**Params and headers**
+
+Entries that still exist in the spec keep your value and enabled state. New spec entries are added. Entries the spec drops are removed.
+
+**Form bodies** (URL-encoded and multipart)
+
+Same rule as params, keyed on field name.
+
+**Auth**
+
+When your request and the spec share the same auth mode, all auth field values are preserved including OAuth2 URLs, scopes, grant type, API key placement, client credentials, and any variable references. Bruno does not overwrite these.
+
+When the auth mode differs, the auth fields update to match the new mode and the difference is surfaced as a modification in the review screen.
+
+### Reset
+
+Reset is a per-endpoint action available on requests that have drifted from the spec. It replaces the spec-derived fields (URL, params, headers, body, auth) with the spec's version. Your tests, scripts, and assertions are always kept.
+
+Use Reset when you want to deliberately discard local changes to a request and start fresh from the spec.
+
+## What the diff preview shows
+
+The Spec Updates tab shows what your collection will look like after sync, not the raw spec. Fields you have already set to the correct value do not appear as changes. Only structural additions, removals, and auth mode differences are shown. This means reviewing a sync is straightforward: if a field appears in the diff, something actually changed.
+
+## What gets preserved across both Sync and Reset
+
+- Pre-request scripts
+- Post-response scripts
+- Tests and assertions
+- Request settings
+
+The latest spec is also saved locally under `collection/resources/spec/` so sync works offline.
 
 ## Connection Settings
 
