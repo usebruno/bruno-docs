@@ -11,22 +11,54 @@ Bruno allows you to automatically generate a standalone HTML documentation file 
 
 ![Click Generate Docs](/images/screenshots/send-request/api-docs/opencollection/1-click-generate-docs.webp)
 
-2. Click the **Generate** button to create the HTML documentation
+2. Select **Environment** to include in the documentation and click the **Generate** button to create the HTML documentation
 
-![Click Generate Button](/images/screenshots/send-request/api-docs/opencollection/click-generate-2-button.webp)
+![Click Generate Button](/images/screenshots/v4/collection-docs/select-environment-export.webp)
 
-3. Bruno will generate a HTML documentation file for your collection documentation
+<Tip>
+  **Optional:** You can set a collection version before generating docs. Collections without a version show "Not set".
+</Tip>
 
-![Generated HTML Documentation](/images/screenshots/send-request/api-docs/opencollection/genarated-docs-htmml.webp)
+3. Bruno will generate a documentation file for your collection in your file system with name `collection-name-documentation.html`
+
+![Generated HTML Documentation](/images/screenshots/v4/collection-docs/interface-overview.webp)
 
 ## Key Features
 
-### Auto-Generated Docs from Bruno Collections
+### Environment Support
 
-- **Support for .bru files** and Bruno collection structure
-- **Render nested folders** with requests, environment variables, and metadata
-- **Sample requests/responses** and script previews included
-- **Environment support** for different configurations
+Use the topbar environment switcher to pick an active environment, and turn on **Show vars** to resolve `{{var}}` placeholders across URLs, headers, body, and code snippets.
+
+- Resolves collection and global variables against the active environment
+- Switch environments without reloading the page
+- Secret variables stay masked even when Show variables is on
+- Environment and toggle preferences persist for that docs file across refreshes
+
+![environment support](/images/screenshots/v4/collection-docs/environment-support.webp)
+
+### Search Capability
+
+Click the search bar in the header or press **`⌘K`** / **`Ctrl+K`** to open the search palette. Press **`Escape`** or the close button to dismiss it.
+
+- **Searches across** request name, URL, params, and description
+- **Results show** HTTP method badge, request name, folder breadcrumb, and resolved URL
+- **Filter by method** using GET / POST / PUT / DEL chips
+- **Filter by folder** to narrow results to a specific part of the collection
+- **Clear all** resets both the query and all active filters
+- Selecting a result navigates directly to that request's page
+
+![Search Panel](/images/screenshots/v4/collection-docs/search-panel.webp)
+
+### Interactive Playground
+
+Click on **Try** button at request level to get interactive playground that allows users to:
+
+- Edit request parameters, headers, and body
+- Modify and test scripts in real-time
+- Execute requests live directly from the documentation
+- View responses immediately
+
+![Try It Out Playground](/images/screenshots/v4/collection-docs/play-ground.webp)
 
 ### Code Samples
 
@@ -36,26 +68,12 @@ The documentation automatically generates code snippets for each request in mult
 - Python (requests)
 - JavaScript
 
-![Test Scripts](/images/screenshots/send-request/api-docs/opencollection/curl.webp)
-
 ### Tests and Scripts Display
 
-- Show **pre-request scripts** inline for each request
-- Display **post-response scripts** and test logic
-- View **test assertions** directly in the documentation
-
-![Test Scripts](/images/screenshots/send-request/api-docs/opencollection/test-script-display.webp)
-
-### Try It Out Playground
-
-Interactive playground that allows users to:
-
-- Edit request parameters, headers, and body
-- Modify and test scripts in real-time
-- Execute requests live directly from the documentation
-- View responses immediately
-
-![Try It Out Playground](/images/screenshots/send-request/api-docs/opencollection/auto-docs-playground.webp)
+Interactive playground supports to:
+- Show **pre and post request scripts** inline for each request
+- Display **Params**, **Variables**, **Body**, **Headers**, **Auth** and test logic
+- View **Tests and Assertions** directly in the documentation
 
 ## Deployment Options
 
