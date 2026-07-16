@@ -1,0 +1,79 @@
+---
+title: "Migrating from Bru to YAML"
+sidebarTitle: "Bru to YAML"
+---
+
+Starting with Bruno v3.1.0, new and imported collections use [OpenCollection YAML](/opencollection-yaml/overview) by default. If you have existing `.bru` collections, you can migrate them in a few steps.
+
+<Note>
+  All requests in a collection must use the same format. A collection cannot mix `.bru` and `.yml` files. Migration is available in Bruno v4.0.0 and higher.
+</Note>
+
+## How to migrate
+
+1. Open your `.bru` collection in Bruno.
+2. Click **Migrate to YML** button available in the top-right navigation bar or in the bottom of the collection **Overview** tab.
+
+![Migrate to YML option](/images/screenshots/v4/bru-yaml-migration/1-migrate-yml-option.webp)
+
+3. A confirmation dialog appears. Click **Export Collection** to back up your existing collection before proceeding.
+
+![Migration dialog with backup option](/images/screenshots/v4/bru-yaml-migration/2-migration-button-with-backup.webp)
+
+<Warning>
+  Back up your collection before migrating. Export it using the button in the dialog so you have a copy of the original `.bru` files.
+</Warning>
+
+4. Click **Migrate** to complete the migration. Your collection is now stored as `.yml` files.
+
+## Before and after
+
+<CodeGroup>
+```bru Before (.bru)
+meta {
+  name: github-user
+  type: http
+  seq: 2
+}
+
+get {
+  url: https://api.github.com/users/usebruno
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+```
+
+```yaml After (.yml)
+info:
+  name: github-user
+  type: http
+  seq: 2
+
+http:
+  method: GET
+  url: https://api.github.com/users/usebruno
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+```
+</CodeGroup>
+
+## After migration
+
+- Your requests are now saved as `.yml` files with `opencollection.yml` at the collection root
+- If any scripts use `bru.runRequest()` with a `.bru` file extension in the path, update those to `.yml`
+- The original `.bru` files are removed after migration, so keep your backup until you confirm everything works
+
+## Related
+
+- [OpenCollection YAML overview](/opencollection-yaml/overview)
+- [YAML structure reference](/opencollection-yaml/structure-reference)
