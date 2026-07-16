@@ -328,12 +328,24 @@
               {
                 "group": "AI Agents",
                 "pages": [
-                  "agents/overview",
-                  "agents/use-cases",
-                  "agents/cursor",
-                  "agents/vs-code",
-                  "agents/codex",
-                  "agents/claude"
+                  {
+                    "group": "Bruno AI",
+                    "pages": [
+                      "agents/introduction",
+                      "agents/configuration"
+                    ]
+                  },
+                  {
+                    "group": "External Agents",
+                    "pages": [
+                      "agents/overview",
+                      "agents/use-cases",
+                      "agents/cursor",
+                      "agents/vs-code",
+                      "agents/codex",
+                      "agents/claude"
+                    ]
+                  }
                 ]
               },
               {
