@@ -326,24 +326,25 @@
             "icon": "code",
             "pages": [
               {
-                "group": "AI Agents",
+                "group": "AI",
                 "pages": [
                   {
                     "group": "Bruno AI",
                     "pages": [
-                      "agents/introduction",
-                      "agents/configuration"
+                      "ai/bruno-ai/introduction",
+                      "ai/bruno-ai/configuration",
+                      "ai/bruno-ai/usage"
                     ]
                   },
                   {
-                    "group": "External Agents",
+                    "group": "Integration",
                     "pages": [
-                      "agents/overview",
-                      "agents/use-cases",
-                      "agents/cursor",
-                      "agents/vs-code",
-                      "agents/codex",
-                      "agents/claude"
+                      "ai/integration/overview",
+                      "ai/integration/use-cases",
+                      "ai/integration/cursor",
+                      "ai/integration/vs-code",
+                      "ai/integration/codex",
+                      "ai/integration/claude"
                     ]
                   }
                 ]
@@ -1349,6 +1350,31 @@
     }
   },
   "redirects": [
+    {
+      "source": "/agents/overview",
+      "destination": "/ai/integration/overview",
+      "permanent": true
+    },
+    {
+      "source": "/agents/cursor",
+      "destination": "/ai/integration/cursor",
+      "permanent": true
+    },
+    {
+      "source": "/agents/vs-code",
+      "destination": "/ai/integration/vs-code",
+      "permanent": true
+    },
+    {
+      "source": "/agents/codex",
+      "destination": "/ai/integration/codex",
+      "permanent": true
+    },
+    {
+      "source": "/agents/claude",
+      "destination": "/ai/integration/claude",
+      "permanent": true
+    },
     {
       "source": "/bru-cli/gitHubCLI",
       "destination": "/bru-cli/github-actions/overview",
