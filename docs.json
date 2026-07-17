@@ -271,6 +271,7 @@
                   "auth/aws-signature",
                   "auth/ntlm",
                   "auth/oauth1",
+                  "auth/akamai-edgegrid",
                   {
                     "group": "OAuth 2.0",
                     "pages": [
