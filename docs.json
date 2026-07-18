@@ -351,6 +351,16 @@
                 ]
               },
               {
+                "group": "Apps",
+                "pages": [
+                  "apps/overview",
+                  "apps/configure",
+                  "apps/ai-with-apps",
+                  "apps/api-ref",
+                  "apps/examples"
+                ]
+              },
+              {
                 "group": "Bruno CLI",
                 "pages": [
                   "bru-cli/overview",
