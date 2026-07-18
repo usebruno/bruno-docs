@@ -51,6 +51,18 @@ bru run -h
 | `--exclude-tags [string]`   | Skip requests that have ANY of the specified tags (comma-separated)           |
 | `--parallel`                | Run requests in parallel order                            |
 
+### Secret Manager options
+
+| Option | Details |
+| --- | --- |
+| `--secrets-env-file [string]` | Path to a dotenv file containing credentials for an external secret manager (HashiCorp Vault, AWS Secrets Manager, or Azure Key Vault). Values are injected at runtime and are never written to disk or printed in logs. |
+
+The `--secrets-env-file` flag is used together with `--env` when your environment file has an `externalSecrets` block configured. See [Secret Managers](/bru-cli/secret-managers) for credential file formats and full usage examples for each provider.
+
+```bash
+bru run collection/ --env Production --secrets-env-file ./secrets.env
+```
+
 ### SSL & Security options
 
 | Option                       | Details                                                                       |
@@ -125,6 +137,7 @@ Now that you're familiar with the command options, explore these guides to get t
 1. [Command Examples](/bru-cli/runCollection) - Learn how to execute your collections with the above command options
 2. [Import Data](/bru-cli/import) - Import OpenAPI and WSDL specifications into Bruno collections
 3. [Generate Reports](/bru-cli/builtInReporters) - Create detailed test reports in multiple formats
+4. [Secret Managers](/bru-cli/secret-managers) - Fetch secrets from HashiCorp Vault, AWS Secrets Manager, or Azure Key Vault at runtime
 
 ---
 

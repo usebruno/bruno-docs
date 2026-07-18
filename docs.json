@@ -228,6 +228,7 @@
                     "group": "Secret Managers",
                     "pages": [
                       "secrets-management/secret-managers/overview",
+                      "secrets-management/secret-managers/migration",
                       {
                         "group": "HashiCorp Vault",
                         "pages": [
@@ -371,6 +372,7 @@
                   "bru-cli/builtInReporters",
                   "bru-cli/import",
                   "bru-cli/proxyConfiguration",
+                  "bru-cli/secret-managers",
                   "bru-cli/docker",
                   {
                     "group": "GitHub Actions",
@@ -1361,6 +1363,11 @@
     }
   },
   "redirects": [
+    {
+      "source": "/secrets-management/secret-managers/hashicorp-vault/using-with-cli",
+      "destination": "/bru-cli/secret-managers",
+      "permanent": true
+    },
     {
       "source": "/agents/overview",
       "destination": "/ai/integration/overview",
