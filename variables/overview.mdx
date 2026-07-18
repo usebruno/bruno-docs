@@ -63,6 +63,92 @@ Each variable has its own storage location either within your collection file or
 | Prompt | Never stored |
 | Process Environment | Separate `.env` file |
 
+### Variable Data Type
+
+<Warning>
+  **Breaking change in v4.0.0:** Bruno now supports typed variables such as `string`, `number`, `boolean`, and `object`. Collections written with `@type(...)` annotations will not parse in Bruno versions older than v4.0.0.
+</Warning>
+
+Starting with v4.0.0, variables are no longer limited to strings. You can store any of the following types:
+
+| Type | Example value |
+|------|--------------|
+| `string` | `"https://api.example.com"` |
+| `number` | `30` |
+| `boolean` | `true` |
+| `object` | `{ "host": "localhost" }` |
+
+In `.bru` files, types are stored using `@number`, `@boolean`, or `@object` annotations placed on the line immediately above the variable. Object values use triple-quote (`'''`) blocks. In `.yml` files, each variable is an object with a `type` field and a `data` field.
+
+<CodeGroup>
+```bru BRU format (.bru)
+vars:pre-request {
+  @number
+  timeout: 30
+
+  @boolean
+  debug: true
+
+  @object
+  config: '''
+    {
+      "host": "localhost",
+      "port": 8080
+    }
+  '''
+
+  baseUrl: https://api.example.com
+}
+```
+
+```yaml YAML format (.yml)
+runtime:
+  variables:
+    - name: timeout
+      value:
+        type: number
+        data: "30"
+
+    - name: debug
+      value:
+        type: boolean
+        data: "true"
+
+    - name: config
+      value:
+        type: object
+        data: '{"host":"localhost","port":8080}'
+
+    - name: baseUrl
+      value: https://api.example.com
+```
+</CodeGroup>
+
+**Setting typed variables from scripts**
+
+When you call `bru.setEnvVar(key, value)`, Bruno infers the type from the value you pass and writes the correct annotation automatically:
+
+```javascript
+bru.setEnvVar("timeout", 30)            // written as @number
+bru.setEnvVar("debug", true)            // written as @boolean
+bru.setEnvVar("config", { a: 1 })       // written as @object
+bru.setEnvVar("baseUrl", "example.com") // written as plain string (no annotation needed)
+```
+
+On subsequent reads, `timeout` resolves as a number and `config` resolves as an object. It preserves the original type across runs.
+
+Typed values work across all variable scopes: environment, global environment, collection, folder, and request variables.
+
+**Type selector in the UI**
+
+In the Vars tab you can select the type of each variable using the type dropdown next to the value field.
+
+![Variable type selector](/images/screenshots/v4/chores/data-types.webp)
+
+<Note>
+  **Backward compatibility:** Existing `.bru` files and environments that use plain string values continue to work without any changes or migration. The `@type(...)` annotation is only written when a non-string type is used.
+</Note>
+
 ### Environment Color Coding
 
 <Info>
@@ -92,10 +178,6 @@ Once colors are assigned, they appear in multiple places throughout the interfac
 ![Environment Color Coding](/images/screenshots/variables/view-color-coding-env.webp)
 
 This visual system helps prevent mistakes when switching between development, staging, and production environments, especially in fast-paced workflows.
-
-### Variable Data Type
-
-All variables are stored as strings. Bruno does not infer or change the data type of the variable based on the value you set.
 
 ### Debugging Variables in Console
 
