@@ -235,8 +235,7 @@
                           "secrets-management/secret-managers/hashicorp-vault/overview",
                           "secrets-management/secret-managers/hashicorp-vault/adding-a-secret-provider",
                           "secrets-management/secret-managers/hashicorp-vault/configuring-and-fetching-secrets",
-                          "secrets-management/secret-managers/hashicorp-vault/using-secrets",
-                          "secrets-management/secret-managers/hashicorp-vault/using-with-cli"
+                          "secrets-management/secret-managers/hashicorp-vault/using-secrets"                        
                         ]
                       },
                       {
