@@ -54,6 +54,8 @@ docker run -d \
   -e SMTP_PORT="{{ smtp_port }}" \
   -e SMTP_USER="{{ smtp_user }}" \
   -e SMTP_PASSWORD="{{ smtp_password }}" \
+  -e SMTP_FROM_EMAIL="{{ smtp_from_email }}" \
+  -e SMTP_FROM_NAME="{{ smtp_from_name }}" \
   -e AUTH_JWT_SECRET="{{ random_uuid }}" \
   -e BRUNO_GLOBAL_LICENSE_SERVER_URL="https://license-api.usebruno.com" \
   -e PORT="80" \
@@ -88,6 +90,8 @@ docker run -d \
           SMTP_PORT: "{{ smtp_port }}"
           SMTP_USER: "{{ smtp_user }}"
           SMTP_PASSWORD: "{{ smtp_pass }}"
+          SMTP_FROM_EMAIL: "{{ smtp_from_email }}"
+          SMTP_FROM_NAME: "{{ smtp_from_name }}"
           AUTH_JWT_SECRET: "{{ random_uuid }}"
           BRUNO_GLOBAL_LICENSE_SERVER_URL: "https://license-api.usebruno.com"
           PORT: 80
@@ -112,6 +116,8 @@ services:
       SMTP_PORT: "your_smtp_port"
       SMTP_USER: "your_smtp_user"
       SMTP_PASSWORD: "your_smtp_password"
+      SMTP_FROM_EMAIL: "your_from_email"
+      SMTP_FROM_NAME: "your_from_name"
       AUTH_JWT_SECRET: "{{ random_uuid }}"
       BRUNO_GLOBAL_LICENSE_SERVER_URL: "https://license-api.usebruno.com"
       PORT: 80
@@ -136,6 +142,8 @@ kubectl create secret generic licensing-server-secrets \
   --from-literal=SMTP_PORT="your_smtp_port" \
   --from-literal=SMTP_USER="your_smtp_user" \
   --from-literal=SMTP_PASSWORD="your_smtp_password" \
+  --from-literal=SMTP_FROM_EMAIL="your_from_email" \
+  --from-literal=SMTP_FROM_NAME="your_from_name" \
   --from-literal=BRUNO_GLOBAL_LICENSE_SERVER_URL="https://license-api.usebruno.com" \
   --from-literal=AUTH_JWT_SECRET="random_uuid"
 ```
@@ -190,6 +198,16 @@ spec:
             secretKeyRef:
               name: licensing-server-secrets
               key: SMTP_PASS
+        - name: SMTP_FROM_EMAIL
+          valueFrom:
+            secretKeyRef:
+              name: licensing-server-secrets
+              key: SMTP_FROM_EMAIL
+        - name: SMTP_FROM_NAME
+          valueFrom:
+            secretKeyRef:
+              name: licensing-server-secrets
+              key: SMTP_FROM_NAME
         - name: BRUNO_GLOBAL_LICENSE_SERVER_URL
           valueFrom:
             secretKeyRef:
@@ -287,6 +305,8 @@ docker run -d \
   -e SMTP_PORT="{{ smtp_port }}" \
   -e SMTP_USER="{{ smtp_user }}" \
   -e SMTP_PASSWORD="{{ smtp_password }}" \
+  -e SMTP_FROM_EMAIL="{{ smtp_from_email }}" \
+  -e SMTP_FROM_NAME="{{ smtp_from_name }}" \
   -e AUTH_JWT_SECRET="{{ random_uuid }}" \
   -e BRUNO_GLOBAL_LICENSE_SERVER_URL="https://license-api.usebruno.com" \
   -e PORT="80" \
@@ -301,6 +321,19 @@ docker run -d \
 ## Email Configuration
 
 The licensing server supports customizable email templates for license activation, deactivation, and OTP-based login.
+
+### Sender Configuration
+
+By default, all emails are sent from `Bruno <notifications@usebruno.com>`. If your organization enforces email authentication policies (SPF, DKIM, DMARC), you may need to send from a domain you control — otherwise emails may be rejected or flagged as spam.
+
+| Variable | Description | Default |
+|---|---|---|
+| `SMTP_FROM_EMAIL` | The "From" email address | `notifications@usebruno.com` |
+| `SMTP_FROM_NAME` | The display name shown to recipients | `Bruno` |
+
+Both variables are optional. If omitted, emails will be sent from the default Bruno address.
+
+---
 
 ### Template Format
 
