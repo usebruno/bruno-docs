@@ -185,6 +185,40 @@ In the Bruno License Portal's SSO Settings, you'll find two fields under "Role M
 **Important**: The role values are case-sensitive. Ensure the values in your IdP's `roles` attribute match exactly with the values you configure in Bruno's Admin Roles or User Roles fields.
 </Warning>
 
+## Just-in-Time (JIT) Provisioning
+
+With SSO enabled, Bruno automatically provisions **standard licensed users** the first time they [activate their license via SSO in the Bruno app](/v2/license-end-users/activate-license#activating-with-sso) — this is known as Just-in-Time (JIT) provisioning. You do not need to create these accounts in advance, and JIT provisioning works without SCIM.
+
+<Info>
+JIT provisioning applies to users who activate their license through the **SSO** option in the Bruno app's *Activate License* screen. It does not apply to signing in to the License Portal website.
+</Info>
+
+### How JIT Provisioning Works
+
+1. In the Bruno app's *Activate License* screen, a user selects **SSO**, enters their email, and signs in with SSO for the first time.
+2. Bruno validates the SAML assertion and checks the `roles` value against your [Role Mapping](#role-mapping).
+3. If the role matches a value in **User Roles**, Bruno automatically creates a standard licensed user account and issues them a license.
+4. On subsequent logins, the existing account is reused (and reactivated if it was previously deactivated).
+
+<Info>
+Users created through JIT provisioning appear in the License Portal's user list with **Added By: System (SSO)**, which distinguishes them from users you add manually.
+</Info>
+
+### JIT Provisioning Does Not Create Admins
+
+JIT provisioning applies to **standard licensed users only**. It does **not** create or grant License Manager Admin access.
+
+A user must already exist as an Admin in the License Portal before they can sign in to the License Manager with SSO. Mapping an IdP role to **Admin Roles** is not sufficient on its own: role mapping controls the access level of users who are *already* provisioned as Admins, but it does not automatically create the Admin account.
+
+To provision Admins, use one of the following:
+
+- **Add them manually** in the License Portal under **Settings → Admins**, then have the user sign in with SSO.
+- **Use SCIM Admin Role Mapping** to provision Admins automatically from your identity provider. See [SCIM Provisioning](../scim-provisioning/overview).
+
+<Warning>
+If an Admin tries to access the License Portal via SSO without first being added under **Settings → Admins** (or provisioned via SCIM), the login will fail even when their IdP role matches your configured Admin Roles. See the [SAML SSO troubleshooting guide](./troubleshooting#2-is-the-user-already-an-admin-in-bruno-license-portal) for details.
+</Warning>
+
 ## License Activation and Access Control
 
 ### License Activation Flow
