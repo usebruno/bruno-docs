@@ -391,8 +391,7 @@
                   "bru-lang/language",
                   "bru-lang/tag-reference",
                   "bru-lang/samples",
-                  "bru-lang/syntax-highlighting",
-                  "bru-lang/bru-to-yaml"
+                  "bru-lang/syntax-highlighting"
                 ]
               },
               {
