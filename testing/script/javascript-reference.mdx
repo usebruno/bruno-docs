@@ -837,7 +837,7 @@ console.log("Response body:", data);
 
 // Extract and store a token from the response
 const token = res.getBody().token;
-bru.setEnvVar("access_token", token, { persist: true });
+bru.setEnvVar("access_token", token);
 ```
 
 ### `res.setBody(body)`
@@ -917,6 +917,8 @@ Here are all available environment-related methods:
 | bru.setGlobalEnvVar(key, value) | Set the Bruno global environment variable.           |
 | bru.hasGlobalEnvVar(key)   | Checks if the global environment variable exists.         |
 | bru.getAllGlobalEnvVars()  | Retrieves all global environment variables as an object.  |
+| bru.deleteGlobalEnvVar(key) | Deletes a specific global environment variable.          |
+| bru.deleteAllGlobalEnvVars() | Deletes all global environment variables.               |
 
 ### `bru.getEnvName()`
 
@@ -940,22 +942,26 @@ const token = bru.getEnvVar("access_token");
 req.setHeader("Authorization", "Bearer " + token);
 ```
 
-### `bru.setEnvVar(key, value, options?)`
+### `bru.setEnvVar(key, value)`
 
-Set the Bruno environment variable. By default, variables are in-memory only; use `{ persist: true }` to save to disk.
+Sets a variable in the currently selected environment. Changes are written back to the environment file on disk by default, so values set by scripts survive the request and persist across app restarts.
 
-**Parameters:** `key` (string), `value` (any), `options.persist` (boolean, optional).
+**Parameters:** `key` (string), `value` (any).
 
 ```javascript
 bru.setEnvVar("sessionId", "temp");
-bru.setEnvVar("apiToken", "12345", { persist: true });
+bru.setEnvVar("apiToken", "12345");
 
 function onResponse(res) {
   let data = res.getBody();
-  bru.setEnvVar("access_token", data.token, { persist: true });
+  bru.setEnvVar("access_token", data.token);
 }
 onResponse(res);
 ```
+
+<Info>
+  The legacy third argument `{ persist: true }` is no longer required — all scripted changes persist by default. Calls that still pass it continue to work for backward compatibility.
+</Info>
 
 ### `bru.hasEnvVar(key)`
 
@@ -971,7 +977,7 @@ if (bru.hasEnvVar("access_token")) {
 
 ### `bru.deleteEnvVar(key)`
 
-Removes a specific variable from the current environment. Changes are in-memory only for the duration of the run unless the environment is re-saved.
+Removes a specific variable from the current environment. Deletions are written back to the environment file on disk so they persist across requests and app restarts.
 
 ```javascript
 // Clean up a short-lived session token after it has been used
@@ -993,7 +999,7 @@ console.log("Environment variables:", allVars);
 Removes every variable from the currently selected environment. Use with caution — this affects all requests in the collection that rely on environment variables.
 
 <Warning>
-  This action clears all variables from the active environment. It cannot be undone within the same run.
+  This action clears all variables from the active environment and writes the change to disk. It cannot be undone within the same run.
 </Warning>
 
 ```javascript
@@ -1043,6 +1049,27 @@ console.log("Global variables:", globalVars);
 // Output: { organizationId: "org_abc123", global_token: "eyJ..." }
 ```
 
+### `bru.deleteGlobalEnvVar(key)`
+
+Removes a specific variable from the active global environment. Deletions are written back to disk so they persist across requests and app restarts.
+
+```javascript
+// Drop a stale global token after rotating credentials
+bru.deleteGlobalEnvVar("global_token");
+```
+
+### `bru.deleteAllGlobalEnvVars()`
+
+Removes every variable from the active global environment.
+
+<Warning>
+  This action clears all variables from the active global environment and writes the change to disk. It cannot be undone within the same run.
+</Warning>
+
+```javascript
+bru.deleteAllGlobalEnvVars();
+```
+
 ## Variables
 
 Bruno provides a comprehensive variable system that allows you to manage and access different types of variables throughout your scripts. Variables are resolved in a specific order of precedence, with runtime variables taking the highest priority.
@@ -1059,6 +1086,10 @@ Here are all available variable-related methods:
 | bru.getCollectionName()      | Retrieves the current collection name.                    |
 | bru.getCollectionVar(key)    | Retrieves the collection-level variable for the key.      |
 | bru.hasCollectionVar(key)    | Checks if a collection variable exists.                   |
+| bru.setCollectionVar(key, value) | Sets a collection-level variable and persists it to disk. |
+| bru.deleteCollectionVar(key) | Deletes a specific collection-level variable.             |
+| bru.deleteAllCollectionVars() | Deletes all collection-level variables.                  |
+| bru.getAllCollectionVars()   | Retrieves all collection-level variables as an object.    |
 | bru.getFolderVar(key)        | Fetches a folder-specific variable by key.                |
 | bru.getRequestVar(key)       | Retrieves the value of a request variable.                |
 | bru.hasVar(key)              | Checks if a variable exists.                              |
@@ -1108,6 +1139,49 @@ if (bru.hasCollectionVar("namespace")) {
 } else {
   console.warn("Collection variable 'namespace' is not set.");
 }
+```
+
+### `bru.setCollectionVar(key, value)`
+
+Sets a collection-level variable. Changes are written back to the collection file (`collection.bru` / `collection.yml`) on disk so values set by scripts survive the request and persist across app restarts.
+
+```javascript
+// Store a base URL discovered at runtime so every subsequent request can reach it
+bru.setCollectionVar("baseUrl", "https://api.staging.example.com");
+
+// Cache a refresh token at the collection scope
+const data = res.getBody();
+bru.setCollectionVar("refresh_token", data.refresh_token);
+```
+
+### `bru.deleteCollectionVar(key)`
+
+Removes a specific variable from the collection. Deletions are written back to the collection file on disk.
+
+```javascript
+bru.deleteCollectionVar("refresh_token");
+```
+
+### `bru.deleteAllCollectionVars()`
+
+Removes every collection-level variable.
+
+<Warning>
+  This action clears all variables from the collection and writes the change to disk. It cannot be undone within the same run.
+</Warning>
+
+```javascript
+bru.deleteAllCollectionVars();
+```
+
+### `bru.getAllCollectionVars()`
+
+Returns an object containing all collection-level variables as key-value pairs.
+
+```javascript
+const collectionVars = bru.getAllCollectionVars();
+console.log("Collection variables:", collectionVars);
+// Output: { baseUrl: "https://api.example.com", namespace: "production" }
 ```
 
 ### `bru.getCollectionName()`
