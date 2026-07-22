@@ -64,17 +64,103 @@ This guide will walk you through setting up SCIM (System for Cross-domain Identi
 
 Your SCIM integration is now complete. You can now begin [assigning users to Bruno](#assign-people-and-groups-to-bruno-in-okta).
 
+## Configure Admin Role Mapping
+
+Admin Role Mapping lets you provision specific Okta users as Bruno License Manager admins. Admins provisioned this way get portal access, do **not** consume a license seat, and do **not** appear in the Users list.
+
+<Info>
+This section is optional. Skip it if you only want to provision regular licensed users.
+</Info>
+
+Unlike Entra ID, Okta has no built-in App Roles concept for custom SCIM apps, so this uses a custom profile attribute instead.
+
+### Add a custom attribute to the Okta user profile
+
+1. Go to **Directory** → **Profile Editor**
+2. Select **Okta** (the default/base user profile, not this app's own profile)
+3. Click **Add Attribute**
+4. Fill in:
+   - **Data type**: `string`
+   - **Display name**: `Bruno License Role`
+   - **Variable name**: `brunoLicenseRole`
+   - **Attribute type**: `Personal`
+5. Click **Save**
+
+![Add custom attribute in Okta Profile Editor](/images/screenshots/sso-scim-management/okta/okta-swa-17.webp)
+
+<Warning>
+Do not check any "define enumerated list of values" / array option when creating this attribute. If it renders as a dropdown instead of a plain text box afterward, it was created as an enum with no options, and any value you set on a user's profile will be silently dropped. It must be a plain free-text string.
+</Warning>
+
+### Add a roles attribute to your Bruno app's profile
+
+1. Go to your Bruno SCIM app → **Provisioning** → **To App**, click **Go to Profile Editor**
+2. Click **Add Attribute**
+3. Fill in:
+   - **Data type**: `string`
+   - **Display name**: `Roles`
+   - **Variable name**: `roles`
+4. Click **Save**
+
+![Add roles attribute to app profile](/images/screenshots/sso-scim-management/okta/okta-swa-18.webp)
+
+<Warning>
+Okta may default this attribute's namespace to something app-specific instead of the base SCIM schema, which causes it to be sent nested (e.g. `"roles": {"roles": "..."}`) instead of as a flat field, and Bruno won't recognize it. If this happens, use the Okta API to set this attribute's `externalNamespace` to `urn:ietf:params:scim:schemas:core:2.0:User` (matching the other built-in attributes like `givenName`), the same namespace already used by attributes such as `givenName` or `locale` on this profile.
+</Warning>
+
+### Map the attribute to the roles field
+
+1. Go to your Bruno SCIM app → **Provisioning** → **To App** → **Attribute Mappings**
+2. Find the `roles` row and click the pencil icon
+3. Set **Attribute value** to **Expression** and enter:
+   ```
+   user.brunoLicenseRole
+   ```
+4. Set **Apply on** to **Create and update**
+5. Click **Save**
+
+![Configure roles attribute mapping expression](/images/screenshots/sso-scim-management/okta/okta-swa-19.webp)
+
+<Warning>
+Use `user.brunoLicenseRole` (global profile), not `appuser.brunoLicenseRole`. Okta blocks same-profile attribute references in expression mappings.
+</Warning>
+
+### Configure Admin Role Mapping in Bruno
+
+1. In the Bruno LM portal, go to **Settings → SCIM → Admin Role Mapping**
+2. Enter the role value(s) that should grant admin access, for example:
+   ```
+   bruno-admin
+   ```
+3. Multiple values are supported comma-separated (e.g. `bruno-admin, admin`). Any match grants admin access.
+4. Values must exactly match what you set on users in Okta (case-sensitive)
+5. Click **Save**
+
+![Configure Admin Role Mapping in Bruno](/images/screenshots/sso-scim-management/okta/okta-swa-20.webp)
+
+### Set the role on users in Okta
+
+For each user you want to provision as a License Manager admin:
+
+1. Go to **Directory → People → [user] → Profile tab → Edit**
+2. Find **Bruno License Role** and set the value to `bruno-admin` (or whatever you configured above)
+3. Click **Save**
+
+![Set Bruno License Role on a user's profile](/images/screenshots/sso-scim-management/okta/okta-swa-21.webp)
+
+Leave **Bruno License Role** empty for users who should be provisioned as regular licensed users.
+
 ## Assign people and groups to Bruno in Okta
 
 1. Under your created Bruno Application, navigate to the **Assignments** tab
 
-2. Select **Assign** and either **Assign to People** or **Assign to Groups** to provision Bruno license keys
+2. Select **Assign** and either **Assign to People** or **Assign to Groups** to provision Bruno license keys. If you [configured Admin Role Mapping](#configure-admin-role-mapping), make sure the assigned user's **Bruno License Role** attribute is set first
 
 ![License portal login](/images/screenshots/sso-scim-management/okta/okta-swa-15.webp)
 
 ![License portal login](/images/screenshots/sso-scim-management/okta/okta-swa-16.webp)
 
-3. Assigned Users will receive an email with their **License Key**
+3. Assigned users with a matching admin role get portal access directly, with no license key or email. All other assigned users receive an email with their **License Key**
 
 ![License portal login](/images/screenshots/sso-scim-management/okta/okta-swa-12.webp)
 
