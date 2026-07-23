@@ -1,0 +1,658 @@
+---
+title: "Self Host Licensing"
+sidebarTitle: "Self Host Licensing"
+hidden: true
+---
+
+This document provides a step-by-step guide to installing and configuring the Bruno Licensing Server on your own infrastructure. The server runs as a Docker container and requires a MongoDB instance for data storage and SMTP credentials for sending email notifications.
+
+## Prerequisites
+
+- **Docker** installed on your server — [Install Docker](https://docs.docker.com/get-docker/)
+- Access to a **MongoDB** instance (on-premise or cloud-hosted, e.g., [MongoDB Atlas](https://www.mongodb.com/atlas))
+- **SMTP credentials** from any email provider (SendGrid, Gmail, custom SMTP, etc.)
+
+## System Requirements
+
+| Component | Requirement |
+|---|---|
+| MongoDB Community Server | v6 or greater |
+| MongoDB Storage | 4 GB or greater |
+| Docker Container Memory | 2 GB or greater |
+
+## Architecture Diagram
+
+![Architecture Diagram](/images/screenshots/self-host-guide/01-flow-diagram.webp)
+
+---
+
+## Setup Methods
+
+The licensing server can be deployed in four ways. Choose the approach that fits your infrastructure:
+
+1. [Running the Docker image directly](#1-setup-by-running-the-docker-image)
+2. [Ansible](#2-setup-using-ansible)
+3. [Docker Compose](#3-setup-using-docker-compose)
+4. [Kubernetes](#4-setup-using-kubernetes)
+
+---
+
+### 1. Setup by Running the Docker Image
+
+**Pull the image:**
+
+```bash
+docker pull public.ecr.aws/e6d0f8t6/bruno-hosted-license-server
+```
+
+**Run the container:**
+
+```bash
+docker run -d \
+  -e MONGODB_URI="{{ mongodb_uri }}" \
+  -e SMTP_HOST="{{ smtp_host }}" \
+  -e SMTP_PORT="{{ smtp_port }}" \
+  -e SMTP_USER="{{ smtp_user }}" \
+  -e SMTP_PASSWORD="{{ smtp_password }}" \
+  -e AUTH_JWT_SECRET="{{ random_uuid }}" \
+  -e BRUNO_GLOBAL_LICENSE_SERVER_URL="https://license-api.usebruno.com" \
+  -e PORT="80" \
+  -p 8080:80 \
+  public.ecr.aws/e6d0f8t6/bruno-hosted-license-server
+```
+
+---
+
+### 2. Setup Using Ansible
+
+```yaml
+- hosts: all
+  become: true
+  tasks:
+    - name: Pull Docker image for licensing server
+      docker_image:
+        name: public.ecr.aws/e6d0f8t6/bruno-hosted-license-server
+        source: pull
+
+    - name: Run the licensing server container
+      docker_container:
+        name: licensing_server
+        image: public.ecr.aws/e6d0f8t6/bruno-hosted-license-server
+        state: started
+        restart_policy: always
+        ports:
+          - "8080:8080"
+        env:
+          MONGODB_URI: "{{ mongodb_uri }}"
+          SMTP_HOST: "{{ smtp_host }}"
+          SMTP_PORT: "{{ smtp_port }}"
+          SMTP_USER: "{{ smtp_user }}"
+          SMTP_PASSWORD: "{{ smtp_pass }}"
+          AUTH_JWT_SECRET: "{{ random_uuid }}"
+          BRUNO_GLOBAL_LICENSE_SERVER_URL: "https://license-api.usebruno.com"
+          PORT: 80
+```
+
+---
+
+### 3. Setup Using Docker Compose
+
+**`docker-compose.yml`:**
+
+```yaml
+version: '3'
+services:
+  licensing-server:
+    image: public.ecr.aws/e6d0f8t6/bruno-hosted-license-server
+    ports:
+      - "8080:80"
+    environment:
+      MONGODB_URI: "your_mongodb_uri"
+      SMTP_HOST: "your_smtp_host"
+      SMTP_PORT: "your_smtp_port"
+      SMTP_USER: "your_smtp_user"
+      SMTP_PASSWORD: "your_smtp_password"
+      AUTH_JWT_SECRET: "{{ random_uuid }}"
+      BRUNO_GLOBAL_LICENSE_SERVER_URL: "https://license-api.usebruno.com"
+      PORT: 80
+```
+
+**Start the service:**
+
+```bash
+docker-compose up -d
+```
+
+---
+
+### 4. Setup Using Kubernetes
+
+**Create the secret:**
+
+```bash
+kubectl create secret generic licensing-server-secrets \
+  --from-literal=MONGODB_URI="your_mongodb_uri" \
+  --from-literal=SMTP_HOST="your_smtp_host" \
+  --from-literal=SMTP_PORT="your_smtp_port" \
+  --from-literal=SMTP_USER="your_smtp_user" \
+  --from-literal=SMTP_PASSWORD="your_smtp_password" \
+  --from-literal=BRUNO_GLOBAL_LICENSE_SERVER_URL="https://license-api.usebruno.com" \
+  --from-literal=AUTH_JWT_SECRET="random_uuid"
+```
+
+**`licensing-server.yaml` — Deployment and Service:**
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: licensing-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: licensing-server
+  template:
+    metadata:
+      labels:
+        app: licensing-server
+    spec:
+      containers:
+      - name: licensing-server
+        image: usebruno/hosted-licensing-server
+        ports:
+        - containerPort: 8080
+        env:
+        - name: PORT
+          value: "80"
+        - name: MONGODB_URI
+          valueFrom:
+            secretKeyRef:
+              name: licensing-server-secrets
+              key: MONGODB_URI
+        - name: SMTP_HOST
+          valueFrom:
+            secretKeyRef:
+              name: licensing-server-secrets
+              key: SMTP_HOST
+        - name: SMTP_PORT
+          valueFrom:
+            secretKeyRef:
+              name: licensing-server-secrets
+              key: SMTP_PORT
+        - name: SMTP_USER
+          valueFrom:
+            secretKeyRef:
+              name: licensing-server-secrets
+              key: SMTP_USER
+        - name: SMTP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: licensing-server-secrets
+              key: SMTP_PASS
+        - name: BRUNO_GLOBAL_LICENSE_SERVER_URL
+          valueFrom:
+            secretKeyRef:
+              name: licensing-server-secrets
+              key: BRUNO_GLOBAL_LICENSE_SERVER_URL
+        - name: AUTH_JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: licensing-server-secrets
+              key: AUTH_JWT_SECRET
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: licensing-server
+spec:
+  selector:
+    app: licensing-server
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+```
+
+**Apply the manifest:**
+
+```bash
+kubectl apply -f licensing-server.yaml
+```
+
+---
+
+## Network Ports & Firewall Rules
+
+| System / URL | Port | Description |
+|---|---|---|
+| `https://license-api.usebruno.com/` | 443 | Required for the on-premises server to retrieve keys from the Bruno Global Licensing Server. |
+| On-Prem License Server | 443 | Ensure port 443 is open on the machine hosting the on-premises server. |
+| On-Prem MongoDB Server | 27017 | The on-premises server must be able to communicate with the MongoDB instance. |
+
+---
+
+## Proxy Settings
+
+Pass the following environment variables to configure proxy settings:
+
+| Variable | Value |
+|---|---|
+| `PROXY_ENABLED` | `true` |
+| `HTTP_PROXY` | HTTP proxy URL |
+| `HTTPS_PROXY` | HTTPS proxy URL |
+
+---
+
+## Troubleshooting SSL Issues
+
+The following environment variables disable SSL validation when connecting to the Bruno Global Licensing Server.
+
+<Warning>
+Use these settings only to diagnose SSL-related issues. Do not use them in a production environment.
+</Warning>
+
+| Variable | Value |
+|---|---|
+| `BRUNO_GLOBAL_LICENSE_SERVER_DISABLE_SSL` | `true` |
+| `NODE_TLS_REJECT_UNAUTHORIZED` | `1` |
+
+---
+
+## SSL Configuration
+
+The licensing server supports SSL using either a self-signed certificate or a CA-signed certificate.
+
+**Supported formats:**
+- PFX format (`.p12`)
+- CRT + KEY format (`.crt` and `.key`)
+
+`SSL_KEY_PASSPHRASE` is optional and only required if the certificate is encrypted.
+
+**Expected file structure:**
+
+```
+ssl/
+├── certificate.crt
+├── certificate.key
+└── certificate.p12
+```
+
+**Run the container with SSL enabled:**
+
+```bash
+docker run -d \
+  -e MONGODB_URI="{{ mongodb_uri }}" \
+  -e SMTP_HOST="{{ smtp_host }}" \
+  -e SMTP_PORT="{{ smtp_port }}" \
+  -e SMTP_USER="{{ smtp_user }}" \
+  -e SMTP_PASSWORD="{{ smtp_password }}" \
+  -e AUTH_JWT_SECRET="{{ random_uuid }}" \
+  -e BRUNO_GLOBAL_LICENSE_SERVER_URL="https://license-api.usebruno.com" \
+  -e PORT="80" \
+  -p 8080:80 \
+  -v ~/ssl:/opt/license-service/ssl \
+  -e SSL_KEY_PASSPHRASE="secret" \
+  public.ecr.aws/e6d0f8t6/bruno-hosted-license-server
+```
+
+---
+
+## Email Configuration
+
+The licensing server supports customizable email templates for license activation, deactivation, and OTP-based login.
+
+### Template Format
+
+Templates are written in **TOML** format with two required fields:
+
+| Field | Description |
+|---|---|
+| `subject` | Email subject line (supports variables) |
+| `body` | Full HTML body of the email (supports variables) |
+
+**Example template:**
+
+```toml
+subject = "Your Bruno License Key - {{orgName}}"
+body = '''
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bruno License Key</title>
+</head>
+<body>
+  <h1>Welcome to {{orgName}}!</h1>
+  <p>Hello {{name}},</p>
+  <p>Your Bruno license key is ready:</p>
+  <h2>{{licenseKey}}</h2>
+  <p>Please keep this license key secure and do not share it with anyone.</p>
+  <p>If you have any questions, please contact our support team.</p>
+  <hr>
+  <p><small>&copy; {{currentYear}} {{orgName}}. Powered by Bruno.</small></p>
+</body>
+</html>
+'''
+```
+
+### Available Template Variables
+
+| Variable | Description | Example |
+|---|---|---|
+| `{{licenseKey}}` | The generated license key | `XXXX-XXXX-XXXX-XXXX` |
+| `{{orgName}}` | Organization name | `Your Corporation` |
+| `{{email}}` | User's email address | `user@example.com` |
+| `{{name}}` | User's name | `John Doe` |
+| `{{currentYear}}` | Current year | `2025` |
+| `{{otp}}` | One-Time Password for login (OTP emails only) | `123456` |
+
+### Template File Structure
+
+Mount your custom templates using the following structure:
+
+```
+templates/
+├── license-activation.toml
+├── license-deactivation.toml
+└── otp-email.toml
+```
+
+| Purpose | File Name |
+|---|---|
+| License Activation | `license-activation.toml` |
+| License Deactivation | `license-deactivation.toml` |
+| OTP Login Email | `otp-email.toml` |
+
+**Mount templates when starting the container:**
+
+```bash
+docker run -d \
+  -e MONGODB_URI="{{ mongodb_uri }}" \
+  -e SMTP_HOST="{{ smtp_host }}" \
+  -e SMTP_PORT="{{ smtp_port }}" \
+  -e SMTP_USER="{{ smtp_user }}" \
+  -e SMTP_PASSWORD="{{ smtp_password }}" \
+  -e AUTH_JWT_SECRET="{{ random_uuid }}" \
+  -e BRUNO_GLOBAL_LICENSE_SERVER_URL="https://license-api.usebruno.com" \
+  -e PORT="80" \
+  -p 8080:80 \
+  -v ~/templates:/opt/license-service/templates \
+  public.ecr.aws/e6d0f8t6/bruno-hosted-license-server
+```
+
+### Template Fallback Behavior
+
+If a custom template is missing or cannot be parsed, the server automatically falls back to the default Bruno template for that notification type. Template usage and fallback events are logged at startup and runtime.
+
+### Built-In Template Examples
+
+<AccordionGroup>
+
+<Accordion title="License Activation (license-activation.toml)">
+
+```toml
+subject = "Welcome to {{orgName}} - Your Bruno License Key"
+body = '''
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bruno License Key</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .header { background-color: #d97706; color: white; padding: 10px; text-align: center; border-top-left-radius: 10px; border-top-right-radius: 10px; }
+    .content { background-color: #f9f9f9; border: 1px solid #ddd; padding: 20px; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; }
+    .license-key { font-size: 24px; font-weight: bold; margin: 20px 0; letter-spacing: 5px; background-color: #e5e7eb; padding: 15px; border-radius: 5px; text-align: center; }
+    .footer { text-align: center; margin-top: 20px; font-size: 12px; color: #777; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header"><h1>Welcome to {{orgName}}!</h1></div>
+    <div class="content">
+      <p>Hello {{name}},</p>
+      <p>Your Bruno license key is ready:</p>
+      <div class="license-key">{{licenseKey}}</div>
+      <p>Please keep this license key secure and do not share it with anyone.</p>
+      <p>If you have any questions, please contact our support team.</p>
+    </div>
+    <div class="footer"><p><small>&copy; {{currentYear}} {{orgName}}. Powered by Bruno.</small></p></div>
+  </div>
+</body>
+</html>
+'''
+```
+
+</Accordion>
+
+<Accordion title="License Deactivation (license-deactivation.toml)">
+
+```toml
+subject = "Bruno License Deactivation Notice"
+body = '''
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bruno License Deactivation</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .header { background-color: #d97706; color: white; padding: 10px; text-align: center; border-top-left-radius: 10px; border-top-right-radius: 10px; }
+    .content { background-color: #f9f9f9; border: 1px solid #ddd; padding: 20px; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; }
+    .footer { text-align: center; margin-top: 20px; font-size: 12px; color: #777; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header"><h1>License Deactivation Notice</h1></div>
+    <div class="content">
+      <p>Your Bruno license has been deactivated.</p>
+      <p>This means you will no longer have access to Bruno's premium features.</p>
+      <p>If you believe this was a mistake, please contact your License Administrator or software licensing team.</p>
+    </div>
+    <div class="footer"><p>&copy; {{currentYear}} Bruno Software Inc. All rights reserved.</p></div>
+  </div>
+</body>
+</html>
+'''
+```
+
+</Accordion>
+
+<Accordion title="OTP Login (otp-email.toml)">
+
+```toml
+subject = "Bruno License Manager - Login OTP"
+body = '''
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bruno Login OTP</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .header { background-color: #d97706; color: white; padding: 10px; text-align: center; border-top-left-radius: 10px; border-top-right-radius: 10px; }
+    .content { background-color: #f9f9f9; border: 1px solid #ddd; padding: 20px; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; }
+    .otp { font-size: 24px; font-weight: bold; text-align: center; margin: 20px 0; letter-spacing: 5px; }
+    .footer { text-align: center; margin-top: 20px; font-size: 12px; color: #777; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header"><h1>Bruno Login OTP</h1></div>
+    <div class="content">
+      <p>Your One-Time Password (OTP) for logging into Bruno License Manager is:</p>
+      <div class="otp">{{otp}}</div>
+      <p>This OTP is valid for 10 minutes. Please do not share it with anyone.</p>
+      <p>If you didn't request this OTP, please ignore this email.</p>
+    </div>
+    <div class="footer"><p>&copy; {{currentYear}} Bruno Software Inc. All rights reserved.</p></div>
+  </div>
+</body>
+</html>
+'''
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+### Troubleshooting Template Issues
+
+**Template not being used:**
+- Verify the file exists at `/opt/license-service/templates/[template-name].toml`
+- Check file permissions (must be readable by the container)
+- Confirm the server logs show the template was loaded
+
+**Template rendering errors:**
+- Verify valid TOML syntax
+- Ensure both `subject` and `body` fields are present
+- Use Mustache-style variables (`{{variable}}`), not `${variable}`
+
+**Common issues:**
+- Missing or misspelled `subject`/`body` fields
+- Incorrect variable formatting
+- Invalid HTML or character encoding
+- Missing read permissions on the template file
+
+---
+
+## SSO for License Admins
+
+The licensing server supports Single Sign-On (SSO) via **SAML**, allowing License Administrators to log in through your organization's Identity Provider (IdP).
+
+### Environment Variables
+
+| Variable | Description | Example |
+|---|---|---|
+| `SERVER_URL` | The URL where the server is hosted | `https://bruno.internal` |
+| `SSO_ENABLED` | Enable or disable SSO | `true` |
+| `SSO_SAML_SELF_ISSUER_ID` | The SP issuer ID (the server itself acts as the SP) | `bruno-license-manager` |
+| `SSO_SAML_IDP_CERTIFICATE` | IdP certificate to validate the SAMLResponse signature (from IdP metadata) | `MIICnTCCAYUC...` |
+| `SSO_SAML_IDP_LOGIN_URL` | The IdP login URL where AuthNRequest is sent | `https://idp.internal/realms/testidp/protocol/saml` |
+| `SSO_ADMIN_ROLES` | Roles assigned to License Admins in the IdP | `bruno-license-admin` |
+| `SSO_USER_ROLES` | Roles assigned to Users in the IdP | `bruno-license-user` |
+| `SSO_SESSION_TIMEOUT_SECONDS` | Session timeout in seconds (default: `3600`) | `7200` |
+
+### Domain Discovery
+
+Bruno supports domain discovery, which automatically routes users to your organization's license server based on their email domain. To enable this, send us the following details:
+
+- **Domain** — e.g., `company.com` (as in `john@company.com`)
+- **Internal License Server URL** — e.g., `https://bruno.internal`
+
+### User Workflow for License Activation via SSO
+
+1. Open the Bruno app, select the **SSO** option, and enter your work email.
+
+![Select SSO and enter work email](/images/screenshots/self-host-guide/02-select-sso.webp)
+
+2. You will be redirected to the SSO login page. If `SSO_ENABLED=true`, a **Login with SSO** button will appear.
+
+![SSO login page with Login with SSO button](/images/screenshots/self-host-guide/03-sso-login-button.webp)
+
+3. After logging in through your IdP, users with the `bruno-license-user` role will be granted access and see the activation confirmation page.
+
+![Successful license activation confirmation](/images/screenshots/self-host-guide/04-successfull-activation.webp)
+
+---
+
+## Changelog
+
+Release history for the Bruno Self-Hosted Licensing Server.
+
+### 1.18.0 <sub>(19 June 2026)</sub>
+
+- Track user provisioning across the User List, User CSV export, and Audit logs
+- Fixed last active value not populating correctly in user CSV export
+
+### 1.17.0 <sub>(30 March 2026)</sub>
+
+- Display the app version in the admin dashboard
+
+### 1.16.2 <sub>(2 March 2026)</sub>
+
+- Fixed issue where license activation details were not persisted after restarting the app
+
+### 1.16.1 <sub>(19 February 2026)</sub>
+
+- Fixed license activation issue
+
+### 1.16.0 <sub>(6 February 2026)</sub>
+
+- Added user activation logs
+- Added dynamic version logs
+- Fixed issue with Docker image updates for default templates
+
+### 1.15.2 <sub>(16 January 2026)</sub>
+
+- Fixed issue with Docker image updates
+
+### 1.15.1 <sub>(14 January 2026)</sub>
+
+- Fixed session handling for SSO
+
+### 1.15.0 <sub>(9 January 2026)</sub>
+
+- Added refresh option for the license information
+
+### 1.14.0 <sub>(1 January 2026)</sub>
+
+- Added CSV export support for user data
+
+### 1.13.0 <sub>(4 November 2025)</sub>
+
+- Added SCIM support in SSO integration for automated user provisioning and enhanced identity management
+
+### 1.12.1 <sub>(17 October 2025)</sub>
+
+- Fixed duplicate license activation page after successful login
+
+### 1.12.0 <sub>(7 August 2025)</sub>
+
+- Support for customizing License Activation, Deactivation, and OTP emails
+
+### 1.11.0 <sub>(8 July 2025)</sub>
+
+- Support for in-app license activation using SSO
+- Users are now notified via email upon deactivation
+
+### 1.10.1 <sub>(10 June 2025)</sub>
+
+- Parse Group/Role attributes with list of values (SSO)
+
+### 1.10.0 <sub>(29 May 2025)</sub>
+
+- License keys are masked in the UI
+- Seat usage is now displayed in the UI
+
+### 1.9.3 <sub>(22 May 2025)</sub>
+
+- Retrieve role info from Groups attribute and validate accordingly (SAML, SSO)
+
+### 1.9.2 <sub>(9 May 2025)</sub>
+
+- Made Assertion signature non-mandatory (Response signature is required) for SSO
+
+### 1.9.1 <sub>(17 April 2025)</sub>
+
+- Fixed issue related to duplicate user during upload
+
+### 1.9.0 <sub>(4 April 2025)</sub>
+
+- SSO support for License Admins
+
+### 1.8.0 <sub>(28 March 2025)</sub>
+
+- SSL certificate configuration support
+
+### 1.7.0 <sub>(26 November 2024)</sub>
+
+- Status API — `/api/v1/status`

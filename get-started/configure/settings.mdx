@@ -2,26 +2,19 @@
 title: "Settings"
 ---
 
-You can customize Bruno settings according to your preferences. Bruno offers a variety of settings that can be tailored to suit your needs. Key settings include:
-
-- [General](#general)
-- [Themes](#themes)
-- [Display](#display)
-- [Proxy](#proxy)
-- [License](#license)
-- [Keybindings](#keybindings)
-- [Secrets](#secrets)
-- [Support](#support)
-- [About](#about)
-- [Telemetry](#telemetry)
+You can customize Bruno settings according to your preferences. Bruno offers a variety of settings that can be tailored to suit your needs.
 
 These are the core settings that you can adjust to optimize your Bruno experience.
 
 ## General
 
-The General settings include options for SSL/TLS, Custom CA certificates, and Cookies. You can customize how cookies are handled by choosing to store and send them automatically, or simply uncheck the box if you prefer not to store cookies.
+The General settings include options for SSL/TLS, Custom CA certificates, Auto save, default collection folder and Cookies. 
 
-![general-settings](/images/screenshots/get-started/config/settings/general-settings.webp)
+<Tip>
+Bruno store all your collections at `/users/your-username/documents/bruno` by default on your filesystem. You can change this location from the General tab in Preferences to point to any folder that suits your workflow.
+</Tip>
+
+![settings](/images/screenshots/v4/preferences/settings.webp)
 
 ## Themes
 
@@ -67,13 +60,35 @@ Click on **Reset Default** button to reset all keybindings to their default valu
 
 ![keybindings](/images/screenshots/get-started/config/settings/key-settings.webp)
 
-## Secrets
+## Secrets Manager
 
 There are three primary ways to manage secrets in Bruno, which you can learn about in the [Secret Management Overview](/secrets-management/overview).
 
 This setting controls the integration with a Vault for secret management, which is available in Bruno **Ultimate Edition**.
 
 ![vault-secrets](/images/screenshots/get-started/config/settings/vault-server.webp)
+
+## Git Providers
+
+Connect Bruno to your Git hosting service to enable in-app repository access, cloning, and collaboration workflows. See the [Git Providers](/git-providers/overview) guide for setup instructions for each supported provider.
+
+![git-providers](/images/screenshots/v4/preferences/git-providers.webp)
+
+## AI Integration
+
+Configure AI settings for Bruno's native AI features and external agent integrations. You can set your preferred AI provider, API key, and model from this tab. See the [AI Agents](/agents/introduction) guide for more details.
+
+![ai-settings](/images/screenshots/v4/preferences/ai.webp)
+
+## Cache
+
+<Note>
+  Cache is available in Bruno **4.0.0** or higher as a Beta feature.
+</Note>
+
+Control how Bruno caches data locally. You can view the current cache size and clear it from this tab to free up disk space or resolve stale data issues.
+
+![cache-settings](/images/screenshots/v4/preferences/cache.webp)
 
 ## Support
 

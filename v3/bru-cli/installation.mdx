@@ -1,0 +1,44 @@
+---
+title: "Installation"
+---
+
+<Callout emoji="">
+  Make sure you have Node.js installed on your local system. It is recommended to use the latest LTS version (Node 18 or higher). 
+</Callout>
+
+To install the Bruno CLI, use the node package manager of your choice:
+
+<Tabs>
+  <Tab title="pnpm">
+    ### Using pnpm
+
+    ```bash
+    pnpm install -g @usebruno/cli
+    ```
+  </Tab>
+  <Tab title="npm">
+    ### Using npm
+
+    ```bash
+    npm install -g @usebruno/cli
+    ```
+  </Tab>
+  <Tab title="yarn">
+    ### Using yarn
+
+    ```bash
+    yarn global add @usebruno/cli
+    ```
+  </Tab>
+</Tabs>
+For more details, visit the official [NPM Page for Bruno CLI <strong><sup>↗</sup></strong>](https://www.npmjs.com/package/@usebruno/cli)
+
+## Docker
+
+If you prefer not to install Node.js on the host, official Docker images are published for the Bruno CLI:
+
+```bash
+docker pull usebruno/cli:latest
+```
+
+See [Docker](/bru-cli/docker) for variants, tags, and usage examples.

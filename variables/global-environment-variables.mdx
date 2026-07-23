@@ -36,6 +36,7 @@ variables:
     enabled: true
     secret: false
     type: text
+    description: Base URL for the local development server
 ```
 
 This structure provides several benefits:
@@ -60,16 +61,16 @@ In earlier versions, global environments are stored in Bruno's application data 
 
 ![Environment Variables location](/images/screenshots/variables/select-env-name.webp)
 
-5. Add a variable by specifying the **Name** and **Value**.
+5. Add a variable by specifying the **Name**, **Value**, and an optional **Description** for what the variable represents.
 
-![Environment Variables location](/images/screenshots/variables/create-env-key-value-pair.webp)
+![Environment Variables location](/images/screenshots/v4/secret-variables/global-environment.webp)
 
 6. Click **Save**.
 
 Your global environment variable is now created and can be accessed across your workspace.
 
 <Warning>
-  You can click the secret checkbox to hide the values of variables while hovering over them. Secret values are stored securely and are not saved to the environment file.
+  Starting from v4.0.0, all secret variable will be displayed in a separate tab to avoid confusion between normal and secret vars. Secret values are stored securely and are not saved to the environment file.
 </Warning>
 
 ## Using Global Environment Variables

@@ -1,0 +1,269 @@
+---
+title: API Reference
+sidebarTitle: API Reference
+description: Complete reference for the bru.ctx object available inside every Bruno App.
+---
+
+Before your App code runs, Bruno injects a global `window.bru` into the guest page. All interaction with Bruno happens through `bru.ctx`.
+
+```
+Your App
+    │
+  bru.ctx
+    │
+  Bruno
+```
+
+Instead of using `fetch()` directly, your App calls `bru.ctx.submitRequest()` or `bru.ctx.runRequest()`. Bruno then interpolates variables, runs pre/post scripts, executes assertions and tests, records the timeline, and updates the response pane — exactly as if you pressed **Send**.
+
+<Warning>
+  `bru.ctx` data arrives **asynchronously** after page load. Reading `bru.ctx.http.response`, `bru.ctx.variables.resolved`, or any other state field at the top level or inside `DOMContentLoaded` returns `null` or empty values.
+
+  Always do the first render inside `bru.ctx.onInit`. React to later changes via the `on*Change` callbacks.
+</Warning>
+
+## Shared surface
+
+These fields and methods are available in **both** request-level and collection-level Apps.
+
+| Field | Type | Description |
+|---|---|---|
+| `bru.ctx.theme` | `{ name, mode, config }` | `mode` is `'light'` \| `'dark'`, also mirrored as a `light` / `dark` class on `document.body`. `config` is the full resolved theme object (colors, tokens, etc.). |
+| `bru.ctx.variables.resolved` | `Record<string, any>` | Merged, read-only snapshot of all variables: global env → active env → collection vars → runtime vars (later keys win). |
+| `bru.ctx.variables.runtime.set(name, value)` | `function` | Persists a runtime variable on the active collection for the session. Same scope as `bru.setVar` in scripts. |
+| `bru.ctx.log(...args)` | `function` | Logs to the App's own console and forwards to Bruno's host console as `[app] …`. |
+| `bru.ctx.onInit` | `(bru) => void` | Assigned by your code. Called once when the initial state arrives. The argument is `bru` (not `ctx`) — access state via `bru.ctx.*` inside the callback. |
+| `bru.ctx.onThemeChange` | `(theme) => void` | Assigned by your code. Called when the theme changes. |
+| `bru.ctx.onVariablesChange` | `(variables) => void` | Assigned by your code. Called when any merged variable changes. |
+
+### Reading theme
+
+```js
+// Check light/dark
+const isDark = bru.ctx.theme.mode === 'dark';
+
+// Read a specific token
+const primaryColor = bru.ctx.theme.config.colors.primary;
+
+// Or use the body class added automatically
+document.body.classList.contains('dark'); // true in dark mode
+```
+
+### Reading variables
+
+```js
+bru.ctx.onInit = () => {
+  const baseUrl = bru.ctx.variables.resolved['baseUrl'];
+  console.log('Base URL:', baseUrl);
+};
+```
+
+### Setting a runtime variable
+
+```js
+bru.ctx.variables.runtime.set('token', loginRes.data.token);
+// Now {{token}} resolves in all subsequent requests
+```
+
+---
+
+## Request-level App
+
+These fields are **only available on request-level Apps**. They do not exist on collection Apps.
+
+| Field | Type | Description |
+|---|---|---|
+| `bru.ctx.http.response` | `Response \| null` | The latest response for this request, from any source (Send button, runner, or the App itself). |
+| `bru.ctx.http.onResponseChange` | `(response) => void` | Assigned by your code. Fired whenever a new response arrives. |
+| `bru.ctx.assertions` | `Assertion[]` | Results of the latest assertion run for this request. |
+| `bru.ctx.tests` | `Test[]` | Results of the latest test run for this request. |
+| `bru.ctx.onAssertionsChange` | `(assertions) => void` | Assigned by your code. Fired when assertion results update. |
+| `bru.ctx.onTestsChange` | `(tests) => void` | Assigned by your code. Fired when test results update. |
+| `bru.ctx.submitRequest(options?)` | `(options?) => Promise<Response>` | Sends the parent request through the full Bruno pipeline. See [Overrides](#overrides). |
+
+### Sending the parent request
+
+```js
+// Simple send
+const res = await bru.ctx.submitRequest();
+console.log(res.status, res.data);
+
+// Send with runtime variable overrides
+const res = await bru.ctx.submitRequest({
+  runtimeVariables: { userId: '42' }
+});
+```
+
+> The request must reference `{{userId}}` in its URL, body, params, or headers. Bruno interpolates the variable — it does not search-and-replace literal strings.
+
+### Reacting to responses
+
+```js
+bru.ctx.onInit = () => {
+  if (bru.ctx.http.response) render(bru.ctx.http.response);
+};
+
+bru.ctx.http.onResponseChange = (res) => render(res);
+```
+
+### Reading test results
+
+```js
+bru.ctx.onTestsChange = (tests) => {
+  tests.forEach(t => console.log(t.status, t.description));
+  // t.status is 'pass' or 'fail'
+};
+```
+
+---
+
+## Collection-level App
+
+These fields are **only available on collection-level Apps**. They do not exist on request Apps.
+
+| Field | Type | Description |
+|---|---|---|
+| `bru.ctx.collection` | `{ name, pathname } \| null` | Metadata for the collection the App belongs to. |
+| `bru.ctx.onCollectionChange` | `(collection) => void` | Assigned by your code. Fired when collection metadata changes. |
+| `bru.ctx.listRequests()` | `() => Promise<RequestSummary[]>` | Returns every HTTP/GraphQL/gRPC/WebSocket request in the collection. Folder Apps also see the whole collection, not just their folder. |
+| `bru.ctx.runRequest(pathname, options?)` | `(pathname, options?) => Promise<Response>` | Runs any listed request by its pathname. See [Overrides](#overrides). |
+
+### Listing requests
+
+```js
+bru.ctx.onInit = async () => {
+  const requests = await bru.ctx.listRequests();
+  requests.forEach(r => console.log(r.method, r.name, r.pathname));
+};
+```
+
+### Running a specific request
+
+```js
+const requests = await bru.ctx.listRequests();
+const loginReq = requests.find(r => r.name === 'Login');
+
+const res = await bru.ctx.runRequest(loginReq.pathname, {
+  runtimeVariables: { email: 'user@example.com', password: 'secret' }
+});
+```
+
+---
+
+## Types
+
+### Response
+
+```ts
+type Response = {
+  status:     number | null,
+  statusText: string | null,
+  data:       any,                      // parsed JSON body, or raw string
+  headers:    Record<string, string> | null,
+  duration:   number | null,            // milliseconds
+  size:       number | null             // bytes
+}
+```
+
+### RequestSummary
+
+```ts
+type RequestSummary = {
+  uid:      string,
+  name:     string,
+  pathname: string,   // absolute filesystem path — stable unless the file is moved
+  type:     string,   // 'http' | 'graphql' | 'grpc' | 'ws'
+  method:   string,   // 'GET' | 'POST' | … (empty for non-HTTP types)
+  url:      string
+}
+```
+
+### Assertion
+
+```ts
+type Assertion = {
+  uid:         string,
+  name:        string,
+  description: string,
+  status:      'pass' | 'fail',
+  error?:      string
+}
+```
+
+### Test
+
+```ts
+type Test = {
+  uid:         string,
+  description: string,
+  status:      'pass' | 'fail',
+  error?:      string
+}
+```
+
+---
+
+## Overrides
+
+Both `submitRequest` and `runRequest` accept an optional `options` object:
+
+```ts
+{
+  runtimeVariables: {
+    key: 'value',
+    // …
+  }
+}
+```
+
+**How overrides work:**
+
+- Values are injected as ephemeral runtime variables for that **single send only**.
+- They take precedence over all other variable scopes (global env, active env, collection vars, persistent runtime vars).
+- The request must reference them using `{{name}}` syntax — Bruno interpolates the variable at runtime. Hard-coded literal strings in the request body are not matched or replaced.
+- Overrides do **not** persist. To persist a value across requests, use `bru.ctx.variables.runtime.set(name, value)`.
+
+---
+
+## Notes & gotchas
+
+**`bru.ctx.theme` is an object, not a string.**
+Use `bru.ctx.theme.mode` for the light/dark switch. The mode is also mirrored as a `light` / `dark` class on `document.body`.
+
+**`onInit` receives `bru`, not `ctx`.**
+The callback signature is `(bru) => void`. Access all state as `bru.ctx.*` inside it.
+
+```js
+// Correct
+bru.ctx.onInit = (bru) => {
+  console.log(bru.ctx.variables.resolved);
+};
+
+// Also works (bru is the same global)
+bru.ctx.onInit = () => {
+  console.log(bru.ctx.variables.resolved);
+};
+```
+
+**Overrides are nested under `runtimeVariables`.**
+Flat top-level keys on the options object are ignored.
+
+```js
+// Correct
+bru.ctx.submitRequest({ runtimeVariables: { id: '1' } });
+
+// Wrong — id is silently ignored
+bru.ctx.submitRequest({ id: '1' });
+```
+
+**Pathnames are absolute filesystem paths.**
+`listRequests` returns paths like `/Users/me/collections/myapi/users/get-user.bru`. They are stable as long as the file is not moved or renamed.
+
+**No `bru.ctx.http` or `bru.ctx.submitRequest` on collection Apps.**
+Those fields are request-level only. Accessing them on a collection App returns `undefined`.
+
+**No `bru.ctx.listRequests` or `bru.ctx.runRequest` on request Apps.**
+Those methods are collection-level only.
+
+**Variable precedence.**
+`bru.ctx.variables.runtime.set` and `runtimeVariables` overrides both write to the runtime scope, which sits at the top of Bruno's precedence chain: global env → active env → collection vars → runtime vars.

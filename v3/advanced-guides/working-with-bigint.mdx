@@ -1,0 +1,14 @@
+---
+title: "Working with BigInt"
+---
+
+When your response data contains `BigInt`, the parsed value may become corrupted because Bruno parses the response data by default, which can lead to a loss of fidelity.
+This occurs because `JSON.parse()` does not handle `BigInt` values correctly by default.
+
+However, if you need access to the raw response data (for example, if it contains `BigInt`), you can bypass the parsing step.
+
+To prevent automatic parsing and work directly with the raw response data, add the below expression to the `pre-request` script.
+
+```js
+req.disableParsingResponseJson();
+```

@@ -26,7 +26,7 @@ Below is an example folder structure for your collection:
     </Tree.Folder>
     <Tree.File name=".env" />
     <Tree.File name=".gitignore" />
-    <Tree.File name="bruno.json" />
+    <Tree.File name="opencollection.yml" />
     <Tree.File name="package.json" />
   </Tree.Folder>
 </Tree>
@@ -44,20 +44,38 @@ API_KEY=your_api_key_value
 
 These secrets will be accessible in your Bruno collection via the `process.env` object.
 
-![dot env vars](/images/screenshots/secret-variables/dot-env-vars.webp)
+![dot env vars](/images/screenshots/v4/secret-variables/process-env.webp)
 
 Bruno will automatically load the secrets from this file and make them available to your collection via `process.env.<secret-name>`.
 
-Your environment file at `environments/local.bru` would look like
+Your environment file would look like this:
 
-```bash filename="local.bru"
+<CodeGroup>
+
+```yaml local_environment.yml
+name: local_environment
+variables:
+  - name: BASE_URL
+    value: https://echo.usebruno.com
+    description: Base URL for the API
+  - name: JWT_TOKEN
+    value: '{{process.env.JWT_TOKEN}}'
+    description: JWT token for authentication
+  - name: API_KEY
+    value: '{{process.env.API_KEY}}'
+    description: API key for authentication
+```
+
+```bru local_environment.bru
 vars {
-  baseURL: https://echo.usebruno.com
+  BASE_URL: https://echo.usebruno.com
   JWT_TOKEN: {{process.env.JWT_TOKEN}}
   API_KEY: {{process.env.API_KEY}}
 }
-
 ```
+
+</CodeGroup>
+
 
 In this example, the `JWT_TOKEN` secret from the `.env` file is referenced using `process.env.JWT_TOKEN`. This will be replaced with the actual value of `JWT_TOKEN` when the collection is executed.
 

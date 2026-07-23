@@ -1,0 +1,154 @@
+---
+title: Overview
+sidebarTitle: Overview
+---
+
+<Tip>
+Bruno Apps are available from v4.0.0 and higher.
+</Tip>
+
+Bruno Apps are a powerful way to interact with your APIs directly inside Bruno. You can create a custom UI using HTML/CSS/JS or even React. Instead of only editing requests and reading raw JSON responses, Apps let you create a custom UI that interacts with your APIs inside Bruno.
+
+For example, instead of editing a JSON body and reading a raw response, you can build:
+
+```
++--------------------------------+
+| Username: [_________]           |
+| Password: [_________]           |
+|                                |
+|         [ Login ]              |
+|                                |
+| Logged in ✓                    |
+| User ID: 123                   |
++--------------------------------+
+```
+
+## Two types of Apps
+
+### Request App
+
+A Request App is attached to a single request. It replaces the response pane with your custom UI.
+
+Normal flow:
+
+```
+Edit Body → Send → Read Response
+```
+
+With a Request App:
+
+```
+Login Form → Submit → Display token + assertions + tests
+```
+
+The App fires its parent request via `bru.ctx.submitRequest()` and reads back the response, test results, and assertion results.
+
+### Collection App
+
+A Collection App is attached to an entire collection or folder. It is far more powerful — instead of controlling one request, it can orchestrate the whole collection.
+
+Given a collection like:
+
+```
+Authentication
+    Login
+    Refresh Token
+Users
+    Get Users
+    Create User
+Orders
+    Get Orders
+    Create Order
+```
+
+A Collection App can chain these together:
+
+```
+Run Login → save token → Run Get Users → Run Get Orders → Render Dashboard
+```
+
+**Real-world example:** testing an e-commerce API without opening each request manually:
+
+```
++---------------------------------------+
+| Customer ID: [123]                    |
+|                                       |
+| [ Load Customer ]                     |
+|                                       |
+| Orders                                |
+| ──────────────────                    |
+| #12  Delivered                        |
+| #13  Cancelled                        |
+|                                       |
+| [ Create New Order ]                  |
++---------------------------------------+
+```
+
+Behind the scenes, one button press chains `Get Customer` → `Get Orders` → `Get Recommendations`.
+
+## What is `bru.ctx`?
+
+`bru.ctx` is the bridge between your App and Bruno.
+
+```
+Your App
+    │
+  bru.ctx
+    │
+  Bruno
+```
+
+Instead of a raw `fetch()`, your App calls `bru.ctx.submitRequest()` or `bru.ctx.runRequest()`. Bruno then interpolates variables, runs pre/post scripts, executes assertions and tests, records the timeline, and updates the response pane — exactly as if you had pressed **Send**.
+
+See the [bru.ctx API reference](/apps/bru-ctx-api) for the full list of available fields and methods.
+
+## Sandboxing
+
+Apps run inside an Electron `<webview>`. It is isolated from Bruno itself.
+
+- Cannot access Bruno's internal state, cookies, or localStorage.
+- No Node.js integration.
+- Communicates with Bruno **only** through `bru.ctx`.
+- Not bound by Bruno's strict `script-src` CSP, so inline scripts and CDN libraries work freely.
+
+This isolation keeps Bruno secure while still allowing rich, interactive Apps.
+
+## Persistence
+
+When you save an App, Bruno stores the code inside the request or collection file:
+
+```
+app {
+  enabled: true
+  code: '''
+    <button>Run</button>
+    <script>
+      bru.ctx.submitRequest();
+    </script>
+  '''
+}
+```
+
+The App travels with your collection and can be version-controlled alongside your `.bru` and `.yml` files.
+
+## Practical use cases
+
+| Use case | What you can build |
+|---|---|
+| Interactive forms | Login screens, search UIs, parameter builders. No more editing raw JSON |
+| Dashboards | Charts and tables from API responses using Chart.js, D3, or similar |
+| API workflows | Chain login → fetch → create → verify behind a single button |
+| Admin tools | Lightweight internal tools for common API operations |
+| Testing utilities | Custom runners that feed different runtime variables and display test results |
+| Health checks | Collection-wide status boards that ping every endpoint at once |
+
+## React and external libraries
+
+Bruno applies a strict Content Security Policy (CSP) to its main app, which restricts things like inline scripts and loading resources from unknown sources. 
+
+However, your App runs in a sandboxed `<webview>` that is not subject to Bruno’s CSP. This means you’re free to load any external libraries from a CDN.
+```html
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+```
+
+Your Bruno App can look and behave like a real web application. See [Examples](/apps/examples) for working code.

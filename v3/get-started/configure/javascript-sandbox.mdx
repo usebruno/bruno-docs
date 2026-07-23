@@ -1,0 +1,62 @@
+---
+title: "JavaScript Sandbox"
+---
+
+Bruno provides two modes for executing JavaScript code in your collections: 
+1. Safe Mode
+2. Developer Mode
+
+![Javascript Sandbox](/images/screenshots/javascript-sandbox.webp)
+
+<Info>
+  **Bruno CLI v3.0.0 Update**: When using Bruno CLI, the default mode is now **Safe Mode**. To use Developer Mode features in CLI, you must pass the `--sandbox=developer` flag. Learn more in the [Bruno CLI documentation](/bru-cli/runCollection#running-with-developer-mode).
+</Info>
+
+## Safe Mode
+
+JavaScript code is executed in a secure sandbox and cannot access your filesystem or execute system commands. We recommend Safe Mode for most users.
+
+<Info>
+  When in doubt, leave the Collection in Safe Mode. You can always switch to Developer Mode later.
+</Info>
+
+## Developer Mode
+
+JavaScript code has access to the filesystem, can execute system commands and access sensitive information.
+
+#### When to use Developer Mode
+
+- You trust the collection source/authors (Ex: Collection maintained by you/your team) and Safe Mode is not enough for your use case.
+- You need to use external npm packages in your scripts
+- Your collection needs access to filesystem / system commands
+
+#### When to avoid Developer Mode
+
+- You are running a collection that you do not trust (Ex: Downloaded from the internet)
+
+<Warning>
+  Developer Mode can be dangerous and should only be used when you fully understand the implications.
+</Warning>
+
+## Detecting Sandbox Mode in Scripts
+
+You can programmatically detect the current sandbox mode in your pre-request, post-request, and test scripts using the `bru.isSafeMode()` API.
+
+**Use Case:** Some collections may require explicit Developer Mode features. By detecting the sandbox mode, you can log appropriate error messages or take alternative actions when the collection is run in Safe Mode.
+
+**Example:**
+
+```javascript
+// Check if running in Safe Mode
+if (bru.isSafeMode()) {
+  console.log('⚠️ This collection requires Developer Mode.');
+  console.log('Please switch to Developer Mode to use filesystem and external packages.');
+} else {
+  console.log('✓ Running in Developer Mode - all features available.');
+  // Proceed with Developer Mode features
+  const fs = require('fs');
+  // ... use filesystem operations
+}
+```
+
+**API Reference:** See the complete documentation in [JavaScript API Reference](/testing/script/javascript-reference#detecting-sandbox-mode).

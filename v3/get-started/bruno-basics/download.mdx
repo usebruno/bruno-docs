@@ -1,0 +1,114 @@
+---
+title: "Download & Install"
+---
+
+
+Bruno is an open-source, fast and lightweight API client for exploring and testing APIs. It's designed to be a modern alternative to traditional API clients with a focus on speed, simplicity, and collaboration.
+
+## Installation Options
+
+Bruno can be installed via direct download or through package managers on supported platforms.
+
+<Warning>
+Starting with Bruno v3, native ARM64 binaries are available for [Windows ARM64 devices <strong><sup>↗</sup></strong>](https://www.usebruno.com/downloads).
+</Warning>
+
+<Tabs>
+  <Tab title="macOS">
+    ### Direct Download
+    
+    Download the latest macOS version from the [official downloads page <strong><sup>↗</sup></strong>](https://www.usebruno.com/downloads).
+    
+    ### Homebrew
+    
+    ```bash
+    brew install bruno
+    ```
+    
+  </Tab>
+  <Tab title="Windows">
+    ### Direct Download
+    
+    Download the latest Windows installer from the [official downloads page <strong><sup>↗</sup></strong>](https://www.usebruno.com/downloads).
+    
+    <Info>
+      **Enterprise MSI Installation**
+      
+      When installing Bruno using an MSI installer, IT administrators can control auto-update behavior by passing the `AUTOUPDATE_ENABLED` flag during installation:
+      
+      - Set to `false` to disable auto-updates enterprise-wide
+      - If auto-updates are disabled by the enterprise, users cannot enable them manually
+      - If no enterprise setting exists, Bruno respects individual user preferences
+      
+      Example: `msiexec /i Bruno.msi AUTOUPDATE_ENABLED=false`
+    </Info>
+    
+    ### Using Package Managers
+    
+    **Chocolatey**
+    ```bash
+    choco install bruno
+    ```
+    
+    **Winget**
+    ```bash
+    winget install Bruno.Bruno
+    ```
+    
+    **Scoop**
+    ```bash
+    scoop install bruno
+    ```
+    
+  </Tab>
+  <Tab title="Linux">
+    ### Direct Download
+    
+    Download the latest Linux package from the [official downloads page <strong><sup>↗</sup></strong>](https://www.usebruno.com/downloads).
+    
+    ### Using Package Managers
+    
+    **APT (Debian/Ubuntu)**
+    ```bash
+    # Create keyrings directory
+    sudo mkdir -p /etc/apt/keyrings
+    
+    # Update and install GPG and curl
+    sudo apt update && sudo apt install gpg curl
+    
+    # List existing keys (optional)
+    sudo gpg --list-keys
+    
+    # Add the Bruno repository key
+    curl -fsSL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x9FA6017ECABE0266" | gpg --dearmor | sudo tee /etc/apt/keyrings/bruno.gpg > /dev/null
+    
+    # Set permissions for the GPG key file
+    sudo chmod 644 /etc/apt/keyrings/bruno.gpg
+    
+    # Add the Bruno repository
+    echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/bruno.gpg] http://debian.usebruno.com/ bruno stable" | sudo tee /etc/apt/sources.list.d/bruno.list
+    
+    # Update and install Bruno
+    sudo apt update && sudo apt install bruno
+    ```
+    **Flatpak**
+    ```bash
+    flatpak install flathub com.usebruno.Bruno
+    ```
+    
+    **Snap**
+    ```bash
+    sudo snap install bruno
+    ```
+  </Tab>
+</Tabs>
+
+
+## Release Information
+
+Bruno follows semantic versioning. You can check the [GitHub Releases <strong><sup>↗</sup></strong>](https://github.com/usebruno/bruno/releases) page for:
+- Latest version information
+- Release notes
+- Bug fixes
+- New features included in each release
+

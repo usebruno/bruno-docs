@@ -11,10 +11,10 @@ Environment variables are variables that are scoped to an environment, such as l
 
 ![No-Environment](/images/screenshots/variables/no-environment.webp)
 
-3. Add your variable name and value for the specific environment.
+3. Add your variable name, value, and an optional description for what the variable represents.
 4. Save your changes.
 
-![No-Environment](/images/screenshots/variables/collection-environment.webp)
+![No-Environment](/images/screenshots/v4/secret-variables/environment.webp)
 
 ## Using an Environment Variable
 
@@ -40,13 +40,67 @@ The search filters the variable list in real time. If you click on a variable ro
 
 Environment variables are synced with the `/environments` directory inside your collection. You can also create and manage environments there.
 
-Each environment is saved in a `<environment-name>.bru` file, which looks like this:
+Each environment is saved in a `<environment-name>.bru` file or a `.yml` file depending on the format in use.
 
-```bash filename="local.bru"
+**BRU format** (`local.bru`)
+
+```bash
 vars {
+  @description('''Base URL for the local server''')
   host: http://localhost:8787
+
+  @description('''
+    JWT token obtained after login.
+    Expires in 24 hours.
+  ''')
+  token: abc123
+
+  noDesc: plain-value
 }
 ```
+
+Use `@description` before a variable to document what it represents. Descriptions are optional, always go on the line immediately before the variable, and support multiline text using triple quotes (`'''`).
+
+**YAML format** (`production.yml`)
+
+```yaml
+name: Production
+variables:
+  - name: host
+    value: https://api.example.com
+    enabled: true
+    secret: false
+    description: Single-line description
+
+  - name: token
+    value: abc123
+    enabled: true
+    secret: false
+    description: |-
+      Multiline description.
+      Supports multiple lines.
+      Third line here.
+
+  - name: apiKey
+    value: ''
+    enabled: true
+    secret: true
+    description: Secret API key stored encrypted
+
+  - name: disabledVar
+    value: old-value
+    enabled: false
+    secret: false
+    description: This variable is disabled
+
+  - name: ''
+    value: ''
+    enabled: true
+    secret: false
+    description: Orphaned description becomes an empty-name row
+```
+
+The `description` field is optional. Use the block scalar `|-` for multiline descriptions to preserve line breaks. A variable with an empty `name` and `value` is treated as an orphaned description row in the UI.
 
 <Info>
   For information on importing and exporting environment variables, see the [Import/Export Environments](/import-export-data/import-export-environments) guide.

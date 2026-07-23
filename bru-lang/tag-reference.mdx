@@ -94,7 +94,9 @@ get {
 }
 
 params:query {
+  @description('''Your API access key''')
   apiKey: secret
+  @description('''Comma-separated list of recipient numbers''')
   numbers: 9988776655
   message: hello
 }
@@ -113,7 +115,7 @@ params:path {
 ```
 ## headers
 
-The request query headers
+The request headers
 ```bash
 get {
   url: https://api.textlocal.in/send?apiKey=secret&numbers=9988776655&message=hello
@@ -121,6 +123,7 @@ get {
 
 headers {
   content-type: application/json
+  @description('''Bearer token obtained after login. Expires in 24 hours.''')
   Authorization: Bearer topsecret
 }
 ```
@@ -156,20 +159,28 @@ body:xml {
 The request body as form-urlencoded
 ```bash
 body:form-urlencoded {
+  @description('''Your API access key''')
   apikey: secret
+  @description('''Recipient phone number with country code''')
   numbers: +91998877665
   ~message: hello
 }
 ```
+
+Use `@description` before a field to document what it represents. Descriptions are optional.
 ## body:multipart-form
 The request body as multipart-form
 ```bash
 body:multipart-form {
+  @description('''Your API access key''')
   apikey: secret
+  @description('''Recipient phone number with country code''')
   numbers: +91998877665
   ~message: hello
 }
 ```
+
+Use `@description` before a field to document what it represents. Descriptions are optional.
 ## body:graphql
 The request body as graphql
 ```bash

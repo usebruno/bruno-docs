@@ -1,0 +1,45 @@
+---
+title: "Codex"
+sidebarTitle: "Codex"
+---
+
+[Codex](https://openai.com/codex) is OpenAI's AI-powered coding agent. It reads custom instructions from `AGENTS.md` before doing any work, so you can give it project-specific guidance. With Bruno's local-first approach, you can add an `AGENTS.md` at your project root so Codex understands how to generate and work with Bruno collections.
+
+<Info>
+  Codex discovers instructions in this order: global `~/.codex/AGENTS.md`, See [Custom instructions with AGENTS.md](https://developers.openai.com/codex/guides/agents-md/) for full details.
+</Info>
+
+## Configure Codex with Bruno
+
+1. Install and set up Codex from the [Codex documentation](https://developers.openai.com/codex/).
+
+2. At your project root (typically the Git root), create an `AGENTS.md` file with instructions for working with Bruno collections.
+
+Your project folder structure should look like this:
+
+<Tree>
+  <Tree.Folder name="my-project" defaultOpen>
+    <Tree.Folder name="codex" defaultOpen>
+        <Tree.File name="AGENTS.md" />
+    </Tree.Folder>
+    <Tree.Folder name="src" defaultOpen>
+      <Tree.Folder name="routes">
+        <Tree.File name="users.js" />
+        <Tree.File name="auth.js" />
+      </Tree.Folder>
+      <Tree.File name="app.js" />
+      <Tree.File name="server.js" />
+    </Tree.Folder>
+    <Tree.Folder name="bruno-collection">
+      <Tree.File name="bruno.json" />
+    </Tree.Folder>
+    <Tree.File name="package.json" />
+    <Tree.File name=".gitignore" />
+  </Tree.Folder>
+</Tree>
+
+<Warning>
+  You can write your own instructions in `AGENTS.md` for Codex to follow when working on Bruno collections, or use the [default instructions provided by Bruno](https://github.com/bruno-collections/ai-assistant-prompts) if available for Codex.
+</Warning>
+
+For example workflows and prompts, see [Use cases](./use-cases).

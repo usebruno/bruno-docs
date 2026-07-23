@@ -1,0 +1,44 @@
+---
+title: "Response Data"
+---
+
+The API returns data as a response from the server after the request is executed. The response panel in Bruno provides you with an organized view of the API's response, including the body, headers, HTTP status code, raw response code, and more.
+
+### Response Panel
+
+After executing a request, the response panel provides detailed information on the API's response. It shows the response body, headers, status code, and other relevant data. You can also search within the response using the `cmd+f` or `ctrl+f` keyboard shortcut.
+
+![Response Panel](/images/screenshots/send-request/res-data-and-cookie/res-data.webp)
+
+### Data Type Selector
+
+Bruno provides a powerful response format selector that allows you to view API responses in different formats, making it easier to inspect and analyze response data. This feature includes both an **Editor** view for viewing formatted code and a **Preview** view for visualizing the response content.
+
+![Data Type Selector](/images/screenshots/send-request/res-data-and-cookie/data-type-selector.webp)
+
+### Headers
+
+The request headers are displayed to show what was sent to the API. This can help in debugging and understanding the context of the request.
+
+![Request Headers](/images/screenshots/send-request/res-data-and-cookie/res-headers.webp)
+
+### Timeline
+
+The **Timeline** tab lists every HTTP call from a request run along with the main request plus any calls made by scripts. See [Timeline](/debugging/timeline) for context badges (`main`, `sendRequest`, `runRequest`), filter tabs, and per-request details.
+
+![Response Timeline](/images/screenshots/send-request/res-data-and-cookie/res-timeline.webp)
+
+### Response Actions
+
+Bruno provides multiple options to manage your response data, including saving as examples, downloading to files, copying, and clearing the response panel.
+
+![Response Options](/images/screenshots/send-request/res-data-and-cookie/res-save.webp)
+
+- **Save as Example** - Save the response as a sub-request under your main request for documenting different API behaviors and scenarios
+- **Download Response** - Export the response data to a file in various formats such as HTML
+- **Copy Response** - Quickly copy the response data to your clipboard for use in other applications
+- **Change Layout** - Switch between different layout views to customize how the response is displayed
+- **Clear Response** - Reset or clear the response data from the panel
+
+**Learn more:** [Response Examples](/send-requests/res-data-cookies/response-examples)
+

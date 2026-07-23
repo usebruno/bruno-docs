@@ -1,0 +1,159 @@
+---
+title: "Use Cases"
+sidebarTitle: "Use Cases"
+---
+
+Once you've [configured an AI agent](./overview) with Bruno, you can use it to automate common API development tasks. The following use cases apply to any supported agent (Cursor, VS Code with Copilot, Codex, Claude); specific examples use Cursor-style prompts where relevant.
+
+## Common Use Cases
+
+- **Generate Bruno collections** – Create API collections from your backend source code with requests, tests, and documentation.
+- **Write scripts and tests** – Use the agent to write pre-request scripts, test scripts, and assertions. Reference Bruno's [JavaScript API Reference](/testing/script/javascript-reference) and [Bru Lang](/bru-lang/overview) in your instructions so the agent produces valid Bruno files.
+- **Automate workflows** – Get help with CI/CD pipelines, environment setup, and collection organization.
+
+## Example: Create a complete Bruno collection from your backend API
+
+If you want to create a new Bruno collection for your backend API endpoints from source code, you can use a prompt like:
+
+```md
+Create Bruno collection for my backend API with relevant test cases and write docs for each request at request level.
+```
+
+The agent will analyze your source code and generate a Bruno collection. Your project may look like this:
+
+<Tree>
+  <Tree.Folder name="my-project" defaultOpen>
+    <Tree.Folder name=".cursor" defaultOpen>
+      <Tree.Folder name="rules" defaultOpen>
+        <Tree.File name="instructions.md" />
+      </Tree.Folder>
+    </Tree.Folder>
+    <Tree.Folder name="src" defaultOpen>
+      <Tree.Folder name="routes">
+        <Tree.File name="users.js" />
+        <Tree.File name="auth.js" />
+      </Tree.Folder>
+      <Tree.File name="app.js" />
+      <Tree.File name="server.js" />
+    </Tree.Folder>
+    <Tree.Folder name="bruno-collection" defaultOpen>
+      <Tree.Folder name="environments" defaultOpen>
+        <Tree.File name="local.bru" />
+        <Tree.File name="prod.bru" />
+      </Tree.Folder>
+      <Tree.File name="auth-api.bru" />
+      <Tree.File name="product.bru" />
+      <Tree.File name="user.bru" />
+      <Tree.File name="bruno.json" />
+    </Tree.Folder>
+    <Tree.File name="package.json" />
+    <Tree.File name=".gitignore" />
+  </Tree.Folder>
+</Tree>
+
+## Example: Create a CI/CD pipeline for API tests
+
+You can ask the agent to generate a CI/CD pipeline for your API tests using Bruno CLI. For example, with Cursor you can use:
+
+```md
+Create fully functional CI/CD pipeline for my API tests using Bruno CLI to generate test reports.
+```
+
+The agent can generate a workflow file (e.g. GitHub Actions) in your project:
+
+<Tree>
+  <Tree.Folder name="my-project" defaultOpen>
+    <Tree.Folder name=".cursor" defaultOpen>
+      <Tree.Folder name="rules" defaultOpen>
+        <Tree.File name="instructions.md" />
+      </Tree.Folder>
+    </Tree.Folder>
+    <Tree.Folder name=".github" defaultOpen>
+      <Tree.Folder name="workflows" defaultOpen>
+        <Tree.File name="api-tests.yml" />
+      </Tree.Folder>
+    </Tree.Folder>
+    <Tree.Folder name="src">
+      <Tree.Folder name="routes">
+        <Tree.File name="users.js" />
+        <Tree.File name="auth.js" />
+      </Tree.Folder>
+      <Tree.File name="app.js" />
+      <Tree.File name="server.js" />
+    </Tree.Folder>
+    <Tree.Folder name="bruno-collection">
+      <Tree.Folder name="environments">
+        <Tree.File name="local.bru" />
+        <Tree.File name="prod.bru" />
+      </Tree.Folder>
+      <Tree.File name="auth-api.bru" />
+      <Tree.File name="product.bru" />
+      <Tree.File name="user.bru" />
+      <Tree.File name="bruno.json" />
+    </Tree.Folder>
+    <Tree.File name="package.json" />
+    <Tree.File name=".gitignore" />
+  </Tree.Folder>
+</Tree>
+
+## Example: Write automated test cases
+
+You can ask your AI agent to write test cases for each API in your Bruno collection, including different edge cases.
+
+### Prompt
+
+Use a prompt like:
+
+```md
+Write test cases for each API in my Bruno collection. Include happy-path checks and different edge cases (error responses, missing fields, invalid data, response time, headers).
+```
+
+The agent generates test scripts. Bruno uses the [Chai library](https://www.chaijs.com/) for assertions—all Chai `expect` syntax works in Bruno tests. The agent can produce tests such as:
+
+**Status codes and response body (happy path):**
+
+```javascript
+test("should return success", function () {
+  expect(res.getStatus()).to.equal(200);
+});
+
+test("should return user data", function () {
+  const body = res.getBody();
+  expect(body).to.have.property("id");
+  expect(body.name).to.equal("John Doe");
+  expect(body.email).to.contain("@example.com");
+});
+```
+
+**Edge cases (error responses, conditional logic):**
+
+```javascript
+test("should validate response based on status", function () {
+  const status = res.getStatus();
+  const body = res.getBody();
+
+  if (status === 200) {
+    expect(body).to.have.property("data");
+    expect(body.data).to.not.be.empty;
+  } else if (status === 404) {
+    expect(body).to.have.property("error");
+    expect(body.error.message).to.contain("not found");
+  } else {
+    throw new Error(`Unexpected status code: ${status}`);
+  }
+});
+
+test("should validate error response structure", function () {
+  const status = res.getStatus();
+  if (status >= 400) {
+    const body = res.getBody();
+    expect(body).to.have.property("error");
+    expect(body.error).to.have.property("message");
+    expect(body.error.message).to.be.a("string");
+  }
+});
+```
+
+For more test patterns (headers, response time, arrays and loops, saving variables for the next request), see the [Testing introduction](/testing/tests/introduction).
+
+

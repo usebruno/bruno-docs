@@ -1,0 +1,54 @@
+---
+title: "gRPC Request"
+sidebarTitle: "Create Request"
+---
+
+Bruno provides comprehensive support for gRPC requests, enabling you to test and interact with gRPC services directly from the interface. With Bruno's gRPC support, you can:
+
+- **Add Proto files** for enhanced IntelliSense and method discovery
+- **Use Server Reflection** as an alternative to Proto files for automatic method suggestions
+- **Call server methods** with full parameter support and type validation
+- **Test real-time streaming APIs** including unary, server streaming, client streaming, and bidirectional streaming
+
+## gRPC Interface
+
+Bruno gRPC interface provides an intuitive way to interact with gRPC services. The interface automatically adapts based on whether you're using Proto files or Server Reflection.
+
+![gRPC Interface](/images/screenshots/send-request/grpc/1-grpc-interface.webp)
+
+## Creating a gRPC Request
+
+### Step 1: Create a gRPC Request
+
+1. Open the collection context menu and select **New Request** from the dropdown
+
+![create request dialog](/images/screenshots/get-started/bruno-basics/create_request/1-create-new-request.webp)
+
+2. Select **gRPC** as your request type
+3. Enter the **service endpoint** in the URL field (e.g., `https://grpcb.in/`)
+
+![Create gRPC Request](/images/screenshots/send-request/grpc/2-create-grpc-req.webp)
+
+### Step 2: Configure the Request
+ 
+1. Click on **Reflection** and choose the **method** you want to call from the dropdown
+
+<Warning> 
+   **Refresh**: The gRPC refresh feature caches server information in memory for better performance. If you're running a local gRPC server and make changes to your service definitions, click the **Refresh** button next to the **Using Reflection** toggle to reload the latest changes from your server.
+</Warning>
+
+2. Use the **search functionality** in the dropdown to quickly find your desired method by typing the method name
+
+![Select Method](/images/screenshots/send-request/grpc/3-select-method.webp)
+
+### Step 3: Send the Request
+
+1. Add any **required inputs** in the message section (auto generate with **Auto Fill** button)
+
+2. Click the **Send** button to execute your gRPC request.
+
+![Add Message and Receive Response](/images/screenshots/send-request/grpc/4-add-msg-receive-resp.webp)
+
+You'll see the response in the **Response** section with detailed information about the request execution.
+
+To learn about proto files, navigate to the [Adding Proto file section.](./grpc-proto)

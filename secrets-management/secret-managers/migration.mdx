@@ -1,0 +1,222 @@
+---
+title: Migration Guide
+sidebarTitle: Migration Guide
+description: Move your Secret Manager configuration from secrets.json to environment files.
+---
+
+Bruno v4 changes where secret manager configuration lives. This guide explains what changed, how migration works, and what to watch for.
+
+## What changed
+
+| | Before v4 | v4+ |
+|---|---|---|
+| **Config location** | `secrets.json` at the collection root | `externalSecrets` block inside environment files (`.bru` / `environment.yml`) |
+| **Configured from** | Collection Settings → Secrets tab | Environment UI → External Secrets |
+| **Variable syntax** | `{{$secrets.name.keyname}}` | `{{name.keyname}}` (**recommended**) |
+| **Legacy syntax** | — | `{{$secrets.name.keyname}}` still resolves, shown with a deprecation underline |
+| **CLI migration** | Not needed | CLI warns if `secrets.json` exists but environment file has no `externalSecrets` — open the app to migrate |
+| **Providers** | HashiCorp Vault only (CLI) | HashiCorp Vault, AWS Secrets Manager, Azure Key Vault |
+
+---
+
+## How migration works
+
+### In the app (automatic)
+
+1. Open any collection that still has a `secrets.json` file.
+2. Bruno detects the old format and migrates the configuration to the environment file in the background.
+3. The `externalSecrets` block appears in the relevant environment file. The original `secrets.json` is no longer used.
+4. Collection Settings → Secrets tab shows a notice that Secret Manager has moved to the Environment UI, with a button to open it directly.
+
+No manual steps are needed. The migration runs once and is non-destructive.
+
+<Warning>
+  **Migration failure edge case:** If `secrets.json` is marked read-only on disk, the migration will fail. Bruno currently has no fallback for this scenario. You will see a "start a fresh" state and will need to manually re-enter your secret configuration in the Environment UI. This situation is rare but worth checking if migration does not complete as expected: verify that `secrets.json` is writable before opening the collection.
+</Warning>
+
+### In the CLI (manual trigger via app)
+
+The CLI **does not auto-migrate**. If it finds a `secrets.json` but no `externalSecrets` block in the environment file, it prints a warning:
+
+```
+[warn] secrets.json found but no externalSecrets in environment file.
+       Open the collection in the Bruno app to migrate.
+```
+
+**Fix:** Open the collection in the Bruno app, let the automatic migration run, commit the updated environment file, then re-run the CLI.
+
+---
+
+## Before and after
+
+### secrets.json (pre-v4)
+
+```json
+{
+  "type": "vault",
+  "cli": {
+    "type": "vault-server",
+    "vaultServerConfig": {
+      "url": "http://localhost:8200",
+      "namespace": "bruno",
+      "auth": {
+        "method": "token",
+        "token": "{{authToken}}"
+      }
+    }
+  },
+  "data": [
+    {
+      "environment": "Production",
+      "secrets": [
+        { "name": "db", "path": "secret/db", "enabled": true }
+      ]
+    }
+  ]
+}
+```
+
+Configuration lives at the collection root. All environments share the same vault connection; per-environment secret paths are listed in `data[].secrets`.
+
+### Environment file (v4+)
+
+Configuration is embedded directly in the environment file. Each environment can point to a different vault, region, or key vault independently.
+
+<CodeGroup>
+
+```yaml production.yml
+name: Production
+variables:
+  - name: baseUrl
+    value: https://api.example.com
+externalSecrets:
+  type: aws-secrets-manager
+  variables:
+    - name: db
+      secretName: prod/db/credentials
+      enabled: true
+```
+
+```bru production.bru
+vars {
+  baseUrl: https://api.example.com
+}
+
+vars:externalsecrets:aws-secrets-manager {
+  db: prod/db/credentials
+}
+```
+
+</CodeGroup>
+
+### Variable reference in requests
+
+```
+Before:  {{$secrets.db.password}}
+After:   {{db.password}}
+```
+
+Both work in v4. The old syntax is shown with a deprecation underline in the editor.
+
+---
+
+## Step-by-step migration (app)
+
+<Steps>
+  <Step title="Open the collection in Bruno">
+    Launch Bruno and open any collection that uses `secrets.json`.
+  </Step>
+  <Step title="Let the automatic migration run">
+    Bruno detects `secrets.json` on open and silently migrates the configuration into the correct environment files. A notice appears in Collection Settings → Secrets confirming the move.
+  </Step>
+  <Step title="Verify the environment file">
+    Open the Environment UI (top-right environment selector → Edit). Confirm that the **External Secrets** section shows your secret providers and mappings.
+  </Step>
+  <Step title="Update variable references (optional but recommended)">
+    Find any `{{$secrets.name.keyname}}` usage in your request URLs, headers, bodies, and scripts. Replace them with the new `{{name.keyname}}` syntax. The old syntax still works and will continue to do so until the next major release, but Bruno marks it with a deprecation underline in the editor.
+
+    **From v4.2.0:** Bruno provides a one-click in-app migration tool that automatically rewrites all `{{$secrets.*}}` references across your collection to the new syntax. You do not need to do this manually if you can wait for v4.2.0.
+  </Step>
+  <Step title="Commit the updated environment file">
+    The migrated `externalSecrets` block is now in your environment `.yml` or `.bru` file. Commit it to version control so the CLI and other team members can use it.
+  </Step>
+  <Step title="Remove secrets.json (optional)">
+    Once you have verified the migration, delete `secrets.json` from the collection root. Bruno no longer reads it in v4.
+  </Step>
+</Steps>
+
+---
+
+## Step-by-step migration (CLI / CI)
+
+<Steps>
+  <Step title="Migrate the collection in the app first">
+    The app migration must run before the CLI can use the new format. Open the collection in Bruno, confirm the `externalSecrets` block appears in the environment file, then commit and push.
+  </Step>
+  <Step title="Create a secrets credential file">
+    Create a dotenv file with your provider credentials (never commit this file):
+
+    **HashiCorp Vault (token)**
+    ```bash
+    # pass via --env-var at runtime, no credential file needed
+    ```
+
+    **AWS Secrets Manager**
+    ```bash
+    BRUNO_AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE
+    BRUNO_AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+    BRUNO_AWS_REGION=us-east-1
+    ```
+
+    **Azure Key Vault (Service Principal)**
+    ```bash
+    BRUNO_AZURE_TENANT_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+    BRUNO_AZURE_CLIENT_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+    BRUNO_AZURE_CLIENT_SECRET=your-client-secret
+    ```
+  </Step>
+  <Step title="Update your CLI command">
+    Old command (pre-v4):
+    ```bash
+    bru run collection/ --env Production --env-var authToken=my-token
+    ```
+
+    New command (v4+):
+    ```bash
+    bru run collection/ --env Production --secrets-env-file ./secrets.env
+    ```
+  </Step>
+  <Step title="Update CI/CD pipelines">
+    Replace `secrets.json` injection steps with `--secrets-env-file`. Store credentials in your CI secret store (GitHub Actions secrets, GitLab CI variables, etc.) and write them to a temp file before the `bru run` step.
+  </Step>
+</Steps>
+
+---
+
+## Gotchas
+
+**The CLI will not run if `secrets.json` exists without a migrated environment file.**
+The CLI prints a warning and continues without secrets — it does not fail hard, but requests that depend on secrets will receive empty values. Fix: open the collection in the app first.
+
+**Each environment has its own `externalSecrets` block.**
+In v3, all environments shared one `secrets.json`. In v4, each environment file declares its own secrets. If you have multiple environments (Dev, Staging, Production) pointing to different vaults or regions, update each one independently in the Environment UI.
+
+**`secrets.json` is not automatically deleted.**
+After migration Bruno stops reading it, but the file stays on disk. Clean it up manually once you have verified the migration and confirmed nothing else depends on it.
+
+**Variable syntax change is not auto-applied to request files (until v4.2.0).**
+The old `{{$secrets.name.keyname}}` syntax still resolves in v4 and will continue to work until the next major release. Bruno marks usages with a deprecation underline in the editor. You can update references manually by searching for `$secrets` across your collection, or wait for the **v4.2.0 in-app migration tool** which will rewrite all occurrences automatically with one click.
+
+**`runtimeVariables` overrides do not bypass secret resolution.**
+Secret variables are resolved first. If a secret and a runtime variable share the same name, the secret value takes precedence (external secrets sit above runtime vars in the precedence chain).
+
+**The `--secrets-env-file` flag is required for AWS and Azure in CI.**
+Unlike HashiCorp Vault (which can use `--env-var` for token auth), AWS and Azure credentials must be passed via `--secrets-env-file`. Flat `--env-var` flags are not read by the AWS/Azure credential resolver.
+
+---
+
+## Need help?
+
+- [Secret Managers overview](/secrets-management/secret-managers/overview)
+- [Using Secret Managers with Bruno CLI](/bru-cli/secret-managers)
+- [Bruno v4 release notes](/get-started/bruno-basics/migration)

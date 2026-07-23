@@ -1,0 +1,190 @@
+---
+title: "Pairing with Downstream Actions"
+sidebarTitle: "Action Examples"
+description: "Chain the Bruno CLI GitHub Action with EnricoMi, dorny, Slack, and other ecosystem actions for PR comments, artifacts, and notifications."
+---
+
+The [Bruno CLI GitHub Action](/bru-cli/github-actions/overview) emits clean JUnit XML. Downstream actions render it for PR comments, Checks tab UI, Step Summary, or artifact upload. The [action README](https://github.com/usebruno/bruno-cli-action#pairing-with-downstream-actions) documents all 13 canonical recipes. Common patterns:
+
+## Upload reports as artifacts
+
+Pass reporter flags in `command`, then chain `actions/upload-artifact`:
+
+```yaml
+- uses: usebruno/bruno-cli-action@v1
+  with:
+    working-directory: tests/payments
+    command: 'run --env prod --reporter-junit results.xml --reporter-html report.html'
+
+- uses: actions/upload-artifact@v6
+  if: always()
+  with:
+    name: bruno-reports-${{ github.run_id }}
+    path: |
+      tests/payments/results.xml
+      tests/payments/report.html
+```
+
+To redact sensitive headers before upload, pass `--reporter-skip-headers` in `command`. See [Generating Reports](/bru-cli/builtInReporters).
+
+**What this does:** Saves test report files (JUnit and HTML) as downloadable artifacts on the workflow run page. Anyone with repo access can download them for up to 90 days.
+
+## Slack notification on failure
+
+Use action outputs with `continue-on-error: true` so the notification step still runs:
+
+```yaml
+- id: bruno
+  uses: usebruno/bruno-cli-action@v1
+  continue-on-error: true
+  with:
+    working-directory: tests/payments
+    command: 'run --env prod'
+
+- if: steps.bruno.outputs.failed != '0'
+  uses: slackapi/slack-github-action@v1
+  with:
+    payload: |
+      {
+        "text": "Bruno tests failed: ${{ steps.bruno.outputs.failed }}/${{ steps.bruno.outputs.total }} on ${{ github.ref_name }}"
+      }
+  env:
+    SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+```
+
+**What this does:** Runs Bruno tests, but if any fail, sends a Slack message with the failure count. `continue-on-error: true` lets the Slack step run even when tests fail. `id: bruno` names the step so later steps can read its outputs (`steps.bruno.outputs.failed`).
+
+## PR comment on every run
+
+`EnricoMi/publish-unit-test-result-action` posts a sticky PR comment updated on re-runs, plus a check run with structured results.
+
+```yaml
+permissions:
+  pull-requests: write
+  checks: write
+  contents: read
+
+jobs:
+  bruno:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: usebruno/bruno-cli-action@v1
+        with:
+          working-directory: tests/payments
+          command: 'run --env prod --reporter-junit results.xml'
+
+      - uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: tests/payments/results.xml
+```
+
+Use `if: always()` so EnricoMi runs even when the Bruno step fails. Otherwise users do not see the comment on failure.
+
+**What this does:** Runs your Bruno tests, writes a JUnit report to `results.xml`, then posts a sticky comment on the PR with pass/fail details. The comment updates in place on re-runs instead of spamming new comments.
+
+## PR comment only on failures
+
+```yaml
+- uses: EnricoMi/publish-unit-test-result-action@v2
+  if: always()
+  with:
+    files: tests/payments/results.xml
+    comment_mode: failures
+```
+
+**What this does:** Same as above, but the PR comment only appears when something failed. Successful runs stay quiet.
+
+## Checks tab UI (polyglot test stacks)
+
+Use `dorny/test-reporter` when you want Bruno results alongside Jest, Pytest, or other JUnit-emitting suites:
+
+```yaml
+- uses: usebruno/bruno-cli-action@v1
+  with:
+    working-directory: tests/payments
+    command: 'run --env prod --reporter-junit results.xml'
+
+- uses: dorny/test-reporter@v1
+  if: always()
+  with:
+    name: Bruno API tests
+    path: tests/payments/results.xml
+    reporter: java-junit
+```
+
+**What this does:** Shows Bruno test results as a separate check run in the PR Checks tab, the same way Jest or Pytest results appear. Good when your repo runs multiple test tools and you want a consistent UI.
+
+## Matrix across environments
+
+Use distinct JUnit paths and artifact names per matrix leg:
+
+```yaml
+strategy:
+  matrix:
+    env: [staging, prod]
+steps:
+  - uses: actions/checkout@v6
+
+  - uses: usebruno/bruno-cli-action@v1
+    with:
+      working-directory: tests/payments
+      command: 'run --env ${{ matrix.env }} --reporter-junit results-${{ matrix.env }}.xml'
+
+  - uses: actions/upload-artifact@v6
+    if: always()
+    with:
+      name: bruno-report-${{ matrix.env }}
+      path: tests/payments/results-${{ matrix.env }}.xml
+```
+
+Include the matrix key in both `--reporter-junit` and the artifact `name` to avoid duplicate-name errors across legs.
+
+**What this does:** Runs the same collection twice in parallel, once per environment (`staging` and `prod`). Each run gets its own report file and artifact so results do not overwrite each other.
+
+## Soft-fail
+
+Record results without failing the build, then act on outputs:
+
+```yaml
+- id: bruno
+  uses: usebruno/bruno-cli-action@v1
+  continue-on-error: true
+  with:
+    working-directory: tests/payments
+    command: 'run --env prod'
+
+- if: steps.bruno.outputs.failed != '0'
+  run: ./notify-slack.sh ${{ steps.bruno.outputs.failed }}
+```
+
+The Bruno step still appears red on failure (honest signal), but downstream steps proceed.
+
+**What this does:** Runs tests and records results, but does not stop the workflow when tests fail. Use this when you want to notify or log failures without blocking the entire pipeline.
+
+## Enterprise mTLS
+
+Write cert files from secrets, then pass paths in `command`:
+
+```yaml
+- run: |
+    mkdir -p /tmp/certs && chmod 700 /tmp/certs
+    echo "$CA_CERT" > /tmp/certs/ca.pem
+    echo "$CLIENT_CERT_CONFIG" > /tmp/certs/client.json
+  env:
+    CA_CERT: ${{ secrets.API_CA_CERT }}
+    CLIENT_CERT_CONFIG: ${{ secrets.API_CLIENT_CERT_CONFIG }}
+
+- uses: usebruno/bruno-cli-action@v1
+  with:
+    working-directory: tests/payments
+    command: 'run --env prod --cacert /tmp/certs/ca.pem --client-cert-config /tmp/certs/client.json'
+```
+
+**What this does:** Writes TLS certificates from GitHub Secrets to temp files, then passes those file paths to Bruno so it can call APIs protected by mTLS (mutual TLS). Secrets never appear in logs.
+
+<Tip>
+  **Forked PR caveat:** GitHub restricts `GITHUB_TOKEN` to read-only for `pull_request` events from forked repositories. PR comment actions need write permission, which may require `pull_request_target` with care. See [EnricoMi's fork PR docs](https://github.com/EnricoMi/publish-unit-test-result-action#support-fork-repositories-and-dependabot-branches).
+</Tip>

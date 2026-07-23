@@ -1,0 +1,348 @@
+---
+title: Examples
+sidebarTitle: Examples
+description: Ready-to-use App examples for common API workflows.
+---
+
+The examples below are self-contained. Paste any of them into the App tab's code editor, save, and activate App Mode to try them out.
+
+<Note>
+  `bru.ctx` data arrives **asynchronously** after page load. Always do the first render inside `bru.ctx.onInit`, then react to later changes via `on*Change` callbacks. Reading state at the top level or on `DOMContentLoaded` returns `null` or empty values.
+</Note>
+
+## Request Apps
+
+### Send a request and display the response
+
+A minimal form that sends the parent request with a custom variable and renders the JSON response.
+
+> Add `{{search}}` somewhere in your request — URL, body, params, or headers. Bruno will interpolate it at runtime.
+
+```html
+<button id="go">Send</button>
+<input id="q" placeholder="Enter search query" />
+<pre id="out"></pre>
+
+<script>
+  document.getElementById('go').addEventListener('click', async () => {
+    const res = await bru.ctx.submitRequest({
+      runtimeVariables: { search: document.getElementById('q').value }
+    });
+    document.getElementById('out').textContent = JSON.stringify(res.data, null, 2);
+  });
+</script>
+```
+
+---
+
+### React to responses without polling
+
+Renders the latest response instantly whenever one arrives — from the Send button, the runner, or another App call. No polling or manual refresh needed.
+
+```html
+<pre id="out">Waiting for a response…</pre>
+
+<script>
+  function render(response) {
+    document.getElementById('out').textContent = response
+      ? JSON.stringify(response.data, null, 2)
+      : 'Waiting for a response…';
+  }
+
+  bru.ctx.onInit = () => render(bru.ctx.http.response);
+  bru.ctx.http.onResponseChange = render;
+</script>
+```
+
+---
+
+### Login form with token display
+
+Useful for any `POST /login` or `POST /auth/token` endpoint. Displays the status code and extracted token after a successful login.
+
+> Your request body should reference `{{email}}` and `{{password}}`.
+
+```html
+<style>
+  body { font-family: sans-serif; padding: 1rem; }
+  input, button { display: block; margin: 0.5rem 0; padding: 0.4rem 0.8rem; width: 100%; box-sizing: border-box; }
+  #result { margin-top: 1rem; white-space: pre-wrap; }
+</style>
+
+<input id="email"    type="email"    placeholder="Email" />
+<input id="password" type="password" placeholder="Password" />
+<button id="login">Login</button>
+<div id="result"></div>
+
+<script>
+  document.getElementById('login').addEventListener('click', async () => {
+    const res = await bru.ctx.submitRequest({
+      runtimeVariables: {
+        email:    document.getElementById('email').value,
+        password: document.getElementById('password').value
+      }
+    });
+
+    const out = document.getElementById('result');
+    if (res.status === 200) {
+      out.textContent = `✓ Logged in\nStatus: ${res.status}\nToken: ${res.data?.token ?? '(not found)'}`;
+    } else {
+      out.textContent = `✗ Failed\nStatus: ${res.status}\n${JSON.stringify(res.data, null, 2)}`;
+    }
+  });
+</script>
+```
+
+---
+
+### Display test and assertion results
+
+Shows a live summary of which tests and assertions passed or failed for the most recent response.
+
+```html
+<h3>Tests</h3>
+<ul id="tests"></ul>
+<h3>Assertions</h3>
+<ul id="assertions"></ul>
+
+<script>
+  function renderList(id, items) {
+    document.getElementById(id).innerHTML = items.length
+      ? items.map(i => `<li>${i.status === 'pass' ? '✓' : '✗'} ${i.description ?? i.name}</li>`).join('')
+      : '<li><em>None</em></li>';
+  }
+
+  bru.ctx.onInit = () => {
+    renderList('tests',      bru.ctx.tests);
+    renderList('assertions', bru.ctx.assertions);
+  };
+
+  bru.ctx.onTestsChange      = (t) => renderList('tests',      t);
+  bru.ctx.onAssertionsChange = (a) => renderList('assertions', a);
+</script>
+```
+
+---
+
+## Collection Apps
+
+### List all requests in a collection
+
+Displays every request in the collection and lets you run any one of them with a click.
+
+```html
+<ul id="list"></ul>
+<pre id="log"></pre>
+
+<script>
+  const log = document.getElementById('log');
+
+  async function refresh() {
+    const requests = await bru.ctx.listRequests();
+    const ul = document.getElementById('list');
+    ul.innerHTML = requests.map(r =>
+      `<li>
+        <strong>${r.method || r.type}</strong> ${r.name}
+        <button data-path="${r.pathname}">Run</button>
+      </li>`
+    ).join('');
+
+    ul.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const res = await bru.ctx.runRequest(btn.dataset.path);
+        log.textContent = `${btn.closest('li').textContent.trim()} → ${res.status}\n` + log.textContent;
+      });
+    });
+  }
+
+  bru.ctx.onInit = refresh;
+</script>
+```
+
+---
+
+### Run all GET requests and show a status summary
+
+A one-click smoke test runner that hits every GET endpoint in the collection and reports pass/fail.
+
+```html
+<button id="run-all">Run all GETs</button>
+<pre id="log"></pre>
+
+<script>
+  document.getElementById('run-all').addEventListener('click', async () => {
+    const requests = await bru.ctx.listRequests();
+    const gets     = requests.filter(r => r.method === 'GET');
+    const out      = document.getElementById('log');
+    out.textContent = '';
+
+    for (const r of gets) {
+      try {
+        const res = await bru.ctx.runRequest(r.pathname);
+        out.textContent += `${res.status < 400 ? '✓' : '✗'} ${r.name} → ${res.status}\n`;
+      } catch (e) {
+        out.textContent += `✗ ${r.name} → ERR ${e.message}\n`;
+      }
+    }
+  });
+</script>
+```
+
+---
+
+### Chain requests — login then fetch data
+
+Logs in, stores the token as a runtime variable, then uses it to fetch a protected resource.
+
+> Your collection should have a `Login` request (returns `{ token: "…" }`) and a `Get Profile` request that uses `{{token}}` in an Authorization header.
+
+```html
+<button id="go">Login & Load Profile</button>
+<pre id="out">Click the button to start.</pre>
+
+<script>
+  document.getElementById('go').addEventListener('click', async () => {
+    const out = document.getElementById('out');
+    out.textContent = 'Logging in…';
+
+    const requests = await bru.ctx.listRequests();
+    const loginReq   = requests.find(r => r.name === 'Login');
+    const profileReq = requests.find(r => r.name === 'Get Profile');
+
+    const loginRes = await bru.ctx.runRequest(loginReq.pathname, {
+      runtimeVariables: { email: 'user@example.com', password: 'secret' }
+    });
+
+    const token = loginRes.data?.token;
+    if (!token) { out.textContent = '✗ Login failed'; return; }
+
+    bru.ctx.variables.runtime.set('token', token);
+    out.textContent = `✓ Logged in. Fetching profile…`;
+
+    const profileRes = await bru.ctx.runRequest(profileReq.pathname);
+    out.textContent = `✓ Profile loaded\n\n${JSON.stringify(profileRes.data, null, 2)}`;
+  });
+</script>
+```
+
+---
+
+### E-commerce customer dashboard
+
+Loads a customer record, their orders, and product recommendations in parallel, then renders everything in one view.
+
+> Assumes requests named `Get Customer`, `Get Orders`, and `Get Recommendations`, each accepting a `{{customerId}}` runtime variable.
+
+```html
+<style>
+  body { font-family: sans-serif; padding: 1rem; }
+  input, button { padding: 0.4rem 0.8rem; margin-right: 0.5rem; }
+  section { margin-top: 1.5rem; }
+  ul { padding-left: 1rem; }
+</style>
+
+<input id="cid" placeholder="Customer ID" value="123" />
+<button id="load">Load Customer</button>
+
+<section id="customer"></section>
+<section id="orders"></section>
+<section id="recs"></section>
+
+<script>
+  document.getElementById('load').addEventListener('click', async () => {
+    const id = document.getElementById('cid').value;
+    const vars = { runtimeVariables: { customerId: id } };
+
+    const requests = await bru.ctx.listRequests();
+    const find = (name) => requests.find(r => r.name === name)?.pathname;
+
+    const [customer, orders, recs] = await Promise.all([
+      bru.ctx.runRequest(find('Get Customer'),       vars),
+      bru.ctx.runRequest(find('Get Orders'),         vars),
+      bru.ctx.runRequest(find('Get Recommendations'), vars)
+    ]);
+
+    document.getElementById('customer').innerHTML =
+      `<h3>Customer</h3><pre>${JSON.stringify(customer.data, null, 2)}</pre>`;
+
+    document.getElementById('orders').innerHTML =
+      `<h3>Orders</h3><ul>${(orders.data ?? []).map(o =>
+        `<li>#${o.id} — ${o.status}</li>`).join('')}</ul>`;
+
+    document.getElementById('recs').innerHTML =
+      `<h3>Recommendations</h3><ul>${(recs.data ?? []).map(r =>
+        `<li>${r.name}</li>`).join('')}</ul>`;
+  });
+</script>
+```
+
+---
+
+## Using external libraries
+
+Apps run outside Bruno's CSP so any CDN library works. Pin versions for stability.
+
+### Chart.js response visualiser
+
+Renders a bar chart from a JSON array response (e.g. `[{ label: "A", value: 10 }, …]`).
+
+```html
+<canvas id="chart"></canvas>
+<button id="go">Load Chart</button>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+
+<script>
+  let chart;
+  document.getElementById('go').addEventListener('click', async () => {
+    const res  = await bru.ctx.submitRequest();
+    const data = res.data ?? [];
+
+    const labels = data.map(d => d.label);
+    const values = data.map(d => d.value);
+
+    if (chart) chart.destroy();
+    chart = new Chart(document.getElementById('chart'), {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{ label: 'Values', data: values }]
+      }
+    });
+  });
+</script>
+```
+
+---
+
+### React App
+
+JSX is transpiled in-browser via `@babel/standalone`. Pin to `@7` (the newer automatic JSX runtime emits `import` statements that inline `text/babel` scripts cannot handle).
+
+```html
+<div id="root"></div>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
+
+<script type="text/babel">
+  const { useState } = React;
+
+  function App() {
+    const [data, setData] = useState(null);
+
+    const send = async () => {
+      const res = await bru.ctx.submitRequest();
+      setData(res.data);
+    };
+
+    return (
+      <div>
+        <button onClick={send}>Send</button>
+        {data && <pre>{JSON.stringify(data, null, 2)}</pre>}
+      </div>
+    );
+  }
+
+  ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+```
