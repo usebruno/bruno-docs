@@ -328,9 +328,11 @@
             "pages": [
               {
                 "group": "AI",
+                "tag": "Beta",
                 "pages": [
                   {
                     "group": "Bruno AI",
+                    "tag": "Beta",
                     "pages": [
                       "ai/bruno-ai/introduction",
                       "ai/bruno-ai/configuration",

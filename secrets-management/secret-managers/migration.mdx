@@ -78,20 +78,36 @@ The CLI **does not auto-migrate**. If it finds a `secrets.json` but no `external
 
 Configuration lives at the collection root. All environments share the same vault connection; per-environment secret paths are listed in `data[].secrets`.
 
-### environment.yml (v4+)
-
-```yaml
-name: Production
-variables:
-  baseUrl: https://api.example.com
-externalSecrets:
-  - name: db
-    provider: hashicorp-vault
-    ref: secret/db
-    enabled: true
-```
+### Environment file (v4+)
 
 Configuration is embedded directly in the environment file. Each environment can point to a different vault, region, or key vault independently.
+
+<CodeGroup>
+
+```yaml production.yml
+name: Production
+variables:
+  - name: baseUrl
+    value: https://api.example.com
+externalSecrets:
+  type: aws-secrets-manager
+  variables:
+    - name: db
+      secretName: prod/db/credentials
+      enabled: true
+```
+
+```bru production.bru
+vars {
+  baseUrl: https://api.example.com
+}
+
+vars:externalsecrets:aws-secrets-manager {
+  db: prod/db/credentials
+}
+```
+
+</CodeGroup>
 
 ### Variable reference in requests
 
