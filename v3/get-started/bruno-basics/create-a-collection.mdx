@@ -51,6 +51,24 @@ When you create a new collection or workspace, Bruno automatically generates a `
   The automatically generated `.gitignore` file helps prevent accidentally committing sensitive information (like API keys in environment variables) or unnecessary files to version control.
 </Tip>
 
+## Open an existing collection
+
+You can open collections that already exist on your filesystem — including projects that keep multiple collections inside a single repository (a monorepo layout).
+
+1. From the **home screen**, click the `+` button and select **Open Collection**, or use the **Open Collection** option in the sidebar or application menu.
+2. Choose one or more folders in the native directory picker.
+3. Bruno scans the selected folders for valid collections:
+    - If every selected folder is itself a Bruno collection, they are opened directly.
+    - If any selected folder contains nested collections, Bruno shows a **selection modal** listing every collection it found.
+4. In the selection modal you can:
+    - Filter the list with the search box.
+    - Toggle individual collections, or use **Select all** to open every match at once.
+    - Click **Open** to load the selected collections.
+
+<Info>
+  Collections that are already open in the current workspace are skipped, and folders with no valid Bruno collections show a **No Bruno collections found** message.
+</Info>
+
 ## Custom Collection Names
 
 
