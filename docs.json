@@ -458,7 +458,8 @@
                       "license-administrators/scim-provisioning/configure-scim-with-entra-id",
                       "license-administrators/scim-provisioning/bruno-scim-api"
                     ]
-                  }
+                  },
+                  "license-administrators/ai-policy"
                 ]
               }
             ]
