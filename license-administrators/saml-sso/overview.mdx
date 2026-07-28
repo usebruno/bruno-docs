@@ -36,6 +36,10 @@ Bruno supports SAML 2.0 SSO with the following identity providers:
 - **Microsoft Entra ID (Azure AD)** - [Configuration Guide](./configure-saml-sso-with-entra-id)
 - **Generic SAML 2.0 providers** - Any SAML 2.0 compliant identity provider
 
+<Info>
+Bruno has no IdP-specific logic — it only requires a standards-compliant SAML 2.0 assertion containing the [required attributes](#required-saml-attributes). If your provider isn't listed above, follow the general setup flow below and use the [Using Groups for Access Control](#using-groups-for-access-control) section to map your existing directory groups to Bruno access levels.
+</Info>
+
 ## Prerequisites
 
 Before configuring SAML SSO, ensure you have:
@@ -54,7 +58,7 @@ In your identity provider (Okta, Entra ID, etc.):
 - Create a new SAML application for Bruno
 - Configure the SAML settings using Bruno's ACS URL and Entity ID
 - Set up attribute mappings for user information
-- Configure role mappings for admin and user access
+- Configure role or group mappings for admin and user access
 - Assign users or groups to the Bruno application
 
 ### 2. Configure Bruno
@@ -63,7 +67,7 @@ In the Bruno License Portal:
 - Navigate to Settings → SSO
 - Toggle **Enable SSO** to on
 - Enter your IdP's SAML metadata (Entity IDLogin URL, Certificate)
-- Configure **Role Mapping** to match your IdP's role attributes
+- Configure **Role Mapping** to match your IdP's role or group attributes
 - Set session timeout preferences
 - Save Configuration
 
@@ -98,7 +102,7 @@ Bruno requires the following SAML attributes to be configured in your identity p
 | Attribute Name | Description | Example Value |
 |----------------|-------------|---------------|
 | **NameID** | User's email address (unique identifier) | `user.mail` or `user.email` - Must be in email format |
-| **roles** | User role(s) for access control | Any role value from your IdP (e.g., `BrunoAdmin`, `Engineering`, `admin`, `user`) |
+| **roles** *or* **groups** | User role(s) or group membership(s) for access control | Any role or group value from your IdP (e.g., `BrunoAdmin`, `Bruno-Users`, `Engineering`, `admin`) |
 | **fullName** | User's full name | `user.firstName+" "+user.lastName` or equivalent |
 
 <Info>
@@ -106,18 +110,55 @@ Bruno requires the following SAML attributes to be configured in your identity p
 
 - **NameID**: Bruno uses the NameID as the unique user identifier and email address. Configure your IdP to send the user's email address as the NameID with format `urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress`. This is critical for user identification and license activation.
 
-- **roles**: This attribute contains the role value(s) from your identity provider. The value can be:
-  - Any existing role or group attribute from your IdP (e.g., `Engineering`, `BrunoAdmin`, `IT-Team`)
-  - A hardcoded value for testing purposes (e.g., `admin`, `user`)
-  - Mapped from existing user attributes or group memberships in your IdP
+- **roles / groups**: This attribute contains the access control value(s) from your identity provider. Bruno recognizes **four** attribute names — `role`, `roles`, `group`, and `groups` (case-insensitive) — so you can send whichever your IdP produces naturally. The value can be:
+  - **Group membership** from your existing directory (e.g., `Bruno-Admins`, `Engineering`) — see [Using Groups for Access Control](#using-groups-for-access-control)
+  - An app role or role attribute, if your IdP has one (e.g., Entra ID App Roles, an Okta profile attribute)
+  - A hardcoded constant value for testing purposes (e.g., `admin`, `user`)
 
-  **Important**: The role values sent in the SAML assertion must be mapped to either "Admin Roles" or "User Roles" in the Bruno License Portal's SSO Settings (see [Role Mapping](#role-mapping) section below).
+  Bruno merges the values of **every** recognized attribute into a single list, so sending `roles` and `groups` together is safe — a match in either grants access.
+
+  **Important**: The values sent in the SAML assertion must be mapped to either "Admin Roles" or "User Roles" in the Bruno License Portal's SSO Settings (see [Role Mapping](#role-mapping) section below).
 
 - **fullName**: This attribute should contain the user's complete name. It can be mapped to:
   - A single field if your IdP has a combined name field
   - A concatenation of first and last name fields (e.g., `user.firstName+" "+user.lastName`)
   - Any existing user property in your IdP that contains the full name
+
+  If your IdP cannot concatenate fields, you can instead send separate **`firstName`** and **`lastName`** attributes — Bruno joins them when no `fullName` is present.
 </Info>
+
+### Using Groups for Access Control
+
+Bruno does not require a dedicated "role" attribute. Because it accepts attributes named `role`, `roles`, `group`, or `groups`, **your existing directory groups work as-is** — there is no need to create app roles or custom user attributes just for Bruno.
+
+<Info>
+**Which should I use?**
+
+- **Groups** — best if your organization already manages Bruno access through directory groups (e.g. `Bruno-Admins`, `Bruno-Users`), or if your IdP has no app-role concept at all. This is the normal path on most generic SAML 2.0 connectors.
+- **Roles** — best if your IdP has a first-class app-role primitive you already use, such as Entra ID App Roles (`user.assignedroles`) or an Okta profile attribute.
+- **Both** — fully supported. Bruno checks every recognized attribute, so you can send `roles` and `groups` in the same assertion.
+</Info>
+
+**Sending group membership from your IdP**
+
+Most identity providers do **not** include group membership in a SAML assertion by default, and most of those that can will name the attribute something Bruno doesn't recognize. The universal rule: the attribute must arrive named `role`, `roles`, `group`, or `groups`.
+
+| Identity provider | Where to configure it | Watch out for |
+|---|---|---|
+| **Okta** | SAML Settings → **Group Attribute Statements** ([guide](./configure-saml-sso-with-okta#step-4-configure-attribute-statements)) | A Profile attribute alone does not include group names; group-assigned users need the Group Attribute Statement |
+| **Entra ID** | Attributes & Claims → **Add a group claim** ([guide](./configure-saml-sso-with-entra-id#step-4-configure-attributes--claims)) | Check "Customize the name of the group claim" and set it to `groups`, otherwise the claim arrives as a full URI |
+| **Other / generic SAML** | Look for a "group attribute", "memberOf" or "group attribute statement" option in the SAML app settings | Many providers default the attribute name to `memberOf`, which Bruno does **not** recognize — rename it to `groups`. Also scope it to groups assigned to the Bruno app rather than the user's entire directory |
+
+Then in **License Portal → Settings → SSO → Role Mapping**, enter the **exact group names** as your IdP emits them — for example `Bruno-Admins` under Admin Roles and `Bruno-Users` under User Roles.
+
+**Common pitfalls with group-based access**
+
+- **An attribute name is not a value.** Where your IdP maps "SP attribute name → IdP attribute name", the right-hand side names an attribute to *read from* — it is not a literal value to send. Pointing it at an attribute that doesn't exist produces an *empty* attribute rather than an error, and an empty attribute yields no roles, so the login is rejected with a permissions error while both sides look correctly configured.
+- **URI-style attribute names don't match.** `http://schemas.microsoft.com/ws/2008/06/identity/claims/groups` is not recognized. Bruno matches the four bare names only.
+- **Group names are case-sensitive.** `bruno-admins` in the assertion will not match `Bruno-Admins` in Role Mapping.
+- **Some IdPs emit group IDs rather than names.** If you see opaque GUIDs in the assertion, either switch the source attribute to display names or paste the GUIDs into Role Mapping verbatim.
+- **The group must be assigned to the Bruno application**, not merely exist in your directory. Most IdPs only emit groups that are scoped to the app.
+- **Only the first `<AttributeStatement>` block is read.** If your IdP splits attributes across multiple statement blocks, values in later blocks are ignored.
 
 ### Example SAML Assertion
 
@@ -138,24 +179,51 @@ Here's an example of how these attributes appear in a SAML assertion:
 </saml2:AttributeStatement>
 ```
 
+If you are using group membership instead, the equivalent assertion sends a `groups` attribute, which may carry multiple values:
+
+```xml
+<saml2:AttributeStatement>
+  <saml2:Attribute Name="groups" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified">
+    <saml2:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                          xsi:type="xs:string">Bruno-Admins</saml2:AttributeValue>
+    <saml2:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                          xsi:type="xs:string">Engineering</saml2:AttributeValue>
+  </saml2:Attribute>
+</saml2:AttributeStatement>
+```
+
 <Warning>
-**Important**: Both attributes must be configured in your identity provider for SAML SSO to work correctly. The attribute names are case-sensitive and must match exactly as shown above.
+**Watch for an attribute that is present but empty.** A value like this extracts no roles at all and results in a "You do not have necessary permissions" error, even though the attribute appears in the assertion:
+
+```xml
+<saml2:Attribute Name="roles" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified">
+  <saml2:AttributeValue xsi:nil="true" xsi:type="xsd:string"/>
+</saml2:Attribute>
+```
+
+`xsi:nil="true"` means your IdP resolved the mapping to an attribute that has no value for this user. Fix the mapping in your IdP, or remove the attribute and use group membership instead.
+</Warning>
+
+<Warning>
+**Important**: The `fullName` attribute plus at least one role or group source is required for SAML SSO to work correctly. Attribute *names* are matched case-insensitively and must be one of the names Bruno recognizes (`role`, `roles`, `group`, `groups`); the attribute *values* are matched case-sensitively against your Role Mapping configuration.
 </Warning>
 
 ## Role Mapping
 
-After configuring the `roles` attribute in your identity provider, you need to map those role values to Bruno access levels in the License Portal.
+After configuring the `roles` or `groups` attribute in your identity provider, you need to map those values to Bruno access levels in the License Portal. Group names go in exactly the same fields as role values — Bruno makes no distinction between them.
 
 ### Configuring Role Mapping in Bruno
 
 In the Bruno License Portal's SSO Settings, you'll find two fields under "Role Mapping":
 
-1. **Admin Roles**: Comma-separated list of role values that should have admin access
-   - Example: `admin,BrunoAdmin,IT-Administrators`
+1. **Admin Roles**: Comma-separated list of role or group values that should have admin access
+   - Example: `admin,BrunoAdmin,IT-Administrators` or `Bruno-Admins`
    - Users with these roles can access the admin panel and manage licenses
 
-2. **User Roles**: Comma-separated list of role values that should have user access
-   - Example: `user,Engineering,Developers`
+2. **User Roles**: Comma-separated list of role or group values that should have user access
+   - Example: `user,Engineering,Developers` or `Bruno-Users`
    - Users with these roles have standard access to Bruno
 
 ![Bruno SAML SSO role mapping configuration showing Admin Roles and User Roles fields](/images/screenshots/sso-scim-management/okta/okta-sso-11.webp)
@@ -163,28 +231,32 @@ In the Bruno License Portal's SSO Settings, you'll find two fields under "Role M
 <Info>
 **How Role Mapping Works:**
 
-1. Your IdP sends the `roles` attribute value in the SAML assertion (e.g., `Engineering`)
-2. Bruno checks if this value matches any role in the "Admin Roles" or "User Roles" fields
+1. Your IdP sends the `roles` or `groups` attribute value in the SAML assertion (e.g., `Engineering`)
+2. Bruno checks if this value matches any entry in the "Admin Roles" or "User Roles" fields
 3. If it matches "Admin Roles", the user will be able to access the license portal and manage licenses
 4. If it matches "User Roles", the user will be able to activate their license with SSO but will not have license portal access
 5. If it doesn't match either, the user will be denied access
 
 **Example Configuration:**
-- IdP sends: `roles="Engineering"`
+- IdP sends: `groups="Engineering"`
 - Bruno Admin Roles: `admin,BrunoAdmin`
 - Bruno User Roles: `user,Engineering,QA`
 - Result: User gets standard access (matches "Engineering" in User Roles)
 
 **Important Implementation Details:**
-- Role matching is **case-sensitive** - `admin` ≠ `Admin`
-- A user can have multiple roles in the IdP; Bruno checks if **any** of them match the configured roles
+- Role and group matching is **case-sensitive** - `admin` ≠ `Admin`
+- A user can have multiple roles or groups in the IdP; Bruno checks if **any** of them match the configured values
 - If a user matches "Admin Roles", they get admin access (even if they also match "User Roles")
 - When a user is removed from the IdP, they lose access on their next login attempt
 </Info>
 
 <Warning>
-**Important**: The role values are case-sensitive. Ensure the values in your IdP's `roles` attribute match exactly with the values you configure in Bruno's Admin Roles or User Roles fields.
+**Important**: The role and group values are case-sensitive. Ensure the values in your IdP's `roles` or `groups` attribute match exactly with the values you configure in Bruno's Admin Roles or User Roles fields. Both fields are required and must be non-empty before SSO can be enabled.
 </Warning>
+
+<Info>
+**Admin Roles and User Roles are evaluated independently, not as a hierarchy.** Membership of an Admin Roles group does not by itself grant the license-activation flow, and membership of a User Roles group does not grant License Portal access. If the same people need both, list their group in *both* fields, or give them a group in each.
+</Info>
 
 ## Just-in-Time (JIT) Provisioning
 
@@ -197,8 +269,8 @@ JIT provisioning applies to users who activate their license through the **SSO**
 ### How JIT Provisioning Works
 
 1. In the Bruno app's *Activate License* screen, a user selects **SSO**, enters their email, and signs in with SSO for the first time.
-2. Bruno validates the SAML assertion and checks the `roles` value against your [Role Mapping](#role-mapping).
-3. If the role matches a value in **User Roles**, Bruno automatically creates a standard licensed user account and issues them a license.
+2. Bruno validates the SAML assertion and checks the `roles` or `groups` values against your [Role Mapping](#role-mapping).
+3. If a value matches an entry in **User Roles**, Bruno automatically creates a standard licensed user account and issues them a license.
 4. On subsequent logins, the existing account is reused (and reactivated if it was previously deactivated).
 
 <Info>
@@ -209,7 +281,7 @@ Users created through JIT provisioning appear in the License Portal's user list 
 
 JIT provisioning applies to **standard licensed users only**. It does **not** create or grant License Manager Admin access.
 
-A user must already exist as an Admin in the License Portal before they can sign in to the License Manager with SSO. Mapping an IdP role to **Admin Roles** is not sufficient on its own: role mapping controls the access level of users who are *already* provisioned as Admins, but it does not automatically create the Admin account.
+A user must already exist as an Admin in the License Portal before they can sign in to the License Manager with SSO. Mapping an IdP role or group to **Admin Roles** is not sufficient on its own: role mapping controls the access level of users who are *already* provisioned as Admins, but it does not automatically create the Admin account.
 
 To provision Admins, use one of the following:
 
@@ -217,7 +289,7 @@ To provision Admins, use one of the following:
 - **Use SCIM Admin Role Mapping** to provision Admins automatically from your identity provider. See [SCIM Provisioning](../scim-provisioning/overview).
 
 <Warning>
-If an Admin tries to access the License Portal via SSO without first being added under **Settings → Admins** (or provisioned via SCIM), the login will fail even when their IdP role matches your configured Admin Roles. See the [SAML SSO troubleshooting guide](./troubleshooting#2-is-the-user-already-an-admin-in-bruno-license-portal) for details.
+If an Admin tries to access the License Portal via SSO without first being added under **Settings → Admins** (or provisioned via SCIM), the login will fail even when their IdP role or group matches your configured Admin Roles. See the [SAML SSO troubleshooting guide](./troubleshooting#2-is-the-user-already-an-admin-in-bruno-license-portal) for details.
 </Warning>
 
 ## License Activation and Access Control
@@ -254,5 +326,6 @@ Ready to configure SAML SSO? Choose your identity provider:
 - [Configure SAML SSO with Okta](./configure-saml-sso-with-okta) - Complete setup guide for Okta
 - [Configure SAML SSO with Entra ID](./configure-saml-sso-with-entra-id) - Complete setup guide for Microsoft Entra ID
 
-Need help? See our [Troubleshooting Guide](./troubleshooting) for common issues and solutions.
+Using a different SAML 2.0 provider? Follow the [General Setup Flow](#general-setup-flow) above, supply the [SAML Configuration Values](#saml-configuration-values) from your Bruno SSO settings page, and map your directory groups using [Using Groups for Access Control](#using-groups-for-access-control).
 
+Need help? See our [Troubleshooting Guide](./troubleshooting) for common issues and solutions.
