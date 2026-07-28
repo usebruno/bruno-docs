@@ -1,6 +1,6 @@
 ---
 title: Migration Guide
-sidebarTitle: Migration Guide
+sidebarTitle: V4 Migration Guide
 description: Move your Secret Manager configuration from secrets.json to environment files.
 ---
 
@@ -193,7 +193,7 @@ Both work in v4. The old syntax is shown with a deprecation underline in the edi
 
 ---
 
-## Gotchas
+## Tips
 
 **The CLI will not run if `secrets.json` exists without a migrated environment file.**
 The CLI prints a warning and continues without secrets — it does not fail hard, but requests that depend on secrets will receive empty values. Fix: open the collection in the app first.

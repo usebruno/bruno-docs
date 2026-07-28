@@ -54,10 +54,10 @@ Each variable has its own storage location either within your collection file or
 
 | Variable Type | Storage Location |
 |---|---|
-| Collection | `<collection-name>.bru` |
-| Folder | `<folder-name>.bru` |
-| Request | `<request-name>.bru` |
-| Environment | `<env-name>.bru` |
+| Collection | `opencollection.yml` |
+| Folder | `folder.yml` |
+| Request | `request.yml` |
+| Environment | `<env-name>.yml` |
 | Runtime | Local storage |
 | Global | Local storage |
 | Prompt | Never stored |
@@ -78,28 +78,9 @@ Starting with v4.0.0, variables are no longer limited to strings. You can store 
 | `boolean` | `true` |
 | `object` | `{ "host": "localhost" }` |
 
-In `.bru` files, types are stored using `@number`, `@boolean`, or `@object` annotations placed on the line immediately above the variable. Object values use triple-quote (`'''`) blocks. In `.yml` files, each variable is an object with a `type` field and a `data` field.
+In `.yml` files, each variable is an object with a `type` field and a `data` field. In `.bru` files, types are stored using `@number`, `@boolean`, or `@object` annotations placed on the line immediately above the variable. Object values use triple-quote (`'''`) blocks.
 
 <CodeGroup>
-```bru BRU format (.bru)
-vars:pre-request {
-  @number
-  timeout: 30
-
-  @boolean
-  debug: true
-
-  @object
-  config: '''
-    {
-      "host": "localhost",
-      "port": 8080
-    }
-  '''
-
-  baseUrl: https://api.example.com
-}
-```
 
 ```yaml YAML format (.yml)
 runtime:
@@ -122,6 +103,27 @@ runtime:
     - name: baseUrl
       value: https://api.example.com
 ```
+
+```bru BRU format (.bru)
+vars:pre-request {
+  @number
+  timeout: 30
+
+  @boolean
+  debug: true
+
+  @object
+  config: '''
+    {
+      "host": "localhost",
+      "port": 8080
+    }
+  '''
+
+  baseUrl: https://api.example.com
+}
+```
+
 </CodeGroup>
 
 **Setting typed variables from scripts**
