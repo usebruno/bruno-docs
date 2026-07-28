@@ -31,6 +31,10 @@ A file field can hold more than one file. Each selected file appears as a chip i
 - Selecting the same file again is deduplicated.
 - The `Content-Type` for the field is auto-detected from the file list; you can override it from the field's settings.
 
+<Tip>
+  You can use variable interpolation in both parameter values and file attachment paths. For example, setting a file value to `{{filePath}}` resolves the variable at runtime, letting you dynamically control which file is uploaded based on your environment or script variables.
+</Tip>
+
 #### 2. URL Encoded
 
 It is commonly used for simple form submissions where data is sent as key-value pairs. Each key and value are separated by an equal sign (=), and multiple pairs are separated by an ampersand (&).
@@ -60,7 +64,7 @@ The **Other** option on the **Body** tab provides quick choices to send a file o
 1. Navigate to the **Body** tab.
 2. From the dropdown, choose **Other**.
 3. Two controls are available:
-   - **File / Binary**: Send a file directly as the request body. Click **Select File** (or drag-and-drop) to pick the file. Bruno sends the file as-is (Content-Type will be inferred or set it in **Headers**).
+   - **File / Binary**: Send a file directly as the request body. Click **Select File** (or drag-and-drop) to pick the file, or enter a `{{variable}}` in the file path field to resolve the path dynamically at runtime. Bruno sends the file as-is (Content-Type will be inferred or set it in **Headers**).
    - **No Body**: Send the request with an empty body (useful for requests that require no payload).
 4. (optional) Verify the **Content-Type** header if your server expects a specific media type for the uploaded file.
 5. Save and execute the request.

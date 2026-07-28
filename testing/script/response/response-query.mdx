@@ -1,16 +1,22 @@
 ---
-title: "Response Query"
+title: "Response query"
+description: "Query and filter nested response data using dot notation, deep navigation, and array filtering"
 ---
 
-The `res` object that is available inside the [vars](../vars), [assertions](../../tests/assertions), [scripting](../getting-started) and [testing](../../tests/introduction) contexts can be queried for data by invoking it like below.
+The `res` object available inside the [vars](../vars), [assertions](../../tests/assertions), [scripting](../getting-started), and [testing](../../tests/introduction) contexts can be invoked as a function to query nested response data.
 
-Think of it as `lodash.get()` on steroids
+Think of it as `lodash.get()` on steroids.
 
 ```javascript
 res('order.total')
 ```
 
+<Info>
+Response query filtering (including `[?]` with filter functions and object predicates) works in both **Safe Mode** and **Developer Mode**.
+</Info>
+
 ## Examples
+
 ```javascript
 const data = {
   customer: {
@@ -36,21 +42,22 @@ const data = {
   },
 };
 ```
-| Query                                   | Output                             |
+
+| Query | Output |
 |-----------------------------------------|------------------------------------|
-| res("customer.address.city")            | bangalore                          |
-| res("customer.orders.items.amount")     | [10, 20, 30, 40]                   |
-| res("customer.orders.items.amount[0]") | 10                                 |
-| res("..items.amount")                   | [10, 20, 30, 40]                   | |
-| res("..amount")                         | [10, 20, 30, 40]                   |
-| res("..items.amount[0]")                | 10                                 |
-| res("..items[0].amount")                | 10                                 |
-| res("..items[5].amount")                | undefined                          |
-| res("..id")                             | ["order-1", 1, 2, "order-2", 3, 4] |
-| res("customer.orders.foo")              | undefined                          |
-| res("..customer.foo")                   | undefined                          |
-| res("..address")                        | [\{ city: "bangalore" \}]          |
-| res("..address[0]")                     | \{ city: "bangalore" \}            |
+| res("customer.address.city") | bangalore |
+| res("customer.orders.items.amount") | [10, 20, 30, 40] |
+| res("customer.orders.items.amount[0]") | 10 |
+| res("..items.amount") | [10, 20, 30, 40] |
+| res("..amount") | [10, 20, 30, 40] |
+| res("..items.amount[0]") | 10 |
+| res("..items[0].amount") | 10 |
+| res("..items[5].amount") | undefined |
+| res("..id") | ["order-1", 1, 2, "order-2", 3, 4] |
+| res("customer.orders.foo") | undefined |
+| res("..customer.foo") | undefined |
+| res("..address") | [\{ city: "bangalore" \}] |
+| res("..address[0]") | \{ city: "bangalore" \} |
 
 ## API
 
@@ -61,7 +68,7 @@ const data = {
 res('customer.orders.items.amount')
 ```
 
-### Deep navigation .. double dots
+### Deep navigation with double dots
 
 **Example:**
 ```javascript
@@ -75,17 +82,28 @@ res('..items.amount')
 res('..items[0].amount')
 ```
 
-### Array filtering [?] with corresponding filter function
+### Array filtering with a filter function
+
+Use `[?]` with a corresponding filter function to select matching items.
 
 **Example:**
 ```javascript
 res('..items[?].amount', i => i.amount > 20)
 ```
 
-### Array mapping [?] with corresponding mapper function
+### Array filtering with an object predicate
+
+Use `[?]` with an object to match items by property values. This is equivalent to `i => i.id === 2 && i.amount === 20`.
+
+```javascript
+res('..items[?]', { id: 2, amount: 20 })
+```
+
+### Array mapping with a mapper function
+
+Use `[?]` with a function that returns a transformed value to map over items.
 
 **Example:**
 ```javascript
 res('..items..amount[?]', amt => amt + 10)
 ```
-
