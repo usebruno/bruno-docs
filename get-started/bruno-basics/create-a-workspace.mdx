@@ -160,6 +160,42 @@ If you opened a collection from a location outside the active workspace folder, 
 
 Bruno moves the collection files to `<workspace>/collections/<name>`, registers the new path in `workspace.yml`, and re-opens the collection from its new location. Any open request tabs for that collection will close.
 
+**Example**: The collection `legacy-proxy` was opened from outside the active workspace. After you move it, Bruno copies the files under `collections/` and updates the path in `workspace.yml`.
+
+<CodeGroup>
+
+```yaml Before (workspace.yml)
+opencollection: 1.0.0
+info:
+  name: "api-workspace"
+  type: workspace
+
+collections:
+  - name: "users-api"
+    path: "collections/users-api"
+  - name: "payments-api"
+    path: "collections/payments-api"
+  - name: "legacy-proxy"
+    path: "../../other-projects/legacy-proxy"
+```
+
+```yaml After (workspace.yml)
+opencollection: 1.0.0
+info:
+  name: "api-workspace"
+  type: workspace
+
+collections:
+  - name: "users-api"
+    path: "collections/users-api"
+  - name: "payments-api"
+    path: "collections/payments-api"
+  - name: "legacy-proxy"
+    path: "collections/legacy-proxy"
+```
+
+</CodeGroup>
+
 <Warning>
   If the collection has unsaved changes, Bruno shows a confirmation dialog. You can **Save All and Move**, **Discard All and Move**, or save individual unsaved requests before continuing.
 </Warning>
