@@ -5,7 +5,9 @@ description: "Query and filter nested response data using dot notation, deep nav
 
 The `res` object available inside the [vars](../vars), [assertions](../../tests/assertions), [scripting](../getting-started), and [testing](../../tests/introduction) contexts can be invoked as a function to query nested response data.
 
-Think of it as `lodash.get()` on steroids.
+Think of it as `lodash.get()` on steroids.  
+
+If you're not familiar, [`lodash.get()`](https://lodash.com/docs/#get) is a utility function from the [Lodash](https://lodash.com/) library that lets you safely access nested properties in JavaScript objects.
 
 ```javascript
 res('order.total')
@@ -84,26 +86,29 @@ res('..items[0].amount')
 
 ### Array filtering with a filter function
 
-Use `[?]` with a corresponding filter function to select matching items.
+Use `[?]` with a corresponding filter function to select matching items. `[?]` works with both standard dot notation and deep navigation (`..`).
 
 **Example:**
 ```javascript
+res('customer.orders.items[?].amount', i => i.amount > 20)
 res('..items[?].amount', i => i.amount > 20)
 ```
 
 ### Array filtering with an object predicate
 
-Use `[?]` with an object to match items by property values. This is equivalent to `i => i.id === 2 && i.amount === 20`.
+Use `[?]` with an object to match items by property values. This is equivalent to `i => i.id === 2 && i.amount === 20`. `[?]` works with both standard dot notation and deep navigation (`..`).
 
 ```javascript
+res('customer.orders.items[?]', { id: 2, amount: 20 })
 res('..items[?]', { id: 2, amount: 20 })
 ```
 
 ### Array mapping with a mapper function
 
-Use `[?]` with a function that returns a transformed value to map over items.
+Use `[?]` with a function that returns a transformed value to map over items. `[?]` works with both standard dot notation and deep navigation (`..`).
 
 **Example:**
 ```javascript
+res('customer.orders.items..amount[?]', amt => amt + 10)
 res('..items..amount[?]', amt => amt + 10)
 ```

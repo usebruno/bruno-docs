@@ -81,7 +81,7 @@ To use a global environment variable, reference it using the format `{{var_name}
 
 ### Using process.env in global environments
 
-You can reference process environment variables inside global environment variable values using the `{{process.env.VAR_NAME}}` syntax. Bruno resolves these references from the workspace-level `.env` file, so your secrets remain out of version control while still being usable in global environments.
+You can reference process environment variables ((variables from a `.env` file)) inside global environment variable values using the `{{process.env.VAR_NAME}}` syntax. Bruno resolves these references from the workspace-level `.env` file, so your secrets remain out of version control while still being usable in global environments.
 
 For example, you can set a global environment variable value to:
 
