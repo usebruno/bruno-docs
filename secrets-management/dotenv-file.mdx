@@ -85,6 +85,33 @@ In this example, the `JWT_TOKEN` secret from the `.env` file is referenced using
 
 2. If you need to share the structure of your environment variables with other developers, create a `.env.sample` file without actual secret values.
 
+### Handling Special Characters in Values
+
+If you manage `.env` variables through Bruno's UI, values containing special characters are automatically quoted when saved. However, If you edit the file manually, wrap values in double quotes when they contain any of the following:
+
+| Character | Why it needs quoting |
+|---|---|
+| `#` | The dotenv parser treats everything after `#` as a comment |
+| `\n` / `\r` | Newlines break the line-based format |
+| `"` | Must be escaped as `\"` inside a quoted value |
+| `\` | Must be escaped as `\\` inside a quoted value |
+
+```bash
+# Simple values — no quoting needed
+SIMPLE_KEY=mysecretvalue
+
+# Values with # must be quoted — otherwise everything after # is ignored
+DB_PASSWORD="P@ss#w0rd!123"
+
+# Newlines and backslashes must be quoted and escaped
+MULTILINE="line1\nline2"
+WIN_PATH="C:\\Users\\name"
+```
+
+<Warning>
+  Example: `PASSWORD=ABC#DEF` is parsed as `ABC`, not `ABC#DEF`. Always quote values that contain `#`.
+</Warning>
+
 ### Handling Variables with Dots
 
 When using environment variables that contain dots in their names, use square bracket notation:

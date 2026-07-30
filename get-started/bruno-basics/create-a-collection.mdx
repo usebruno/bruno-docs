@@ -4,9 +4,9 @@ title: "Create a Collection"
 
 A collection in Bruno is a structured group of API requests, tests, and related resources that helps you organize and manage your API testing workflow.
 
-<Info>
+<Note>
   If you have an existing collection inside of another tool that you would like to import, please see [Importing Collections <strong><sup>↗</sup></strong>](../import-export-data/import-collections).
-</Info>
+</Note>
 
 ## How to Create a Collection
 
@@ -32,10 +32,9 @@ A collection in Bruno is a structured group of API requests, tests, and related 
 
 6. Click **Create**
 
-
-<Info>
-  Starting with Bruno v3.1.0, YAML (OpenCollection format) is the default file format when creating new collections. Learn more about [OpenCollection YAML](/opencollection-yaml/overview).
-</Info>
+- **Create a Collection** - Creates a new collection in the current workspace.
+- **Open Collection** - Opens an existing Bruno collection (multiple open collections is supported).
+- **Import Collection** - Imports a collection from other tools (Postman, GitHub Import, Insomnia, etc.).
 
 ## Automatic Git Configuration
 
@@ -52,8 +51,6 @@ When you create a new collection or workspace, Bruno automatically generates a `
 </Tip>
 
 ## Custom Collection Names
-
-
 
 You can use any characters in your collection names, including special characters like `/`, `[`, `]`, `*`, etc. Bruno automatically handles filesystem compatibility by replacing unsupported characters with `-` in the filenames while preserving your original collection name.
 

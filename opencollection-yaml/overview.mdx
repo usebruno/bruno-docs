@@ -148,6 +148,14 @@ my-collection/
     └── create-order.bru
 ```
 
+## Cross-collection drag and drop
+
+When you drag a request from one collection to another that uses a different format (for example, `.bru` to `.yml` or vice versa), Bruno automatically converts the request file to the target collection's format. This lets you move individual requests between format types without any manual conversion.
+
+<Note>
+  Moving folders between collections with different formats is not supported. Only individual requests are converted automatically during cross-collection moves.
+</Note>
+
 ## Migration
 
 Bruno supports both `.bru` and `.yml` formats, so you can migrate your collections gradually. Both formats can coexist within the same collection during the transition period.
