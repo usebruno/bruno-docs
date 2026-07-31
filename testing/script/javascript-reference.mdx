@@ -6,6 +6,10 @@ sidebarTitle: "JavaScript Reference"
 Bruno offers powerful scripting capabilities that allow you to extend and automate your API testing workflows.
 Here is the complete set of API reference for the scripting feature in Bruno.
 
+<Note>
+  This page covers the APIs available in **scripts and tests** (`req`, `res`, and `bru`). [Apps](/apps/overview) use a separate API — `bru.ctx` — which is injected into the App's page instead of the scripting sandbox, and is not available in scripts. See the [Apps API Reference](/apps/api-ref) for the full `bru.ctx` surface.
+</Note>
+
 ## Request
 
 The `req` variable represents the HTTP request object and is automatically available inside your scripting and testing context. It provides methods to access and modify the current request's properties such as URL, method, headers, body, and other configuration options before the request is sent to the server.
