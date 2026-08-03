@@ -3,12 +3,12 @@ title: "Script Flow in Bruno"
 sidebarTitle: "Script Flow"
 ---
 
-In Bruno, we provide two types of script flows: **Sandwich** and **Sequential (Natural)**. These flows control the order in which the scripts at various levels of your API test collections are executed, allowing for flexibility and control over your automation.
+In Bruno, we provide two types of script flows: **Sandwich** and **Sequential**. These flows control the order in which pre-request scripts, post-response scripts, and test scripts at various levels of your API test collections are executed, allowing for flexibility and control over your automation.
 
 ## Flow Types
 
 1. Sandwich Flow
-2. Sequential (Natural) Flow
+2. Sequential Flow
 
 ### 1. Sandwich Flow
 
@@ -19,12 +19,27 @@ sandwich-flow/
 ├── Collection Pre Script
 │   └── Folder Pre Script
 │       └── Request Pre Script
-└── Request Post Script
-    └── Folder Post Script
-        └── Collection Post Script
+├── Request Post Script
+│   └── Folder Post Script
+│       └── Collection Post Script
+└── Request Test Script
+    └── Folder Test Script
+        └── Collection Test Script
 ```
 
-This order allows you to execute actions at multiple levels (collection, folder, and request) before and after each test. It is useful when you need to configure different environments or states before and after running tests at various levels.
+**Execution order:**
+
+1. Collection Pre Script
+2. Folder Pre Script
+3. Request Pre Script
+4. Request Post Script
+5. Folder Post Script
+6. Collection Post Script
+7. Request Test Script
+8. Folder Test Script
+9. Collection Test Script
+
+This order nests pre-scripts inward and post-scripts / test scripts outward. It is useful when you need to set up state at broader scopes first, then tear down or assert from the request level back out to the collection.
 
 ### 2. Sequential (Natural) Flow
 
@@ -35,22 +50,39 @@ sequential-flow/
 ├── Collection Pre Script
 │   └── Folder Pre Script
 │       └── Request Pre Script
-└── Collection Post Script
-    └── Folder Post Script
-        └── Request Post Script
+├── Collection Post Script
+│   └── Folder Post Script
+│       └── Request Post Script
+└── Collection Test Script
+    └── Folder Test Script
+        └── Request Test Script
 ```
 
-This flow executes scripts in a more natural, linear order. After the **Request Pre Script**, it runs the **Collection Post Script**, followed by **Folder Post Script**, and finally, the **Request Post Script**. This flow may be better suited when you want a clean execution from top to bottom.
+**Execution order:**
 
-<Callout emoji="">
+1. Collection Pre Script
+2. Folder Pre Script
+3. Request Pre Script
+4. Collection Post Script
+5. Folder Post Script
+6. Request Post Script
+7. Collection Test Script
+8. Folder Test Script
+9. Request Test Script
+
+This flow runs each phase (pre, post, test) from collection → folder → request. It may be better suited when you want a clean top-to-bottom execution at every stage.
+
+## Setting the Flow Type
+
+<Note>
   If the `flow` property is not specified, Sandwich is used by default.
-</Callout>
+</Note>
 
 You can set the flow type (either `sandwich` or `sequential`) in your collection configuration file:
 
 <Tabs>
-  <Tab title="YAML Collections (v3)">
-    ```yaml filename="opencollection.yml"
+  <Tab title="YAML Collections">
+    ```yaml title="opencollection.yml"
     extensions:
       bruno:
         scripts:
@@ -58,7 +90,7 @@ You can set the flow type (either `sandwich` or `sequential`) in your collection
     ```
   </Tab>
   <Tab title="Bru Collections">
-    ```json filename="bruno.json"
+    ```json title="bruno.json"
     {
       "scripts": {
         "moduleWhitelist": ["crypto", "buffer", "form-data"],
@@ -71,3 +103,7 @@ You can set the flow type (either `sandwich` or `sequential`) in your collection
     ```
   </Tab>
 </Tabs>
+
+## Resources
+
+- [Blog - Script Flow in Bruno](https://blog.usebruno.com/script-flow-in-bruno)

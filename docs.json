@@ -55,6 +55,7 @@
                 "group": "Configure",
                 "pages": [
                   "get-started/configure/settings",
+                  "get-started/configure/keybindings",
                   "get-started/configure/proxy-config",
                   "get-started/configure/javascript-sandbox"
                 ]
@@ -347,7 +348,8 @@
                       "ai/integration/cursor",
                       "ai/integration/vs-code",
                       "ai/integration/codex",
-                      "ai/integration/claude"
+                      "ai/integration/claude",
+                      "ai/integration/devin"
                     ]
                   }
                 ]
