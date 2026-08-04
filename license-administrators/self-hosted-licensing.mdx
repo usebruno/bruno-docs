@@ -597,9 +597,109 @@ Bruno supports domain discovery, which automatically routes users to your organi
 
 ---
 
+## AI Policy
+
+AI Policy lets License Administrators set AI governance for their whole organization from the self-hosted admin portal. Instead of every user configuring AI independently, an admin decides what AI is allowed and how requests are protected, and that policy applies to every user on the server.
+
+The model is simple: **the org sets policy, the user brings the key.** No API keys are entered or stored in the admin portal. Keys stay user-level, set by each user in the desktop app. A provider or model toggle means *allowed* or *not allowed*, not *enabled*: within the allowed set, users still add their own keys for the providers they want to use.
+
+### Accessing AI Policy
+
+1. Sign in to your self-hosted admin portal as a License Administrator.
+2. Navigate to **Settings**.
+3. Select **AI** from the left-hand menu.
+
+The AI Policy page has two tabs: **Configuration** (what AI is allowed) and **Security** (how requests are protected).
+
+![AI Policy page — Settings sidebar with AI selected, showing Configuration and Security tabs](/images/screenshots/self-host-guide/ai-policy-overview.webp)
+
+### Enabling AI features
+
+At the top of the page, the **AI Features** card is the master switch for your organization. It also summarizes the current policy (for example, *3 providers · 7 models allowed*).
+
+- Toggle **AI Features** **on** to allow AI usage across your organization.
+- Toggle it **off** to disable all Bruno AI features for every user. When off, the rest of the policy is inert.
+
+### Configuration
+
+The **Configuration** tab controls which providers and models your users can enable.
+
+![AI Policy Configuration tab — provider toggles with per-model allow/deny controls](/images/screenshots/self-host-guide/ai-policy-configuration.webp)
+
+#### Providers
+
+Each provider has its own allow/deny toggle and a summary of how many of its models are allowed. Turning a provider off makes it unavailable to users regardless of their own configuration or stored key.
+
+**OpenAI**: Toggle on to allow it, then expand the row to allow or deny individual models.
+
+**Anthropic**: Toggle on to allow it, then expand the row to allow or deny individual models.
+
+**OpenAI-Compatible Endpoints**: Custom endpoints that users configure themselves, for example Azure OpenAI or self-hosted models. Because these are user-defined, there is no per-model control: you can either allow or deny custom endpoints as a whole.
+
+#### Per-model control
+
+Expand a provider row to allow or deny its individual models. Denying a model removes it from the allowed list. Users cannot select it in the desktop app even when its provider is allowed.
+
+### Security
+
+The **Security** tab governs the data-protection (redaction) rules applied to context Bruno sends to AI providers. These are the same protections available in the Bruno app's Security settings, but set here they can be enforced org-wide.
+
+![AI Policy Security tab — "Let users control security" switch and redaction controls](/images/screenshots/self-host-guide/ai-policy-security.webp)
+
+#### Let users control security
+
+A **Let users control security** switch decides who owns the redaction settings:
+
+- **On**: users manage their own redaction toggles in the desktop app; org policy is ignored.
+- **Off**: the org's redaction policy below is enforced for everyone, and users cannot change it in the app.
+
+#### Redaction controls
+
+- **Redact sensitive header values**: mask credential-bearing headers such as `Authorization` and cookies.
+- **Redact sensitive body keys**: mask values under keys like `password`, `*_token`, and `secret`.
+- **Redact response values**: send the response as a shape only, replacing real values with type placeholders.
+- **Redact secret variable values**: mask values of variables that look like secrets.
+- **Custom redacted headers** and **custom redacted variables**: additional names to always mask.
+
+### Saving your policy
+
+Use the buttons at the bottom of the page:
+
+- **Save Policy**: apply your changes to the whole organization.
+- **Reset**: discard unsaved changes and revert to the last saved policy.
+
+### Default state on first deployment
+
+When no policy has been saved, AI is **on by default** and all providers and models are allowed. Users retain full control of their own security and redaction settings. The lock-down behavior takes effect only once an admin saves a policy.
+
+### How the policy reaches users
+
+Policy is delivered to the desktop app through Bruno's existing license verification cycle, which runs **when the app opens and every ~24 hours**. A policy change can take up to about a day to reach a client that stays open without being restarted.
+
+Enforcement is defense-in-depth: disallowed providers and models are gated in the app's configuration screen and blocked at request time, regardless of any key the user has stored.
+
+### What users see in the app
+
+Disabled features are shown in a **disabled state with clear messaging**. They are not hidden:
+
+- **When AI is disabled entirely**, the app shows:
+  > AI features are currently disabled. If your access is managed by an administrator, reach out to them to enable it.
+- **When the Security tab is governed by the org** (AI on, settings locked), the app shows:
+  > These security settings are managed for your account and can't be changed here. If your access is managed by an administrator, reach out to them to make changes.
+
+---
+
 ## Changelog
 
 Release history for the Bruno Self-Hosted Licensing Server.
+
+### 1.20.0 <sub>(4 August 2026)</sub>
+
+- Added AI governance for self-hosted deployments. Admins can set AI policy for the whole organization from the License Manager: turn AI features on or off org-wide, allow or block individual providers and the models within them, and set the data controls applied to AI requests
+- AI is on by default, so existing users keep the access they have today. Turning it off is an admin decision
+- Policy reaches the desktop app when it opens or at its next daily license verification, so allow up to 24 hours for a change to take effect on an app left running
+- Disabled providers and models appear in the app in a disabled state with a message, rather than being hidden
+- Changed the Added By value to "-" with an explanatory tooltip, replacing "System", for users added before 1.18.0. Provisioning source has only been recorded since 1.18.0. Users added since then are unaffected, in both the User List and the CSV export
 
 ### 1.19.0 <sub>(22 July 2026)</sub>
 
