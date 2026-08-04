@@ -1,0 +1,65 @@
+/* ---------------------------------------------------------------------------
+   Desktop nav tabs — spread across the full width of the bar
+   ---------------------------------------------------------------------------
+   Mintlify renders the tab row as `.nav-tabs` (display:flex, gap-x-6) inside a
+   full-width `px-12` wrapper. `.nav-tabs` is a flex item with `flex: 0 1 auto`,
+   so it shrink-wraps its content: at a 1440px viewport it measures 796px inside
+   1344px of available space, bunching the tabs on the left and leaving ~548px of
+   dead air on the right.
+
+   Fix: let `.nav-tabs` grow to fill its wrapper, then hand the free space to
+   `justify-content: space-between`. Each tab keeps its own text-sized width and
+   the leftover width is divided equally between the six gaps, so the separation
+   between every pair of tabs is identical. The first and last tabs stay flush
+   with the bar's px-12 edges, which keeps "Get Started" aligned with the Bruno
+   wordmark on the left and the last tab aligned with the header controls on the
+   right.
+
+   Measured at 1440px: .nav-tabs 796.5px -> 1344px; the six inter-tab gaps go
+   from 24px each to 115.3px each. Ultra-wide is self-limiting — the navbar's own
+   max-w-8xl caps the row, so gaps top out around 121px rather than growing
+   without bound.
+
+   Notes:
+   - The underline indicator needs no CSS. It is a `w-full left-0` child of each
+     `<a>`, and since the anchors keep their intrinsic width, each indicator
+     still spans exactly its own tab box (icon + gap + label), unchanged from
+     today. It is *not* label-width — it has always been ~24px wider than the
+     text, most visibly under "CLI". Mintlify's active (`bg-primary`) and hover
+     (`group-hover:bg-gray-200`) colours are inherited untouched.
+   - The existing gap-x-6 (24px) is left in place on purpose. While there is free
+     space, space-between absorbs it and the result is identical with or without
+     the gap; once free space runs out the gap becomes a 24px minimum gutter,
+     which is the behaviour we want.
+   - No rules are applied to `.nav-tabs-item`, so the existing shrink/wrap
+     fallback is untouched: if the labels ever outgrow the bar, layout is
+     identical to today's. This rule is deliberately a no-op once free space runs
+     out — please keep it that way. Do NOT add `min-width: 0`, `overflow-x: auto`,
+     `flex: 0 0 auto` or per-item `padding-inline` here; each was tested and each
+     converts today's reachable shrink-and-wrap fallback into silently clipped or
+     hidden tabs at large browser font sizes.
+   - The 1024px breakpoint is px-based on purpose, to match Tailwind's compiled
+     `lg` screen (Tailwind's spacing is rem but its screens are px). Verified: the
+     wrapper flips from `display:none` to `display:flex` at exactly 1024px of
+     viewport width at root font sizes 12/16/20px. Do not "fix" this to 64rem —
+     that would drift against the browser's default-font-size setting.
+   - `div.nav-tabs.nav-tabs` is specificity (0,2,1). Nothing in Mintlify currently
+     declares `flex-grow` or `justify-content` on `.nav-tabs`, so a plain
+     `.nav-tabs` would win today; the doubled class is cheap insurance against a
+     future `justify-*` or `shrink-*` utility landing on this element.
+
+   Maintenance couplings:
+   - `.nav-tabs` is a Mintlify-emitted class, not a public API. If it is renamed,
+     this rule stops matching and the bar reverts to today's left-bunched layout
+     — a safe failure direction, but worth re-checking after a Mintlify bump.
+   - Gap size is a function of tab count and label widths, which are data in
+     docs.json (`navigation.versions[].tabs`). Reorganising the nav visibly
+     re-spaces this row; a nav of only 2-3 tabs would strand very large gaps.
+   --------------------------------------------------------------------------- */
+
+@media (min-width: 1024px) {
+  div.nav-tabs.nav-tabs {
+    flex: 1 1 auto;
+    justify-content: space-between;
+  }
+}
