@@ -30,9 +30,12 @@
       ".dark #bru-webinar{background:#0F1117;border-color:#26272B;color:#F3F4F6;" +
       "box-shadow:0 10px 30px rgba(0,0,0,.5)}" +
       "#bru-webinar .bru-eyebrow{display:flex;align-items:center;gap:.4rem;font-size:.6875rem;" +
-      "font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#F2994A}" +
+      "font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#C2410C}" +
       "#bru-webinar .bru-dot{flex:none;width:.4rem;height:.4rem;border-radius:9999px;" +
-      "background:#F2994A}" +
+      "background:#C2410C}" +
+      // #F2994A is only ~2.2:1 on the light card, but ~8.5:1 on the dark one — keep it there.
+      ".dark #bru-webinar .bru-eyebrow{color:#F2994A}" +
+      ".dark #bru-webinar .bru-dot{background:#F2994A}" +
       "#bru-webinar .bru-narrow{display:none}" +
       "#bru-webinar h4{margin:.5rem 0 .25rem;font-size:.9375rem;font-weight:600}" +
       "#bru-webinar p{margin:0;opacity:.7;font-size:.8125rem}" +
