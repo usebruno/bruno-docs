@@ -1,0 +1,144 @@
+/* ===================================================================
+   Density pass (prototype) — tighter type, spacing, and media so more
+   content fits per screen. Scoped to documented Mintlify ids where
+   possible. Body text drops 16px -> 14.5px; because the prose theme
+   sizes headings and margins in em, most spacing scales down with it.
+   =================================================================== */
+
+/* --- Article body ------------------------------------------------- */
+#content-area .mdx-content {
+  font-size: 0.90625rem; /* 14.5px */
+  line-height: 1.55;
+  margin-top: 1.25rem;
+  margin-bottom: 3rem;
+}
+
+/* Headings: keep hierarchy but trim the air above them */
+#content-area .mdx-content h1 {
+  margin-bottom: 0.6em;
+}
+#content-area .mdx-content h2 {
+  margin-top: 1.5em;
+  margin-bottom: 0.6em;
+}
+#content-area .mdx-content h3 {
+  margin-top: 1.25em;
+  margin-bottom: 0.5em;
+}
+
+#content-area .mdx-content p,
+#content-area .mdx-content ul,
+#content-area .mdx-content ol {
+  margin-top: 0.75em;
+  margin-bottom: 0.75em;
+}
+#content-area .mdx-content li {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+
+/* --- Screenshots: cap size so images illustrate, not dominate ----- */
+#content-area .mdx-content img {
+  max-width: min(100%, 580px);
+  margin-top: 0.75em;
+  margin-bottom: 0.75em;
+}
+
+/* --- Callouts: less padding, tighter internal text ---------------- */
+#content-area div:has(> [data-component-part="callout-icon"]) {
+  padding: 0.625rem 0.875rem;
+}
+[data-component-part="callout-content"] {
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+/* --- Full-width layout --------------------------------------------
+   Navbar, sidebar, content, and TOC all share one centered 88rem
+   frame; releasing it lets the sidebar sit at the viewport's left
+   edge. The navbar search lives in a flex-1 wrapper that would grow
+   with it, so cap the search entry at a fixed width. Prose stays at
+   a readable measure. */
+.max-w-8xl {
+  max-width: none;
+}
+/* The body wrapper (sidebar + content) is capped separately via a
+   conditional utility class, so release it too — this is the cap
+   that actually constrains the page content. */
+div[class*="peer-[.is-not-center]:max-w-8xl"] {
+  max-width: none !important;
+}
+#search-bar-entry {
+  max-width: 26rem;
+}
+/* Center the article in the space between sidebar and TOC: cap the
+   title header, body, pagination, and footer at a shared width and
+   auto-center them as a unit. The width is the dial — raise it for
+   denser pages, lower it for a narrower reading column. */
+#content-area > #header,
+#content-area > .mdx-content,
+#content-area > #pagination,
+#content-area > #footer {
+  max-width: 70rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* The box the article centers in is asymmetric (TOC reserves ~28rem
+   on the right vs ~21rem of sidebar on the left), so true "centered"
+   needs a rightward nudge on wide screens. Adjust the 3rem to taste. */
+@media (min-width: 1536px) {
+  #content-area > #header,
+  #content-area > .mdx-content,
+  #content-area > #pagination,
+  #content-area > #footer {
+    transform: translateX(3rem);
+  }
+}
+
+/* --- Sidebar: subtle tinted panel ---------------------------------- */
+#sidebar {
+  background: rgb(0 0 0 / 0.025);
+  border-right: 1px solid rgb(0 0 0 / 0.06);
+}
+.dark #sidebar {
+  background: rgb(255 255 255 / 0.025);
+  border-right: 1px solid rgb(255 255 255 / 0.07);
+}
+
+/* --- Hide the lone "Documentation" wrapper header -------------------
+   v4 needs a named top-level wrapper group (an empty name breaks
+   default-version routing), but its header is noise. When a version
+   has exactly one top-level group (v4), hide that group's header;
+   v3 has six groups, so :only-child never matches there. */
+#navigation-items > div:only-child > .sidebar-group-header {
+  display: none;
+}
+
+/* --- Sidebar section headers (Getting Started, Tools, ...) --------
+   Top-level sections render at indent 1rem; nested groups start at
+   1.75rem, so this selector only matches the section rows. */
+/* Match both style serializations: the server renders
+   "padding-left:1rem" but client-side re-renders write
+   "padding-left: 1rem" (with a space). Neither matches 1.75rem+,
+   so deeper groups stay regular weight. */
+#sidebar-content button[style*="padding-left:1rem"],
+#sidebar-content button[style*="padding-left: 1rem"] {
+  font-weight: 600;
+  color: rgb(31 41 55);
+}
+.dark #sidebar-content button[style*="padding-left:1rem"],
+.dark #sidebar-content button[style*="padding-left: 1rem"] {
+  color: rgb(209 213 219);
+}
+
+/* --- Sidebar: smaller type, tighter rows --------------------------- */
+#sidebar-content {
+  font-size: 0.8125rem; /* 13px */
+}
+#sidebar-content li > a,
+#sidebar-content li > div {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
