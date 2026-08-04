@@ -606,8 +606,7 @@ The model is simple: **the org sets policy, the user brings the key.** No API ke
 ### Accessing AI Policy
 
 1. Sign in to your self-hosted admin portal as a License Administrator.
-2. Navigate to **Settings**.
-3. Select **AI** from the left-hand menu.
+2. Select **AI Policy** from the top navigation bar.
 
 The AI Policy page has two tabs: **Configuration** (what AI is allowed) and **Security** (how requests are protected).
 
@@ -696,9 +695,9 @@ Release history for the Bruno Self-Hosted Licensing Server.
 ### 1.20.0 <sub>(4 August 2026)</sub>
 
 - Added AI governance for self-hosted deployments. Admins can set AI policy for the whole organization from the License Manager: turn AI features on or off org-wide, allow or block individual providers and the models within them, and set the data controls applied to AI requests
-- AI is on by default, so existing users keep the access they have today. Turning it off is an admin decision
-- Policy reaches the desktop app when it opens or at its next daily license verification, so allow up to 24 hours for a change to take effect on an app left running
-- Disabled providers and models appear in the app in a disabled state with a message, rather than being hidden
+  - AI is on by default, so existing users keep the access they have today. Turning it off is an admin decision
+  - Policy reaches the desktop app when it opens or at its next daily license verification, so allow up to 24 hours for a change to take effect on an app left running
+  - Disabled providers and models appear in the app in a disabled state with a message, rather than being hidden
 - Changed the Added By value to "-" with an explanatory tooltip, replacing "System", for users added before 1.18.0. Provisioning source has only been recorded since 1.18.0. Users added since then are unaffected, in both the User List and the CSV export
 
 ### 1.19.0 <sub>(22 July 2026)</sub>
