@@ -37,7 +37,9 @@
       "#bru-webinar h4{margin:.5rem 0 .25rem;font-size:.9375rem;font-weight:600}" +
       "#bru-webinar p{margin:0;opacity:.7;font-size:.8125rem}" +
       "#bru-webinar a.bru-cta{display:inline-block;margin-top:.75rem;padding:.4rem .75rem;" +
-      "border-radius:.5rem;background:#F2994A;color:#fff;font-weight:600;text-decoration:none}" +
+      // Dark ink on the orange: white was only ~2.2:1, this is ~8:1.
+      "border-radius:.5rem;background:#F2994A;color:#111827;font-weight:600;" +
+      "text-decoration:none}" +
       "#bru-webinar button{position:absolute;top:.5rem;right:.5rem;border:0;background:none;" +
       "cursor:pointer;color:inherit;opacity:.5;font-size:1rem;line-height:1;padding:.25rem}" +
       "#bru-webinar button:hover{opacity:1}" +
