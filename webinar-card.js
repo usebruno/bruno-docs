@@ -30,14 +30,19 @@
       ".dark #bru-webinar{background:#0F1117;border-color:#26272B;color:#F3F4F6;" +
       "box-shadow:0 10px 30px rgba(0,0,0,.5)}" +
       "#bru-webinar .bru-eyebrow{display:flex;align-items:center;gap:.4rem;font-size:.6875rem;" +
-      "font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#F2994A}" +
+      "font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#C2410C}" +
       "#bru-webinar .bru-dot{flex:none;width:.4rem;height:.4rem;border-radius:9999px;" +
-      "background:#F2994A}" +
+      "background:#C2410C}" +
+      // #F2994A is only ~2.2:1 on the light card, but ~8.5:1 on the dark one — keep it there.
+      ".dark #bru-webinar .bru-eyebrow{color:#F2994A}" +
+      ".dark #bru-webinar .bru-dot{background:#F2994A}" +
       "#bru-webinar .bru-narrow{display:none}" +
       "#bru-webinar h4{margin:.5rem 0 .25rem;font-size:.9375rem;font-weight:600}" +
       "#bru-webinar p{margin:0;opacity:.7;font-size:.8125rem}" +
       "#bru-webinar a.bru-cta{display:inline-block;margin-top:.75rem;padding:.4rem .75rem;" +
-      "border-radius:.5rem;background:#F2994A;color:#fff;font-weight:600;text-decoration:none}" +
+      // Dark ink on the orange: white was only ~2.2:1, this is ~8:1.
+      "border-radius:.5rem;background:#F2994A;color:#111827;font-weight:600;" +
+      "text-decoration:none}" +
       "#bru-webinar button{position:absolute;top:.5rem;right:.5rem;border:0;background:none;" +
       "cursor:pointer;color:inherit;opacity:.5;font-size:1rem;line-height:1;padding:.25rem}" +
       "#bru-webinar button:hover{opacity:1}" +
@@ -67,7 +72,7 @@
       "<h4>Bruno v4 Live: AI, Scripting, Docs &amp; What’s New</h4>" +
       "<p>11:00 AM EDT / 4:00 PM BST &middot; Zoom</p>" +
       '<a class="bru-cta" href="https://www.usebruno.com/webinar" target="_blank" rel="noopener">' +
-      'Register <span class="bru-wide">free </span>→</a>' +
+      "Register →</a>" +
       "</div>";
 
     document.body.appendChild(el);
