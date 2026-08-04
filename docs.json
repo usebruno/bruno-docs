@@ -14,11 +14,11 @@
         "version": "v4",
         "default": true,
         "tag": "Latest",
-        "groups": [
+        "tabs": [
           {
-            "group": "Getting Started",
+            "tab": "Get Started",
             "icon": "rocket",
-            "pages": [
+            "groups": [
               {
                 "group": "Introduction",
                 "pages": [
@@ -41,7 +41,7 @@
                 ]
               },
               {
-                "group": "Import or Export Data",
+                "group": "Import & Migrate",
                 "pages": [
                   "get-started/import-export-data/import-collections",
                   "get-started/import-export-data/export-collections",
@@ -50,22 +50,19 @@
                   "get-started/import-export-data/postman-migration",
                   "get-started/import-export-data/script-translator"
                 ]
-              },
-              {
-                "group": "Configure",
-                "pages": [
-                  "get-started/configure/settings",
-                  "get-started/configure/keybindings",
-                  "get-started/configure/proxy-config",
-                  "get-started/configure/javascript-sandbox"
-                ]
               }
             ]
           },
           {
-            "group": "Core Features",
-            "icon": "zap",
-            "pages": [
+            "tab": "API Client",
+            "icon": "app-window",
+            "groups": [
+              {
+                "group": "Overview",
+                "pages": [
+                  "api-client/overview"
+                ]
+              },
               {
                 "group": "Send Requests",
                 "pages": [
@@ -122,7 +119,8 @@
                       "send-requests/res-data-cookies/overview",
                       "send-requests/res-data-cookies/res-data",
                       "send-requests/res-data-cookies/cookies",
-                      "send-requests/res-data-cookies/response-examples"
+                      "send-requests/res-data-cookies/response-examples",
+                      "advanced-guides/visualize"
                     ]
                   },
                   "send-requests/history"
@@ -144,34 +142,76 @@
                 ]
               },
               {
-                "group": "Git Integration & Collaboration",
+                "group": "Authentication",
                 "pages": [
-                  "git-integration/overview",
-                  "git-integration/git-strategies",
+                  "auth/overview",
+                  "auth/basic",
+                  "auth/bearer",
+                  "auth/digest",
+                  "auth/aws-signature",
+                  "auth/ntlm",
+                  "auth/oauth1",
+                  "auth/akamai-edgegrid",
                   {
-                    "group": "Using GUI",
+                    "group": "OAuth 2.0",
                     "pages": [
-                      "git-integration/using-gui/intro",
-                      "git-integration/using-gui/provider",
-                      "git-integration/using-gui/consumer"
+                      "auth/oauth2-2.0/overview",
+                      "auth/oauth2-2.0/collection-level-configuration",
+                      "auth/oauth2-2.0/authorization-code",
+                      "auth/oauth2-2.0/client-credentials",
+                      "auth/oauth2-2.0/password-credentials",
+                      "auth/oauth2-2.0/system-browser"
                     ]
                   },
-                  "git-integration/using-cli",
-                  "git-integration/gitlab",
-                  "git-integration/bitbucket",
-                  "git-integration/azure-devops",
-                  "git-integration/embed-bruno-collection"
+                  "auth/add-and-manage-certs"
                 ]
               },
               {
-                "group": "Git Providers",
+                "group": "Secret Management",
                 "pages": [
-                  "git-providers/overview",
-                  "git-providers/github"
+                  "secrets-management/overview",
+                  "secrets-management/secret-variables",
+                  "secrets-management/secret-masking",
+                  "secrets-management/dotenv-file",
+                  {
+                    "group": "Secret Managers",
+                    "pages": [
+                      "secrets-management/secret-managers/overview",
+                      "secrets-management/secret-managers/migration",
+                      {
+                        "group": "HashiCorp Vault",
+                        "pages": [
+                          "secrets-management/secret-managers/hashicorp-vault/overview",
+                          "secrets-management/secret-managers/hashicorp-vault/adding-a-secret-provider",
+                          "secrets-management/secret-managers/hashicorp-vault/configuring-and-fetching-secrets",
+                          "secrets-management/secret-managers/hashicorp-vault/using-secrets"
+                        ]
+                      },
+                      {
+                        "group": "AWS Secrets Manager",
+                        "pages": [
+                          "secrets-management/secret-managers/aws-secrets-manager/overview",
+                          "secrets-management/secret-managers/aws-secrets-manager/adding-a-secret-provider",
+                          "secrets-management/secret-managers/aws-secrets-manager/configuring-and-fetching-secrets",
+                          "secrets-management/secret-managers/aws-secrets-manager/using-secrets"
+                        ]
+                      },
+                      {
+                        "group": "Azure Key Vault",
+                        "pages": [
+                          "secrets-management/secret-managers/azure-key-vault/overview",
+                          "secrets-management/secret-managers/azure-key-vault/adding-a-secret-provider",
+                          "secrets-management/secret-managers/azure-key-vault/configuring-and-fetching-secrets",
+                          "secrets-management/secret-managers/azure-key-vault/using-secrets",
+                          "secrets-management/secret-managers/azure-key-vault/cli-authentication"
+                        ]
+                      }
+                    ]
+                  }
                 ]
               },
               {
-                "group": "Tests and Scripts",
+                "group": "Tests & Scripts",
                 "pages": [
                   {
                     "group": "Tests",
@@ -220,114 +260,32 @@
                 ]
               },
               {
-                "group": "Secret Management",
+                "group": "Git & Collaboration",
                 "pages": [
-                  "secrets-management/overview",
-                  "secrets-management/secret-variables",
-                  "secrets-management/secret-masking",
-                  "secrets-management/dotenv-file",
+                  "git-integration/overview",
+                  "git-integration/git-strategies",
                   {
-                    "group": "Secret Managers",
+                    "group": "Using GUI",
                     "pages": [
-                      "secrets-management/secret-managers/overview",
-                      "secrets-management/secret-managers/migration",
-                      {
-                        "group": "HashiCorp Vault",
-                        "pages": [
-                          "secrets-management/secret-managers/hashicorp-vault/overview",
-                          "secrets-management/secret-managers/hashicorp-vault/adding-a-secret-provider",
-                          "secrets-management/secret-managers/hashicorp-vault/configuring-and-fetching-secrets",
-                          "secrets-management/secret-managers/hashicorp-vault/using-secrets"                        
-                        ]
-                      },
-                      {
-                        "group": "AWS Secrets Manager",
-                        "pages": [
-                          "secrets-management/secret-managers/aws-secrets-manager/overview",
-                          "secrets-management/secret-managers/aws-secrets-manager/adding-a-secret-provider",
-                          "secrets-management/secret-managers/aws-secrets-manager/configuring-and-fetching-secrets",
-                          "secrets-management/secret-managers/aws-secrets-manager/using-secrets"
-                        ]
-                      },
-                      {
-                        "group": "Azure Key Vault",
-                        "pages": [
-                          "secrets-management/secret-managers/azure-key-vault/overview",
-                          "secrets-management/secret-managers/azure-key-vault/adding-a-secret-provider",
-                          "secrets-management/secret-managers/azure-key-vault/configuring-and-fetching-secrets",
-                          "secrets-management/secret-managers/azure-key-vault/using-secrets",
-                          "secrets-management/secret-managers/azure-key-vault/cli-authentication"
-                        ]
-                      }
+                      "git-integration/using-gui/intro",
+                      "git-integration/using-gui/provider",
+                      "git-integration/using-gui/consumer"
+                    ]
+                  },
+                  "git-integration/using-cli",
+                  "git-integration/gitlab",
+                  "git-integration/bitbucket",
+                  "git-integration/azure-devops",
+                  "git-integration/embed-bruno-collection",
+                  {
+                    "group": "Git Providers",
+                    "pages": [
+                      "git-providers/overview",
+                      "git-providers/github"
                     ]
                   }
                 ]
               },
-              {
-                "group": "Authentication & Authorization",
-                "pages": [
-                  "auth/overview",
-                  "auth/basic",
-                  "auth/bearer",
-                  "auth/digest",
-                  "auth/aws-signature",
-                  "auth/ntlm",
-                  "auth/oauth1",
-                  "auth/akamai-edgegrid",
-                  {
-                    "group": "OAuth 2.0",
-                    "pages": [
-                      "auth/oauth2-2.0/overview",
-                      "auth/oauth2-2.0/collection-level-configuration",
-                      "auth/oauth2-2.0/authorization-code",
-                      "auth/oauth2-2.0/client-credentials",
-                      "auth/oauth2-2.0/password-credentials",
-                      "auth/oauth2-2.0/system-browser"
-                    ]
-                  },
-                  "auth/add-and-manage-certs"
-                ]
-              },
-              {
-                "group": "Debugging",
-                "pages": [
-                  "debugging/timeline",
-                  "debugging/dev-tools"
-                ]
-              }
-            ]
-          },
-          {
-            "group": "API Tools",
-            "icon": "book-open",
-            "pages": [
-              {
-                "group": "Create Documentation",
-                "pages": [
-                  "api-docs/overview",
-                  "api-docs/workspace-docs",
-                  "api-docs/collection-docs",
-                  "api-docs/folder-docs",
-                  "api-docs/request-docs",
-                  "api-docs/auto-generate-docs"
-                ]
-              },
-              {
-                "group": "OpenAPI",
-                "pages": [
-                  "open-api/overview",
-                  "open-api/importOAS",
-                  "open-api/exportOAS",
-                  "open-api/createOAS",
-                  "open-api/openapi-sync"
-                ]
-              }
-            ]
-          },
-          {
-            "group": "Developer Tools",
-            "icon": "code",
-            "pages": [
               {
                 "group": "AI",
                 "tag": "Beta",
@@ -366,17 +324,54 @@
                 ]
               },
               {
-                "group": "Bruno CLI",
+                "group": "Settings",
+                "pages": [
+                  "get-started/configure/settings",
+                  "get-started/configure/keybindings",
+                  "get-started/configure/proxy-config",
+                  "get-started/configure/javascript-sandbox"
+                ]
+              },
+              {
+                "group": "Debugging",
+                "pages": [
+                  "debugging/timeline",
+                  "debugging/dev-tools"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "CLI",
+            "icon": "terminal",
+            "groups": [
+              {
+                "group": "Overview",
                 "pages": [
                   "bru-cli/overview",
                   "bru-cli/quick-start",
-                  "bru-cli/installation",
-                  "bru-cli/commandOptions",
+                  "bru-cli/installation"
+                ]
+              },
+              {
+                "group": "Run Collections",
+                "pages": [
                   "bru-cli/runCollection",
+                  "bru-cli/commandOptions",
                   "bru-cli/builtInReporters",
-                  "bru-cli/import",
+                  "bru-cli/import"
+                ]
+              },
+              {
+                "group": "Configuration",
+                "pages": [
                   "bru-cli/proxyConfiguration",
-                  "bru-cli/secret-managers",
+                  "bru-cli/secret-managers"
+                ]
+              },
+              {
+                "group": "CI/CD",
+                "pages": [
                   "bru-cli/docker",
                   {
                     "group": "GitHub Actions",
@@ -388,7 +383,49 @@
                   },
                   "bru-cli/jenkins"
                 ]
+              }
+            ]
+          },
+          {
+            "tab": "API Docs",
+            "icon": "book",
+            "groups": [
+              {
+                "group": "Create Documentation",
+                "pages": [
+                  "api-docs/overview",
+                  "api-docs/workspace-docs",
+                  "api-docs/collection-docs",
+                  "api-docs/folder-docs",
+                  "api-docs/request-docs",
+                  "api-docs/auto-generate-docs"
+                ]
               },
+              {
+                "group": "OpenAPI",
+                "pages": [
+                  "open-api/overview",
+                  "open-api/importOAS",
+                  "open-api/exportOAS",
+                  "open-api/createOAS",
+                  "open-api/openapi-sync"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "VS Code Extension",
+            "icon": "code",
+            "pages": [
+              "vs-code-extension/overview",
+              "vs-code-extension/install-config",
+              "vs-code-extension/send-req"
+            ]
+          },
+          {
+            "tab": "Reference",
+            "icon": "book-open",
+            "groups": [
               {
                 "group": "Bru Lang",
                 "pages": [
@@ -416,22 +453,19 @@
                   "converters/openapi-to-bruno",
                   "converters/wsdl-to-bruno"
                 ]
-              },
-              {
-                "group": "VS Code Extension",
-                "pages": [
-                  "vs-code-extension/overview",
-                  "vs-code-extension/install-config",
-                  "vs-code-extension/send-req"
-                ]
               }
             ]
           },
           {
-            "group": "License Management",
+            "tab": "Licensing",
             "icon": "key",
-            "pages": [
-              "license-overview",
+            "groups": [
+              {
+                "group": "Overview",
+                "pages": [
+                  "license-overview"
+                ]
+              },
               {
                 "group": "End Users",
                 "pages": [
@@ -439,7 +473,7 @@
                 ]
               },
               {
-                "group": "License Administrators",
+                "group": "Administrators",
                 "pages": [
                   "license-administrators/license-portal",
                   "license-administrators/billing",
@@ -465,13 +499,6 @@
                   "license-administrators/ai-policy"
                 ]
               }
-            ]
-          },
-          {
-            "group": "Advanced Guides",
-            "icon": "graduation-cap",
-            "pages": [
-              "advanced-guides/visualize"
             ]
           }
         ]
