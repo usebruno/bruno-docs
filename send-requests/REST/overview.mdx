@@ -26,3 +26,7 @@ HTTP status codes are issued by a server in response to a client's request made 
 | 300             | Redirection     |
 | 400             | Client Error    |
 | 500             | Server Error    |
+
+## Streaming responses
+
+Bruno supports [Server-Sent Events (SSE)](/send-requests/REST/sse) for REST requests that stream data with `Accept: text/event-stream`. Incoming chunks appear live in the response panel, and you can cancel an active stream at any time.

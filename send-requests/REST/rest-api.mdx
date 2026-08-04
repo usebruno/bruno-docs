@@ -46,6 +46,14 @@ Bruno supports custom HTTP methods beyond the standard ones (GET, POST, PUT, DEL
 
 ![custom-http-method](/images/screenshots/send-request/rest/custom-http-methods.webp)
 
+## Server-Sent Events (SSE)
+
+Bruno supports streamed HTTP responses for Server-Sent Events. Add an `Accept: text/event-stream` header, send the request, and Bruno appends incoming chunks to the response panel in real time. While a stream is active, the Send button becomes Cancel so you can stop the connection at any time.
+
+<Info>
+  Collection runs and the Bruno CLI skip SSE requests so long-lived streams do not block automation. See [Server-Sent Events (SSE)](/send-requests/REST/sse) for full details.
+</Info>
+
 ## Request Settings
 
 Bruno provides advanced request execution options through the **Settings** tab in the request pane. You can configure per-request settings for:
