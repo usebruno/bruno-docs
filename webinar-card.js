@@ -67,7 +67,7 @@
       "<h4>Bruno v4 Live: AI, Scripting, Docs &amp; What’s New</h4>" +
       "<p>11:00 AM EDT / 4:00 PM BST &middot; Zoom</p>" +
       '<a class="bru-cta" href="https://www.usebruno.com/webinar" target="_blank" rel="noopener">' +
-      'Register <span class="bru-wide">free </span>→</a>' +
+      "Register →</a>" +
       "</div>";
 
     document.body.appendChild(el);
