@@ -63,3 +63,102 @@
     justify-content: space-between;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Full-width docs shell — release Mintlify's 1472px cap
+   ---------------------------------------------------------------------------
+   Mintlify centres the entire shell — sidebar, article and table of contents —
+   inside a `max-w-8xl` (92rem = 1472px) box with `mx-auto`. Past that width the
+   box stops growing and the remainder becomes equal dead margins: 224px per
+   side at 1920px, 544px per side at 2560px. Nothing renders in them.
+
+   Two elements carry the cap, and both must be released or the shell tears in
+   half — the navbar would sit on a different grid from the body:
+     1. `header#navbar > div.max-w-8xl` — the navbar rail (wordmark, search,
+        header links, and the tab row above). Plain utility class, (0,1,0).
+     2. `header#navbar + div` — the wrapper around #sidebar, #content-area and
+        the TOC. Same 1472px, but written through Mintlify's per-page `mode`
+        peer variants, compiling to roughly
+          .peer-[…]:max-w-8xl:is(:where(.peer).is-not-custom ~ *)
+                              :is(:where(.peer).is-not-center ~ *)
+        which is (0,3,0).
+   `[class*="max-w-8xl"]` matches both — the bare utility and the peer variant
+   share that substring — with no coupling to where either sits in the tree, so
+   a Mintlify reshuffle cannot half-apply this. The selector is repeated three
+   times for (0,3,1), which clears carrier 2. That insurance is unused today:
+   Mintlify injects this file as an inline <style> inside <main>, unlayered and
+   last, and an unlayered declaration beats any @layer utilities rule regardless
+   of specificity. The repeats only matter if Mintlify layers custom CSS or
+   moves the injection point.
+
+   Why CSS: docs.json has no content-width option (`styling` accepts only
+   `eyebrows` and `codeblocks`). The only native escape hatches are per-page
+   frontmatter `mode: "custom"` (drops sidebar AND TOC) and `mode: "wide"`
+   (drops the TOC) — both remove chrome we want to keep, and would have to be
+   pasted into every .mdx file.
+
+   No media query, because none is needed: below the cap's binding width this
+   rule is a measured no-op. #sidebar, #content, the TOC, .nav-tabs and
+   #content-area are byte-identical with and without it at 390/768/1024/1280/
+   1440/1472 across seven pages. NB the cap is 92rem, so it tracks the root font
+   size — it binds at 1473px only at a 16px root, and at ~1105px at a 12px root.
+   The rule releases the cap exactly where the cap binds, whatever that width is.
+
+   Measured at 1920px on /send-requests/REST/rest-api:
+     #sidebar             x 256 -> 32     (still 18rem, still position:fixed)
+     article text        721px -> 1169px  (x 587 -> 363)
+     #table-of-contents   x 1400 -> 1624  (still 16.5rem)
+   Nothing inside the shell is touched — the sidebar's 18rem, the TOC's 16.5rem
+   and the gutter #content-area reserves for the fixed sidebar all still come
+   from Mintlify. Only the box around them grew, and #content-area (the single
+   flex-grow child) absorbs the new width. No horizontal overflow appears at any
+   width: documentElement.scrollWidth === innerWidth throughout.
+
+   Deliberate consequences, all measured — this rule caps nothing, so every
+   element keeps a single shared right edge. The capping variants that were
+   tried instead all scored worse: capping the content column strands the TOC
+   across a void of up to 1461px, and capping prose alone gives the page two
+   different right margins that read as a misalignment bug.
+   - Line length. Body copy goes 78 characters today -> 124 at 1920px, 198 at
+     2560px, 256 at 3440px, against a comfortable 45-90. At 3440 a lead
+     paragraph can render as one unbroken 256-character line. This is the real
+     cost of the change. If long measure becomes the complaint, the dial is a
+     max-width on `#content` — but expect the ragged-edge tradeoff above.
+   - Card grids are the weakest spot on very wide screens. Mintlify's `.columns`
+     uses a container query that tops out at 2 tracks, so cards inflate rather
+     than reflow: 352px each today -> 576px at 1920 (still good) -> 896px at
+     2560 -> 1336px at 3440, where a 3-card group shows two enormous cards and
+     an orphan.
+   - Nav tabs. The rule above spreads the row with space-between, and the cap
+     used to bound that row at 1376px so its gaps settled at ~121px. Uncapped,
+     the gaps track the viewport: 195px at 1920, 302px at 2560, 449px at 3440.
+     Left unbounded on purpose — every way of bounding it (a max-width on
+     .nav-tabs, or re-capping the navbar rail) puts back the dead margin this
+     rule removes, and does it asymmetrically, because the wordmark and header
+     links stay pinned to the viewport edges regardless.
+   - Images never upscale: Mintlify computes them to width:auto + max-width:100%,
+     so they render at natural width. Large screenshots therefore stop growing
+     and leave a trailing gutter on very wide screens (~209px at 3440). They do
+     not stretch or blur.
+   - The navbar search field grows with the rail: 443px -> 597px at 1920,
+     811px at 2560, 1104px at 3440.
+   - Narrow two-column tables and short code blocks span the full column and
+     leave a wide trailing gutter, which costs some scannability on reference
+     pages. Offset by a real win: code blocks that used to scroll horizontally
+     now fit.
+
+   Maintenance couplings:
+   - `max-w-8xl` is a Mintlify-emitted Tailwind class, not a public API. If it
+     is renamed or swapped for a custom property this rule stops matching and
+     the layout reverts to today's capped, centred shell — a safe failure
+     direction, but re-check after a Mintlify bump.
+   - Conversely, any future Mintlify <div> carrying an 8xl cap is uncapped too.
+     There are exactly two today, on every page and width tested. No .mdx in
+     this repo sets frontmatter `mode`, so every page renders is-not-custom /
+     is-not-center / is-not-wide / is-not-frame; there is no second layout
+     variant to check.
+   --------------------------------------------------------------------------- */
+
+div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
+  max-width: none;
+}
