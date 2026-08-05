@@ -22,3 +22,13 @@ Request headers are **key-value** pairs sent along with an HTTP request to provi
   To view default headers, navigate to the **Headers** tab in your request. For
   custom headers, check the **Timeline** tab.
 </Tip>
+
+## Streaming with Server-Sent Events
+
+To work with Server-Sent Events (SSE), set:
+
+```
+Accept: text/event-stream
+```
+
+Bruno keeps the connection open, streams chunks into the response panel live, and swaps the Send button for Cancel while the stream is active. See [Server-Sent Events (SSE)](/send-requests/REST/sse) for details on cancellation, collection runs, and CLI behavior.
