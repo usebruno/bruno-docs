@@ -107,17 +107,17 @@
                       "send-requests/soap/soap-request"
                     ]
                   },
-                  {
-                    "group": "Response Data & Cookies",
-                    "pages": [
-                      "send-requests/res-data-cookies/overview",
-                      "send-requests/res-data-cookies/res-data",
-                      "send-requests/res-data-cookies/cookies",
-                      "send-requests/res-data-cookies/response-examples",
-                      "advanced-guides/visualize"
-                    ]
-                  },
                   "send-requests/history"
+                ]
+              },
+              {
+                "group": "Responses & Cookies",
+                "pages": [
+                  "send-requests/res-data-cookies/overview",
+                  "send-requests/res-data-cookies/res-data",
+                  "send-requests/res-data-cookies/cookies",
+                  "send-requests/res-data-cookies/response-examples",
+                  "advanced-guides/visualize"
                 ]
               },
               {
@@ -205,43 +205,10 @@
                 ]
               },
               {
-                "group": "Tests & Scripts",
+                "group": "Testing",
                 "pages": [
-                  {
-                    "group": "Tests",
-                    "pages": [
-                      "testing/tests/introduction",
-                      "testing/tests/assertions"
-                    ]
-                  },
-                  {
-                    "group": "Scripts",
-                    "pages": [
-                      "testing/script/getting-started",
-                      "testing/script/javascript-reference",
-                      "testing/script/script-flow",
-                      "testing/script/inbuilt-libraries",
-                      "testing/script/external-libraries",
-                      "testing/script/js-file",
-                      "testing/script/dynamic-variables",
-                      "testing/script/request-chaining",
-                      {
-                        "group": "Request",
-                        "pages": [
-                          "testing/script/request/request-object",
-                          "testing/script/request/sync-requests"
-                        ]
-                      },
-                      {
-                        "group": "Response",
-                        "pages": [
-                          "testing/script/response/response-object",
-                          "testing/script/response/response-query"
-                        ]
-                      },
-                      "testing/script/vars"
-                    ]
-                  },
+                  "testing/tests/introduction",
+                  "testing/tests/assertions",
                   {
                     "group": "Automate Tests",
                     "pages": [
@@ -251,6 +218,34 @@
                       "testing/automate-test/data-driven-testing"
                     ]
                   }
+                ]
+              },
+              {
+                "group": "Scripting",
+                "pages": [
+                  "testing/script/getting-started",
+                  "testing/script/javascript-reference",
+                  "testing/script/script-flow",
+                  "testing/script/inbuilt-libraries",
+                  "testing/script/external-libraries",
+                  "testing/script/js-file",
+                  "testing/script/dynamic-variables",
+                  "testing/script/request-chaining",
+                  {
+                    "group": "Request",
+                    "pages": [
+                      "testing/script/request/request-object",
+                      "testing/script/request/sync-requests"
+                    ]
+                  },
+                  {
+                    "group": "Response",
+                    "pages": [
+                      "testing/script/response/response-object",
+                      "testing/script/response/response-query"
+                    ]
+                  },
+                  "testing/script/vars"
                 ]
               },
               {
@@ -267,17 +262,17 @@
                     ]
                   },
                   "git-integration/using-cli",
-                  "git-integration/gitlab",
-                  "git-integration/bitbucket",
-                  "git-integration/azure-devops",
-                  "git-integration/embed-bruno-collection",
                   {
-                    "group": "Git Providers",
+                    "group": "Providers",
                     "pages": [
                       "git-providers/overview",
-                      "git-providers/github"
+                      "git-providers/github",
+                      "git-integration/gitlab",
+                      "git-integration/bitbucket",
+                      "git-integration/azure-devops"
                     ]
-                  }
+                  },
+                  "git-integration/embed-bruno-collection"
                 ]
               },
               {
@@ -340,13 +335,8 @@
             "icon": "terminal",
             "pages": [
               "bru-cli/overview",
-              {
-                "group": "Install & Quick Start",
-                "pages": [
-                  "bru-cli/quick-start",
-                  "bru-cli/installation"
-                ]
-              },
+              "bru-cli/quick-start",
+              "bru-cli/installation",
               {
                 "group": "Run Collections",
                 "pages": [
@@ -455,12 +445,7 @@
             "icon": "key",
             "pages": [
               "license-overview",
-              {
-                "group": "End Users",
-                "pages": [
-                  "license-end-users/activate-license"
-                ]
-              },
+              "license-end-users/activate-license",
               {
                 "group": "Administrators",
                 "pages": [
