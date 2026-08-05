@@ -1,0 +1,67 @@
+/* ---------------------------------------------------------------------------
+   Full-width docs shell — release Mintlify's 1472px cap
+   ---------------------------------------------------------------------------
+   Mintlify centres the whole shell — sidebar, article and table of contents —
+   inside a `max-w-8xl` box (`.max-w-8xl{max-width:92rem}`, i.e. 1472px at a
+   16px root font size) with `mx-auto`. Past that width the box stops growing
+   and the remainder becomes equal dead margins on both sides, which is why the
+   docs look narrow on a large display.
+
+   Why CSS and not docs.json: there is no content-width option in the schema.
+   The only native escape hatches are per-page frontmatter `mode: "wide"` (drops
+   the table of contents) and `mode: "custom"` (drops the sidebar *and* the
+   TOC), and either would have to be pasted into every .mdx file.
+
+   Two divs carry the cap, and both must be released or the navbar would sit on
+   a different grid from the body:
+     1. `<div class="max-w-8xl mx-auto relative">` — the navbar rail (wordmark,
+        search, header links). Plain utility class, specificity (0,1,0).
+     2. The wrapper around #sidebar, #content-area and the TOC. Same 92rem, but
+        written through Mintlify's per-page `mode` peer variants
+        (`peer-[.is-not-custom]:peer-[.is-not-center]:max-w-8xl`), which
+        compiles to a ~(0,3,0) selector.
+   `[class*="max-w-8xl"]` matches both — the bare utility and the peer variant
+   share that substring — with no coupling to where either sits in the tree, so
+   a Mintlify DOM reshuffle cannot half-apply this. The selector is repeated for
+   (0,3,1) so it outranks carrier 2 on specificity alone; today that insurance
+   is unused, because Mintlify injects this file unlayered and last, and an
+   unlayered declaration already beats any @layer utilities rule.
+
+   No media query is needed: below the width where the cap binds, `max-width`
+   is not the constraint and the rule changes nothing. The cap is in rem, so it
+   binds wherever 92rem lands for the reader's root font size, and this rule
+   releases it exactly there. #content-area is the single flex-grow child of
+   carrier 2, so it absorbs the new width; the sidebar's and TOC's own fixed
+   widths are untouched.
+
+   Known tradeoffs, in the order they will be noticed:
+   - Line length grows with the viewport. Body copy sits near the comfortable
+     45-90 character range at today's cap and goes well past it on a 2560px or
+     wider display. This is the real cost of the change. If long measure becomes
+     the complaint, the dial is a `max-width` on `#content` — but capping the
+     text column alone gives the page two different right edges, which reads as
+     a misalignment bug, so expect that tradeoff.
+   - Card grids are the weakest spot. Mintlify's `.columns` container query tops
+     out at 2 tracks, so cards inflate instead of reflowing into more columns; a
+     3-card group on a very wide screen shows two huge cards and an orphan.
+   - Images never upscale (Mintlify computes them to `width:auto` +
+     `max-width:100%`), so wide screenshots render at natural width and leave a
+     trailing gutter rather than stretching.
+   - Narrow tables and short code blocks span the full column and leave a wide
+     trailing gutter. Offsetting win: code blocks that used to scroll
+     horizontally now fit.
+
+   Maintenance couplings:
+   - `max-w-8xl` is a Mintlify-emitted Tailwind class, not a public API. If it
+     is renamed or replaced this rule silently stops matching and the layout
+     reverts to today's capped, centred shell — a safe failure direction, but
+     worth re-checking after a Mintlify bump.
+   - Conversely, any future Mintlify div carrying an 8xl cap is uncapped too.
+     There are exactly two today. No .mdx in this repo sets frontmatter `mode`,
+     so every page renders is-not-custom / is-not-center / is-not-wide /
+     is-not-frame; there is no second layout variant to check.
+   --------------------------------------------------------------------------- */
+
+div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
+  max-width: none;
+}
