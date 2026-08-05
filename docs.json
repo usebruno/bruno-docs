@@ -107,15 +107,15 @@
                       "send-requests/soap/soap-request"
                     ]
                   },
+                  "send-requests/res-data-cookies/cookies",
                   "send-requests/history"
                 ]
               },
               {
-                "group": "Responses & Cookies",
+                "group": "Response Data",
                 "pages": [
                   "send-requests/res-data-cookies/overview",
                   "send-requests/res-data-cookies/res-data",
-                  "send-requests/res-data-cookies/cookies",
                   "send-requests/res-data-cookies/response-examples",
                   "advanced-guides/visualize"
                 ]
