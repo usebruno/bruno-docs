@@ -1,0 +1,87 @@
+---
+title: "Server-Sent Events (SSE)"
+sidebarTitle: "Server-Sent Events (SSE)"
+---
+
+Bruno supports **Server-Sent Events (SSE)** for REST requests. When a request expects a streamed response (`Accept: text/event-stream`), Bruno keeps the connection open and appends incoming data to the response panel in real time instead of hanging until the stream ends.
+
+Use SSE to test and debug real-time APIs such as OpenAI-style streams, live event feeds, and other long-lived HTTP connections where the server pushes data continuously.
+
+## What are Server-Sent Events?
+
+Server-Sent Events are a standard way for a server to push updates to a client over a single HTTP connection. Unlike WebSockets, SSE is unidirectional: the server streams data to the client.
+
+| Feature | Regular HTTP | SSE |
+| --- | --- | --- |
+| **Connection** | Closes after one response | Stays open while the stream is active |
+| **Data flow** | One response body | Continuous event chunks |
+| **Typical use** | CRUD APIs | Live updates, AI token streams, event feeds |
+| **Client control** | Wait for completion | Cancel anytime while streaming |
+
+## How to send an SSE request
+
+1. Create or open an **HTTP** request in your collection.
+2. Set the method and URL for your streaming endpoint (for example, a chat completions or events URL).
+3. Open the **Headers** tab and add:
+
+| Name | Value |
+| --- | --- |
+| `Accept` | `text/event-stream` |
+
+4. Click **Send** (or press `⌘ Enter` / `Ctrl Enter`).
+
+{/* screenshot: SSE request with Accept header and live response panel */}
+
+Bruno detects the streamed response, keeps the connection open, and starts appending chunks to the **Response** panel as they arrive.
+
+## Streaming response behavior
+
+While a stream is active:
+
+- Incoming data is **concatenated** and shown live in the response body.
+- The **Send** (→) button switches to a **Cancel** button.
+- Elapsed time continues updating for as long as the stream stays open.
+- The stream state resets when the server closes the connection or you cancel it.
+
+### Cancel an active stream
+
+1. While data is streaming, click the **Cancel** button in the URL bar (where Send normally appears).
+2. Bruno stops receiving new data, closes the connection, and resets the stream state.
+3. The response panel keeps the data received up to the cancellation point.
+4. The button returns to **Send** so you can run the request again.
+
+<Info>
+  Clicking **Cancel** cancels only the active stream for that request. It does not close other tabs or stop unrelated requests.
+</Info>
+
+## Collection runs and CLI
+
+Long-lived SSE connections would block a collection run indefinitely. To keep runners reliable:
+
+- **Collection Runner** skips requests that use `Accept: text/event-stream`.
+- **Bruno CLI** also skips those requests during `bru run`.
+
+Test SSE requests individually from the request tab. Use the Collection Runner or CLI for non-streaming requests in the same collection.
+
+<Warning>
+  If a collection run appears to skip a request unexpectedly, check whether that request sets `Accept: text/event-stream`. Remove or disable the header for automated runs when you need the request to execute.
+</Warning>
+
+## Example use cases
+
+- **AI / LLM APIs** - Inspect token-by-token or chunked completion streams.
+- **Live event feeds** - Watch notifications or status updates as the server pushes them.
+- **Long-lived monitoring endpoints** - Debug keep-alive streams without waiting for a final close.
+
+## Tips
+
+- Prefer an explicit `Accept: text/event-stream` header so Bruno treats the request as a stream.
+- Use Cancel to stop noisy or endless streams while debugging.
+- Keep SSE requests out of CI collection runs, or tag/structure them so automated runs only execute finite HTTP requests.
+- For bidirectional real-time protocols, use [WebSocket](/send-requests/websocket/overview) instead of SSE.
+
+## Related
+
+- [REST API requests](/send-requests/REST/rest-api)
+- [Request headers](/send-requests/REST/req-header)
+- [WebSocket overview](/send-requests/websocket/overview)

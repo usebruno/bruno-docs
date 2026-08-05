@@ -70,6 +70,7 @@
                       "send-requests/REST/req-header",
                       "send-requests/REST/parameters",
                       "send-requests/REST/body-data",
+                      "send-requests/REST/sse",
                       "send-requests/REST/request-settings",
                       "send-requests/REST/code-generator"
                     ]
