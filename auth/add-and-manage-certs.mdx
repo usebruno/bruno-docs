@@ -3,18 +3,34 @@ title: "Adding and managing certificates"
 sidebarTitle: "Add and Manage Certificates"
 ---
 
-Bruno supports adding custom Client Authorization (CA) and client certificates to your requests if required by the API you are working with. 
+import { BrunoButton } from "/snippets/BrunoButton.jsx";
+
+Bruno supports adding custom Certificate Authority (CA) and client certificates to your requests if required by the API you are working with.
+
+## Try it out
+
+Explore the [client-cert](https://github.com/bruno-collections/client-cert-badssl) sample collection to practice custom CA trust and client certificates.
+
+<BrunoButton
+  collectionUrl="https://github.com/bruno-collections/client-cert-badssl"
+  width={160}
+  height={40}
+/>
 
 ### Adding a custom CA certificate
 
-Navigate to the `Preferences` menu in Bruno and select `Use Custom CA Certificate`, then upload the selected file. 
+Navigate to the `Preferences` menu in Bruno and select `Use Custom CA Certificate`, then upload the selected file.
 
 ![Custom CA Certificate](/images/screenshots/auth/customcacert.webp)
 
 ### Adding client certificates to Collections
 
-You can add and manage client certificate(s) on any Collection by going to the `Collection Settings` menu and selecting `Client Certificates`. 
+You can add and manage client certificate(s) on any Collection by going to the `Collection Settings` menu and selecting `Client Certificates`.
 
-Simply enter the domain, designate the type of certificate, and then upload the relevant file(s). 
+Simply enter the domain, designate the type of certificate, and then upload the relevant file(s).
 
 ![Client Certificate](/images/screenshots/auth/clientcerts.webp)
+
+<Info>
+  From Bruno **v4.1.0**, you can also add client certificates at the **app (Preferences) level**, so the same certificate can be reused across collections.
+</Info>
