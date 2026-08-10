@@ -167,22 +167,52 @@ bru run --env Local --global-env Production
 #### Passing Environment Variables
 
 <Info>
-Variables marked as secrets in Bruno app are not accessible via the CLI. Pass them directly as command-line arguments.
+  Variables marked as secrets in the Bruno app are not persisted to disk for the CLI. Pass them at runtime with `--env-var` (collection) or `--global-env-var` (global).
 </Info>
+
+Use `--env-var` to override **collection-level** environment variables:
 
 ```bash copy
 bru run --env Local --env-var JWT_TOKEN=1234
 ```
 
-## Multiple Environment Variables
-
-You can override multiple environment variables by using additional `--env-var` flags:
+You can override multiple collection variables by repeating the flag:
 
 ```bash copy
-bru run --env Local --env-var JWT_TOKEN=1234 --env-var API_KEY=abcd1234 
+bru run --env Local --env-var JWT_TOKEN=1234 --env-var API_KEY=abcd1234
 ```
 
-Each `--env-var` flag adds or overrides a single environment variable, and you can chain as many as needed.
+Each `--env-var` flag adds or overrides a single collection environment variable. Collection-level `--env-var` behavior is unchanged.
+
+#### Passing Global Environment Variables
+
+Use `--global-env-var` to override variables in the **active global environment**. This is required when scripts call `bru.getGlobalEnvVar()` or when you need to inject global secret values in CI/CD.
+
+`--global-env-var` requires `--global-env`:
+
+```bash copy
+bru run --global-env Production --global-env-var apiKey=xyz789
+```
+
+Override multiple global variables, optionally with a collection environment:
+
+```bash copy
+bru run --env Local --global-env Production \
+  --global-env-var apiKey=xyz789 \
+  --global-env-var JWT_TOKEN=1234
+```
+
+During the run:
+
+- Overrides are merged into `globalEnvironmentVariables` before requests start.
+- `bru.getGlobalEnvVar('apiKey')` returns the overridden value in scripts.
+- `{{apiKey}}` interpolation also resolves to the overridden value.
+- Overrides are not written back to the global environment file on disk.
+
+| Flag | Scope | Seen by |
+| --- | --- | --- |
+| `--env-var` | Collection environment | Collection env vars and `{{variable}}` interpolation |
+| `--global-env-var` | Global environment (requires `--global-env`) | `bru.getGlobalEnvVar()` and `{{variable}}` interpolation |
 
 ## Filtering Requests with Tags
 

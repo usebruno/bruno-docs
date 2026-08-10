@@ -355,13 +355,13 @@ More: [Data Driven Testing](/testing/automate-test/data-driven-testing) · [Comm
 
 **Objective:** Pass or override environment variables at runtime without editing environment files.
 
-Use the `--env-var` flag to set variables on the command line. This is useful for secrets and CI-specific values:
+Use `--env-var` for **collection-level** variables:
 
 ```bash
 bru run --env local --env-var baseURL=https://echo.usebruno.com
 ```
 
-You can chain multiple overrides:
+You can chain multiple collection overrides:
 
 ```bash
 bru run --env local \
@@ -369,12 +369,29 @@ bru run --env local \
   --env-var API_KEY=your-key-here
 ```
 
+Use `--global-env-var` for **global environment** variables. This requires `--global-env`, and is the correct flag when scripts call `bru.getGlobalEnvVar()` or when you need to inject global secrets in CI:
+
+```bash
+bru run --global-env Production \
+  --global-env-var apiKey=xyz789 \
+  --global-env-var JWT_TOKEN=1234
+```
+
+You can combine both scopes in one run:
+
+```bash
+bru run --env local --global-env Production \
+  --env-var baseURL=https://echo.usebruno.com \
+  --global-env-var apiKey=xyz789
+```
+
 <Tip>
-  Variables marked as secrets in the Bruno app are not accessible via the CLI. Pass them directly with `--env-var`.
+  Secret variables are not persisted to disk for CLI use. Pass collection secrets with `--env-var`, and global secrets with `--global-env-var`.
 </Tip>
 
 **Success Criteria:**
 - Collection runs successfully with overridden variables.
+- `bru.getGlobalEnvVar()` returns values passed via `--global-env-var`.
 - No changes are required to environment files on disk.
 
 More: [Command Examples](/bru-cli/runCollection#passing-environment-variables)
