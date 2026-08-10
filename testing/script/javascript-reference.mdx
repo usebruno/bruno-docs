@@ -1646,24 +1646,32 @@ See [JavaScript Sandbox](/get-started/configure/javascript-sandbox#detecting-san
 
 ### `bru.runRequest(requestPathName)`
 
-Executes another request in the collection by its name and returns its response. Useful for chaining dependent requests inside a single script without relying on collection runner order.
+Executes another request in the collection by its path and returns its response. Useful for chaining dependent requests inside a single script without relying on collection runner order.
+
+The argument is the request's path relative to the collection root, without the `.bru` or `.yml` extension. For a request at the top of the collection, pass just the request name (for example, `"Login"`). For a request inside a folder, include the folder path using forward slashes (for example, `"Auth/Login"`).
+
+If Bruno cannot find a request at that path, the promise rejects with `bru.runRequest: invalid request path - <resolved path>`. Wrap the call in `try/catch` to handle a mistyped name.
 
 <Warning>
   Do not call `bru.runRequest()` from a collection-level pre-request script — it can cause an infinite recursive loop. Always use double quotes for the request name.
 </Warning>
+
+<Info>
+  `bru.runRequest()` only runs HTTP and GraphQL requests. WebSocket and gRPC requests resolve with `{ status: 'skipped' }` and are recorded in the Timeline as skipped rather than executed.
+</Info>
 
 <Tip>
   You can see the executed request in the [Timeline](/debugging/timeline) tab with a `runRequest` context badge.
 </Tip>
 
 ```javascript
-// Run an auth request and use the token it returns
+// Run an auth request at the top of the collection
 const authResponse = await bru.runRequest("Login");
 const token = authResponse.data.token;
 req.setHeader("Authorization", "Bearer " + token);
 
-// Run a cleanup step after the main request
-const cleanupResponse = await bru.runRequest("Delete Test User");
+// Run a request that lives inside a folder
+const cleanupResponse = await bru.runRequest("Admin/Delete Test User");
 console.log("Cleanup status:", cleanupResponse.status);
 ```
 

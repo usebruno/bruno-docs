@@ -47,3 +47,16 @@ The client-cert-config.json file should contain the following fields:
   ]
 }
 ```
+
+### How `--client-cert-config` interacts with `bruno.json`
+
+The certificates from `--client-cert-config` are **appended to** the certificates already defined under `clientCertificates.certs` in `bruno.json`, not swapped in. Both sets are available during the run, and Bruno picks a certificate for each request by matching its host against each entry's `domain`.
+
+Two conditions must be met for `--client-cert-config` entries to be added:
+
+- The JSON file must exist and be valid JSON.
+- The top-level `enabled` field must be `true`.
+
+If `enabled` is `false` or omitted, or `certs` is not an array, Bruno prints a warning and only the `bruno.json` certificates are used for the run.
+
+If both a `--client-cert-config` entry and a `bruno.json` entry match the same domain, the `bruno.json` entry takes precedence because it is checked first.
