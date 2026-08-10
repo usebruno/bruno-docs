@@ -32,9 +32,31 @@ A collection in Bruno is a structured group of API requests, tests, and related 
 
 6. Click **Create**
 
+After you create a collection, use the `+` menu for related actions:
+
 - **Create a Collection** - Creates a new collection in the current workspace.
-- **Open Collection** - Opens an existing Bruno collection (multiple open collections is supported).
+- **Open Collection** - Opens one or more existing Bruno collections from a folder on disk.
 - **Import Collection** - Imports a collection from other tools (Postman, GitHub Import, Insomnia, etc.).
+
+
+### How to open one or more collections
+
+1. Open Bruno and click the `+` button in the left-top corner sidebar 
+2. Select **Open Collection**.
+3. Choose a folder on your filesystem.
+4. Bruno scans nested folders for Bruno collections (folders that contain `opencollection.yml` or `bruno.json`).
+5. In the open collection modal, review the collections found.
+6. Select one or more collections, then click **Open**.
+
+Bruno adds the selected collections to your workspace. You do not need to open each nested collection separately.
+
+The flow matches how Bruno opens collections after a [Git clone](/git-providers/github#access-and-import-public-repositories): scan the folder, list Bruno collections found inside, then select one or more to open.
+
+<Info>
+  Opening a parent folder that contains multiple collections is useful for monorepos and shared team directories. Select every collection you need in the modal, then open them together.
+</Info>
+
+
 
 ## Automatic Git Configuration
 
