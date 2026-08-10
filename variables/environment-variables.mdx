@@ -36,6 +36,70 @@ The search filters the variable list in real time. If you click on a variable ro
   The search feature is also available for [global environment variables](/variables/global-environment-variables).
 </Info>
 
+## Default environment
+
+You can set a **default environment** for a collection so teammates and new sessions start with the right environment selected, without picking it manually every time.
+
+The default is stored in the collection > **Presets** and travels with the collection when you share, export, or import it.
+
+### Set a default environment
+
+1. Go to **Collection > Presets** tab.
+2. Select the environment you want as the default
+3. Click **Save** button.
+
+![Default environment](/images/screenshots/v4/chores/default-env.webp)
+
+Bruno marks that environment as the collection default and saves it to the collection config.
+
+### How the default is applied
+
+| Situation | What Bruno uses |
+| --- | --- |
+| You open a collection and already have a recently selected environment saved in the UI snapshot | The saved selection (default does **not** override it) |
+| You open or import a collection with no recent environment selected | The configured default environment |
+| You run requests in the app with no environment selected | The default environment, if one is configured |
+| You run the collection with Bruno CLI and omit `--env` | The collection's default environment, if one is configured |
+
+<Info>
+  The default environment is shareable with the collection. Setting it updates collection config (`bruno.json` or OpenCollection YAML), not only your local UI state.
+</Info>
+
+### Persistence and export
+
+The default environment is persisted in the collection configuration and included when you export the collection:
+
+- **Bruno native** -  stored in `bruno.json`
+- **OpenCollection YAML** - stored in `opencollection.yml`
+
+On import or when opening a collection, if no recent environment is selected from the UI snapshot, Bruno falls back to this configured default.
+
+### Example config
+
+After you set **Local** as the default, the collection config includes that choice. Exact field placement depends on format:
+
+<Tabs>
+  <Tab title="Bru Collections">
+    ```json title="bruno.json"
+    {
+      "version": "1",
+      "name": "my-api",
+      "defaultEnvironment": "Local"
+    }
+    ```
+  </Tab>
+  <Tab title="OpenCollection YAML">
+    ```yaml title="opencollection.yml"
+    opencollection: 1.0.0
+    info:
+      name: my-api
+    extensions:
+      bruno:
+        defaultEnvironment: Local
+    ```
+  </Tab>
+</Tabs>
+
 ## Using the ./environment directory
 
 Environment variables are synced with the `/environments` directory inside your collection. You can also create and manage environments there.
