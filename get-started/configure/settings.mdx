@@ -56,6 +56,16 @@ This setting controls the integration with a Vault for secret management, which 
 
 ![vault-secrets](/images/screenshots/get-started/config/settings/vault-server.webp)
 
+## Client Certificates
+
+<Note>
+  Global client certificates are available in Bruno **v4.1.0+**.
+</Note>
+
+Configure client certificates once under **Preferences → Client Certificates** and reuse them across collections. Each certificate has an enable/disable switch. Collection certificates still take precedence for the same domain. See [Add and Manage Certificates](/auth/add-and-manage-certs) for setup, precedence, schema, and CLI behavior.
+
+![Global client certificates](/images/screenshots/v4/chores/preferences-client-cert.webp)
+
 ## Git Providers
 
 Connect Bruno to your Git hosting service to enable in-app repository access, cloning, and collaboration workflows. See the [Git Providers](/git-providers/overview) guide for setup instructions for each supported provider.
