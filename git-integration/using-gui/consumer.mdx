@@ -6,7 +6,7 @@ sidebarTitle: "Consumer"
 This guide covers Git operations for team members who clone and consume shared collections.
 
 <Info>
-  All features on this page are available in the **free version** starting from Bruno 3.0.0.
+  Cloning, fetching, and pulling are available in the **free version** starting from Bruno 3.0.0. Choosing which remote and branch to pull from requires [Pro or Ultimate](https://www.usebruno.com/pricing).
 </Info>
 
 ## Cloning Collections from GitHub
@@ -47,13 +47,35 @@ This allows you to see if your team has pushed new changes before you pull them.
 
 Pull the latest changes from the remote repository to stay synchronized with your team.
 
-1. Go to **Git UI**.
-2. Click the **Fetch** button.
-3. Click the **Pull** button.
+1. Go to **Git UI** from top-right navbar icon.
+2. Click the **Pull** button.
+3. Bruno opens the **Pull from other branches** dialog and fetches your remotes and branches. 
+4. Select the branch you want to pull from. Your current branch is selected by default and is tagged **Current**. 
+5. If your collection has more than one remote, pick the one you want from the **Remote** dropdown above the branch list.
+6. The note at the bottom of the dialog confirms where the changes will land, such as *Changes will be merged into main (current branch)*.
+7. Click **Pull from selected branch**.
 
-![Pull Changes](/images/screenshots/git-integration/git-gui/consumer/5-fetch-pull-repo.webp)
+<Note>
+Remote branches appear as `<remote>/<branch>` e.g. `origin/main`. Use the **Search branches...** box to filter longer lists.
+</Note>
+
+![Pull from other branches](/images/screenshots/v4/chores/git-pull.webp)
 
 Now you can see all your remote changes pulled in your collection.
+
+<Note>
+  Picking a remote and a branch requires [Pro or Ultimate](https://www.usebruno.com/pricing). In the free version, **Pull** fetches and merges the branch your current branch already tracks, without opening the dialog.
+</Note>
+
+<Tip>
+  If you select a **local** branch other than the one you're on, Bruno switches to that branch before merging, so you don't have to check it out first.
+</Tip>
+
+### When a Pull Fails
+
+If the pull cannot complete, the dialog stays open and shows the Git output for the operation, and the primary button changes to **Close**. Close the dialog and click **Pull** again to retry.
+
+Retrying helps with transient failures such as a network timeout or a slow remote. For failures that need a fix first uncommitted local changes, or a branch that has diverged from the remote resolve the underlying issue before pulling again.
 
 <Info>
   If you have local uncommitted changes when pulling, you may be prompted to stash them first. The [Stash Changes](../using-gui/provider#stash-changes) feature (Pro/Ultimate) helps manage this workflow.
