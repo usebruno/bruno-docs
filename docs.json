@@ -55,7 +55,7 @@
           },
           {
             "tab": "API Client",
-            "icon": "app-window",
+            "icon": "browser",
             "groups": [
               {
                 "group": "Overview",
@@ -391,14 +391,29 @@
             "icon": "book",
             "groups": [
               {
-                "group": "Create Documentation",
+                "group": "Overview",
                 "pages": [
-                  "api-docs/overview",
+                  "api-docs/overview"
+                ]
+              },
+              {
+                "group": "Write Docs in Bruno",
+                "pages": [
                   "api-docs/workspace-docs",
                   "api-docs/collection-docs",
                   "api-docs/folder-docs",
-                  "api-docs/request-docs",
-                  "api-docs/auto-generate-docs"
+                  "api-docs/request-docs"
+                ]
+              },
+              {
+                "group": "Generate HTML Docs",
+                "pages": [
+                  "html-docs/overview",
+                  "html-docs/generate",
+                  "html-docs/environments",
+                  "html-docs/search",
+                  "html-docs/playground",
+                  "html-docs/deploy"
                 ]
               },
               {
@@ -414,6 +429,18 @@
             ]
           },
           {
+            "tab": "Mock Servers",
+            "icon": "server",
+            "groups": [
+              {
+                "group": "Overview",
+                "pages": [
+                  "mock-servers/overview"
+                ]
+              }
+            ]
+          },
+          {
             "tab": "VS Code Extension",
             "icon": "code",
             "pages": [
@@ -423,80 +450,120 @@
             ]
           },
           {
-            "tab": "Reference",
-            "icon": "book-open",
-            "groups": [
+            "tab": "More",
+            "icon": "ellipsis",
+            "menu": [
               {
-                "group": "Bru Lang",
-                "pages": [
-                  "bru-lang/overview",
-                  "bru-lang/language",
-                  "bru-lang/tag-reference",
-                  "bru-lang/samples",
-                  "bru-lang/syntax-highlighting"
-                ]
-              },
-              {
-                "group": "OpenCollection YAML",
-                "pages": [
-                  "opencollection-yaml/overview",
-                  "opencollection-yaml/samples",
-                  "opencollection-yaml/structure-reference"
-                ]
-              },
-              {
-                "group": "Converters",
-                "pages": [
-                  "converters/overview",
-                  "converters/postman-to-bruno",
-                  "converters/insomnia-to-bruno",
-                  "converters/openapi-to-bruno",
-                  "converters/wsdl-to-bruno"
-                ]
-              }
-            ]
-          },
-          {
-            "tab": "Licensing",
-            "icon": "key",
-            "groups": [
-              {
-                "group": "Overview",
-                "pages": [
-                  "license-overview"
-                ]
-              },
-              {
-                "group": "End Users",
-                "pages": [
-                  "license-end-users/activate-license"
-                ]
-              },
-              {
-                "group": "Administrators",
-                "pages": [
-                  "license-administrators/license-portal",
-                  "license-administrators/billing",
-                  "license-administrators/self-hosted-licensing",
+                "item": "Reference",
+                "icon": "book-open",
+                "description": "Bru Lang, OpenCollection YAML, and format converters",
+                "groups": [
                   {
-                    "group": "SAML SSO",
+                    "group": "Bru Lang",
                     "pages": [
-                      "license-administrators/saml-sso/overview",
-                      "license-administrators/saml-sso/configure-saml-sso-with-okta",
-                      "license-administrators/saml-sso/configure-saml-sso-with-entra-id",
-                      "license-administrators/saml-sso/troubleshooting"
+                      "bru-lang/overview",
+                      "bru-lang/language",
+                      "bru-lang/tag-reference",
+                      "bru-lang/samples",
+                      "bru-lang/syntax-highlighting"
                     ]
                   },
                   {
-                    "group": "SCIM Provisioning",
+                    "group": "OpenCollection YAML",
                     "pages": [
-                      "license-administrators/scim-provisioning/overview",
-                      "license-administrators/scim-provisioning/configure-scim-with-okta",
-                      "license-administrators/scim-provisioning/configure-scim-with-entra-id",
-                      "license-administrators/scim-provisioning/bruno-scim-api"
+                      "opencollection-yaml/overview",
+                      "opencollection-yaml/samples",
+                      "opencollection-yaml/structure-reference"
                     ]
                   },
-                  "license-administrators/ai-policy"
+                  {
+                    "group": "Converters",
+                    "pages": [
+                      "converters/overview",
+                      "converters/postman-to-bruno",
+                      "converters/insomnia-to-bruno",
+                      "converters/openapi-to-bruno",
+                      "converters/wsdl-to-bruno"
+                    ]
+                  }
+                ]
+              },
+              {
+                "item": "Licensing",
+                "icon": "key",
+                "description": "Activate licenses and manage your organization",
+                "groups": [
+                  {
+                    "group": "Overview",
+                    "pages": [
+                      "license-overview"
+                    ]
+                  },
+                  {
+                    "group": "End Users",
+                    "pages": [
+                      "license-end-users/activate-license"
+                    ]
+                  },
+                  {
+                    "group": "Administrators",
+                    "pages": [
+                      "license-administrators/license-portal",
+                      "license-administrators/billing",
+                      "license-administrators/self-hosted-licensing",
+                      {
+                        "group": "SAML SSO",
+                        "pages": [
+                          "license-administrators/saml-sso/overview",
+                          "license-administrators/saml-sso/configure-saml-sso-with-okta",
+                          "license-administrators/saml-sso/configure-saml-sso-with-entra-id",
+                          "license-administrators/saml-sso/troubleshooting"
+                        ]
+                      },
+                      {
+                        "group": "SCIM Provisioning",
+                        "pages": [
+                          "license-administrators/scim-provisioning/overview",
+                          "license-administrators/scim-provisioning/configure-scim-with-okta",
+                          "license-administrators/scim-provisioning/configure-scim-with-entra-id",
+                          "license-administrators/scim-provisioning/bruno-scim-api"
+                        ]
+                      },
+                      "license-administrators/ai-policy"
+                    ]
+                  }
+                ]
+              },
+              {
+                "item": "JavaScript API Reference",
+                "icon": "brackets-curly",
+                "description": "The bru object, scripting and testing API",
+                "pages": [
+                  "testing/script/javascript-reference"
+                ]
+              },
+              {
+                "item": "Postman Migration",
+                "icon": "right-left",
+                "description": "Move your Postman collections to Bruno",
+                "pages": [
+                  "get-started/import-export-data/postman-migration"
+                ]
+              },
+              {
+                "item": "Environment Variables",
+                "icon": "layer-group",
+                "description": "Manage values across environments",
+                "pages": [
+                  "variables/environment-variables"
+                ]
+              },
+              {
+                "item": "OAuth 2.0",
+                "icon": "shield-check",
+                "description": "Configure OAuth 2.0 flows",
+                "pages": [
+                  "auth/oauth2-2.0/overview"
                 ]
               }
             ]
@@ -1394,6 +1461,11 @@
     }
   },
   "redirects": [
+    {
+      "source": "/api-docs/auto-generate-docs",
+      "destination": "/html-docs/overview",
+      "permanent": true
+    },
     {
       "source": "/secrets-management/secret-managers/hashicorp-vault/using-with-cli",
       "destination": "/bru-cli/secret-managers",
