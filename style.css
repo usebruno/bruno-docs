@@ -162,3 +162,109 @@
 div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
   max-width: none;
 }
+
+/* ---------------------------------------------------------------------------
+   Information density — shrink the theme's whitespace, not the content
+   ---------------------------------------------------------------------------
+   Mintlify's defaults are 16px body text at line-height 28px (1.75), 48px of
+   margin above every h2, 32px around every image, and full-column screenshots.
+   None of that is in our .mdx — it's the platform theme (Tailwind prose). The
+   blocks below override it. Measured at 1440x900 on two probe pages:
+   /html-docs/generate 2511px -> 2136px (-15%), the JavaScript reference
+   52709px -> 47694px (-9.5%), and visible sidebar rows 13 -> 16 / 14 -> 18.
+   Text-heavy stretches compress the most; the floor on long pages is code
+   blocks (deliberately untouched) and screenshot heights, which don't track
+   the base font. If more is wanted, the next lever is a code-block font-size
+   block — not taken here to keep code readable.
+
+   For calibration: Cursor's docs (the density benchmark that prompted this)
+   use 14px body text; we land at 14.5px.
+
+   Mechanics that make this cheap: the prose theme sizes headings and most
+   margins in em, so the base-font block compounds — shrinking 16px -> 14.5px
+   proportionally shrinks nearly every gap on the page for free. The explicit
+   margin blocks then cut the biggest offenders further. Selectors are plain
+   classes; this file is injected unlayered and last, so no !important or
+   specificity games are needed (see the max-w-8xl block above).
+
+   Each block below is independent — tune or delete any one without affecting
+   the rest. Values are plain numbers on purpose.
+
+   Maintenance couplings:
+   - `.mdx-content` (article body), `.callout` and `#sidebar` are
+     Mintlify-emitted, not public API. If renamed, the affected block stops
+     matching and that element reverts to the roomier default — safe failure
+     direction, re-check after a Mintlify bump.
+   - The h1 subtitle and code blocks are deliberately untouched.
+   --------------------------------------------------------------------------- */
+
+/* Body text: 16px/1.75 -> 14.5px/1.55. The biggest lever — everything
+   em-based (headings, prose margins, list indents) scales with it. */
+.mdx-content {
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+
+/* Heading margins: the ~48px band above every h2 (2em at 24px) was the
+   single biggest scroll cost on long pages. */
+.mdx-content h2 {
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+.mdx-content h3 {
+  margin-top: 1.25em;
+  margin-bottom: 0.4em;
+}
+.mdx-content h4 {
+  margin-top: 1.2em;
+  margin-bottom: 0.4em;
+}
+
+/* Paragraphs and lists: prose defaults are 1.25em between paragraphs and
+   0.5em between list items. */
+.mdx-content p {
+  margin-top: 0.7em;
+  margin-bottom: 0.7em;
+}
+.mdx-content ul,
+.mdx-content ol {
+  margin-top: 0.7em;
+  margin-bottom: 0.7em;
+}
+.mdx-content li {
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
+}
+
+/* Screenshots: cap at 580px instead of the full content column (~689px at
+   1440, wider on the uncapped shell), and halve the 32px vertical margins.
+   min() keeps them responsive below the cap; images never upscale (Mintlify
+   sets width:auto), so small images are unaffected. */
+.mdx-content img {
+  max-width: min(580px, 100%);
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+/* Callouts (Note/Tip/Warning/Info): default is 16px text with 16px/20px
+   padding. Internal paragraph margins shrink too, or a one-line callout
+   still reads roomy. */
+.callout {
+  padding: 10px 14px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+.callout p {
+  margin-top: 0.4em;
+  margin-bottom: 0.4em;
+}
+
+/* Sidebar: 14px text in 36px rows -> 13px in ~27px rows, so more of the
+   navigation is visible without scrolling. */
+#sidebar a {
+  font-size: 13px;
+  line-height: 20px;
+  padding-top: 3.5px;
+  padding-bottom: 3.5px;
+}
