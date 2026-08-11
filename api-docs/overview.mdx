@@ -5,7 +5,20 @@ sidebarTitle: "Overview"
 
 Bruno allows you to create API documentation at four distinct levels: **Workspace, Collection, Folder, and Request**.
 
-With full Markdown support you can write clear, concise, and well-structured documentation at each level supplemented with any relevant screenshots, gifs, or other elements to ensure your users have a seamless onboarding experience.
+With full Markdown support you can write clear, concise, and well-structured documentation at each level, supplemented with screenshots, and other media to ensure your users have a seamless onboarding experience.
+
+## Rich Text and Markdown Editing
+
+The Docs tab includes a WYSIWYG (rich text) editor built on top of Markdown. You can:
+
+- **Formatting text** - Format text visually using a toolbar (headings, bold, italic, strikethrough, lists, task lists, tables, quotes, inline code, code blocks, undo/redo).
+- **Rich Text** and **Markdown** - Toggle between rich text and markdown modes at any time, content stays synchronized because Markdown remains the underlying source of truth.
+- **Syntax-highlighted and Code blocks** - Paste or insert code blocks with language auto-detection and a language selector (JavaScript, TypeScript, Python, JSON, YAML, SQL, Bash, and more). Highlighting follows the active Bruno theme.
+- **Syntax-highlighted Markdown editor** - Use a syntax-highlighted Markdown editor when editing in Markdown mode.
+- **Images** - Embed images that render correctly in both edit and preview.
+- **Copy code** - Copy code from any block with the copy control, in both edit and preview modes.
+
+This lets non-technical teammates author documentation without writing raw Markdown, while power users can still edit Markdown directly.
 
 <Info>
   Bruno sanitizes all HTML in documentation blocks before rendering. This prevents cross-site scripting (XSS) attacks when previewing markdown that contains embedded HTML. Elements like `script` tags and inline event handlers are automatically removed.
