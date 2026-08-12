@@ -1,0 +1,131 @@
+---
+title: "Create and Run a Mock Server"
+sidebarTitle: "Create and Run"
+---
+
+You can create a mock server from a collection of saved response examples, from an OpenAPI spec, or as a standalone (manual) mock.
+
+## Enable the beta flag
+
+1. Open **Preferences**.
+2. Go to **Beta**.
+3. Turn on **Mock Server**.
+
+A **Mock Servers** section appears in the sidebar.
+
+## Create from a collection (saved examples)
+
+Use this path when the collection already has saved response examples.
+
+1. Open the collection.
+2. In the sidebar, expand **Mock Servers** and click the **+** icon to create a new mock server.
+3. Enter a **Name**.
+4. Keep **Link to a collection or API spec** checked, select **Collection**, pick the collection, then click **Create**.
+5. On the dashboard, click **Sync with Examples**. Every [saved example](/send-requests/res-data-cookies/response-examples) becomes a mock response (method, path, status, headers, and body).
+6. Click **Start Server**. Bruno picks a free port (or uses the port you set under **Advanced settings**).
+
+![Create mock server linked to a collection](/images/screenshots/v4/mock-severs/create-api-spec-mock-server.webp)
+
+
+## Create from an OpenAPI spec
+
+Use this path when you have an API spec in the workspace. Turn on [API Spec](/open-api/createOAS#viewing-existing-oas-files) under **Preferences** → **Features** if it is not already enabled.
+
+1. Load the spec under **API Specs** in the sidebar (if it is not already there).
+2. Create a mock server, keep **Link to a collection or API spec** checked, select **API Spec**, pick the spec, then click **Create**.
+3. On the dashboard, click **Generate from API Spec**. Each operation and response status becomes a mock response; bodies are derived from the schema where possible.
+4. Click **Start Server**.
+
+![Create mock server linked to an API spec](/images/screenshots/v4/mock-severs/create-collection-api-mock-server.webp)
+
+
+## Create a standalone (manual) mock
+
+To add responses yourself instead of syncing from a collection or spec:
+
+1. Click **+** under **Mock Servers**.
+2. Enter a **Name**.
+3. Turn off **Link to a collection or API spec**.
+4. Optionally set **Port** and **Response delay** under **Advanced settings**.
+5. Click **Create**, then add responses from the **Responses** tab.
+
+![Create a standalone mock server](/images/screenshots/v4/mock-severs/create-raw-mock-server.webp)
+
+## Dashboard at a glance
+
+The mock opens as its own tab in the main pane (distinct from a request tab).
+
+### Header
+
+| State | What you see |
+|-------|----------------|
+| **Running** | Green status dot, port, base URL with copy, **Stop Server**, refresh, **Delay (ms)** |
+| **Stopped** | Grey status dot, **Start Server**, **Delay (ms)** |
+
+**Delay (ms)** adds a fixed latency to matched responses. Unmatched routes are never delayed.
+
+**Refresh** re-reads the source and rebuilds the route table without dropping the port.
+
+The **gear** icon on the right side of the dashboard header opens **Mock Server Settings** (rename, change link source, port, delay, or delete).
+
+![API spec mock server dashboard](/images/screenshots/v4/mock-severs/api-mock-server-dashboard.webp)
+
+
+### Responses tab
+
+Each mock response is a first-class object with:
+
+- **Method** and **Path** - path parameters use `:name` (for example, `/users/:id`)
+- **Status** and **Headers**
+- **Body** editor with syntax highlighting for JSON, XML, HTML, and plain text
+- **Rules** - optional conditions that choose one response over another on the same method + path
+- **Try** - runs the response through the matcher and shows what the server would return, without leaving the editor
+
+Empty state: *No mock responses yet. Sync from examples or add one manually.*
+
+![mock-server-dashboard-responses](/images/screenshots/v4/mock-severs/mock-server-dashboard-response.webp)
+
+You can edit, rename, disable, or clone responses at any time. Rules can change while the server is running; they apply on the next incoming request.
+
+![mock-server-request-logs](/images/screenshots/v4/mock-severs/mock-server-request.webp)
+
+#### Rules
+
+A rule matches on a request **header**, **query parameter**, or **body field** (JSON path), using **equals**, **not equals**, **contains**, or **matches** (regex). Multiple conditions combine with **AND** or **OR**.
+
+Example: two responses on `GET /users/:id` - one for `?type=admin`, another for `?type=guest`, or different payloads based on an `x-api-key` header.
+
+When several responses share a route, the one whose rules match wins. If none match, Bruno returns the default for that route, or `404` if no default is set.
+
+![mock-server-rules](/images/screenshots/v4/mock-severs/mock-server-rules.webp)
+
+### Routes tab
+
+A read-only, searchable table of every registered method + path pair, with a response count per route, a method-family filter, and search. Use it to confirm the shape developers expect and to spot duplicate routes.
+
+![mock-server-routes](/images/screenshots/v4/mock-severs/mock-server-routes.webp)
+
+### Request Log tab
+
+While the server is running, every incoming request is listed live: method, path, status returned, whether it matched, and duration. Filter by match status (**Matched**, **Unmatched**, **All Requests**) or status-code family (**2xx**, **3xx**, **4xx**, **5xx**), or clear the log.
+
+Unmatched requests are labelled **No Match**. Empty state: *No requests yet. Start the server and send one.*
+
+The log is in-memory only and capped at the **most recent 500** entries per server.
+
+![mock-server-request-logs](/images/screenshots/v4/mock-severs/mock-server-request-logs.webp)
+
+## How the running server behaves
+
+- **CORS** is enabled by default. Browser apps can call the mock without extra setup. `OPTIONS` preflight returns `204` with the correct headers.
+- Trailing slashes are normalised (`/users/` and `/users` both match).
+- Unmatched paths return **404** with a JSON payload: method and path tried, a hint to create a matching mock response, and a truncated list of registered routes.
+- Transport-level headers such as `transfer-encoding` and `content-encoding` are stripped from replies.
+- Content type comes from the saved example’s headers, defaulting to `application/json` when the body is JSON.
+- If the requested port is taken, Bruno reports which mock or system process holds it and suggests a nearby free port.
+
+## Keeping mocks in sync with the collection
+
+Renaming, deleting, or moving the source collection on disk is reflected on the next tick without stopping the server. Deleting a mock response updates the sidebar and dashboard the same way - mock server is not orphaned.
+
+Stopping Bruno stops every running mock server cleanly.

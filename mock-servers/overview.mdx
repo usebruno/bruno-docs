@@ -1,0 +1,42 @@
+---
+title: "Mock Servers"
+sidebarTitle: "Overview"
+---
+
+<Warning>
+  Mock Servers are in **Beta**. Enable them under **Preferences → Beta → Mock Server**. The sidebar section appears only after you opt in.
+</Warning>
+
+
+
+Bruno can run a **mock HTTP server on your machine**, backed by a collection’s saved response examples or by an OpenAPI spec. Point any client at `http://localhost:<port>` and Bruno returns the status, headers, and body your team already defined - no cloud host, no terminal required.
+
+## Why use Mock Servers?
+
+Frontend and integration teams often need a stable API before the real backend is ready. Mock Servers close that gap:
+
+- **Use what you already have** - saved examples and OpenAPI operations become mock responses with one click.
+- **Stay local and git-first** - mocks live on disk next to the collection, so teammates cloning the repo get the same mocks.
+- **Point any client at localhost** - browsers work out of the box (CORS is on by default).
+- **Debug mismatches quickly** - a live Request Log and helpful `404` payloads show what was tried and which routes are registered.
+
+## What you get
+
+| Area | Capability |
+|------|------------|
+| **Sidebar** | A **Mock Servers** section listing each instance, with Rename, Clone, and Delete |
+| **Sources** | Link a mock to a **collection**, an **API spec**, or leave it **manual** |
+| **Sync / Generate** | **Sync from examples** (collection) or **Generate from spec** (OpenAPI) |
+| **Dashboard** | Full-screen tab with **Responses**, **Routes**, and **Request Log** |
+| **Runtime** | Start / Stop, auto or pinned port, **Copy URL**, optional **global delay** |
+| **Matching** | Method + path (with `:param` paths), plus optional **rules** on headers, query, or body |
+
+## How it fits Bruno
+
+Mock responses are stored with your collection, not in a hosted service. Closing Bruno stops every running mock; restarting Bruno does **not** auto-start them - you start each server deliberately so a background port is never claimed silently.
+
+The Request Log is **in-memory only** (most recent 500 entries per server). It is a debugging aid, not an audit log.
+
+## Next steps
+
+- [Create and run a mock server](./create-and-run) — enable the beta flag, sync from examples or generate from a spec, then start and use the base URL

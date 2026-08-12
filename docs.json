@@ -303,6 +303,14 @@
                   "debugging/timeline",
                   "debugging/dev-tools"
                 ]
+              },
+              {
+                "group": "Mock Servers",
+                "tag": "Beta",
+                "pages": [
+                  "mock-servers/overview",
+                  "mock-servers/create-and-run"
+                ]
               }
             ]
           },
