@@ -258,6 +258,15 @@
                           "secrets-management/secret-managers/azure-key-vault/using-secrets",
                           "secrets-management/secret-managers/azure-key-vault/cli-authentication"
                         ]
+                      },
+                      {
+                        "group": "Google Cloud Secret Manager",
+                        "pages": [
+                          "secrets-management/secret-managers/google-secret-manager/overview",
+                          "secrets-management/secret-managers/google-secret-manager/adding-a-secret-provider",
+                          "secrets-management/secret-managers/google-secret-manager/configuring-and-fetching-secrets",
+                          "secrets-management/secret-managers/google-secret-manager/using-secrets"
+                        ]
                       }
                     ]
                   }

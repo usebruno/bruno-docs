@@ -1,0 +1,37 @@
+---
+title: "Google Cloud Secret Manager"
+sidebarTitle: "Overview"
+---
+
+<Tip>
+  Google Cloud Secret Manager is supported from Bruno v4.1.0 and later.
+</Tip>
+
+[Google Cloud Secret Manager](https://cloud.google.com/secret-manager/docs) is a secure service for storing API keys, credentials, and other sensitive values in Google Cloud.
+
+Bruno integrates with Google Cloud Secret Manager the same way it does with HashiCorp Vault, AWS Secrets Manager, and Azure Key Vault. Configure an account once in Preferences, attach it to a collection environment, then fetch and resolve secrets in requests, scripts, and environments.
+
+This guide covers:
+
+- [Integrating Google Cloud Secret Manager](./adding-a-secret-provider)
+- [Configuring and fetching secrets](./configuring-and-fetching-secrets)
+- [Using secrets in Bruno](./using-secrets)
+
+## What you can do
+
+- Select **GCP Secrets Manager** as a secret provider in Bruno.
+- Authenticate with a GCP **service account key** - upload or paste the JSON key, or enter the **Client Email** and **Private Key** manually.
+- Use the service account key’s project as the default, and **override the project per environment row** so one service account can fetch from multiple GCP projects.
+- Fetch all secrets in the selected project(s) and resolve them in requests, scripts, and environments like the other providers. JSON secret values are accessible by sub-key.
+- Use the same flow in the **desktop app** and the **CLI**.
+
+## Future improvements
+
+The following are not supported currently:
+
+- Application Default Credentials, `gcloud` CLI login, and Workload Identity Federation
+- Per-secret version pinning - secrets are always fetched at their **latest** version
+
+<Tip>
+  The service account needs permission to **list** secrets in the project and **access** secret versions (for example, the `Secret Manager Secret Accessor` and `Secret Manager Viewer` roles, or equivalent custom permissions).
+</Tip>
