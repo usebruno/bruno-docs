@@ -16,6 +16,11 @@
         "tag": "Latest",
         "tabs": [
           {
+            "tab": "Home",
+            "icon": "house",
+            "pages": ["home"]
+          },
+          {
             "tab": "Get Started",
             "icon": "rocket",
             "groups": [
@@ -211,43 +216,10 @@
                 ]
               },
               {
-                "group": "Tests & Scripts",
+                "group": "Tests",
                 "pages": [
-                  {
-                    "group": "Tests",
-                    "pages": [
-                      "testing/tests/introduction",
-                      "testing/tests/assertions"
-                    ]
-                  },
-                  {
-                    "group": "Scripts",
-                    "pages": [
-                      "testing/script/getting-started",
-                      "testing/script/javascript-reference",
-                      "testing/script/script-flow",
-                      "testing/script/inbuilt-libraries",
-                      "testing/script/external-libraries",
-                      "testing/script/js-file",
-                      "testing/script/dynamic-variables",
-                      "testing/script/request-chaining",
-                      {
-                        "group": "Request",
-                        "pages": [
-                          "testing/script/request/request-object",
-                          "testing/script/request/sync-requests"
-                        ]
-                      },
-                      {
-                        "group": "Response",
-                        "pages": [
-                          "testing/script/response/response-object",
-                          "testing/script/response/response-query"
-                        ]
-                      },
-                      "testing/script/vars"
-                    ]
-                  },
+                  "testing/tests/introduction",
+                  "testing/tests/assertions",
                   {
                     "group": "Automate Tests",
                     "pages": [
@@ -260,10 +232,46 @@
                 ]
               },
               {
+                "group": "Scripts",
+                "pages": [
+                  "testing/script/overview",
+                  "testing/script/javascript-reference",
+                  "testing/script/script-flow",
+                  "testing/script/inbuilt-libraries",
+                  "testing/script/external-libraries",
+                  "testing/script/js-file",
+                  "testing/script/dynamic-variables",
+                  "testing/script/request-chaining",
+                  {
+                    "group": "Request",
+                    "pages": [
+                      "testing/script/request/request-object",
+                      "testing/script/request/sync-requests"
+                    ]
+                  },
+                  {
+                    "group": "Response",
+                    "pages": [
+                      "testing/script/response/response-object",
+                      "testing/script/response/response-query"
+                    ]
+                  },
+                  "testing/script/vars"
+                ]
+              },
+              {
                 "group": "Git & Collaboration",
                 "pages": [
                   "git-integration/overview",
                   "git-integration/git-strategies",
+                  {
+                    "group": "Git Providers",
+                    "pages": [
+                      "git-providers/overview",
+                      "git-providers/github"
+                    ]
+                  },
+                  "git-integration/embed-bruno-collection",
                   {
                     "group": "Using GUI",
                     "pages": [
@@ -275,15 +283,7 @@
                   "git-integration/using-cli",
                   "git-integration/gitlab",
                   "git-integration/bitbucket",
-                  "git-integration/azure-devops",
-                  "git-integration/embed-bruno-collection",
-                  {
-                    "group": "Git Providers",
-                    "pages": [
-                      "git-providers/overview",
-                      "git-providers/github"
-                    ]
-                  }
+                  "git-integration/azure-devops"
                 ]
               },
               {
@@ -415,16 +415,6 @@
                   "html-docs/playground",
                   "html-docs/deploy"
                 ]
-              },
-              {
-                "group": "OpenAPI",
-                "pages": [
-                  "open-api/overview",
-                  "open-api/importOAS",
-                  "open-api/exportOAS",
-                  "open-api/createOAS",
-                  "open-api/openapi-sync"
-                ]
               }
             ]
           },
@@ -450,90 +440,102 @@
             ]
           },
           {
-            "tab": "More",
-            "icon": "ellipsis",
+            "tab": "Formats",
+            "icon": "shapes",
+            "groups": [
+              {
+                "group": "Overview",
+                "pages": ["reference/overview"]
+              },
+              {
+                "group": "OpenAPI",
+                "pages": [
+                  "open-api/overview",
+                  "open-api/importOAS",
+                  "open-api/exportOAS",
+                  "open-api/createOAS",
+                  "open-api/openapi-sync"
+                ]
+              },
+              {
+                "group": "OpenCollection YAML",
+                "pages": [
+                  "opencollection-yaml/overview",
+                  "opencollection-yaml/samples",
+                  "opencollection-yaml/structure-reference"
+                ]
+              },
+              {
+                "group": "Converters",
+                "pages": [
+                  "converters/overview",
+                  "converters/postman-to-bruno",
+                  "converters/insomnia-to-bruno",
+                  "converters/openapi-to-bruno",
+                  "converters/wsdl-to-bruno"
+                ]
+              },
+              {
+                "group": "Bru Lang",
+                "pages": [
+                  "bru-lang/overview",
+                  "bru-lang/language",
+                  "bru-lang/tag-reference",
+                  "bru-lang/samples",
+                  "bru-lang/syntax-highlighting"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Licensing",
+            "icon": "key",
+            "groups": [
+              {
+                "group": "Overview",
+                "pages": [
+                  "license-overview"
+                ]
+              },
+              {
+                "group": "End Users",
+                "pages": [
+                  "license-end-users/activate-license"
+                ]
+              },
+              {
+                "group": "Administrators",
+                "pages": [
+                  "license-administrators/license-portal",
+                  "license-administrators/billing",
+                  "license-administrators/self-hosted-licensing",
+                  {
+                    "group": "SAML SSO",
+                    "pages": [
+                      "license-administrators/saml-sso/overview",
+                      "license-administrators/saml-sso/configure-saml-sso-with-okta",
+                      "license-administrators/saml-sso/configure-saml-sso-with-entra-id",
+                      "license-administrators/saml-sso/troubleshooting"
+                    ]
+                  },
+                  {
+                    "group": "SCIM Provisioning",
+                    "pages": [
+                      "license-administrators/scim-provisioning/overview",
+                      "license-administrators/scim-provisioning/configure-scim-with-okta",
+                      "license-administrators/scim-provisioning/configure-scim-with-entra-id",
+                      "license-administrators/scim-provisioning/bruno-scim-api"
+                    ]
+                  },
+                  "license-administrators/ai-policy"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Popular",
+            "icon": "star",
             "menu": [
-              {
-                "item": "Reference",
-                "icon": "book-open",
-                "description": "Bru Lang, OpenCollection YAML, and format converters",
-                "groups": [
-                  {
-                    "group": "Bru Lang",
-                    "pages": [
-                      "bru-lang/overview",
-                      "bru-lang/language",
-                      "bru-lang/tag-reference",
-                      "bru-lang/samples",
-                      "bru-lang/syntax-highlighting"
-                    ]
-                  },
-                  {
-                    "group": "OpenCollection YAML",
-                    "pages": [
-                      "opencollection-yaml/overview",
-                      "opencollection-yaml/samples",
-                      "opencollection-yaml/structure-reference"
-                    ]
-                  },
-                  {
-                    "group": "Converters",
-                    "pages": [
-                      "converters/overview",
-                      "converters/postman-to-bruno",
-                      "converters/insomnia-to-bruno",
-                      "converters/openapi-to-bruno",
-                      "converters/wsdl-to-bruno"
-                    ]
-                  }
-                ]
-              },
-              {
-                "item": "Licensing",
-                "icon": "key",
-                "description": "Activate licenses and manage your organization",
-                "groups": [
-                  {
-                    "group": "Overview",
-                    "pages": [
-                      "license-overview"
-                    ]
-                  },
-                  {
-                    "group": "End Users",
-                    "pages": [
-                      "license-end-users/activate-license"
-                    ]
-                  },
-                  {
-                    "group": "Administrators",
-                    "pages": [
-                      "license-administrators/license-portal",
-                      "license-administrators/billing",
-                      "license-administrators/self-hosted-licensing",
-                      {
-                        "group": "SAML SSO",
-                        "pages": [
-                          "license-administrators/saml-sso/overview",
-                          "license-administrators/saml-sso/configure-saml-sso-with-okta",
-                          "license-administrators/saml-sso/configure-saml-sso-with-entra-id",
-                          "license-administrators/saml-sso/troubleshooting"
-                        ]
-                      },
-                      {
-                        "group": "SCIM Provisioning",
-                        "pages": [
-                          "license-administrators/scim-provisioning/overview",
-                          "license-administrators/scim-provisioning/configure-scim-with-okta",
-                          "license-administrators/scim-provisioning/configure-scim-with-entra-id",
-                          "license-administrators/scim-provisioning/bruno-scim-api"
-                        ]
-                      },
-                      "license-administrators/ai-policy"
-                    ]
-                  }
-                ]
-              },
               {
                 "item": "JavaScript API Reference",
                 "icon": "brackets-curly",
@@ -1462,6 +1464,11 @@
   },
   "redirects": [
     {
+      "source": "/testing/script/getting-started",
+      "destination": "/testing/script/overview",
+      "permanent": true
+    },
+    {
       "source": "/api-docs/auto-generate-docs",
       "destination": "/html-docs/overview",
       "permanent": true
@@ -1658,7 +1665,7 @@
     },
     {
       "source": "/scripting/getting-started",
-      "destination": "/testing/script/getting-started",
+      "destination": "/testing/script/overview",
       "permanent": true
     },
     {
@@ -1678,7 +1685,7 @@
     },
     {
       "source": "/scripting/introduction",
-      "destination": "/testing/script/getting-started",
+      "destination": "/testing/script/overview",
       "permanent": true
     },
     {
@@ -1728,7 +1735,7 @@
     },
     {
       "source": "/testing/script",
-      "destination": "/testing/script/getting-started",
+      "destination": "/testing/script/overview",
       "permanent": true
     },
     {
