@@ -377,6 +377,7 @@
               },
               {
                 "group": "Apps",
+                "tag": "Beta",
                 "pages": [
                   "apps/overview",
                   "apps/configure",
