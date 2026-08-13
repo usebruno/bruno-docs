@@ -431,7 +431,7 @@
             ]
           },
           {
-            "tab": "VS Code Extension",
+            "tab": "VS Code",
             "icon": "code",
             "pages": [
               "vs-code-extension/overview",

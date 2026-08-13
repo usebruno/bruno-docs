@@ -94,17 +94,76 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
 }
 
 /* ---------------------------------------------------------------------------
-   Nav tabs as a segmented control + hover dropdowns
+   Cursor-style shell: sidebar hugs the viewport's left edge
+   ---------------------------------------------------------------------------
+   Modeled on cursor.com/docs: the left nav sits flush against the viewport
+   edge with a clear gutter between it and the article column. Mechanics:
+   #sidebar is position:fixed with no `left`, so it normally inherits its
+   static x from the body wrapper's lg:px-8 (32px on the uncapped shell).
+   Pinning `left: 1rem` moves ONLY the sidebar — #content-area computes its
+   own left inset (lg:pl-[23.7rem] against the same wrapper), so it doesn't
+   follow, and the sidebar->content gap widens by the 16px the sidebar moved
+   (~60px edge-to-text, more to the last sidebar glyph thanks to
+   #sidebar-content's pr-8). The navbar rows (wordmark row and tab row) carry
+   their own lg:px-12 — trimmed to the same 1rem so the wordmark, the first
+   tab and the sidebar share one left edge; without this the header floats
+   48px in while the nav below it starts at 16px and the shell looks torn.
+   Scoped >= 1024px: below lg the sidebar is display:none and the navbar
+   uses mx-4, both untouched.
+
+   Maintenance couplings:
+   - `px-12` appears in the navbar only on those two rows (checked in the
+     rendered DOM); a future Mintlify row carrying px-12 would be pulled to
+     the edge too — consistent rather than harmful.
+   - If Mintlify ever sets an explicit `left` on #sidebar this override
+     still wins (unlayered custom CSS beats layered utilities), but re-check
+     the resulting gap after a bump.
+   --------------------------------------------------------------------------- */
+
+@media (min-width: 1024px) {
+  #sidebar {
+    left: 1rem;
+    /* A whisper of a panel behind the nav — enough to separate it from
+       the page without reading as a box. Rounded only on top: the panel
+       runs to the viewport bottom (#sidebar is fixed bottom-0), so bottom
+       corners never show. */
+    background: rgb(0 0 0 / 0.025);
+    border-radius: 0.75rem 0.75rem 0 0;
+  }
+  .dark #sidebar {
+    background: rgb(255 255 255 / 0.035);
+  }
+  /* With a visible panel edge, links need breathing room from it —
+     #sidebar-content ships with pr-8 but no left padding at all. */
+  #sidebar #sidebar-content {
+    padding-left: 0.75rem;
+  }
+  /* NB: #navbar is a <div>, not a <header> — a `header#navbar` selector
+     silently matches nothing (this file's older comments say <header>;
+     the rendered DOM disagrees). Keep these hooks tag-free. */
+  #navbar [class*="px-12"] {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Nav tabs as folder tabs + hover dropdowns
    ---------------------------------------------------------------------------
    Two cooperating pieces:
-   1. The tab row is styled as a segmented control: `.nav-tabs` becomes a
-      recessed, rounded "track" and each `.nav-tabs-item` a segment inside it.
-      The active segment is an elevated card (solid surface + shadow + brand
-      top edge); inactive segments fill on hover. A single grouped control
-      reads as navigation chrome in a way individual text links never did —
-      that was the complaint with both the stock underline and the previous
-      per-tab pill design. Mintlify's own affordance — a 1.5px underline div —
-      is hidden; `data-active="true"` marks the active tab.
+   1. The tab row is styled as folder tabs: a full-width baseline is drawn at
+      the bottom of the tab row (the navbar's own border-b there is a barely
+      visible gray-500/5), and each `.nav-tabs-item` becomes a rounded-top
+      tab resting on it. The active tab is taller, solid-surfaced, keeps the
+      brand top edge, and overlaps the baseline by 1px (negative margin +
+      z-index) so the line visibly breaks under it — it reads as the open
+      folder connected to the page below. Inactive tabs are equal-width,
+      faintly outlined cards stacked left-to-right — flat left edge,
+      rounded right shoulder, each tucked behind the previous one — so the
+      row reads as a card index with the active one pulled to the front.
+      Mintlify's own affordance — a 1.5px underline div — is hidden; the
+      active tab is recognized by the fake-bold text-shadow utility class
+      Mintlify puts on it (see the active-tab hook note below).
    2. nav-dropdowns.js injects a `.bru-nav-dd` panel inside each link tab
       listing that tab's main sections (menu tabs like "Popular" keep their
       native hover menu instead). Show/hide lives here in CSS: the panel is a
@@ -117,8 +176,14 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
    the row is display:none and the mobile dropdown takes over, untouched.
 
    Notes:
-   - The track overrides `.nav-tabs`' h-full to a 2.5rem bar (self-centered
-     in the 3rem row); segments are 2rem. The panel's transparent
+   - The baseline lives on the tab-row wrapper (`div:has(> div.nav-tabs)`,
+     the `hidden lg:flex px-12 h-12` strip at the navbar's bottom edge), so
+     it spans the full rail, not just the shrink-wrapped tab group. Children
+     paint above a parent's border, so the active tab's opaque background
+     plus `margin-bottom: -1px` is enough to erase the line under it.
+   - Tabs keep `.nav-tabs`' h-full (the 3rem row) but bottom-align inside
+     it: inactive tabs are 2.25rem, the active tab 2.5rem — the extra
+     height is what makes it "pop forward". The panel's transparent
      `.bru-nav-dd` wrapper bridges the segment→panel gap with padding-top so
      the pointer never leaves segment+panel while crossing; the delayed hide
      transition (150ms) is a second guard for diagonal moves.
@@ -127,92 +192,160 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
      class. Our injected wrapper is positioned by the `.bru-nav-dd` rule and
      never has that class; the Popular button's label div is `flex`, not
      `absolute`. Revisit if Mintlify restructures the tab item.
-   - The chevron ::after is gated on `a.bru-has-dd` (class added by the JS):
-     anchors without a dropdown (Home, Mock Servers) get no false affordance,
-     and the Popular <button> keeps its native Radix chevron rather than
-     growing a second one.
+   - Tabs carry no dropdown chevron (a per-tab ::after was tried and read
+     as clutter across ten tabs); the hover panels are discoverable by
+     pointer alone. Popular's native Radix caret is hidden for the same
+     reason — see the viewBox-matched rule below.
    - The active card's brand accent is a 2px inset top edge (box-shadow) —
      #F2994A on a white/dark card is too low-contrast to carry body text, so
      the label keeps Mintlify's own high-contrast text color and the brand
      appears as trim. Colors are hard-coded per theme rather than
      var(--primary): Mintlify's custom-property names are not public API.
-   - Ten full-size segments measure ~1300px, which only fits the px-12 rail
-     at viewports >= ~1400px. The narrow-desktop blocks below compact
-     1024-1399px; if a tab is ever added, re-check 1024px and 1280px.
+   - Equal width is a fixed per-tier width (see the tier block below the
+     media query) sized to the longest label; icons only show >= 1370px
+     where they fit. If a tab is ever added, re-check every tier bound.
 
    Maintenance couplings:
-   - `.nav-tabs`, `.nav-tabs-item` and `data-active` are Mintlify-emitted,
-     not public API. If renamed, tabs revert to stock text styling and the
-     dropdowns stop appearing (nav-dropdowns.js matches the same classes) —
-     safe failure direction, re-check after a Mintlify bump.
+   - `.nav-tabs`, `.nav-tabs-item` and the active tab's text-shadow class
+     are Mintlify-emitted, not public API. If renamed, tabs revert to stock
+     text styling and the dropdowns stop appearing (nav-dropdowns.js
+     matches the same classes) — safe failure direction, re-check after a
+     Mintlify bump.
    - Section lists live in nav-dropdowns.js (NAV_SECTIONS, generated from
      docs.json). Reorganizing docs.json navigation requires regenerating that
      map or dropdown contents silently go stale.
    --------------------------------------------------------------------------- */
 
 @media (min-width: 1024px) {
-  /* The track: one recessed container around all tabs. */
-  div.nav-tabs.nav-tabs {
-    height: 2.5rem;
-    align-self: center;
-    align-items: center;
-    column-gap: 0.125rem;
-    padding: 0.25rem;
-    border-radius: 0.625rem;
-    border: 1px solid rgb(0 0 0 / 0.07);
-    background: rgb(0 0 0 / 0.045);
+  /* The baseline: a full-width line at the bottom of the tab row that the
+     tabs rest on. Drawn here rather than relying on the navbar's own
+     border-b, which at gray-500/5 is too faint to read as a shelf. */
+  #navbar div:has(> div.nav-tabs) {
+    border-bottom: 1px solid rgb(0 0 0 / 0.1);
   }
-  .dark div.nav-tabs.nav-tabs {
-    border-color: rgb(255 255 255 / 0.09);
-    background: rgb(255 255 255 / 0.06);
+  .dark #navbar div:has(> div.nav-tabs) {
+    border-bottom-color: rgb(255 255 255 / 0.1);
   }
 
-  /* Segments. */
+  /* The row: tabs shingle on the baseline — overlap comes from negative
+     margins below, so the stock gap-x-6 must be zeroed. */
+  div.nav-tabs.nav-tabs {
+    align-items: flex-end;
+    column-gap: 0;
+  }
+
+  /* Folder tabs, card-index style: equal width, faint outline, flat left
+     edge, rounded top-right shoulder. The FIRST tab is in front and each
+     subsequent tab is tucked behind the previous one (reversed z-index
+     ladder below), so all you see of a tab is its right shoulder emerging
+     from behind its neighbour — the classic stacked-index-card treatment.
+     Hover slides a tab forward out of the tuck; the active tab pops out
+     on top of the whole stack with the grey fill.
+
+     Occlusion mechanics: the tuck only works if tabs are opaque, so
+     inactive tabs are painted the page background color — they read as
+     unfilled (only the active tab shows a *grey* fill) while still hiding
+     the tab behind them. The 0.875rem tuck is load-bearing: it must stay
+     >= the 0.625rem corner radius or the flat left corner of the tab
+     behind pokes out in the front tab's shoulder curve.
+
+     Equal width: a fixed per-tier width with the content centered in the
+     VISIBLE part of the tab — padding-left carries an extra 0.875rem to
+     mirror the tuck, otherwise centered content drifts into the hidden
+     zone and gets clipped behind the neighbour (the old "VS Code
+     Extension" icon did exactly that). The tier widths are sized to the
+     longest label ("Mock Servers"); `min-width: max-content` is the
+     no-clip safety net — if a future label outgrows its tier, that one
+     tab widens instead of truncating. Ten fixed-width tabs don't fit the
+     px-12 rail with icons below ~1370px; below that, tabs are text-only. */
   .nav-tabs .nav-tabs-item {
-    height: 2rem;
-    padding: 0 0.625rem;
-    border-radius: 0.4375rem;
-    /* A segment whose label wraps to two clipped lines is worse than a
+    height: 2.25rem;
+    width: 8.75rem;
+    min-width: max-content;
+    justify-content: center;
+    padding: 0 0.5rem 0 1.375rem;
+    border-radius: 0 0.625rem 0 0;
+    border: 1px solid rgb(0 0 0 / 0.1);
+    border-bottom: none;
+    background: #fff;
+    /* A tab whose label wraps to two clipped lines is worse than a
        tight row — labels stay on one line at every width. */
     white-space: nowrap;
+    transition:
+      background-color 140ms ease,
+      color 140ms ease;
   }
+  .nav-tabs .nav-tabs-item:first-child {
+    border-top-left-radius: 0.625rem;
+    /* The tuck-compensating padding-left (see above) assumes a neighbour
+       covering the tab's left flank. Nothing covers the first tab, so
+       symmetric padding — otherwise its content sits visibly off-center
+       and the tab row reads as misaligned with the sidebar edge below. */
+    padding-left: 0.5rem;
+  }
+  .nav-tabs .nav-tabs-item + .nav-tabs-item {
+    margin-left: -0.875rem;
+  }
+  /* The reversed stack: first tab in front, each next one behind. An
+     11th tab (z-index auto) would sit behind the 10th — consistent. */
+  .nav-tabs .nav-tabs-item:nth-child(1) { z-index: 10; }
+  .nav-tabs .nav-tabs-item:nth-child(2) { z-index: 9; }
+  .nav-tabs .nav-tabs-item:nth-child(3) { z-index: 8; }
+  .nav-tabs .nav-tabs-item:nth-child(4) { z-index: 7; }
+  .nav-tabs .nav-tabs-item:nth-child(5) { z-index: 6; }
+  .nav-tabs .nav-tabs-item:nth-child(6) { z-index: 5; }
+  .nav-tabs .nav-tabs-item:nth-child(7) { z-index: 4; }
+  .nav-tabs .nav-tabs-item:nth-child(8) { z-index: 3; }
+  .nav-tabs .nav-tabs-item:nth-child(9) { z-index: 2; }
+  .nav-tabs .nav-tabs-item:nth-child(10) { z-index: 1; }
   .nav-tabs .nav-tabs-item:hover {
-    background: rgb(0 0 0 / 0.06);
+    background: #f8f8f9;
+    z-index: 15;
+  }
+  .dark .nav-tabs .nav-tabs-item {
+    border-color: rgb(255 255 255 / 0.12);
+    background: #0f1117;
   }
   .dark .nav-tabs .nav-tabs-item:hover {
-    background: rgb(255 255 255 / 0.08);
+    background: #14171f;
   }
 
-  /* Active segment: elevated card with a brand top edge. */
-  .nav-tabs .nav-tabs-item[data-active="true"] {
-    background: #fff;
-    box-shadow:
-      inset 0 2px 0 #f2994a,
-      0 1px 3px rgb(0 0 0 / 0.18),
-      0 1px 2px rgb(0 0 0 / 0.1);
+  /* Popular's stock Radix caret: the tab-wide chevrons were removed as
+     clutter, so this lone survivor reads as an inconsistency. The hover
+     menu still opens without it. The viewBox match is the stable hook —
+     its Tailwind classes (rotate-90 etc.) can change with menu state. */
+  .nav-tabs .nav-tabs-item svg[viewBox="0 -9 3 24"] {
+    display: none;
   }
-  .dark .nav-tabs .nav-tabs-item[data-active="true"] {
-    background: #2b2d35;
-    box-shadow:
-      inset 0 2px 0 #ffa94d,
-      0 1px 3px rgb(0 0 0 / 0.5);
+
+  /* Active tab: taller, solid, hairline outline, brand top edge, pulled
+     1px down over the baseline so the line breaks under it — the "open
+     folder". The soft upward shadow is the pop-forward cue. */
+  /* Active-tab hook: Mintlify does NOT set data-active on nav tabs (the
+     attribute appears nowhere in the rendered page). What it does emit,
+     on the active tab only, is a fake-bold text-shadow utility class —
+     `[text-shadow:-0.2px_0_0_currentColor,...]` — so the class-substring
+     match is the working selector. data-active is kept as a second hook
+     in case a future Mintlify starts emitting it. */
+  .nav-tabs .nav-tabs-item[data-active="true"],
+  .nav-tabs .nav-tabs-item[class*="text-shadow"] {
+    height: 2.5rem;
+    margin-bottom: -1px;
+    z-index: 20;
+    background: #f4f4f5;
+    border-color: rgb(0 0 0 / 0.12);
+    box-shadow: 0 -3px 10px rgb(0 0 0 / 0.06);
+  }
+  .dark .nav-tabs .nav-tabs-item[data-active="true"],
+  .dark .nav-tabs .nav-tabs-item[class*="text-shadow"] {
+    background: #191c24;
+    border-color: rgb(255 255 255 / 0.14);
+    box-shadow: 0 -3px 10px rgb(0 0 0 / 0.45);
   }
 
   /* The stock 1.5px underline indicator — see note above. */
   .nav-tabs .nav-tabs-item > div.absolute {
     display: none;
-  }
-
-  /* Dropdown affordance: small chevron on tabs that have a panel. */
-  a.nav-tabs-item.bru-has-dd::after {
-    content: "";
-    width: 0.375rem;
-    height: 0.375rem;
-    margin-left: 0.125rem;
-    border-right: 1.5px solid currentColor;
-    border-bottom: 1.5px solid currentColor;
-    transform: rotate(45deg) translateY(-15%);
-    opacity: 0.55;
   }
 
   /* Hover panel: hidden by default, shown while pointer or focus is inside
@@ -280,27 +413,24 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
   }
 }
 
-/* Narrow desktop: ten full-size segments overflow the px-12 rail below
-   ~1400px. Two compaction tiers (measured, see PR notes):
-   - 1024-1399px: tighter segment padding.
-   - 1024-1299px: additionally hide the tab icons (labels and chevrons stay).
-     `svg.h-4` matches only the FA icon masks — the Popular button's caret is
-     a different size class and keeps its dropdown affordance. */
-@media (min-width: 1024px) and (max-width: 1399.98px) {
-  .nav-tabs .nav-tabs-item {
-    padding: 0 0.375rem;
-  }
-}
-@media (min-width: 1024px) and (max-width: 1299.98px) {
+/* Equal-width tiers: ten tabs x tier width - 9 tucks (0.875rem, constant
+   across tiers — it must stay >= the corner radius, see above) + the px-12
+   rail must fit the viewport, so the fixed width steps down with it.
+   Estimated against the longest label at each tier's font size ("Mock
+   Servers": ~84px at 14px + 24px icon+gap, ~78px at 13px text-only);
+   min-width: max-content in the base rule catches any estimate that runs
+   tight — a too-long tab widens instead of truncating. If a tab is ever
+   added or a label grows, re-check each tier's lower bound.
+   - base: tabs 8.75rem with icons -> row needs ~1370px.
+   - below 1370px: hide icons (`svg.h-4` matches only the FA icon masks,
+     not Popular's caret), tabs 6.5rem at 13px -> ~1010px. */
+@media (min-width: 1024px) and (max-width: 1369.98px) {
   .nav-tabs .nav-tabs-item svg.h-4 {
     display: none;
   }
   .nav-tabs .nav-tabs-item {
-    padding: 0 0.25rem;
+    width: 6.5rem;
     font-size: 0.8125rem;
-  }
-  div.nav-tabs.nav-tabs {
-    padding: 0.25rem 0.125rem;
   }
 }
 
