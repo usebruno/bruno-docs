@@ -16,11 +16,6 @@
         "tag": "Latest",
         "tabs": [
           {
-            "tab": "Home",
-            "icon": "house",
-            "pages": ["home"]
-          },
-          {
             "tab": "Get Started",
             "icon": "rocket",
             "groups": [
@@ -445,7 +440,9 @@
             "groups": [
               {
                 "group": "Overview",
-                "pages": ["reference/overview"]
+                "pages": [
+                  "reference/overview"
+                ]
               },
               {
                 "group": "OpenAPI",
@@ -1412,30 +1409,6 @@
     "default": "system",
     "strict": false
   },
-  "navbar": {
-    "links": [
-      {
-        "label": "API Reference",
-        "href": "/testing/script/javascript-reference"
-      },
-      {
-        "label": "Blog",
-        "href": "https://blog.usebruno.com"
-      },
-      {
-        "label": "Support",
-        "href": "https://www.usebruno.com/support"
-      },
-      {
-        "label": "Changelog",
-        "href": "https://www.usebruno.com/changelog"
-      },
-      {
-        "label": "Roadmap",
-        "href": "https://www.usebruno.com/roadmap"
-      }
-    ]
-  },
   "search": {
     "prompt": "Search documentation..."
   },
@@ -1796,6 +1769,11 @@
     {
       "source": "/to/embed-bruno-collection",
       "destination": "/git-integration/embed-bruno-collection",
+      "permanent": true
+    },
+    {
+      "source": "/home",
+      "destination": "/",
       "permanent": true
     }
   ],

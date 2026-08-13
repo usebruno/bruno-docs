@@ -93,6 +93,18 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
   max-width: none;
 }
 
+/* The uncap above overshoots on mode:center pages (the home page): the
+   body wrapper carries ALL the per-mode width classes at once —
+   peer-[.is-center]:max-w-3xl AND the 8xl variants — so matching the
+   8xl substring also releases the 3xl cap that center mode is supposed
+   to apply, and the home content stretches to the full viewport.
+   The navbar's peer marker says which mode is live: restore the 48rem
+   cap when it is is-center. (The navbar rail inside #navbar is a
+   different element and stays uncapped.) */
+#navbar[class*="is-center"] ~ div[class*="max-w-8xl"] {
+  max-width: 48rem;
+}
+
 /* ---------------------------------------------------------------------------
    Cursor-style shell: sidebar hugs the viewport's left edge
    ---------------------------------------------------------------------------
@@ -148,214 +160,324 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
 }
 
 /* ---------------------------------------------------------------------------
-   Nav tabs as folder tabs + hover dropdowns
+   Clustered top nav (design handoff option 1c)
    ---------------------------------------------------------------------------
-   Two cooperating pieces:
-   1. The tab row is styled as folder tabs: a full-width baseline is drawn at
-      the bottom of the tab row (the navbar's own border-b there is a barely
-      visible gray-500/5), and each `.nav-tabs-item` becomes a rounded-top
-      tab resting on it. The active tab is taller, solid-surfaced, keeps the
-      brand top edge, and overlaps the baseline by 1px (negative margin +
-      z-index) so the line visibly breaks under it — it reads as the open
-      folder connected to the page below. Inactive tabs are equal-width,
-      faintly outlined cards stacked left-to-right — flat left edge,
-      rounded right shoulder, each tucked behind the previous one — so the
-      row reads as a card index with the active one pulled to the front.
-      Mintlify's own affordance — a 1.5px underline div — is hidden; the
-      active tab is recognized by the fake-bold text-shadow utility class
-      Mintlify puts on it (see the active-tab hook note below).
-   2. nav-dropdowns.js injects a `.bru-nav-dd` panel inside each link tab
-      listing that tab's main sections (menu tabs like "Popular" keep their
-      native hover menu instead). Show/hide lives here in CSS: the panel is a
-      *child* of the position:relative tab item, so plain :hover/:focus-within
-      covers both the segment and the open panel with no JS event juggling.
-      :focus-within also gives keyboard users the dropdown for free — the
-      panel links are real anchors and tabbing into them holds it open.
+   The nine tabs render as one quiet row: a leading Get Started, then two
+   labelled groups split off by hairline dividers:
 
-   Scoped to min-width:1024px like everything else in the tab row — below lg
-   the row is display:none and the mobile dropdown takes over, untouched.
+     "Get Started" | PRODUCTS "API Client" CLI ... | MORE Formats ...
 
-   Notes:
-   - The baseline lives on the tab-row wrapper (`div:has(> div.nav-tabs)`,
-     the `hidden lg:flex px-12 h-12` strip at the navbar's bottom edge), so
-     it spans the full rail, not just the shrink-wrapped tab group. Children
-     paint above a parent's border, so the active tab's opaque background
-     plus `margin-bottom: -1px` is enough to erase the line under it.
-   - Tabs keep `.nav-tabs`' h-full (the 3rem row) but bottom-align inside
-     it: inactive tabs are 2.25rem, the active tab 2.5rem — the extra
-     height is what makes it "pop forward". The panel's transparent
-     `.bru-nav-dd` wrapper bridges the segment→panel gap with padding-top so
-     the pointer never leaves segment+panel while crossing; the delayed hide
-     transition (150ms) is a second guard for diagonal moves.
-   - `.nav-tabs-item > div.absolute` hides ONLY the underline indicator: the
-     underline is the sole direct-child div carrying Tailwind's `absolute`
-     class. Our injected wrapper is positioned by the `.bru-nav-dd` rule and
-     never has that class; the Popular button's label div is `flex`, not
-     `absolute`. Revisit if Mintlify restructures the tab item.
-   - Tabs carry no dropdown chevron (a per-tab ::after was tried and read
-     as clutter across ten tabs); the hover panels are discoverable by
-     pointer alone. Popular's native Radix caret is hidden for the same
-     reason — see the viewBox-matched rule below.
-   - The active card's brand accent is a 2px inset top edge (box-shadow) —
-     #F2994A on a white/dark card is too low-contrast to carry body text, so
-     the label keeps Mintlify's own high-contrast text color and the brand
-     appears as trim. Colors are hard-coded per theme rather than
-     var(--primary): Mintlify's custom-property names are not public API.
-   - Equal width is a fixed per-tier width (see the tier block below the
-     media query) sized to the longest label; icons only show >= 1370px
-     where they fit. If a tab is ever added, re-check every tier bound.
+   (No Home tab: the wordmark links to the index page at /.)
+
+   Dividers are injected as pseudo-elements on the FIRST tab of each
+   group; the tabs themselves are monochrome text pills — no icons, no
+   borders, active = soft grey pill. Spec:
+   design_handoff_clustered_nav/README.md (untracked on purpose, via
+   .git/info/exclude). Deviations from the spec, all agreed:
+   - The spec's START/PRODUCTS/MORE group labels show at >= 1250px and
+     hide below (dividers stay): with the tabs merged into the wordmark
+     row (a post-handoff decision, see the single-bar block) the labelled
+     bar doesn't fit narrow desktops. The header links' removal from
+     docs.json is what made room for the labels at full width.
+   - The bar keeps Mintlify's translucent blur instead of the spec's solid
+     #FFFFFF, so the spec's warm opaque greys (#F5F4F0/#F0EEE9 etc.) are
+     re-derived as warm ALPHA tints that read on both the blurred and the
+     scrolled-opaque bar.
+   - Dark-mode neutrals are derived, not designer-supplied (the handoff
+     says ask; agreed to derive and flag for review on the preview).
+   - The "VS Code Extension" tab stays renamed "VS Code".
+   - Spec wants inactive 400 / active 600 weight and offers hacks for the
+     resulting reflow. Instead ALL tabs stay 400 and the active bold comes
+     from Mintlify's own fake-bold text-shadow, which is metric-neutral —
+     the row cannot shift on navigation, so the caveat dissolves. That
+     text-shadow class is also our active-state HOOK: Mintlify does NOT
+     emit data-active on nav tabs (checked — it appears nowhere in the
+     rendered DOM), contrary to the handoff's assumption.
+
+   Group-opening routes come from docs.json's first page per tab:
+   API Client -> /api-client/*, Formats -> /reference/*. NB the handoff
+   guessed href^="/formats"; the real Formats route is /reference/overview.
+   Re-check these hooks whenever docs.json moves the first page of a group.
+
+   Accessibility, flagged in the handoff and accepted for now: the
+   dividers are CSS-only and invisible to screen readers — purely visual
+   grouping. The tabs themselves remain plain anchors and read fine.
+
+   Scoped >= 1024px; below lg the row is display:none and Mintlify's
+   mobile menu takes over, untouched.
 
    Maintenance couplings:
-   - `.nav-tabs`, `.nav-tabs-item` and the active tab's text-shadow class
-     are Mintlify-emitted, not public API. If renamed, tabs revert to stock
-     text styling and the dropdowns stop appearing (nav-dropdowns.js
-     matches the same classes) — safe failure direction, re-check after a
-     Mintlify bump.
-   - Section lists live in nav-dropdowns.js (NAV_SECTIONS, generated from
-     docs.json). Reorganizing docs.json navigation requires regenerating that
-     map or dropdown contents silently go stale.
+   - `.nav-tabs`, `.nav-tabs-item`, the active tab's text-shadow class and
+     Popular's caret viewBox are Mintlify-emitted, not public API. Failure
+     direction is safe (stock text tabs); re-check after a Mintlify bump.
+   - Group membership is positional: labels and dividers hook on
+     first-child and href prefixes. Reordering tabs in docs.json means
+     updating the three href hooks here.
    --------------------------------------------------------------------------- */
 
 @media (min-width: 1024px) {
-  /* The baseline: a full-width line at the bottom of the tab row that the
-     tabs rest on. Drawn here rather than relying on the navbar's own
-     border-b, which at gray-500/5 is too faint to read as a shelf. */
+  /* ---- Single-bar merge -------------------------------------------------
+     The tab row (`hidden lg:flex px-12 h-12`, the sibling below the h-16
+     wordmark row inside the same `div.relative`) is lifted out of flow and
+     overlaid onto the wordmark row, so the header collapses from two rows
+     to one: wordmark | clustered tabs | search | links. Consequences,
+     each handled below:
+     - The overlay spans the full rail, so it must be pointer-transparent
+       (pointer-events: none) with clicks re-enabled on .nav-tabs itself,
+       or it blocks the logo, search and links underneath.
+     - The navbar loses 3rem of flow height. Content below the sticky
+       navbar reflows on its own, but #sidebar's inline `top` (9.5rem, or
+       7rem with the banner dismissed) is set by Mintlify — a fixed
+       margin-top: -3rem corrects it for BOTH banner states, where a `top`
+       override could only hard-code one.
+     - The rail's own inner border-b becomes the bar's bottom edge; it
+       ships at gray-500/5 which is too faint, so it is re-tinted here
+       (the old tab-row hairline is dropped with the row itself).
+     - Search is pushed to the right end of the bar, a real field on wide
+       bars and icon + shortcut below 1450px. The old header links (API
+       Reference, Blog, ...) are gone from docs.json's navbar block — they
+       could never share 1440px with the labelled clusters; a Download
+       button takes that corner later. */
   #navbar div:has(> div.nav-tabs) {
-    border-bottom: 1px solid rgb(0 0 0 / 0.1);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4rem;
+    align-items: center;
+    pointer-events: none;
   }
-  .dark #navbar div:has(> div.nav-tabs) {
-    border-bottom-color: rgb(255 255 255 / 0.1);
+  #navbar div:has(> div.nav-tabs) .nav-tabs {
+    pointer-events: auto;
+    /* Clear the wordmark + version cluster; at full width the 47px START
+       reservation on the first tab sits inside this too, so the label —
+       not the Home pill — is what starts here. */
+    margin-left: 10.5rem;
+  }
+  /* The wordmark cluster ships with gap-x-4 twice (outer wrapper and
+     logo+version group) — tightened so version hugs the logo and the
+     tabs can start sooner. Matches only inside the navbar; the tab row
+     carries no gap-x-4. NB most of the apparent logo->version air was
+     never the gap: the version button carries px-2.5 of its own, so its
+     "v4" text sat 10px inside the button edge — trimmed below. */
+  #navbar div[class*="flex-1"][class*="gap-x-4"] {
+    column-gap: 0.125rem;
+  }
+  #navbar div[class*="gap-x-2"] > button[aria-haspopup="menu"] {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+  #sidebar {
+    margin-top: -3rem;
+  }
+  /* The rail's inner border-b (the div.h-full.flex-1 wrapping the row):
+     now the single bar's bottom edge. */
+  #navbar div.flex-1[class*="border-b"] {
+    border-color: rgb(60 50 20 / 0.12);
+  }
+  .dark #navbar div.flex-1[class*="border-b"] {
+    border-color: rgb(255 255 255 / 0.08);
+  }
+  /* Search lives at the right end of the bar (the old navbar links were
+     removed from docs.json; a Download button will take that corner
+     later). #search-bar-entry is a documented Mintlify hook
+     (mintlify.com/docs/customize/custom-scripts). Its wrapper (the lone
+     z-20 div around it) is a flex sibling squeezed between two flex-1
+     containers, so flex/margin games position it unpredictably — instead
+     it is pulled out of the flex flow and pinned to the bar's right,
+     clear of the theme toggle at the row's end. Wide bars get a real
+     field with placeholder; below 1450px — where wordmark + clusters + a
+     field can't coexist — it compresses to icon + shortcut. */
+  #navbar div[class*="z-20"]:has(#search-bar-entry) {
+    position: absolute;
+    right: 3.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  #search-bar-entry {
+    width: 15rem;
+  }
+  @media (max-width: 1449.98px) {
+    #search-bar-entry {
+      width: auto;
+    }
+    #search-bar-entry .truncate {
+      display: none;
+    }
   }
 
-  /* The row: tabs shingle on the baseline — overlap comes from negative
-     margins below, so the stock gap-x-6 must be zeroed. */
+  /* Narrow desktop: ten pills + wordmark + icon-search share ~1024px only
+     if the pills tighten and the group labels come off (dividers stay).
+     Re-check if a tab is added. */
+  @media (max-width: 1249.98px) {
+    .nav-tabs .nav-tabs-item::before {
+      display: none;
+    }
+    .nav-tabs .nav-tabs-item {
+      font-size: 12.5px;
+      padding: 6px 7px;
+    }
+    .nav-tabs .nav-tabs-item[href^="/api-client"],
+    .nav-tabs .nav-tabs-item[href^="/reference"] {
+      margin-left: 17px;
+    }
+    .nav-tabs .nav-tabs-item[href^="/api-client"]::after,
+    .nav-tabs .nav-tabs-item[href^="/reference"]::after {
+      right: calc(100% + 8px);
+    }
+  }
+
+  /* Row: centered pills, 2px apart inside a group (the stock gap-x-6 is
+     far too wide for clustering); nothing shrinks, nothing wraps. */
   div.nav-tabs.nav-tabs {
-    align-items: flex-end;
-    column-gap: 0;
+    align-items: center;
+    column-gap: 2px;
+    flex-wrap: nowrap;
   }
 
-  /* Folder tabs, card-index style: equal width, faint outline, flat left
-     edge, rounded top-right shoulder. The FIRST tab is in front and each
-     subsequent tab is tucked behind the previous one (reversed z-index
-     ladder below), so all you see of a tab is its right shoulder emerging
-     from behind its neighbour — the classic stacked-index-card treatment.
-     Hover slides a tab forward out of the tuck; the active tab pops out
-     on top of the whole stack with the grey fill.
-
-     Occlusion mechanics: the tuck only works if tabs are opaque, so
-     inactive tabs are painted the page background color — they read as
-     unfilled (only the active tab shows a *grey* fill) while still hiding
-     the tab behind them. The 0.875rem tuck is load-bearing: it must stay
-     >= the 0.625rem corner radius or the flat left corner of the tab
-     behind pokes out in the front tab's shoulder curve.
-
-     Equal width: a fixed per-tier width with the content centered in the
-     VISIBLE part of the tab — padding-left carries an extra 0.875rem to
-     mirror the tuck, otherwise centered content drifts into the hidden
-     zone and gets clipped behind the neighbour (the old "VS Code
-     Extension" icon did exactly that). The tier widths are sized to the
-     longest label ("Mock Servers"); `min-width: max-content` is the
-     no-clip safety net — if a future label outgrows its tier, that one
-     tab widens instead of truncating. Ten fixed-width tabs don't fit the
-     px-12 rail with icons below ~1370px; below that, tabs are text-only. */
+  /* Tab: quiet monochrome text pill. height:auto overrides the stock
+     h-full so the pill hugs its text instead of filling the 3rem row. */
   .nav-tabs .nav-tabs-item {
-    height: 2.25rem;
-    width: 8.75rem;
-    min-width: max-content;
-    justify-content: center;
-    padding: 0 0.5rem 0 1.375rem;
-    border-radius: 0 0.625rem 0 0;
-    border: 1px solid rgb(0 0 0 / 0.1);
-    border-bottom: none;
-    background: #fff;
-    /* A tab whose label wraps to two clipped lines is worse than a
-       tight row — labels stay on one line at every width. */
+    position: relative;
+    flex: 0 0 auto;
+    height: auto;
+    padding: 7px 10px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 400;
+    color: #6e6a62;
     white-space: nowrap;
     transition:
-      background-color 140ms ease,
-      color 140ms ease;
-  }
-  .nav-tabs .nav-tabs-item:first-child {
-    border-top-left-radius: 0.625rem;
-    /* The tuck-compensating padding-left (see above) assumes a neighbour
-       covering the tab's left flank. Nothing covers the first tab, so
-       symmetric padding — otherwise its content sits visibly off-center
-       and the tab row reads as misaligned with the sidebar edge below. */
-    padding-left: 0.5rem;
-  }
-  .nav-tabs .nav-tabs-item + .nav-tabs-item {
-    margin-left: -0.875rem;
-  }
-  /* The reversed stack: first tab in front, each next one behind. An
-     11th tab (z-index auto) would sit behind the 10th — consistent. */
-  .nav-tabs .nav-tabs-item:nth-child(1) { z-index: 10; }
-  .nav-tabs .nav-tabs-item:nth-child(2) { z-index: 9; }
-  .nav-tabs .nav-tabs-item:nth-child(3) { z-index: 8; }
-  .nav-tabs .nav-tabs-item:nth-child(4) { z-index: 7; }
-  .nav-tabs .nav-tabs-item:nth-child(5) { z-index: 6; }
-  .nav-tabs .nav-tabs-item:nth-child(6) { z-index: 5; }
-  .nav-tabs .nav-tabs-item:nth-child(7) { z-index: 4; }
-  .nav-tabs .nav-tabs-item:nth-child(8) { z-index: 3; }
-  .nav-tabs .nav-tabs-item:nth-child(9) { z-index: 2; }
-  .nav-tabs .nav-tabs-item:nth-child(10) { z-index: 1; }
-  .nav-tabs .nav-tabs-item:hover {
-    background: #f8f8f9;
-    z-index: 15;
+      background-color 0.16s ease,
+      color 0.16s ease;
   }
   .dark .nav-tabs .nav-tabs-item {
-    border-color: rgb(255 255 255 / 0.12);
-    background: #0f1117;
-  }
-  .dark .nav-tabs .nav-tabs-item:hover {
-    background: #14171f;
+    color: #a6a199;
   }
 
-  /* Popular's stock Radix caret: the tab-wide chevrons were removed as
-     clutter, so this lone survivor reads as an inconsistency. The hover
-     menu still opens without it. The viewBox match is the stable hook —
-     its Tailwind classes (rotate-90 etc.) can change with menu state. */
+  /* Spec: no icons — the group labels do the wayfinding job instead.
+     svg.h-4 matches only the FA icon masks; the viewBox match is
+     Popular's native Radix caret (its Tailwind classes change with menu
+     state, the viewBox doesn't). */
+  .nav-tabs .nav-tabs-item svg.h-4,
   .nav-tabs .nav-tabs-item svg[viewBox="0 -9 3 24"] {
     display: none;
   }
 
-  /* Active tab: taller, solid, hairline outline, brand top edge, pulled
-     1px down over the baseline so the line breaks under it — the "open
-     folder". The soft upward shadow is the pop-forward cue. */
-  /* Active-tab hook: Mintlify does NOT set data-active on nav tabs (the
-     attribute appears nowhere in the rendered page). What it does emit,
-     on the active tab only, is a fake-bold text-shadow utility class —
-     `[text-shadow:-0.2px_0_0_currentColor,...]` — so the class-substring
-     match is the working selector. data-active is kept as a second hook
-     in case a future Mintlify starts emitting it. */
+  .nav-tabs .nav-tabs-item:hover {
+    background: rgb(60 50 20 / 0.055);
+    color: #1a1917;
+  }
+  .dark .nav-tabs .nav-tabs-item:hover {
+    background: rgb(255 255 255 / 0.07);
+    color: #f2f0ec;
+  }
+
+  /* Active pill. Weight stays 400 — the bold you see is Mintlify's own
+     metric-neutral text-shadow (also the hook; see header note).
+     data-active is kept as a second hook in case Mintlify ever ships it. */
   .nav-tabs .nav-tabs-item[data-active="true"],
   .nav-tabs .nav-tabs-item[class*="text-shadow"] {
-    height: 2.5rem;
-    margin-bottom: -1px;
-    z-index: 20;
-    background: #f4f4f5;
-    border-color: rgb(0 0 0 / 0.12);
-    box-shadow: 0 -3px 10px rgb(0 0 0 / 0.06);
+    background: rgb(55 45 15 / 0.085);
+    color: #1a1917;
   }
   .dark .nav-tabs .nav-tabs-item[data-active="true"],
   .dark .nav-tabs .nav-tabs-item[class*="text-shadow"] {
-    background: #191c24;
-    border-color: rgb(255 255 255 / 0.14);
-    box-shadow: 0 -3px 10px rgb(0 0 0 / 0.45);
+    background: rgb(255 255 255 / 0.11);
+    color: #f5f3ef;
   }
 
-  /* The stock 1.5px underline indicator — see note above. */
+  /* The stock 1.5px underline indicator: the sole direct-child div with
+     Tailwind's `absolute` class. The pill replaces it. */
   .nav-tabs .nav-tabs-item > div.absolute {
     display: none;
   }
 
-  /* Hover panel: hidden by default, shown while pointer or focus is inside
-     the tab item. Slight show delay stops panels flashing as the pointer
-     sweeps across the bar; longer hide delay covers diagonal travel. */
+  /* Popular is the one <button> tab (Radix menu trigger): clicking it
+     leaves it focused, so the theme's orange focus ring lingers on the
+     pill after the pointer leaves — none of the anchor tabs do this.
+     Suppress the ring for pointer focus only; keyboard focus
+     (:focus-visible) keeps it. */
+  .nav-tabs .nav-tabs-item:focus:not(:focus-visible) {
+    outline: none;
+    box-shadow: none;
+  }
+
+  /* Group labels + dividers. Two labelled groups — PRODUCTS and MORE —
+     after the leading unlabelled Get Started tab (the Home tab was
+     dropped once the wordmark started linking to the index page, and its
+     START label went with it). Both are pseudo-elements on each group's
+     first tab — the label is ::before, the divider ::after — absolutely
+     positioned OUTSIDE the tab box so the hover/active pill never
+     highlights them; margin-left on those tabs reserves the space:
+     12 + divider + 12 + label + 11px label gap. Label widths assume the
+     site sans at 10px/600/0.07em: PRODUCTS ~58px, MORE ~29px. Below
+     1250px the labels hide (dividers stay) — see the compaction tier. */
+  .nav-tabs .nav-tabs-item[href^="/api-client"]::before,
+  .nav-tabs .nav-tabs-item[href^="/reference"]::before {
+    position: absolute;
+    right: 100%;
+    margin-right: 11px;
+    top: 50%;
+    transform: translateY(-50%);
+    /* Site sans, not the handoff's mono: distinct from the tabs through
+       size and weight rather than a font switch (the letterspaced mono
+       eyebrow read as boilerplate). Tracking stays modest for the same
+       reason. */
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: #b4aea2;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .dark .nav-tabs .nav-tabs-item[href^="/api-client"]::before,
+  .dark .nav-tabs .nav-tabs-item[href^="/reference"]::before {
+    color: #6e6a62;
+  }
+  .nav-tabs .nav-tabs-item[href^="/api-client"]::before {
+    content: "PRODUCTS";
+  }
+  .nav-tabs .nav-tabs-item[href^="/reference"]::before {
+    content: "MORE";
+  }
+  .nav-tabs .nav-tabs-item[href^="/api-client"] {
+    margin-left: 94px; /* 25 + PRODUCTS 58 + 11 */
+  }
+  .nav-tabs .nav-tabs-item[href^="/reference"] {
+    margin-left: 65px; /* 25 + MORE 29 + 11 */
+  }
+  .nav-tabs .nav-tabs-item[href^="/api-client"]::after,
+  .nav-tabs .nav-tabs-item[href^="/reference"]::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 20px;
+    background: rgb(60 50 20 / 0.12);
+    pointer-events: none;
+  }
+  .nav-tabs .nav-tabs-item[href^="/api-client"]::after {
+    right: calc(100% + 81px); /* 11 + PRODUCTS 58 + 12 */
+  }
+  .nav-tabs .nav-tabs-item[href^="/reference"]::after {
+    right: calc(100% + 52px); /* 11 + MORE 29 + 12 */
+  }
+  .dark .nav-tabs .nav-tabs-item[href^="/api-client"]::after,
+  .dark .nav-tabs .nav-tabs-item[href^="/reference"]::after {
+    background: rgb(255 255 255 / 0.1);
+  }
+
+  /* Hover panels (nav-dropdowns.js): unchanged from the folder-tab
+     branch — hidden by default, shown while pointer or focus is inside
+     the tab item; the transparent wrapper bridges the pill->panel gap. */
   .bru-nav-dd {
     position: absolute;
     top: 100%;
     left: 0;
-    padding-top: 0.625rem; /* invisible bridge across the pill→panel gap */
+    padding-top: 0.625rem;
     z-index: 60;
     visibility: hidden;
     opacity: 0;
@@ -375,7 +497,6 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
       opacity 120ms ease 60ms,
       visibility 0ms linear 60ms;
   }
-
   .bru-nav-dd-panel {
     min-width: 12rem;
     padding: 0.375rem;
@@ -389,7 +510,6 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
     background: #0f1117;
     box-shadow: 0 10px 30px rgb(0 0 0 / 0.5);
   }
-
   .bru-nav-dd-link {
     display: block;
     padding: 0.4rem 0.625rem;
@@ -410,27 +530,6 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
   .dark .bru-nav-dd-link:hover {
     background: #1a1d26;
     color: #f3f4f6;
-  }
-}
-
-/* Equal-width tiers: ten tabs x tier width - 9 tucks (0.875rem, constant
-   across tiers — it must stay >= the corner radius, see above) + the px-12
-   rail must fit the viewport, so the fixed width steps down with it.
-   Estimated against the longest label at each tier's font size ("Mock
-   Servers": ~84px at 14px + 24px icon+gap, ~78px at 13px text-only);
-   min-width: max-content in the base rule catches any estimate that runs
-   tight — a too-long tab widens instead of truncating. If a tab is ever
-   added or a label grows, re-check each tier's lower bound.
-   - base: tabs 8.75rem with icons -> row needs ~1370px.
-   - below 1370px: hide icons (`svg.h-4` matches only the FA icon masks,
-     not Popular's caret), tabs 6.5rem at 13px -> ~1010px. */
-@media (min-width: 1024px) and (max-width: 1369.98px) {
-  .nav-tabs .nav-tabs-item svg.h-4 {
-    display: none;
-  }
-  .nav-tabs .nav-tabs-item {
-    width: 6.5rem;
-    font-size: 0.8125rem;
   }
 }
 
@@ -520,7 +619,72 @@ div.fixed.inset-0.z-40 [role="dialog"] {
 .bru-home-search {
   display: flex;
   justify-content: center;
-  margin: 2rem 0 3rem;
+  margin: 2rem 0 2.25rem;
+}
+
+/* Group eyebrows on the card sections — same treatment as the nav's
+   START/PRODUCTS/MORE labels (site sans, 10px/600, modest tracking), with
+   a hairline rule running out to the right to carry the sectioning. The
+   class only exists on home.mdx. */
+.bru-home-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 1.75rem 0 0.75rem;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #b4aea2;
+}
+.bru-home-group::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgb(60 50 20 / 0.09);
+}
+.dark .bru-home-group {
+  color: #6e6a62;
+}
+.dark .bru-home-group::after {
+  background: rgb(255 255 255 / 0.08);
+}
+
+/* Compact chip cards, home only: every card is a horizontal icon+title
+   chip (descriptions dropped — they were most of the tile height, and
+   the titles are self-explanatory next to the nav). Hooks are the Card's
+   data-component-part attributes plus its stable .card class. Title
+   margin-top is zeroed because horizontal cards put the icon BESIDE the
+   title — Mintlify's mt-4 there pushes the title below the icon line and
+   reads as misalignment. */
+#content-area:has(.bru-home-search) .card {
+  border-radius: 0.625rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+#content-area:has(.bru-home-search) .card [data-component-part="card-content-container"] {
+  padding: 0.75rem 0.875rem;
+}
+#content-area:has(.bru-home-search) .card [data-component-part="card-icon"] {
+  height: 1rem;
+  width: 1rem;
+}
+#content-area:has(.bru-home-search) .card [data-component-part="card-icon"] svg {
+  height: 1rem;
+  width: 1rem;
+}
+#content-area:has(.bru-home-search) .card [data-component-part="card-title"] {
+  font-size: 0.875rem;
+  margin-top: 0;
+}
+#content-area:has(.bru-home-search) .card [data-component-part="card-content"] {
+  font-size: 0.78125rem;
+  line-height: 1.45;
+  margin-top: 0.125rem;
+}
+/* The grid tightens to match the chips. */
+#content-area:has(.bru-home-search) .columns {
+  gap: 0.625rem;
 }
 .bru-home-search-btn {
   display: flex;
