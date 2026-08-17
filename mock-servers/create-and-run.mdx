@@ -22,7 +22,7 @@ Use this path when the collection already has saved response examples.
 3. Enter a **Name**.
 4. Keep **Link to a collection or API spec** checked, select **Collection**, pick the collection, then click **Create**.
 5. On the dashboard, click **Sync with Examples**. Every [saved example](/send-requests/res-data-cookies/response-examples) becomes a mock response (method, path, status, headers, and body).
-6. Click **Start Server**. Bruno picks a free port (or uses the port you set under **Advanced settings**).
+6. Click **Start Server** to start the mock server on the saved port. If the port is already in use, change it under **Mock Server Settings (gear icon)** → **Advanced settings**.
 
 ![Create mock server linked to a collection](/images/screenshots/v4/mock-severs/create-api-spec-mock-server.webp)
 
@@ -34,7 +34,7 @@ Use this path when you have an API spec in the workspace. Turn on [API Spec](/op
 1. Load the spec under **API Specs** in the sidebar (if it is not already there).
 2. Create a mock server, keep **Link to a collection or API spec** checked, select **API Spec**, pick the spec, then click **Create**.
 3. On the dashboard, click **Generate from API Spec**. Each operation and response status becomes a mock response; bodies are derived from the schema where possible.
-4. Click **Start Server**.
+4. Click **Start Server** to start the mock server on the saved port. If the port is already in use, change it under **Mock Server Settings (gear icon)** → **Advanced settings**.
 
 ![Create mock server linked to an API spec](/images/screenshots/v4/mock-severs/create-collection-api-mock-server.webp)
 
@@ -57,31 +57,37 @@ The mock opens as its own tab in the main pane (distinct from a request tab).
 
 ### Header
 
-| State | What you see |
-|-------|----------------|
-| **Running** | Green status dot, port, base URL with copy, **Stop Server**, refresh, **Delay (ms)** |
-| **Stopped** | Grey status dot, **Start Server**, **Delay (ms)** |
+| State        | What you see                                                                                                                    |
+|--------------|--------------------------------------------------------------------------------------------------------------------------------|
+| **Running**  | Editable name field (rename inline), "Source: \<collection \| spec name \| Standalone\>" label under the name, green status dot, port, base URL with copy, **Stop Server**, refresh, **Delay (ms)**, live "N routes / N responses" counts, warning if configured and running ports differ: "Configured port N differs from the running port N.", **gear** icon |
+| **Stopped**  | Editable name field (rename inline), "Source: \<collection \| spec name \| Standalone\>" label under the name, grey status dot, **Start Server**, **Delay (ms)**, **gear** icon                         |
 
-**Delay (ms)** adds a fixed latency to matched responses. Unmatched routes are never delayed.
-
-**Refresh** re-reads the source and rebuilds the route table without dropping the port.
-
-The **gear** icon on the right side of the dashboard header opens **Mock Server Settings** (rename, change link source, port, delay, or delete).
+- **Editable name field:** Rename quickly by clicking the title at the top of the dashboard header.
+- **Source label:** Shows what the mock is linked to, or "Standalone" if not linked.
+- **Live N routes / N responses:** Shows the number of registered routes and responses while running.
+- **Port warning:** If the configured port doesn't match the running port, a warning appears: "Configured port N differs from the running port N."
+- **Delay (ms):** Adds a fixed latency to matched responses. Unmatched routes are never delayed.
+- **Refresh:** Re-reads the source and rebuilds the route table without dropping the port.
+- **Gear icon:** On the right side of the dashboard header, opens Mock Server Settings (rename, change link source, port, delay, or delete).
 
 ![API spec mock server dashboard](/images/screenshots/v4/mock-severs/api-mock-server-dashboard.webp)
 
 
 ### Responses tab
 
-Each mock response is a first-class object with:
+The **Responses** tab is where you manage, generate, and sync your mock responses.
 
-- **Method** and **Path** - path parameters use `:name` (for example, `/users/:id`)
-- **Status** and **Headers**
-- **Body** editor with syntax highlighting for JSON, XML, HTML, and plain text
-- **Rules** - optional conditions that choose one response over another on the same method + path
-- **Try** - runs the response through the matcher and shows what the server would return, without leaving the editor
+The toolbar at the top provides **New Mock Response** and also surfaces context-aware buttons depending on how the mock is linked:
+- **Sync with Examples** is shown for collection-linked mocks, syncing responses to the latest examples.
+- **Generate from API Spec** appears for API-spec mocks without any added responses, bulk-generating responses from the spec.
+- **Sync with Spec** is shown for API-spec mock servers that already have mock responses. Clicking it re-imports the API spec and overwrites existing responses that still match the spec (method and path), while preserving any custom responses you’ve added or changed.
 
-Empty state: *No mock responses yet. Sync from examples or add one manually.*
+Each mock response is presented as a first-class object with:
+  - **Method** and **Path** - path parameters use `:name` (for example, `/users/:id`)
+  - **Status** and **Headers**
+  - **Body** editor with syntax highlighting for JSON, XML, HTML, and plain text
+  - **Rules** - optional conditions that select one response over another for the same method + path
+  - **Try** - lets you send a real request to this route and see the response in the Try Result tab without leaving the editor. The mock server must be running. Try requests follow all configured rules and are also recorded in the **Request Log**.
 
 ![mock-server-dashboard-responses](/images/screenshots/v4/mock-severs/mock-server-dashboard-response.webp)
 
@@ -91,7 +97,7 @@ You can edit, rename, disable, or clone responses at any time. Rules can change 
 
 #### Rules
 
-A rule matches on a request **header**, **query parameter**, or **body field** (JSON path), using **equals**, **not equals**, **contains**, or **matches** (regex). Multiple conditions combine with **AND** or **OR**.
+A rule matches on a request header (case-insensitive), query parameter, or body field, using equals, not equals, contains, or matches (regex). Body fields use a dotted path—for example, `$.user.type` or `user.type`. Array indexing and JSONPath filters are not supported.
 
 Example: two responses on `GET /users/:id` - one for `?type=admin`, another for `?type=guest`, or different payloads based on an `x-api-key` header.
 
@@ -101,17 +107,44 @@ When several responses share a route, the one whose rules match wins. If none ma
 
 ### Routes tab
 
-A read-only, searchable table of every registered method + path pair, with a response count per route, a method-family filter, and search. Use it to confirm the shape developers expect and to spot duplicate routes.
+The **Routes** tab displays a read-only, searchable table listing every registered method + path combination in your mock server. Each row includes:
+
+- **Method** – HTTP method (e.g. GET, POST, etc.), with a filter that only shows exact methods in use.
+- **Path** – The route path, with a copy-route-URL button when the server is running.
+- **Responses** – Number of mock responses defined for this route.
+- **Default** – Indicates which response is the default for this route.
+- **Source** – Shows the origin (e.g. collection, spec, or standalone).
+- **Hits** – How many times this route has been called while the server is running.
+
+You can filter by HTTP method using a dropdown populated with only the methods present in your registered routes, and search through all columns. Use this tab to confirm your registered endpoints, track usage, and spot duplicate or unexpected routes.
 
 ![mock-server-routes](/images/screenshots/v4/mock-severs/mock-server-routes.webp)
 
 ### Request Log tab
 
-While the server is running, every incoming request is listed live: method, path, status returned, whether it matched, and duration. Filter by match status (**Matched**, **Unmatched**, **All Requests**) or status-code family (**2xx**, **3xx**, **4xx**, **5xx**), or clear the log.
+While the server is running, every incoming request is listed live in the **Request Log** table. The table columns are:
 
-Unmatched requests are labelled **No Match**. Empty state: *No requests yet. Start the server and send one.*
+- **Time** - when the request was received (newest first)
+- **Method** - HTTP method (e.g. GET, POST)
+- **Path** - endpoint path
+- **Mock Response** - name of the mock response selected (or **No Match** if none found)
+- **Status** - response status code returned
+- **Delay** - any artificial delay (if configured) before the response was sent
+- **Duration** - total time taken to serve the response
 
-The log is in-memory only and capped at the **most recent 500** entries per server.
+You can filter log entries by match status (**Matched**, **Unmatched**, **All Requests**) or by status code family (**2xx**, **3xx**, **4xx**, **5xx**). There’s also an option to clear the log. The log is held in memory only and capped at the **most recent 500** entries per server.
+
+#### Match Trace Inspector
+
+Each row in the Request Log has an info icon that opens the **Match Trace Inspector** - a powerful tool for understanding how Bruno evaluated your request against the available mock responses for that route.
+
+The Match Trace Inspector shows:
+- Every mock response considered for the matched route
+- Each rule condition, with whether it passed or failed, and the actual value received (e.g., got `"guest"`)
+- Which response was selected and why such as specific rules passing, or fallback/default logic
+- For unmatched requests, a list of available routes to help identify missing or misconfigured mocks
+
+The newest Request Log entry auto-expands the inspector, making it easy to debug exactly why a request matched (or didn’t). This is your primary resource for answering questions like, “Why didn’t my rule match?” or “Which conditions failed?”
 
 ![mock-server-request-logs](/images/screenshots/v4/mock-severs/mock-server-request-logs.webp)
 
@@ -122,7 +155,7 @@ The log is in-memory only and capped at the **most recent 500** entries per serv
 - Unmatched paths return **404** with a JSON payload: method and path tried, a hint to create a matching mock response, and a truncated list of registered routes.
 - Transport-level headers such as `transfer-encoding` and `content-encoding` are stripped from replies.
 - Content type comes from the saved example’s headers, defaulting to `application/json` when the body is JSON.
-- If the requested port is taken, Bruno reports which mock or system process holds it and suggests a nearby free port.
+- If the requested port is taken, the server won't start and reports whether the conflict is with another Bruno mock server or another process on your system. Change it under **Mock Server Settings (gear icon)** → **Advanced settings**.
 
 ## Keeping mocks in sync with the collection
 
