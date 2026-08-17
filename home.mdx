@@ -1,0 +1,64 @@
+---
+title: "What would you like help with?"
+mode: "center"
+---
+
+<div className="bru-home-search">
+  <button
+    type="button"
+    className="bru-home-search-btn"
+    aria-label="Search documentation"
+  >
+    {/* Magnifier drawn as ONE path: Mintlify's MDX sanitizer strips <circle>
+        elements, so the lens is an arc pair instead. */}
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      aria-hidden="true"
+    >
+      <path
+        d="M9 3a6 6 0 1 0 0 12a6 6 0 1 0 0-12M13.5 13.5L18 18"
+        strokeLinecap="round"
+      />
+    </svg>
+    <span className="bru-home-search-label">Search the docs&hellip;</span>
+    <kbd>⌘K</kbd>
+  </button>
+</div>
+
+<Columns cols={4}>
+  <Card title="Get Started" icon="rocket" href="/introduction/getting-started">
+    Download Bruno, learn the basics, and send your first request in minutes.
+  </Card>
+  <Card title="API Client" icon="browser" href="/api-client/overview">
+    The full desktop app — requests, variables, authentication, scripting,
+    tests, and Git-based collaboration.
+  </Card>
+  <Card title="CLI" icon="terminal" href="/bru-cli/overview">
+    Run collections from the terminal with `bru` — reports, environments, and
+    CI/CD integration.
+  </Card>
+  <Card title="API Docs" icon="book" href="/api-docs/overview">
+    Write docs alongside your collections and publish them as shareable HTML.
+  </Card>
+  <Card title="Mock Servers" icon="server" href="/mock-servers/overview">
+    Serve realistic mock responses from your collections while you build.
+  </Card>
+  <Card
+    title="VS Code Extension"
+    icon="code"
+    href="/vs-code-extension/overview"
+  >
+    Send requests and manage collections without leaving your editor.
+  </Card>
+  <Card title="Formats" icon="shapes" href="/reference/overview">
+    OpenAPI specs, OpenCollection YAML, converters from other API clients, and
+    Bru Lang.
+  </Card>
+  <Card title="Licensing" icon="key" href="/license-overview">
+    Activate a license and manage your organization — billing, SAML SSO, and
+    SCIM provisioning.
+  </Card>
+</Columns>
