@@ -160,6 +160,27 @@ When you drag a request from one collection to another that uses a different for
 
 Bruno supports both `.bru` and `.yml` formats, so you can migrate your collections gradually. Both formats can coexist within the same collection during the transition period.
 
+### Migrate a collection with the header pill
+
+Bruno shows a **Migrate to YML** pill in the collection header for collections that are still stored in `.bru` format. Click the pill to open the migration modal, or dismiss it with the **X** to hide the prompt for that collection. Dismissals are remembered per collection.
+
+The migration modal converts all files in the collection:
+
+- Request files change from `.bru` to `.yml`.
+- Environment files are rewritten in YAML.
+- `bruno.json` is replaced with `opencollection.yml`.
+
+Open tabs for the collection close and the collection reloads once the migration finishes.
+
+### Unsaved changes
+
+If any drafts exist when you start the migration, the modal switches to an **Unsaved changes** step that lists up to five affected items across the collection, folders, requests, and collection environments. Resolve the drafts before Bruno migrates the files:
+
+- **Save all** writes every draft to disk in one batch, then starts the migration automatically.
+- **Discard all** drops the pending changes, then starts the migration.
+
+Transient requests (requests that have never been saved to disk) can't be batch-saved. Save each one manually from the modal so the migration can continue.
+
 
 ## Resources
 
