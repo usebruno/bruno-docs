@@ -151,6 +151,15 @@ In the Vars tab you can select the type of each variable using the type dropdown
   **Backward compatibility:** Existing `.bru` files and environments that use plain string values continue to work without any changes or migration. The `@type(...)` annotation is only written when a non-string type is used.
 </Note>
 
+### Sorting and Reordering Variables
+
+You can control the order in which variables appear in the Vars tab across all scopes (collection, folder, request, and environment).
+
+- **Alphabetical sort:** Use the sort control in the Vars tab to sort variables **A–Z** or **Z–A**. Sort preference persists across sessions.
+- **Drag-and-drop reordering:** In **Manual** mode, use the drag handle on each row to reorder variables. The saved order is written back to the underlying file after you save.
+
+Sorting and reordering preserve variable group boundaries (for example, secret and non-secret groups) and keep newly added rows in place.
+
 ### Environment Color Coding
 
 <Info>
