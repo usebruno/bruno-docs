@@ -1,27 +1,52 @@
 ---
-title: "APIs Documentation"
+title: "API Documentation in Bruno"
 sidebarTitle: "Overview"
 ---
+
+Bruno has two distinct documentation features, and it helps to know which one you're looking for:
+
+<CardGroup cols={2}>
+  <Card
+    title="Write Docs in Bruno"
+    icon="pen-line"
+    href="/api-docs/workspace-docs"
+  >
+    Author markdown documentation alongside your requests — at the workspace, collection, folder, and request level — rendered inside the Bruno app.
+  </Card>
+  <Card
+    title="Generate HTML Docs"
+    icon="globe"
+    href="/html-docs/overview"
+  >
+    Have Bruno build a standalone, interactive HTML documentation site from a collection — with a live playground, search, and code samples — that you can deploy anywhere.
+  </Card>
+</CardGroup>
+
+**Writing docs** is an authoring feature: you write the content yourself in markdown, and it lives with your collection for anyone working in Bruno to read.
+
+**Generating docs** is a publishing feature: Bruno produces a shareable HTML file from what's already in your collection, for consumers of your API who may never open Bruno at all.
+
+<Info>
+  The two features connect in one direction: the markdown docs you write at each level are included in the generated HTML site as the descriptions for your collection, folders, and requests. Write once in Bruno, publish everywhere.
+</Info>
+
+## Write Docs in Bruno
 
 Bruno allows you to create API documentation at four distinct levels: **Workspace, Collection, Folder, and Request**.
 
 With full Markdown support you can write clear, concise, and well-structured documentation at each level supplemented with any relevant screenshots, gifs, or other elements to ensure your users have a seamless onboarding experience.
-
-<Info>
-  Bruno sanitizes all HTML in documentation blocks before rendering. This prevents cross-site scripting (XSS) attacks when previewing markdown that contains embedded HTML. Elements like `script` tags and inline event handlers are automatically removed.
-</Info>
-
-Although Collections are the machine-readable instructions for interacting with an API, offering human-readable instructions to your users can significantly reduce the time to their first interaction.
-
-## Create Documentation
 
 1. [Document a workspace](./workspace-docs)
 2. [Document a collection](./collection-docs)
 3. [Document a folder](./folder-docs)
 4. [Document a request](./request-docs)
 
-## Auto Generate Documentation
+<Info>
+  Bruno sanitizes all HTML in documentation blocks before rendering. This prevents cross-site scripting (XSS) attacks when previewing markdown that contains embedded HTML. Elements like `script` tags and inline event handlers are automatically removed.
+</Info>
 
-Bruno can automatically generate a standalone HTML documentation file for your entire collection. This allows you to quickly create and deploy professional-looking API documentation.
+## Generate HTML Docs
 
-[Learn how to auto-generate docs](/api-docs/auto-generate-docs)
+Bruno can automatically generate a standalone HTML documentation file for your entire collection — an interactive site with an environment switcher, full-text search, a try-it playground, and auto-generated code samples.
+
+[Learn about generated HTML docs](/html-docs/overview)

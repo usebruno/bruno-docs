@@ -21,7 +21,9 @@
       "<style>" +
       // right/max-width track --assistant-sheet-width so the card slides aside when the AI
       // assistant panel opens, the same way Mintlify's own fixed navbar does.
-      "#bru-webinar{position:fixed;bottom:1.25rem;z-index:60;width:20rem;" +
+      // z-index 39 keeps the card above page content but UNDER the search
+      // modal's z-40 scrim, so it dims with the rest of the page.
+      "#bru-webinar{position:fixed;bottom:1.25rem;z-index:39;width:20rem;" +
       "right:calc(1.25rem + var(--assistant-sheet-width, 0px));" +
       "max-width:calc(100vw - 2.5rem - var(--assistant-sheet-width, 0px));" +
       "padding:1rem;border-radius:.75rem;border:1px solid #E5E7EB;" +
