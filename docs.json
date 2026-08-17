@@ -1387,6 +1387,9 @@
   "integrations": {
     "ga4": {
       "measurementId": "G-EB5Y7HLTX3"
+    },
+    "posthog": {
+      "apiKey": "phc_7gtqSrrdZRohiozPMLIacjzgHbUlhalW1Bu16uYijMR"
     }
   },
   "redirects": [
