@@ -3,6 +3,11 @@ title: "Proxy and mTLS"
 sidebarTitle: "Proxy & mTLS"
 ---
 
+<Warning>
+  From Bruno **v4.1.0**, the desktop app supports global client certificates in Preferences. The CLI does not read Preferences. In CI, continue using `--client-cert-config` with the same file shape as before. Collection certificates that include `"disabled": true` are skipped. 
+  
+  Certificates from `--client-cert-config` are appended after collection certificates and resolved by first domain match, so collection certificates take precedence for overlapping domains. See [Add and Manage Certificates](/auth/add-and-manage-certs).
+</Warning>
 
 Bruno CLI allows you to configure proxy settings directly from the terminal. You can also add client certificates through the CLI.
 
@@ -60,9 +65,3 @@ Two conditions must be met for `--client-cert-config` entries to be added:
 If `enabled` is `false` or omitted, or `certs` is not an array, Bruno prints a warning and only the `bruno.json` certificates are used for the run.
 
 If both a `--client-cert-config` entry and a `bruno.json` entry match the same domain, the `bruno.json` entry takes precedence because it is checked first.
-
-<Info>
-  From Bruno **v4.1.0**, the desktop app supports global client certificates in Preferences. The CLI does not read Preferences. In CI, continue using `--client-cert-config` with the same file shape as before. Collection certificates that include `"disabled": true` are skipped. 
-  
-  Certificates from `--client-cert-config` are appended after collection certificates and resolved by first domain match, so collection certificates take precedence for overlapping domains. See [Add and Manage Certificates](/auth/add-and-manage-certs).
-</Info>
