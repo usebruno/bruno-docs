@@ -1,0 +1,79 @@
+---
+title: "Scripting"
+sidebarTitle: "Overview"
+---
+
+Bruno allows you to write JavaScript code before sending a request
+(Pre-request) and after receiving a response (Post-response). Use scripts to
+generate dynamic data, manipulate requests, parse responses, and set
+variables.
+
+![bru lang sample](/images/screenshots/script/scripting.webp)
+
+<CardGroup cols={2}>
+  <Card
+    title="JavaScript API Reference"
+    icon="book"
+    href="/testing/script/javascript-reference"
+  >
+    The complete `bru` API — request and response methods, environments, and
+    utilities.
+  </Card>
+  <Card
+    title="Script Flow"
+    icon="diagram-project"
+    href="/testing/script/script-flow"
+  >
+    When pre-request and post-response scripts run, and in what order across
+    collection, folder, and request levels.
+  </Card>
+  <Card
+    title="Inbuilt Libraries"
+    icon="cubes"
+    href="/testing/script/inbuilt-libraries"
+  >
+    Libraries bundled with Bruno, ready to require in your scripts.
+  </Card>
+  <Card
+    title="External Libraries"
+    icon="box-open"
+    href="/testing/script/external-libraries"
+  >
+    Use npm packages in your scripts with Developer Mode.
+  </Card>
+  <Card title="JavaScript File" icon="file-code" href="/testing/script/js-file">
+    Keep shared script code in standalone `.js` files inside your collection.
+  </Card>
+  <Card
+    title="Dynamic Variables"
+    icon="shuffle"
+    href="/testing/script/dynamic-variables"
+  >
+    Generate random data like names, emails, and UUIDs on every run.
+  </Card>
+  <Card
+    title="Request Chaining"
+    icon="link"
+    href="/testing/script/request-chaining"
+  >
+    Pass data from one request to the next and control execution flow.
+  </Card>
+  <Card
+    title="Request"
+    icon="arrow-up"
+    href="/testing/script/request/request-object"
+  >
+    The `req` object — inspect and modify outgoing requests, and send
+    synchronous requests from scripts.
+  </Card>
+  <Card
+    title="Response"
+    icon="arrow-down"
+    href="/testing/script/response/response-object"
+  >
+    The `res` object — read status, headers, and body, and query response data.
+  </Card>
+  <Card title="Variables" icon="brackets-curly" href="/testing/script/vars">
+    Get and set variables from scripts with the Vars tab.
+  </Card>
+</CardGroup>

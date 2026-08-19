@@ -1,0 +1,25 @@
+---
+title: "Generated HTML Documentation"
+sidebarTitle: "Overview"
+---
+
+Bruno can generate a standalone HTML documentation site from any collection. The result is a single, self-contained file — a shareable, interactive API reference that you can open in any browser, send to API consumers, or deploy to any static host. No Bruno installation is required to view it.
+
+![Generated HTML Documentation](/images/screenshots/v4/collection-docs/interface-overview.webp)
+
+This is a publishing feature, not an authoring one: Bruno builds the site for you from what's already in your collection — requests, params, headers, auth, scripts, and tests — along with any [documentation you've written](/api-docs/overview) at the collection, folder, and request levels.
+
+<Tip>
+  The markdown docs you write inside Bruno are what fill out the descriptions in the generated site. The better your [written docs](/api-docs/overview), the better the generated output.
+</Tip>
+
+## What the generated site includes
+
+- **[Interactive playground](/html-docs/playground)** — readers can edit and execute requests live from the docs, with auto-generated code samples in cURL, Python, and JavaScript
+- **[Environment switcher](/html-docs/environments)** — resolve `{{var}}` placeholders against any included environment
+- **[Full-text search](/html-docs/search)** — find requests by name, URL, params, or description
+
+## Get started
+
+1. [Generate documentation](/html-docs/generate) — create the HTML file from your collection
+2. [Deploy and share](/html-docs/deploy) — host it, or just send the file
