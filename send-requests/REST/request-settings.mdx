@@ -28,9 +28,11 @@ Controls whether HTTP redirects should be followed automatically during request 
 Limits the maximum number of redirects that can be followed in a single request.
 
 **Configuration:**
-- **Type**: Numeric input
-- **Range**: 1 to 50 (validation enforced)
+- **Type**: Numeric input (whole numbers)
+- **Range**: 0 or more (no upper bound)
 - **Default**: 5 redirects
+
+Fractional values are truncated. Negative, non-numeric, or non-finite values fall back to the default.
 
 ### Request Timeout
 
