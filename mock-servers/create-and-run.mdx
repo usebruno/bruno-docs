@@ -78,43 +78,54 @@ The mock opens as its own tab in the main pane (distinct from a request tab).
 The **Responses** tab is where you manage, generate, and sync your mock responses.
 
 The toolbar at the top provides **New Mock Response** and also surfaces context-aware buttons depending on how the mock is linked:
+- **New Mock Response** creates a new mock response with a default method, path
 - **Sync with Examples** is shown for collection-linked mocks, syncing responses to the latest examples.
 - **Generate from API Spec** appears for API-spec mocks without any added responses, bulk-generating responses from the spec.
 - **Sync with Spec** is shown for API-spec mock servers that already have mock responses. Clicking it re-imports the API spec and overwrites existing responses that still match the spec (method and path), while preserving any custom responses you’ve added or changed.
 
+![mock-server-dashboard-responses](/images/screenshots/v4/mock-severs/mock-server-dashboard-response.webp)
+
 Each mock response is presented as a first-class object with:
   - **Method** and **Path** - path parameters use `:name` (for example, `/users/:id`)
   - **Status** and **Headers**
-  - **Body** editor with syntax highlighting for JSON, XML, HTML, and plain text
+  - **Expected** editor with syntax highlighting and expected response body
   - **Rules** - optional conditions that select one response over another for the same method + path
-  - **Try** - lets you send a real request to this route and see the response in the Try Result tab without leaving the editor. The mock server must be running. Try requests follow all configured rules and are also recorded in the **Request Log**.
+  - **Demo Request** - Automatically generated based on the defined rules. Shows an example of a request that would match this mock response.
+  - **Try** - lets you send a real request to this route and see the response in the Try Result tab without leaving the editor. The mock server must be running. Try requests follow all configured rules and are also recorded in the **[Request Log](/mock-servers/create-and-run#request-log-tab)**.
+  - **Open a New Request** - opens a new request tab with the method, path, and body pre-filled with the demo request
+  - **Edit** and **Delete** responses from the top-right corner of the response editor. Click on **Edit** to add or change rules.
 
-![mock-server-dashboard-responses](/images/screenshots/v4/mock-severs/mock-server-dashboard-response.webp)
+![mock-server-rules](/images/screenshots/v4/mock-severs/mock-server-rules.webp)
 
-You can edit, rename, disable, or clone responses at any time. Rules can change while the server is running; they apply on the next incoming request.
-
-![mock-server-request-logs](/images/screenshots/v4/mock-severs/mock-server-request.webp)
 
 #### Rules
 
-A rule matches on a request header (case-insensitive), query parameter, or body field, using equals, not equals, contains, or matches (regex). Body fields use a dotted path—for example, `$.user.type` or `user.type`. Array indexing and JSONPath filters are not supported.
+A rule matches on a request header (case-insensitive), query parameter, or body field, using equals, not equals, contains, or matches (regex). Body fields use a dotted path. For example, `$.user.type` or `user.type`. Array indexing and JSONPath filters are not supported.
 
 Example: two responses on `GET /users/:id` - one for `?type=admin`, another for `?type=guest`, or different payloads based on an `x-api-key` header.
 
 When several responses share a route, the one whose rules match wins. If none match, Bruno returns the default for that route, or `404` if no default is set.
 
-![mock-server-rules](/images/screenshots/v4/mock-severs/mock-server-rules.webp)
+![mock-server-request-logs](/images/screenshots/v4/mock-severs/mock-sever-request-dashboard.webp)
+
+<Note>
+**Demo Request** is automatically generated from the defined rules. It shows an example request that satisfies the conditions required to match this mock response.
+
+</Note>
+
+Example: if a Header rule requires **x-api-key** to equal **1234567890**, the demo request includes **x-api-key: 1234567890** as a request header.  
+![mock-demo-request](/images/screenshots/v4/mock-severs/mock-demo-request.webp)
 
 ### Routes tab
 
 The **Routes** tab displays a read-only, searchable table listing every registered method + path combination in your mock server. Each row includes:
 
-- **Method** – HTTP method (e.g. GET, POST, etc.), with a filter that only shows exact methods in use.
-- **Path** – The route path, with a copy-route-URL button when the server is running.
-- **Responses** – Number of mock responses defined for this route.
-- **Default** – Indicates which response is the default for this route.
-- **Source** – Shows the origin (e.g. collection, spec, or standalone).
-- **Hits** – How many times this route has been called while the server is running.
+- **Method** - HTTP method (e.g. GET, POST, etc.), with a filter that only shows exact methods in use.
+- **Path** - The route path, with a copy-route-URL button when the server is running.
+- **Responses** - Number of mock responses defined for this route.
+- **Default** - Indicates which response is the default for this route.
+- **Source** - Shows the origin (e.g. collection, spec, or standalone).
+- **Hits** - How many times this route has been called while the server is running.
 
 You can filter by HTTP method using a dropdown populated with only the methods present in your registered routes, and search through all columns. Use this tab to confirm your registered endpoints, track usage, and spot duplicate or unexpected routes.
 
@@ -141,7 +152,7 @@ Each row in the Request Log has an info icon that opens the **Match Trace Inspec
 The Match Trace Inspector shows:
 - Every mock response considered for the matched route
 - Each rule condition, with whether it passed or failed, and the actual value received (e.g., got `"guest"`)
-- Which response was selected and why such as specific rules passing, or fallback/default logic
+- Which response was selected and why - such as specific rules passing, or fallback/default logic
 - For unmatched requests, a list of available routes to help identify missing or misconfigured mocks
 
 The newest Request Log entry auto-expands the inspector, making it easy to debug exactly why a request matched (or didn’t). This is your primary resource for answering questions like, “Why didn’t my rule match?” or “Which conditions failed?”
