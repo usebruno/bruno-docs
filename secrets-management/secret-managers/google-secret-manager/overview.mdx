@@ -2,6 +2,7 @@
 title: "Google Cloud Secret Manager"
 sidebarTitle: "Overview"
 ---
+import { BrunoButton } from "/snippets/BrunoButton.jsx";
 
 <Tip>
   Google Cloud Secret Manager is supported from Bruno v4.1.0 and later.
@@ -24,6 +25,16 @@ This guide covers:
 - Use the service account key’s project as the default, and **override the project per environment row** so one service account can fetch from multiple GCP projects.
 - Fetch all secrets in the selected project(s) and resolve them in requests, scripts, and environments like the other providers. JSON secret values are accessible by sub-key.
 - Use the same flow in the **desktop app** and the **CLI**.
+
+## Try it out
+
+Explore the [google-cloud-secret-manager](https://github.com/bruno-collections/google-cloud-secret-manager) sample collection to see Bruno's Google Cloud Secret Manager integration in action:
+
+<BrunoButton
+  collectionUrl="https://github.com/bruno-collections/google-cloud-secret-manager.git"
+  width={160}
+  height={40}
+/>
 
 ## Future improvements
 
