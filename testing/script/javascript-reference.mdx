@@ -1,6 +1,7 @@
 ---
 title: "JavaScript API Reference"
 sidebarTitle: "JavaScript Reference"
+boost: 5
 ---
 
 Bruno offers powerful scripting capabilities that allow you to extend and automate your API testing workflows.
@@ -46,7 +47,6 @@ Here is a complete table for all available methods on the `req` object.
 | req.getTimeout()               | Get the current timeout value of the request.                        |
 | req.setTimeout(milliseconds)   | Set a timeout for the request.                                       |
 | req.getExecutionMode()         | Get the current active execution mode (runner or standalone).        |
-| req.getExecutionPlatform()     | Get the platform on which the request is being executed (app or cli).|
 | req.onFail(callback)           | Handle request errors with a custom callback function.               |
 
 Below is the API documentation for the methods available on `req`.
@@ -505,15 +505,6 @@ Get the current active execution mode: `runner` (collection run) or `standalone`
 ```javascript
 const executionMode = req.getExecutionMode();
 console.log(`Request is running in ${executionMode} mode`);
-```
-
-### `req.getExecutionPlatform()`
-
-Get the platform: `app` (desktop) or `cli` (Bruno CLI).
-
-```javascript
-const platform = req.getExecutionPlatform();
-console.log(`Request is running on ${platform} platform`);
 ```
 
 ### `req.onFail(callback)`
