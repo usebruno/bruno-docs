@@ -312,7 +312,8 @@
                 "tag": "Beta",
                 "pages": [
                   "mock-servers/overview",
-                  "mock-servers/create-and-run"
+                  "mock-servers/create-mock-server",
+                  "mock-servers/run-mock-server"
                 ]
               }
             ]

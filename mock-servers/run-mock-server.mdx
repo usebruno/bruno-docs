@@ -1,61 +1,18 @@
 ---
-title: "Create and Run a Mock Server"
-sidebarTitle: "Create and Run"
+title: "Run a Mock Server"
+sidebarTitle: "Run a Mock Server"
+description: "Run a mock server, interface walkthrough, server controls, request log, response examples, and more."
 ---
 
-You can create a mock server from a collection of saved response examples, from an OpenAPI spec, or as a standalone (manual) mock.
+Once you have created a mock server, you can run it by clicking the **Start Server** button in the mock server dashboard.
 
-## Enable the beta flag
-
-1. Open **Preferences**.
-2. Go to **Beta**.
-3. Turn on **Mock Server**.
-
-A **Mock Servers** section appears in the sidebar.
-
-## Create from a collection (saved examples)
-
-Use this path when the collection already has saved response examples.
-
-1. Open the collection.
-2. In the sidebar, expand **Mock Servers** and click the **+** icon to create a new mock server.
-3. Enter a **Name**.
-4. Keep **Link to a collection or API spec** checked, select **Collection**, pick the collection, then click **Create**.
-5. On the dashboard, click **Sync with Examples**. Every [saved example](/send-requests/res-data-cookies/response-examples) becomes a mock response (method, path, status, headers, and body).
-6. Click **Start Server** to start the mock server on the saved port. If the port is already in use, change it under **Mock Server Settings (gear icon)** → **Advanced settings**.
-
-![Create mock server linked to a collection](/images/screenshots/v4/mock-severs/create-api-spec-mock-server.webp)
-
-
-## Create from an OpenAPI spec
-
-Use this path when you have an API spec in the workspace. Turn on [API Spec](/open-api/createOAS#viewing-existing-oas-files) under **Preferences** → **Features** if it is not already enabled.
-
-1. Load the spec under **API Specs** in the sidebar (if it is not already there).
-2. Create a mock server, keep **Link to a collection or API spec** checked, select **API Spec**, pick the spec, then click **Create**.
-3. On the dashboard, click **Generate from API Spec**. Each operation and response status becomes a mock response; bodies are derived from the schema where possible.
-4. Click **Start Server** to start the mock server on the saved port. If the port is already in use, change it under **Mock Server Settings (gear icon)** → **Advanced settings**.
-
-![Create mock server linked to an API spec](/images/screenshots/v4/mock-severs/create-collection-api-mock-server.webp)
-
-
-## Create a standalone (manual) mock
-
-To add responses yourself instead of syncing from a collection or spec:
-
-1. Click **+** under **Mock Servers**.
-2. Enter a **Name**.
-3. Turn off **Link to a collection or API spec**.
-4. Optionally set **Port** and **Response delay** under **Advanced settings**.
-5. Click **Create**, then add responses from the **Responses** tab.
-
-![Create a standalone mock server](/images/screenshots/v4/mock-severs/create-raw-mock-server.webp)
-
-## Dashboard at a glance
+## Dashboard interface walkthrough 
 
 The mock opens as its own tab in the main pane (distinct from a request tab).
 
 ### Header
+
+Headers is a top level section in the dashboard with the following controls:
 
 | State        | What you see                                                                                                                    |
 |--------------|--------------------------------------------------------------------------------------------------------------------------------|
@@ -85,6 +42,8 @@ The toolbar at the top provides **New Mock Response** and also surfaces context-
 
 ![mock-server-dashboard-responses](/images/screenshots/v4/mock-severs/mock-server-dashboard-response.webp)
 
+
+#### Mock response editor
 Each mock response is presented as a first-class object with:
   - **Method** and **Path** - path parameters use `:name` (for example, `/users/:id`)
   - **Status** and **Headers**
@@ -100,20 +59,59 @@ Each mock response is presented as a first-class object with:
 
 #### Rules
 
-A rule matches on a request header (case-insensitive), query parameter, or body field, using equals, not equals, contains, or matches (regex). Body fields use a dotted path. For example, `$.user.type` or `user.type`. Array indexing and JSONPath filters are not supported.
+Rules are optional conditions that select one response over another for the same method + path. You can add rules for headers, query parameters and body fields with respect to the target.
 
-Example: two responses on `GET /users/:id` - one for `?type=admin`, another for `?type=guest`, or different payloads based on an `x-api-key` header.
+<Info>
+You can use **Match** switcher between **All rules AND** and **Any rule OR** to match the request against all rules or any rule. Default is **All rules AND**.
+</Info>
 
-When several responses share a route, the one whose rules match wins. If none match, Bruno returns the default for that route, or `404` if no default is set.
+**Target** and **Operator** are used to match the request and select the appropriate response.
+
+| Field      | Explanation                                                                                                                             |
+|------------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| **Target**   | Specifies which part of the request to match, such as a header, query parameter, or body field.                                       |
+| **Key**      | The exact field or name you want checked like a specific header, query parameter, or property in the body.                            |
+| **Operator** | Defines the comparison condition to use, e.g., equals, not equals, contains, or matches.                                              |
+| **Value**    | The value to match against the chosen target field.                                                                                   |
 
 ![mock-server-request-logs](/images/screenshots/v4/mock-severs/mock-sever-request-dashboard.webp)
 
+
+**Example:** Match a request body
+
+Suppose you have multiple responses configured for the same `POST /users` endpoint. You can add different rules to each response and let Bruno select the appropriate response based on the incoming request body.
+
+**Incoming request body:**
+
+```json
+{
+  "user": {
+    "type": "admin"
+  }
+}
+```
+Configure the rule as:
+
+| Target | Key       | Operator | Value |
+|--------|-----------|----------|-------|
+| Body   | user.type | equals   | admin |
+
+When `user.type` equals `admin`, Bruno returns the response configured with this rule.
+
+<Tip>
+For nested body fields, you can use a dotted path with or without the `$` prefix. For example, both `user.type` and `$.user.type` are supported.
+
+Array indexing and advanced JSONPath filters are not currently supported.
+</Tip>
+
+#### Demo Request
+
 <Note>
 **Demo Request** is automatically generated from the defined rules. It shows an example request that satisfies the conditions required to match this mock response.
-
 </Note>
 
-Example: if a Header rule requires **x-api-key** to equal **1234567890**, the demo request includes **x-api-key: 1234567890** as a request header.  
+As we have added a rule in **Headers** `testing` equal to `header` in ab, the demo request will have `testing: header` as a request header. This is automatically generated from the defined rules.  
+
 ![mock-demo-request](/images/screenshots/v4/mock-severs/mock-demo-request.webp)
 
 ### Routes tab
