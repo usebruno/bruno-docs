@@ -24,3 +24,15 @@ You can also use the `bru.getRequestVar()` function to get the value of a reques
 let source = bru.getRequestVar("source");
 let destination = bru.getRequestVar("destination");
 ```
+
+## Deleting a Request Variable
+Request variables are stored in the request file itself. To delete one, remove the row from the **Vars** tab:
+
+1. Open the request.
+2. Go to the **Vars** tab.
+3. Hover over the variable row in the **Pre Request Vars** section and click the delete icon.
+4. Save the request.
+
+<Note>
+  `bru.deleteVar()` and `bru.deleteAllVars()` remove **runtime variables** only. They do not delete request variables defined on the Vars tab.
+</Note>
