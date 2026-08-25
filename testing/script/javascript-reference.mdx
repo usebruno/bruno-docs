@@ -48,6 +48,7 @@ Here is a complete table for all available methods on the `req` object.
 | req.setTimeout(milliseconds)   | Set a timeout for the request.                                       |
 | req.getExecutionMode()         | Get the current active execution mode (runner or standalone).        |
 | req.onFail(callback)           | Handle request errors with a custom callback function.               |
+| req.disableParsingResponseJson() | Disables JSON response parsing for the request.                    |
 
 Below is the API documentation for the methods available on `req`.
 
@@ -527,6 +528,18 @@ req.onFail((error) => {
 <Warning>
 The `onFail` function is only available in Developer mode and should be called in pre-request scripts. When using Bruno CLI (v3.0.0+), pass the `--sandbox=developer` flag.
 </Warning>
+
+### `req.disableParsingResponseJson()`
+
+Prevents Bruno from automatically parsing the response body as JSON, even when the `Content-Type` is `application/json`. After calling this, `res.getBody()` returns the raw string. Call this in a **pre-request** script.
+
+```javascript
+// Keep the raw JSON string to process with a custom parser
+req.disableParsingResponseJson();
+
+// Then in the post-response script:
+// const rawString = res.getBody(); // returns string, not object
+```
 
 ## Response
 
@@ -1482,7 +1495,6 @@ Here are all available utility methods:
 | bru.sendRequest(options, callback) | Sends a programmatic HTTP request within your script.   |
 | bru.sleep(milliseconds)          | Pauses execution for the specified duration.              |
 | bru.interpolate(string)          | Evaluates dynamic variables within a string.              |
-| bru.disableParsingResponseJson() | Disables JSON response parsing for the request.           |
 | bru.isSafeMode()                 | Detects whether the script is running in Safe Mode.       |
 | bru.cwd()                        | Returns the current working directory.                    |
 | bru.runRequest(requestPathName)  | Executes a request by its path name.                      |
@@ -1589,18 +1601,6 @@ console.log(userInfo);
 //   Name: Clara Johnson
 //   Job: Senior Developer
 //   Email: clara.johnson@example.com
-```
-
-### `bru.disableParsingResponseJson()`
-
-Prevents Bruno from automatically parsing the response body as JSON, even when the `Content-Type` is `application/json`. After calling this, `res.getBody()` returns the raw string. Call this in a **pre-request** script.
-
-```javascript
-// Keep the raw JSON string to process with a custom parser
-bru.disableParsingResponseJson();
-
-// Then in the post-response script:
-// const rawString = res.getBody(); // returns string, not object
 ```
 
 ### `bru.cwd()`
