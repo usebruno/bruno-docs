@@ -306,27 +306,6 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
     }
   }
 
-  /* Narrow desktop: ten pills + wordmark + icon-search share ~1024px only
-     if the pills tighten and the group labels come off (dividers stay).
-     Re-check if a tab is added. */
-  @media (max-width: 1249.98px) {
-    .nav-tabs .nav-tabs-item::before {
-      display: none;
-    }
-    .nav-tabs .nav-tabs-item {
-      font-size: 12.5px;
-      padding: 6px 7px;
-    }
-    .nav-tabs .nav-tabs-item[href^="/api-client"],
-    .nav-tabs .nav-tabs-item[href^="/reference"] {
-      margin-left: 17px;
-    }
-    .nav-tabs .nav-tabs-item[href^="/api-client"]::after,
-    .nav-tabs .nav-tabs-item[href^="/reference"]::after {
-      right: calc(100% + 8px);
-    }
-  }
-
   /* Row: centered pills, 2px apart inside a group (the stock gap-x-6 is
      far too wide for clustering); nothing shrinks, nothing wraps. */
   div.nav-tabs.nav-tabs {
@@ -468,6 +447,32 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
   .dark .nav-tabs .nav-tabs-item[href^="/api-client"]::after,
   .dark .nav-tabs .nav-tabs-item[href^="/reference"]::after {
     background: rgb(255 255 255 / 0.1);
+  }
+
+  /* Narrow desktop: ten pills + wordmark + icon-search share ~1024px only
+     if the pills tighten and the group labels come off (dividers stay).
+     Re-check if a tab is added.
+     MUST stay below the base pill/label/divider rules above: every rule
+     here ties on specificity with its base counterpart, and a media query
+     adds none — source order is the only thing that lets this tier win.
+     (It once sat above them, which left it fully dead: below ~1200px the
+     full-width row ran under the pinned search field and theme toggle.) */
+  @media (max-width: 1249.98px) {
+    .nav-tabs .nav-tabs-item::before {
+      display: none;
+    }
+    .nav-tabs .nav-tabs-item {
+      font-size: 12.5px;
+      padding: 6px 7px;
+    }
+    .nav-tabs .nav-tabs-item[href^="/api-client"],
+    .nav-tabs .nav-tabs-item[href^="/reference"] {
+      margin-left: 17px;
+    }
+    .nav-tabs .nav-tabs-item[href^="/api-client"]::after,
+    .nav-tabs .nav-tabs-item[href^="/reference"]::after {
+      right: calc(100% + 8px);
+    }
   }
 
   /* Hover panels (nav-dropdowns.js): unchanged from the folder-tab
