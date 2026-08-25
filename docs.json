@@ -128,6 +128,7 @@
               },
               {
                 "group": "Variables",
+                "boost": 3,
                 "pages": [
                   "variables/overview",
                   "variables/environment-variables",
@@ -175,6 +176,7 @@
                   "secrets-management/dotenv-file",
                   {
                     "group": "Secret Managers",
+                    "boost": 3,
                     "pages": [
                       "secrets-management/secret-managers/overview",
                       "secrets-management/secret-managers/migration",
@@ -205,6 +207,15 @@
                           "secrets-management/secret-managers/azure-key-vault/using-secrets",
                           "secrets-management/secret-managers/azure-key-vault/cli-authentication"
                         ]
+                      },
+                      {
+                        "group": "Google Cloud Secret Manager",
+                        "pages": [
+                          "secrets-management/secret-managers/google-secret-manager/overview",
+                          "secrets-management/secret-managers/google-secret-manager/adding-a-secret-provider",
+                          "secrets-management/secret-managers/google-secret-manager/configuring-and-fetching-secrets",
+                          "secrets-management/secret-managers/google-secret-manager/using-secrets"
+                        ]
                       }
                     ]
                   }
@@ -228,6 +239,7 @@
               },
               {
                 "group": "Scripts",
+                "boost": 3,
                 "pages": [
                   "testing/script/overview",
                   "testing/script/javascript-reference",
@@ -310,6 +322,7 @@
               },
               {
                 "group": "Apps",
+                "tag": "Beta",
                 "pages": [
                   "apps/overview",
                   "apps/configure",
@@ -342,6 +355,7 @@
             "groups": [
               {
                 "group": "Overview",
+                "boost": 3,
                 "pages": [
                   "bru-cli/overview",
                   "bru-cli/quick-start",
@@ -350,6 +364,7 @@
               },
               {
                 "group": "Run Collections",
+                "boost": 3,
                 "pages": [
                   "bru-cli/runCollection",
                   "bru-cli/commandOptions",
@@ -359,6 +374,7 @@
               },
               {
                 "group": "Configuration",
+                "boost": 3,
                 "pages": [
                   "bru-cli/proxyConfiguration",
                   "bru-cli/secret-managers"
@@ -366,6 +382,7 @@
               },
               {
                 "group": "CI/CD",
+                "boost": 3,
                 "pages": [
                   "bru-cli/docker",
                   {
@@ -418,9 +435,12 @@
             "icon": "server",
             "groups": [
               {
-                "group": "Overview",
+                "group": "Mock Servers",
+                "tag": "Beta",
                 "pages": [
-                  "mock-servers/overview"
+                  "mock-servers/overview",
+                  "mock-servers/create-mock-server",
+                  "mock-servers/run-mock-server"
                 ]
               }
             ]
@@ -479,7 +499,8 @@
                   "bru-lang/language",
                   "bru-lang/tag-reference",
                   "bru-lang/samples",
-                  "bru-lang/syntax-highlighting"
+                  "bru-lang/syntax-highlighting",
+                  "bru-lang/yaml-migration"
                 ]
               }
             ]
@@ -1433,6 +1454,9 @@
   "integrations": {
     "ga4": {
       "measurementId": "G-EB5Y7HLTX3"
+    },
+    "posthog": {
+      "apiKey": "phc_7gtqSrrdZRohiozPMLIacjzgHbUlhalW1Bu16uYijMR"
     }
   },
   "redirects": [

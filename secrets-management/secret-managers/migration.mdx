@@ -15,7 +15,7 @@ Bruno v4 changes where secret manager configuration lives. This guide explains w
 | **Variable syntax** | `{{$secrets.name.keyname}}` | `{{name.keyname}}` (**recommended**) |
 | **Legacy syntax** | — | `{{$secrets.name.keyname}}` still resolves, shown with a deprecation underline |
 | **CLI migration** | Not needed | CLI warns if `secrets.json` exists but environment file has no `externalSecrets` — open the app to migrate |
-| **Providers** | HashiCorp Vault only (CLI) | HashiCorp Vault, AWS Secrets Manager, Azure Key Vault |
+| **Providers** | HashiCorp Vault only (CLI) | HashiCorp Vault, AWS Secrets Manager, Azure Key Vault, Google Cloud Secret Manager |
 
 ---
 
@@ -174,6 +174,13 @@ Both work in v4. The old syntax is shown with a deprecation underline in the edi
     BRUNO_AZURE_CLIENT_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
     BRUNO_AZURE_CLIENT_SECRET=your-client-secret
     ```
+
+    **Google Cloud Secret Manager (service account)**
+    ```bash
+    BRUNO_GCP_SECRETS_MANAGER_PROJECT_ID=my-project
+    BRUNO_GCP_SECRETS_MANAGER_CLIENT_EMAIL=service-account@my-project.iam.gserviceaccount.com
+    BRUNO_GCP_SECRETS_MANAGER_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
+    ```
   </Step>
   <Step title="Update your CLI command">
     Old command (pre-v4):
@@ -210,8 +217,8 @@ The old `{{$secrets.name.keyname}}` syntax still resolves in v4 and will continu
 **`runtimeVariables` overrides do not bypass secret resolution.**
 Secret variables are resolved first. If a secret and a runtime variable share the same name, the secret value takes precedence (external secrets sit above runtime vars in the precedence chain).
 
-**The `--secrets-env-file` flag is required for AWS and Azure in CI.**
-Unlike HashiCorp Vault (which can use `--env-var` for token auth), AWS and Azure credentials must be passed via `--secrets-env-file`. Flat `--env-var` flags are not read by the AWS/Azure credential resolver.
+**The `--secrets-env-file` flag is required for AWS, Azure, and GCP in CI.**
+Unlike HashiCorp Vault (which can use `--env-var` for token auth), AWS, Azure, and Google Cloud credentials must be passed via `--secrets-env-file`. Flat `--env-var` flags are not read by those credential resolvers.
 
 ---
 

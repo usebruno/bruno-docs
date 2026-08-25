@@ -46,6 +46,23 @@ bru.setVar("isActive", true);
 // Interpolates to: { "active": true }
 ```
 
+## Referencing variables inside other variables
+
+Interpolation is recursive: if a variable's value contains another `{{...}}` placeholder, Bruno resolves the inner reference too. This lets you compose one variable from others directly in the **Vars** editor, without a pre-request script.
+
+```javascript
+// Set variables that reference each other
+bru.setVar("host", "api.example.com");
+bru.setVar("baseUrl", "https://{{host}}/v1");
+```
+
+```http
+GET {{baseUrl}}/users
+// Interpolates to: https://api.example.com/v1/users
+```
+
+The same works for values entered as environment, collection, or folder variables in the UI. Bruno keeps resolving until every placeholder is replaced or an unknown variable is left in place. Cycles (for example, `a` → `{{b}}` and `b` → `{{a}}`) are detected and the last unresolved placeholder is left as-is.
+
 ## Object Interpolation
 
 <Info>

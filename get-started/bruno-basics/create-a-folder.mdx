@@ -19,6 +19,52 @@ Bruno helps you organize your API requests efficiently by grouping them into fol
 
 Your new folder is now ready to organize your requests!
 
+## Ignore folders
+
+You can hide folders from a collection without deleting them. Ignoring a folder adds it to the collection's ignore config and removes it from the sidebar. This is useful for folders that should stay on disk (for example assets, fixtures, or generated files) but should not appear as part of the runnable collection.
+
+1. Right-click a folder in the collection sidebar (or use the `···` menu).
+2. Select **Ignore**.
+3. Bruno adds the folder to the collection ignore config and the folder disappears from the sidebar.
+
+![Ignore folder from the sidebar](/images/screenshots/v4/chores/ignore-folder.webp)
+
+<Info>
+  You no longer need to hand-edit the collection config file to ignore a folder. Use the sidebar menu instead. Bruno updates `opencollection.yml` or `bruno.json` for you.
+</Info>
+
+### Config after ignoring a folder
+
+After you ignore a folder such as `assets` from the UI, Bruno appends it to the ignore list. Existing entries like `node_modules` and `.git` stay unchanged.
+
+<Tabs>
+  <Tab title="OpenCollection YAML">
+    ```yaml title="opencollection.yml"
+    extensions:
+      bruno:
+        ignore:
+          - node_modules
+          - .git
+          - certificates
+          - assets   # added when you choose Ignore on the assets folder
+    ```
+  </Tab>
+  <Tab title="Bru Collections">
+    ```json title="bruno.json"
+    {
+      "ignore": [
+        "node_modules",
+        ".git",
+        "certificates",
+        "assets"
+      ]
+    }
+    ```
+  </Tab>
+</Tabs>
+
+In the example above, `assets` is the folder ignored from the sidebar. The folder remains on disk. It is only hidden from the collection tree.
+
 ## Custom Folder Names
 
 You can use any characters in your folder names, including special characters like `/`, `[`, `]`, `*`, etc. Bruno automatically handles filesystem compatibility by replacing unsupported characters with `-` in the filenames while preserving your original folder name.

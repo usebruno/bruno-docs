@@ -56,6 +56,16 @@ This setting controls the integration with a Vault for secret management, which 
 
 ![vault-secrets](/images/screenshots/get-started/config/settings/vault-server.webp)
 
+## Client Certificates
+
+<Note>
+  Global client certificates are available in Bruno **v4.1.0+**.
+</Note>
+
+Configure client certificates once under **Preferences → Client Certificates** and reuse them across collections. Each certificate has an enable/disable switch. Collection certificates still take precedence for the same domain. See [Add and Manage Certificates](/auth/add-and-manage-certs) for setup, precedence, schema, and CLI behavior.
+
+![Global client certificates](/images/screenshots/v4/chores/preferences-client-cert.webp)
+
 ## Git Providers
 
 Connect Bruno to your Git hosting service to enable in-app repository access, cloning, and collaboration workflows. See the [Git Providers](/git-providers/overview) guide for setup instructions for each supported provider.
@@ -77,6 +87,17 @@ Configure AI settings for Bruno's native AI features and external agent integrat
 Control how Bruno caches data locally. You can view the current cache size and clear it from this tab to free up disk space or resolve stale data issues.
 
 ![cache-settings](/images/screenshots/v4/preferences/cache.webp)
+
+## Beta
+
+The **Beta** tab lists opt-in features that are still under active development. Toggle a feature on to enable it, and off to disable it. Available beta features include:
+
+- **AI Assistant** — Generate scripts, tests, and documentation from the request tab. See the [Bruno AI](/ai/bruno-ai/introduction) guide.
+- **File cache** — Speed up how quickly your collections open by keeping a local cache on disk. Manage it from the [Cache](#cache) tab.
+- **Akamai EdgeGrid** — Sign requests with the Akamai EdgeGrid authentication scheme. See the [Akamai EdgeGrid auth](/auth/akamai-edgegrid) guide.
+- **Mock Server** — Run a local [mock server](/mock-servers/create-mock-server) using response examples defined in your collection. Useful for serving mock API responses during frontend development without a real backend.
+
+The list of available beta features changes as new capabilities are promoted or graduated to general availability. If the tab shows "No beta features are currently available", none are opt-in in your version.
 
 ## Support
 

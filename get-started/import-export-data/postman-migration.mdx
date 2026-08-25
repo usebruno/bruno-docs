@@ -29,9 +29,9 @@ Now simply follow the instructions for [Importing Collections](/get-started/impo
 
 ## Export Data Dump
 
-<Callout type="default">
-  Bulk Import from Postman is included in Bruno Ultimate Edition
-</Callout>
+<Tip>
+  Bulk Import from Postman is included in [Bruno Ultimate Edition](https://www.usebruno.com/pricing)
+</Tip>
 
 You can export a data dump of all your collections and environments in Postman. You can then import the data into any Bruno.
 
@@ -147,3 +147,24 @@ With environments properly configured, your API requests will work seamlessly ac
 <Info>
   Postman allows variable values to be numbers, booleans, or objects, but Bruno stores all variable values as strings. During import, non-string values are automatically converted — for example, `5000` becomes `"5000"`, `true` becomes `"true"`, and objects are serialized as JSON strings.
 </Info>
+
+## Preserve Postman Scripts
+
+By default, Bruno translates Postman script APIs (such as `pm.test` and `pm.environment`) to their Bruno equivalents during import and export. 
+If you have complex scripting setups and want Bruno to leave scripts untouched, enable **Preserve scripts**. When this option is on:
+
+- Scripts are kept **verbatim** as `pm.*` during import.
+- Collection structure, requests, variables, and settings are still converted as usual during import.
+- Scripts are converted to Bruno script APIs during export.
+
+### Enable Preserve scripts on import
+
+1. Click the **+** icon in the top-left sidebar and select **Import Collection**.
+2. Choose your Postman collection file and continue to the import dialog.
+3. Click **Options**, then expand **Show Advanced Options**.
+4. Turn on the **Preserve scripts** toggle (off by default).
+5. Click **Import**.
+
+![Preserve scripts option](/images/screenshots/v4/chores/preserve-postman-scripts.webp)
+
+The same **Preserve scripts** option is available when exporting a Bruno collection to Postman format, so you can round-trip collections without Bruno rewriting your scripts.

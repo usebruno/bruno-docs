@@ -9,11 +9,12 @@
 //
 // NAV_SECTIONS is generated from docs.json (v4 `navigation.versions[0].tabs`):
 // one entry per tab, one row per group (or per page for pages-only tabs, or per
-// menu item for menu tabs), href = the group's first page. It is matched to
-// tabs BY LABEL (the tab's visible text), so renaming a tab in docs.json
+// menu item for menu tabs), href = the group's first page. Single-group tabs
+// (Mock Servers) list their pages instead, like pages-only tabs. It is matched
+// to tabs BY LABEL (the tab's visible text), so renaming a tab in docs.json
 // without updating this map simply leaves that tab dropdown-less — a safe
 // failure, but keep the two files in sync. Tabs with fewer than 2 sections
-// (Mock Servers today) get no dropdown on purpose.
+// get no dropdown on purpose.
 //
 // Mechanics worth knowing before editing:
 // - Each `.nav-tabs-item` is position:relative and overflow-visible, so the
@@ -72,7 +73,12 @@
       { label: "Write Docs in Bruno", href: "/api-docs/workspace-docs" },
       { label: "Generate HTML Docs", href: "/html-docs/overview" },
     ],
-    "VS Code Extension": [
+    "Mock Servers": [
+      { label: "Overview", href: "/mock-servers/overview" },
+      { label: "Create a Mock Server", href: "/mock-servers/create-mock-server" },
+      { label: "Run a Mock Server", href: "/mock-servers/run-mock-server" },
+    ],
+    "VS Code": [
       { label: "Overview", href: "/vs-code-extension/overview" },
       {
         label: "Install and Configure",

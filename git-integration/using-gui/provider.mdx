@@ -139,18 +139,38 @@ By following these steps, your changes are now committed and tracked in Git, rea
 
 The GUI-based Git integration in Bruno allows both engineering and non-engineering teams to work together in a fast, efficient, and accurate manner. This integration ensures that your collections remain consistently up-to-date across all team members.
 
-> Before you can push or pull changes, ensure that the **remote repository** is linked to your project.
+<Warning>
+  Before you can push or pull changes, ensure that the **remote repository** is linked to your project. Learn how to connect to a remote repository [here](#connecting-to-remote-repository).
+</Warning>
 
-Push your local changes to the remote repository with just a few clicks.
+Push your local commits to the remote repository with just a few clicks.
 
-1. Go to **Git UI** and click the **Fetch** button.
+1. Go to **Git UI**.
 2. Click the **Push** button.
+3. Bruno opens the **Push to other branches** dialog and fetches your remotes and branches. 
+4. Select the branch you want to push to. Your current branch is selected by default and is tagged **Current**. 
+5. If your collection has more than one remote, pick the one you want from the **Remote** dropdown above the branch list.
+6. The note at the bottom of the dialog confirms the source and destination, such as *Changes will be pushed from main (current branch) to origin/main*.
+7. Click **Push to selected branch**.
 
-![Push Pull](/images/screenshots/git-integration/git-gui/8-push-pull.webp)
+<Note>
+Remote branches appear as `<remote>/<branch>` e.g. `origin/main`. Use the **Search branches...** box to filter longer lists.
+</Note>
+![Push to other branches](/images/screenshots/v4/chores/git-push.webp)
 
 Now you can see all your local changes pushed to the remote repository.
 
-> Follow the Consumer guide to learn about the pulling changes feature.
+If the branch you're pushing doesn't exist on the remote yet, Bruno creates it and sets it as the upstream branch for you with no extra steps needed.
+
+#### When a Push Fails
+
+If the push cannot complete, the dialog stays open and shows the Git output for the operation, and the primary button changes to **Close**. Close the dialog and click **Push** again to retry.
+
+Retrying helps with transient failures such as a network timeout or a slow remote. For failures that need a fix first rejected pushes because the remote has commits you don't have locally, or missing credentials resolve the underlying issue and then push again. 
+
+In the case of a rejected push, [pull](./consumer#pulling-changes) the remote changes first, then push.
+
+
 
 ### Branch Creation and Checkout
 
