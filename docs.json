@@ -1471,6 +1471,56 @@
       "permanent": true
     },
     {
+      "source": "/mock-servers/create-and-run",
+      "destination": "/mock-servers/run-mock-server",
+      "permanent": true
+    },
+    {
+      "source": "/agents/introduction",
+      "destination": "/ai/integration/overview",
+      "permanent": true
+    },
+    {
+      "source": "/auth/oauth2-experimental/request-level-configuration",
+      "destination": "/auth/oauth2-2.0/overview",
+      "permanent": true
+    },
+    {
+      "source": "/secrets-management/secret-managers",
+      "destination": "/secrets-management/secret-managers/overview",
+      "permanent": true
+    },
+    {
+      "source": "/secrets-management/secret-managers/hashicorp-vault",
+      "destination": "/secrets-management/secret-managers/hashicorp-vault/overview",
+      "permanent": true
+    },
+    {
+      "source": "/secrets-management/secret-managers/aws-secrets-manager",
+      "destination": "/secrets-management/secret-managers/aws-secrets-manager/overview",
+      "permanent": true
+    },
+    {
+      "source": "/secrets-management/secret-managers/azure-key-vault",
+      "destination": "/secrets-management/secret-managers/azure-key-vault/overview",
+      "permanent": true
+    },
+    {
+      "source": "/secrets-management/secret-managers/google-secret-manager",
+      "destination": "/secrets-management/secret-managers/google-secret-manager/overview",
+      "permanent": true
+    },
+    {
+      "source": "/import-export-data/import-export-environments",
+      "destination": "/get-started/import-export-data/import-export-environments",
+      "permanent": true
+    },
+    {
+      "source": "/bruno-basics/create-a-workspace",
+      "destination": "/get-started/bruno-basics/create-a-workspace",
+      "permanent": true
+    },
+    {
       "source": "/secrets-management/secret-managers/hashicorp-vault/using-with-cli",
       "destination": "/bru-cli/secret-managers",
       "permanent": true
