@@ -1,0 +1,132 @@
+---
+title: "Mock with Response Examples"
+sidebarTitle: "With Response Examples"
+description: "Walk through saving collection response examples, creating a mock server from them, syncing, adding rules, and serving the mock locally."
+---
+
+Saved [response examples](/send-requests/res-data-cookies/response-examples) are snapshots of how an API behaves: success payloads, validation errors, empty lists, and other states you care about. Once they live on a request, you can document those cases, share them with the team, and with Mock Servers, serve them on `localhost` so a frontend or integration test does not need the real backend.
+
+<Warning>
+  Mock Servers are in **Beta**. Open **Preferences → Beta** and turn on **Mock Server**. The **Mock Servers** section appears in the sidebar only after you opt in.
+</Warning>
+
+## Create response examples
+
+You can create an example from a request’s context menu without sending the request first. Use this when you already know the status, headers, and body you want to mock.
+
+1. Open Bruno and open the collection that contains the request.
+2. Click the request’s context menu (**⋯**, three dots).
+3. Select **Create Example**.
+4. Enter an **Example name**, optional **description**, **status code** (`200 OK` by default), and **body type** (`JSON` by default).
+5. Click **Create Example**.
+
+![Create Response Example dialog](/images/screenshots/v4/mock-severs/tutorial-create-response-example.webp)
+
+The example appears nested under the request. You can also save a live response as an example after you send a request, see [Response Examples](/send-requests/res-data-cookies/response-examples).
+
+<Tip>
+  Create at least one example per route you plan to mock. Multiple examples on the same method and path become alternative mock responses once you add [rules](/mock-servers/run-mock-server#rules).
+</Tip>
+
+## Create a mock from collection examples
+
+With examples in the collection, create a mock server that uses those examples as its source.
+
+<Warning>
+  If you have not already, enable Mock Servers under **Preferences → Beta**.
+</Warning>
+
+1. In the sidebar, click the **+** icon next to **Mock Servers**.
+2. Enter a **name**. Keep the source as **Collection** (this is the default).
+3. Choose the collection from the dropdown.
+4. Optionally open **Advanced settings** to set the **port** and **response delay**.
+5. Click **Create**.
+
+![Create Mock Server dialog with Collection as the source](/images/screenshots/v4/mock-severs/tutorial-create-mock-server.webp)
+
+Bruno opens the mock [dashboard](/mock-servers/run-mock-server#dashboard-interface-walkthrough). The server is not running yet — you still need to sync examples, then start it.
+
+![Mock server dashboard before syncing examples](/images/screenshots/v4/mock-severs/tutorial-collection-examplemock-server-dashboard.webp)
+
+## Sync with Examples
+
+On the dashboard, click **Sync with Examples**. Bruno copies every saved example in the linked collection into mock responses (method, path, status, headers, and body).
+
+Those responses appear on the **Responses** tab. Use the search field to find a specific example by name or path.
+
+![Responses tab after syncing with collection examples](/images/screenshots/v4/mock-severs/tutorial-collection-example-sync-examples.webp)
+
+<Info>
+  Sync again after you add or change examples in the collection so the mock stays aligned with the source.
+</Info>
+
+## Add a new mock response
+
+You are not limited to synced examples. Click **New Mock Response** and provide:
+
+- A **name**
+- Optional **description**
+- **Status code** (`200 OK` by default)
+- **Body type** (`JSON` by default)
+
+Optionally **copy from a collection example** to reuse a request already in the collection instead of starting from a blank response.
+
+## Respons Editor
+
+Each mock response opens in an editor with two side-by-side sections:
+- Left: rules, demo request, response URL, try button and open as new request button (when to return this response) 
+- Right: expected body, headers and try results (what the response should look like)
+
+![Mock response editor for a synced collection example](/images/screenshots/v4/mock-severs/tutorial-collection-example-response-editor.webp)
+
+### Left section: rules and demo request
+
+Use this side to decide **when** this response is returned.
+
+**Start the server** from the dashboard header. The first time, Bruno uses port **4000** unless you changed it in **Advanced settings**. After the server is running, each mock API is available at `http://localhost:4000`. Change the port later from **Mock Server Settings** (gear icon).
+
+#### Rules
+
+To add matching logic, click **Add rule** or the **Edit** icon (top-right of the response). The **Rules** and **Demo Request** sections appear. See [Rules](/mock-servers/run-mock-server#rules) on the dashboard guide for field-level detail.
+
+You can match on **body**, **headers**, and **query** parameters so the same path can return different payloads (admin vs guest, missing field vs valid body, and so on).
+
+**Match** controls how those conditions combine:
+
+| Match | Behavior |
+|-------|----------|
+| **All rules AND** (default) | Every condition must pass. |
+| **Any rule OR** | One passing condition is enough. |
+
+After you add or change rules, click **Save** in the top-right of the editor. Rules are not applied until you save.
+
+![Rules editor with Save, Try, and Try Result](/images/screenshots/v4/mock-severs/tutorial-collection-examples-rules.webp)
+
+With the mock server running, click **Try** next to the response URL to send the demo request. Open the **Try Result** tab on the right: it shows only the body and headers you defined in **Expected** and **Headers**. Anything not set there will not appear in Try Result.
+
+**Demo Request** is generated from the rules you defined. It shows a sample request that would select this response, so you can copy it into a client or use **Try** while the server is running.
+
+**Open as New Request** will open the demo request in a new request tab with rules and demo request applied.
+
+### Right section: expected body and headers
+
+Use this side to define **what** the mock returns: the **Expected** body and **Headers**, plus the status code.
+
+The body can be JSON, HTML, text, or XML. Headers are independent of body type, set `Content-Type` and any other headers the client should see.
+
+**Try Result** shows the response body and headers from **Expected** and **Headers** after you click **Try**. Only those values appear — the tab does not invent extra fields.
+
+## Inspect traffic
+
+After the server is running, use the dashboard tabs to confirm routes and debug matches:
+
+- **[Routes](/mock-servers/run-mock-server#routes-tab)** - every registered method and path, how many responses sit on that route, and hit counts.
+- **[Request Log](/mock-servers/run-mock-server#request-log-tab)** - live incoming requests, which mock response was selected (or **No Match**), status, delay, and the Match Trace Inspector.
+
+For the full control surface (delay, refresh, copy URL, filters), see the [dashboard walkthrough](/mock-servers/run-mock-server#dashboard-interface-walkthrough).
+
+## Next steps
+
+- [Mock with OpenAPI](./mock-from-openapi) - generate the same kind of mock from an OpenAPI spec instead of collection examples.
+- [Create a mock server](/mock-servers/create-mock-server) - collection, spec, and standalone sources.
+- [Run a mock server](/mock-servers/run-mock-server) - dashboard, rules, routes, and request log.
