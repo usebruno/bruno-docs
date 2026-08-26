@@ -297,11 +297,31 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
   #search-bar-entry {
     width: 15rem;
   }
+  /* Mintlify's production renderer (newer than the local CLI) also puts
+     an "Ask Assistant" button (#assistant-entry) beside search in this
+     wrapper — dev builds don't render it, so its rules no-op locally.
+     The corner compacts in tiers so it always clears the tab row, which
+     ends at ~1059px labelled / ~842px compacted (see the tier below):
+     under 1520px the assistant drops its label (icon stays clickable) —
+     with the label, field + assistant need ~1520px before the wrapper's
+     left edge clears the row; under 1450px the search field drops to
+     icon + ⌘K; under 1250px the ⌘K hint goes too, leaving two icon
+     buttons (~94px) that clear the compacted row down to 1024px. */
+  @media (max-width: 1519.98px) {
+    #assistant-entry span {
+      display: none;
+    }
+  }
   @media (max-width: 1449.98px) {
     #search-bar-entry {
       width: auto;
     }
     #search-bar-entry .truncate {
+      display: none;
+    }
+  }
+  @media (max-width: 1249.98px) {
+    #search-bar-entry span {
       display: none;
     }
   }
@@ -335,11 +355,14 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
   }
 
   /* Spec: no icons — the group labels do the wayfinding job instead.
-     svg.h-4 matches only the FA icon masks; the viewBox match is
-     Popular's native Radix caret (its Tailwind classes change with menu
-     state, the viewBox doesn't). */
-  .nav-tabs .nav-tabs-item svg.h-4,
-  .nav-tabs .nav-tabs-item svg[viewBox="0 -9 3 24"] {
+     Hide EVERY svg inside a tab (icon masks and Popular's menu caret),
+     sparing only our injected dropdown panels. This used to enumerate
+     the exact markup (svg.h-4 + the caret's viewBox) and rotted when
+     Mintlify's production renderer drifted from the local CLI's — prod
+     emits size-4 icons and a viewBox="0 0 18 18" caret, so Popular grew
+     a visible star + caret on the deployed preview only. The tabs carry
+     no other svgs, so the blanket rule is the drift-proof shape. */
+  .nav-tabs .nav-tabs-item svg:not(.bru-nav-dd svg) {
     display: none;
   }
 
