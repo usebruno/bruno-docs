@@ -305,12 +305,16 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
      an "Ask Assistant" button (#assistant-entry) beside search in this
      wrapper — dev builds don't render it, so its rules no-op locally.
      The corner compacts in tiers so it always clears the tab row, which
-     ends at ~1059px: under 1520px the assistant drops its label (icon
-     stays clickable) — with the label, field + assistant need ~1520px
-     before the wrapper's left edge clears the row; under 1450px the
-     search field drops to icon + ⌘K (icon + ⌘K + assistant icon ≈ 122px,
-     which clears the row down to this block's 1250px floor). */
-  @media (max-width: 1519.98px) {
+     ends at ~1075px on the hosted renderer (~1059px in dev — its fonts
+     rasterize the row a hair narrower; the hosted number is the one the
+     tiers are sized against): under 1536px the assistant drops its
+     label (icon stays clickable) — labelled, field + assistant put the
+     wrapper's left edge at the row's end near 1527px, so 1536 keeps
+     ~22px of air; under 1450px the search field drops to icon + ⌘K;
+     under 1280px the ⌘K hint goes too, leaving two icon buttons whose
+     left edge clears the row by ~29px at this block's 1250px floor
+     (icon + ⌘K alone would land 1px from the row at exactly 1250). */
+  @media (max-width: 1535.98px) {
     #assistant-entry span {
       display: none;
     }
@@ -320,6 +324,11 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
       width: auto;
     }
     #search-bar-entry .truncate {
+      display: none;
+    }
+  }
+  @media (max-width: 1279.98px) {
+    #search-bar-entry span {
       display: none;
     }
   }
