@@ -120,8 +120,9 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
    their own lg:px-12 — trimmed to the same 1rem so the wordmark, the first
    tab and the sidebar share one left edge; without this the header floats
    48px in while the nav below it starts at 16px and the shell looks torn.
-   Scoped >= 1024px: below lg the sidebar is display:none and the navbar
-   uses mx-4, both untouched.
+   Scoped >= 1250px: below that the shell runs in mobile mode (see the
+   forced-mobile block at the end of the nav section) where the sidebar
+   is display:none and the navbar uses mx-4, both untouched.
 
    Maintenance couplings:
    - `px-12` appears in the navbar only on those two rows (checked in the
@@ -132,7 +133,7 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
      the resulting gap after a bump.
    --------------------------------------------------------------------------- */
 
-@media (min-width: 1024px) {
+@media (min-width: 1250px) {
   #sidebar {
     left: 1rem;
     /* A whisper of a panel behind the nav — enough to separate it from
@@ -203,8 +204,11 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
    dividers are CSS-only and invisible to screen readers — purely visual
    grouping. The tabs themselves remain plain anchors and read fine.
 
-   Scoped >= 1024px; below lg the row is display:none and Mintlify's
-   mobile menu takes over, untouched.
+   Scoped >= 1250px. The tabs never shrink: below 1250px the shell drops
+   straight to Mintlify's mobile mode (hamburger drawer) — natively that
+   happens at lg (1024px), and the forced-mobile block after this one
+   extends it up to 1249.98px, since the full-size labelled row measures
+   ~1059px and cannot share 1024-1249px with the corner controls.
 
    Maintenance couplings:
    - `.nav-tabs`, `.nav-tabs-item`, the active tab's text-shadow class and
@@ -215,7 +219,7 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
      updating the three href hooks here.
    --------------------------------------------------------------------------- */
 
-@media (min-width: 1024px) {
+@media (min-width: 1250px) {
   /* ---- Single-bar merge -------------------------------------------------
      The tab row (`hidden lg:flex px-12 h-12`, the sibling below the h-16
      wordmark row inside the same `div.relative`) is lifted out of flow and
@@ -301,12 +305,11 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
      an "Ask Assistant" button (#assistant-entry) beside search in this
      wrapper — dev builds don't render it, so its rules no-op locally.
      The corner compacts in tiers so it always clears the tab row, which
-     ends at ~1059px labelled / ~842px compacted (see the tier below):
-     under 1520px the assistant drops its label (icon stays clickable) —
-     with the label, field + assistant need ~1520px before the wrapper's
-     left edge clears the row; under 1450px the search field drops to
-     icon + ⌘K; under 1250px the ⌘K hint goes too, leaving two icon
-     buttons (~94px) that clear the compacted row down to 1024px. */
+     ends at ~1059px: under 1520px the assistant drops its label (icon
+     stays clickable) — with the label, field + assistant need ~1520px
+     before the wrapper's left edge clears the row; under 1450px the
+     search field drops to icon + ⌘K (icon + ⌘K + assistant icon ≈ 122px,
+     which clears the row down to this block's 1250px floor). */
   @media (max-width: 1519.98px) {
     #assistant-entry span {
       display: none;
@@ -317,11 +320,6 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
       width: auto;
     }
     #search-bar-entry .truncate {
-      display: none;
-    }
-  }
-  @media (max-width: 1249.98px) {
-    #search-bar-entry span {
       display: none;
     }
   }
@@ -472,32 +470,6 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
     background: rgb(255 255 255 / 0.1);
   }
 
-  /* Narrow desktop: ten pills + wordmark + icon-search share ~1024px only
-     if the pills tighten and the group labels come off (dividers stay).
-     Re-check if a tab is added.
-     MUST stay below the base pill/label/divider rules above: every rule
-     here ties on specificity with its base counterpart, and a media query
-     adds none — source order is the only thing that lets this tier win.
-     (It once sat above them, which left it fully dead: below ~1200px the
-     full-width row ran under the pinned search field and theme toggle.) */
-  @media (max-width: 1249.98px) {
-    .nav-tabs .nav-tabs-item::before {
-      display: none;
-    }
-    .nav-tabs .nav-tabs-item {
-      font-size: 12.5px;
-      padding: 6px 7px;
-    }
-    .nav-tabs .nav-tabs-item[href^="/api-client"],
-    .nav-tabs .nav-tabs-item[href^="/reference"] {
-      margin-left: 17px;
-    }
-    .nav-tabs .nav-tabs-item[href^="/api-client"]::after,
-    .nav-tabs .nav-tabs-item[href^="/reference"]::after {
-      right: calc(100% + 8px);
-    }
-  }
-
   /* Hover panels (nav-dropdowns.js): unchanged from the folder-tab
      branch — hidden by default, shown while pointer or focus is inside
      the tab item; the transparent wrapper bridges the pill->panel gap. */
@@ -558,6 +530,59 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
   .dark .bru-nav-dd-link:hover {
     background: #1a1d26;
     color: #f3f4f6;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Forced mobile mode, 1024–1249.98px
+   ---------------------------------------------------------------------------
+   The full-size labelled tab row measures ~1059px and cannot share
+   1024–1249px with the wordmark and the corner controls. The tabs are
+   never shrunk to fit (an earlier compaction tier did; dropped by
+   request) — instead the shell keeps Mintlify's mobile layout up to
+   1249.98px. Natively everything flips at lg (1024px) via Tailwind
+   variants; every mobile element is in the DOM at desktop widths and
+   hidden purely by CSS, so this block re-flips them for the range.
+   This file is injected unlayered, so plain rules here beat Mintlify's
+   @layer utilities without !important.
+
+   Both renderers were checked (the hosted one and the local CLI's —
+   they emit different DOMs, see the icon-hide note above): the hooks
+   below are identical in both. What flips, hide-side then show-side:
+   - The tab row (`hidden lg:flex` — the div owning .nav-tabs).
+   - The desktop search corner (the z-20 wrapper: field + assistant).
+   - #sidebar (`hidden lg:block`); the >=1250 block's overlay/margin
+     rules no longer apply here, so no compensation is needed.
+   - #content-area drops its sidebar gutter (dev lg:pl-[23.7rem] /
+     prod lg:pl-[5.7rem], both with lg:-ml-12) back to mobile's px-1.
+   - The mobile icon cluster (`flex lg:hidden`, search + assistant
+     icons) and the full-width drawer trigger bar (`lg:hidden` button,
+     h-14 py-4 px-5 in both renderers) come back; the drawer they open
+     is Mintlify's own — but it portals OUTSIDE #navbar and its overlay
+     wrapper (`fixed inset-0 … z-40 lg:hidden`) is itself lg-gated, so
+     it gets its own show rule. The lg:hidden guard on that selector is
+     what keeps the search modal's wrapper (`fixed inset-0 z-40`, never
+     lg-gated) out of its reach. The theme toggle isn't touched either
+     way.
+   Maintenance: these are Mintlify-emitted lg: variants, not public API.
+   If a hook rots, that element reverts to desktop behavior in the range
+   — re-check after Mintlify bumps, and keep this block's bounds in sync
+   with the >=1250 nav block above. */
+
+@media (min-width: 1024px) and (max-width: 1249.98px) {
+  #navbar div:has(> div.nav-tabs),
+  #navbar div[class*="z-20"]:has(#search-bar-entry),
+  #sidebar {
+    display: none;
+  }
+  #navbar div[class*="lg:hidden"],
+  #navbar button[class*="lg:hidden"],
+  div.fixed.inset-0.z-40[class*="lg:hidden"] {
+    display: flex;
+  }
+  #content-area {
+    padding-left: 0.25rem;
+    margin-left: 0;
   }
 }
 
