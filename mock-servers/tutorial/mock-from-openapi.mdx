@@ -1,18 +1,18 @@
 ---
-title: "Mock with OpenAPI"
-sidebarTitle: "With OpenAPI"
+title: "Mock Servers from OpenAPI"
+sidebarTitle: "From OpenAPI"
 description: "Walk through loading an OpenAPI spec in Bruno, generating mock responses from operations, syncing when the spec changes, and running the mock locally."
 ---
 
 An OpenAPI document already describes paths, methods, status codes, and response schemas. Bruno can turn that contract into a local mock so frontend and integration work can start before the real service exists or continue when the backend is unavailable.
 
-This tutorial loads a spec into Bruno, creates a spec-linked mock, generates responses from operations, and starts the server.
+This guide loads a spec into Bruno, creates a spec-linked mock, generates responses from operations, and starts the server.
 
 <Warning>
-  Mock Servers are in **Beta**. Open **Preferences → Beta** and turn on **Mock Server**. The **Mock Servers** section appears in the sidebar only after you opt in.
+  Mock Servers are in **Beta**. Open **Preferences → Beta** to turn on the **Mock Server** feature. The **Mock Servers** section appears in the sidebar only after you opt in.
 </Warning>
 
-## Open an OpenAPI spec
+## 1. Open an OpenAPI spec
 
 Bruno can view and work with existing OAS files. Full steps, including screenshots, are in [Viewing Existing OAS Files](/open-api/createOAS#viewing-existing-oas-files).
 
@@ -25,7 +25,7 @@ Bruno can view and work with existing OAS files. Full steps, including screensho
 
 Keep the spec in the workspace so the mock can stay linked to it.
 
-## Create a mock from the spec
+## 2. Create a Mock Server from the spec
 
 1. Enable Mock Servers under **Preferences → Beta** if they are not already on.
 2. Click the **+** icon next to **Mock Servers** in the sidebar.
@@ -39,7 +39,7 @@ Bruno opens the mock [dashboard](/mock-servers/run-mock-server#dashboard-interfa
 
 ![Spec-linked mock server dashboard with no responses yet](/images/screenshots/v4/mock-severs/tutorial-openapi-mock-dashboard.webp)
 
-## Generate from API Spec
+## 3. Generate from API Spec
 
 On the **Responses** tab you get two entry points:
 
@@ -54,19 +54,19 @@ Click **Generate from API Spec**. Generated items appear on the **Responses** ta
   Specs that define several status codes for one operation (for example `200` and `400`) produce several mock responses on the same route. Add [rules](/mock-servers/run-mock-server#rules) if you want the mock to pick among them instead of always returning the default.
 </Tip>
 
-## Sync with Spec
+## 4. Sync with Spec
 
 If the OpenAPI file changes, use **Sync with Spec**. Bruno re-imports the spec and updates responses that still match an operation (method and path). Custom responses you added or changed stay in place.
 
 Use this after you add endpoints, rename paths, or update example payloads in the spec.
 
-## Start the server
+## 5. Start the server
 
 Click **Start Server** in the dashboard header.
 
 The first start uses port **4000** unless you set another port in **Advanced settings**. Call the mock at `http://localhost:<port>` plus the operation path. Change the port later from **Mock Server Settings** (gear icon).
 
-## Response Editor
+## 6. Response Editor
 
 Each mock response opens in an editor with two side-by-side sections:
 
@@ -81,8 +81,6 @@ Generated spec responses use the same editor as any other mock. If one operation
 
 Use this side to decide **when** this response is returned.
 
-After you start the server, each mock API is available at `http://localhost:4000` plus the operation path, unless you changed the port in **Advanced settings**. Change the port later from **Mock Server Settings** (gear icon).
-
 #### Rules
 
 To add matching logic, click **Add rule** or the **Edit** icon (top-right of the response). The **Rules** and **Demo Request** sections appear. See [Rules](/mock-servers/run-mock-server#rules) on the dashboard guide for field-level detail.
@@ -94,27 +92,27 @@ You can match on **body**, **headers**, and **query** parameters so the same pat
 | Match | Behavior |
 |-------|----------|
 | **All rules AND** (default) | Every condition must pass. |
-| **Any rule OR** | One passing condition is enough. |
+| **Any rule (OR)** | One passing condition is enough. |
 
 After you add or change rules, click **Save** in the top-right of the editor. Rules are not applied until you save.
 
 ![Rules editor for a spec-generated mock response](/images/screenshots/v4/mock-severs/tutorial-openapi-spec-rules.webp)
 
-With the mock server running, click **Try** next to the response URL to send the demo request. Open the **Try Result** tab on the right: it shows only the body and headers you defined in **Expected** and **Headers**. Anything not set there will not appear in Try Result.
+With the mock server running, click **Try** next to the response URL to send the demo request. Open the **Try Result** tab on the right to see the body and headers the mock returned.
 
-**Demo Request** is generated from the rules you defined. It shows a sample request that would select this response, so you can copy it into a client or use **Try** while the server is running.
+**Demo Request** is generated from the rules you defined. It shows a sample request that would select this response.
 
 **Open as New Request** opens the demo request in a new request tab with the rules and demo request applied.
 
 ### Right section: expected body and headers
 
-Use this side to define **what** the mock returns: the **Expected** body and **Headers**, plus the status code.
+Use this side to see **what** the mock returns: the **Expected** body and **Headers**, plus the status code.
 
 The body can be JSON, HTML, text, or XML. Headers are independent of body type — set `Content-Type` and any other headers the client should see.
 
-**Try Result** shows the response body and headers from **Expected** and **Headers** after you click **Try**. Only those values appear — the tab does not invent extra fields.
+**Try Result** shows the response body and headers from **Expected** and **Headers** after you click **Try** (with the server running).
 
-## Inspect traffic
+## 7. Inspect traffic
 
 After the server is running:
 
@@ -125,6 +123,6 @@ See the [dashboard walkthrough](/mock-servers/run-mock-server#dashboard-interfac
 
 ## Next steps
 
-- [Mock with Response Examples](./mock-from-response-examples) -   same dashboard, sourced from collection examples instead of a spec.
+- [Mock Servers from Collection](./mock-from-response-examples) - same dashboard, sourced from collection examples instead of a spec.
 - [Create a mock server](/mock-servers/create-mock-server) - collection, spec, and standalone sources.
 - [Run a mock server](/mock-servers/run-mock-server) - dashboard, rules, routes, and request log.

@@ -315,7 +315,7 @@
                   "mock-servers/create-mock-server",
                   "mock-servers/run-mock-server",
                   {
-                    "group": "Mock Tutorial",
+                    "group": "Getting Started",
                     "pages": [
                       "mock-servers/tutorial/mock-from-response-examples",
                       "mock-servers/tutorial/mock-from-openapi"
