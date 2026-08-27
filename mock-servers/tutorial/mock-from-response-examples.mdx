@@ -84,28 +84,28 @@ You are not limited to synced examples. Click **New Mock Response** and provide:
 - **Status code** (`200 OK` by default)
 - **Body type** (`JSON` by default)
 
-Optionally **copy from a collection example** to reuse a request already in the collection instead of starting from a blank response.
+You can use the **copy from a collection example** option to reuse a request already in the collection instead of starting from a blank response.
 
 ## 5. Start the server
 
-**Start the server** from the dashboard header. The first time, Bruno uses port **4000** unless you changed it in **Advanced settings**. After the server is running, each mock API is available at `http://localhost:4000`. Change the port later from **Mock Server Settings** (gear icon).
+**Start the server** from the dashboard header. Bruno starts with port **4000** and increments to find a new available port for each new mock server. You can also change it in the **Advanced settings** upon creation or via the gear icon. After the server is running, each mock API is available at `http://localhost:4000` or its chosen port.
 
 ## 6. Response Editor
 
-Each mock response opens in an editor with two side-by-side sections:
+Each mock response opens in an editor:
 
-- Left: rules, demo request, response URL, try button and open as new request button (when to return this response)
-- Right: expected body, headers and try results (what the response should look like)
+- Left pane: rules, demo request, response URL, try button and open as new request button (when to return this response)
+- Right pane: expected body, headers and try results (what the response should look like)
 
 ![Mock response editor for a synced collection example](/images/screenshots/v4/mock-severs/tutorial-collection-example-response-editor.webp)
 
-### Left section: rules and demo request
+### Rules and demo request
 
-Use this side to decide **when** this response is returned. 
+Use this decide to decide **when** this response is returned. 
 
 #### Rules
 
-To add matching logic, click **Add rule** or the **Edit** icon (top-right of the response). The **Rules** and **Demo Request** sections appear. See [Rules](/mock-servers/run-mock-server#rules) on the dashboard guide for field-level detail.
+To add matching logic, click **Add rule** or the **Edit** icon (top-right of the response). The **Rules** and **Demo Request** tabs appear. See [Rules](/mock-servers/run-mock-server#rules) on the dashboard guide for field-level detail.
 
 You can match on **body**, **headers**, and **query** parameters so the same path can return different payloads (admin vs guest, missing field vs valid body, and so on).
 
@@ -113,7 +113,7 @@ You can match on **body**, **headers**, and **query** parameters so the same pat
 
 | Match | Behavior |
 |-------|----------|
-| **All rules AND** (default) | Every condition must pass. |
+| **All rules (AND)** (default) | Every condition must pass. |
 | **Any rule (OR)** | One passing condition is enough. |
 
 After you add or change rules, click **Save** in the top-right of the editor. Rules are not applied until you save.
@@ -127,7 +127,7 @@ With the mock server running, click **Try** next to the response URL to send the
 
 **Open as New Request** will open the demo request in a new request tab with rules and demo request applied.
 
-### Right section: expected body and headers
+### Expected body and headers
 
 Use this side to see **what** the mock returns: the **Expected** body and **Headers**, plus the status code.
 

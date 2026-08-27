@@ -62,28 +62,26 @@ Use this after you add endpoints, rename paths, or update example payloads in th
 
 ## 5. Start the server
 
-Click **Start Server** in the dashboard header.
-
-The first start uses port **4000** unless you set another port in **Advanced settings**. Call the mock at `http://localhost:<port>` plus the operation path. Change the port later from **Mock Server Settings** (gear icon).
+**Start the server** from the dashboard header. Bruno starts with port **4000** and increments to find a new available port for each new mock server. You can also change it in the **Advanced settings** upon creation or via the gear icon. After the server is running, each mock API is available at `http://localhost:4000` or its chosen port.
 
 ## 6. Response Editor
 
 Each mock response opens in an editor with two side-by-side sections:
 
-- Left: rules, demo request, response URL, **Try** button, and **Open as New Request** button (when to return this response)
-- Right: expected body, headers, and try results (what the response should look like)
+- Left pane: rules, demo request, response URL, **Try** button, and **Open as New Request** button (when to return this response)
+- Right pane: expected body, headers, and try results (what the response should look like)
 
 ![Mock response editor for a response generated from the spec](/images/screenshots/v4/mock-severs/tutorial-openapi-spec-response-editor.webp)
 
 Generated spec responses use the same editor as any other mock. If one operation has several statuses (`200` and `400`, for example), open each response and add rules so the mock can choose among them.
 
-### Left section: rules and demo request
+### Rules and demo request
 
 Use this side to decide **when** this response is returned.
 
 #### Rules
 
-To add matching logic, click **Add rule** or the **Edit** icon (top-right of the response). The **Rules** and **Demo Request** sections appear. See [Rules](/mock-servers/run-mock-server#rules) on the dashboard guide for field-level detail.
+To add matching logic, click **Add rule** or the **Edit** icon (top-right of the response). The **Rules** and **Demo Request** tabs appear. See [Rules](/mock-servers/run-mock-server#rules) on the dashboard guide for field-level detail.
 
 You can match on **body**, **headers**, and **query** parameters so the same path can return different payloads (admin vs guest, missing field vs valid body, and so on).
 
@@ -104,7 +102,7 @@ With the mock server running, click **Try** next to the response URL to send the
 
 **Open as New Request** opens the demo request in a new request tab with the rules and demo request applied.
 
-### Right section: expected body and headers
+### Expected body and headers
 
 Use this side to see **what** the mock returns: the **Expected** body and **Headers**, plus the status code.
 
