@@ -58,7 +58,7 @@
             "icon": "browser",
             "groups": [
               {
-                "group": "Overview",
+                "group": "API Client",
                 "pages": ["api-client/overview"]
               },
               {
@@ -344,7 +344,7 @@
             "icon": "terminal",
             "groups": [
               {
-                "group": "Overview",
+                "group": "CLI",
                 "boost": 3,
                 "pages": [
                   "bru-cli/overview",
@@ -393,7 +393,7 @@
             "icon": "book",
             "groups": [
               {
-                "group": "Overview",
+                "group": "API Docs",
                 "pages": ["api-docs/overview"]
               },
               {
@@ -443,10 +443,15 @@
           {
             "tab": "VS Code",
             "icon": "code",
-            "pages": [
-              "vs-code-extension/overview",
-              "vs-code-extension/install-config",
-              "vs-code-extension/send-req"
+            "groups": [
+              {
+                "group": "VS Code",
+                "pages": [
+                  "vs-code-extension/overview",
+                  "vs-code-extension/install-config",
+                  "vs-code-extension/send-req"
+                ]
+              }
             ]
           },
           {
@@ -454,7 +459,7 @@
             "icon": "shapes",
             "groups": [
               {
-                "group": "Overview",
+                "group": "Formats",
                 "pages": ["reference/overview"]
               },
               {
@@ -503,7 +508,7 @@
             "icon": "key",
             "groups": [
               {
-                "group": "Overview",
+                "group": "Licensing",
                 "pages": ["license-overview"]
               },
               {
