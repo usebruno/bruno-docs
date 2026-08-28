@@ -7,14 +7,18 @@
 // is pure CSS (:hover / :focus-within — see the "Nav tab dropdowns" block in
 // style.css); this file only builds the DOM.
 //
-// NAV_SECTIONS is generated from docs.json (v4 `navigation.versions[0].tabs`):
-// one entry per tab, one row per group (or per page for pages-only tabs, or per
-// menu item for menu tabs), href = the group's first page. Single-group tabs
-// (Mock Servers) list their pages instead, like pages-only tabs. It is matched
-// to tabs BY LABEL (the tab's visible text), so renaming a tab in docs.json
-// without updating this map simply leaves that tab dropdown-less — a safe
-// failure, but keep the two files in sync. Tabs with fewer than 2 sections
-// get no dropdown on purpose.
+// NAV_SECTIONS_BY_VERSION is generated from docs.json (`navigation.versions`):
+// one map per version, chosen at attach time from the URL's /v2 | /v3 prefix
+// (v4 pages carry no prefix). Per tab: one row per group (or per page for
+// pages-only tabs, or per menu item for menu tabs), href = the group's first
+// page. Single-group tabs (Mock Servers) list their pages instead, like
+// pages-only tabs. Maps are matched to tabs BY LABEL (the tab's visible text),
+// so renaming a tab in docs.json without updating this map simply leaves that
+// tab dropdown-less — a safe failure, but keep the two files in sync. Tabs
+// with fewer than 2 sections get no dropdown on purpose. Several versions
+// share tab labels ("Getting Started" exists in v2 AND v3) and React may
+// re-use tab DOM nodes across a version switch, so each injected panel is
+// stamped with its version (data-ver) and rebuilt when it goes stale.
 //
 // Mechanics worth knowing before editing:
 // - Each `.nav-tabs-item` is position:relative and overflow-visible, so the
@@ -36,90 +40,208 @@
 //   navbar re-renders. If hydration strips the first injection, the observer
 //   converges on the next mutation.
 (function () {
-  var NAV_SECTIONS = {
-    "Get Started": [
-      { label: "Introduction", href: "/introduction/getting-started" },
-      {
-        label: "Bruno Basics",
-        href: "/get-started/bruno-basics/create-a-workspace",
-      },
-      {
-        label: "Import & Migrate",
-        href: "/get-started/import-export-data/import-collections",
-      },
-    ],
-    "API Client": [
-      { label: "Overview", href: "/api-client/overview" },
-      { label: "Send Requests", href: "/send-requests/overview" },
-      { label: "Variables", href: "/variables/overview" },
-      { label: "Authentication", href: "/auth/overview" },
-      { label: "Secret Management", href: "/secrets-management/overview" },
-      { label: "Tests", href: "/testing/tests/introduction" },
-      { label: "Scripts", href: "/testing/script/overview" },
-      { label: "Git & Collaboration", href: "/git-integration/overview" },
-      { label: "AI", href: "/ai/bruno-ai/introduction" },
-      { label: "Apps", href: "/apps/overview" },
-      { label: "Settings", href: "/get-started/configure/settings" },
-      { label: "Debugging", href: "/debugging/timeline" },
-    ],
-    CLI: [
-      { label: "Overview", href: "/bru-cli/overview" },
-      { label: "Run Collections", href: "/bru-cli/runCollection" },
-      { label: "Configuration", href: "/bru-cli/proxyConfiguration" },
-      { label: "CI/CD", href: "/bru-cli/docker" },
-    ],
-    "API Docs": [
-      { label: "Overview", href: "/api-docs/overview" },
-      { label: "Write Docs in Bruno", href: "/api-docs/workspace-docs" },
-      { label: "Generate HTML Docs", href: "/html-docs/overview" },
-    ],
-    "Mock Servers": [
-      { label: "Overview", href: "/mock-servers/overview" },
-      {
-        label: "Getting Started",
-        href: "/mock-servers/tutorial/mock-from-response-examples",
-      },
-      { label: "Create a Mock Server", href: "/mock-servers/create-mock-server" },
-      { label: "Run a Mock Server", href: "/mock-servers/run-mock-server" },
-    ],
-    "VS Code": [
-      { label: "Overview", href: "/vs-code-extension/overview" },
-      {
-        label: "Install and Configure",
-        href: "/vs-code-extension/install-config",
-      },
-      { label: "Send Requests", href: "/vs-code-extension/send-req" },
-    ],
-    Formats: [
-      { label: "Overview", href: "/reference/overview" },
-      { label: "OpenAPI", href: "/open-api/overview" },
-      { label: "OpenCollection YAML", href: "/opencollection-yaml/overview" },
-      { label: "Converters", href: "/converters/overview" },
-      { label: "Bru Lang", href: "/bru-lang/overview" },
-    ],
-    Licensing: [
-      { label: "Overview", href: "/license-overview" },
-      { label: "End Users", href: "/license-end-users/activate-license" },
-      {
-        label: "Administrators",
-        href: "/license-administrators/license-portal",
-      },
-    ],
-    Popular: [
-      {
-        label: "JavaScript API Reference",
-        href: "/testing/script/javascript-reference",
-      },
-      {
-        label: "Postman Migration",
-        href: "/get-started/import-export-data/postman-migration",
-      },
-      {
-        label: "Environment Variables",
-        href: "/variables/environment-variables",
-      },
-      { label: "Bruno CLI", href: "/bru-cli/overview" },
-    ],
+  var NAV_SECTIONS_BY_VERSION = {
+    v4: {
+      "Get Started": [
+        { label: "Introduction", href: "/introduction/getting-started" },
+        {
+          label: "Bruno Basics",
+          href: "/get-started/bruno-basics/create-a-workspace",
+        },
+        {
+          label: "Import & Migrate",
+          href: "/get-started/import-export-data/import-collections",
+        },
+      ],
+      "API Client": [
+        { label: "Overview", href: "/api-client/overview" },
+        { label: "Send Requests", href: "/send-requests/overview" },
+        { label: "Variables", href: "/variables/overview" },
+        { label: "Authentication", href: "/auth/overview" },
+        { label: "Secret Management", href: "/secrets-management/overview" },
+        { label: "Tests", href: "/testing/tests/introduction" },
+        { label: "Scripts", href: "/testing/script/overview" },
+        { label: "Git & Collaboration", href: "/git-integration/overview" },
+        { label: "AI", href: "/ai/bruno-ai/introduction" },
+        { label: "Apps", href: "/apps/overview" },
+        { label: "Settings", href: "/get-started/configure/settings" },
+        { label: "Debugging", href: "/debugging/timeline" },
+      ],
+      CLI: [
+        { label: "Overview", href: "/bru-cli/overview" },
+        { label: "Run Collections", href: "/bru-cli/runCollection" },
+        { label: "Configuration", href: "/bru-cli/proxyConfiguration" },
+        { label: "CI/CD", href: "/bru-cli/docker" },
+      ],
+      "API Docs": [
+        { label: "Overview", href: "/api-docs/overview" },
+        { label: "Write Docs in Bruno", href: "/api-docs/workspace-docs" },
+        { label: "Generate HTML Docs", href: "/html-docs/overview" },
+      ],
+      "Mock Servers": [
+        { label: "Overview", href: "/mock-servers/overview" },
+        {
+          label: "Getting Started",
+          href: "/mock-servers/tutorial/mock-from-response-examples",
+        },
+        {
+          label: "Create a Mock Server",
+          href: "/mock-servers/create-mock-server",
+        },
+        { label: "Run a Mock Server", href: "/mock-servers/run-mock-server" },
+      ],
+      "VS Code": [
+        { label: "Overview", href: "/vs-code-extension/overview" },
+        {
+          label: "Install and Configure",
+          href: "/vs-code-extension/install-config",
+        },
+        { label: "Send Requests", href: "/vs-code-extension/send-req" },
+      ],
+      Formats: [
+        { label: "Overview", href: "/reference/overview" },
+        { label: "OpenAPI", href: "/open-api/overview" },
+        { label: "OpenCollection YAML", href: "/opencollection-yaml/overview" },
+        { label: "Converters", href: "/converters/overview" },
+        { label: "Bru Lang", href: "/bru-lang/overview" },
+      ],
+      Licensing: [
+        { label: "Overview", href: "/license-overview" },
+        { label: "End Users", href: "/license-end-users/activate-license" },
+        {
+          label: "Administrators",
+          href: "/license-administrators/license-portal",
+        },
+      ],
+      Popular: [
+        {
+          label: "JavaScript API Reference",
+          href: "/testing/script/javascript-reference",
+        },
+        {
+          label: "Postman Migration",
+          href: "/get-started/import-export-data/postman-migration",
+        },
+        {
+          label: "Environment Variables",
+          href: "/variables/environment-variables",
+        },
+        { label: "Bruno CLI", href: "/bru-cli/overview" },
+      ],
+    },
+    v3: {
+      "Getting Started": [
+        { label: "Introduction", href: "/v3/introduction/getting-started" },
+        {
+          label: "Bruno Basics",
+          href: "/v3/get-started/bruno-basics/create-a-workspace",
+        },
+        {
+          label: "Import or Export Data",
+          href: "/v3/get-started/import-export-data/import-collections",
+        },
+        { label: "Configure", href: "/v3/get-started/configure/settings" },
+      ],
+      "Core Features": [
+        { label: "Send Requests", href: "/v3/send-requests/overview" },
+        { label: "Variables", href: "/v3/variables/overview" },
+        {
+          label: "Git Integration & Collaboration",
+          href: "/v3/git-integration/overview",
+        },
+        { label: "Git Providers", href: "/v3/git-providers/overview" },
+        { label: "Tests and Scripts", href: "/v3/testing/tests/introduction" },
+        { label: "Secret Management", href: "/v3/secrets-management/overview" },
+        { label: "Authentication & Authorization", href: "/v3/auth/overview" },
+        { label: "Debugging", href: "/v3/debugging/timeline" },
+      ],
+      "API Tools": [
+        { label: "Create Documentation", href: "/v3/api-docs/overview" },
+        { label: "OpenAPI", href: "/v3/open-api/overview" },
+      ],
+      "Developer Tools": [
+        { label: "AI Agents", href: "/v3/agents/overview" },
+        { label: "Bruno CLI", href: "/v3/bru-cli/overview" },
+        { label: "Bru Lang", href: "/v3/bru-lang/overview" },
+        {
+          label: "OpenCollection YAML",
+          href: "/v3/opencollection-yaml/overview",
+        },
+        { label: "Converters", href: "/v3/converters/overview" },
+        { label: "VS Code Extension", href: "/v3/vs-code-extension/overview" },
+      ],
+      "License Management": [
+        { label: "Overview", href: "/v3/license-overview" },
+        { label: "End Users", href: "/v3/license-end-users/activate-license" },
+        {
+          label: "License Administrators",
+          href: "/v3/license-administrators/license-portal",
+        },
+      ],
+      "Advanced Guides": [
+        { label: "Visualizer", href: "/v3/advanced-guides/visualize" },
+      ],
+    },
+    v2: {
+      Introduction: [
+        { label: "What is Bruno?", href: "/v2/introduction/what-is-bruno" },
+        { label: "Manifesto", href: "/v2/introduction/manifesto" },
+        {
+          label: "Feedback & Community",
+          href: "/v2/introduction/feedback-community",
+        },
+      ],
+      "Getting Started": [
+        {
+          label: "Bruno Basics",
+          href: "/v2/get-started/bruno-basics/download",
+        },
+        {
+          label: "Import or Export Data",
+          href: "/v2/get-started/import-export-data/import-collections",
+        },
+        { label: "Configure", href: "/v2/get-started/configure/settings" },
+      ],
+      "Core Features": [
+        { label: "Send Requests", href: "/v2/send-requests/overview" },
+        { label: "Variables", href: "/v2/variables/overview" },
+        {
+          label: "Git Integration & Collaboration",
+          href: "/v2/git-integration/overview",
+        },
+        { label: "Tests and Scripts", href: "/v2/testing/tests/introduction" },
+        { label: "Secret Management", href: "/v2/secrets-management/overview" },
+        { label: "Authentication & Authorization", href: "/v2/auth/overview" },
+      ],
+      "API Tools": [
+        { label: "Create Documentation", href: "/v2/api-docs/overview" },
+        { label: "OpenAPI", href: "/v2/open-api/overview" },
+      ],
+      "Developer Tools": [
+        { label: "Bruno CLI", href: "/v2/bru-cli/overview" },
+        { label: "Bru Lang", href: "/v2/bru-lang/overview" },
+        { label: "Converters", href: "/v2/converters/overview" },
+        { label: "VS Code Extension", href: "/v2/vs-code-extension/overview" },
+      ],
+      "License Management": [
+        { label: "Overview", href: "/v2/license-overview" },
+        { label: "End Users", href: "/v2/license-end-users/activate-license" },
+        {
+          label: "License Administrators",
+          href: "/v2/license-administrators/license-portal",
+        },
+      ],
+      "Advanced Guides": [
+        {
+          label: "Bruno Starter Guide",
+          href: "/v2/advanced-guides/starter-guide",
+        },
+        {
+          label: "Response Visualization",
+          href: "/v2/advanced-guides/visualize",
+        },
+      ],
+    },
   };
 
   function buildDropdown(sections) {
@@ -160,14 +282,26 @@
   function attach() {
     var items = document.querySelectorAll(".nav-tabs .nav-tabs-item");
     if (!items.length) return;
+    var match = window.location.pathname.match(/^\/(v2|v3)(\/|$)/);
+    var version = match ? match[1] : "v4";
+    var sectionsByTab = NAV_SECTIONS_BY_VERSION[version];
     var added = false;
     items.forEach(function (item) {
       // Menu tabs (<button>, e.g. "Popular") have a native hover menu — skip.
       if (item.tagName !== "A") return;
-      if (item.querySelector(".bru-nav-dd")) return;
-      var sections = NAV_SECTIONS[(item.textContent || "").trim()];
+      var existing = item.querySelector(".bru-nav-dd");
+      if (existing && existing.getAttribute("data-ver") === version) return;
+      if (existing) {
+        // Tab node survived a version switch with a panel built for the old
+        // version's map — rebuild below (or drop, if this label has none).
+        existing.remove();
+        item.classList.remove("bru-has-dd");
+      }
+      var sections = sectionsByTab[(item.textContent || "").trim()];
       if (!sections || sections.length < 2) return;
-      item.appendChild(buildDropdown(sections));
+      var dd = buildDropdown(sections);
+      dd.setAttribute("data-ver", version);
+      item.appendChild(dd);
       item.classList.add("bru-has-dd");
       added = true;
     });

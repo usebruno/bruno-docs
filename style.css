@@ -233,7 +233,10 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
        navbar reflows on its own, but #sidebar's inline `top` (9.5rem, or
        7rem with the banner dismissed) is set by Mintlify — a fixed
        margin-top: -3rem corrects it for BOTH banner states, where a `top`
-       override could only hard-code one.
+       override could only hard-code one. Guarded on a tab row existing:
+       a page that renders without one never lost the 3rem, and the pull-up
+       would shove the sidebar under the sticky bar (this is exactly what
+       happened on v2/v3 pages before those versions got tabs).
      - The rail's own inner border-b becomes the bar's bottom edge; it
        ships at gray-500/5 which is too faint, so it is re-tinted here
        (the old tab-row hairline is dropped with the row itself).
@@ -271,7 +274,7 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
     padding-left: 0.25rem;
     padding-right: 0.25rem;
   }
-  #sidebar {
+  body:has(#navbar .nav-tabs) #sidebar {
     margin-top: -3rem;
   }
   /* The rail's inner border-b (the div.h-full.flex-1 wrapping the row):
@@ -724,14 +727,19 @@ div.fixed.inset-0.z-40 [role="dialog"] {
   margin-top: 0.25rem;
   margin-bottom: 0.25rem;
 }
-#content-area:has(.bru-home-search) .card [data-component-part="card-content-container"] {
+#content-area:has(.bru-home-search)
+  .card
+  [data-component-part="card-content-container"] {
   padding: 0.75rem 0.875rem;
 }
 #content-area:has(.bru-home-search) .card [data-component-part="card-icon"] {
   height: 1rem;
   width: 1rem;
 }
-#content-area:has(.bru-home-search) .card [data-component-part="card-icon"] svg {
+#content-area:has(.bru-home-search)
+  .card
+  [data-component-part="card-icon"]
+  svg {
   height: 1rem;
   width: 1rem;
 }

@@ -59,9 +59,7 @@
             "groups": [
               {
                 "group": "Overview",
-                "pages": [
-                  "api-client/overview"
-                ]
+                "pages": ["api-client/overview"]
               },
               {
                 "group": "Send Requests",
@@ -109,9 +107,7 @@
                   },
                   {
                     "group": "SOAP",
-                    "pages": [
-                      "send-requests/soap/soap-request"
-                    ]
+                    "pages": ["send-requests/soap/soap-request"]
                   },
                   {
                     "group": "Response Data & Cookies",
@@ -273,10 +269,7 @@
                   "git-integration/git-strategies",
                   {
                     "group": "Git Providers",
-                    "pages": [
-                      "git-providers/overview",
-                      "git-providers/github"
-                    ]
+                    "pages": ["git-providers/overview", "git-providers/github"]
                   },
                   "git-integration/embed-bruno-collection",
                   {
@@ -342,10 +335,7 @@
               },
               {
                 "group": "Debugging",
-                "pages": [
-                  "debugging/timeline",
-                  "debugging/dev-tools"
-                ]
+                "pages": ["debugging/timeline", "debugging/dev-tools"]
               }
             ]
           },
@@ -404,9 +394,7 @@
             "groups": [
               {
                 "group": "Overview",
-                "pages": [
-                  "api-docs/overview"
-                ]
+                "pages": ["api-docs/overview"]
               },
               {
                 "group": "Write Docs in Bruno",
@@ -467,9 +455,7 @@
             "groups": [
               {
                 "group": "Overview",
-                "pages": [
-                  "reference/overview"
-                ]
+                "pages": ["reference/overview"]
               },
               {
                 "group": "OpenAPI",
@@ -518,15 +504,11 @@
             "groups": [
               {
                 "group": "Overview",
-                "pages": [
-                  "license-overview"
-                ]
+                "pages": ["license-overview"]
               },
               {
                 "group": "End Users",
-                "pages": [
-                  "license-end-users/activate-license"
-                ]
+                "pages": ["license-end-users/activate-license"]
               },
               {
                 "group": "Administrators",
@@ -565,33 +547,25 @@
                 "item": "JavaScript API Reference",
                 "icon": "brackets-curly",
                 "description": "The bru object, scripting and testing API",
-                "pages": [
-                  "testing/script/javascript-reference"
-                ]
+                "pages": ["testing/script/javascript-reference"]
               },
               {
                 "item": "Postman Migration",
                 "icon": "right-left",
                 "description": "Move your Postman collections to Bruno",
-                "pages": [
-                  "get-started/import-export-data/postman-migration"
-                ]
+                "pages": ["get-started/import-export-data/postman-migration"]
               },
               {
                 "item": "Environment Variables",
                 "icon": "layer-group",
                 "description": "Manage values across environments",
-                "pages": [
-                  "variables/environment-variables"
-                ]
+                "pages": ["variables/environment-variables"]
               },
               {
                 "item": "Bruno CLI",
                 "icon": "terminal",
                 "description": "Run collections from the command line",
-                "pages": [
-                  "bru-cli/overview"
-                ]
+                "pages": ["bru-cli/overview"]
               }
             ]
           }
@@ -599,11 +573,11 @@
       },
       {
         "version": "v3",
-        "groups": [
+        "tabs": [
           {
-            "group": "Getting Started",
+            "tab": "Getting Started",
             "icon": "rocket",
-            "pages": [
+            "groups": [
               {
                 "group": "Introduction",
                 "pages": [
@@ -647,9 +621,9 @@
             ]
           },
           {
-            "group": "Core Features",
+            "tab": "Core Features",
             "icon": "zap",
-            "pages": [
+            "groups": [
               {
                 "group": "Send Requests",
                 "pages": [
@@ -695,9 +669,7 @@
                   },
                   {
                     "group": "SOAP",
-                    "pages": [
-                      "v3/send-requests/soap/soap-request"
-                    ]
+                    "pages": ["v3/send-requests/soap/soap-request"]
                   },
                   {
                     "group": "Response Data & Cookies",
@@ -872,17 +844,14 @@
               },
               {
                 "group": "Debugging",
-                "pages": [
-                  "v3/debugging/timeline",
-                  "v3/debugging/dev-tools"
-                ]
+                "pages": ["v3/debugging/timeline", "v3/debugging/dev-tools"]
               }
             ]
           },
           {
-            "group": "API Tools",
+            "tab": "API Tools",
             "icon": "book-open",
-            "pages": [
+            "groups": [
               {
                 "group": "Create Documentation",
                 "pages": [
@@ -907,9 +876,9 @@
             ]
           },
           {
-            "group": "Developer Tools",
+            "tab": "Developer Tools",
             "icon": "code",
-            "pages": [
+            "groups": [
               {
                 "group": "AI Agents",
                 "pages": [
@@ -983,38 +952,41 @@
             ]
           },
           {
-            "group": "License Management",
+            "tab": "License Management",
             "icon": "key",
-            "pages": [
-              "v3/license-overview",
+            "groups": [
               {
-                "group": "End Users",
+                "group": "License Management",
                 "pages": [
-                  "v3/license-end-users/activate-license"
-                ]
-              },
-              {
-                "group": "License Administrators",
-                "pages": [
-                  "v3/license-administrators/license-portal",
-                  "v3/license-administrators/billing",
-                  "v3/license-administrators/self-hosted-licensing",
+                  "v3/license-overview",
                   {
-                    "group": "SAML SSO",
-                    "pages": [
-                      "v3/license-administrators/saml-sso/overview",
-                      "v3/license-administrators/saml-sso/configure-saml-sso-with-okta",
-                      "v3/license-administrators/saml-sso/configure-saml-sso-with-entra-id",
-                      "v3/license-administrators/saml-sso/troubleshooting"
-                    ]
+                    "group": "End Users",
+                    "pages": ["v3/license-end-users/activate-license"]
                   },
                   {
-                    "group": "SCIM Provisioning",
+                    "group": "License Administrators",
                     "pages": [
-                      "v3/license-administrators/scim-provisioning/overview",
-                      "v3/license-administrators/scim-provisioning/configure-scim-with-okta",
-                      "v3/license-administrators/scim-provisioning/configure-scim-with-entra-id",
-                      "v3/license-administrators/scim-provisioning/bruno-scim-api"
+                      "v3/license-administrators/license-portal",
+                      "v3/license-administrators/billing",
+                      "v3/license-administrators/self-hosted-licensing",
+                      {
+                        "group": "SAML SSO",
+                        "pages": [
+                          "v3/license-administrators/saml-sso/overview",
+                          "v3/license-administrators/saml-sso/configure-saml-sso-with-okta",
+                          "v3/license-administrators/saml-sso/configure-saml-sso-with-entra-id",
+                          "v3/license-administrators/saml-sso/troubleshooting"
+                        ]
+                      },
+                      {
+                        "group": "SCIM Provisioning",
+                        "pages": [
+                          "v3/license-administrators/scim-provisioning/overview",
+                          "v3/license-administrators/scim-provisioning/configure-scim-with-okta",
+                          "v3/license-administrators/scim-provisioning/configure-scim-with-entra-id",
+                          "v3/license-administrators/scim-provisioning/bruno-scim-api"
+                        ]
+                      }
                     ]
                   }
                 ]
@@ -1022,19 +994,18 @@
             ]
           },
           {
-            "group": "Advanced Guides",
+            "tab": "Advanced Guides",
             "icon": "graduation-cap",
-            "pages": [
-              "v3/advanced-guides/visualize"
-            ]
+            "pages": ["v3/advanced-guides/visualize"]
           }
         ]
       },
       {
         "version": "v2",
-        "groups": [
+        "tabs": [
           {
-            "group": "Introduction",
+            "tab": "Introduction",
+            "icon": "flag",
             "pages": [
               "v2/introduction/what-is-bruno",
               "v2/introduction/manifesto",
@@ -1042,8 +1013,9 @@
             ]
           },
           {
-            "group": "Getting Started",
-            "pages": [
+            "tab": "Getting Started",
+            "icon": "rocket",
+            "groups": [
               {
                 "group": "Bruno Basics",
                 "pages": [
@@ -1076,8 +1048,9 @@
             ]
           },
           {
-            "group": "Core Features",
-            "pages": [
+            "tab": "Core Features",
+            "icon": "zap",
+            "groups": [
               {
                 "group": "Send Requests",
                 "pages": [
@@ -1122,9 +1095,7 @@
                   },
                   {
                     "group": "SOAP",
-                    "pages": [
-                      "v2/send-requests/soap/soap-request"
-                    ]
+                    "pages": ["v2/send-requests/soap/soap-request"]
                   },
                   {
                     "group": "Response Data & Cookies",
@@ -1304,8 +1275,9 @@
             ]
           },
           {
-            "group": "API Tools",
-            "pages": [
+            "tab": "API Tools",
+            "icon": "book-open",
+            "groups": [
               {
                 "group": "Create Documentation",
                 "pages": [
@@ -1327,8 +1299,9 @@
             ]
           },
           {
-            "group": "Developer Tools",
-            "pages": [
+            "tab": "Developer Tools",
+            "icon": "code",
+            "groups": [
               {
                 "group": "Bruno CLI",
                 "pages": [
@@ -1374,35 +1347,39 @@
             ]
           },
           {
-            "group": "License Management",
-            "pages": [
-              "v2/license-overview",
+            "tab": "License Management",
+            "icon": "key",
+            "groups": [
               {
-                "group": "End Users",
+                "group": "License Management",
                 "pages": [
-                  "v2/license-end-users/activate-license"
-                ]
-              },
-              {
-                "group": "License Administrators",
-                "pages": [
-                  "v2/license-administrators/license-portal",
+                  "v2/license-overview",
                   {
-                    "group": "SAML SSO",
-                    "pages": [
-                      "v2/license-administrators/saml-sso/overview",
-                      "v2/license-administrators/saml-sso/configure-saml-sso-with-okta",
-                      "v2/license-administrators/saml-sso/configure-saml-sso-with-entra-id",
-                      "v2/license-administrators/saml-sso/troubleshooting"
-                    ]
+                    "group": "End Users",
+                    "pages": ["v2/license-end-users/activate-license"]
                   },
                   {
-                    "group": "SCIM Provisioning",
+                    "group": "License Administrators",
                     "pages": [
-                      "v2/license-administrators/scim-provisioning/overview",
-                      "v2/license-administrators/scim-provisioning/configure-scim-with-okta",
-                      "v2/license-administrators/scim-provisioning/configure-scim-with-entra-id",
-                      "v2/license-administrators/scim-provisioning/bruno-scim-api"
+                      "v2/license-administrators/license-portal",
+                      {
+                        "group": "SAML SSO",
+                        "pages": [
+                          "v2/license-administrators/saml-sso/overview",
+                          "v2/license-administrators/saml-sso/configure-saml-sso-with-okta",
+                          "v2/license-administrators/saml-sso/configure-saml-sso-with-entra-id",
+                          "v2/license-administrators/saml-sso/troubleshooting"
+                        ]
+                      },
+                      {
+                        "group": "SCIM Provisioning",
+                        "pages": [
+                          "v2/license-administrators/scim-provisioning/overview",
+                          "v2/license-administrators/scim-provisioning/configure-scim-with-okta",
+                          "v2/license-administrators/scim-provisioning/configure-scim-with-entra-id",
+                          "v2/license-administrators/scim-provisioning/bruno-scim-api"
+                        ]
+                      }
                     ]
                   }
                 ]
@@ -1410,7 +1387,8 @@
             ]
           },
           {
-            "group": "Advanced Guides",
+            "tab": "Advanced Guides",
+            "icon": "graduation-cap",
             "pages": [
               "v2/advanced-guides/starter-guide",
               "v2/advanced-guides/visualize"
@@ -1447,11 +1425,7 @@
     }
   },
   "contextual": {
-    "options": [
-      "copy",
-      "chatgpt",
-      "claude"
-    ]
+    "options": ["copy", "chatgpt", "claude"]
   },
   "feedback": {
     "thumbsRating": true,
