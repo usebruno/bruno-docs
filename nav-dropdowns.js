@@ -118,7 +118,7 @@
         label: "Environment Variables",
         href: "/variables/environment-variables",
       },
-      { label: "OAuth 2.0", href: "/auth/oauth2-2.0/overview" },
+      { label: "Bruno CLI", href: "/bru-cli/overview" },
     ],
   };
 

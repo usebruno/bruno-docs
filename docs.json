@@ -586,11 +586,11 @@
                 ]
               },
               {
-                "item": "OAuth 2.0",
-                "icon": "shield-check",
-                "description": "Configure OAuth 2.0 flows",
+                "item": "Bruno CLI",
+                "icon": "terminal",
+                "description": "Run collections from the command line",
                 "pages": [
-                  "auth/oauth2-2.0/overview"
+                  "bru-cli/overview"
                 ]
               }
             ]
