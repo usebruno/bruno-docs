@@ -439,15 +439,15 @@
                 "tag": "Beta",
                 "pages": [
                   "mock-servers/overview",
-                  "mock-servers/create-mock-server",
-                  "mock-servers/run-mock-server",
                   {
                     "group": "Getting Started",
                     "pages": [
                       "mock-servers/tutorial/mock-from-response-examples",
                       "mock-servers/tutorial/mock-from-openapi"
                     ]
-                  }
+                  },
+                  "mock-servers/create-mock-server",
+                  "mock-servers/run-mock-server"
                 ]
               }
             ]

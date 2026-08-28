@@ -75,6 +75,10 @@
     ],
     "Mock Servers": [
       { label: "Overview", href: "/mock-servers/overview" },
+      {
+        label: "Getting Started",
+        href: "/mock-servers/tutorial/mock-from-response-examples",
+      },
       { label: "Create a Mock Server", href: "/mock-servers/create-mock-server" },
       { label: "Run a Mock Server", href: "/mock-servers/run-mock-server" },
     ],
