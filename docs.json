@@ -569,8 +569,8 @@
               {
                 "item": "Bruno CLI",
                 "icon": "terminal",
-                "description": "Run collections from the command line",
-                "pages": ["bru-cli/overview"]
+                "description": "Command examples for running collections",
+                "pages": ["bru-cli/runCollection"]
               }
             ]
           }
