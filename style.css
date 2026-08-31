@@ -1,0 +1,927 @@
+/* ---------------------------------------------------------------------------
+   Full-width docs shell — release Mintlify's 1472px cap
+   ---------------------------------------------------------------------------
+   Mintlify centres the entire shell — sidebar, article and table of contents —
+   inside a `max-w-8xl` (92rem = 1472px) box with `mx-auto`. Past that width the
+   box stops growing and the remainder becomes equal dead margins: 224px per
+   side at 1920px, 544px per side at 2560px. Nothing renders in them.
+
+   Two elements carry the cap, and both must be released or the shell tears in
+   half — the navbar would sit on a different grid from the body:
+     1. `header#navbar > div.max-w-8xl` — the navbar rail (wordmark, search,
+        header links, and the tab row above). Plain utility class, (0,1,0).
+     2. `header#navbar + div` — the wrapper around #sidebar, #content-area and
+        the TOC. Same 1472px, but written through Mintlify's per-page `mode`
+        peer variants, compiling to roughly
+          .peer-[…]:max-w-8xl:is(:where(.peer).is-not-custom ~ *)
+                              :is(:where(.peer).is-not-center ~ *)
+        which is (0,3,0).
+   `[class*="max-w-8xl"]` matches both — the bare utility and the peer variant
+   share that substring — with no coupling to where either sits in the tree, so
+   a Mintlify reshuffle cannot half-apply this. The selector is repeated three
+   times for (0,3,1), which clears carrier 2. That insurance is unused today:
+   Mintlify injects this file as an inline <style> inside <main>, unlayered and
+   last, and an unlayered declaration beats any @layer utilities rule regardless
+   of specificity. The repeats only matter if Mintlify layers custom CSS or
+   moves the injection point.
+
+   Why CSS: docs.json has no content-width option (`styling` accepts only
+   `eyebrows` and `codeblocks`). The only native escape hatches are per-page
+   frontmatter `mode: "custom"` (drops sidebar AND TOC) and `mode: "wide"`
+   (drops the TOC) — both remove chrome we want to keep, and would have to be
+   pasted into every .mdx file.
+
+   No media query, because none is needed: below the cap's binding width this
+   rule is a measured no-op. #sidebar, #content, the TOC, .nav-tabs and
+   #content-area are byte-identical with and without it at 390/768/1024/1280/
+   1440/1472 across seven pages. NB the cap is 92rem, so it tracks the root font
+   size — it binds at 1473px only at a 16px root, and at ~1105px at a 12px root.
+   The rule releases the cap exactly where the cap binds, whatever that width is.
+
+   Measured at 1920px on /send-requests/REST/rest-api:
+     #sidebar             x 256 -> 32     (still 18rem, still position:fixed)
+     article text        721px -> 1169px  (x 587 -> 363)
+     #table-of-contents   x 1400 -> 1624  (still 16.5rem)
+   Nothing inside the shell is touched — the sidebar's 18rem, the TOC's 16.5rem
+   and the gutter #content-area reserves for the fixed sidebar all still come
+   from Mintlify. Only the box around them grew, and #content-area (the single
+   flex-grow child) absorbs the new width. No horizontal overflow appears at any
+   width: documentElement.scrollWidth === innerWidth throughout.
+
+   Deliberate consequences, all measured — this rule caps nothing, so every
+   element keeps a single shared right edge. The capping variants that were
+   tried instead all scored worse: capping the content column strands the TOC
+   across a void of up to 1461px, and capping prose alone gives the page two
+   different right margins that read as a misalignment bug.
+   - Line length. Body copy goes 78 characters today -> 124 at 1920px, 198 at
+     2560px, 256 at 3440px, against a comfortable 45-90. At 3440 a lead
+     paragraph can render as one unbroken 256-character line. This is the real
+     cost of the change. If long measure becomes the complaint, the dial is a
+     max-width on `#content` — but expect the ragged-edge tradeoff above.
+   - Card grids are the weakest spot on very wide screens. Mintlify's `.columns`
+     uses a container query that tops out at 2 tracks, so cards inflate rather
+     than reflow: 352px each today -> 576px at 1920 (still good) -> 896px at
+     2560 -> 1336px at 3440, where a 3-card group shows two enormous cards and
+     an orphan.
+   - Nav tabs keep their intrinsic shrink-to-fit width (Mintlify's default
+     `flex: 0 1 auto` on .nav-tabs), so uncapping the rail just widens the
+     empty space to the right of the row; the tabs themselves don't move.
+   - Images never upscale: Mintlify computes them to width:auto + max-width:100%,
+     so they render at natural width. Large screenshots therefore stop growing
+     and leave a trailing gutter on very wide screens (~209px at 3440). They do
+     not stretch or blur.
+   - The navbar search field grows with the rail: 443px -> 597px at 1920,
+     811px at 2560, 1104px at 3440.
+   - Narrow two-column tables and short code blocks span the full column and
+     leave a wide trailing gutter, which costs some scannability on reference
+     pages. Offset by a real win: code blocks that used to scroll horizontally
+     now fit.
+
+   Maintenance couplings:
+   - `max-w-8xl` is a Mintlify-emitted Tailwind class, not a public API. If it
+     is renamed or swapped for a custom property this rule stops matching and
+     the layout reverts to today's capped, centred shell — a safe failure
+     direction, but re-check after a Mintlify bump.
+   - Conversely, any future Mintlify <div> carrying an 8xl cap is uncapped too.
+     There are exactly two today, on every page and width tested. No .mdx in
+     this repo sets frontmatter `mode`, so every page renders is-not-custom /
+     is-not-center / is-not-wide / is-not-frame; there is no second layout
+     variant to check.
+   --------------------------------------------------------------------------- */
+
+div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
+  max-width: none;
+}
+
+/* The uncap above overshoots on mode:center pages (the home page): the
+   body wrapper carries ALL the per-mode width classes at once —
+   peer-[.is-center]:max-w-3xl AND the 8xl variants — so matching the
+   8xl substring also releases the 3xl cap that center mode is supposed
+   to apply, and the home content stretches to the full viewport.
+   The navbar's peer marker says which mode is live: restore the 48rem
+   cap when it is is-center. (The navbar rail inside #navbar is a
+   different element and stays uncapped.) */
+#navbar[class*="is-center"] ~ div[class*="max-w-8xl"] {
+  max-width: 48rem;
+}
+
+/* ---------------------------------------------------------------------------
+   Cursor-style shell: sidebar hugs the viewport's left edge
+   ---------------------------------------------------------------------------
+   Modeled on cursor.com/docs: the left nav sits flush against the viewport
+   edge with a clear gutter between it and the article column. Mechanics:
+   #sidebar is position:fixed with no `left`, so it normally inherits its
+   static x from the body wrapper's lg:px-8 (32px on the uncapped shell).
+   Pinning `left: 1rem` moves ONLY the sidebar — #content-area computes its
+   own left inset (lg:pl-[23.7rem] against the same wrapper), so it doesn't
+   follow, and the sidebar->content gap widens by the 16px the sidebar moved
+   (~60px edge-to-text, more to the last sidebar glyph thanks to
+   #sidebar-content's pr-8). The navbar rows (wordmark row and tab row) carry
+   their own lg:px-12 — trimmed to the same 1rem so the wordmark, the first
+   tab and the sidebar share one left edge; without this the header floats
+   48px in while the nav below it starts at 16px and the shell looks torn.
+   Scoped >= 1250px: below that the shell runs in mobile mode (see the
+   forced-mobile block at the end of the nav section) where the sidebar
+   is display:none and the navbar uses mx-4, both untouched.
+
+   Maintenance couplings:
+   - `px-12` appears in the navbar only on those two rows (checked in the
+     rendered DOM); a future Mintlify row carrying px-12 would be pulled to
+     the edge too — consistent rather than harmful.
+   - If Mintlify ever sets an explicit `left` on #sidebar this override
+     still wins (unlayered custom CSS beats layered utilities), but re-check
+     the resulting gap after a bump.
+   --------------------------------------------------------------------------- */
+
+@media (min-width: 1250px) {
+  #sidebar {
+    left: 1rem;
+    /* A whisper of a panel behind the nav — enough to separate it from
+       the page without reading as a box. Rounded only on top: the panel
+       runs to the viewport bottom (#sidebar is fixed bottom-0), so bottom
+       corners never show. */
+    background: rgb(0 0 0 / 0.025);
+    border-radius: 0.75rem 0.75rem 0 0;
+  }
+  .dark #sidebar {
+    background: rgb(255 255 255 / 0.035);
+  }
+  /* With a visible panel edge, links need breathing room from it —
+     #sidebar-content ships with pr-8 but no left padding at all. */
+  #sidebar #sidebar-content {
+    padding-left: 0.75rem;
+  }
+  /* NB: #navbar is a <div>, not a <header> — a `header#navbar` selector
+     silently matches nothing (this file's older comments say <header>;
+     the rendered DOM disagrees). Keep these hooks tag-free. */
+  #navbar [class*="px-12"] {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Clustered top nav (design handoff option 1c)
+   ---------------------------------------------------------------------------
+   The nine tabs render as one quiet row: a leading Get Started, then two
+   labelled groups split off by hairline dividers:
+
+     "Get Started" | PRODUCTS "API Client" CLI ... | MORE Formats ...
+
+   (No Home tab: the wordmark links to the index page at /.)
+
+   Dividers are injected as pseudo-elements on the FIRST tab of each
+   group; the tabs themselves are monochrome text pills — no icons, no
+   borders, active = soft grey pill. Spec:
+   design_handoff_clustered_nav/README.md (untracked on purpose, via
+   .git/info/exclude). Deviations from the spec, all agreed:
+   - The spec's START/PRODUCTS/MORE group labels show at >= 1250px and
+     hide below (dividers stay): with the tabs merged into the wordmark
+     row (a post-handoff decision, see the single-bar block) the labelled
+     bar doesn't fit narrow desktops. The header links' removal from
+     docs.json is what made room for the labels at full width.
+   - The bar keeps Mintlify's translucent blur instead of the spec's solid
+     #FFFFFF, so the spec's warm opaque greys (#F5F4F0/#F0EEE9 etc.) are
+     re-derived as warm ALPHA tints that read on both the blurred and the
+     scrolled-opaque bar.
+   - Dark-mode neutrals are derived, not designer-supplied (the handoff
+     says ask; agreed to derive and flag for review on the preview).
+   - The "VS Code Extension" tab stays renamed "VS Code".
+   - Spec wants inactive 400 / active 600 weight and offers hacks for the
+     resulting reflow. Instead ALL tabs stay 400 and the active bold comes
+     from Mintlify's own fake-bold text-shadow, which is metric-neutral —
+     the row cannot shift on navigation, so the caveat dissolves. That
+     text-shadow class is also our active-state HOOK: Mintlify does NOT
+     emit data-active on nav tabs (checked — it appears nowhere in the
+     rendered DOM), contrary to the handoff's assumption.
+
+   Group-opening routes come from docs.json's first page per tab:
+   API Client -> /api-client/*, Formats -> /reference/*. NB the handoff
+   guessed href^="/formats"; the real Formats route is /reference/overview.
+   Re-check these hooks whenever docs.json moves the first page of a group.
+
+   Accessibility, flagged in the handoff and accepted for now: the
+   dividers are CSS-only and invisible to screen readers — purely visual
+   grouping. The tabs themselves remain plain anchors and read fine.
+
+   Scoped >= 1250px. The tabs never shrink: below 1250px the shell drops
+   straight to Mintlify's mobile mode (hamburger drawer) — natively that
+   happens at lg (1024px), and the forced-mobile block after this one
+   extends it up to 1249.98px, since the full-size labelled row measures
+   ~1059px and cannot share 1024-1249px with the corner controls.
+
+   Maintenance couplings:
+   - `.nav-tabs`, `.nav-tabs-item`, the active tab's text-shadow class and
+     Popular's caret viewBox are Mintlify-emitted, not public API. Failure
+     direction is safe (stock text tabs); re-check after a Mintlify bump.
+   - Group membership is positional: labels and dividers hook on
+     first-child and href prefixes. Reordering tabs in docs.json means
+     updating the three href hooks here.
+   --------------------------------------------------------------------------- */
+
+@media (min-width: 1250px) {
+  /* ---- Single-bar merge -------------------------------------------------
+     The tab row (`hidden lg:flex px-12 h-12`, the sibling below the h-16
+     wordmark row inside the same `div.relative`) is lifted out of flow and
+     overlaid onto the wordmark row, so the header collapses from two rows
+     to one: wordmark | clustered tabs | search | links. Consequences,
+     each handled below:
+     - The overlay spans the full rail, so it must be pointer-transparent
+       (pointer-events: none) with clicks re-enabled on .nav-tabs itself,
+       or it blocks the logo, search and links underneath.
+     - The navbar loses 3rem of flow height. Content below the sticky
+       navbar reflows on its own, but #sidebar's inline `top` (9.5rem, or
+       7rem with the banner dismissed) is set by Mintlify — a fixed
+       margin-top: -3rem corrects it for BOTH banner states, where a `top`
+       override could only hard-code one. Guarded on a tab row existing:
+       a page that renders without one never lost the 3rem, and the pull-up
+       would shove the sidebar under the sticky bar (this is exactly what
+       happened on v2/v3 pages before those versions got tabs).
+     - The rail's own inner border-b becomes the bar's bottom edge; it
+       ships at gray-500/5 which is too faint, so it is re-tinted here
+       (the old tab-row hairline is dropped with the row itself).
+     - Search is pushed to the right end of the bar, a real field on wide
+       bars and icon + shortcut below 1450px. The old header links (API
+       Reference, Blog, ...) are gone from docs.json's navbar block — they
+       could never share 1440px with the labelled clusters; a Download
+       button takes that corner later. */
+  #navbar div:has(> div.nav-tabs) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4rem;
+    align-items: center;
+    pointer-events: none;
+  }
+  #navbar div:has(> div.nav-tabs) .nav-tabs {
+    pointer-events: auto;
+    /* Clear the wordmark + version cluster; at full width the 47px START
+       reservation on the first tab sits inside this too, so the label —
+       not the Home pill — is what starts here. */
+    margin-left: 10.5rem;
+  }
+  /* The wordmark cluster ships with gap-x-4 twice (outer wrapper and
+     logo+version group) — tightened so version hugs the logo and the
+     tabs can start sooner. Matches only inside the navbar; the tab row
+     carries no gap-x-4. NB most of the apparent logo->version air was
+     never the gap: the version button carries px-2.5 of its own, so its
+     "v4" text sat 10px inside the button edge — trimmed below. */
+  #navbar div[class*="flex-1"][class*="gap-x-4"] {
+    column-gap: 0.125rem;
+  }
+  #navbar div[class*="gap-x-2"] > button[aria-haspopup="menu"] {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+  body:has(#navbar .nav-tabs) #sidebar {
+    margin-top: -3rem;
+  }
+  /* The rail's inner border-b (the div.h-full.flex-1 wrapping the row):
+     now the single bar's bottom edge. */
+  #navbar div.flex-1[class*="border-b"] {
+    border-color: rgb(60 50 20 / 0.12);
+  }
+  .dark #navbar div.flex-1[class*="border-b"] {
+    border-color: rgb(255 255 255 / 0.08);
+  }
+  /* Search lives at the right end of the bar (the old navbar links were
+     removed from docs.json; a Download button will take that corner
+     later). #search-bar-entry is a documented Mintlify hook
+     (mintlify.com/docs/customize/custom-scripts). Its wrapper (the lone
+     z-20 div around it) is a flex sibling squeezed between two flex-1
+     containers, so flex/margin games position it unpredictably — instead
+     it is pulled out of the flex flow and pinned to the bar's right,
+     clear of the theme toggle at the row's end. Wide bars get a real
+     field with placeholder; below 1450px — where wordmark + clusters + a
+     field can't coexist — it compresses to icon + shortcut. */
+  #navbar div[class*="z-20"]:has(#search-bar-entry) {
+    position: absolute;
+    right: 3.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  #search-bar-entry {
+    width: 15rem;
+  }
+  /* Mintlify's production renderer (newer than the local CLI) also puts
+     an "Ask Assistant" button (#assistant-entry) beside search in this
+     wrapper — dev builds don't render it, so its rules no-op locally.
+     The corner compacts in tiers so it always clears the tab row, which
+     ends at ~1075px on the hosted renderer (~1059px in dev — its fonts
+     rasterize the row a hair narrower; the hosted number is the one the
+     tiers are sized against): under 1536px the assistant drops its
+     label (icon stays clickable) — labelled, field + assistant put the
+     wrapper's left edge at the row's end near 1527px, so 1536 keeps
+     ~22px of air; under 1450px the search field drops to icon + ⌘K;
+     under 1280px the ⌘K hint goes too, leaving two icon buttons whose
+     left edge clears the row by ~29px at this block's 1250px floor
+     (icon + ⌘K alone would land 1px from the row at exactly 1250). */
+  @media (max-width: 1535.98px) {
+    #assistant-entry span {
+      display: none;
+    }
+  }
+  @media (max-width: 1449.98px) {
+    #search-bar-entry {
+      width: auto;
+    }
+    #search-bar-entry .truncate {
+      display: none;
+    }
+  }
+  @media (max-width: 1279.98px) {
+    #search-bar-entry span {
+      display: none;
+    }
+  }
+
+  /* Row: centered pills, 2px apart inside a group (the stock gap-x-6 is
+     far too wide for clustering); nothing shrinks, nothing wraps. */
+  div.nav-tabs.nav-tabs {
+    align-items: center;
+    column-gap: 2px;
+    flex-wrap: nowrap;
+  }
+
+  /* Tab: quiet monochrome text pill. height:auto overrides the stock
+     h-full so the pill hugs its text instead of filling the 3rem row. */
+  .nav-tabs .nav-tabs-item {
+    position: relative;
+    flex: 0 0 auto;
+    height: auto;
+    padding: 7px 10px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 400;
+    color: #6e6a62;
+    white-space: nowrap;
+    transition:
+      background-color 0.16s ease,
+      color 0.16s ease;
+  }
+  .dark .nav-tabs .nav-tabs-item {
+    color: #a6a199;
+  }
+
+  /* Spec: no icons — the group labels do the wayfinding job instead.
+     Hide EVERY svg inside a tab (icon masks and Popular's menu caret),
+     sparing only our injected dropdown panels. This used to enumerate
+     the exact markup (svg.h-4 + the caret's viewBox) and rotted when
+     Mintlify's production renderer drifted from the local CLI's — prod
+     emits size-4 icons and a viewBox="0 0 18 18" caret, so Popular grew
+     a visible star + caret on the deployed preview only. The tabs carry
+     no other svgs, so the blanket rule is the drift-proof shape. */
+  .nav-tabs .nav-tabs-item svg:not(.bru-nav-dd svg) {
+    display: none;
+  }
+
+  .nav-tabs .nav-tabs-item:hover {
+    background: rgb(60 50 20 / 0.055);
+    color: #1a1917;
+  }
+  .dark .nav-tabs .nav-tabs-item:hover {
+    background: rgb(255 255 255 / 0.07);
+    color: #f2f0ec;
+  }
+
+  /* Active pill. Weight stays 400 — the bold you see is Mintlify's own
+     metric-neutral text-shadow (also the hook; see header note).
+     data-active is kept as a second hook in case Mintlify ever ships it. */
+  .nav-tabs .nav-tabs-item[data-active="true"],
+  .nav-tabs .nav-tabs-item[class*="text-shadow"] {
+    background: rgb(55 45 15 / 0.085);
+    color: #1a1917;
+  }
+  .dark .nav-tabs .nav-tabs-item[data-active="true"],
+  .dark .nav-tabs .nav-tabs-item[class*="text-shadow"] {
+    background: rgb(255 255 255 / 0.11);
+    color: #f5f3ef;
+  }
+
+  /* The stock 1.5px underline indicator: the sole direct-child div with
+     Tailwind's `absolute` class. The pill replaces it. */
+  .nav-tabs .nav-tabs-item > div.absolute {
+    display: none;
+  }
+
+  /* Popular is the one <button> tab (Radix menu trigger): clicking it
+     leaves it focused, so the theme's orange focus ring lingers on the
+     pill after the pointer leaves — none of the anchor tabs do this.
+     Suppress the ring for pointer focus only; keyboard focus
+     (:focus-visible) keeps it. */
+  .nav-tabs .nav-tabs-item:focus:not(:focus-visible) {
+    outline: none;
+    box-shadow: none;
+  }
+
+  /* Group labels + dividers. Two labelled groups — PRODUCTS and MORE —
+     after the leading unlabelled Get Started tab (the Home tab was
+     dropped once the wordmark started linking to the index page, and its
+     START label went with it). Both are pseudo-elements on each group's
+     first tab — the label is ::before, the divider ::after — absolutely
+     positioned OUTSIDE the tab box so the hover/active pill never
+     highlights them; margin-left on those tabs reserves the space:
+     12 + divider + 12 + label + 11px label gap. Label widths assume the
+     site sans at 10px/600/0.07em: PRODUCTS ~58px, MORE ~29px. Below
+     1250px the labels hide (dividers stay) — see the compaction tier. */
+  .nav-tabs .nav-tabs-item[href^="/api-client"]::before,
+  .nav-tabs .nav-tabs-item[href^="/reference"]::before {
+    position: absolute;
+    right: 100%;
+    margin-right: 11px;
+    top: 50%;
+    transform: translateY(-50%);
+    /* Site sans, not the handoff's mono: distinct from the tabs through
+       size and weight rather than a font switch (the letterspaced mono
+       eyebrow read as boilerplate). Tracking stays modest for the same
+       reason. */
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: #b4aea2;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .dark .nav-tabs .nav-tabs-item[href^="/api-client"]::before,
+  .dark .nav-tabs .nav-tabs-item[href^="/reference"]::before {
+    color: #6e6a62;
+  }
+  .nav-tabs .nav-tabs-item[href^="/api-client"]::before {
+    content: "PRODUCTS";
+  }
+  .nav-tabs .nav-tabs-item[href^="/reference"]::before {
+    content: "MORE";
+  }
+  .nav-tabs .nav-tabs-item[href^="/api-client"] {
+    margin-left: 94px; /* 25 + PRODUCTS 58 + 11 */
+  }
+  .nav-tabs .nav-tabs-item[href^="/reference"] {
+    margin-left: 65px; /* 25 + MORE 29 + 11 */
+  }
+  .nav-tabs .nav-tabs-item[href^="/api-client"]::after,
+  .nav-tabs .nav-tabs-item[href^="/reference"]::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 20px;
+    background: rgb(60 50 20 / 0.12);
+    pointer-events: none;
+  }
+  .nav-tabs .nav-tabs-item[href^="/api-client"]::after {
+    right: calc(100% + 81px); /* 11 + PRODUCTS 58 + 12 */
+  }
+  .nav-tabs .nav-tabs-item[href^="/reference"]::after {
+    right: calc(100% + 52px); /* 11 + MORE 29 + 12 */
+  }
+  .dark .nav-tabs .nav-tabs-item[href^="/api-client"]::after,
+  .dark .nav-tabs .nav-tabs-item[href^="/reference"]::after {
+    background: rgb(255 255 255 / 0.1);
+  }
+
+  /* Hover panels (nav-dropdowns.js): unchanged from the folder-tab
+     branch — hidden by default, shown while pointer or focus is inside
+     the tab item; the transparent wrapper bridges the pill->panel gap. */
+  .bru-nav-dd {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    padding-top: 0.625rem;
+    z-index: 60;
+    visibility: hidden;
+    opacity: 0;
+    transition:
+      opacity 120ms ease 150ms,
+      visibility 0ms linear 270ms;
+  }
+  .bru-nav-dd.bru-dd-right {
+    left: auto;
+    right: 0;
+  }
+  .nav-tabs-item:hover > .bru-nav-dd,
+  .nav-tabs-item:focus-within > .bru-nav-dd {
+    visibility: visible;
+    opacity: 1;
+    transition:
+      opacity 120ms ease 60ms,
+      visibility 0ms linear 60ms;
+  }
+  .bru-nav-dd-panel {
+    min-width: 12rem;
+    padding: 0.375rem;
+    border-radius: 0.625rem;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    box-shadow: 0 10px 30px rgb(0 0 0 / 0.12);
+  }
+  .dark .bru-nav-dd-panel {
+    border-color: #26272b;
+    background: #0f1117;
+    box-shadow: 0 10px 30px rgb(0 0 0 / 0.5);
+  }
+  .bru-nav-dd-link {
+    display: block;
+    padding: 0.4rem 0.625rem;
+    border-radius: 0.4rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    line-height: 1.3;
+    white-space: nowrap;
+    color: #4b5563;
+  }
+  .bru-nav-dd-link:hover {
+    background: #f3f4f6;
+    color: #111827;
+  }
+  .dark .bru-nav-dd-link {
+    color: #9ca3af;
+  }
+  .dark .bru-nav-dd-link:hover {
+    background: #1a1d26;
+    color: #f3f4f6;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Forced mobile mode, 1024–1249.98px
+   ---------------------------------------------------------------------------
+   The full-size labelled tab row measures ~1059px and cannot share
+   1024–1249px with the wordmark and the corner controls. The tabs are
+   never shrunk to fit (an earlier compaction tier did; dropped by
+   request) — instead the shell keeps Mintlify's mobile layout up to
+   1249.98px. Natively everything flips at lg (1024px) via Tailwind
+   variants; every mobile element is in the DOM at desktop widths and
+   hidden purely by CSS, so this block re-flips them for the range.
+   This file is injected unlayered, so plain rules here beat Mintlify's
+   @layer utilities without !important.
+
+   Both renderers were checked (the hosted one and the local CLI's —
+   they emit different DOMs, see the icon-hide note above): the hooks
+   below are identical in both. What flips, hide-side then show-side:
+   - The tab row (`hidden lg:flex` — the div owning .nav-tabs).
+   - The desktop search corner (the z-20 wrapper: field + assistant).
+   - #sidebar (`hidden lg:block`); the >=1250 block's overlay/margin
+     rules no longer apply here, so no compensation is needed.
+   - #content-area drops its sidebar gutter (dev lg:pl-[23.7rem] /
+     prod lg:pl-[5.7rem], both with lg:-ml-12) back to mobile's px-1.
+   - The mobile icon cluster (`flex lg:hidden`, search + assistant
+     icons) and the full-width drawer trigger bar (`lg:hidden` button,
+     h-14 py-4 px-5 in both renderers) come back; the drawer they open
+     is Mintlify's own — but it portals OUTSIDE #navbar and its overlay
+     wrapper (`fixed inset-0 … z-40 lg:hidden`) is itself lg-gated, so
+     it gets its own show rule. The lg:hidden guard on that selector is
+     what keeps the search modal's wrapper (`fixed inset-0 z-40`, never
+     lg-gated) out of its reach. The theme toggle isn't touched either
+     way.
+   Maintenance: these are Mintlify-emitted lg: variants, not public API.
+   If a hook rots, that element reverts to desktop behavior in the range
+   — re-check after Mintlify bumps, and keep this block's bounds in sync
+   with the >=1250 nav block above. */
+
+@media (min-width: 1024px) and (max-width: 1249.98px) {
+  #navbar div:has(> div.nav-tabs),
+  #navbar div[class*="z-20"]:has(#search-bar-entry),
+  #sidebar {
+    display: none;
+  }
+  #navbar div[class*="lg:hidden"],
+  #navbar button[class*="lg:hidden"],
+  div.fixed.inset-0.z-40[class*="lg:hidden"] {
+    display: flex;
+  }
+  #content-area {
+    padding-left: 0.25rem;
+    margin-left: 0;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Search modal — separate it from the page
+   ---------------------------------------------------------------------------
+   Mintlify's search dialog ships with a bg-black/40 overlay and a shadowless
+   panel that sits directly over the navbar, so on a bright page the popup
+   visually merges with the content behind it (worse in dark mode, where a
+   dark panel floats on a dark page behind a faint scrim). Two fixes:
+   1. The overlay gets a deeper dim plus a backdrop blur — the blur is what
+      really sells "the page is inert now", independent of theme.
+   2. The dialog panel gets a hard drop shadow and a 1px ring so its edges
+      read against any background.
+
+   Selectors piggyback on Mintlify-emitted Tailwind utility combos (not
+   public API — safe failure: the modal reverts to the stock flat look):
+   - Overlay: the only `fixed inset-0` element carrying `bg-black/40`.
+     Matching the substring avoids escaping the slash; if Mintlify reuses
+     the same utility for other scrims (mobile sidebar), they deepen too,
+     which is consistent rather than harmful.
+   - Panel: the [role="dialog"] child of the fixed z-40 scroll wrapper.
+   --------------------------------------------------------------------------- */
+
+div.fixed.inset-0[class*="bg-black/40"] {
+  background: rgb(0 0 0 / 0.55);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+.dark div.fixed.inset-0[class*="bg-black/40"] {
+  background: rgb(0 0 0 / 0.65);
+}
+
+div.fixed.inset-0.z-40 [role="dialog"] {
+  box-shadow:
+    0 0 0 1px rgb(0 0 0 / 0.1),
+    0 10px 20px rgb(0 0 0 / 0.2),
+    0 25px 60px rgb(0 0 0 / 0.35);
+}
+/* Dark mode needs more than a shadow: Mintlify's dark dialog surface is
+   rgb(14,12,12) — the same near-black as the page behind the scrim, so the
+   panel simply disappears. Three-part fix:
+   - lift the panel to an elevated surface visibly lighter than the page;
+   - lift the inner search-field row (its own rgb(14,12,12) background fills
+     most of the dialog when only the input bar is showing) the same way —
+     the rounded-2xl div is that field row;
+   - trade the white hairline for a brand-orange ring, which reads instantly
+     against a black scrim and echoes the home CTA's orange hover. */
+.dark div.fixed.inset-0.z-40 [role="dialog"] {
+  background: #20232b;
+  box-shadow:
+    0 0 0 1.5px rgb(255 169 77 / 0.55),
+    0 10px 20px rgb(0 0 0 / 0.5),
+    0 25px 60px rgb(0 0 0 / 0.7);
+}
+.dark div.fixed.inset-0.z-40 [role="dialog"] div[class*="rounded-2xl"] {
+  background: #262a33;
+}
+
+/* ---------------------------------------------------------------------------
+   Home page — hero, search CTA, tab tiles
+   ---------------------------------------------------------------------------
+   home.mdx (mode: center) supplies the markup; docs.json points the "Home"
+   tab at it. Everything here is scoped through :has(.bru-home-search), the
+   CTA wrapper that only exists on that page, so no other page is affected.
+   The tiles are stock Mintlify <Card>s — no styling needed. The CTA is a
+   fake search field (a button dressed as an input) that opens the real
+   search modal via home-search.js; `cursor: text` is deliberate, it reads
+   as a field you click into.
+   --------------------------------------------------------------------------- */
+
+/* Hero: the page's frontmatter title doubles as the headline. It shares a
+   flex row with the "Copy page" widget, so it shrink-wraps and sits left by
+   default — hide the widget (its wrapper is the min-w-[156px] flex child;
+   noise on a landing page anyway) and let the h1 take the full row. */
+#content-area:has(.bru-home-search) h1 {
+  font-size: 2.75rem;
+  line-height: 1.15;
+  text-align: center;
+  margin-top: 3rem;
+  width: 100%;
+}
+#content-area:has(.bru-home-search) header [class*="min-w-[156px]"] {
+  display: none;
+}
+
+.bru-home-search {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0 2.25rem;
+}
+
+/* Group eyebrows on the card sections — same treatment as the nav's
+   START/PRODUCTS/MORE labels (site sans, 10px/600, modest tracking), with
+   a hairline rule running out to the right to carry the sectioning. The
+   class only exists on home.mdx. */
+.bru-home-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 1.75rem 0 0.75rem;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #b4aea2;
+}
+.bru-home-group::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgb(60 50 20 / 0.09);
+}
+.dark .bru-home-group {
+  color: #6e6a62;
+}
+.dark .bru-home-group::after {
+  background: rgb(255 255 255 / 0.08);
+}
+
+/* Compact chip cards, home only: every card is a horizontal icon+title
+   chip (descriptions dropped — they were most of the tile height, and
+   the titles are self-explanatory next to the nav). Hooks are the Card's
+   data-component-part attributes plus its stable .card class. Title
+   margin-top is zeroed because horizontal cards put the icon BESIDE the
+   title — Mintlify's mt-4 there pushes the title below the icon line and
+   reads as misalignment. */
+#content-area:has(.bru-home-search) .card {
+  border-radius: 0.625rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+#content-area:has(.bru-home-search)
+  .card
+  [data-component-part="card-content-container"] {
+  padding: 0.75rem 0.875rem;
+}
+#content-area:has(.bru-home-search) .card [data-component-part="card-icon"] {
+  height: 1rem;
+  width: 1rem;
+}
+#content-area:has(.bru-home-search)
+  .card
+  [data-component-part="card-icon"]
+  svg {
+  height: 1rem;
+  width: 1rem;
+}
+#content-area:has(.bru-home-search) .card [data-component-part="card-title"] {
+  font-size: 0.875rem;
+  margin-top: 0;
+}
+#content-area:has(.bru-home-search) .card [data-component-part="card-content"] {
+  font-size: 0.78125rem;
+  line-height: 1.45;
+  margin-top: 0.125rem;
+}
+/* The grid tightens to match the chips. */
+#content-area:has(.bru-home-search) .columns {
+  gap: 0.625rem;
+}
+.bru-home-search-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 50rem;
+  height: 3.5rem;
+  padding: 0 1.25rem;
+  border-radius: 0.875rem;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 0.08);
+  color: #6b7280;
+  font-size: 1rem;
+  text-align: left;
+  cursor: text;
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+}
+.bru-home-search-btn:hover,
+.bru-home-search-btn:focus-visible {
+  border-color: #f2994a;
+  box-shadow: 0 6px 24px rgb(242 153 74 / 0.25);
+}
+.bru-home-search-btn svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex: none;
+}
+.bru-home-search-label {
+  flex: 1 1 auto;
+}
+.bru-home-search-btn kbd {
+  flex: none;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.375rem;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  font-size: 0.75rem;
+  font-family: inherit;
+  color: #9ca3af;
+}
+.dark .bru-home-search-btn {
+  border-color: #3f4148;
+  background: #16181f;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 0.4);
+  color: #9ca3af;
+}
+.dark .bru-home-search-btn:hover,
+.dark .bru-home-search-btn:focus-visible {
+  border-color: #ffa94d;
+  box-shadow: 0 6px 24px rgb(255 169 77 / 0.2);
+}
+.dark .bru-home-search-btn kbd {
+  border-color: #33353c;
+  background: #1e2027;
+  color: #6b7280;
+}
+
+/* ---------------------------------------------------------------------------
+   Information density — shrink the theme's whitespace, not the content
+   ---------------------------------------------------------------------------
+   Mintlify's defaults are 16px body text at line-height 28px (1.75), 48px of
+   margin above every h2, 32px around every image, and full-column screenshots.
+   None of that is in our .mdx — it's the platform theme (Tailwind prose). The
+   blocks below override it. Measured at 1440x900 on two probe pages:
+   /html-docs/generate 2511px -> 2136px (-15%), the JavaScript reference
+   52709px -> 47694px (-9.5%), and visible sidebar rows 13 -> 16 / 14 -> 18.
+   Text-heavy stretches compress the most; the floor on long pages is code
+   blocks (deliberately untouched) and screenshot heights, which don't track
+   the base font. If more is wanted, the next lever is a code-block font-size
+   block — not taken here to keep code readable.
+
+   For calibration: Cursor's docs (the density benchmark that prompted this)
+   use 14px body text; we land at 14.5px.
+
+   Mechanics that make this cheap: the prose theme sizes headings and most
+   margins in em, so the base-font block compounds — shrinking 16px -> 14.5px
+   proportionally shrinks nearly every gap on the page for free. The explicit
+   margin blocks then cut the biggest offenders further. Selectors are plain
+   classes; this file is injected unlayered and last, so no !important or
+   specificity games are needed (see the max-w-8xl block above).
+
+   Each block below is independent — tune or delete any one without affecting
+   the rest. Values are plain numbers on purpose.
+
+   Maintenance couplings:
+   - `.mdx-content` (article body), `.callout` and `#sidebar` are
+     Mintlify-emitted, not public API. If renamed, the affected block stops
+     matching and that element reverts to the roomier default — safe failure
+     direction, re-check after a Mintlify bump.
+   - The h1 subtitle and code blocks are deliberately untouched.
+   --------------------------------------------------------------------------- */
+
+/* Body text: 16px/1.75 -> 14.5px/1.55. The biggest lever — everything
+   em-based (headings, prose margins, list indents) scales with it. */
+.mdx-content {
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+
+/* Heading margins: the ~48px band above every h2 (2em at 24px) was the
+   single biggest scroll cost on long pages. */
+.mdx-content h2 {
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+.mdx-content h3 {
+  margin-top: 1.25em;
+  margin-bottom: 0.4em;
+}
+.mdx-content h4 {
+  margin-top: 1.2em;
+  margin-bottom: 0.4em;
+}
+
+/* Paragraphs and lists: prose defaults are 1.25em between paragraphs and
+   0.5em between list items. */
+.mdx-content p {
+  margin-top: 0.7em;
+  margin-bottom: 0.7em;
+}
+.mdx-content ul,
+.mdx-content ol {
+  margin-top: 0.7em;
+  margin-bottom: 0.7em;
+}
+.mdx-content li {
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
+}
+
+/* Screenshots: cap at 580px instead of the full content column (~689px at
+   1440, wider on the uncapped shell), and halve the 32px vertical margins.
+   min() keeps them responsive below the cap; images never upscale (Mintlify
+   sets width:auto), so small images are unaffected. */
+.mdx-content img {
+  max-width: min(580px, 100%);
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+/* Callouts (Note/Tip/Warning/Info): default is 16px text with 16px/20px
+   padding. Internal paragraph margins shrink too, or a one-line callout
+   still reads roomy. */
+.callout {
+  padding: 10px 14px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+.callout p {
+  margin-top: 0.4em;
+  margin-bottom: 0.4em;
+}
+
+/* Sidebar: 14px text in 36px rows -> 13px in ~27px rows, so more of the
+   navigation is visible without scrolling. Page links are <a>; collapsible
+   subgroup toggles (REST, GraphQL, ... under Send Requests) are <button>
+   with the same row classes — cover both or the toggles render 9px taller
+   than the links around them and the group looks unevenly spaced. */
+#sidebar a,
+#sidebar li button {
+  font-size: 13px;
+  line-height: 20px;
+  padding-top: 3.5px;
+  padding-bottom: 3.5px;
+}
