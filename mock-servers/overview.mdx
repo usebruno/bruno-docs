@@ -38,6 +38,12 @@ Mock responses are stored with your collection, not in a hosted service. Closing
 
 The Request Log is **in-memory only** (most recent 500 entries per server). It is a debugging aid, not an audit log.
 
+## Scope and limitations
+
+- **App only.** Mock servers start and stop from the Bruno app. Bruno CLI has no command to run a mock server, and Bruno does not ship a standalone mock server binary or container image. You cannot deploy a Bruno mock server to a remote environment such as Kubernetes.
+- **Local only.** A running mock server binds to a port on your machine and stops when you close Bruno.
+- **No separate export.** Mock server definitions are stored as `.yml` files in the `mocks` folder of your workspace. To share a mock server or move it to another machine, commit these files to version control or copy them directly. Teammates who open the same workspace get the same mock servers.
+
 ## Share feedback
 
 Share your feedback on Mock Servers directly on usebruno [GitHub Discussions](https://github.com/usebruno/bruno/discussions/9014).
