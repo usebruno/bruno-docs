@@ -567,10 +567,10 @@
                 "pages": ["variables/environment-variables"]
               },
               {
-                "item": "Bruno CLI",
+                "item": "Bruno CLI Examples",
                 "icon": "terminal",
-                "description": "Run collections from the command line",
-                "pages": ["bru-cli/overview"]
+                "description": "Command examples for running collections",
+                "pages": ["bru-cli/runCollection"]
               }
             ]
           }
