@@ -21,8 +21,8 @@ Use this path when the collection already has saved response examples.
 1. Open the collection.
 2. In the sidebar, expand **Mock Servers** and click the **+** icon to create a new mock server.
 3. Enter a **Name**.
-4. Keep **Link to a collection or API spec** checked, select **Collection**, pick the collection, then click **Create**.
-5. On the dashboard, click **Sync with Examples**. Every [saved example](/send-requests/res-data-cookies/response-examples) becomes a mock response (method, path, status, headers, and body).
+4. Under **Source**, select **Collection** and pick the collection.
+5. Keep **Sync mock responses with collection examples** checked, then click **Create**. Every [saved example](/send-requests/res-data-cookies/response-examples) becomes a mock response (method, path, status, headers, and body). If you uncheck it, you can sync later from the dashboard with **Sync with Examples**.
 6. Click **Start Server** to start the mock server on the saved port. If the port is already in use, change it under **Mock Server Settings (gear icon)** → **Advanced settings**.
 
 ![Create mock server linked to a collection](/images/screenshots/v4/mock-severs/create-api-spec-mock-server.webp)
@@ -33,8 +33,8 @@ Use this path when the collection already has saved response examples.
 Use this path when you have an API spec in the workspace. Turn on [API Spec](/open-api/createOAS#viewing-existing-oas-files) under **Preferences** → **Features** if it is not already enabled.
 
 1. Load the spec under **API Specs** in the sidebar (if it is not already there).
-2. Create a mock server, keep **Link to a collection or API spec** checked, select **API Spec**, pick the spec, then click **Create**.
-3. On the dashboard, click **Generate from API Spec**. Each operation and response status becomes a mock response; bodies are derived from the schema where possible.
+2. Create a mock server. Under **Source**, select **API Spec** and pick the spec.
+3. Keep **Sync mock responses with API spec** checked, then click **Create**. Each operation and response status becomes a mock response; bodies are derived from the schema where possible. If you uncheck it, you can generate later from the dashboard with **Generate from API Spec**.
 4. Click **Start Server** to start the mock server on the saved port. If the port is already in use, change it under **Mock Server Settings (gear icon)** → **Advanced settings**.
 
 ![Create mock server linked to an API spec](/images/screenshots/v4/mock-severs/create-collection-api-mock-server.webp)
@@ -46,11 +46,15 @@ To add responses yourself instead of syncing from a collection or spec:
 
 1. Click **+** under **Mock Servers**.
 2. Enter a **Name**.
-3. Turn off **Link to a collection or API spec**.
+3. Under **Source**, select **Standalone**.
 4. Optionally set **Port** and **Response delay** under **Advanced settings**.
 5. Click **Create**, then add responses from the **Responses** tab.
 
 ![Create a standalone mock server](/images/screenshots/v4/mock-severs/create-raw-mock-server.webp)
+
+## Port validation
+
+The port must be a whole number between 1 and 65535. Bruno validates the port when you create, clone, or edit a mock server and when you start it, and shows an error if the port is already used by another mock server in Bruno or by another process on your system.
 
 ## Where Bruno store mock servers
 

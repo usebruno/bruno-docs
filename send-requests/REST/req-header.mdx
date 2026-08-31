@@ -18,10 +18,31 @@ Request headers are **key-value** pairs sent along with an HTTP request to provi
 
 ![req-headers](/images/screenshots/v4/description/header.webp)
 
+## View default headers
+
+Bruno adds a set of default headers, such as `User-Agent`, `Accept`, `Accept-Encoding`, `Connection`, and `Host`, to every request at runtime. You can view them directly in the **Headers** tab:
+
+1. Navigate to the **Headers** tab.
+2. Click **Show Inherited Headers** at the bottom of the tab.
+
+The tab now shows an **Inherited Headers** section with the default headers and a **Request Headers** section with your own headers. Click **Hide Inherited Headers** to collapse the view.
+
 <Tip>
-  To view default headers, navigate to the **Headers** tab in your request. For
-  custom headers, check the **Timeline** tab.
+  To verify the headers that were actually sent with a request, check the **Timeline** tab.
 </Tip>
+
+### Omit a default header
+
+You can omit individual default headers on a per-request basis:
+
+1. Click **Show Inherited Headers** in the **Headers** tab.
+2. Uncheck the default header you want to omit.
+
+Bruno saves the omitted headers in the request file and skips them when sending the request, both in the app and in the [Bruno CLI](/bru-cli/overview).
+
+<Note>
+  Adding your own header with the same name overrides the default header. Bruno shows a warning icon next to both headers when this happens. The `Host` header is required by HTTP and cannot be omitted.
+</Note>
 
 ## Streaming with Server-Sent Events
 
