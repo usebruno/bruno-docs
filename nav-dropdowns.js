@@ -126,7 +126,7 @@
           label: "Environment Variables",
           href: "/variables/environment-variables",
         },
-        { label: "Bruno CLI", href: "/bru-cli/runCollection" },
+        { label: "Bruno CLI Examples", href: "/bru-cli/runCollection" },
       ],
     },
     v3: {
