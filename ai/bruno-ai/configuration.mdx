@@ -3,11 +3,14 @@ title: "Configuration"
 sidebarTitle: "Configuration"
 ---
 
-<Note>
-  Bruno AI is available from **v4.0.0** and higher.
-</Note>
+<Note>Bruno AI is available from **v4.0.0** and higher.</Note>
 
-Open **Preferences** from the bottom-left corner of the app and click the **AI** tab. The AI tab has three sections: **Configuration**, **Autocomplete**, and **Security**.
+## How to enable Bruno AI
+
+1. Open **Preferences** from the bottom-left corner of the app
+2. Go to the **AI** section and click the **Enable** button.
+
+The **AI** tab has three sections: **Configuration**, **Autocomplete**, and **Security**.
 
 ![ai-configuration](/images/screenshots/v4/ai/ai-preferences.webp)
 
@@ -17,37 +20,28 @@ Open **Preferences** from the bottom-left corner of the app and click the **AI**
 
 ### Enable AI Features
 
-Toggle **AI Features** on at the top of the Configuration tab. Your API keys are stored locally in `preference.json` and never leave your machine.
+Toggle **AI Features** on at the top of the Configuration tab.
+
+<Warning>
+ **Bruno never stores your API keys.** 
+  
+  The keys stay on your machine and are not written to collections or Git. Bruno saves them locally in the same application-data folder as `preferences.json`, and they never leave your machine except when Bruno talks to the provider you configured.
+
+  - macOS: `~/Library/Application Support/bruno/`
+  - Windows: `%APPDATA%\bruno\`
+  - Linux: `~/.config/bruno/`
+
+</Warning>
 
 ### Add a provider
 
-#### OpenAI
+Choose the provider you want to connect:
 
-1. Expand the **OpenAI** row under **Providers**.
-2. Enter your **API Key**.
-3. Enable or disable individual models as needed.
-4. Toggle the provider on.
+- [OpenAI](/ai/bruno-ai/openai) - add an OpenAI API key and select OpenAI models
+- [Anthropic](/ai/bruno-ai/anthropic) - add an Anthropic API key and select Claude models
+- [Custom AI providers](/ai/bruno-ai/custom-providers) - connect an OpenAI-compatible hosted or local endpoint
 
-#### Anthropic
-
-1. Expand the **Anthropic** row under **Providers**.
-2. Enter your **API Key**.
-3. Choose from the default models: **Claude Opus 4.7**, **Claude Sonnet 4.6**, **Claude Haiku 4.5**.
-4. Toggle the provider on.
-
-#### Custom OpenAI-compatible endpoints
-
-Connect any provider that exposes an OpenAI-compatible API — including self-hosted models like Llama or any third-party proxy.
-
-1. Click **+ Add endpoint** under **OpenAI-Compatible Endpoints**.
-2. Fill in:
-   - **Name** - a label for this endpoint
-   - **Base URL** - the API base URL (for example `https://api.example.com/v1`)
-   - **API Key** - your key for this endpoint
-3. Add model IDs under **Models** - use the model ID your provider expects (for example `gpt-4o`, `llama3.1:8b`, or `mistral-7b`). You can also add a label for each model.
-4. Click **Save**.
-
-You can add multiple custom endpoints. Each is stored as a separate provider entry in `preference.json`.
+Each provider page includes setup, connection testing, model selection, and troubleshooting details.
 
 ---
 
@@ -65,20 +59,20 @@ Select which model handles suggestions. **Auto (fastest available)** picks the l
 
 ### Trigger mode
 
-| Mode | Behavior |
-|------|----------|
-| Aggressive | Suggests on every keystroke |
-| Debounced | Suggests after you pause typing (default) |
-| Manual | Only suggests when you press `⌘ \` |
+| Mode       | Behavior                                  |
+| ---------- | ----------------------------------------- |
+| Aggressive | Suggests on every keystroke               |
+| Debounced  | Suggests after you pause typing (default) |
+| Manual     | Only suggests when you press `⌘ \`        |
 
 ### Keymap
 
-| Key | Action |
-|-----|--------|
+| Key   | Action                     |
+| ----- | -------------------------- |
 | `Tab` | Accept the full suggestion |
-| `⌘ →` | Accept one word at a time |
-| `Esc` | Dismiss the suggestion |
-| `⌘ \` | Trigger manually |
+| `⌘ →` | Accept one word at a time  |
+| `Esc` | Dismiss the suggestion     |
+| `⌘ \` | Trigger manually           |
 
 ---
 
@@ -93,12 +87,15 @@ Bruno automatically redacts sensitive data before sending context to any provide
 Masks `Authorization`, cookies, API keys, and other credential-bearing headers. Non-sensitive headers pass through unchanged.
 
 **Request headers sent to Bruno:**
+
 ```
 Authorization: Bearer eyJhbGci...
 Content-Type: application/json
 X-Request-Id: req_abc123
 ```
+
 **What the AI receives:**
+
 ```
 Authorization: <redacted>
 Content-Type: application/json
@@ -110,6 +107,7 @@ X-Request-Id: req_abc123
 Masks values under keys like `password`, `*_token`, and `secret` in JSON and GraphQL variables. Structure and non-sensitive fields still pass through.
 
 **Request body sent to Bruno:**
+
 ```json
 {
   "username": "usebruno",
@@ -118,7 +116,9 @@ Masks values under keys like `password`, `*_token`, and `secret` in JSON and Gra
   "email": "usebruno@example.com"
 }
 ```
+
 **What the AI receives:**
+
 ```json
 {
   "username": "usebruno",
@@ -133,6 +133,7 @@ Masks values under keys like `password`, `*_token`, and `secret` in JSON and Gra
 Sends the response as a shape only. Real values are replaced with type placeholders. Turn this off to send the actual response body.
 
 **Actual response:**
+
 ```json
 {
   "id": 42,
@@ -140,7 +141,9 @@ Sends the response as a shape only. Real values are replaced with type placehold
   "token": "eyJhbGci..."
 }
 ```
+
 **What the AI receives:**
+
 ```json
 {
   "id": "<number>",
@@ -154,11 +157,14 @@ Sends the response as a shape only. Real values are replaced with type placehold
 Masks values of variables whose names look like secrets. Variables explicitly marked `secret` are always redacted regardless of this toggle.
 
 **Environment variables:**
+
 ```
 baseUrl = https://api.example.com
 api_key = sk-abc123
 ```
+
 **What the AI receives:**
+
 ```
 baseUrl = https://api.example.com
 api_key = <redacted>
