@@ -24,22 +24,29 @@ Execute any request in your collection and retrieve the response directly within
 
 ```javascript
 const requestResponse = await bru.runRequest(
-  "absolute/path/to/a/request/from/collection/root"
+  "folder/subfolder/request-name"
 );
 ```
 
 ### Parameters
 
-- **requestPath**: The absolute path to the request from the collection root (string)
+- **requestPath**: The path to the request relative to the collection root, using folder names as segments and the request name (without the `.bru` extension) as the last segment. For a request at the collection root, pass just the request name (e.g. `"Login"`). For a nested request, join the folder names with `/` (e.g. `"auth/Login"`).
 
 ### Returns
 
-Returns a response object containing:
-- `status`: HTTP status code
-- `statusText`: HTTP status text
+Returns a response object with the following fields:
+
+- `status`: HTTP status code (number)
+- `statusText`: HTTP status text (string)
 - `headers`: Response headers object
-- `body`: Response body (automatically parsed if JSON)
-- `responseTime`: Response time in milliseconds
+- `data`: Parsed response body — automatically decoded to a JavaScript object when the response is JSON, otherwise a string
+- `duration`: Response time in milliseconds
+- `size`: Response size in bytes
+- `url`: The final request URL
+
+<Callout type="info" emoji="">
+  The parsed body lives on `response.data`, not `response.body`. This differs from the `res` object in post-response and test scripts, where the body is exposed as `res.body` / `res.getBody()`.
+</Callout>
 
 ### Examples
 
@@ -51,7 +58,7 @@ const response = await bru.runRequest("auth/login");
 
 // Check if login was successful
 if (response.status === 200) {
-  const data = response.body;
+  const data = response.data;
   bru.setVar("authToken", data.token);
   console.log("Login successful, token saved");
 } else {
