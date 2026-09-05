@@ -19,7 +19,7 @@ You can import and export environment variables (collection and global) to share
 
 ## Importing Environment Variables
 
-The import feature accepts environment files in both **Bruno** and **Postman** formats.
+The import feature accepts environment files in both **Bruno** and **Postman** formats. You can import multiple files at once.
 
 ### Steps to Import
 
@@ -27,10 +27,25 @@ The import feature accepts environment files in both **Bruno** and **Postman** f
 
 ![Export env](/images/screenshots/get-started/import-export/import-export-env/import-env.webp)
 
-2. Select the environment file you want to import.
-3. The variables will be added to your environment (global or collection, depending on which you're configuring).
+2. Drag and drop one or more JSON environment files, or click to browse and select them.
+3. The environments will be added (global or collection, depending on which you're configuring). If none of the names conflict with existing environments and all files are valid, Bruno imports them immediately.
 
 ![Import Environment](/images/screenshots/get-started/import-export/import_collection/import-env.webp)
+
+### Resolving name conflicts
+
+If an imported environment has the same name as an existing one, Bruno shows a review screen before importing. The screen groups environments into **Duplicates** and **New**, and lets you search the list and select which environments to import.
+
+For each duplicate, choose one of two resolutions:
+
+- **Import as copy** (default): Bruno creates the environment under a new name and keeps the existing environment untouched.
+- **Replace existing**: Bruno overwrites the existing environment's variables with the imported ones.
+
+You can also apply a resolution to all duplicates at once using the dropdown in the **Duplicates** group header. Click **Import** to finish.
+
+<Note>
+  If a file has an invalid or unsupported format, Bruno reports the error and continues importing the remaining valid files.
+</Note>
 
 ## Exporting Environment Variables
 
