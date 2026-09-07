@@ -1618,6 +1618,32 @@ const fixture = JSON.parse(fs.readFileSync(`${bru.cwd()}/fixtures/user.json`, "u
 req.setBody(fixture);
 ```
 
+### `__dirname` and `__filename`
+
+The CommonJS globals `__dirname` and `__filename` are available inside scripts. They are bound per script segment, so collection, folder, and request scripts each see their own source file location.
+
+| Script segment | `__dirname` | `__filename` |
+| --- | --- | --- |
+| Collection scripts and tests | Collection directory | Absolute path to `collection.bru` |
+| Folder scripts and tests | Folder directory | Absolute path to `folder.bru` |
+| Request scripts and tests | Request directory | Absolute path to the request's `.bru` file |
+| No script path (fallback) | Collection directory | `undefined` |
+
+Collections in the YAML format use `opencollection.yml`, `folder.yml`, and `<name>.yml` in place of the `.bru` filenames.
+
+```javascript
+const fs = require("fs");
+const path = require("path");
+
+// Read a file next to the script's source file
+const data = JSON.parse(fs.readFileSync(path.join(__dirname, "data.json"), "utf8"));
+req.setBody(data);
+```
+
+<Info>
+  `__dirname` and `__filename` are available in Bruno **4.2.0** or higher.
+</Info>
+
 ### `bru.isSafeMode()`
 
 Returns `true` when the script is running in **Safe Mode** (the default sandbox), or `false` when running in **Developer Mode** which enables `require()` and Node.js built-ins. Use this to branch logic based on the active sandbox.

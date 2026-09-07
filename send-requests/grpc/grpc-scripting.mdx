@@ -1,0 +1,128 @@
+---
+title: "gRPC Scripting"
+sidebarTitle: "Scripting"
+---
+
+Bruno lets you write JavaScript that runs at specific points in a gRPC call's lifecycle. Use scripts to set metadata before the call starts, inspect messages as they are sent and received, and run tests against the final status and trailers.
+
+<Note>
+  gRPC scripting is a **Beta** feature. Enable it under **Preferences → Beta → gRPC Scripting** before the Script tab appears on gRPC requests. See [Preferences](/get-started/configure/settings#beta).
+</Note>
+
+## Lifecycle hooks
+
+Open a gRPC request and select the **Script** tab. The tab contains one editor per hook:
+
+| Hook | Runs | Available objects |
+| --- | --- | --- |
+| **Before Call Start** | Once, before the call is sent | `bru.grpc.request` |
+| **Before Message Send** | Before each message is transmitted | `bru.grpc.request` (with `message`) |
+| **After Message Receive** | After each message arrives from the server | `bru.grpc.request`, `bru.grpc.response` (with `message`) |
+| **After Call End** | Once, after the call completes | `bru.grpc.request`, `bru.grpc.response` |
+
+For a unary call, each hook runs once. For streaming calls, the message hooks run once per message sent or received.
+
+## The `bru.grpc` API
+
+gRPC scripts use the same `bru` object as HTTP scripts for [variables](/testing/script/vars), assertions, and utilities. Instead of the `req` and `res` globals, the request and response models live under `bru.grpc`.
+
+<Warning>
+  Everything under `bru.grpc` is read-only, with one exception: `bru.grpc.request.metadata` accepts writes in the **Before Call Start** hook. Calling a write method on metadata in any other hook throws an error. `bru.runRequest()` is not supported in gRPC scripts.
+</Warning>
+
+### `bru.grpc.request`
+
+| Property | Description |
+| --- | --- |
+| `url` | The request URL. |
+| `method` | The full method path being called. |
+| `methodType` | The call type: unary, server streaming, client streaming, or bidirectional. |
+| `authMode` | The configured auth mode, or `none`. |
+| `protoPath` | Path to the proto file, when one is used. |
+| `name` | The request name. |
+| `metadata` | The metadata sent with the call. Writable only in Before Call Start. |
+| `messages` | Messages the call has sent so far, as `{ data, timestamp }` entries. Empty in Before Call Start. |
+| `message` | The single message about to be sent. Present only in Before Message Send. |
+
+### `bru.grpc.response`
+
+Available in the **After Message Receive** and **After Call End** hooks.
+
+| Property | Description |
+| --- | --- |
+| `statusCode` | The gRPC status code. |
+| `statusText` | The gRPC status text. |
+| `metadata` | Response metadata (headers). Read-only. |
+| `trailers` | Response trailers. Read-only. |
+| `messages` | Messages received so far, as `{ data, timestamp }` entries. |
+| `duration` | Call duration. |
+| `message` | The single message just received. Present only in After Message Receive. |
+
+<Note>
+  In **After Message Receive** the call is still open, so `statusCode`, `statusText`, `duration`, and `trailers` are not yet known and read as `undefined` or empty. They are complete in **After Call End**.
+</Note>
+
+### Metadata methods
+
+`metadata` on the request and `metadata` and `trailers` on the response share the same list API. Keys are matched case-insensitively.
+
+| Method | Description |
+| --- | --- |
+| `get(key)` | Get the value of an entry. |
+| `one(key)` | Get the full `{ key, value }` entry. |
+| `has(key, value?)` | Check whether an entry exists, optionally matching its value. |
+| `all()` | Get all entries as an array of `{ key, value }`. |
+| `indexOf(item)` | Get the index of an entry by key or `{ key, value }`. |
+| `each(fn)`, `find(fn)`, `filter(fn)`, `map(fn)`, `reduce(fn)` | Iterate over entries. |
+| `toString()` | Render entries as `key: value` lines. |
+| `upsert(key, value)` | Insert a key, or update it in place. Write method. |
+| `add(item)` | Upsert an entry from a `{ key, value }` object. Write method. |
+| `remove(key)` | Remove the entry with the given key. Write method. |
+| `clear()` | Remove every entry. Write method. |
+
+Write methods work only on `bru.grpc.request.metadata` in the **Before Call Start** hook.
+
+### Message methods
+
+`messages` on the request and response is a read-only list.
+
+| Method | Description |
+| --- | --- |
+| `all()` | Get all messages. |
+| `get(index?)` | Get the message at an index. Defaults to `0`. |
+| `count()` | Get the number of messages. |
+| `each(fn)`, `find(fn)`, `filter(fn)`, `map(fn)`, `reduce(fn)` | Iterate over messages. |
+
+Each message is a `{ data, timestamp }` object, where `data` is the decoded message payload.
+
+## Examples
+
+Set an auth token in metadata before the call starts:
+
+```javascript
+// Before Call Start
+bru.grpc.request.metadata.upsert("authorization", `Bearer ${bru.getEnvVar("token")}`);
+```
+
+Capture a value from a received message:
+
+```javascript
+// After Message Receive
+const reply = bru.grpc.response.message;
+bru.setVar("lastReply", reply.data);
+```
+
+Test the final call status and trailers:
+
+```javascript
+// After Call End
+test("call succeeded", function () {
+  expect(bru.grpc.response.statusCode).to.equal(0);
+});
+
+test("received all replies", function () {
+  expect(bru.grpc.response.messages.count()).to.be.above(0);
+});
+```
+
+Test results and script errors appear in the response pane, grouped by the hook they came from.
