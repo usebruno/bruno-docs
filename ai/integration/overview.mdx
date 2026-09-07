@@ -11,6 +11,12 @@ You can configure Bruno to use any AI agent and editor of your choice.
 
 See [Use cases](./use-cases) for common workflows (generating collections, writing tests, CI/CD) and example prompts you can use with any supported agent.
 
+## MCP Server
+
+[Bruno MCP](https://github.com/usebruno/bruno-mcp) is a Model Context Protocol (MCP) server that lets MCP-compatible AI assistants, such as Claude and Cursor, work with your Bruno API collections. It exposes your requests, folders, and environments as MCP tools so an agent can discover, inspect, and run them, while your collection files stay on your local filesystem.
+
+The Bruno desktop app does not include a built-in MCP server. See the [Bruno MCP repository](https://github.com/usebruno/bruno-mcp) for details.
+
 ## Supported Agents
 
 - [Cursor](https://cursor.com) - AI code editor with powerful automation for API development workflows

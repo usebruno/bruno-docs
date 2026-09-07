@@ -51,4 +51,16 @@ Bruno gRPC interface provides an intuitive way to interact with gRPC services. T
 
 You'll see the response in the **Response** section with detailed information about the request execution.
 
+## Adding metadata
+
+gRPC uses metadata instead of HTTP headers. Use metadata to send key-value pairs such as access tokens or tenant identifiers with a request.
+
+1. Open your gRPC request and select the **Metadata** tab in the request pane.
+2. Click **Add Metadata** and enter the key and value.
+3. Use the checkbox next to an entry to enable or disable it.
+
+Metadata values support variable interpolation, so you can reference environment or collection variables like `{{token}}`.
+
+For authentication methods such as Basic, Bearer, or API key, use the **Auth** tab instead of adding metadata manually.
+
 To learn about proto files, navigate to the [Adding Proto file section.](./grpc-proto)

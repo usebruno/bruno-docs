@@ -49,3 +49,18 @@ vars:secret [
 ```
 Any key in the array block can be prefixed with `~` to indicate that it is disabled.
 
+### Comments
+
+The Bru markup language does not have a dedicated comment syntax. To keep an entry in a file without it taking effect, prefix it with `~` to disable it:
+
+```bash
+headers {
+  content-type: application/json
+  ~transaction-id: {{transactionId}}
+}
+```
+
+The content of `script:pre-request`, `script:post-response`, and `tests` blocks is JavaScript, so standard JavaScript comments (`//` and `/* */`) work inside those blocks.
+
+To document a request, use the `docs` block or the **Docs** tab in the app.
+
