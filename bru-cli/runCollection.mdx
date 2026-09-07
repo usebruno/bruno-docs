@@ -5,12 +5,13 @@ sidebarTitle: "Command Examples"
 
 Bruno CLI allows you to run your API collections with ease, either by directly executing requests or using external data sources.
 
-This guide explains how to run entire collections, specific folders, and how to use data sources like CSV and JSON files to drive your API tests.
+This guide explains how to run entire collections, specific folders, and how to use data sources like CSV and JSON files to drive your API tests. For the full reference of every flag used below, see [Command Options](/bru-cli/commandOptions).
 
 <Warning>
-  **v3.0.0 Breaking Change**
-  
-  Starting from Bruno CLI v3.0.0, the default runtime mode is **Safe Mode**. If your collection requires Developer Mode features (external npm packages, filesystem access), pass the `--sandbox=developer` flag: `bru run --sandbox=developer`
+  **v3.0.0 Breaking Change** Starting from Bruno CLI v3.0.0, the default runtime
+  mode is **Safe Mode**. If your collection requires Developer Mode features
+  (external npm packages, filesystem access), pass the `--sandbox=developer`
+  flag: `bru run --sandbox=developer`
 </Warning>
 
 ## Basic Collection Execution
@@ -37,10 +38,6 @@ bru run users
 
 ## Running a Collection with a CSV File
 
-<Info>
-  This feature requires [Bruno CLI <strong><sup>↗</sup></strong>](https://www.npmjs.com/package/@usebruno/cli) version 1.35.0 or higher.
-</Info>
-
 If you need to run a collection using data from a CSV file, specify the path to the file with the `--csv-file-path` option:
 
 ```bash copy
@@ -56,6 +53,7 @@ To run a collection using data from a JSON file, provide the file path using the
 ```bash copy
 bru run --json-file-path /path/to/json/file.json
 ```
+
 ## Running a Collection Multiple Times
 
 You can run a collection multiple times in a single command using the `--iteration-count` flag:
@@ -89,14 +87,11 @@ bru run --env-file /Users/username/projects/api-testing/environments/prod.bru
 ```
 
 <Info>
-  The environment file should be in Bruno's `.bru` format. Make sure the file contains valid environment variables and their values.
+  The environment file should be in Bruno's `.bru` format. Make sure the file
+  contains valid environment variables and their values.
 </Info>
 
 ### Using JSON Environment Files
-
-<Info>
-  This feature requires [Bruno CLI <strong><sup>↗</sup></strong>](https://www.npmjs.com/package/@usebruno/cli) version 2.13.0 or higher.
-</Info>
 
 Bruno CLI now supports JSON environment files, which is particularly useful for global environments created in the Bruno app. This bridges the gap between UI-only global environments and CLI-based workflows.
 
@@ -114,15 +109,15 @@ The JSON environment file should follow Bruno's environment schema:
 {
   "name": "My Environment",
   "variables": [
-    { 
-      "name": "host", 
-      "value": "https://api.example.com", 
-      "enabled": true 
+    {
+      "name": "host",
+      "value": "https://api.example.com",
+      "enabled": true
     },
-    { 
-      "name": "api_key", 
-      "value": "your-api-key-here", 
-      "enabled": true 
+    {
+      "name": "api_key",
+      "value": "your-api-key-here",
+      "enabled": true
     }
   ]
 }
@@ -167,7 +162,9 @@ bru run --env Local --global-env Production
 #### Passing Environment Variables
 
 <Info>
-  Variables marked as secrets in the Bruno app are not persisted to disk for the CLI. Pass them at runtime with `--env-var` (collection) or `--global-env-var` (global).
+  Variables marked as secrets in the Bruno app are not persisted to disk for the
+  CLI. Pass them at runtime with `--env-var` (collection) or `--global-env-var`
+  (global).
 </Info>
 
 Use `--env-var` to override **collection-level** environment variables:
@@ -209,9 +206,9 @@ During the run:
 - `{{apiKey}}` interpolation also resolves to the overridden value.
 - Overrides are not written back to the global environment file on disk.
 
-| Flag | Scope | Seen by |
-| --- | --- | --- |
-| `--env-var` | Collection environment | Collection env vars and `{{variable}}` interpolation |
+| Flag               | Scope                                        | Seen by                                                  |
+| ------------------ | -------------------------------------------- | -------------------------------------------------------- |
+| `--env-var`        | Collection environment                       | Collection env vars and `{{variable}}` interpolation     |
 | `--global-env-var` | Global environment (requires `--global-env`) | `bru.getGlobalEnvVar()` and `{{variable}}` interpolation |
 
 ## Filtering Requests with Tags
@@ -253,4 +250,3 @@ By default, Bruno CLI runs requests sequentially. You can enable parallel execut
 ```bash copy
 bru run --iteration-count 2 --parallel
 ```
-
