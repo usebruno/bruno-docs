@@ -287,6 +287,12 @@ bru docs generate -o docs/api.html
 
 ### Select environments
 
+Use `--all-envs` to embed every environment in the collection:
+
+```bash copy
+bru docs generate --all-envs
+```
+
 Use `--envs` to embed only selected collection environments. Separate names with commas and quote the value when an environment name contains spaces:
 
 ```bash copy
@@ -295,11 +301,15 @@ bru docs generate --envs Production,Development
 bru docs generate --envs "Production,QA Env,Staging" -o docs/api.html
 ```
 
-Use `--exclude-envs` to leave environments out:
+Use `--exclude-envs` to leave environments out. Combine it with `--all-envs` to start from the full set, or with `--envs` to start from a named list:
 
 ```bash copy
-bru docs generate --exclude-envs Local,Development
+bru docs generate --all-envs --exclude-envs Local,Development
+
+bru docs generate --envs "Production,Staging,Local" --exclude-envs Local
 ```
+
+`--exclude-envs` takes preference. If the same environment name appears in both `--envs` and `--exclude-envs`, that environment is left out.
 
 The command exits with an error if a requested environment does not exist.
 
@@ -317,10 +327,10 @@ Use `--exclude-tags` to remove requests carrying any matching tag:
 bru docs generate --envs Prod --exclude-tags local
 ```
 
-You can combine both filters. Exclusion wins if a request matches both:
+You can combine both filters. `--exclude-tags` takes preference, the same way `--exclude-envs` does. If the same tag name appears in both `--tags` and `--exclude-tags`, requests with that tag are left out:
 
 ```bash copy
-bru docs generate --tags "Prod Ready,v2" --exclude-tags "WIP,Internal"
+bru docs generate --tags "Prod Ready,v2,WIP" --exclude-tags "WIP,Internal"
 ```
 
 Excluded requests do not remain in the embedded collection data, navigation, or search index of the generated documentation.
@@ -339,15 +349,14 @@ Use `--no-git-link` to omit `gitCollectionUrl`:
 bru docs generate --tags "Prod Ready,v2" --no-git-link
 ```
 
-When the Git link is omitted, **Open in Bruno** falls back to downloading and importing the collection.
-
 ### CI example
 
 Generate a filtered artifact after the collection changes, then publish or commit the resulting file:
 
 ```bash copy
 bru docs generate \
-  --envs "Production,Staging" \
+  --all-envs \
+  --exclude-envs Local \
   --exclude-tags "WIP,Internal" \
   --no-git-link \
   --output dist/docs/api.html

@@ -131,17 +131,20 @@ Use these options with `bru docs generate`. Run the command from the collection 
 | Option                  | Details                                                                                                                                                                   |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `-o`, `--output [file]` | Output HTML file. Parent directories are created and an existing file is overwritten. Default: `<sanitized-collection-name>-documentation.html` in the current directory. |
+| `--all-envs`            | Embed every environment in the collection.                                                                                                                                |
 | `--envs [a,b]`          | Embed only the named environments (comma-separated). Environment names must exist in the collection.                                                                      |
-| `--exclude-envs [a,b]`  | Leave the named environments out of the generated documentation (comma-separated).                                                                                        |
+| `--exclude-envs [a,b]`  | Leave the named environments out of the generated documentation (comma-separated). Exclusion wins if the same name also appears in `--envs`.                              |
 | `--tags [a,b]`          | Include only requests carrying any matching tag (comma-separated).                                                                                                        |
-| `--exclude-tags [a,b]`  | Exclude requests carrying any matching tag (comma-separated). Exclusion wins when a request matches both include and exclude filters.                                     |
+| `--exclude-tags [a,b]`  | Exclude requests carrying any matching tag (comma-separated). Exclusion wins if the same tag also appears in `--tags`.                                                    |
 | `--git-link`            | Embed `gitCollectionUrl` so the generated documentation can link to the Git repository. Enabled by default.                                                               |
 | `--no-git-link`         | Omit `gitCollectionUrl`. **Open in Bruno** then uses the download-and-import flow.                                                                                        |
 
 The CLI uses the same tag filtering and HTML generation implementation as the desktop app, so the same collection and options produce the same documentation. Excluded requests are removed from the generated artifact, including its embedded collection data, navigation, and search.
 
+ `--exclude-tags` and `--exclude-envs` both take preference when the same name appears on the include and exclude lists.
+
 ```bash
-bru docs generate --envs "Production,QA Env" --exclude-tags WIP --no-git-link -o docs/api.html
+bru docs generate --all-envs --exclude-envs Local --exclude-tags WIP --no-git-link -o docs/api.html
 ```
 
 See [Generate API Documentation](/bru-cli/runCollection#generate-api-documentation) for workflow examples covering output paths, environments, tags, and Git links.

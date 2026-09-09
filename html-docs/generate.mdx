@@ -58,14 +58,14 @@ Tags live in the request files themselves, so they travel with the collection th
 
 For Git backed collections, Bruno embeds the repository URL by default so readers can clone the collection through **Open in Bruno**.
 
-Turn the toggle off if you would rather not ship a repository URL, which matters most when the repo is private and the documentation is published somewhere public. With it off, no repository URL is written into the file, and **Open in Bruno** falls back to downloading and importing the collection instead of cloning it. Readers keep the button either way.
+Turn the toggle off if you would rather not ship a repository URL, which matters most when the repo is private and the documentation is published somewhere public. 
 
 ## Generate from the CLI
 
 You can produce the same file from the command line, which is the better option when documentation lives in Git or gets published by a pipeline:
 
 ```bash
-bru docs generate --envs Production --exclude-tags "Work in progress" --no-git-link
+bru docs generate --all-envs --exclude-tags "Work in progress" --no-git-link
 ```
 
 The CLI and the app share one implementation, so the same collection and the same options give you the same documentation. See [Generate API Documentation](/bru-cli/runCollection#generate-api-documentation) for the workflow and [Generate API Documentation options](/bru-cli/commandOptions#generate-api-documentation-options) for every flag.
