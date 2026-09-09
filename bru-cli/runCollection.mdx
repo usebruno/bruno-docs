@@ -250,3 +250,122 @@ By default, Bruno CLI runs requests sequentially. You can enable parallel execut
 ```bash copy
 bru run --iteration-count 2 --parallel
 ```
+
+## Generate API Documentation
+
+Bruno CLI can generate the same standalone HTML API documentation as **Collection → Generate Documentation** in the desktop app. This lets teams keep generated docs in Git, review changes alongside the collection, and regenerate or deploy the artifact from release and CI pipelines.
+
+Run the command from the collection root:
+
+```bash copy
+bru docs generate
+```
+
+Without additional options, Bruno writes:
+
+```text
+<sanitized-collection-name>-documentation.html
+```
+
+to the current directory. The CLI creates parent directories when needed and overwrites an existing output file without prompting. A successful command prints the output path.
+
+See [Generate API Documentation options](/bru-cli/commandOptions#generate-api-documentation-options) for the complete flag reference.
+
+### Choose the output file
+
+Use `--output` or `-o` to write the HTML file somewhere else:
+
+```bash copy
+bru docs generate --output docs/api.html
+```
+
+The short form is equivalent:
+
+```bash copy
+bru docs generate -o docs/api.html
+```
+
+### Select environments
+
+Use `--all-envs` to embed every environment in the collection:
+
+```bash copy
+bru docs generate --all-envs
+```
+
+Use `--envs` to embed only selected collection environments. Separate names with commas and quote the value when an environment name contains spaces:
+
+```bash copy
+bru docs generate --envs Production,Development
+
+bru docs generate --envs "Production,QA Env,Staging" -o docs/api.html
+```
+
+Use `--exclude-envs` to leave environments out. Combine it with `--all-envs` to start from the full set, or with `--envs` to start from a named list:
+
+```bash copy
+bru docs generate --all-envs --exclude-envs Local,Development
+
+bru docs generate --envs "Production,Staging,Local" --exclude-envs Local
+```
+
+`--exclude-envs` takes preference. If the same environment name appears in both `--envs` and `--exclude-envs`, that environment is left out.
+
+The command exits with an error if a requested environment does not exist.
+
+### Filter requests by tags
+
+Use `--tags` to include requests carrying any matching tag:
+
+```bash copy
+bru docs generate --tags "Prod Ready,local"
+```
+
+Use `--exclude-tags` to remove requests carrying any matching tag:
+
+```bash copy
+bru docs generate --envs Prod --exclude-tags local
+```
+
+You can combine both filters. `--exclude-tags` takes preference, the same way `--exclude-envs` does. If the same tag name appears in both `--tags` and `--exclude-tags`, requests with that tag are left out:
+
+```bash copy
+bru docs generate --tags "Prod Ready,v2,WIP" --exclude-tags "WIP,Internal"
+```
+
+Excluded requests do not remain in the embedded collection data, navigation, or search index of the generated documentation.
+
+### Include or omit the Git repository link
+
+Git links are included by default:
+
+```bash copy
+bru docs generate --git-link
+```
+
+Use `--no-git-link` to omit `gitCollectionUrl`:
+
+```bash copy
+bru docs generate --tags "Prod Ready,v2" --no-git-link
+```
+
+### CI example
+
+Generate a filtered artifact after the collection changes, then publish or commit the resulting file:
+
+```bash copy
+bru docs generate \
+  --all-envs \
+  --exclude-envs Local \
+  --exclude-tags "WIP,Internal" \
+  --no-git-link \
+  --output dist/docs/api.html
+```
+
+<Info>
+  The CLI and desktop app use the same HTML generation and filtering
+  implementation. For the same collection and options, they produce the same
+  documentation.
+</Info>
+
+For details about the generated site and deployment options, see [Generated HTML Documentation](/html-docs/overview).
