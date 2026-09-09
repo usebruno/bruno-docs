@@ -3,7 +3,7 @@ title: "Generated HTML Documentation"
 sidebarTitle: "Overview"
 ---
 
-Bruno can generate a standalone HTML documentation site from any collection. The result is a single HTML file which is a shareable, interactive API reference that you can open in a browser, send to API consumers, or deploy to a static host. 
+Bruno can generate a standalone HTML documentation site from any collection. The result is a single HTML file which is a shareable, interactive API reference that you can open in a browser, send to API consumers, or deploy to a static host.
 
 No Bruno installation is required to view it. The generated page loads the documentation renderer from Bruno's CDN, so viewers need network access.
 
@@ -19,7 +19,7 @@ This is a publishing feature, not an authoring one: Bruno builds the site for yo
 
 ## What the generated site includes
 
-- **[Interactive playground](/html-docs/playground)** - readers can edit and execute requests live from the docs, with auto-generated code samples in cURL, Python, and JavaScript
+- **[Interactive playground](/html-docs/playground)** - readers can edit and execute requests live from the docs. Collection scripts run in a Safe Mode sandbox, with auto-generated code samples in cURL, Python, and JavaScript
 - **[Environment switcher](/html-docs/environments)** - resolve `{{var}}` placeholders against any included environment
 - **[Full-text search](/html-docs/search)** - find requests by name, URL, params, or description
 
@@ -27,7 +27,7 @@ This is a publishing feature, not an authoring one: Bruno builds the site for yo
 
 You can generate the same HTML documentation from the desktop app or Bruno CLI:
 
-1. [Generate documentation in the app](/html-docs/generate) - create the HTML file from the collection menu
+1. [Generate documentation in the app](/html-docs/generate) - create the HTML file from the collection menu, and use the Advanced options to select environments, filter requests by tags, and include or omit the Git repository link
 2. [Generate API documentation with Bruno CLI](/bru-cli/runCollection#generate-api-documentation) - regenerate docs in scripts, releases, and CI pipelines
 3. [CLI documentation options](/bru-cli/commandOptions#generate-api-documentation-options) - select environments, filter requests by tags, set the output path, and include or omit the Git link
 4. [Deploy and share](/html-docs/deploy) - host the generated file or send it directly

@@ -3,22 +3,75 @@ title: "Interactive Playground"
 sidebarTitle: "Interactive Playground"
 ---
 
-The generated documentation is executable, not just readable: every request has a **Try** button that opens an interactive playground, plus ready-to-copy code samples.
+The generated documentation is executable, not just readable. Every request has a **Try** button that opens an interactive playground, plus ready-to-copy code samples.
 
 ## Try Requests Live
 
-Click on **Try** button at request level to get interactive playground that allows users to:
+Click **Try** on a request to open the playground. From there you can:
 
-- Edit request parameters, headers, and body
-- Modify and test scripts in real-time
-- Execute requests live directly from the documentation
-- View responses immediately
+- Edit parameters, headers, and body
+- Run the request live from the documentation
+- See the response immediately
+- Inspect and edit the scripts that belong to that request
 
 ![Try It Out Playground](/images/screenshots/v4/collection-docs/play-ground.webp)
 
+## Scripting in the playground
+
+When you hit **Try**, Bruno runs the same collection scripts the desktop app would run: pre-request, post-response, and tests. Collection, folder, and request scripts still stack in that order.
+
+The playground runs those scripts in a browser sandbox that matches **[Safe Mode](/get-started/javascript-sandbox)** in the desktop app. `bru`, `req`, and `res` are the same objects you already use in collection scripts. If a script works in Safe Mode on your machine, it should behave the same way here.
+
+That includes:
+
+- Environment, global environment, and runtime variables (`bru.getEnvVar`, `bru.setVar`, and related helpers)
+- Collection, folder, and request variables (`bru.getCollectionVar`, `bru.getFolderVar`, `bru.getRequestVar`)
+- Secrets resolved at run time with `bru.getSecretVar`
+- `bru.interpolate` (this is a real interpolation, not a no-op)
+- `bru.sleep`, `bru.sendRequest`, and `bru.utils`
+- Flow control such as `bru.setNextRequest`
+- The Safe Mode `req` and `res` accessors (URL, method, headers, body, status, and so on)
+
+```js
+const region = bru.getRequestVar("region");
+const baseId = bru.getCollectionVar("baseId");
+const apiKey = bru.getSecretVar("API_KEY");
+
+bru.setNextRequest("Refresh Token");
+```
+
+The full method list lives in the [JavaScript reference](/testing/script/javascript-reference). Treat that page as the Safe Mode contract. The playground follows it, except for the APIs called out below.
+
+<Info>
+  Secret values are resolved when a reader runs a request. They are not written
+  into the generated HTML as plaintext. Keep using secret variables the way you
+  already do in the collection.
+</Info>
+
+### What the playground cannot run
+
+A few APIs need the desktop app and are not available in the browser sandbox. Developer Mode features (filesystem access, system commands, extra npm packages) are also out of reach here.
+
+If a script calls one of the deferred APIs, the playground does not fail silently. It shows a warning in the response pane, naming the API:
+
+```text
+<api> is not currently supported in the Bruno playground. Please use the Bruno desktop app.
+```
+
+For example: `bru.visualize is not currently supported in the Bruno playground. Please use the Bruno desktop app.`
+
+| API                                                                                                | In the playground             |
+| -------------------------------------------------------------------------------------------------- | ----------------------------- |
+| `bru.runner.*`                                                                                     | Warning. Use the desktop app. |
+| OAuth2 credential helpers (`bru.getOauth2CredentialVar`, `bru.resetOauth2Credential`, and related) | Warning. Use the desktop app. |
+| `bru.cookies.*`                                                                                    | Warning. Use the desktop app. |
+| `bru.visualize`                                                                                    | Warning. Use the desktop app. |
+
+If a collection depends on those APIs (iteration data, OAuth credential storage, cookie jar, or response visualization), run it in Bruno on the desktop. The playground is still useful for trying the request and for scripts that stay on the Safe Mode `bru` / `req` / `res` surface.
+
 ## Code Samples
 
-The documentation automatically generates code snippets for each request in multiple languages:
+The documentation generates copyable snippets for each request in:
 
 - cURL
 - Python (requests)
@@ -26,7 +79,8 @@ The documentation automatically generates code snippets for each request in mult
 
 ## Tests and Scripts Display
 
-Interactive playground supports to:
-- Show **pre and post request scripts** inline for each request
-- Display **Params**, **Variables**, **Body**, **Headers**, **Auth** and test logic
-- View **Tests and Assertions** directly in the documentation
+The playground also shows:
+
+- Pre-request and post-response scripts for each request
+- Params, variables, body, headers, auth, and test logic
+- Tests and assertions in the documentation

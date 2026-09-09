@@ -5,25 +5,72 @@ sidebarTitle: "Generate Docs"
 
 Generate a standalone HTML documentation file from your collection in a few clicks.
 
+## Before you generate
+
+A couple of minutes of prep decides what ends up in the file, so it is worth checking these first:
+
+- **Write your docs.** The generated site pulls descriptions from the markdown you have written at the [collection, folder, and request levels](/api-docs/overview). Requests with no docs still appear, they just look thin.
+- **Decide which environments readers need.** You pick these in the modal. Anything you leave out is not embedded in the file.
+- **Tag your requests if you plan to filter.** Tag filtering is how you keep work in progress or internal endpoints out of published docs, and it reads the tags already saved on each request. If nothing is tagged yet, add tags in the collection first.
+- **Set a collection version (optional).** Collections without one show `Not Set` in the modal and in the generated site.
+- **Know whether the collection is Git backed.** The option to include the repository URL only shows up for Git backed collections.
+
 ## Generate Documentation
 
 1. Navigate to the Collection Settings and click on the **Generate Docs** under Documentation section
 
 ![Click Generate Docs](/images/screenshots/send-request/api-docs/opencollection/1-click-generate-docs.webp)
 
-2. Select **Environment** to include in the documentation and click the **Generate** button to create the HTML documentation
+2. Under **Environments to include**, select the environments you want embedded in the documentation. Use **Select All** to include every one of them.
+
+3. Expand **Advanced** if you want to filter requests or control the Git repository link. Both controls are optional, and leaving them alone produces the same output as before.
 
 ![Click Generate Button](/images/screenshots/v4/collection-docs/select-environment-export.webp)
 
+4. Click **Generate**. Bruno writes a documentation file for your collection to your file system, named `collection-name-documentation.html`
+
+![Generated HTML Documentation](/images/screenshots/v4/collection-docs/play-ground.webp)
+
+## Advanced options
+
+The **Advanced** section holds two independent controls. You can use either one on its own, or both together.
+
+### Filter requests by tags
+
+**Requests to include** starts on **All requests**. Switch it to **Filter by Tags** to publish a subset of the collection.
+
+- **Include tags**: only requests carrying a matching tag are published. For example, `Production ready`.
+- **Exclude tags**: requests carrying a matching tag are dropped. For example, `Work in progress`.
+
+You can fill in one field or both. If a request matches an include tag and an exclude tag at the same time, the exclusion wins and the request is left out.
+
+Filtered requests are genuinely absent from the generated file, not hidden in the page. They do not appear in the navigation, in search results, or in the collection data embedded in the HTML, so a reader cannot dig them out of the source.
+
 <Tip>
-  **Optional:** You can set a collection version before generating docs. Collections without a version show "Not set".
+  Because the filters are set per run, you can publish more than one variant
+  from the same collection. Generate once with `Production ready` for the public
+  file, then generate again with no filters for the internal copy.
 </Tip>
 
-3. Bruno will generate a documentation file for your collection in your file system with name `collection-name-documentation.html`
+Tags live in the request files themselves, so they travel with the collection through Git and stay consistent with the tag filters used by the [collection runner](/bru-cli/runCollection#filtering-requests-with-tags).
 
-![Generated HTML Documentation](/images/screenshots/v4/collection-docs/interface-overview.webp)
+### Include Git repo URL
+
+For Git backed collections, Bruno embeds the repository URL by default so readers can clone the collection through **Open in Bruno**.
+
+Turn the toggle off if you would rather not ship a repository URL, which matters most when the repo is private and the documentation is published somewhere public. With it off, no repository URL is written into the file, and **Open in Bruno** falls back to downloading and importing the collection instead of cloning it. Readers keep the button either way.
+
+## Generate from the CLI
+
+You can produce the same file from the command line, which is the better option when documentation lives in Git or gets published by a pipeline:
+
+```bash
+bru docs generate --envs Production --exclude-tags "Work in progress" --no-git-link
+```
+
+The CLI and the app share one implementation, so the same collection and the same options give you the same documentation. See [Generate API Documentation](/bru-cli/runCollection#generate-api-documentation) for the workflow and [Generate API Documentation options](/bru-cli/commandOptions#generate-api-documentation-options) for every flag.
 
 ## Next steps
 
-- See what readers can do in the generated site: [switch environments](/html-docs/environments), [search requests](/html-docs/search), and [try requests live](/html-docs/playground)
+- See what readers can do in the generated site: [switch environments](/html-docs/environments), [search requests](/html-docs/search), and [try requests live](/html-docs/playground) (including how collection scripts run in the playground)
 - [Deploy and share](/html-docs/deploy) the file with your team or API consumers
