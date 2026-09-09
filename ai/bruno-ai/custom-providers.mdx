@@ -1,0 +1,179 @@
+---
+title: "Connect a Custom AI Provider"
+sidebarTitle: "Custom Providers"
+description: "Connect an OpenAI-compatible hosted, proxied, or local AI endpoint to Bruno AI."
+---
+
+<Note>
+  Bruno AI is available from **v4.0.0** and higher. Turn it on under
+  **Preferences → AI → Configuration** before configuring a provider.
+</Note>
+
+Bruno can connect to any provider that exposes an **OpenAI-compatible API**. This includes third-party hosted providers, company gateways and proxies, self-hosted inference servers, and local model applications such as Ollama or LM Studio.
+
+<Warning>
+ **Bruno never stores your API keys.** 
+  
+  The keys stay on your machine and are not written to collections or Git. Bruno saves them locally in the same application-data folder as `preferences.json`, and they never leave your machine except when Bruno talks to the provider you configured.
+
+  - macOS: `~/Library/Application Support/bruno/`
+  - Windows: `%APPDATA%\bruno\`
+  - Linux: `~/.config/bruno/`
+
+</Warning>
+
+## What OpenAI-compatible means
+
+An OpenAI-compatible provider implements API routes and request formats based on the OpenAI API. Bruno needs:
+
+- A **Base URL** for the compatible API
+- An optional **API Key**
+- At least one exact **Model ID** accepted by the endpoint
+
+<Info>
+  Compatibility refers to the API format. The model itself does not need to be
+  made by OpenAI.
+</Info>
+
+## Before you begin
+
+Start the provider or local model server and find its Base URL and model ID in its documentation or interface.
+
+Common local examples:
+
+| Provider  | Base URL example            | Model ID example                      |
+| --------- | --------------------------- | ------------------------------------- |
+| Ollama    | `http://localhost:11434/v1` | `llama3.1:8b`                         |
+| LM Studio | `http://localhost:1234/v1`  | The identifier displayed by LM Studio |
+
+The exact values depend on your provider and configuration.
+
+## Add an endpoint
+
+1. Open **Preferences** from the bottom-left corner of Bruno.
+2. Go to **AI → Configuration**.
+3. Turn on **AI Features** if it is not already enabled.
+4. Under **OpenAI-Compatible Endpoints**, click **+ Add endpoint**.
+5. Enter a **Name** that identifies the provider, such as `Ollama local` or `Company AI gateway`.
+6. Enter the provider's **Base URL**, including any required API prefix such as `/v1`.
+7. Add an **API Key** if the endpoint requires authentication.
+
+The API key is optional. Local endpoints commonly do not require one, while hosted providers and company gateways usually do.
+
+![An OpenAI-compatible endpoint expanded in Preferences showing the Name, Base URL, optional API Key, and Models fields](/images/screenshots/v4/ai/ai-provider-custom-endpoint.webp)
+
+## Add models
+
+Under **Models**:
+
+1. Enter the **Model ID** expected by the provider.
+2. Optionally enter a friendlier display **Label**.
+3. Click **Add**.
+4. Enable the model using its checkbox.
+5. Toggle the custom provider on.
+
+Model IDs must match the provider exactly, including punctuation, versions, or tags. For example, Ollama may require `llama3.1:8b`, not only `llama3.1`.
+
+You can add multiple model IDs to one endpoint and configure multiple custom endpoints.
+
+![AI Assistant model picker listing a model served by a custom OpenAI-compatible endpoint](/images/screenshots/v4/ai/ai-provider-custom-model-picker.webp)
+
+## Test the connection
+
+After setting the Base URL and enabling the provider, click **Test connection** (the bolt icon).
+
+- **Connection successful** means Bruno can reach the endpoint and use its configuration.
+- If the test fails, review the error and check the endpoint, authentication, and model configuration.
+
+## Edit or remove an endpoint
+
+Expand the endpoint to:
+
+- Change its **Name** or **Base URL**
+- Add, replace, or remove its API key
+- Add, rename, disable, or remove models
+- Select **Remove endpoint** to delete the endpoint from Bruno
+
+## Local provider examples
+
+### Ollama
+
+1. Install and start Ollama.
+2. Pull a model:
+
+```shell
+ollama pull llama3.1:8b
+```
+
+3. Confirm the OpenAI-compatible API is running:
+
+```shell
+curl http://localhost:11434/v1/models
+```
+
+4. In Bruno, use:
+   - Base URL: `http://localhost:11434/v1`
+   - API Key: leave empty
+   - Model ID: the exact name shown by `ollama list`
+
+### LM Studio
+
+1. Download and load a model in LM Studio.
+2. Open **Developer** (called **Local Server** in some versions).
+3. Start the local server.
+4. Confirm the API is running:
+
+```shell
+curl http://localhost:1234/v1/models
+```
+
+5. In Bruno, use:
+   - Base URL: `http://localhost:1234/v1`
+   - API Key: leave empty unless authentication is enabled
+   - Model ID: the identifier shown by LM Studio
+
+<Warning>
+  Bruno cannot connect to a local endpoint unless its server is running.
+  Starting or loading a model in the provider application may be a separate step
+  from starting its API server.
+</Warning>
+
+## Troubleshooting
+
+### Connection refused
+
+The endpoint is not running, the port is incorrect, or Bruno cannot reach the host. Test the provider's models endpoint from the same machine before testing it in Bruno.
+
+### 404 Not Found
+
+Check the Base URL. Many compatible providers require an API prefix such as `/v1`.
+
+### Unauthorized or forbidden
+
+Confirm that the endpoint requires an API key and that the key has the necessary permissions. Replace the saved key if it has expired or been revoked.
+
+### Model not found
+
+Copy the model ID exactly from the provider. Include required tags or versions.
+
+### Models do not appear in Bruno
+
+Make sure:
+
+1. The endpoint has a Base URL.
+2. The custom provider is enabled.
+3. At least one model has been added and selected.
+4. The main **AI Features** toggle is enabled.
+
+## Security considerations
+
+A custom endpoint receives the AI context that Bruno sends to it. Review the endpoint owner's data-handling policy before connecting a hosted provider.
+
+Bruno's AI security protections redact sensitive headers, body fields, response values, and secret variables by default. Review them under **Preferences → AI → Security**.
+
+## Next steps
+
+- [Connect OpenAI](/ai/bruno-ai/openai)
+- [Connect Anthropic](/ai/bruno-ai/anthropic)
+- [Configure autocomplete and security](/ai/bruno-ai/configuration)
+- [Use Bruno AI](/ai/bruno-ai/usage)

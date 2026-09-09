@@ -296,6 +296,14 @@
                     "pages": [
                       "ai/bruno-ai/introduction",
                       "ai/bruno-ai/configuration",
+                      {
+                        "group": "Providers",
+                        "pages": [
+                          "ai/bruno-ai/openai",
+                          "ai/bruno-ai/anthropic",
+                          "ai/bruno-ai/custom-providers"
+                        ]
+                      },
                       "ai/bruno-ai/usage"
                     ]
                   },
