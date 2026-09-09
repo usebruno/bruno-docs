@@ -356,8 +356,8 @@
                 "group": "Run Collections",
                 "boost": 3,
                 "pages": [
-                  "bru-cli/runCollection",
                   "bru-cli/commandOptions",
+                  "bru-cli/runCollection",
                   "bru-cli/builtInReporters",
                   "bru-cli/import"
                 ]
