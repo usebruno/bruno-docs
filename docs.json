@@ -48,6 +48,7 @@
                   "get-started/import-export-data/import-export-workspace",
                   "get-started/import-export-data/import-export-environments",
                   "get-started/import-export-data/postman-migration",
+                  "get-started/import-export-data/postman-export-organizer",
                   "get-started/import-export-data/script-translator"
                 ]
               }
