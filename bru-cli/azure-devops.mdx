@@ -1,0 +1,249 @@
+---
+title: "Azure DevOps Pipelines Integration"
+sidebarTitle: "Azure DevOps"
+---
+
+import { BrunoButton } from "/snippets/BrunoButton.jsx";
+
+[Azure Pipelines](https://azure.microsoft.com/products/devops/pipelines) runs your Bruno collections on every push or pull request, then surfaces the results directly in Azure DevOps: assertions in the **Tests** tab, an HTML report in its own build tab, and the raw report files as downloadable artifacts.
+
+Explore our Azure DevOps setup collection for a working example you can fork and run:
+
+<BrunoButton
+  collectionUrl="https://github.com/bruno-collections/azure-devops-setup"
+  width={160}
+  height={40}
+/>
+
+## Prerequisites
+
+- An Azure DevOps project with a repository containing your Bruno collections.
+- Permission to create pipelines in that project.
+- No agent setup is needed for Microsoft-hosted agents — Node.js is installed by the pipeline itself.
+
+## Step 1: Organize your repository
+
+Keep the pipeline definition at the repository root, next to your collections:
+
+```
+your-api-project/
+├── azure-pipelines.yml
+└── collection/
+    ├── opencollection.yml
+    ├── environments/
+    │   ├── ci.yml
+    │   └── production.yml
+    └── authentication/
+        ├── login.yml
+        └── logout.yml
+```
+
+<Note>
+  Keep `azure-pipelines.yml` outside the collection directory. Bruno treats every `.yml` file under the collection root as a request, so a pipeline definition sitting next to `opencollection.yml` will fail to parse as one.
+</Note>
+
+## Step 2: Create the pipeline file
+
+Create `azure-pipelines.yml` in the root of your repository. This version installs Node.js and the Bruno CLI on the agent — see [Running with Docker](#running-with-docker) for the containerized alternative.
+
+```yaml
+trigger:
+  branches:
+    include:
+      - main
+
+pr:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  REPORT_DIR: $(Build.ArtifactStagingDirectory)/bruno-reports
+
+steps:
+  - task: UseNode@1
+    displayName: Set up Node.js
+    inputs:
+      version: "22.x"
+
+  - script: npm install -g @usebruno/cli
+    displayName: Install Bruno CLI
+
+  - script: |
+      mkdir -p "$(REPORT_DIR)"
+      bru run \
+        --env ci \
+        --env-var api_key="$(API_KEY)" \
+        --env-var build_id="$(Build.BuildId)" \
+        --reporter-junit "$(REPORT_DIR)/results.xml" \
+        --reporter-json "$(REPORT_DIR)/results.json" \
+        --reporter-html "$(REPORT_DIR)/results.html"
+    displayName: Run Bruno tests
+    workingDirectory: collection
+    continueOnError: true
+    env:
+      API_KEY: $(API_KEY)
+
+  - task: PublishTestResults@2
+    displayName: Publish results to the Tests tab
+    condition: succeededOrFailed()
+    inputs:
+      testResultsFormat: JUnit
+      testResultsFiles: "**/results.xml"
+      searchFolder: "$(REPORT_DIR)"
+      testRunTitle: "Bruno API Tests"
+      failTaskOnFailedTests: true
+
+  - task: PublishPipelineArtifact@1
+    displayName: Publish reports as an artifact
+    condition: succeededOrFailed()
+    inputs:
+      targetPath: "$(REPORT_DIR)"
+      artifact: bruno-reports
+```
+
+<Note>
+  `continueOnError: true` on the `bru run` step lets the publish steps run even when tests fail. The build is still marked as failed by `failTaskOnFailedTests: true` on `PublishTestResults@2`, so a failing assertion never passes silently.
+</Note>
+
+<Tip>
+  Prefer containers? [Running with Docker](#running-with-docker) replaces the first three steps with a single `docker run`, and the [sample repository](https://github.com/bruno-collections/azure-devops-setup) ships both variants: `azure-pipelines.yml` and `azure-pipelines-docker.yml`.
+</Tip>
+
+### What each step does
+
+| Step | Purpose |
+| --- | --- |
+| **UseNode@1** | Installs the Node.js runtime the Bruno CLI needs. |
+| **Install Bruno CLI** | Installs `@usebruno/cli` globally from npm. |
+| **Run Bruno tests** | Runs the collection and writes JUnit, JSON, and HTML reports. |
+| **PublishTestResults@2** | Feeds the JUnit XML into the built-in **Tests** tab of the build. |
+| **PublishPipelineArtifact@1** | Uploads all three reports so they can be downloaded from the build summary. |
+
+## Step 3: Create the pipeline in Azure DevOps
+
+1. In your project, go to **Pipelines** > **New pipeline**.
+2. Select **Azure Repos Git** (or GitHub, if that's where your repository lives) and pick your repository.
+3. Choose **Existing Azure Pipelines YAML file** and select `/azure-pipelines.yml`.
+4. Click **Run** to trigger the first build.
+
+Subsequent pushes and pull requests to `main` trigger the pipeline automatically.
+
+## Viewing results
+
+### Tests tab
+
+Because the pipeline publishes a JUnit report, every Bruno test and assertion appears in the build's **Tests** tab with pass/fail counts, duration, and failure messages. Azure DevOps also tracks these across builds, so you get flaky-test detection and pass-rate trends for free.
+
+Each `<testcase>` uses the collection path (for example `Users/Get Users`) as its `classname`, which keeps test identities stable across environments and runs. See [Generating Reports](/bru-cli/builtInReporters#classname-format) for details.
+
+### Artifacts
+
+The **PublishPipelineArtifact@1** step attaches the whole report directory to the build. Open the build summary, click **Related** > **Published artifacts** (or the **Artifacts** section), and download `bruno-reports`. It contains:
+
+| File | Use |
+| --- | --- |
+| `results.html` | Human-readable report — open it in a browser. |
+| `results.xml` | JUnit XML, the same file the Tests tab consumes. |
+| `results.json` | Full machine-readable results, for custom dashboards or post-processing in a later pipeline stage. |
+
+### HTML report as a build tab (extension)
+
+To read the HTML report without downloading it, install the free [Publish HTML Reports](https://marketplace.visualstudio.com/items?itemName=LakshayKaushik.PublishHTMLReports) extension from the Visual Studio Marketplace, then add this task after the `bru run` step:
+
+```yaml
+  - task: PublishHtmlReport@1
+    displayName: Publish Bruno HTML report tab
+    condition: succeededOrFailed()
+    inputs:
+      reportDir: "$(REPORT_DIR)/results.html"
+      tabName: "Bruno Report"
+```
+
+The report then renders in a **Bruno Report** tab on the build summary page.
+
+<Info>
+  Marketplace extensions must be installed at the organization level by an Azure DevOps administrator before a pipeline can use their tasks.
+</Info>
+
+## Running with Docker
+
+Rather than installing Node.js and the CLI on the agent, you can run the [official Bruno CLI image](/bru-cli/docker). Replace the **Set up Node.js**, **Install Bruno CLI**, and **Run Bruno tests** steps with a single step:
+
+```yaml
+  - script: |
+      mkdir -p "$(REPORT_DIR)"
+      chmod 777 "$(REPORT_DIR)"
+      docker run --rm \
+        -v "$(Build.SourcesDirectory)/collection:/bruno" \
+        -v "$(REPORT_DIR):/reports" \
+        usebruno/cli:4.1 run \
+          --env ci \
+          --env-var build_id="$(Build.BuildId)" \
+          --reporter-junit /reports/results.xml \
+          --reporter-json /reports/results.json \
+          --reporter-html /reports/results.html
+    displayName: Run Bruno tests (Docker)
+    continueOnError: true
+```
+
+Three things to keep in mind:
+
+- The image entrypoint is already `bru`, so the arguments start with `run`, not `bru run`.
+- Mount your collection at `/bruno` — that is the working directory the CLI expects. Mount a second volume for the reports so they land on the agent where the publish tasks can find them.
+- **Make the report directory writable by the container.** The image runs as the non-root `node` user (uid 1000), while the agent creates the directory as its own user. Without the `chmod`, every reporter fails with `EACCES: permission denied` even though the tests themselves pass.
+
+<Warning>
+  A `bru run` that passes its tests but cannot write its reports still fails the step, and the Tests tab stays empty because no JUnit file reaches the agent. If the log shows `✓ PASS` and `6/6` immediately followed by `EACCES: permission denied, open '/reports/results.html'`, it is the bind-mount permissions, not your collection.
+</Warning>
+
+Instead of the `chmod`, you can run the container as the agent user with `--user $(id -u):$(id -g)`, which also leaves the reports owned by the agent. Be aware that `$( )` is also Azure Pipelines' macro syntax — the agent leaves unrecognized macros untouched, so it reaches bash intact, but the `chmod` avoids the ambiguity entirely.
+
+Pin an exact tag (for example `usebruno/cli:4.1`) rather than `latest` for production pipelines. Microsoft-hosted Linux agents have Docker preinstalled; self-hosted agents need it available on the agent.
+
+The sample repository ships this as a complete, ready-to-run file: [`azure-pipelines-docker.yml`](https://github.com/bruno-collections/azure-devops-setup/blob/main/azure-pipelines-docker.yml).
+
+## Handling secrets
+
+Never commit API keys or tokens to your collection files. Instead, define them as **secret variables** in a [variable group](https://learn.microsoft.com/azure/devops/pipelines/library/variable-groups) (**Pipelines** > **Library**) and pass them into the run with `--env-var`:
+
+```yaml
+variables:
+  - group: bruno-api-secrets
+
+steps:
+  - script: |
+      bru run --env ci --env-var api_key="$(API_KEY)"
+    displayName: Run Bruno tests
+    env:
+      API_KEY: $(API_KEY)
+```
+
+Secret variables are not injected into the shell automatically — map them explicitly with `env:`, as shown above. Bruno also masks secret values in generated reports; see [Secret Masking](/secrets-management/secret-masking).
+
+## Running against multiple environments
+
+Use a matrix strategy to run the same collection against several environments in parallel:
+
+```yaml
+strategy:
+  matrix:
+    staging:
+      BRU_ENV: staging
+    production:
+      BRU_ENV: production
+
+steps:
+  - script: bru run --env $(BRU_ENV) --reporter-junit "$(REPORT_DIR)/$(BRU_ENV).xml"
+    displayName: Run Bruno tests ($(BRU_ENV))
+```
+
+## Learn More
+
+- [Command Options](/bru-cli/commandOptions) — the full list of `bru run` flags.
+- [Generating Reports](/bru-cli/builtInReporters) — JSON, JUnit, and HTML reporters.
+- [Azure Key Vault](/secrets-management/secret-managers/azure-key-vault/overview) — pull secrets straight from Key Vault instead of storing them as pipeline variables.
+- [Azure Pipelines documentation](https://learn.microsoft.com/azure/devops/pipelines/) — task reference and YAML schema.

@@ -391,7 +391,8 @@
                       "bru-cli/github-actions/manual-setup"
                     ]
                   },
-                  "bru-cli/jenkins"
+                  "bru-cli/jenkins",
+                  "bru-cli/azure-devops"
                 ]
               }
             ]
