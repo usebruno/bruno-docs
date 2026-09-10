@@ -93,7 +93,8 @@
                       "send-requests/grpc/overview",
                       "send-requests/grpc/grpc-request",
                       "send-requests/grpc/grpc-proto",
-                      "send-requests/grpc/grpc-streams"
+                      "send-requests/grpc/grpc-streams",
+                      "send-requests/grpc/grpc-scripting"
                     ]
                   },
                   {
