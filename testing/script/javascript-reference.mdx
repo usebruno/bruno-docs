@@ -1555,7 +1555,7 @@ Custom CA (requires [Developer Mode](/get-started/configure/javascript-sandbox#d
 const https = require("node:https");
 const fs = require("fs");
 const path = require("path");
-const ca = fs.readFileSync(path.join(bru.cwd(), "certs", "ca.pem"));
+const ca = fs.readFileSync(path.join(bru.cwd(), "certs", "ca.pem")); // collection root
 const agent = new https.Agent({ ca, rejectUnauthorized: true });
 const res = await bru.sendRequest({
   url: "https://api.example.com/data",
@@ -1605,18 +1605,45 @@ console.log(userInfo);
 
 ### `bru.cwd()`
 
-Returns the absolute path of the collection's root directory on disk. Useful when reading files (certificates, fixtures, config) relative to the collection in Developer Mode.
+Returns the absolute path of the collection's root directory on disk. Use this when a file lives at the collection root (certificates, shared fixtures, config). For a file next to the current request or folder `.yml` file, use [`__dirname`](#__dirname-and-__filename) instead.
+
+Requires [Developer Mode](/get-started/configure/javascript-sandbox#developer-mode) to read the filesystem.
 
 ```javascript
 const collectionDir = bru.cwd();
 console.log("Collection directory:", collectionDir);
 // Output: "/Users/me/projects/my-api-collection"
 
-// Load a local fixture file relative to the collection
+// Load a fixture from the collection root
 const fs = require("fs");
-const fixture = JSON.parse(fs.readFileSync(`${bru.cwd()}/fixtures/user.json`, "utf8"));
+const path = require("path");
+const fixture = JSON.parse(fs.readFileSync(path.join(bru.cwd(), "fixtures", "user.json"), "utf8"));
 req.setBody(fixture);
 ```
+
+### `__dirname` and `__filename`
+
+CommonJS globals for the **executing script's location** in the collection file tree. Available in both the Node VM sandbox and the isolated JS sandbox when the collection is in [Developer Mode](/get-started/configure/javascript-sandbox#developer-mode).
+
+Use them to build paths next to the current `.yml` file:
+
+```javascript
+const fs = require("fs");
+const path = require("path");
+
+const csvData = fs.readFileSync(path.join(__dirname, "data.json"), "utf8");
+```
+
+| Script context | `__dirname` | `__filename` |
+| -------------- | ----------- | ------------ |
+| Collection (pre / post / tests) | Collection directory | Absolute path to `opencollection.yml` |
+| Folder (pre / post / tests) | Folder directory | Absolute path to `folder.yml` |
+| Request (pre / post / tests) | Request directory | Absolute path to the request `.yml` file |
+| Fallback (no script path) | Collection directory | `undefined` |
+
+If Bruno cannot determine the script path, `__dirname` falls back to the collection directory and `__filename` is `undefined`.
+
+`bru.cwd()` is always the collection root. `__dirname` follows the folder that owns the script.
 
 ### `bru.isSafeMode()`
 
