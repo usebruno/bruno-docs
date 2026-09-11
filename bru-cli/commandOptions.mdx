@@ -53,6 +53,7 @@ See [Running a Collection with Environments](/bru-cli/runCollection#running-a-co
 | `--tags [string]`         | Only run requests that have ANY of the specified tags (comma-separated) |
 | `--exclude-tags [string]` | Skip requests that have ANY of the specified tags (comma-separated)     |
 | `--parallel`              | Run requests in parallel order                                          |
+| `--experimental-cache-modules` | Share evaluated script modules across requests in a `bru run`. Opt in only if CLI RSS grows without bound on large collections. [Details](/bru-cli/runCollection#reduce-cli-memory-use-on-large-runs). |
 
 ### Secret Manager options
 

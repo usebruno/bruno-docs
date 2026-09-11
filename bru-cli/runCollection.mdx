@@ -251,6 +251,35 @@ By default, Bruno CLI runs requests sequentially. You can enable parallel execut
 bru run --iteration-count 2 --parallel
 ```
 
+## Reduce CLI memory use on large runs
+
+If you are seeing unbounded RSS(Resident Set Size) growth or OOM(Out of Memory) kills, you can use the `--experimental-cache-modules` flag to reduce the memory usage. It will share evaluated script modules across requests in a `bru run`.
+
+If you are **not** seeing unbounded RSS growth or OOM kills, leave the default as-is.
+
+### `--experimental-cache-modules`
+
+Pass this flag on `bru run` when a run grows memory with every request:
+
+```bash copy
+bru run --experimental-cache-modules
+```
+
+The flag does two things:
+
+- Shares `globalThis` across script VMs so module identity stays consistent.
+- Caches each evaluated module instead of rebuilding the module graph from scratch on every script.
+
+That avoids the heap climb caused by re-creating the graph for every request. The flag is **experimental** because the approach can change script behavior in edge cases. Use it only when you hit the high-RSS issue.
+
+The name will become `--cache-modules` once the default CLI run is confirmed to stay unchanged with this caching on.
+
+### CI example
+
+```yaml
+- run: bru run --env ci --experimental-cache-modules --reporter-junit results.xml
+```
+
 ## Generate API Documentation
 
 Bruno CLI can generate the same standalone HTML API documentation as **Collection → Generate Documentation** in the desktop app. This lets teams keep generated docs in Git, review changes alongside the collection, and regenerate or deploy the artifact from release and CI pipelines.
