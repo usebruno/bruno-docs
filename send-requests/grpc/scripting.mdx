@@ -1,0 +1,155 @@
+---
+title: "gRPC Scripting"
+sidebarTitle: "Scripting"
+description: "Request-level JavaScript hooks, bru.grpc APIs, tests, and assertions for gRPC calls."
+---
+
+<Warning>
+  gRPC scripting is in **Beta**. Enable it under **Preferences → Beta → gRPC Scripting**. The Script tab on a gRPC request appears only after you opt in.
+</Warning>
+
+HTTP requests in Bruno already support pre-request scripts, post-response scripts, tests, and assertions. gRPC requests now have the same kind of automation at the **request** level: four hooks along the call lifecycle, a read-only `bru.grpc.*` API, and `test()` / `expect()` on inbound messages and at the end of the call.
+
+This ships for **interactive runs in the app**. Collection- and folder-level gRPC scripts, Collection Runner, and CLI are out of scope.
+
+For usage examples, see [gRPC APIs in the JavaScript Reference](/testing/script/javascript-reference#grpc-bru-grpc).
+
+## Lifecycle hooks
+
+A gRPC call is a connection that exchanges messages and ends with a status. Bruno runs four hooks:
+
+| Hook | When it runs | Typical use |
+| ---- | ------------ | ----------- |
+| **Before Call Start** (`grpc:before-call-start`) | Once, before the RPC is invoked | Set metadata, read call info |
+| **Before Message Send** (`grpc:before-message-send`) | Before each outbound message (once for unary / server-streaming; per message for client-streaming / bidi) | Inspect the message about to go on the wire (read-only) |
+| **After Message Receive** (`grpc:after-message-receive`) | After each inbound message (once for unary / client-streaming; per message for server-streaming / bidi) | Validate that message with `test()` / `expect()` |
+| **After Call End** (`grpc:after-call-end`) | Once after the call ends, errors, or is cancelled | Assert status, trailers, all received messages, duration |
+
+Message lists are always **read-only**. You cannot add, replace, send, or delete messages from a script. `bru.grpc.request.metadata` is **writable only in Before Call Start**. `bru.grpc.response.*` is read-only and exists only in After Message Receive and After Call End.
+
+The usual `bru.*` helpers (variables, `sendRequest`, `sleep`, `interpolate`, OAuth2 credential helpers, `console`) work in every hook. `bru.cookies.*` and `bru.runner.*` are **not** available on gRPC requests.
+
+## How to add a script
+
+1. Enable **gRPC Scripting** under **Preferences → Beta**.
+2. Open a gRPC request and go to the **Script** tab.
+3. Choose a hook and write JavaScript. Autocomplete and lint cover `bru.grpc.*`.
+4. Send the request. Tests from After Message Receive and After Call End appear in the **Tests** tab.
+
+<CodeGroup>
+```yaml api-request.yml
+scripts:
+  - type: grpc:before-call-start
+    code: |
+      bru.grpc.request.metadata.upsert("x-trace-id", bru.interpolate("{{$guid}}"));
+  - type: grpc:before-message-send
+    code: |
+      console.log("sending", bru.grpc.request.message.data);
+  - type: grpc:after-message-receive
+    code: |
+      test("message has greeting", function () {
+        expect(bru.grpc.response.message.data).to.have.property("greeting");
+      });
+  - type: grpc:after-call-end
+    code: |
+      test("call succeeded", function () {
+        expect(bru.grpc.response.statusCode).to.equal(0);
+      });
+```
+
+```bru api-request.bru
+script:grpc:before-call-start {
+  bru.grpc.request.metadata.upsert("authorization", "Bearer " + bru.getEnvVar("token"));
+}
+
+script:grpc:before-message-send {
+  console.log(bru.grpc.request.message.data);
+}
+
+script:grpc:after-message-receive {
+  test("greeting is present", function () {
+    expect(bru.grpc.response.message.data.greeting).to.be.a("string");
+  });
+}
+
+script:grpc:after-call-end {
+  test("status is OK", function () {
+    expect(bru.grpc.response.statusCode).to.equal(0);
+  });
+}
+```
+</CodeGroup>
+
+## API reference (tables)
+
+All gRPC data lives under `bru.grpc.request.*` (client) and `bru.grpc.response.*` (server). A **message** is `{ data, timestamp }` — `data` is the protobuf payload; `timestamp` is epoch milliseconds (Bruno-specific).
+
+Hook abbreviations: **BCS** Before Call Start · **BMS** Before Message Send · **AMR** After Message Receive · **ACE** After Call End.
+
+### Messages
+
+`request.messages` is what was **transmitted**, not what is authored in the UI. It is empty in Before Call Start.
+
+| API | Description | Hooks |
+| --- | ----------- | ----- |
+| [`bru.grpc.request.messages.get(i)`](/testing/script/javascript-reference#bru-grpc-request-messages) | Transmitted message at index `i` (default `0`) | BCS, BMS, AMR, ACE (read) |
+| [`bru.grpc.request.messages.all()`](/testing/script/javascript-reference#bru-grpc-request-messages) | All transmitted messages | BCS, BMS, AMR, ACE (read) |
+| [`bru.grpc.request.messages.count()`](/testing/script/javascript-reference#bru-grpc-request-messages) | Number of transmitted messages | BCS, BMS, AMR, ACE (read) |
+| [`bru.grpc.request.messages.find` / `filter` / `map` / `each` / `reduce`](/testing/script/javascript-reference#bru-grpc-request-messages) | Query and iterate | BCS, BMS, AMR, ACE (read) |
+| [`bru.grpc.request.message.data`](/testing/script/javascript-reference#bru-grpc-request-message) | Current outbound payload | BMS |
+| [`bru.grpc.request.message.timestamp`](/testing/script/javascript-reference#bru-grpc-request-message) | When the BMS hook ran (epoch ms) | BMS |
+| [`bru.grpc.response.message.data`](/testing/script/javascript-reference#bru-grpc-response-message) | Current received payload | AMR |
+| [`bru.grpc.response.message.timestamp`](/testing/script/javascript-reference#bru-grpc-response-message) | When this message was received | AMR |
+| [`bru.grpc.response.messages.get(i)`](/testing/script/javascript-reference#bru-grpc-response-messages) | Received message at index `i` | ACE |
+| [`bru.grpc.response.messages.all()`](/testing/script/javascript-reference#bru-grpc-response-messages) | All received messages | ACE |
+| [`bru.grpc.response.messages.count()`](/testing/script/javascript-reference#bru-grpc-response-messages) | Number of received messages | ACE |
+| [`bru.grpc.response.messages.find` / `filter` / `map` / `each` / `reduce`](/testing/script/javascript-reference#bru-grpc-response-messages) | Query and iterate | ACE |
+
+Singular hooks (BMS, AMR) always see **one** message. `request.messages` has many items for client-streaming and bidi; `response.messages` has many for server-streaming and bidi.
+
+### Metadata
+
+Metadata entries are `{ key, value }`. Keys ending in `-bin` are binary (values stored as base64). Key matching is case-insensitive.
+
+`request.metadata` is readable in all four hooks and writable **only in BCS**. `response.metadata` is server initial metadata. `response.trailers` is trailing metadata and includes `grpc-status` / `grpc-message`.
+
+| API | Description | Hooks |
+| --- | ----------- | ----- |
+| [`bru.grpc.request.metadata.get(key)`](/testing/script/javascript-reference#bru-grpc-request-metadata) | Value for key | BCS–ACE (read) |
+| [`bru.grpc.request.metadata.one(key)`](/testing/script/javascript-reference#bru-grpc-request-metadata) | Full `{ key, value }` entry | BCS–ACE (read) |
+| [`bru.grpc.request.metadata.toObject()`](/testing/script/javascript-reference#bru-grpc-request-metadata) | All entries as a map | BCS–ACE (read) |
+| [`bru.grpc.request.metadata.has(key, value?)`](/testing/script/javascript-reference#bru-grpc-request-metadata) | Whether the key exists | BCS–ACE (read) |
+| [`bru.grpc.request.metadata.all()`](/testing/script/javascript-reference#bru-grpc-request-metadata) | All entries as an array | BCS–ACE (read) |
+| [`bru.grpc.request.metadata.count()`](/testing/script/javascript-reference#bru-grpc-request-metadata) | Number of entries | BCS–ACE (read) |
+| [`bru.grpc.request.metadata.indexOf(item)`](/testing/script/javascript-reference#bru-grpc-request-metadata) | Index of a key or `{ key, value }` | BCS–ACE (read) |
+| [`bru.grpc.request.metadata.find` / `filter` / `map` / `each` / `reduce`](/testing/script/javascript-reference#bru-grpc-request-metadata) | Query and iterate | BCS–ACE (read) |
+| [`bru.grpc.request.metadata.upsert(key, value)`](/testing/script/javascript-reference#bru-grpc-request-metadata) | Insert or update by key | BCS (write) |
+| [`bru.grpc.request.metadata.add(entry)`](/testing/script/javascript-reference#bru-grpc-request-metadata) | Upsert from `{ key, value }` | BCS (write) |
+| [`bru.grpc.request.metadata.remove(key)`](/testing/script/javascript-reference#bru-grpc-request-metadata) | Remove by key | BCS (write) |
+| [`bru.grpc.request.metadata.clear()`](/testing/script/javascript-reference#bru-grpc-request-metadata) | Remove all entries | BCS (write) |
+| [`bru.grpc.response.metadata.get` / `toObject` / `has` / `all` / `count` / `find`…](/testing/script/javascript-reference#brugrpc-response-metadata) | Server initial metadata | AMR, ACE |
+| [`bru.grpc.response.trailers.get` / `toObject` / `has` / `all` / `count` / `find`…](/testing/script/javascript-reference#brugrpc-response-trailers) | Trailing metadata and status | ACE |
+
+### Call info and tests
+
+| API | Description | Hooks |
+| --- | ----------- | ----- |
+| [`bru.grpc.request.url`](/testing/script/javascript-reference#call-info) | Server URL (`host:port`) | all (read) |
+| [`bru.grpc.request.method`](/testing/script/javascript-reference#call-info) | Full method path | all (read) |
+| [`bru.grpc.request.methodType`](/testing/script/javascript-reference#call-info) | `unary`, `server-streaming`, `client-streaming`, or `bidi` | all (read) |
+| [`bru.grpc.request.authMode`](/testing/script/javascript-reference#call-info) | Configured auth (default `none`) | all (read) |
+| [`bru.grpc.request.protoPath`](/testing/script/javascript-reference#call-info) | Proto file path | all (read) |
+| [`bru.grpc.request.name`](/testing/script/javascript-reference#call-info) | Request name | all (read) |
+| [`bru.grpc.response.statusCode`](/testing/script/javascript-reference#call-info) | gRPC status (`0` = OK) | ACE |
+| [`bru.grpc.response.statusText`](/testing/script/javascript-reference#call-info) | Status text | ACE |
+| [`bru.grpc.response.duration`](/testing/script/javascript-reference#call-info) | Call duration in ms | ACE |
+| [`test(name, fn)`](/testing/script/javascript-reference#tests-and-assertions) | Define a test | AMR, ACE |
+| [`expect(value)`](/testing/script/javascript-reference#tests-and-assertions) | Chai-style assertion | AMR, ACE |
+
+## What is not included
+
+- Changing or sending messages from a script (the connect-and-send flow is a later ticket)
+- Collection- and folder-level gRPC hooks (folder/collection scripts still run for HTTP only)
+- Collection Runner and Bruno CLI execution of gRPC scripts
+
+Known gaps: stack traces for errors in Before Message Send / After Message Receive still need polish, and a long-running Before Call Start script has no progress UI before the connection opens.
