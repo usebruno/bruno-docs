@@ -23,6 +23,18 @@ Request headers are **key-value** pairs sent along with an HTTP request to provi
   custom headers, check the **Timeline** tab.
 </Tip>
 
+## Inherited headers
+
+The **Headers** tab shows an **Inherited Headers** accordion listing headers coming from the collection, any parent folders, and Bruno's runtime defaults. This lets you see exactly which headers will be sent with the request without opening collection or folder settings.
+
+Inherited rows are read-only and cannot be toggled from the request. Click a row's source link to jump straight to the originating collection or folder row, which is scrolled into view and briefly highlighted.
+
+Precedence and visibility:
+
+- A header defined on the request overrides same-named inherited headers (case-insensitive) and hides them from the inherited list.
+- Among inherited headers, the nearest source wins: folder headers override collection headers of the same name.
+- Disabled inherited headers are ignored and are not sent.
+
 ## Streaming with Server-Sent Events
 
 To work with Server-Sent Events (SSE), set:
