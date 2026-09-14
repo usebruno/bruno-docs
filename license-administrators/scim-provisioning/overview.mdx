@@ -56,6 +56,35 @@ You must have Ultimate Edition with SCIM provisioning enabled before you can con
 
 You can revisit this page to manage your SCIM API keys. The SCIM Base URL and API key will be needed when configuring your identity provider.
 
+## Provisioning administrators
+
+In addition to licensed users, SCIM can provision **Bruno License Manager administrators**. Administrators provisioned this way:
+
+- Receive portal access to manage licenses, users, and settings
+- Do **not** consume a license seat
+- Do **not** appear in the **Users** list — they appear under **Settings → Admins**
+
+This suits IT administrators, operations staff, and team leads who manage licensing but do not need a Bruno desktop license themselves.
+
+### How Bruno decides
+
+When a user is provisioned, Bruno checks the role values in the request against the **Admin Role Mapping** configured under **Settings → SCIM Provisioning**:
+
+| Role in the provisioning request | Result |
+|---|---|
+| Matches a configured admin role | Portal administrator. No license issued, no seat consumed. |
+| No match, or no role sent | Licensed user. A license is issued and a seat is consumed. |
+
+Role values are matched exactly and are **case-sensitive**. Multiple admin roles can be configured as a comma-separated list; a match against any one of them grants administrator access.
+
+<Warning>
+**The admin role must be present on the first provisioning call.** Bruno decides whether a user is an administrator or a licensed user at the moment the account is created, based on whether a matching role is included in that request.
+
+If a user is created before their role value is available, they are provisioned as a licensed user and consume a license seat. A role arriving in a later update promotes them to administrator, but the license already issued remains in place — Bruno does not revoke a license that has been issued, so that users already working in Bruno desktop are never cut off.
+</Warning>
+
+Configure the role mapping in your identity provider so the value is included the first time a user is provisioned. See the [Okta](./configure-scim-with-okta#configure-admin-role-mapping) and [Microsoft Entra ID](./configure-scim-with-entra-id#configure-admin-role-mapping) guides for provider-specific steps.
+
 ## Next Steps
 
 Ready to configure SCIM? Choose your integration method:

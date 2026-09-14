@@ -391,7 +391,8 @@
                       "bru-cli/github-actions/manual-setup"
                     ]
                   },
-                  "bru-cli/jenkins"
+                  "bru-cli/jenkins",
+                  "bru-cli/azure-devops"
                 ]
               }
             ]
@@ -528,7 +529,6 @@
                 "pages": [
                   "license-administrators/license-portal",
                   "license-administrators/billing",
-                  "license-administrators/self-hosted-licensing",
                   {
                     "group": "SAML SSO",
                     "pages": [
@@ -981,7 +981,6 @@
                     "pages": [
                       "v3/license-administrators/license-portal",
                       "v3/license-administrators/billing",
-                      "v3/license-administrators/self-hosted-licensing",
                       {
                         "group": "SAML SSO",
                         "pages": [
