@@ -1,5 +1,6 @@
 ---
 title: "Download & Install"
+description: "Install Bruno on macOS (DMG, PKG installer, Homebrew), Windows (EXE, MSI, winget, Chocolatey, Scoop) and Linux (AppImage, deb, rpm, APT, Flatpak, Snap)."
 ---
 
 
@@ -19,8 +20,21 @@ Starting with Bruno v3, native ARM64 binaries are available for [Windows ARM64 d
     
     Download the latest macOS version from the [official downloads page <strong><sup>↗</sup></strong>](https://www.usebruno.com/downloads).
     
-    ### Homebrew
+    <Info>
+      **PKG Installer**
+      
+      Starting with v4.0.0, Bruno is also available as a `.pkg` installer for MDM tools and scripted deployments.
+      
+      - Installs `Bruno.app` to `/Applications` for all users and requires administrator privileges
+      - Signed and notarized by Apple. Verify with `pkgutil --check-signature <file>.pkg`
+      - Package identifier: `com.usebruno.app`
+      
+      Example: `sudo installer -pkg bruno_<version>_<arch>_mac.pkg -target /`
+    </Info>
     
+    ### Using Package Managers
+    
+    **Homebrew**
     ```bash
     brew install bruno
     ```
@@ -119,8 +133,8 @@ Nightly builds are published automatically for early testing of upcoming feature
 
     | Platform | File to download |
     |----------|-----------------|
-    | macOS (Apple Silicon) | `.dmg` (arm64) |
-    | macOS (Intel) | `.dmg` (x64) |
+    | macOS (Apple Silicon) | `.dmg` or `.pkg` (arm64) |
+    | macOS (Intel) | `.dmg` or `.pkg` (x64) |
     | Windows | `.exe` or `.msi` installer |
     | Linux | `.AppImage`, `.deb`, or `.rpm` |
 
