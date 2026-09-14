@@ -58,6 +58,33 @@ The flow matches how Bruno opens collections after a [Git clone](/git-providers/
 
 
 
+## Close or delete a collection
+
+Bruno separates closing a collection (removing it from the workspace) from deleting it (removing the files from disk).
+
+### Close a collection (keep files)
+
+Closing a collection removes it from the workspace sidebar. The files stay on disk and can be re-opened later.
+
+1. In the sidebar, hover over the collection and open its menu (three-dot icon), or right-click the collection name.
+2. Select **Remove**.
+3. Confirm in the **Remove Collection** dialog. If the collection has unsaved drafts, Bruno prompts you to save or discard them first.
+
+You can also close collections from the workspace home page: open the collection card's menu and select **Remove**.
+
+### Delete a collection (permanent)
+
+Deleting a collection permanently removes the collection files from disk. This action cannot be undone.
+
+1. Open the workspace home page.
+2. Locate the collection card and open its menu.
+3. Select **Delete**.
+4. In the confirmation dialog, type `delete` to enable the **Delete** button, then confirm.
+
+<Warning>
+  Delete permanently removes the collection files from your filesystem. If the collection is tracked in Git, delete it from the workspace and remove the folder through your version control workflow instead if you want to preserve history.
+</Warning>
+
 ## Automatic Git Configuration
 
 When you create a new collection or workspace, Bruno automatically generates a `.gitignore` file with recommended settings to ensure proper Git hygiene out of the box.
