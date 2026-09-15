@@ -50,7 +50,7 @@ See [Running a Collection with Environments](/bru-cli/runCollection#running-a-co
 | `--delay [number]`        | Delay between each requests (in milliseconds)                           |
 | `--tests-only`            | Only run requests that have tests or active assertions                  |
 | `--bail`                  | Stop execution after a failure of a request, test, or assertion         |
-| `--tags [string]`         | Only run requests that have ALL of the specified tags (comma-separated) |
+| `--tags [string]`         | Only run requests that have ANY of the specified tags (comma-separated) |
 | `--exclude-tags [string]` | Skip requests that have ANY of the specified tags (comma-separated)     |
 | `--parallel`              | Run requests in parallel order                                          |
 
@@ -124,6 +124,31 @@ Use `--output` to write a collection to a directory, or `--output-file` to write
 bru import openapi --source ./openapi.yaml --output ./collections --collection-name "Petstore API"
 ```
 
+### Generate API Documentation options
+
+Use these options with `bru docs generate`. Run the command from the collection root.
+
+| Option                  | Details                                                                                                                                                                   |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `-o`, `--output [file]` | Output HTML file. Parent directories are created and an existing file is overwritten. Default: `<sanitized-collection-name>-documentation.html` in the current directory. |
+| `--all-envs`            | Embed every environment in the collection.                                                                                                                                |
+| `--envs [a,b]`          | Embed only the named environments (comma-separated). Environment names must exist in the collection.                                                                      |
+| `--exclude-envs [a,b]`  | Leave the named environments out of the generated documentation (comma-separated). Exclusion wins if the same name also appears in `--envs`.                              |
+| `--tags [a,b]`          | Include only requests carrying any matching tag (comma-separated).                                                                                                        |
+| `--exclude-tags [a,b]`  | Exclude requests carrying any matching tag (comma-separated). Exclusion wins if the same tag also appears in `--tags`.                                                    |
+| `--git-link`            | Embed `gitCollectionUrl` so the generated documentation can link to the Git repository. Enabled by default.                                                               |
+| `--no-git-link`         | Omit `gitCollectionUrl`. **Open in Bruno** then uses the download-and-import flow.                                                                                        |
+
+The CLI uses the same tag filtering and HTML generation implementation as the desktop app, so the same collection and options produce the same documentation. Excluded requests are removed from the generated artifact, including its embedded collection data, navigation, and search.
+
+ `--exclude-tags` and `--exclude-envs` both take preference when the same name appears on the include and exclude lists.
+
+```bash
+bru docs generate --all-envs --exclude-envs Local --exclude-tags WIP --no-git-link -o docs/api.html
+```
+
+See [Generate API Documentation](/bru-cli/runCollection#generate-api-documentation) for workflow examples covering output paths, environments, tags, and Git links.
+
 ## Examples
 
 This will run all the requests in your collection.
@@ -160,6 +185,7 @@ Now that you're familiar with the command options, explore these guides to get t
 3. [Import Data](/bru-cli/import) - Import OpenAPI and WSDL specifications into Bruno collections
 4. [Proxy & mTLS](/bru-cli/proxyConfiguration) - Route requests through a proxy and configure client certificates
 5. [Secret Managers](/bru-cli/secret-managers) - Fetch secrets from HashiCorp Vault, AWS Secrets Manager, or Azure Key Vault at runtime
+6. [Generate API Documentation](/bru-cli/runCollection#generate-api-documentation) - Generate and publish standalone HTML API documentation from the CLI
 
 ---
 
