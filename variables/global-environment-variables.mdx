@@ -101,6 +101,36 @@ To activate a global environment:
 
 The active global environment selection is stored per-workspace in the application's internal settings. This means your environment selection persists across app restarts and is maintained independently for each workspace.
 
+## Environment inheritance
+
+A global environment can inherit variables from another global environment in the same workspace. Use this to define shared values once in a base environment and override only the names that differ per environment.
+
+Set the parent from the environment editor: pick a global environment from the same workspace under the current environment's settings, then save. Inherited variables show in a collapsible **Inherited** section with their source, are read-only, and are overridden by any same-named variable in the current environment. Bruno warns if the referenced parent is missing so the reference is not silently dropped.
+
+Inheritance resolves at request time and applies in requests, scripts, collection runs, code generation, and Bruno CLI runs.
+
+The parent reference is stored in the environment file and travels with the workspace on version control, import, and export:
+
+```yaml title="production.yml"
+name: production
+extends: base
+variables:
+  - name: api_url
+    value: https://api.example.com
+    enabled: true
+    secret: false
+```
+
+Declare multiple parents with a list; later entries take precedence over earlier ones:
+
+```yaml
+name: production
+extends:
+  - base
+  - shared
+variables: []
+```
+
 ## Upgrading from Bruno 2.x to 3.0.0
 
 <Info>

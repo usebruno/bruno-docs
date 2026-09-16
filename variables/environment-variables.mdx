@@ -101,6 +101,83 @@ After you set **Local** as the default, the collection config includes that choi
   </Tab>
 </Tabs>
 
+## Environment inheritance
+
+An environment can inherit variables from another environment in the same scope and override only the names it redefines. Use this to define shared values (host, common headers, feature flags) in a base environment, then layer environment-specific overrides on top.
+
+Inheritance is supported for collection environments and workspace (global) environments, in both `.bru` and `.yml`, and applies in the app and in Bruno CLI.
+
+### Set a parent environment
+
+1. Open the environment you want to extend from another.
+2. In the environment editor, choose a **parent environment** from the same scope.
+3. Save.
+
+Inherited variables appear in a collapsible **Inherited** section above the environment's own variables. Each inherited row shows its source environment and is read-only. To change an inherited value, redefine the variable in the current environment; the override wins at resolve time.
+
+<Info>
+  Bruno warns you when a parent environment is missing or excluded from the collection so the reference is not silently dropped. The unresolved parent name is preserved on save, so re-adding the parent restores inheritance.
+</Info>
+
+### Resolution and precedence
+
+- Variables defined in the current environment override same-named variables inherited from a parent.
+- Inheritance resolves at request time, so requests, scripts, collection runs, code generation, and CLI runs all see the merged variables.
+- A single parent is declared as one name; multiple parents can be declared as a list (later entries take precedence over earlier ones).
+- Secret values and unchanged inherited values are not rewritten to the child environment file on save.
+
+### Declaring `extends` in files
+
+The parent reference is stored in the environment file so it travels through import, export, rename, and version control.
+
+<Tabs>
+  <Tab title="BRU format (.bru)">
+    ```bash title="production.bru"
+    extends: base
+
+    vars {
+      host: https://api.example.com
+    }
+    ```
+
+    Declare multiple parents with an array:
+
+    ```bash
+    extends [
+      base,
+      shared
+    ]
+
+    vars {
+      host: https://api.example.com
+    }
+    ```
+
+    Parent names may contain spaces. Wrap a name in double quotes if it contains a comma or brackets. A parent name cannot contain `/`.
+  </Tab>
+  <Tab title="YAML format (.yml)">
+    ```yaml title="production.yml"
+    name: production
+    extends: base
+    variables:
+      - name: host
+        value: https://api.example.com
+        enabled: true
+        secret: false
+    ```
+
+    Declare multiple parents with a list:
+
+    ```yaml
+    name: production
+    extends:
+      - base
+      - shared
+    variables: []
+    ```
+  </Tab>
+</Tabs>
+
 ## Using the ./environment directory
 
 Environment variables are synced with the `/environments` directory inside your collection. You can also create and manage environments there.
