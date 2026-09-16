@@ -5,7 +5,7 @@ description: "Request-level JavaScript hooks, bru.grpc APIs, tests, and assertio
 ---
 
 <Warning>
-  gRPC scripting is in **Beta**. Enable it under **Preferences → Beta → gRPC Scripting**. The Script tab on a gRPC request appears only after you opt in.
+  gRPC scripting is in **Beta**. Open a gRPC request and use the **Script (Beta)** tab to write hooks with the `bru.grpc` APIs.
 </Warning>
 
 HTTP requests in Bruno already support pre-request scripts, post-response scripts, tests, and assertions. gRPC requests now have the same kind of automation at the **request** level: four hooks along the call lifecycle, a read-only `bru.grpc.*` API, and `test()` / `expect()` on inbound messages and at the end of the call.
@@ -31,9 +31,9 @@ The usual `bru.*` helpers (variables, `sendRequest`, `sleep`, `interpolate`, OAu
 
 ## How to add a script
 
-1. Enable **gRPC Scripting** under **Preferences → Beta**.
-2. Open a gRPC request and go to the **Script** tab.
-3. Choose a hook and write JavaScript. Autocomplete and lint cover `bru.grpc.*`.
+1. Open a gRPC request.
+2. Go to the **Script (Beta)** tab.
+3. Choose a hook and write JavaScript using the `bru.grpc` APIs. Autocomplete and lint cover `bru.grpc.*`.
 4. Send the request. Tests from After Message Receive and After Call End appear in the **Tests** tab.
 
 <CodeGroup>
