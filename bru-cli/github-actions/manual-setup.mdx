@@ -132,6 +132,16 @@ git push origin main
 ## Troubleshooting
 
 <AccordionGroup>
+  <Accordion title="CLI process is OOM-killed on large collections (Bruno CLI v4+)">
+    Large `bru run` jobs can retain memory per request and exhaust a small CI VM. If the runner dies mid-collection and v3.0.3 on the same collection finishes, add `--experimental-cache-modules`:
+
+```yaml
+run: bru run --env ci --experimental-cache-modules
+```
+
+Do not enable the flag unless you see this RSS growth. See [Reduce CLI memory use on large runs](/bru-cli/runCollection#reduce-cli-memory-use-on-large-runs).
+  </Accordion>
+
   <Accordion title="Sandbox migration (Bruno CLI v3+)">
     Bruno CLI v3 changed the default sandbox to Safe Mode. If your tests rely on Node built-ins (`require`, `Buffer`, etc.), add `--sandbox developer` to your `bru run` command:
 

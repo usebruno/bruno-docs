@@ -4,7 +4,9 @@ title: "Runtime Variables"
 
 ## Overview
 
-Runtime variables are **ephemeral variables** that exist only during the runtime of the API client. These variables are scoped within a collection, meaning they are accessible to all requests within that collection. However, once the API client is closed or restarted, the values of these variables are lost. They are ideal for managing temporary data such as session tokens, dynamic parameters, or other values that are generated or updated during the execution of requests.
+Runtime variables are **ephemeral variables** that exist only during the runtime of the API client. These variables are scoped within a collection, meaning they are accessible to all requests within that collection. However, once the API client is closed or restarted, the values of these variables are lost. 
+
+They are ideal for managing temporary data such as session tokens, dynamic parameters, or other values that are generated or updated during the execution of requests.
 
 ### Creating a Runtime Variable
 
@@ -17,6 +19,8 @@ Suppose you receive an authentication token as part of a response body and want 
 ```javascript
 bru.setVar("token", res.body.token);
 ```
+
+![Runtime variables table with nested JSON values](/images/screenshots/v4/chores/runtime-var.webp)
 
 ### Using a Runtime Variable
 
@@ -39,7 +43,10 @@ req.setHeader("Authorization", `Bearer ${token}`);
 
 ### Viewing Runtime Variables
 
-You can view all runtime variables by clicking on the **Eye** icon located in the top-right corner of the navigation bar
+1. Click on the **(...)** icon in the top-right of the corner.
+2. Select **Variables** from the dropdown.
+
+It will open the variables tab with a table with all the runtime and environment variables.
 
 <Callout emoji="">
   The request must be executed before you can view the runtime variables.
@@ -47,12 +54,27 @@ You can view all runtime variables by clicking on the **Eye** icon located in th
 
 Example:
 
-Consider the following script inside Bruno, which creates a runtime variable with a `key` and value `pair`. In this case, the key is _hey_ and the value is _Bruno_.
+Consider the following script inside Bruno, which creates a runtime variable. Nested objects show up in the same table as environment variables:
 
 ```js
-bru.setVar("hey", "Bruno");
+bru.setVar("data", { name: "usebruno", id: 101 });
 ```
 
-Once the request is executed, the runtime variable will be available for viewing. You should see something like this:
+Once the request is executed, the runtime variable is available in the variables view:
 
-![runtime-var](/images/screenshots/variables/runtime-var.webp)
+![Runtime variables table with nested JSON values](/images/screenshots/v4/chores/runtime-var.webp)
+
+The variables table matches the requests and environments tables.
+
+#### Expand and collapse nested values
+
+Objects and arrays expand in place. Bruno keeps that expand/collapse state for the session, keyed by variable path. 
+
+#### Copy a value
+
+Hover a row and click the copy icon. You do not need to select text.
+
+- Primitives (strings, numbers, booleans) copy as-is.
+- Objects and arrays copy as pretty-printed JSON, including when the node is collapsed.
+- Copy works for large values without freezing the UI.
+- Bruno shows a brief confirmation after a successful copy.

@@ -32,6 +32,29 @@ The import feature accepts environment files in both **Bruno** and **Postman** f
 
 ![Import Environment](/images/screenshots/get-started/import-export/import_collection/import-env.webp)
 
+### Duplicate environment names
+
+If an imported environment uses a name that already exists in the collection, a prompt dialog lists the conflicts so you can choose what happens.
+
+![Import environments dialog when a name already exists](/images/screenshots/v4/chores/import-env-copy.webp)
+
+The dialog shows how many environments already exist with the same name. For each conflict, choose one of:
+
+| Action | What Bruno does |
+| ------ | --------------- |
+| **Replace** | Overwrites the existing environment with the imported one. |
+| **New** (import as copy) | Keeps the existing environment and imports the file as a new environment. Bruno appends `Copy` to the name. |
+| **Skip** | Leaves the existing environment unchanged and does not import that file. Uncheck the row, or use Skip if it is offered. Other environments in the same batch still import. |
+
+When several files conflict in one import, use **Apply to all** so one choice covers every remaining conflict.
+
+- **Cancel** or the dialog close control cancels the whole import. Conflicting files are not applied.
+
+
+<Info>
+  A Postman data dump can contain several environments with the same name. Bruno resolves those names internally and imports the dump without treating them as collection conflicts. You are not prompted for duplicates that exist only inside that dump.
+</Info>
+
 ## Exporting Environment Variables
 
 ### Steps to Export

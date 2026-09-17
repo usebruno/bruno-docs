@@ -47,6 +47,7 @@ When a variable is accessed, the following precedence is used to determine which
 - Runtime variables get the highest precedence.
 - Prompt Variables are defined using the `{{?Prompt String}}` syntax and hence don't compete with the above.
 - Process Environment Variables are accessed using the `{{process.env.VAR_NAME}}` syntax and hence don't compete with the above.
+- Inside an environment, values can [inherit from a parent](/variables/environment-variables#inherit-from-a-parent-environment). The merge is ancestor → parent → active environment, then the usual scope stack above still applies.
 
 ### Variable Storage
 

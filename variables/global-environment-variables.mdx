@@ -91,6 +91,42 @@ For example, you can set a global environment variable value to:
 
 When the global environment is active, Bruno will resolve the value from the workspace `.env` file. See [Process Environment Variables](/variables/process-env) and [DotEnv File](/secrets-management/dotenv-file) for more details on managing `.env` files.
 
+## Inherit from a parent environment
+
+<Warning>
+  The `extends` key is written only in **4.2.0 and later**. Opening the same environment in an earlier version drops `extends`, so the parent link and inherited values disappear.
+</Warning>
+
+Global environments can inherit from one other **global** environment in the same workspace, the same way collection environments inherit. Pick a parent with **Inherits from** in the environment header.
+
+The child's variables and secrets override the parent. Chains such as `Prod` → `Oauth2` → `base` resolve transitively. You cannot select more than one parent, inherit from yourself, or pick a parent that would cycle.
+
+Inherited rows are read-only and show their source. A missing parent shows a warning and does not block the environment. The flattened merge is computed at runtime and is not saved to disk. The `extends` field on the environment file is the only persistence. Its value is the parent environment name.
+
+<CodeGroup>
+```yaml local.yml
+name: local
+extends: dev
+variables:
+  - name: url
+    value: https://echo.usebruno.com
+  - secret: true
+    name: apikey
+```
+
+```bru local.bru
+extends: dev
+vars {
+  url: https://echo.usebruno.com
+}
+vars:secret [
+  apikey
+]
+```
+</CodeGroup>
+
+See [Inherit from a parent environment](/variables/environment-variables#inherit-from-a-parent-environment) for merge order and interpolation.
+
 ## Selecting a Global Environment
 
 To activate a global environment:

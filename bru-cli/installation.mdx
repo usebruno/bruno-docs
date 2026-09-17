@@ -42,3 +42,80 @@ docker pull usebruno/cli:latest
 ```
 
 See [Docker](/bru-cli/docker) for variants, tags, and usage examples.
+
+## Testing nightly
+
+<Note>
+  Nightly builds are **pre-release** and may contain bugs. Use them to preview
+  upcoming features and provide feedback and not for production.
+</Note>
+
+The CLI nightly is published as an npm tarball (`.tgz`) on the [bruno-nightly-builds <strong><sup>↗</sup></strong>](https://github.com/usebruno/bruno-nightly-builds/releases) repository. Install it in an **isolated folder** so it does not replace a globally installed `@usebruno/cli`.
+
+**1. Prepare a test folder**
+
+Download the `.tgz` file from the latest nightly release and keep the original filename unchanged. Then create a clean folder and move the file into it:
+
+```bash
+mkdir cli-portable-nightly
+mv usebruno-cli-*.tgz cli-portable-nightly/
+cd cli-portable-nightly
+```
+
+**2. Install the bundle locally**
+
+```bash
+npm init -y
+npm install --offline ./usebruno-cli-<version>.tgz
+```
+
+**3. Verify the installation**
+
+```bash
+npx bru --version
+# Expected output: the nightly version number, e.g. 3.5.0
+```
+
+**4. Run your collection using the local CLI**
+
+The nightly binary is installed at `cli-portable-nightly/node_modules/.bin/bru`. When the collection lives in a **different folder**, use the full absolute path to that binary.
+
+Using `./node_modules/.bin/bru` only works from inside the `cli-portable-nightly` folder itself.
+
+```bash
+# Step into your collection folder
+cd /path/to/your-collection
+
+# macOS / Linux — use the absolute path to the nightly binary
+/path/to/cli-portable-nightly/node_modules/.bin/bru run --env <name>
+
+# Windows
+C:\path\to\cli-portable-nightly\node_modules\.bin\bru run --env <name>
+```
+
+If you are not sure of the path, run `pwd` while inside `cli-portable-nightly`:
+
+```bash
+cd /path/to/cli-portable-nightly
+pwd
+# e.g. /Users/yourname/Downloads/cli-portable-nightly
+```
+
+Then use that output as the prefix:
+
+```bash
+cd /path/to/your-collection
+/Users/yourname/Downloads/cli-portable-nightly/node_modules/.bin/bru run --env <name>
+```
+
+<Tip>
+  To avoid typing the full path every time, export it as a shell variable for your session:
+
+  ```bash
+  export NIGHTLY_BRU=/Users/yourname/Downloads/cli-portable-nightly/node_modules/.bin/bru
+  cd /path/to/your-collection
+  $NIGHTLY_BRU run --env <name>
+  ```
+</Tip>
+
+Desktop app nightlies are documented separately under [Download & Install](/get-started/bruno-basics/download#nightly-builds).

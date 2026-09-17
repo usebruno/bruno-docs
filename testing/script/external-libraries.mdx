@@ -119,7 +119,9 @@ req.setBody(records[0]);
 
 ### Reading CSV from a file
 
-You can also pass CSV from a file in your collection (path is relative to the collection root):
+You can also read CSV from a file on disk. Enable [Developer Mode](/get-started/configure/javascript-sandbox) so `fs` and `path` are available.
+
+Place `data.csv` **next to the request** `.yml` file and use `__dirname`:
 
 ```javascript
 const fs = require('fs');
@@ -136,4 +138,10 @@ req.setHeader('Content-Type', 'application/json');
 req.setBody(records[0]);
 ```
 
-Adjust the path to match where you store your `.csv` file.
+If the file lives at the **collection root** (or in a shared folder under it), use `bru.cwd()` instead:
+
+```javascript
+const csvData = fs.readFileSync(path.join(bru.cwd(), 'data.csv'), 'utf8');
+```
+
+`__dirname` is the directory of the executing `.bru` file (the request, folder, or collection script). `bru.cwd()` is always the collection root. See [`__dirname` and `__filename`](/testing/script/javascript-reference#__dirname-and-__filename).
