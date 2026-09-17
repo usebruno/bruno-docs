@@ -1,0 +1,82 @@
+---
+title: "Postman Export Organizer"
+---
+
+The Postman Export Organizer is a desktop app that analyzes and organizes Postman data exports. Point it at a Postman data dump or connect your Postman API key, and it groups your collections and environments by workspace, detects duplicates, and exports a **Bruno Bulk-Import ZIP** ready for the [data dump import](/get-started/import-export-data/postman-migration#export-data-dump) flow in Bruno.
+
+It's useful when you're migrating a large or messy Postman account and want to see what you actually have before importing it.
+
+<Info>
+  The Postman Export Organizer is an independent, community-built tool. It is not maintained or endorsed by Bruno, and is provided as-is. Back up your data before using it.
+</Info>
+
+## Installation
+
+The downloads below are for **v0.3.0**. For other versions, or to see release notes, visit the [releases page <strong><sup>↗</sup></strong>](https://github.com/james-ha-bruno/postman-export-organizer-app/releases/latest).
+
+<Tabs>
+  <Tab title="macOS">
+    | Platform | Download |
+    |----------|----------|
+    | Apple Silicon (arm64) | [Postman.Export.Organizer_0.3.0_aarch64.dmg <strong><sup>↗</sup></strong>](https://github.com/james-ha-bruno/postman-export-organizer-app/releases/download/v0.3.0/Postman.Export.Organizer_0.3.0_aarch64.dmg) |
+    | Intel (x64) | [Postman.Export.Organizer_0.3.0_x64.dmg <strong><sup>↗</sup></strong>](https://github.com/james-ha-bruno/postman-export-organizer-app/releases/download/v0.3.0/Postman.Export.Organizer_0.3.0_x64.dmg) |
+
+    <Warning>
+      **The app is not code-signed.** The first time you open it, macOS reports that the app is `damaged and can't be opened`. The app is not damaged — this is Gatekeeper rejecting an unsigned download.
+
+      To clear the quarantine flag, run:
+
+      ```bash
+      xattr -cr "/Applications/Postman Export Organizer.app"
+      ```
+
+      Then open the app again.
+    </Warning>
+  </Tab>
+  <Tab title="Windows">
+    | Installer | Download |
+    |-----------|----------|
+    | EXE (x64) | [Postman.Export.Organizer_0.3.0_x64-setup.exe <strong><sup>↗</sup></strong>](https://github.com/james-ha-bruno/postman-export-organizer-app/releases/download/v0.3.0/Postman.Export.Organizer_0.3.0_x64-setup.exe) |
+    | MSI (x64) | [Postman.Export.Organizer_0.3.0_x64_en-US.msi <strong><sup>↗</sup></strong>](https://github.com/james-ha-bruno/postman-export-organizer-app/releases/download/v0.3.0/Postman.Export.Organizer_0.3.0_x64_en-US.msi) |
+
+    <Note>
+      The installers are unsigned, so Windows SmartScreen may warn you before running them. Select `More info`, then `Run anyway` to continue.
+    </Note>
+  </Tab>
+  <Tab title="Linux">
+    | Package | Download |
+    |---------|----------|
+    | AppImage (x64) | [Postman.Export.Organizer_0.3.0_amd64.AppImage <strong><sup>↗</sup></strong>](https://github.com/james-ha-bruno/postman-export-organizer-app/releases/download/v0.3.0/Postman.Export.Organizer_0.3.0_amd64.AppImage) |
+    | Debian / Ubuntu | [Postman.Export.Organizer_0.3.0_amd64.deb <strong><sup>↗</sup></strong>](https://github.com/james-ha-bruno/postman-export-organizer-app/releases/download/v0.3.0/Postman.Export.Organizer_0.3.0_amd64.deb) |
+    | Fedora / RHEL | [Postman.Export.Organizer-0.3.0-1.x86_64.rpm <strong><sup>↗</sup></strong>](https://github.com/james-ha-bruno/postman-export-organizer-app/releases/download/v0.3.0/Postman.Export.Organizer-0.3.0-1.x86_64.rpm) |
+
+    The AppImage needs to be marked executable before it will run:
+
+    ```bash
+    chmod +x Postman.Export.Organizer_0.3.0_amd64.AppImage
+    ./Postman.Export.Organizer_0.3.0_amd64.AppImage
+    ```
+  </Tab>
+</Tabs>
+
+## Exporting for Bruno
+
+Once the app is installed:
+
+- Choose a data source — either a Postman data export (`.zip`) or your Postman API key.
+
+- Review the collections and environments, grouped by workspace. Use the filters to narrow down by workspace, collection name, environment name, or owner.
+
+- From the export panel, select **Bruno Bulk-Import ZIP**. This produces a single ZIP structured for bulk import in Bruno 3.5 and later.
+
+- In Bruno, open the import menu, select `Import Collections`, and choose the ZIP.
+
+<Tip>
+  Bulk Import from Postman is included in [Bruno Ultimate Edition](https://www.usebruno.com/pricing)
+</Tip>
+
+See [Migrating from Postman](/get-started/import-export-data/postman-migration) for the rest of the migration process, including environments and script translation.
+
+## Release Information
+
+Release notes and older versions are on the [GitHub Releases <strong><sup>↗</sup></strong>](https://github.com/james-ha-bruno/postman-export-organizer-app/releases) page. Source is at [james-ha-bruno/postman-export-organizer-app <strong><sup>↗</sup></strong>](https://github.com/james-ha-bruno/postman-export-organizer-app).

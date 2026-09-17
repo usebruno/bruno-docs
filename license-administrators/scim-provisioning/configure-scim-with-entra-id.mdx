@@ -95,6 +95,12 @@ Admin Role Mapping lets you provision specific Entra ID users as Bruno License M
 This section is optional. Skip it if you only want to provision regular licensed users.
 </Info>
 
+<Warning>
+**The admin role must be present on the first provisioning call.** Bruno decides whether a user is an administrator or a licensed user at the moment the account is created, based on whether a matching role is included in that request.
+
+If a user is created before their role value is available, they are provisioned as a licensed user and consume a license seat. A role arriving in a later update promotes them to administrator, but the license already issued remains in place — Bruno does not revoke a license that has been issued, so that users already working in Bruno desktop are never cut off.
+</Warning>
+
 ### Define an App Role
 
 1. In the [Microsoft Entra admin center](https://entra.microsoft.com/), go to **Identity** → **Applications** → **App registrations**
@@ -176,6 +182,15 @@ The initial provisioning cycle will begin immediately. Microsoft Entra ID will c
 **Note**: Microsoft Entra ID syncs changes every 40 minutes. For immediate provisioning of specific users, you can use the [on-demand provisioning feature](https://learn.microsoft.com/entra/identity/app-provisioning/provision-on-demand) in Microsoft Entra ID.
 </Info>
 
+### Verify an administrator provisioned correctly
+
+After assigning the user:
+
+1. In the Bruno portal, confirm they appear under **Settings → Admins**
+2. Confirm they do **not** appear in the **Users** list
+
+If they appear in the **Users** list with a license, the role was not present when the account was created. See [Troubleshooting](#troubleshooting).
+
 ## Deprovision users from Bruno
 
 1. To remove a user's access to Bruno, navigate to **Users and groups** in your Bruno application
@@ -219,6 +234,12 @@ The initial provisioning cycle will begin immediately. Microsoft Entra ID will c
 **Duplicate user errors**
 - Ensure the `userName` attribute mapping uses a unique identifier (email address)
 - Check that no users with the same email already exist in Bruno
+
+**A user was provisioned as a licensed user instead of an administrator**
+
+The App Role assignment was not in place when Entra ID first provisioned the user. Assign the App Role before the user is provisioned, then use [on-demand provisioning](https://learn.microsoft.com/entra/identity/app-provisioning/provision-on-demand) to confirm the `roles` value appears in the request.
+
+To correct an affected user, remove their license under **Users** in the Bruno portal. Re-provisioning through Entra ID does not remove an existing license.
 
 For additional help, [contact Bruno Support](https://www.usebruno.com/support) or visit the [Bruno SCIM API documentation](./bruno-scim-api).
 
