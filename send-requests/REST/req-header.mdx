@@ -5,7 +5,20 @@ sidebarTitle: "Headers"
 
 Request headers are **key-value** pairs sent along with an HTTP request to provide additional information to the server about the request. The request headers give the server more information about how to process the incoming request.
 
-**Default Headers**: Default headers are predefined headers that are part of the HTTP specification.
+**Default Headers**: Default headers are predefined headers that Bruno sends automatically with every request. You do not need to add them yourself, and they are not shown on the Headers tab. To see them on the wire, open the **Timeline** tab after sending a request.
+
+Bruno sends the following default headers:
+
+| Header | Value |
+|---|---|
+| `User-Agent` | `bruno-runtime/<version>` — the running Bruno app or CLI version. |
+| `Accept` | `application/json, text/plain, */*` |
+| `Accept-Encoding` | `gzip, compress, deflate, br` |
+| `Content-Type` | Set automatically based on the request **Body** type (for example `application/json` for JSON, `application/x-www-form-urlencoded` for Form URL Encoded, `multipart/form-data` for Multipart Form). |
+| `Content-Length` | Set automatically based on the encoded body size. |
+| `Host` | Derived from the request URL. |
+
+You can override any default header by adding a header with the same name on the **Headers** tab.
 
 **Custom Headers**: Custom headers are headers that are **user-defined** and are not part of the official HTTP specification.
 
