@@ -24,3 +24,9 @@ You can also use the `bru.getRequestVar()` function to get the value of a reques
 let source = bru.getRequestVar("source");
 let destination = bru.getRequestVar("destination");
 ```
+
+<Note>
+  `bru.getRequestVar()` only reads Pre Request Vars defined on the current request's own Vars tab. It does not read variables defined on a folder or collection.
+
+  To read a variable defined at any other scope (global, collection, environment, folder, or runtime), use `bru.getVar("name")`, which walks the full precedence chain described in the [Variables overview](/variables/overview#variable-precedence-and-scope). For a scope-specific getter, use `bru.getCollectionVar()`, `bru.getFolderVar()`, or `bru.getEnvVar()`.
+</Note>
