@@ -246,15 +246,22 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
      #sidebar-content, so without this scrolled rows slide under the
      icon. #sidebar-content is `absolute inset-0` in both renderers:
      pushing its top edge below the button row turns that row into a
-     non-scrolling strip the list can never enter. Mintlify's own 32px
-     sticky spacer at the top of the list then shrinks, or the first
-     group would sit 68px down instead of today's 32px; with the strip
-     plus the shortened spacer it lands at 48px. */
+     non-scrolling strip the list can never enter. On its own that edge
+     is a hard clip line — rows scrolling up are sliced off flat at
+     36px — so the top 1rem of the scroll box is masked to transparent,
+     and rows dissolve into the strip instead. A mask (not a painted
+     gradient) because the panel tint is translucent over the page, so
+     there is no solid colour to paint with. Mintlify's own 32px sticky
+     spacer at the top of the list then shrinks to the same 1rem as the
+     fade, so the first group sits fully opaque at rest (52px down) and
+     only rows that have actually scrolled enter the fade. */
   #sidebar #sidebar-content {
     top: 2.25rem;
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 1rem);
+    mask-image: linear-gradient(to bottom, transparent, #000 1rem);
   }
   #sidebar #sidebar-content .sticky.top-0.h-8 {
-    height: 0.75rem;
+    height: 1rem;
   }
 
   html[data-bru-sidebar="collapsed"] #sidebar {
