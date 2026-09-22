@@ -9,7 +9,7 @@ An OpenAPI document already describes paths, methods, status codes, and response
 This guide loads a spec into Bruno, creates a spec-linked mock, generates responses from operations, and starts the server.
 
 <Warning>
-  Mock Servers are in **Beta**. Open **Preferences → Beta** to turn on the **Mock Server** feature. The **Mock Servers** section appears in the sidebar only after you opt in.
+  Mock Servers are in **Beta**. They are on by default and appear in the sidebar. To hide them, turn off **Mock Server** under **Preferences → Beta**.
 </Warning>
 
 ## 1. Open an OpenAPI spec
@@ -27,17 +27,13 @@ Keep the spec in the workspace so the mock can stay linked to it.
 
 ## 2. Create a Mock Server from the spec
 
-1. Enable Mock Servers under **Preferences → Beta** if they are not already on.
-2. Click the **+** icon next to **Mock Servers** in the sidebar.
-3. Enter a **name**. Set the source to **API Spec** and select the spec you want to generate from.
-4. Optionally open **Advanced settings** to set the **port** and **response delay (ms)**.
-5. Click **Create**.
+1. Click the **+** icon next to **Mock Servers** in the sidebar.
+2. Enter a **name**. Set the source to **API Spec** and select the spec you want to generate from.
+3. Optionally open **Advanced settings** to set the **port** and **response delay (ms)**.
+4. Click **Create**.
 
 ![Create Mock Server dialog with API Spec as the source](/images/screenshots/v4/mock-severs/tutorial-openapi-create-mock.webp)
 
-Bruno opens the mock [dashboard](/mock-servers/run-mock-server#dashboard-interface-walkthrough). Responses are not generated until you run **Generate from API Spec**.
-
-![Spec-linked mock server dashboard with no responses yet](/images/screenshots/v4/mock-severs/tutorial-openapi-mock-dashboard.webp)
 
 ## 3. Generate from API Spec
 
