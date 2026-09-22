@@ -7,10 +7,10 @@ Request headers are **key-value** pairs sent with an HTTP request so the server 
 
 Bruno splits the Headers tab into two groups:
 
-- **Inherited Headers** - defaults Bruno adds on every request (for example `User-Agent`, `Accept`, `Accept-Encoding`).
+- **Runtime Headers** - headers Bruno adds on every request as runtime headers (for example `User-Agent`, `Accept`, `Accept-Encoding`).
 - **Request Headers** - headers you add yourself. These can be standard HTTP headers or custom names.
 
-The headers that go on the wire match what this tab shows. Disabled inherited headers are not sent.
+The headers that go on the wire match what this tab shows. Disabled runtime headers are not sent.
 
 ## Create request headers
 
@@ -23,7 +23,7 @@ The headers that go on the wire match what this tab shows. Disabled inherited he
 
 Use **Bulk Edit** in the bottom-right of the tab to edit several headers as text.
 
-## Inherited (default) headers
+## Runtime (default) headers
 
 Default headers are sent with every request. You can see and disable some default headers in Bruno. `Host` is required by HTTP and cannot be disabled. Its checkbox stays off.
 
@@ -31,7 +31,7 @@ The Headers tab lists every inherited header that will be sent. Click **Show Add
 
 ![Inherited headers listed on the Headers tab](/images/screenshots/v4/chores/view-default-headers.webp)
 
-Typical inherited headers include:
+Typical default headers include:
 
 | Header | Example value |
 | ------ | ------------- |
