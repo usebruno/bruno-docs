@@ -71,7 +71,7 @@ settings:
 ## After migration
 
 - Your requests are now saved as `.yml` files with `opencollection.yml` at the collection root
-- If any scripts use `bru.runRequest()` with a `.bru` file extension in the path, update those to `.yml`
+- Any `bru.runRequest()` calls in your scripts that referenced a `.bru` path (for example, `bru.runRequest("folder/req.bru")`) are rewritten during migration to drop the `.bru` extension (`bru.runRequest("folder/req")`). Extensionless paths, comments, strings, and unrelated code are left unchanged.
 - The original `.bru` files are removed after migration, so keep your backup until you confirm everything works
 
 ## Related

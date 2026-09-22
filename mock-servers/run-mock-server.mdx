@@ -45,7 +45,7 @@ The toolbar at the top provides **New Mock Response** and also surfaces context-
 
 #### Mock response editor
 Each mock response is presented as a first-class object with:
-  - **Method** and **Path** - path parameters use `:name` (for example, `/users/:id`)
+  - **Method** and **Path** - path parameters use `:name` (for example, `/users/:id`). Template variables such as `{{baseUrl}}` are preserved when you save the URL. Bruno strips only the base URL portion from the saved path, so route registration on the mock server still uses the resolved `:name` segments.
   - **Status** and **Headers**
   - **Expected** editor with syntax highlighting and expected response body
   - **Rules** - optional conditions that select one response over another for the same method + path
