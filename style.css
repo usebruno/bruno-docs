@@ -146,6 +146,14 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
   .dark #sidebar {
     background: rgb(255 255 255 / 0.035);
   }
+  /* Mintlify tops #sidebar-content with a sticky 32px scroll-fade: a
+     gradient from the PAGE background to transparent. On the bare page it
+     is invisible; over the tinted panel above it renders as a page-coloured
+     box sitting on the tint (a dark slab in dark mode). Drop the gradient
+     and keep the div as a plain spacer so the first group keeps its air. */
+  #sidebar #sidebar-content .sticky.top-0.h-8 {
+    background-image: none;
+  }
   /* With a visible panel edge, links need breathing room from it —
      #sidebar-content ships with pr-8 but no left padding at all. */
   #sidebar #sidebar-content {
