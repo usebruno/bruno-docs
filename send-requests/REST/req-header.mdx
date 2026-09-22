@@ -27,7 +27,7 @@ Use **Bulk Edit** in the bottom-right of the tab to edit several headers as text
 
 Default headers are sent with every request. You can see and disable some default headers in Bruno. `Host` is required by HTTP and cannot be disabled. Its checkbox stays off.
 
-The Headers tab now lists every inherited header that will be sent. Expand **Inherited Headers** to view them.
+The Headers tab lists every inherited header that will be sent. Click **Show Additional Headers** to view them.
 
 ![Inherited headers listed on the Headers tab](/images/screenshots/v4/chores/view-default-headers.webp)
 
@@ -43,11 +43,9 @@ Typical inherited headers include:
 | `Host` | Derived from the request URL |
 
 
-Hiding the list does not change what is sent. Only the checkbox on each row does.
-
 ### Disable a default header
 
-1. Open **Inherited Headers**.
+1. Open **Runtime Headers**.
 2. Clear the checkbox next to the header you do not want to send (for example `User-Agent`).
 3. Send the request.
 
