@@ -1012,10 +1012,20 @@ div.fixed.inset-0.z-40 [role="dialog"] {
   --ais-border-color-rgb: 75, 85, 99;
   --ais-border-color-alpha: 0.6;
 }
-#assistant .ais-ChatSidePanelLayout {
+/* Panel shadow. The side-panel wrapper (.ais-ChatSidePanelLayout) is a
+   fixed, full-height, pointer-transparent strip at the viewport's right
+   edge that stays mounted while the chat is closed — the widget opens and
+   closes only the inner .ais-Chat-container, by transitioning its opacity
+   and sliding it in from off-screen. A shadow on the wrapper is therefore
+   painted while nothing is visible (darkening the page left of the strip
+   so the strip reads as a lighter box), and gating it on the open state
+   still snaps it in before the container has slid into view. So the
+   shadow lives on the container itself, replacing the theme's
+   --ais-shadow-md: it fades and slides in step with the panel. */
+#assistant .ais-ChatSidePanelLayout .ais-Chat-container {
   box-shadow: -12px 0 40px rgb(0 0 0 / 0.18);
 }
-.dark #assistant .ais-ChatSidePanelLayout {
+.dark #assistant .ais-ChatSidePanelLayout .ais-Chat-container {
   box-shadow: -12px 0 40px rgb(0 0 0 / 0.5);
 }
 /* Answer typography. The agent's markdown renders as plain p / ol / ul /
