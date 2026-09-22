@@ -169,6 +169,92 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
 }
 
 /* ---------------------------------------------------------------------------
+   Collapsible sidebar (sidebar-toggle.js)
+   ---------------------------------------------------------------------------
+   sidebar-toggle.js appends one .bru-sb-toggle button to #sidebar and
+   mirrors its state as `data-bru-sidebar="collapsed"` on <html>; all the
+   visual consequences live here. Expanded, the button sits in the empty
+   32px band above the first nav group (Mintlify's sticky scroll-fade
+   spacer), in the panel's top-LEFT corner: the right edge is where the
+   nav's scrollbar runs once the list is long enough to scroll (the
+   local renderer's native bar inside #sidebar-content's pr-8 gutter,
+   the hosted renderer's base-ui scroll-area bar), and a button there
+   sat on top of it. Collapsed, #sidebar narrows to a 2.75rem rail — the
+   tinted panel stays, so the rail reads as "the nav, folded" — and the
+   same `left` offset centres the 1.75rem button in it, so the button
+   does not move when toggled. #sidebar-content is hidden outright
+   rather than clipped, so neither renderer's scrollbar can leak into
+   the rail.
+
+   Reflow differs per renderer, deliberately:
+   - Hosted: #sidebar is a sticky, shrink-0 flex sibling of #content-area
+     (`grow`), so narrowing it hands the freed width to the article with
+     no further rule; the 5.7rem - 3rem gutter is unchanged either way.
+   - Local CLI: #sidebar is position:fixed and #content-area carries an
+     explicit lg:pl-[23.7rem] gutter that would leave a 15rem hole. The
+     last rule re-derives that gutter for the rail (rail right edge at
+     1rem + 2.75rem, plus the same ~3.7rem edge-to-text air the expanded
+     shell has, plus #content-area's own -1rem offset) and is keyed on
+     the dev-only gutter class so it cannot fire on the hosted site.
+
+   Scoped >= 1250px like the panel above: below that the shell is in
+   mobile mode, #sidebar is display:none and the button goes with it.
+   Maintenance: `pl-[23.7rem]` / `pl-[5.7rem]` are renderer-emitted
+   utilities, not public API. If the hosted gutter ever stops being
+   in-flow, the collapsed article will show a gap — re-check on a
+   preview after Mintlify bumps.
+   --------------------------------------------------------------------------- */
+
+@media (min-width: 1250px) {
+  .bru-sb-toggle {
+    position: absolute;
+    top: 0.25rem;
+    left: 0.5rem;
+    z-index: 30; /* above #sidebar-content's z-10 */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    padding: 0;
+    border: 0;
+    border-radius: 0.375rem;
+    background: transparent;
+    color: rgb(0 0 0 / 0.45);
+    cursor: pointer;
+  }
+  .bru-sb-toggle:hover {
+    background: rgb(0 0 0 / 0.06);
+    color: rgb(0 0 0 / 0.75);
+  }
+  .bru-sb-toggle:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 1px;
+  }
+  .dark .bru-sb-toggle {
+    color: rgb(255 255 255 / 0.55);
+  }
+  .dark .bru-sb-toggle:hover {
+    background: rgb(255 255 255 / 0.08);
+    color: rgb(255 255 255 / 0.9);
+  }
+  .bru-sb-toggle svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  html[data-bru-sidebar="collapsed"] #sidebar {
+    width: 2.75rem;
+  }
+  html[data-bru-sidebar="collapsed"] #sidebar #sidebar-content {
+    display: none;
+  }
+  html[data-bru-sidebar="collapsed"] #content-area[class*="pl-[23.7rem]"] {
+    padding-left: 8.5rem;
+  }
+}
+
+/* ---------------------------------------------------------------------------
    Clustered top nav (design handoff option 1c)
    ---------------------------------------------------------------------------
    The nine tabs render as one quiet row: a leading Get Started, then two
