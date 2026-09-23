@@ -23,6 +23,62 @@ Just like other variables you can use the `{{varName}}` syntax to use an environ
 
 ![Environment Variables location](/images/screenshots/variables/environment-variables.webp)
 
+## Inherit from a parent environment
+
+Use inheritance when DEV, STG, PRD, or role-based environments share most values. Define the common variables once on a parent, then override only what differs on the child.
+
+<Warning>
+  The `extends` key is written only in **4.2.0 and later**. Opening the same environment in an earlier version drops `extends`, so the parent link and inherited values disappear.
+</Warning>
+
+An environment can inherit from **one** parent of the **same scope** (collection environments inherit collection environments; global environments inherit global environments). Chains are allowed: `STG-GW` → `STG` → `base`. The child's own values always win.
+
+Inside the environment tier, Bruno merges **furthest ancestor → ancestors → direct parent → active environment**. Other Bruno scopes are unchanged: global, collection, resolved environment, folder, request, runtime, prompt, process.env, secrets.
+
+### Set a parent
+
+1. Open the environment.
+2. In the header, open **Inherits from** and pick one parent.
+3. Save.
+
+The picker does not let you choose more than one parent, the environment itself, or any environment that would create a cycle.
+
+![Environment inheriting from a parent, with a missing-parent warning](/images/screenshots/v4/chores/env-inherits.webp)
+
+Inherited variables and secrets show as read-only rows (de-emphasized), with the source environment. Add a local variable with the same name to override; that name then leaves the inherited list and becomes editable on this environment.
+
+If the parent file is missing, Bruno shows a non-blocking warning (for example **Referenced parent environment(s) not found**) and still uses the child's own variables.
+
+### How values are merged
+
+Flattening happens **before** interpolation and merges **raw** values only. `{{variable}}` is then resolved once against the full scope. That means a parent value can reference a variable defined on the child.
+
+The merged set is computed at read time. It is **never** written back to disk. The `extends` field on the environment file is the only persistence. Its value is the parent environment name.
+
+<CodeGroup>
+```yaml local.yml
+name: local
+extends: dev
+variables:
+  - name: url
+    value: https://echo.usebruno.com
+  - secret: true
+    name: apikey
+```
+
+```bru local.bru
+extends: dev
+vars {
+  url: https://echo.usebruno.com
+}
+vars:secret [
+  apikey
+]
+```
+</CodeGroup>
+
+If a cycle is introduced by editing files by hand, Bruno still notifies you and resolves the chain without looping forever.
+
 ## Searching environment variables
 
 When working with a large number of environment variables, you can use the search feature to quickly find specific variables.

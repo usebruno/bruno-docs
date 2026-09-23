@@ -40,6 +40,8 @@ JavaScript code has access to the filesystem, can execute system commands and ac
 - You need to use external npm packages in your scripts
 - Your collection needs access to filesystem / system commands
 
+In Developer Mode, scripts also get Node-style `__dirname` and `__filename`, scoped to the executing `.bru` file. See [`__dirname` and `__filename`](/testing/script/javascript-reference#__dirname-and-__filename).
+
 #### When to avoid Developer Mode
 
 - You are running a collection that you do not trust (Ex: Downloaded from the internet)

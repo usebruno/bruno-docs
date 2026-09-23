@@ -7,7 +7,7 @@ description: "Walk through saving collection response examples, creating a mock 
 [Response examples](/send-requests/res-data-cookies/response-examples) are snapshots of how an API behaves with success payloads, validation errors, empty lists, and other states you care about. Once they've been saved as an example, you can document those cases, share them with the team, and with Mock Servers, serve them locally so a frontend or integration test can immediately hit the endpoints without needing the real backend to be up and available.
 
 <Warning>
-  Mock Servers are in **Beta**. Open **Preferences → Beta** to turn on the **Mock Server** feature. The **Mock Servers** section appears in the sidebar only after you opt in.
+  Mock Servers are in **Beta**. They are on by default and appear in the sidebar. To hide them, turn off **Mock Server** under **Preferences → Beta**.
 </Warning>
 
 ## 1. Create or save response examples
@@ -33,7 +33,7 @@ The example appears nested under the request.
 Use this when you want to capture a real API response.
 
 1. Send the request and wait for the response.
-2. In the Response tab, click the **Save Response** *(Bookmark)* icon (top-right).
+2. In the Response tab, click the **Save Response** *(Bookmark)* icon in the top-right corner.
 3. Enter a name for the example.
 4. Click **Save**.
 
@@ -47,10 +47,6 @@ See [Response Examples](/send-requests/res-data-cookies/response-examples) for t
 
 With examples in the collection, create a mock server that uses those examples as its source.
 
-<Warning>
-  If you have not already, enable Mock Servers under **Preferences → Beta**.
-</Warning>
-
 1. In the sidebar, click the **+** icon next to **Mock Servers**.
 2. Enter a **name**. Keep the source as **Collection** (this is the default).
 3. Choose the collection from the dropdown.
@@ -59,9 +55,7 @@ With examples in the collection, create a mock server that uses those examples a
 
 ![Create Mock Server dialog with Collection as the source](/images/screenshots/v4/mock-severs/tutorial-create-mock-server.webp)
 
-Bruno opens the mock [dashboard](/mock-servers/run-mock-server#dashboard-interface-walkthrough). The server is not running yet, you still need to sync examples, and then start it.
-
-![Mock server dashboard before syncing examples](/images/screenshots/v4/mock-severs/tutorial-collection-examplemock-server-dashboard.webp)
+Bruno opens the mock [dashboard](/mock-servers/run-mock-server#dashboard-interface-walkthrough) with the **Responses** tab open.
 
 ## 3. Sync with Examples
 

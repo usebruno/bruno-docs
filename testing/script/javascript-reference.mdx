@@ -8,7 +8,7 @@ Bruno offers powerful scripting capabilities that allow you to extend and automa
 Here is the complete set of API reference for the scripting feature in Bruno.
 
 <Note>
-  This page covers the APIs available in **scripts and tests** (`req`, `res`, and `bru`). [Apps](/apps/overview) use a separate API — `bru.ctx` — which is injected into the App's page instead of the scripting sandbox, and is not available in scripts. See the [Apps API Reference](/apps/api-ref) for the full `bru.ctx` surface.
+  This page covers the APIs available in **scripts and tests** (`req`, `res`, `bru`, and `bru.grpc` on gRPC requests). [Apps](/apps/overview) use a separate API — `bru.ctx` — which is injected into the App's page instead of the scripting sandbox, and is not available in scripts. See the [Apps API Reference](/apps/api-ref) for the full `bru.ctx` surface.
 </Note>
 
 ## Request
@@ -1555,7 +1555,7 @@ Custom CA (requires [Developer Mode](/get-started/configure/javascript-sandbox#d
 const https = require("node:https");
 const fs = require("fs");
 const path = require("path");
-const ca = fs.readFileSync(path.join(bru.cwd(), "certs", "ca.pem"));
+const ca = fs.readFileSync(path.join(bru.cwd(), "certs", "ca.pem")); // collection root
 const agent = new https.Agent({ ca, rejectUnauthorized: true });
 const res = await bru.sendRequest({
   url: "https://api.example.com/data",
@@ -1605,18 +1605,45 @@ console.log(userInfo);
 
 ### `bru.cwd()`
 
-Returns the absolute path of the collection's root directory on disk. Useful when reading files (certificates, fixtures, config) relative to the collection in Developer Mode.
+Returns the absolute path of the collection's root directory on disk. Use this when a file lives at the collection root (certificates, shared fixtures, config). For a file next to the current request or folder `.yml` file, use [`__dirname`](#__dirname-and-__filename) instead.
+
+Requires [Developer Mode](/get-started/configure/javascript-sandbox#developer-mode) to use the `fs` package to read the filesystem.
 
 ```javascript
 const collectionDir = bru.cwd();
 console.log("Collection directory:", collectionDir);
 // Output: "/Users/me/projects/my-api-collection"
 
-// Load a local fixture file relative to the collection
+// Load a fixture from the collection root
 const fs = require("fs");
-const fixture = JSON.parse(fs.readFileSync(`${bru.cwd()}/fixtures/user.json`, "utf8"));
+const path = require("path");
+const fixture = JSON.parse(fs.readFileSync(path.join(bru.cwd(), "fixtures", "user.json"), "utf8"));
 req.setBody(fixture);
 ```
+
+### `__dirname` and `__filename`
+
+CommonJS globals for the **executing script's location** in the collection file tree. Available in both the Node VM sandbox and the isolated JS sandbox when in [Developer Mode](/get-started/configure/javascript-sandbox#developer-mode).
+
+Use them to build paths next to the current `.yml` file:
+
+```javascript
+const fs = require("fs");
+const path = require("path");
+
+const csvData = fs.readFileSync(path.join(__dirname, "data.json"), "utf8");
+```
+
+| Script context | `__dirname` | `__filename` |
+| -------------- | ----------- | ------------ |
+| Collection (pre / post / tests) | Collection directory | Absolute path to `opencollection.yml` |
+| Folder (pre / post / tests) | Folder directory | Absolute path to `folder.yml` |
+| Request (pre / post / tests) | Request directory | Absolute path to the request `.yml` file |
+| Fallback (no script path) | Collection directory | `undefined` |
+
+If Bruno cannot determine the script path, `__dirname` falls back to the collection directory and `__filename` is `undefined`.
+
+`bru.cwd()` is always the collection root. `__dirname` follows the folder that owns the script.
 
 ### `bru.isSafeMode()`
 
@@ -1897,4 +1924,135 @@ Clear every cookie in the jar.
 const jar = bru.cookies.jar();
 jar.clear();
 ```
+
+## gRPC (`bru.grpc`)
+
+gRPC scripts use `bru.grpc.request` and `bru.grpc.response` instead of `req` / `res`. Open a gRPC request, go to the **Script (Beta)** tab, and write hooks there. Lifecycle, storage, and hook tables are on [gRPC Scripting](/send-requests/grpc/scripting).
+
+`bru.cookies.*` and `bru.runner.*` are not available in gRPC scripts. Variables, `bru.sendRequest`, `bru.sleep`, `bru.interpolate`, and OAuth2 credential helpers are.
+
+Hook abbreviations: **BCS** Before Call Start · **BMS** Before Message Send · **AMR** After Message Receive · **ACE** After Call End.
+
+A message is `{ data, timestamp }`. `data` is the protobuf payload. `timestamp` is epoch milliseconds.
+
+### `bru.grpc.request.messages`
+
+Transmitted messages (not the list authored in the UI). Empty in BCS. Read-only in every hook.
+
+```javascript
+// ACE: inspect what went on the wire
+const first = bru.grpc.request.messages.get(0);
+console.log(first.data, first.timestamp);
+
+const all = bru.grpc.request.messages.all();
+const n = bru.grpc.request.messages.count();
+const later = bru.grpc.request.messages.filter((m) => m.data.id > 1);
+```
+
+### `bru.grpc.request.message`
+
+Current outbound message. **BMS only**, read-only.
+
+```javascript
+// BMS
+console.log(bru.grpc.request.message.data.clientId);
+console.log(bru.grpc.request.message.timestamp);
+```
+
+### `bru.grpc.response.message`
+
+Current inbound message. **AMR only**.
+
+```javascript
+// AMR
+const greeting = bru.grpc.response.message.data.greeting;
+test("greeting is a string", function () {
+  expect(greeting).to.be.a("string");
+});
+```
+
+### `bru.grpc.response.messages`
+
+All received messages. **ACE only**.
+
+```javascript
+// ACE
+expect(bru.grpc.response.messages.count()).to.be.at.least(1);
+const greetings = bru.grpc.response.messages.map((m) => m.data.greeting);
+const last = bru.grpc.response.messages.get(bru.grpc.response.messages.count() - 1);
+```
+
+### `bru.grpc.request.metadata`
+
+Client metadata. Readable in all hooks. Writable **only in BCS**. Keys are case-insensitive.
+
+```javascript
+// BCS — set metadata before the call opens
+bru.grpc.request.metadata.upsert("authorization", "Bearer " + bru.getEnvVar("token"));
+bru.grpc.request.metadata.add({ key: "x-app", value: "1" });
+bru.grpc.request.metadata.remove("x-trace-id");
+
+console.log(bru.grpc.request.metadata.get("authorization"));
+console.log(bru.grpc.request.metadata.one("authorization"));
+console.log(bru.grpc.request.metadata.toObject());
+console.log(bru.grpc.request.metadata.has("x-app"));
+console.log(bru.grpc.request.metadata.count());
+```
+
+### `bru.grpc.response.metadata`
+
+Server initial metadata. **AMR and ACE**, read-only.
+
+```javascript
+// AMR or ACE
+expect(bru.grpc.response.metadata.get("content-type")).to.equal("application/grpc");
+console.log(bru.grpc.response.metadata.toObject());
+```
+
+### `bru.grpc.response.trailers`
+
+Trailing metadata, including `grpc-status` and `grpc-message`. **ACE only**.
+
+```javascript
+// ACE
+expect(bru.grpc.response.trailers.get("grpc-status")).to.equal("0");
+expect(bru.grpc.response.trailers.has("grpc-status")).to.be.true;
+console.log(bru.grpc.response.trailers.toObject());
+```
+
+### Call info
+
+Available as listed. Status, status text, and duration are **ACE only**.
+
+```javascript
+console.log(bru.grpc.request.url);        // "localhost:50051"
+console.log(bru.grpc.request.method);     // "/helloworld.Greeter/SayHello"
+console.log(bru.grpc.request.methodType); // "unary" | "server-streaming" | ...
+console.log(bru.grpc.request.authMode);   // "bearer" | "none" | ...
+console.log(bru.grpc.request.protoPath);
+console.log(bru.grpc.request.name);
+
+// ACE
+expect(bru.grpc.response.statusCode).to.equal(0);
+expect(bru.grpc.response.statusText).to.equal("OK");
+console.log(bru.grpc.response.duration);
+```
+
+### Tests and assertions
+
+`test()` and `expect()` run in **AMR** (per message) and **ACE** (once at the end). Results show in the Tests tab.
+
+```javascript
+// AMR — one assertion per received message
+test("payload has greeting", function () {
+  expect(bru.grpc.response.message.data).to.have.property("greeting");
+});
+
+// ACE — terminal checks
+test("status is OK", function () {
+  expect(bru.grpc.response.statusCode).to.equal(0);
+  expect(bru.grpc.response.duration).to.be.a("number");
+});
+```
+
 

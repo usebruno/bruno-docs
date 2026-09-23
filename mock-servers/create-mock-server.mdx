@@ -6,47 +6,44 @@ description: "Create a mock server from a collection of saved response examples,
 
 You can create a mock server from a collection of saved response examples, from an OpenAPI spec, or as a standalone (manual) mock.
 
-## Enable the beta flag
-
-1. Open **Preferences**.
-2. Go to **[Beta](/get-started/configure/settings#beta)**.
-3. Turn on **Mock Server**.
-
-A **Mock Servers** section appears in the sidebar.
+<Warning>
+  Mock Servers are in **Beta**. They are on by default and appear in the sidebar. To hide them, turn off **Mock Server** under **[Preferences → Beta](/get-started/configure/settings#beta)**.
+</Warning>
 
 ## Create from a collection (saved examples)
 
 Use this path when the collection already has saved response examples.
 
 1. Open the collection.
-2. In the sidebar, expand **Mock Servers** and click the **+** icon to create a new mock server.
-3. Enter a **Name**.
-4. Keep **Link to a collection or API spec** checked, select **Collection**, pick the collection, then click **Create**.
-5. On the dashboard, click **Sync with Examples**. Every [saved example](/send-requests/res-data-cookies/response-examples) becomes a mock response (method, path, status, headers, and body).
-6. Click **Start Server** to start the mock server on the saved port. If the port is already in use, change it under **Mock Server Settings (gear icon)** → **Advanced settings**.
+2. In the sidebar, click the **+** icon next to **Mock Servers** and enter a **Name** of the mock server.
+3. Select **Collection** as the source, pick the collection, then click **Create**.
+4. Every [saved example](/send-requests/res-data-cookies/response-examples) becomes a mock response (method, path, status, headers, and body).
+5. Click **Start Server** to start the mock server on the saved port. If the port is already in use, change it under **Mock Server Settings (gear icon)** → **Advanced settings**.
 
-![Create mock server linked to a collection](/images/screenshots/v4/mock-severs/create-api-spec-mock-server.webp)
-
+![Create mock server linked to a collection](/images/screenshots/v4/mock-severs/tutorial-create-mock-server.webp)
 
 ## Create from an OpenAPI spec
 
 Use this path when you have an API spec in the workspace. Turn on [API Spec](/open-api/createOAS#viewing-existing-oas-files) under **Preferences** → **Features** if it is not already enabled.
 
 1. Load the spec under **API Specs** in the sidebar (if it is not already there).
-2. Create a mock server, keep **Link to a collection or API spec** checked, select **API Spec**, pick the spec, then click **Create**.
-3. On the dashboard, click **Generate from API Spec**. Each operation and response status becomes a mock response; bodies are derived from the schema where possible.
-4. Click **Start Server** to start the mock server on the saved port. If the port is already in use, change it under **Mock Server Settings (gear icon)** → **Advanced settings**.
+2. In the sidebar, click the **+** icon next to **Mock Servers** and enter a **Name** of the mock server.
+3. Select **API Spec** as the source, pick the spec, then click **Create**.
 
-![Create mock server linked to an API spec](/images/screenshots/v4/mock-severs/create-collection-api-mock-server.webp)
+Each operation and response status becomes a mock response with bodies derived from the schema where possible.
 
+
+![Create mock server linked to an API spec](/images/screenshots/v4/mock-severs/tutorial-openapi-create-mock.webp)
+
+Once the mock server is created, click **Start Server** to start it on the saved port. If the port is already in use, change it under **Mock Server Settings (gear icon)** → **Advanced settings**.
 
 ## Create a standalone (manual) mock
 
 To add responses yourself instead of syncing from a collection or spec:
 
-1. Click **+** under **Mock Servers**.
-2. Enter a **Name**.
-3. Turn off **Link to a collection or API spec**.
+1. In the sidebar, click the **+** icon next to **Mock Servers**.
+2. Enter a **Name** of the mock server.
+3. Select **Standalone** as the source.
 4. Optionally set **Port** and **Response delay** under **Advanced settings**.
 5. Click **Create**, then add responses from the **Responses** tab.
 

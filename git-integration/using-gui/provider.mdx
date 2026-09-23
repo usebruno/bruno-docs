@@ -176,6 +176,62 @@ In the case of a rejected push, [pull](./consumer#pulling-changes) the remote ch
 
 
 
+### Create a Pull Request on GitHub
+
+From Bruno **4.2.0**, you can create the pull request inside Bruno: fill in the title and description, review the commits on the branch, and submit. Bruno creates the PR against the GitHub remote and shows the resulting URL. You can also browse **open** and **closed** pull requests for the current repository without leaving the app.
+
+<Note>
+  Creating and listing pull requests in the Git UI is available from **Bruno 4.2.0** and requires [Pro or Ultimate](https://www.usebruno.com/pricing).
+</Note>
+
+<Info>
+  This release supports **GitHub** remotes only. GitLab and Bitbucket remotes do not show the create pull request prompt; push and the rest of the Git UI work as before.
+</Info>
+
+#### Pull Requests in the Git UI
+
+Git UI sidebar includes a **Pull Requests** item under **Links**, below **Commits**. Open it to browse open and closed pull requests for the current repository.
+
+#### Create a pull request
+
+Work on a feature branch, not the default branch (`main` or `master`):
+
+1. [Create a new branch](#branch-creation-and-checkout) and check it out.
+2. Make your collection changes, then [commit](#adding-and-committing-changes) them.
+3. [Push](#pushing-changes) the branch to the GitHub remote.
+
+After a successful push, Bruno prompts you to open a pull request for that branch — for example, **Create Pull Request** button appears.
+
+![Create pull request prompt after pushing a branch](/images/screenshots/v4/chores/create-pr-button.webp)
+
+4. Click **Create Pull Request**. Bruno opens a **Create PR** tab.
+5. Check the **base** and **compare** branches at the top of the tab. Bruno shows how far ahead your branch is and what it changes, for example *2 commits ahead, +7 -1, 1 file changed*.
+6. Enter a **Title** and a **Description**. The description is a rich text editor, so you can add lists, links, code, and tables.
+
+![Create PR tab with base and compare branches, title, and description](/images/screenshots/v4/chores/create-pr-title-description.webp)
+
+7. Scroll down to review the **Commits** on the branch and the **Files changed** diff before you submit.
+
+![Commits and Files changed diff in the Create PR tab](/images/screenshots/v4/chores/create-pr-diff-changes.webp)
+
+8. Click **Create PR** to submit, or **Cancel** to discard the draft.
+
+Bruno creates the pull request against the GitHub remote and the base branch you selected, then surfaces the PR URL in the Git UI.
+
+9. Click **Open in GitHub** if you want to view the pull request in the browser.
+
+You can dismiss the prompt if you are not ready to open a PR. You can start the same flow later from **Pull Requests** in the Git UI sidebar.
+
+If this is the first time Bruno talks to GitHub on your behalf, sign in with OAuth or a Personal Access Token, the same way you do when [creating a GitHub repository from Bruno](#create-a-new-github-repository-from-bruno).
+
+#### Browse open and closed pull requests
+
+1. Open the **Git UI**.
+2. Under **Links**, click **Pull Requests**.
+3. Switch between **open** and **closed** pull requests for the current repository.
+
+![Pull Requests in the Git UI sidebar](/images/screenshots/v4/chores/cerate-pr-dashboard.webp)
+
 ### Branch Creation and Checkout
 
 With branches in **Bruno**, you can manage your code effectively by isolating different features or tasks.
