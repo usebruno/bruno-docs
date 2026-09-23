@@ -9,11 +9,11 @@ Generate a standalone HTML documentation file from your collection in a few clic
 
 A couple of minutes of prep decides what ends up in the file, so it is worth checking these first:
 
-- **Write your docs.** The generated site pulls descriptions from the markdown you have written at the [collection, folder, and request levels](/api-docs/overview). Requests with no docs still appear, they just look thin.
-- **Decide which environments readers need.** You pick these in the modal. Anything you leave out is not embedded in the file.
-- **Tag your requests if you plan to filter.** Tag filtering is how you keep work in progress or internal endpoints out of published docs, and it reads the tags already saved on each request. If nothing is tagged yet, add tags in the collection first.
-- **Set a collection version (optional).** Collections without one show `Not Set` in the modal and in the generated site.
-- **Know whether the collection is Git backed.** The option to include the repository URL only shows up for Git backed collections.
+- **Write your docs.** The generated site pulls descriptions from the markdown you have written at the [collection, folder, and request levels](/api-docs/overview). Requests with no docs still appear, they just lack any additional info.
+- **Decide which environments readers need.** You pick these in the generate modal. Anything you leave out is not embedded in the file.
+- **Tag your requests if you plan to filter.** Tag filtering is how you keep work in progress or internal endpoints out of published docs. If nothing is tagged yet, it is recommended to add them.
+- **Set a collection version (optional).** Collections without one show `Not Set` in the generate modal and in the generated site.
+- **Whether to enable collaboration via Git.** The option to include the repository URL only shows up for Git backed collections.
 
 ## Generate Documentation
 
@@ -23,7 +23,7 @@ A couple of minutes of prep decides what ends up in the file, so it is worth che
 
 2. Under **Environments to include**, select the environments you want embedded in the documentation. Use **Select All** to include every one of them.
 
-3. Expand **Advanced** if you want to filter requests or control the Git repository link. Both controls are optional, and leaving them alone produces the same output as before.
+3. Expand **Advanced** if you want to filter requests or remove the Git repository link.
 
 ![Click Generate Button](/images/screenshots/v4/collection-docs/select-environment-export.webp)
 

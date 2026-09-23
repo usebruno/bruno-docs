@@ -253,13 +253,13 @@ bru run --iteration-count 2 --parallel
 
 ## Reduce CLI memory use on large runs
 
-If you are seeing unbounded RSS(Resident Set Size) growth or OOM(Out of Memory) kills, you can use the `--experimental-cache-modules` flag to reduce the memory usage. It will share evaluated script modules across requests in a `bru run`.
+If you are seeing unbounded RSS (Resident Set Size) growth or OOM (Out of Memory) kills, you can use the `--experimental-cache-modules` flag to attempt to reduce the memory usage. It will share evaluated script modules across requests in a `bru run`.
 
 If you are **not** seeing unbounded RSS growth or OOM kills, leave the default as-is.
 
 ### `--experimental-cache-modules`
 
-Pass this flag on `bru run` when a run grows memory with every request:
+Pass this flag on `bru run` when it runs out of memory:
 
 ```bash copy
 bru run --experimental-cache-modules
@@ -272,7 +272,7 @@ The flag does two things:
 
 That avoids the heap climb caused by re-creating the graph for every request. The flag is **experimental** because the approach can change script behavior in edge cases. Use it only when you hit the high-RSS issue.
 
-The name will become `--cache-modules` once the default CLI run is confirmed to stay unchanged with this caching on.
+This is still experimental. The name will become `--cache-modules` once the default CLI run is confirmed to stay unchanged with this caching on.
 
 ### CI example
 
@@ -302,13 +302,13 @@ See [Generate API Documentation options](/bru-cli/commandOptions#generate-api-do
 
 ### Choose the output file
 
-Use `--output` or `-o` to write the HTML file somewhere else:
+Use `--output` or `-o` to write the HTML file somewhere other than the current directory:
 
 ```bash copy
 bru docs generate --output docs/api.html
 ```
 
-The short form is equivalent:
+The short form:
 
 ```bash copy
 bru docs generate -o docs/api.html
@@ -322,7 +322,7 @@ Use `--all-envs` to embed every environment in the collection:
 bru docs generate --all-envs
 ```
 
-Use `--envs` to embed only selected collection environments. Separate names with commas and quote the value when an environment name contains spaces:
+Use `--envs` to embed only selected collection environments. Separate names with commas and quote the value when an environment name contains a space:
 
 ```bash copy
 bru docs generate --envs Production,Development
@@ -338,7 +338,7 @@ bru docs generate --all-envs --exclude-envs Local,Development
 bru docs generate --envs "Production,Staging,Local" --exclude-envs Local
 ```
 
-`--exclude-envs` takes preference. If the same environment name appears in both `--envs` and `--exclude-envs`, that environment is left out.
+`--exclude-envs` takes precedence. If the same environment name appears in both `--envs` and `--exclude-envs`, that environment is left out.
 
 The command exits with an error if a requested environment does not exist.
 
@@ -356,7 +356,7 @@ Use `--exclude-tags` to remove requests carrying any matching tag:
 bru docs generate --envs Prod --exclude-tags local
 ```
 
-You can combine both filters. `--exclude-tags` takes preference, the same way `--exclude-envs` does. If the same tag name appears in both `--tags` and `--exclude-tags`, requests with that tag are left out:
+You can combine both filters. `--exclude-tags` takes precedence, the same way `--exclude-envs` does. If the same tag name appears in both `--tags` and `--exclude-tags`, requests with that tag are left out:
 
 ```bash copy
 bru docs generate --tags "Prod Ready,v2,WIP" --exclude-tags "WIP,Internal"
@@ -366,13 +366,13 @@ Excluded requests do not remain in the embedded collection data, navigation, or 
 
 ### Include or omit the Git repository link
 
-Git links are included by default:
+For Git backed collections, the repository URL (`gitCollectionUrl`) is embedded by default, so readers can clone the collection from the generated documentation through **Open in Bruno**. You can make the default explicit with `--git-link`:
 
 ```bash copy
 bru docs generate --git-link
 ```
 
-Use `--no-git-link` to omit `gitCollectionUrl`:
+Use `--no-git-link` to leave the repository URL out. Readers still get the full documentation, but without the clone link. This matters most when the repository is private and the documentation is published somewhere public, where a URL to a repo most readers cannot access is not useful:
 
 ```bash copy
 bru docs generate --tags "Prod Ready,v2" --no-git-link
@@ -380,7 +380,7 @@ bru docs generate --tags "Prod Ready,v2" --no-git-link
 
 ### CI example
 
-Generate a filtered artifact after the collection changes, then publish or commit the resulting file:
+This command embeds every environment except `Local`, drops requests tagged `WIP` or `Internal`, leaves the repository URL out, and writes the file to a build directory you can publish or commit:
 
 ```bash copy
 bru docs generate \

@@ -133,7 +133,7 @@ git push origin main
 
 <AccordionGroup>
   <Accordion title="CLI process is OOM-killed on large collections (Bruno CLI v4+)">
-    Large `bru run` jobs can retain memory per request and exhaust a small CI VM. If the runner dies mid-collection and v3.0.3 on the same collection finishes, add `--experimental-cache-modules`:
+    Large `bru run` jobs can retain memory per request and exhaust a small CI VM. If the runner dies mid-collection, add `--experimental-cache-modules`:
 
 ```yaml
 run: bru run --env ci --experimental-cache-modules

@@ -31,9 +31,9 @@ Use inheritance when DEV, STG, PRD, or role-based environments share most values
   The `extends` key is written only in **4.2.0 and later**. Opening the same environment in an earlier version drops `extends`, so the parent link and inherited values disappear.
 </Warning>
 
-An environment can inherit from **one** parent in the **same scope** (collection environments inherit collection environments; global environments inherit global environments). Chains are allowed: `STG-GW` → `STG` → `base`. The child's own values always win.
+An environment can inherit from **one** parent of the **same scope** (collection environments inherit collection environments; global environments inherit global environments). Chains are allowed: `STG-GW` → `STG` → `base`. The child's own values always win.
 
-Inside the environment tier, Bruno merges **furthest ancestor → direct parent → active environment**. Other Bruno scopes are unchanged: global, collection, resolved environment, folder, request, runtime, prompt, process.env, secrets.
+Inside the environment tier, Bruno merges **furthest ancestor → ancestors → direct parent → active environment**. Other Bruno scopes are unchanged: global, collection, resolved environment, folder, request, runtime, prompt, process.env, secrets.
 
 ### Set a parent
 

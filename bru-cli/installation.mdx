@@ -47,7 +47,7 @@ See [Docker](/bru-cli/docker) for variants, tags, and usage examples.
 
 <Note>
   Nightly builds are **pre-release** and may contain bugs. Use them to preview
-  upcoming features and provide feedback and not for production.
+  upcoming features and provide feedback. Not recommended for production.
 </Note>
 
 The CLI nightly is published as an npm tarball (`.tgz`) on the [bruno-nightly-builds <strong><sup>↗</sup></strong>](https://github.com/usebruno/bruno-nightly-builds/releases) repository. Install it in an **isolated folder** so it does not replace a globally installed `@usebruno/cli`.
@@ -78,9 +78,9 @@ npx bru --version
 
 **4. Run your collection using the local CLI**
 
-The nightly binary is installed at `cli-portable-nightly/node_modules/.bin/bru`. When the collection lives in a **different folder**, use the full absolute path to that binary.
+The nightly `bru` binary lives inside the test folder, at `cli-portable-nightly/node_modules/.bin/bru`. The short form `./node_modules/.bin/bru` only works while your shell is inside `cli-portable-nightly`.
 
-Using `./node_modules/.bin/bru` only works from inside the `cli-portable-nightly` folder itself.
+Your collection is usually in another folder, so `cd` into the collection and call the nightly binary by its full absolute path.
 
 ```bash
 # Step into your collection folder
@@ -118,4 +118,4 @@ cd /path/to/your-collection
   ```
 </Tip>
 
-Desktop app nightlies are documented separately under [Download & Install](/get-started/bruno-basics/download#nightly-builds).
+Desktop app nightly builds are documented separately under [Download & Install](/get-started/bruno-basics/download#nightly-builds).

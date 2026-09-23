@@ -1927,9 +1927,9 @@ jar.clear();
 
 ## gRPC (`bru.grpc`)
 
-gRPC request scripts use `bru.grpc.request` and `bru.grpc.response` instead of `req` / `res`. Open a gRPC request, go to the **Script (Beta)** tab, and write hooks there. Lifecycle, storage, and hook tables are on [gRPC Scripting](/send-requests/grpc/scripting).
+gRPC scripts use `bru.grpc.request` and `bru.grpc.response` instead of `req` / `res`. Open a gRPC request, go to the **Script (Beta)** tab, and write hooks there. Lifecycle, storage, and hook tables are on [gRPC Scripting](/send-requests/grpc/scripting).
 
-`bru.cookies.*` and `bru.runner.*` are not available in gRPC hooks. Variables, `bru.sendRequest`, `bru.sleep`, `bru.interpolate`, and OAuth2 credential helpers are.
+`bru.cookies.*` and `bru.runner.*` are not available in gRPC scripts. Variables, `bru.sendRequest`, `bru.sleep`, `bru.interpolate`, and OAuth2 credential helpers are.
 
 Hook abbreviations: **BCS** Before Call Start · **BMS** Before Message Send · **AMR** After Message Receive · **ACE** After Call End.
 
