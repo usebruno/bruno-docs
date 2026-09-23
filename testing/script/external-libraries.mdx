@@ -119,7 +119,7 @@ req.setBody(records[0]);
 
 ### Reading CSV from a file
 
-You can also read CSV from a file on disk. Enable [Developer Mode](/get-started/configure/javascript-sandbox) so `fs` and `path` are available.
+You can also read a CSV file. Enable [Developer Mode](/get-started/configure/javascript-sandbox) so `fs` and `path` are available.
 
 Place `data.csv` **next to the request** `.yml` file and use `__dirname`:
 
@@ -144,4 +144,4 @@ If the file lives at the **collection root** (or in a shared folder under it), u
 const csvData = fs.readFileSync(path.join(bru.cwd(), 'data.csv'), 'utf8');
 ```
 
-`__dirname` is the directory of the executing `.bru` file (the request, folder, or collection script). `bru.cwd()` is always the collection root. See [`__dirname` and `__filename`](/testing/script/javascript-reference#__dirname-and-__filename).
+`__dirname` is the directory of the executing file (the request, folder, or collection script). `bru.cwd()` is always the collection root. See [`__dirname` and `__filename`](/testing/script/javascript-reference#__dirname-and-__filename).

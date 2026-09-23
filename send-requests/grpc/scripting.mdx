@@ -27,7 +27,9 @@ A gRPC call is a connection that exchanges messages and ends with a status. Brun
 | **After Message Receive** (`grpc:after-message-receive`) | After each inbound message (once for unary / client-streaming; per message for server-streaming / bidi) | Validate that message with `test()` / `expect()` |
 | **After Call End** (`grpc:after-call-end`) | Once after the call ends, errors, or is cancelled | Assert status, trailers, all received messages, duration |
 
-Message lists are always **read-only**. You cannot add, replace, send, or delete messages from a script. `bru.grpc.request.metadata` is **writable only in Before Call Start**. `bru.grpc.response.*` is read-only and exists only in After Message Receive and After Call End.
+- Message lists are always **read-only**. You cannot add, replace, send, or delete messages from a script.
+- `bru.grpc.request.metadata` is **writable only in Before Call Start**.
+- `bru.grpc.response.*` is read-only and exists only in After Message Receive and After Call End.
 
 The usual `bru.*` helpers (variables, `sendRequest`, `sleep`, `interpolate`, OAuth2 credential helpers, `console`) work in every hook. `bru.cookies.*` and `bru.runner.*` are **not** available on gRPC requests.
 
@@ -150,7 +152,7 @@ Metadata entries are `{ key, value }`. Keys ending in `-bin` are binary (values 
 
 ## What is not included
 
-- Changing or sending messages from a script (the connect-and-send flow is a later ticket)
+- Changing or sending messages from a script
 - Collection- and folder-level gRPC hooks (folder/collection scripts still run for HTTP only)
 - Collection Runner and Bruno CLI execution of gRPC scripts
 

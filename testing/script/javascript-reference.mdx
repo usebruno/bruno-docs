@@ -1607,7 +1607,7 @@ console.log(userInfo);
 
 Returns the absolute path of the collection's root directory on disk. Use this when a file lives at the collection root (certificates, shared fixtures, config). For a file next to the current request or folder `.yml` file, use [`__dirname`](#__dirname-and-__filename) instead.
 
-Requires [Developer Mode](/get-started/configure/javascript-sandbox#developer-mode) to read the filesystem.
+Requires [Developer Mode](/get-started/configure/javascript-sandbox#developer-mode) to use the `fs` package to read the filesystem.
 
 ```javascript
 const collectionDir = bru.cwd();
@@ -1623,7 +1623,7 @@ req.setBody(fixture);
 
 ### `__dirname` and `__filename`
 
-CommonJS globals for the **executing script's location** in the collection file tree. Available in both the Node VM sandbox and the isolated JS sandbox when the collection is in [Developer Mode](/get-started/configure/javascript-sandbox#developer-mode).
+CommonJS globals for the **executing script's location** in the collection file tree. Available in both the Node VM sandbox and the isolated JS sandbox when in [Developer Mode](/get-started/configure/javascript-sandbox#developer-mode).
 
 Use them to build paths next to the current `.yml` file:
 
