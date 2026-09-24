@@ -124,11 +124,10 @@ For a given iteration, Bruno resolves those placeholders from the current row—
 
 ##### Accessing Variables in Scripts
 
-In pre-request or post-response scripts, read the current iteration with **`bru.runner.iterationData.get("columnName")`**. Depending on your setup, **`bru.getVar()`** may also reflect runner variables.
+In pre-request or post-response scripts, read the current iteration with **`bru.runner.iterationData.get("columnName")`**.
 
 ```javascript
 console.log(bru.runner.iterationData.get("name"));
-console.log(bru.getVar("name")); // May match iteration data when exposed by the runner
 ```
 
 When you run the collection, check the **Timeline** for the **actual request body** sent on each iteration.
