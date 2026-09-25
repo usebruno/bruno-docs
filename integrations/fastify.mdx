@@ -1,0 +1,149 @@
+---
+title: "Fastify"
+sidebarTitle: "Fastify"
+---
+
+Register your Bruno collection as API documentation in a Fastify app, served from the same process as your API.
+
+## Why this is useful
+
+Your collection is already in the repository, reviewed in the same pull requests as the routes it exercises:
+
+```text
+orders-service/
+├── src/
+│   └── app.js
+├── collection/
+│   ├── collection.yml
+│   ├── List Orders.yml
+│   ├── Create Order.yml
+│   └── environments/
+│       ├── local.yml
+│       └── production.yml
+└── package.json
+```
+
+Registering the plugin publishes that folder as documentation:
+
+```text
+myapp.com/api/orders  → your API
+myapp.com/docs        → your API docs
+```
+
+Nothing separate to build, host, or keep in sync. The docs deploy when the service deploys.
+
+## Install
+
+```bash
+npm install @usebruno/api-docs-fastify
+```
+
+## Register the plugin
+
+```js
+import Fastify from 'fastify'
+import apiDocs from '@usebruno/api-docs-fastify'
+
+const app = Fastify()
+
+await app.register(apiDocs, {
+  url: './collection'
+})
+
+await app.listen({ port: 3000 })
+```
+
+Start the app and open `http://localhost:3000/docs`.
+
+The path in `url` is resolved relative to your app entry file, not the working directory. It can point at a collection folder or at a single bundled `collection.yml`, in either the `.bru` or OpenCollection `.yml` format.
+
+## Change the route
+
+Use Fastify's own `prefix`, or set `route` in the options:
+
+<CodeGroup>
+
+```js Fastify prefix
+await app.register(apiDocs, {
+  url: './collection'
+}, { prefix: '/api-reference' })
+```
+
+```js route option
+await app.register(apiDocs, {
+  url: './collection',
+  route: '/api-reference'
+})
+```
+
+</CodeGroup>
+
+## Choose what gets published
+
+By default no environments are published and every request is included:
+
+```js
+await app.register(apiDocs, {
+  url: './collection',
+  environments: { include: ['production'] },
+  tags: { include: ['public'], exclude: ['internal'] }
+})
+```
+
+Filtering happens on the server, so excluded environments and requests are absent from the response rather than hidden in the page. Use `environments: '*'` to publish all of them.
+
+## Customize the page
+
+Presentation options go under `ui` and are passed straight to the renderer:
+
+```js
+await app.register(apiDocs, {
+  url: './collection',
+  environments: '*',
+  ui: {
+    theme: 'dark',
+    pageTitle: 'Orders API',
+    logo: '/logo.svg',
+    gitCollectionUrl: 'https://github.com/acme/orders-service'
+  }
+})
+```
+
+See the [configuration reference](/integrations/overview#configuration) for every option.
+
+## Put the docs behind your auth
+
+Register the plugin inside a scope that carries your authentication hook:
+
+```js
+await app.register(async (scope) => {
+  scope.addHook('onRequest', requireLogin)
+
+  await scope.register(apiDocs, {
+    url: './collection',
+    environments: { include: ['staging'] }
+  })
+})
+```
+
+The hook runs before the docs handler, so unauthenticated readers get neither the page nor the collection document.
+
+## What the plugin serves
+
+| Route                   | Response                                       |
+| ----------------------- | ---------------------------------------------- |
+| `/docs/`                | The documentation page                         |
+| `/docs/shell.js`        | The boot script, cacheable                     |
+| `/docs/collection.yml`  | The assembled collection document, not cached  |
+
+Navigation inside the docs uses the URL hash, so `/docs/#/catalog/list-products` links straight to a request.
+
+<Info>
+  If the collection cannot be read at startup, the app still boots. The error is logged and the docs route serves it instead of the page, so a documentation problem never takes down your API.
+</Info>
+
+## Next steps
+
+- [Express](/integrations/express) and [NestJS](/integrations/nestjs) integrations
+- [Generate a standalone HTML file](/html-docs/generate) from the same collection with **Generate Docs**
+- [Write better docs](/api-docs/overview) at the collection, folder, and request level so the published page has real descriptions
