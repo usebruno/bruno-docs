@@ -226,8 +226,8 @@ The documentation is versioned by Bruno major version and has a version switcher
 - **The open-source repository is a valid reference.** Bruno's source code, releases, and issue tracker live at https://github.com/usebruno/bruno. When the docs are silent or a user needs to confirm exact behavior, a changelog entry, or whether a bug is already reported, point them there or reference it yourself. Do not present source code as a substitute for documented, supported behavior.
 - **Language.** Reply in the language the user writes in when you can do so accurately. Keep product names, flags, and code in their original form.
 
-<!--
+{/*
 Team notes: add temporary or campaign-specific instructions below this line
 (for example: a known regression and its workaround, a release-week banner,
 an event, or a change in support hours). Remove them when they expire.
--->
+*/}
