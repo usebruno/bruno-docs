@@ -1,4 +1,78 @@
----
+---Description
+Primary
+(where the weakness exists independent of other weaknesses)
+ + Detection Methods
+Method	Details
+Automated Static Analysis
+
+Automated static analysis, commonly referred to as Static Application Security Testing (SAST), can find some instances of this weakness by analyzing source code (or binary/compiled code) without having to execute it. Typically, this is done by building a model of data flow and control flow, then searching for potentially-vulnerable patterns that connect "sources" (origins of input) with "sinks" (destinations where the data interacts with external components, a lower layer such as the OS, etc.)
+Effectiveness: High
+
+ + Functional Areas
+Program Invocation
+Code Libraries
+ + Affected Resources
+System Process
+ + Memberships
+Section Help
+Nature	Type	ID	Name
+MemberOf	Category	991	SFP Secondary Cluster: Tainted Input to Environment
+MemberOf	Category	1403	Comprehensive Categorization: Exposed Resource
+MemberOf	Category	1443	OWASP Top Ten 2025 Category A08:2025 - Software or Data Integrity Failures
+ + Vulnerability Mapping Notes
+Usage	ALLOWED-WITH-REVIEW (this CWE ID could be used to map to real-world vulnerabilities in limited situations requiring careful review)
+Reasons	Frequent Misinterpretation, Abstraction, Other
+Rationale
+This CWE entry is often confused with another closely-related entry about search paths.
+Comments
+CWE-426 and CWE-427 are often misused because they both mention search paths, although CWE-426 is focused on attacker control of the search path itself, while CWE-427 applies when the attacker cannot modify the search path but can write to one of the locations specified in the search path. Also, this entry is classified in a part of CWE's hierarchy that does not have sufficiently low-level coverage, which might reflect a lack of classification-oriented weakness research in the software security community. Conduct careful root cause analysis to determine the original mistake that led to this weakness. If closer analysis reveals that this weakness is appropriate, then this might be the best available CWE to use for mapping. If no other option is available, then it is acceptable to map to this CWE.
+ + Notes
+Relationship
+Unlike untrusted search path (CWE-426), which inherently involves control over the definition of a control sphere (i.e., modification of a search path), this entry concerns a fixed control sphere in which some part of the sphere may be under attacker control (i.e., the search path cannot be modified by an attacker, but one element of the path can be under attacker control).
+Theoretical
+This weakness is not a clean fit under CWE-668 or CWE-610, which suggests that the control sphere model might need enhancement or clarification.
+ + Taxonomy Mappings
+Mapped Taxonomy Name	Node ID	Fit	Mapped Node Name
+PLOVER			Uncontrolled Search Path Element
+ + Related Attack Patterns
+CAPEC-ID	Attack Pattern Name
+CAPEC-38	Leveraging/Manipulating Configuration File Search Paths
+CAPEC-471	Search Order Hijacking
+ + References
+[REF-409]	Georgi Guninski. "Double clicking on MS Office documents from Windows Explorer may execute arbitrary programs in some cases". Bugtraq. 2000-09-18.
+<https://seclists.org/bugtraq/2000/Sep/331>. (URL validated: 2023-01-30)
+[REF-410]	Mitja Kolsek. "ACROS Security: Remote Binary Planting in Apple iTunes for Windows (ASPR #2010-08-18-1)". Bugtraq. 2010-08-18.
+<https://lists.openwall.net/bugtraq/2010/08/18/4>. (URL validated: 2023-01-30)
+[REF-411]	Taeho Kwon and Zhendong Su. "Automatic Detection of Vulnerable Dynamic Component Loadings".
+<https://dl.acm.org/doi/10.1145/1831708.1831722>. (URL validated: 2025-07-24)
+[REF-412]	"Dynamic-Link Library Search Order". Microsoft. 2010-09-02.
+<https://learn.microsoft.com/en-us/windows/win32/dlls/dynamic-link-library-search-order?redirectedfrom=MSDN>. (URL validated: 2023-04-07)
+[REF-413]	"Dynamic-Link Library Security". Microsoft. 2010-09-02.
+<https://learn.microsoft.com/en-us/windows/win32/dlls/dynamic-link-library-security>. (URL validated: 2023-04-07)
+[REF-414]	"An update on the DLL-preloading remote attack vector". Microsoft. 2010-08-31.
+<https://msrc.microsoft.com/blog/2010/08/an-update-on-the-dll-preloading-remote-attack-vector/>. (URL validated: 2023-04-07)
+[REF-415]	"Insecure Library Loading Could Allow Remote Code Execution". Microsoft. 2010-08-23.
+<https://learn.microsoft.com/en-us/security-updates/securityadvisories/2010/2269637#insecure-library-loading-could-allow-remote-code-execution>. (URL validated: 2023-04-07)
+[REF-416]	H D Moore. "Application DLL Load Hijacking". 2010-08-23.
+<https://www.rapid7.com/blog/?p=5325>. (URL validated: 2023-04-07)
+[REF-417]	Oliver Lavery. "DLL Hijacking: Facts and Fiction". 2010-08-26.
+<https://threatpost.com/dll-hijacking-facts-and-fiction-082610/74384/>. (URL validated: 2023-04-07)
+[REF-1168]	Catalin Cimpanu. "Microsoft warns enterprises of new 'dependency confusion' attack technique". ZDNet. 2021-02-10.
+<https://www.zdnet.com/article/microsoft-warns-enterprises-of-new-dependency-confusion-attack-technique/>.
+[REF-1169]	Alex Birsan. "Dependency Confusion: How I Hacked Into Apple, Microsoft and Dozens of Other Companies". 2021-02-09.
+<https://medium.com/@alex.birsan/dependency-confusion-4a5d60fec610>.
+[REF-1170]	Microsoft. "3 Ways to Mitigate Risk When Using Private Package Feeds". 2021-02-09.
+<https://azure.microsoft.com/mediahandler/files/resourcefiles/3-ways-to-mitigate-risk-using-private-package-feeds/3%20Ways%20to%20Mitigate%20Risk%20When%20Using%20Private%20Package%20Feeds%20-%20v1.0.pdf>.
+[REF-1325]	"exec package - os/exec - Go Packages". 2023-04-04.
+<https://pkg.go.dev/os/exec>. (URL validated: 2023-04-21)
+[REF-1326]	Brian M. Carlson. "Git LFS Changelog". 2022-04-19.
+<https://github.com/git-lfs/git-lfs/commit/032dca8ee69c193208cd050024c27e82e11aef81>. (URL validated: 2023-04-21)
+ + Content History
++ Submissions
+Submission Date	Submitter	Organization
+2006-07-19
+(CWE Draft 3, 2006-07-19)	PLOVER	
+ + Contributions
 title: "Document a Collection"
 sidebarTitle: "Collections"
 ---
