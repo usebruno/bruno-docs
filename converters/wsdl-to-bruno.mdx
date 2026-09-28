@@ -6,84 +6,21 @@ sidebarTitle: "WSDL to Bruno"
 import ConvertersSetup from '/snippets/converters-setup.mdx';
 import ConvertersRun from '/snippets/converters-run.mdx';
 
-Bruno supports importing WSDL (Web Services Description Language) files to automatically generate SOAP API collections. This feature is particularly useful when working with legacy SOAP-based web services, as it eliminates the need for manual configuration of SOAP requests.
+Convert a WSDL (Web Services Description Language) file into a Bruno collection folder of SOAP requests you can open in the app or run with the CLI. The converter creates one request per operation, with a SOAP envelope built from the XML schema and the `Content-Type` and `SOAPAction` headers already set.
+
+<Tip>
+  You do not need a script to import a WSDL file. The Bruno app imports one through **Import Collection** (see [Import collections](/get-started/import-export-data/import-collections#7-wsdl-web-services-description-language)), and the CLI does it in one command: `bru import wsdl --source <service.wsdl> --output <output-folder>` (see [Import Data](/bru-cli/import)). Use the script below when you want to process the collection in your own code.
+</Tip>
 
 <Info>
-  WSDL import is available in Bruno v2.14.0 and later versions.
+  WSDL import is available in Bruno v2.14.0 and later.
 </Info>
 
-## What Gets Generated
-
-When you import a WSDL file, Bruno automatically:
-
-- **Parses the WSDL structure** and extracts all available service operations
-- **Creates a structured collection** with one request per operation
-- **Generates SOAP envelope templates** for each operation based on the XML schema definitions
-- **Pre-configures required headers** including `Content-Type: text/xml` and `SOAPAction`
-- **Includes XML schema documentation** as comments within the request body
-
-## Import WSDL via UI
-
-### Step 1: Access Import Collection
-
-1. Click on the three-dot menu next to any collection in the sidebar
-2. Select **Import Collection** from the dropdown menu
-
-![Import Collection Menu](/images/screenshots/get-started/import-export/import_collection/import_collection_main_menu.webp)
-
-### Step 2: Choose WSDL Option
-
-1. In the Import Collection dialog, select the **WSDL** option
-
-![Import Dialog with WSDL Option](/images/screenshots/get-started/import-export/import_collection/import-modal.webp)
-
-2. You can either:
-   - Click the upload area to browse for a local `.wsdl` file
-   - Drag and drop a WSDL file directly into the dialog
-
-### Step 3: Import and Review
-
-1. After selecting your WSDL file, Bruno will parse it and generate the collection
-2. A new folder will be created containing all the SOAP operations
-3. Each operation will be a separate request with a pre-configured SOAP envelope
-
-<Info>
-  Bruno automatically validates the WSDL structure during import. If there are any issues, you'll receive clear error messages.
-</Info>
-
-## Import WSDL via CLI
-
-You can also import WSDL files using the Bruno CLI, which is useful for automation and CI/CD workflows.
-
-### Basic Command
-
-```bash
-bru import wsdl --source path/to/service.wsdl --output ./my-collection
-```
-
-### Example
-
-```bash
-# Import a WSDL file
-bru import wsdl --source ./services/calculator.wsdl --output ./calculator-collection
-
-# Import with nested directory structure
-bru import wsdl --source ./wsdl-files/user-service.wsdl --output ./collections/soap/users
-```
-
-<Info>
-  For detailed CLI import options and examples, see the [CLI Import Guide](/bru-cli/import).
-</Info>
-
-## Programmatic Conversion
-
-Use the `@usebruno/converters` package to convert a WSDL file into a Bruno collection folder from your own code.
-
-### Convert the WSDL
+## Convert the WSDL
 
 <ConvertersSetup />
 
-#### 1. Read the arguments
+### 1. Read the arguments
 
 Import the converter, the file writers from `@usebruno/filestore`, and Node's file helpers. Take the paths from the command line and print a usage line if any are missing. `format` is `'yml'` for OpenCollection YAML or `'bru'` for classic `.bru` files.
 
@@ -102,7 +39,7 @@ if (!inputFile || !outputDir) {
 const format = 'yml';
 ```
 
-#### 2. Add the helpers
+### 2. Add the helpers
 
 `safeName` strips characters that are not allowed in file names. `write` saves a file and creates any missing parent folders.
 
@@ -115,15 +52,15 @@ const write = async (file, content) => {
 };
 ```
 
-#### 3. Convert
+### 3. Convert
 
-`wsdlToBruno` resolves to the Bruno collection.
+`wsdlToBruno` resolves to the Bruno collection. See the [API Reference](./api-reference#wsdltobruno) for the full signature.
 
 ```javascript
 const collection = await wsdlToBruno(await readFile(inputFile, 'utf8'));
 ```
 
-#### 4. Write the collection settings and environments
+### 4. Write the collection settings and environments
 
 `brunoConfig` holds the collection settings. For `.bru` collections it is written to `bruno.json`. For yml it is embedded in `opencollection.yml`. The collection root holds collection-level auth, headers, and scripts. Each environment gets its own file in the `environments` folder.
 
@@ -143,7 +80,7 @@ for (const env of collection.environments || []) {
 }
 ```
 
-#### 5. Write the folders and requests
+### 5. Write the folders and requests
 
 Each folder becomes a directory and each request a file. Folder-level auth, headers, and scripts go in `folder.yml` or `folder.bru`. A stack is used instead of recursion so deeply nested collections are safe.
 
@@ -162,7 +99,7 @@ while (stack.length) {
 }
 ```
 
-#### 6. Report
+### 6. Report
 
 Print where the collection was written.
 
@@ -171,9 +108,9 @@ console.log(`Collection written to ${outputDir}`);
 ```
 
 
-#### 7. Run the script
+### 7. Run the script
 
-Run the script with Node.js, passing the paths as arguments. The output folder is created if it does not exist.
+Run the script with Node.js, passing the paths as arguments.
 
 <CodeGroup>
 ```bash convert.mjs
@@ -190,7 +127,19 @@ Where:
 - `<service.wsdl>`: The WSDL file
 - `<output-folder>`: The folder to create the Bruno collection in. It is created if it does not exist
 
-#### Full script
+The output folder looks like this (with `format` set to `'bru'`, the files are `bruno.json`, `collection.bru`, `folder.bru`, and `.bru` requests instead):
+
+```text
+my-collection/
+├── opencollection.yml
+└── CalculatorService/
+    ├── Add.yml
+    └── Subtract.yml
+```
+
+One folder per service, one file per operation.
+
+### Full script
 
 The complete script, ready to copy. `convert.mjs` is an ES module with top-level `await`. `convert.js` is the same script as CommonJS, with the steps inside an async `main` function.
 
@@ -349,22 +298,22 @@ main();
 ```
 </CodeGroup>
 
-### Open the collection in the app or run it with the CLI
+## Open the collection in the app or run it with the CLI
 
 <ConvertersRun />
 
-## Generated Request Structure
+## Generated request structure
 
-Each SOAP operation in the imported collection will have the following structure:
+Each SOAP operation in the collection has the following structure:
 
-### Request Headers
+### Request headers
 
 ```
 Content-Type: text/xml; charset=utf-8
 SOAPAction: "http://example.com/ServiceName/OperationName"
 ```
 
-### Request Body
+### Request body
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>

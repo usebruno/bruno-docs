@@ -8,6 +8,8 @@ import ConvertersRun from '/snippets/converters-run.mdx';
 
 Convert a Postman collection and environment into a Bruno collection folder you can open in the app or run with the CLI.
 
+Start by exporting the collection from Postman in the Collection v2.1 format and, if you use one, the environment. See [Postman migration](/get-started/import-export-data/postman-migration) for where to find the export buttons.
+
 ## Convert the collection and environment
 
 <ConvertersSetup />
@@ -48,7 +50,7 @@ const write = async (file, content) => {
 
 ### 3. Convert
 
-`postmanToBruno` resolves to the Bruno collection and a list of `issues` it could not convert cleanly. If an environment file was given, convert it and add it to the collection so it is written with the rest.
+`postmanToBruno` resolves to the Bruno collection and a list of `issues` it could not convert cleanly. If an environment file was given, convert it and add it to the collection so it is written with the rest. See the [API Reference](./api-reference#postmantobruno) for the full signature.
 
 ```javascript
 const { collection, issues } = await postmanToBruno(await readJson(collectionFile));
@@ -112,7 +114,7 @@ for (const issue of issues) {
 
 ### 7. Run the script
 
-Run the script with Node.js, passing the paths as arguments. The output folder is created if it does not exist.
+Run the script with Node.js, passing the paths as arguments.
 
 <CodeGroup>
 ```bash convert.mjs
@@ -129,6 +131,22 @@ Where:
 - `<postman-collection.json>`: The collection exported from Postman
 - `<output-folder>`: The folder to create the Bruno collection in. It is created if it does not exist
 - `[postman-environment.json]`: Optional. An environment exported from Postman
+
+The output folder looks like this (with `format` set to `'bru'`, the files are `bruno.json`, `collection.bru`, `folder.bru`, and `.bru` requests instead):
+
+```text
+my-collection/
+├── opencollection.yml
+├── environments/
+│   └── Dev.yml
+├── Users/
+│   ├── folder.yml
+│   ├── List users.yml
+│   └── Create user.yml
+└── Ping.yml
+```
+
+One folder per Postman folder, one file per request, and the environment under `environments`.
 
 ### Full script
 

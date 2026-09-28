@@ -50,7 +50,7 @@ const write = async (file, content) => {
 
 ### 3. Convert
 
-`openApiToBruno` accepts the specification as JSON or YAML and returns the Bruno collection. Pass `{ groupBy: 'path' }` as a second argument to group folders by path instead of tag.
+`openApiToBruno` accepts the specification as JSON or YAML and returns the Bruno collection. Pass `{ groupBy: 'path' }` as a second argument to group folders by path instead of tag. See the [API Reference](./api-reference#openapitobruno) for the full signature.
 
 ```javascript
 const collection = openApiToBruno(await readFile(inputFile, 'utf8'));
@@ -106,7 +106,7 @@ console.log(`Collection written to ${outputDir}`);
 
 ### 7. Run the script
 
-Run the script with Node.js, passing the paths as arguments. The output folder is created if it does not exist.
+Run the script with Node.js, passing the paths as arguments.
 
 <CodeGroup>
 ```bash convert.mjs
@@ -122,6 +122,21 @@ Where:
 
 - `<openapi.yaml>`: The OpenAPI specification, as JSON or YAML
 - `<output-folder>`: The folder to create the Bruno collection in. It is created if it does not exist
+
+The output folder looks like this (with `format` set to `'bru'`, the files are `bruno.json`, `collection.bru`, `folder.bru`, and `.bru` requests instead):
+
+```text
+my-collection/
+├── opencollection.yml
+├── environments/
+│   └── Environment 1.yml
+└── pets/
+    ├── folder.yml
+    ├── List pets.yml
+    └── Create pet.yml
+```
+
+One folder per tag, one file per operation, and an environment holding the base URL from the spec's `servers`.
 
 ### Full script
 

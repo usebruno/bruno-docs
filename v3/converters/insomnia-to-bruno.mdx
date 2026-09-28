@@ -8,6 +8,8 @@ import ConvertersRun from '/snippets/converters-run.mdx';
 
 Convert an Insomnia export into a Bruno collection folder you can open in the app or run with the CLI.
 
+Start by exporting the collection from Insomnia. Both the JSON export from Insomnia v4 and the YAML export from Insomnia v5 work. See [Import collections](/get-started/import-export-data/import-collections) for the export steps.
+
 ## Convert the collection
 
 <ConvertersSetup />
@@ -24,7 +26,7 @@ import path from 'path';
 
 const [inputFile, outputDir] = process.argv.slice(2);
 if (!inputFile || !outputDir) {
-  console.error('Usage: node convert.mjs <insomnia-export.json> <output-folder>');
+  console.error('Usage: node convert.mjs <insomnia-export> <output-folder>');
   process.exit(1);
 }
 
@@ -33,11 +35,9 @@ const format = 'yml';
 
 ### 2. Add the helpers
 
-`safeName` strips characters that are not allowed in file names. `write` saves a file and creates any missing parent folders. `readJson` reads and parses a JSON file.
+`safeName` strips characters that are not allowed in file names. `write` saves a file and creates any missing parent folders.
 
 ```javascript
-const readJson = async (file) => JSON.parse(await readFile(file, 'utf8'));
-
 const safeName = (name) => name.replace(/[<>:"/\\|?*\x00-\x1F]/g, '-');
 
 const write = async (file, content) => {
@@ -48,10 +48,10 @@ const write = async (file, content) => {
 
 ### 3. Convert
 
-`insomniaToBruno` returns the Bruno collection.
+`insomniaToBruno` accepts the export as JSON or YAML text and returns the Bruno collection. See the [API Reference](./api-reference#insomniatobruno) for the full signature.
 
 ```javascript
-const collection = insomniaToBruno(await readJson(inputFile));
+const collection = insomniaToBruno(await readFile(inputFile, 'utf8'));
 ```
 
 ### 4. Write the collection settings and environments
@@ -104,22 +104,36 @@ console.log(`Collection written to ${outputDir}`);
 
 ### 7. Run the script
 
-Run the script with Node.js, passing the paths as arguments. The output folder is created if it does not exist.
+Run the script with Node.js, passing the paths as arguments.
 
 <CodeGroup>
 ```bash convert.mjs
-node convert.mjs <insomnia-export.json> <output-folder>
+node convert.mjs <insomnia-export> <output-folder>
 ```
 
 ```bash convert.js
-node convert.js <insomnia-export.json> <output-folder>
+node convert.js <insomnia-export> <output-folder>
 ```
 </CodeGroup>
 
 Where:
 
-- `<insomnia-export.json>`: The export file from Insomnia
+- `<insomnia-export>`: The export file from Insomnia, JSON (v4) or YAML (v5)
 - `<output-folder>`: The folder to create the Bruno collection in. It is created if it does not exist
+
+The output folder looks like this (with `format` set to `'bru'`, the files are `bruno.json`, `collection.bru`, `folder.bru`, and `.bru` requests instead):
+
+```text
+my-collection/
+├── opencollection.yml
+├── environments/
+│   └── Base.yml
+└── Users/
+    ├── List users.yml
+    └── Create user.yml
+```
+
+One folder per Insomnia folder, one file per request, and any Insomnia environments under `environments`.
 
 ### Full script
 
@@ -128,7 +142,7 @@ The complete script, ready to copy. `convert.mjs` is an ES module with top-level
 <CodeGroup>
 ```javascript convert.mjs
 // Converts an Insomnia export into a Bruno collection folder.
-// Usage: node convert.mjs <insomnia-export.json> <output-folder>
+// Usage: node convert.mjs <insomnia-export> <output-folder>
 
 import { insomniaToBruno } from '@usebruno/converters';
 import { stringifyCollection, stringifyFolder, stringifyRequest, stringifyEnvironment } from '@usebruno/filestore';
@@ -139,7 +153,7 @@ import path from 'path';
 
 const [inputFile, outputDir] = process.argv.slice(2);
 if (!inputFile || !outputDir) {
-  console.error('Usage: node convert.mjs <insomnia-export.json> <output-folder>');
+  console.error('Usage: node convert.mjs <insomnia-export> <output-folder>');
   process.exit(1);
 }
 
@@ -147,8 +161,6 @@ if (!inputFile || !outputDir) {
 const format = 'yml';
 
 // ---- Helpers ----
-
-const readJson = async (file) => JSON.parse(await readFile(file, 'utf8'));
 
 // Strip characters not allowed in file names
 const safeName = (name) => name.replace(/[<>:"/\\|?*\x00-\x1F]/g, '-');
@@ -161,7 +173,7 @@ const write = async (file, content) => {
 
 // ---- Convert ----
 
-const collection = insomniaToBruno(await readJson(inputFile));
+const collection = insomniaToBruno(await readFile(inputFile, 'utf8'));
 
 // ---- Write the collection folder ----
 
@@ -204,7 +216,7 @@ console.log(`Collection written to ${outputDir}`);
 
 ```javascript convert.js
 // Converts an Insomnia export into a Bruno collection folder.
-// Usage: node convert.js <insomnia-export.json> <output-folder>
+// Usage: node convert.js <insomnia-export> <output-folder>
 
 const { insomniaToBruno } = require('@usebruno/converters');
 const { stringifyCollection, stringifyFolder, stringifyRequest, stringifyEnvironment } = require('@usebruno/filestore');
@@ -215,7 +227,7 @@ const path = require('path');
 
 const [inputFile, outputDir] = process.argv.slice(2);
 if (!inputFile || !outputDir) {
-  console.error('Usage: node convert.js <insomnia-export.json> <output-folder>');
+  console.error('Usage: node convert.js <insomnia-export> <output-folder>');
   process.exit(1);
 }
 
@@ -223,8 +235,6 @@ if (!inputFile || !outputDir) {
 const format = 'yml';
 
 // ---- Helpers ----
-
-const readJson = async (file) => JSON.parse(await readFile(file, 'utf8'));
 
 // Strip characters not allowed in file names
 const safeName = (name) => name.replace(/[<>:"/\\|?*\x00-\x1F]/g, '-');
@@ -239,7 +249,7 @@ const write = async (file, content) => {
 async function main() {
   // ---- Convert ----
 
-  const collection = insomniaToBruno(await readJson(inputFile));
+  const collection = insomniaToBruno(await readFile(inputFile, 'utf8'));
 
   // ---- Write the collection folder ----
 
