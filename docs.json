@@ -426,6 +426,17 @@
                   "html-docs/playground",
                   "html-docs/deploy"
                 ]
+              },
+              {
+                "group": "Integrations",
+                "tag": "Beta",
+                "pages": [
+                  "integrations/overview",
+                  "integrations/html",
+                  "integrations/express",
+                  "integrations/fastify",
+                  "integrations/nestjs"
+                ]
               }
             ]
           },

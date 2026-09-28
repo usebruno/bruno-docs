@@ -1,0 +1,108 @@
+---
+title: "HTML and JavaScript"
+sidebarTitle: "HTML / JS"
+---
+
+If you already have a page to put the documentation in, you can load the Bruno docs renderer directly with a script tag. No server package is involved: the browser fetches the collection and renders it.
+
+This is the right choice when you are serving a static site, embedding docs in an existing developer portal, or using a framework that does not have a package yet.
+
+## Add the renderer to a page
+
+```html
+<div id="bruno-api-docs"></div>
+<script src="https://cdn.usebruno.com/api-docs/api-docs.js"></script>
+<script>
+  new Bruno.apiDocs('#bruno-api-docs', {
+    url: '/docs/collection.yml',
+    theme: 'dark'
+  })
+</script>
+```
+
+Three things are happening:
+
+1. An empty container marks where the docs are drawn.
+2. The renderer bundle is loaded from Bruno's CDN.
+3. `Bruno.apiDocs` mounts the docs into the container and fetches the collection from `url`.
+
+## Pointing at your collection
+
+The renderer needs the collection document, either fetched from a URL or handed over directly.
+
+<CodeGroup>
+
+```js Fetch from a URL
+new Bruno.apiDocs('#bruno-api-docs', {
+  url: '/docs/collection.yml'
+})
+```
+
+```js Pass the document inline
+new Bruno.apiDocs('#bruno-api-docs', {
+  content: collectionObject
+})
+```
+
+</CodeGroup>
+
+Use `url` when the file is served alongside your page, and `content` when your page already has the document, for example from a build step that inlined it.
+
+<Warning>
+  With this approach the whole document reaches the browser. Filtering out environments and requests happens on the server, so publish a document that is already safe to hand over. The [framework packages](/integrations/overview#filtering-is-deletion-not-hiding) do that filtering for you.
+</Warning>
+
+## Options
+
+| Option              | Type      | Default             | Description                                        |
+| ------------------- | --------- | ------------------- | -------------------------------------------------- |
+| `url`               | `string`  | none                | Fetch the collection document from here            |
+| `content`           | `object` or `string` | none     | The document itself, as an object or YAML/JSON text |
+| `theme`             | `string`  | `light`             | Default theme                                      |
+| `pageTitle`         | `string`  | `API Documentation` | Browser tab title                                  |
+| `logo`              | `string`  | none                | Logo in the docs header, as a URL or data URI      |
+| `favicon`           | `string`  | none                | Tab favicon                                        |
+| `gitCollectionUrl`  | `string`  | none                | Repository URL behind the **Open in Bruno** button |
+| `showThemeSwitcher` | `boolean` | `true`              | Show or hide the theme switcher                    |
+| `customCss`         | `string`  | none                | Stylesheet that overrides the default styles       |
+| `proxyUrl`          | `string`  | none                | CORS proxy for playground requests                 |
+
+Exactly one source is required. Providing neither `url` nor `content`, or both, is an error.
+
+## Full example
+
+```html
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Payments API</title>
+  </head>
+  <body>
+    <div id="bruno-api-docs"></div>
+
+    <script src="https://cdn.usebruno.com/api-docs/api-docs.js"></script>
+    <script>
+      new Bruno.apiDocs('#bruno-api-docs', {
+        url: '/collection.yml',
+        pageTitle: 'Payments API',
+        logo: '/logo.svg',
+        gitCollectionUrl: 'https://github.com/acme/payments-collection'
+      })
+    </script>
+  </body>
+</html>
+```
+
+## Linking to a request
+
+The renderer routes with the URL hash, so any page inside the docs can be linked to directly:
+
+```text
+/docs/#/catalog/list-products
+```
+
+## Next steps
+
+- Serve the docs from your app instead, with [Express](/integrations/express), [Fastify](/integrations/fastify), or [NestJS](/integrations/nestjs)
+- Build a single self-contained HTML file with [Generate Docs](/html-docs/generate) if you would rather not wire anything up

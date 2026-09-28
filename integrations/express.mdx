@@ -1,0 +1,124 @@
+---
+title: "Express"
+sidebarTitle: "Express"
+---
+
+Serve your Bruno collection as API documentation from an Express app, on any route you choose.
+
+## Why this is useful
+
+If your collection already lives in the repository next to your Express server, it is the most accurate description of your API that you have. Mounting it as documentation means there is nothing extra to maintain:
+
+```text
+payment-service/
+├── src/
+│   └── server.js
+├── collection/
+│   ├── collection.yml
+│   ├── Create Payment.yml
+│   ├── Get Payment.yml
+│   └── environments/
+│       ├── local.yml
+│       └── production.yml
+└── package.json
+```
+
+One line in `server.js` turns that folder into a docs page served by the same app:
+
+```text
+myapp.com/api/payments  → your API
+myapp.com/docs          → your API docs
+```
+
+Because the route is an ordinary Express mount, any middleware in front of it, including your session or token check, protects the documentation too.
+
+## Install
+
+```bash
+npm install @usebruno/api-docs-express
+```
+
+## Mount the docs
+
+```js
+import express from 'express'
+import { apiDocs } from '@usebruno/api-docs-express'
+
+const app = express()
+
+app.use('/docs', apiDocs({
+  url: './collection'
+}))
+
+app.listen(3000)
+```
+
+Start the app and open `http://localhost:3000/docs`.
+
+The path in `url` is resolved relative to your app entry file, not the working directory, so the mount behaves the same however you start the process. It can point at a collection folder or at a single bundled `collection.yml`, in either the `.bru` or OpenCollection `.yml` format.
+
+## Choose what gets published
+
+By default no environments are published and every request is included. Use `environments` and `tags` to shape the document:
+
+```js
+app.use('/docs', apiDocs({
+  url: './collection',
+  environments: { include: ['production'] },
+  tags: { include: ['public'], exclude: ['internal'] }
+}))
+```
+
+Filtering happens on the server, so excluded environments and requests are absent from the response rather than hidden in the page. Use `environments: '*'` to publish all of them.
+
+## Customize the page
+
+Presentation options go under `ui` and are passed straight to the renderer:
+
+```js
+app.use('/docs', apiDocs({
+  url: './collection',
+  environments: '*',
+  ui: {
+    theme: 'dark',
+    pageTitle: 'Payments API',
+    logo: '/logo.svg',
+    gitCollectionUrl: 'https://github.com/acme/payment-service'
+  }
+}))
+```
+
+See the [configuration reference](/integrations/overview#configuration) for every option.
+
+## Put the docs behind your auth
+
+Mount your existing middleware before the docs route:
+
+```js
+app.use('/docs', requireLogin, apiDocs({
+  url: './collection',
+  environments: { include: ['staging'] }
+}))
+```
+
+Requests that fail `requireLogin` never reach the docs handler, so neither the page nor the collection document is served.
+
+## What the mount serves
+
+| Route                   | Response                                       |
+| ----------------------- | ---------------------------------------------- |
+| `/docs/`                | The documentation page                         |
+| `/docs/shell.js`        | The boot script, cacheable                     |
+| `/docs/collection.yml`  | The assembled collection document, not cached  |
+
+Navigation inside the docs uses the URL hash, so `/docs/#/catalog/list-products` links straight to a request.
+
+<Info>
+  If the collection cannot be read at startup, the app still boots. The error is logged and `/docs` serves it instead of the page, so a documentation problem never takes down your API.
+</Info>
+
+## Next steps
+
+- [Fastify](/integrations/fastify) and [NestJS](/integrations/nestjs) integrations
+- [Generate a standalone HTML file](/html-docs/generate) from the same collection with **Generate Docs**
+- [Write better docs](/api-docs/overview) at the collection, folder, and request level so the published page has real descriptions
