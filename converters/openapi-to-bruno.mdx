@@ -3,62 +3,289 @@ title: "Convert OpenAPI to Bruno collection"
 sidebarTitle: "OpenAPI to Bruno"
 ---
 
-<Tabs>
-  <Tab title="JSON">
-  ### Convert OpenAPI JSON to Bruno collection
+import ConvertersSetup from '/snippets/converters-setup.mdx';
+import ConvertersRun from '/snippets/converters-run.mdx';
 
-  ```javascript
-  const { openApiToBruno } = require('@usebruno/converters');
-  
-  const brunoCollection = openApiToBruno(openApiSpecification);
-  ```
+Convert an OpenAPI specification into a Bruno collection folder you can open in the app or run with the CLI.
 
-  ```javascript 
-  const { openApiToBruno } = require('@usebruno/converters');
-  const { readFile, writeFile } = require('fs/promises');
+<Tip>
+  The CLI can do this in one command: `bru import openapi --source <openapi.yaml> --output <output-folder>`. See [Import Data](/bru-cli/import). Use the script below when you want to process the collection in your own code.
+</Tip>
 
-  async function convertOpenApiToBruno(inputFile, outputFile) {
-    try {
-      
-      const jsonContent = await readFile(inputFile, 'utf8');
-      
-      const openApiSpec = JSON.parse(jsonContent);
-      
-      const brunoCollection = openApiToBruno(openApiSpec);
-      
-      await writeFile(outputFile, JSON.stringify(brunoCollection, null, 2));
-      console.log('OpenAPI JSON conversion successful!');
-    } catch (error) {
-      console.error('Error during OpenAPI JSON conversion:', error);
-    }
+## Convert the specification
+
+<ConvertersSetup />
+
+### 1. Read the arguments
+
+Import the converter, the file writers from `@usebruno/filestore`, and Node's file helpers. Take the paths from the command line and print a usage line if any are missing. `format` is `'yml'` for OpenCollection YAML or `'bru'` for classic `.bru` files.
+
+```javascript
+import { openApiToBruno } from '@usebruno/converters';
+import { stringifyCollection, stringifyFolder, stringifyRequest, stringifyEnvironment } from '@usebruno/filestore';
+import { mkdir, readFile, writeFile } from 'fs/promises';
+import path from 'path';
+
+const [inputFile, outputDir] = process.argv.slice(2);
+if (!inputFile || !outputDir) {
+  console.error('Usage: node convert.mjs <openapi.yaml> <output-folder>');
+  process.exit(1);
+}
+
+const format = 'yml';
+```
+
+### 2. Add the helpers
+
+`safeName` strips characters that are not allowed in file names. `write` saves a file and creates any missing parent folders.
+
+```javascript
+const safeName = (name) => name.replace(/[<>:"/\\|?*\x00-\x1F]/g, '-');
+
+const write = async (file, content) => {
+  await mkdir(path.dirname(file), { recursive: true });
+  await writeFile(file, content);
+};
+```
+
+### 3. Convert
+
+`openApiToBruno` accepts the specification as JSON or YAML and returns the Bruno collection. Pass `{ groupBy: 'path' }` as a second argument to group folders by path instead of tag.
+
+```javascript
+const collection = openApiToBruno(await readFile(inputFile, 'utf8'));
+```
+
+### 4. Write the collection settings and environments
+
+`brunoConfig` holds the collection settings. For `.bru` collections it is written to `bruno.json`. For yml it is embedded in `opencollection.yml`. The collection root holds collection-level auth, headers, and scripts. Each environment gets its own file in the `environments` folder.
+
+```javascript
+const brunoConfig = { version: collection.version, name: collection.name, type: 'collection', ignore: ['node_modules', '.git'] };
+
+const root = stringifyCollection(collection.root || {}, brunoConfig, { format });
+if (format === 'yml') {
+  await write(path.join(outputDir, 'opencollection.yml'), root);
+} else {
+  await write(path.join(outputDir, 'bruno.json'), JSON.stringify(brunoConfig, null, 2));
+  await write(path.join(outputDir, 'collection.bru'), root);
+}
+
+for (const env of collection.environments || []) {
+  await write(path.join(outputDir, 'environments', `${safeName(env.name)}.${format}`), stringifyEnvironment(env, { format }));
+}
+```
+
+### 5. Write the folders and requests
+
+Each folder becomes a directory and each request a file. Folder-level auth, headers, and scripts go in `folder.yml` or `folder.bru`. A stack is used instead of recursion so deeply nested collections are safe.
+
+```javascript
+const stack = collection.items.map((item) => [item, outputDir]);
+while (stack.length) {
+  const [item, parent] = stack.pop();
+  if (item.type === 'folder') {
+    const folderDir = path.join(parent, safeName(item.name));
+    await mkdir(folderDir, { recursive: true });
+    if (item.root) await write(path.join(folderDir, `folder.${format}`), stringifyFolder(item.root, { format }));
+    for (const child of item.items || []) stack.push([child, folderDir]);
+  } else {
+    await write(path.join(parent, `${safeName(item.name)}.${format}`), stringifyRequest(item, { format }));
   }
+}
+```
 
-  
-  convertOpenApiToBruno('path/to/openapi-spec.json', 'path/to/bruno-collection.json');
-  ```
-  </Tab>
-  <Tab title="YAML">
-  ### Convert OpenAPI YAML to Bruno collection
+### 6. Report
 
-  ```javascript
-  const { openApiToBruno, yamlToJson } = require('@usebruno/converters');
-  const { readFile, writeFile } = require('fs/promises');
+Print where the collection was written.
 
-async function testOpenApiConversion(yamlFile, outputFile) {
-  const yamlContent = await readFile(yamlFile, 'utf8');
-  const jsonSpec = yamlToJson(yamlContent);
-  if (jsonSpec) {
-    try {
-      const brunoCollection = openApiToBruno(jsonSpec);
-      await writeFile(outputFile, JSON.stringify(brunoCollection, null, 2));
-      console.log('Full conversion pipeline successful!');
-    } catch (error) {
-      console.error('Bruno conversion error:', error.message);
-    }
+```javascript
+console.log(`Collection written to ${outputDir}`);
+```
+
+
+### 7. Run the script
+
+Run the script with Node.js, passing the paths as arguments. The output folder is created if it does not exist.
+
+<CodeGroup>
+```bash convert.mjs
+node convert.mjs <openapi.yaml> <output-folder>
+```
+
+```bash convert.js
+node convert.js <openapi.yaml> <output-folder>
+```
+</CodeGroup>
+
+Where:
+
+- `<openapi.yaml>`: The OpenAPI specification, as JSON or YAML
+- `<output-folder>`: The folder to create the Bruno collection in. It is created if it does not exist
+
+### Full script
+
+The complete script, ready to copy. `convert.mjs` is an ES module with top-level `await`. `convert.js` is the same script as CommonJS, with the steps inside an async `main` function.
+
+<CodeGroup>
+```javascript convert.mjs
+// Converts an OpenAPI specification into a Bruno collection folder.
+// Usage: node convert.mjs <openapi.yaml> <output-folder>
+
+import { openApiToBruno } from '@usebruno/converters';
+import { stringifyCollection, stringifyFolder, stringifyRequest, stringifyEnvironment } from '@usebruno/filestore';
+import { mkdir, readFile, writeFile } from 'fs/promises';
+import path from 'path';
+
+// ---- Arguments ----
+
+const [inputFile, outputDir] = process.argv.slice(2);
+if (!inputFile || !outputDir) {
+  console.error('Usage: node convert.mjs <openapi.yaml> <output-folder>');
+  process.exit(1);
+}
+
+// 'yml' (OpenCollection YAML) or 'bru' (classic .bru files)
+const format = 'yml';
+
+// ---- Helpers ----
+
+// Strip characters not allowed in file names
+const safeName = (name) => name.replace(/[<>:"/\\|?*\x00-\x1F]/g, '-');
+
+// Write a file, creating parent folders as needed
+const write = async (file, content) => {
+  await mkdir(path.dirname(file), { recursive: true });
+  await writeFile(file, content);
+};
+
+// ---- Convert ----
+
+// Accepts JSON or YAML. Pass { groupBy: 'path' } as a second argument to group folders by path instead of tag.
+const collection = openApiToBruno(await readFile(inputFile, 'utf8'));
+
+// ---- Write the collection folder ----
+
+// Collection settings: bruno.json for .bru, embedded in opencollection.yml for yml
+const brunoConfig = { version: collection.version, name: collection.name, type: 'collection', ignore: ['node_modules', '.git'] };
+
+// Collection-level auth, headers, and scripts
+const root = stringifyCollection(collection.root || {}, brunoConfig, { format });
+if (format === 'yml') {
+  await write(path.join(outputDir, 'opencollection.yml'), root);
+} else {
+  await write(path.join(outputDir, 'bruno.json'), JSON.stringify(brunoConfig, null, 2));
+  await write(path.join(outputDir, 'collection.bru'), root);
+}
+
+// One file per environment
+for (const env of collection.environments || []) {
+  await write(path.join(outputDir, 'environments', `${safeName(env.name)}.${format}`), stringifyEnvironment(env, { format }));
+}
+
+// Folders become directories, requests become files. A stack avoids recursion on deep trees.
+const stack = collection.items.map((item) => [item, outputDir]);
+while (stack.length) {
+  const [item, parent] = stack.pop();
+  if (item.type === 'folder') {
+    const folderDir = path.join(parent, safeName(item.name));
+    await mkdir(folderDir, { recursive: true });
+    // Folder-level auth, headers, and scripts
+    if (item.root) await write(path.join(folderDir, `folder.${format}`), stringifyFolder(item.root, { format }));
+    for (const child of item.items || []) stack.push([child, folderDir]);
+  } else {
+    await write(path.join(parent, `${safeName(item.name)}.${format}`), stringifyRequest(item, { format }));
   }
 }
 
-testOpenApiConversion('path/to/your/openapi.yaml', 'path/to/bruno-collection.json');
+// ---- Report ----
+
+console.log(`Collection written to ${outputDir}`);
 ```
-  </Tab>
-</Tabs>
+
+```javascript convert.js
+// Converts an OpenAPI specification into a Bruno collection folder.
+// Usage: node convert.js <openapi.yaml> <output-folder>
+
+const { openApiToBruno } = require('@usebruno/converters');
+const { stringifyCollection, stringifyFolder, stringifyRequest, stringifyEnvironment } = require('@usebruno/filestore');
+const { mkdir, readFile, writeFile } = require('fs/promises');
+const path = require('path');
+
+// ---- Arguments ----
+
+const [inputFile, outputDir] = process.argv.slice(2);
+if (!inputFile || !outputDir) {
+  console.error('Usage: node convert.js <openapi.yaml> <output-folder>');
+  process.exit(1);
+}
+
+// 'yml' (OpenCollection YAML) or 'bru' (classic .bru files)
+const format = 'yml';
+
+// ---- Helpers ----
+
+// Strip characters not allowed in file names
+const safeName = (name) => name.replace(/[<>:"/\\|?*\x00-\x1F]/g, '-');
+
+// Write a file, creating parent folders as needed
+const write = async (file, content) => {
+  await mkdir(path.dirname(file), { recursive: true });
+  await writeFile(file, content);
+};
+
+// CommonJS cannot use top-level await, so the steps run inside an async function
+async function main() {
+  // ---- Convert ----
+
+  // Accepts JSON or YAML. Pass { groupBy: 'path' } as a second argument to group folders by path instead of tag.
+  const collection = openApiToBruno(await readFile(inputFile, 'utf8'));
+
+  // ---- Write the collection folder ----
+
+  // Collection settings: bruno.json for .bru, embedded in opencollection.yml for yml
+  const brunoConfig = { version: collection.version, name: collection.name, type: 'collection', ignore: ['node_modules', '.git'] };
+
+  // Collection-level auth, headers, and scripts
+  const root = stringifyCollection(collection.root || {}, brunoConfig, { format });
+  if (format === 'yml') {
+    await write(path.join(outputDir, 'opencollection.yml'), root);
+  } else {
+    await write(path.join(outputDir, 'bruno.json'), JSON.stringify(brunoConfig, null, 2));
+    await write(path.join(outputDir, 'collection.bru'), root);
+  }
+
+  // One file per environment
+  for (const env of collection.environments || []) {
+    await write(path.join(outputDir, 'environments', `${safeName(env.name)}.${format}`), stringifyEnvironment(env, { format }));
+  }
+
+  // Folders become directories, requests become files. A stack avoids recursion on deep trees.
+  const stack = collection.items.map((item) => [item, outputDir]);
+  while (stack.length) {
+    const [item, parent] = stack.pop();
+    if (item.type === 'folder') {
+      const folderDir = path.join(parent, safeName(item.name));
+      await mkdir(folderDir, { recursive: true });
+      // Folder-level auth, headers, and scripts
+      if (item.root) await write(path.join(folderDir, `folder.${format}`), stringifyFolder(item.root, { format }));
+      for (const child of item.items || []) stack.push([child, folderDir]);
+    } else {
+      await write(path.join(parent, `${safeName(item.name)}.${format}`), stringifyRequest(item, { format }));
+    }
+  }
+
+  // ---- Report ----
+
+  console.log(`Collection written to ${outputDir}`);
+}
+
+main();
+```
+</CodeGroup>
+
+## Open the collection in the app or run it with the CLI
+
+The spec's `servers` become an environment holding the base URL. Select it in the app, or pass its name to `--env`.
+
+<ConvertersRun />

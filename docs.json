@@ -498,7 +498,8 @@
                   "converters/postman-to-bruno",
                   "converters/insomnia-to-bruno",
                   "converters/openapi-to-bruno",
-                  "converters/wsdl-to-bruno"
+                  "converters/wsdl-to-bruno",
+                  "converters/api-reference"
                 ]
               },
               {
@@ -953,7 +954,8 @@
                   "v3/converters/postman-to-bruno",
                   "v3/converters/insomnia-to-bruno",
                   "v3/converters/openapi-to-bruno",
-                  "v3/converters/wsdl-to-bruno"
+                  "v3/converters/wsdl-to-bruno",
+                  "v3/converters/api-reference"
                 ]
               },
               {

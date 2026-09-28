@@ -3,67 +3,320 @@ title: "Postman Conversions"
 sidebarTitle: "Postman to Bruno"
 ---
 
-<Tabs>
-  <Tab title="Collection">
-  ### Convert Postman collection to Bruno collection
+import ConvertersSetup from '/snippets/converters-setup.mdx';
+import ConvertersRun from '/snippets/converters-run.mdx';
 
-  ```javascript
-  const { postmanToBruno } = require('@usebruno/converters');
+Convert a Postman collection and environment into a Bruno collection folder you can open in the app or run with the CLI.
 
-  const brunoCollection = postmanToBruno(postmanCollection);
-  ```
+## Convert the collection and environment
 
-  ```javascript
-  const { postmanToBruno } = require('@usebruno/converters');
-  const { readFile, writeFile } = require('fs/promises');
-  const path = require('path');
+<ConvertersSetup />
 
-  async function convertPostmanToBruno(inputFile, outputFile) {
-    try {
-      const inputData = await readFile(inputFile, 'utf8');
-      const brunoCollection = postmanToBruno(JSON.parse(inputData));
-      await writeFile(outputFile, JSON.stringify(brunoCollection, null, 2));
-      console.log('Conversion successful!');
-    } catch (error) {
-      console.error('Error during conversion:', error);
+### 1. Read the arguments
+
+Import the converter, the file writers from `@usebruno/filestore`, and Node's file helpers. Take the paths from the command line and print a usage line if any are missing. `format` is `'yml'` for OpenCollection YAML or `'bru'` for classic `.bru` files.
+
+```javascript
+import { postmanToBruno, postmanToBrunoEnvironment } from '@usebruno/converters';
+import { stringifyCollection, stringifyFolder, stringifyRequest, stringifyEnvironment } from '@usebruno/filestore';
+import { mkdir, readFile, writeFile } from 'fs/promises';
+import path from 'path';
+
+const [collectionFile, outputDir, environmentFile] = process.argv.slice(2);
+if (!collectionFile || !outputDir) {
+  console.error('Usage: node convert.mjs <postman-collection.json> <output-folder> [postman-environment.json]');
+  process.exit(1);
+}
+
+const format = 'yml';
+```
+
+### 2. Add the helpers
+
+`safeName` strips characters that are not allowed in file names. `write` saves a file and creates any missing parent folders. `readJson` reads and parses a JSON file.
+
+```javascript
+const readJson = async (file) => JSON.parse(await readFile(file, 'utf8'));
+
+const safeName = (name) => name.replace(/[<>:"/\\|?*\x00-\x1F]/g, '-');
+
+const write = async (file, content) => {
+  await mkdir(path.dirname(file), { recursive: true });
+  await writeFile(file, content);
+};
+```
+
+### 3. Convert
+
+`postmanToBruno` resolves to the Bruno collection and a list of `issues` it could not convert cleanly. If an environment file was given, convert it and add it to the collection so it is written with the rest.
+
+```javascript
+const { collection, issues } = await postmanToBruno(await readJson(collectionFile));
+
+if (environmentFile) {
+  collection.environments.push(postmanToBrunoEnvironment(await readJson(environmentFile)));
+}
+```
+
+### 4. Write the collection settings and environments
+
+`brunoConfig` holds the collection settings. For `.bru` collections it is written to `bruno.json`. For yml it is embedded in `opencollection.yml`. The collection root holds collection-level auth, headers, and scripts. Each environment gets its own file in the `environments` folder.
+
+```javascript
+const brunoConfig = { version: collection.version, name: collection.name, type: 'collection', ignore: ['node_modules', '.git'] };
+
+const root = stringifyCollection(collection.root || {}, brunoConfig, { format });
+if (format === 'yml') {
+  await write(path.join(outputDir, 'opencollection.yml'), root);
+} else {
+  await write(path.join(outputDir, 'bruno.json'), JSON.stringify(brunoConfig, null, 2));
+  await write(path.join(outputDir, 'collection.bru'), root);
+}
+
+for (const env of collection.environments || []) {
+  await write(path.join(outputDir, 'environments', `${safeName(env.name)}.${format}`), stringifyEnvironment(env, { format }));
+}
+```
+
+### 5. Write the folders and requests
+
+Each folder becomes a directory and each request a file. Folder-level auth, headers, and scripts go in `folder.yml` or `folder.bru`. A stack is used instead of recursion so deeply nested collections are safe.
+
+```javascript
+const stack = collection.items.map((item) => [item, outputDir]);
+while (stack.length) {
+  const [item, parent] = stack.pop();
+  if (item.type === 'folder') {
+    const folderDir = path.join(parent, safeName(item.name));
+    await mkdir(folderDir, { recursive: true });
+    if (item.root) await write(path.join(folderDir, `folder.${format}`), stringifyFolder(item.root, { format }));
+    for (const child of item.items || []) stack.push([child, folderDir]);
+  } else {
+    await write(path.join(parent, `${safeName(item.name)}.${format}`), stringifyRequest(item, { format }));
+  }
+}
+```
+
+### 6. Report
+
+Print where the collection was written, then each issue with its severity, the path of the item, and a message.
+
+```javascript
+console.log(`Collection written to ${outputDir}`);
+
+for (const issue of issues) {
+  console.warn(`${issue.severity}: ${issue.path}: ${issue.message}`);
+}
+```
+
+
+### 7. Run the script
+
+Run the script with Node.js, passing the paths as arguments. The output folder is created if it does not exist.
+
+<CodeGroup>
+```bash convert.mjs
+node convert.mjs <postman-collection.json> <output-folder> [postman-environment.json]
+```
+
+```bash convert.js
+node convert.js <postman-collection.json> <output-folder> [postman-environment.json]
+```
+</CodeGroup>
+
+Where:
+
+- `<postman-collection.json>`: The collection exported from Postman
+- `<output-folder>`: The folder to create the Bruno collection in. It is created if it does not exist
+- `[postman-environment.json]`: Optional. An environment exported from Postman
+
+### Full script
+
+The complete script, ready to copy. `convert.mjs` is an ES module with top-level `await`. `convert.js` is the same script as CommonJS, with the steps inside an async `main` function.
+
+<CodeGroup>
+```javascript convert.mjs
+// Converts a Postman collection, and optionally an environment, into a Bruno collection folder.
+// Usage: node convert.mjs <postman-collection.json> <output-folder> [postman-environment.json]
+
+import { postmanToBruno, postmanToBrunoEnvironment } from '@usebruno/converters';
+import { stringifyCollection, stringifyFolder, stringifyRequest, stringifyEnvironment } from '@usebruno/filestore';
+import { mkdir, readFile, writeFile } from 'fs/promises';
+import path from 'path';
+
+// ---- Arguments ----
+
+const [collectionFile, outputDir, environmentFile] = process.argv.slice(2);
+if (!collectionFile || !outputDir) {
+  console.error('Usage: node convert.mjs <postman-collection.json> <output-folder> [postman-environment.json]');
+  process.exit(1);
+}
+
+// 'yml' (OpenCollection YAML) or 'bru' (classic .bru files)
+const format = 'yml';
+
+// ---- Helpers ----
+
+const readJson = async (file) => JSON.parse(await readFile(file, 'utf8'));
+
+// Strip characters not allowed in file names
+const safeName = (name) => name.replace(/[<>:"/\\|?*\x00-\x1F]/g, '-');
+
+// Write a file, creating parent folders as needed
+const write = async (file, content) => {
+  await mkdir(path.dirname(file), { recursive: true });
+  await writeFile(file, content);
+};
+
+// ---- Convert ----
+
+// Resolves to the Bruno collection and a list of items that could not be converted cleanly
+const { collection, issues } = await postmanToBruno(await readJson(collectionFile));
+
+// Add the environment so it is written with the collection
+if (environmentFile) {
+  collection.environments.push(postmanToBrunoEnvironment(await readJson(environmentFile)));
+}
+
+// ---- Write the collection folder ----
+
+// Collection settings: bruno.json for .bru, embedded in opencollection.yml for yml
+const brunoConfig = { version: collection.version, name: collection.name, type: 'collection', ignore: ['node_modules', '.git'] };
+
+// Collection-level auth, headers, and scripts
+const root = stringifyCollection(collection.root || {}, brunoConfig, { format });
+if (format === 'yml') {
+  await write(path.join(outputDir, 'opencollection.yml'), root);
+} else {
+  await write(path.join(outputDir, 'bruno.json'), JSON.stringify(brunoConfig, null, 2));
+  await write(path.join(outputDir, 'collection.bru'), root);
+}
+
+// One file per environment
+for (const env of collection.environments || []) {
+  await write(path.join(outputDir, 'environments', `${safeName(env.name)}.${format}`), stringifyEnvironment(env, { format }));
+}
+
+// Folders become directories, requests become files. A stack avoids recursion on deep trees.
+const stack = collection.items.map((item) => [item, outputDir]);
+while (stack.length) {
+  const [item, parent] = stack.pop();
+  if (item.type === 'folder') {
+    const folderDir = path.join(parent, safeName(item.name));
+    await mkdir(folderDir, { recursive: true });
+    // Folder-level auth, headers, and scripts
+    if (item.root) await write(path.join(folderDir, `folder.${format}`), stringifyFolder(item.root, { format }));
+    for (const child of item.items || []) stack.push([child, folderDir]);
+  } else {
+    await write(path.join(parent, `${safeName(item.name)}.${format}`), stringifyRequest(item, { format }));
+  }
+}
+
+// ---- Report ----
+
+console.log(`Collection written to ${outputDir}`);
+
+// Each issue has a severity, the path of the item, and a message
+for (const issue of issues) {
+  console.warn(`${issue.severity}: ${issue.path}: ${issue.message}`);
+}
+```
+
+```javascript convert.js
+// Converts a Postman collection, and optionally an environment, into a Bruno collection folder.
+// Usage: node convert.js <postman-collection.json> <output-folder> [postman-environment.json]
+
+const { postmanToBruno, postmanToBrunoEnvironment } = require('@usebruno/converters');
+const { stringifyCollection, stringifyFolder, stringifyRequest, stringifyEnvironment } = require('@usebruno/filestore');
+const { mkdir, readFile, writeFile } = require('fs/promises');
+const path = require('path');
+
+// ---- Arguments ----
+
+const [collectionFile, outputDir, environmentFile] = process.argv.slice(2);
+if (!collectionFile || !outputDir) {
+  console.error('Usage: node convert.js <postman-collection.json> <output-folder> [postman-environment.json]');
+  process.exit(1);
+}
+
+// 'yml' (OpenCollection YAML) or 'bru' (classic .bru files)
+const format = 'yml';
+
+// ---- Helpers ----
+
+const readJson = async (file) => JSON.parse(await readFile(file, 'utf8'));
+
+// Strip characters not allowed in file names
+const safeName = (name) => name.replace(/[<>:"/\\|?*\x00-\x1F]/g, '-');
+
+// Write a file, creating parent folders as needed
+const write = async (file, content) => {
+  await mkdir(path.dirname(file), { recursive: true });
+  await writeFile(file, content);
+};
+
+// CommonJS cannot use top-level await, so the steps run inside an async function
+async function main() {
+  // ---- Convert ----
+
+  // Resolves to the Bruno collection and a list of items that could not be converted cleanly
+  const { collection, issues } = await postmanToBruno(await readJson(collectionFile));
+
+  // Add the environment so it is written with the collection
+  if (environmentFile) {
+    collection.environments.push(postmanToBrunoEnvironment(await readJson(environmentFile)));
+  }
+
+  // ---- Write the collection folder ----
+
+  // Collection settings: bruno.json for .bru, embedded in opencollection.yml for yml
+  const brunoConfig = { version: collection.version, name: collection.name, type: 'collection', ignore: ['node_modules', '.git'] };
+
+  // Collection-level auth, headers, and scripts
+  const root = stringifyCollection(collection.root || {}, brunoConfig, { format });
+  if (format === 'yml') {
+    await write(path.join(outputDir, 'opencollection.yml'), root);
+  } else {
+    await write(path.join(outputDir, 'bruno.json'), JSON.stringify(brunoConfig, null, 2));
+    await write(path.join(outputDir, 'collection.bru'), root);
+  }
+
+  // One file per environment
+  for (const env of collection.environments || []) {
+    await write(path.join(outputDir, 'environments', `${safeName(env.name)}.${format}`), stringifyEnvironment(env, { format }));
+  }
+
+  // Folders become directories, requests become files. A stack avoids recursion on deep trees.
+  const stack = collection.items.map((item) => [item, outputDir]);
+  while (stack.length) {
+    const [item, parent] = stack.pop();
+    if (item.type === 'folder') {
+      const folderDir = path.join(parent, safeName(item.name));
+      await mkdir(folderDir, { recursive: true });
+      // Folder-level auth, headers, and scripts
+      if (item.root) await write(path.join(folderDir, `folder.${format}`), stringifyFolder(item.root, { format }));
+      for (const child of item.items || []) stack.push([child, folderDir]);
+    } else {
+      await write(path.join(parent, `${safeName(item.name)}.${format}`), stringifyRequest(item, { format }));
     }
   }
 
-  convertPostmanToBruno(
-    path.join(__dirname, 'demo_collection.postman_collection.json'),
-    path.join(__dirname, 'demo_collection.bruno_collection.json')
-  );
-  ```
-  </Tab>
-  <Tab title="Environment">
-  ### Convert Postman Environment to Bruno Environment
+  // ---- Report ----
 
-  ```javascript
-  const { postmanToBrunoEnvironment } = require('@usebruno/converters');
+  console.log(`Collection written to ${outputDir}`);
 
-  const brunoEnvironment = postmanToBrunoEnvironment(postmanEnvironment);
-  ```
-
-  ```javascript 
-  const { postmanToBrunoEnvironment } = require('@usebruno/converters');
-  const { readFile, writeFile } = require('fs/promises');
-  const path = require('path');
-
-  async function convertPostmanEnvironment(inputFile, outputFile) {
-    try {
-      const inputData = await readFile(inputFile, 'utf8');
-      const brunoEnvironment = await postmanToBrunoEnvironment(JSON.parse(inputData));
-      await writeFile(outputFile, JSON.stringify(brunoEnvironment, null, 2));
-      console.log('Environment conversion successful!');
-    } catch (error) {
-      console.error('Error during environment conversion:', error);
-    }
+  // Each issue has a severity, the path of the item, and a message
+  for (const issue of issues) {
+    console.warn(`${issue.severity}: ${issue.path}: ${issue.message}`);
   }
+}
 
-  convertPostmanEnvironment(
-    path.join(__dirname, 'demo_environment.postman_environment.json'),
-    path.join(__dirname, 'demo_environment.bruno_environment.json')
-  );
-  ```
-  </Tab>
-</Tabs>
+main();
+```
+</CodeGroup>
+
+## Open the collection in the app or run it with the CLI
+
+If you included an environment, it keeps its Postman name.
+
+<ConvertersRun />
