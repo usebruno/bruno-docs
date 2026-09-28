@@ -19,6 +19,14 @@ When you import a WSDL file, Bruno automatically:
 - **Pre-configures required headers** including `Content-Type: text/xml` and `SOAPAction`
 - **Includes XML schema documentation** as comments within the request body
 
+### External schema references
+
+Bruno resolves `xsd:import` and `xsd:include` references that point to local files through `schemaLocation`. Bruno follows nested import and include chains. It resolves each `schemaLocation` relative to the file that declares it. The generated request bodies include types defined across all referenced files.
+
+- Referenced files must be local `.xsd` or `.wsdl` files, up to 10 MB each.
+- Bruno does not fetch remote (`http://` or `https://`) schema locations.
+- Keep the referenced files at the relative paths the WSDL expects before you import it.
+
 ## Import WSDL via UI
 
 ### Step 1: Access Import Collection

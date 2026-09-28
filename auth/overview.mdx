@@ -38,3 +38,11 @@ If you enter your auth details to the `Auth` tab of your requests, we will autom
 - [Digest Auth](/auth/digest)
 - [NTLM](/auth/ntlm)
 - [Akamai EdgeGrid](/auth/akamai-edgegrid) <sup>Beta</sup>
+
+## Inherit authentication
+
+Requests and folders can use the **Inherit** auth mode to reuse the auth configured on a parent folder or the collection.
+
+When you select **Inherit**, the **Auth** tab shows the inherited auth mode below the mode dropdown. The tab also displays the inherited fields as read-only, so you can check the values without leaving the request. Click the inherited mode label to open the **Auth** tab of the folder or collection that provides it.
+
+Inherited auth works the same way on HTTP, GraphQL, gRPC, and WebSocket requests, and on folders.

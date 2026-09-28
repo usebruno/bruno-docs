@@ -240,6 +240,8 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+  omitHeaders:
+    - User-Agent
 ```
 
 | Field | Type | Description |
@@ -248,6 +250,7 @@ settings:
 | `timeout` | number | Request timeout in milliseconds (0 = no timeout) |
 | `followRedirects` | boolean | Whether to follow HTTP redirects |
 | `maxRedirects` | number | Maximum number of redirects to follow |
+| `omitHeaders` | string[] | Default (runtime) headers disabled for this request. Bruno does not send these headers. |
 
 ## docs
 

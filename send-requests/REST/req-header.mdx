@@ -57,6 +57,13 @@ The disabled header is omitted from the outgoing request. The [Timeline](/send-r
   Inherited header on/off state is stored per request. Disabling `User-Agent` on one request does not change other requests in the collection.
 </Info>
 
+### Import and export disabled default headers
+
+Bruno keeps disabled default headers when you import or export collections:
+
+- **Postman**: Bruno maps disabled default headers to Postman's `protocolProfileBehavior.disabledSystemHeaders` on export. On import, Bruno reads `disabledSystemHeaders` and disables the same headers.
+- **OpenCollection**: Bruno stores disabled default headers in the request's `settings.omitHeaders` list. See the [OpenCollection structure reference](/opencollection-yaml/structure-reference#settings).
+
 ## Streaming with Server-Sent Events
 
 To work with Server-Sent Events (SSE), set:
