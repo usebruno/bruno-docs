@@ -47,27 +47,32 @@ After the test report is generated, you can download it as an HTML document (`re
 
 ## Managing Request Execution
 
-Bruno allows you to filter which requests to run in your collection using tags. You can add tags to your requests and then filter them during collection runs.
+Bruno allows you to filter which requests to run in your collection using tags. You can add tags to requests and to folders, then filter them during collection runs.
 
 ### Tag-Based Request Filtering
 
 When running a collection in the Bruno app, you can filter requests by tags:
 
-1. **Add tags to your requests**: Go to request settings and add tags to categorize your requests
-   
+1. **Add tags to your requests**: Open a request and go to the **Settings** tab to add tags that categorize the request.
+
 ![Add Tags to Requests](/images/screenshots/collection-runner/1-add-tags.webp)
 
-2. **Go to Collection Runner**: Open the collection runner to start filtering requests
-3. **Use tag filter options**: Use the tag filter options to include or exclude requests based on their tags
-4. **Run filtered collection**: Only requests matching your tag criteria will be executed
+2. **Add tags to a folder (optional)**: Open a folder and go to the **Settings** tab to add folder-level tags. Folder tags cascade to every request and subfolder inside that folder, so you can define shared tags once instead of tagging each request individually.
+3. **Go to Collection Runner**: Open the collection runner to start filtering requests.
+4. **Use tag filter options**: Use the tag filter options to include or exclude requests based on their tags.
+5. **Run filtered collection**: Only requests matching your tag criteria will be executed.
 
 ![click-runner.webp](/images/screenshots/get-started/bruno-basics/run_collection/runner.webp)
 
+#### Inherited tags
+
+A request matches on the union of its own tags and any tags inherited from its parent folders. In the request **Settings** tab, inherited tags appear under an **Inherited from parent** section with a dashed border and are read-only. Remove them from the folder that defines them.
+
 #### Tag Filtering Options
 
-- **Include tags**: Only run requests that have ALL of the specified tags
-- **Exclude tags**: Skip requests that have ANY of the specified tags
-- **Combined filtering**: Use both include and exclude filters together
+- **Include tags**: Only run requests that have ALL of the specified tags (either set directly on the request or inherited from a parent folder).
+- **Exclude tags**: Skip requests that have ANY of the specified tags.
+- **Combined filtering**: Use both include and exclude filters together.
 
 Learn more about tag filtering in Bruno CLI in the [CLI tag filtering documentation](/bru-cli/runCollection#filtering-requests-with-tags).
 
