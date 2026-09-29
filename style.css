@@ -1112,6 +1112,12 @@ div.fixed.inset-0.z-40 [role="dialog"] {
 #assistant .ais-ChatMessage-message .ais-Carousel-list {
   --ais-carousel-item-width: 13rem;
 }
+/* The carousel header's "View all" button is meant to hand the query to
+   a dedicated search-results page (`getSearchPageURL`); there is none here,
+   so all it did was close the chat. The widget has no option to drop it. */
+#assistant .ais-ChatToolSearchIndexCarouselHeaderViewAll {
+  display: none;
+}
 #assistant .bru-chat-hit {
   display: flex;
   flex-direction: column;
