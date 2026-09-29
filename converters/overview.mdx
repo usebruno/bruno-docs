@@ -3,82 +3,54 @@ title: "Bruno Converters"
 sidebarTitle: "Overview"
 ---
 
-Bruno converter is a standalone NPM package that provides programmatic conversion of various API specification formats to Bruno collections. This package allows you to convert Postman collections, Insomnia collections, OpenAPI specifications, WSDL files, and Postman environments into Bruno collection format.
+`@usebruno/converters` is a standalone npm package that converts Postman collections and environments, Insomnia collections, OpenAPI specifications, and WSDL files into Bruno collections from your own code.
 
 ## Installation
 
-<Info> 
-  Make sure you have Node.js (Node 18 or higher) installed on your local system. It is recommended to use the latest LTS version. 
+<Info>
+  Requires Node.js 18 or later. The latest LTS release is recommended.
 </Info>
 
-To install the Bruno Converters, use the node package manager of your choice:
+Install the converters together with `@usebruno/filestore`, which the guides use to write the converted collection to disk as a folder Bruno can open.
 
 <Tabs>
-  <Tab title="pnpm">
-    ### Using pnpm
-
+  <Tab title="npm">
     ```bash
-    pnpm install @usebruno/converters
+    npm install @usebruno/converters @usebruno/filestore
     ```
   </Tab>
-  <Tab title="npm">
-    ### Using npm
-
+  <Tab title="pnpm">
     ```bash
-    npm install @usebruno/converters
+    pnpm add @usebruno/converters @usebruno/filestore
     ```
   </Tab>
   <Tab title="yarn">
-    ### Using yarn
-
     ```bash
-    yarn add @usebruno/converters
+    yarn add @usebruno/converters @usebruno/filestore
     ```
   </Tab>
 </Tabs>
 
-For more details, visit the official [NPM Page for Bruno Converters](https://www.npmjs.com/package/@usebruno/converters)
+Both packages are published on npm: [@usebruno/converters](https://www.npmjs.com/package/@usebruno/converters) and [@usebruno/filestore](https://www.npmjs.com/package/@usebruno/filestore).
 
 ## Conversions
 
-1. [Postman to Bruno](./postman-to-bruno)
-2. [Insomnia to Bruno](./insomnia-to-bruno)
-3. [OpenAPI to Bruno](./openapi-to-bruno)
-4. [WSDL to Bruno](./wsdl-to-bruno)
+Each guide walks through a complete script that converts a file and writes a collection folder you can open in the Bruno app or run with the Bruno CLI.
 
-## API Reference
-
-### `postmanToBruno(postmanCollection: object)`
-
-Converts a Postman collection to a Bruno collection.
-
-**Parameters:**
-- `postmanCollection`: The Postman collection JSON object
-
-### `postmanToBrunoEnvironment(postmanEnvironment: object)`
-
-Converts a Postman environment to a Bruno environment.
-
-**Parameters:**
-- `postmanEnvironment`: The Postman environment JSON object
-
-### `insomniaToBruno(insomniaCollection: object)`
-
-Converts an Insomnia collection to a Bruno collection.
-
-**Parameters:**
-- `insomniaCollection`: The Insomnia collection JSON object
-
-### `openApiToBruno(openApiSpec: object)`
-
-Converts an OpenAPI specification to a Bruno collection.
-
-**Parameters:**
-- `openApiSpec`: The OpenAPI specification JSON object
-
-### `wsdlToBruno(wsdlContent: string)`
-
-Converts a WSDL file to a Bruno collection with SOAP requests.
-
-**Parameters:**
-- `wsdlContent`: The WSDL file content as a string
+<CardGroup cols={2}>
+  <Card title="Postman to Bruno" href="./postman-to-bruno">
+    Convert a Postman collection and, optionally, a Postman environment.
+  </Card>
+  <Card title="Insomnia to Bruno" href="./insomnia-to-bruno">
+    Convert an Insomnia export.
+  </Card>
+  <Card title="OpenAPI to Bruno" href="./openapi-to-bruno">
+    Convert an OpenAPI 3.x or Swagger 2.0 specification, as JSON or YAML.
+  </Card>
+  <Card title="WSDL to Bruno" href="./wsdl-to-bruno">
+    Convert a WSDL file into a collection of SOAP requests.
+  </Card>
+  <Card title="API Reference" href="./api-reference">
+    Signatures, options, and return values for every function.
+  </Card>
+</CardGroup>

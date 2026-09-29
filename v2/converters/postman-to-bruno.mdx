@@ -9,7 +9,8 @@ title: "Postman Conversions"
 ```javascript
 const { postmanToBruno } = require('@usebruno/converters');
 
-const brunoCollection = postmanToBruno(postmanCollection);
+// postmanToBruno is async and resolves to { collection, issues }
+const { collection } = await postmanToBruno(postmanCollection);
 ```
 
 ```javascript postman-to-bruno.js
@@ -20,8 +21,8 @@ const path = require('path');
 async function convertPostmanToBruno(inputFile, outputFile) {
   try {
     const inputData = await readFile(inputFile, 'utf8');
-    const brunoCollection = await postmanToBruno(JSON.parse(inputData));
-    await writeFile(outputFile, JSON.stringify(brunoCollection, null, 2));
+    const { collection } = await postmanToBruno(JSON.parse(inputData));
+    await writeFile(outputFile, JSON.stringify(collection, null, 2));
     console.log('Conversion successful!');
   } catch (error) {
     console.error('Error during conversion:', error);
@@ -51,7 +52,7 @@ const path = require('path');
 async function convertPostmanEnvironment(inputFile, outputFile) {
   try {
     const inputData = await readFile(inputFile, 'utf8');
-    const brunoEnvironment = await postmanToBrunoEnvironment(JSON.parse(inputData));
+    const brunoEnvironment = postmanToBrunoEnvironment(JSON.parse(inputData));
     await writeFile(outputFile, JSON.stringify(brunoEnvironment, null, 2));
     console.log('Environment conversion successful!');
   } catch (error) {

@@ -1,0 +1,137 @@
+---
+title: "API Reference"
+sidebarTitle: "API Reference"
+---
+
+Each function is used in a complete, runnable script in its guide: [Postman](./postman-to-bruno), [Insomnia](./insomnia-to-bruno), [OpenAPI](./openapi-to-bruno), and [WSDL](./wsdl-to-bruno).
+
+## postmanToBruno
+
+Converts a Postman collection to a Bruno collection.
+
+<Warning>
+  `postmanToBruno` is async and returns a Promise. `await` the result, or the value you get back is a pending Promise rather than the collection.
+</Warning>
+
+```javascript
+const { collection, issues } = await postmanToBruno(postmanCollection, options);
+```
+
+**Parameters**
+
+<ParamField path="postmanCollection" type="object" required>
+  The Postman collection, parsed from its JSON export.
+</ParamField>
+
+<ParamField path="options" type="object">
+  <Expandable title="properties">
+    <ParamField path="preserveScripts" type="boolean" default="false">
+      Keep pre-request and post-response scripts exactly as written in Postman instead of translating `pm.*` calls to Bruno's `bru.*` API.
+    </ParamField>
+    <ParamField path="useWorkers" type="boolean" default="false">
+      Translate scripts in worker threads. Speeds up large collections.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+**Returns**
+
+<ResponseField name="collection" type="object">
+  The Bruno collection.
+</ResponseField>
+
+<ResponseField name="issues" type="array">
+  Items that could not be converted cleanly. Each entry has a `severity`, the `path` of the item it concerns, and a `message`.
+</ResponseField>
+
+## postmanToBrunoEnvironment
+
+Converts a Postman environment to a Bruno environment.
+
+```javascript
+const environment = postmanToBrunoEnvironment(postmanEnvironment);
+```
+
+**Parameters**
+
+<ParamField path="postmanEnvironment" type="object" required>
+  The Postman environment, parsed from its JSON export.
+</ParamField>
+
+**Returns**
+
+<ResponseField name="environment" type="object">
+  The Bruno environment.
+</ResponseField>
+
+## insomniaToBruno
+
+Converts an Insomnia collection to a Bruno collection.
+
+```javascript
+const collection = insomniaToBruno(insomniaCollection);
+```
+
+**Parameters**
+
+<ParamField path="insomniaCollection" type="object" required>
+  The Insomnia export, parsed from JSON.
+</ParamField>
+
+**Returns**
+
+<ResponseField name="collection" type="object">
+  The Bruno collection.
+</ResponseField>
+
+## openApiToBruno
+
+Converts an OpenAPI 3.x or Swagger 2.0 specification to a Bruno collection.
+
+```javascript
+const collection = openApiToBruno(openApiSpec, options);
+```
+
+**Parameters**
+
+<ParamField path="openApiSpec" type="object | string" required>
+  The specification as a parsed object, or as a raw JSON or YAML string.
+</ParamField>
+
+<ParamField path="options" type="object">
+  <Expandable title="properties">
+    <ParamField path="groupBy" type="string" default="tags">
+      How requests are grouped into folders: `"tags"` groups by operation tag, `"path"` groups by URL path.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+**Returns**
+
+<ResponseField name="collection" type="object">
+  The Bruno collection.
+</ResponseField>
+
+## wsdlToBruno
+
+Converts a WSDL file to a Bruno collection of SOAP requests.
+
+<Warning>
+  `wsdlToBruno` is async and returns a Promise. `await` the result, or the value you get back is a pending Promise rather than the collection.
+</Warning>
+
+```javascript
+const collection = await wsdlToBruno(wsdlContent);
+```
+
+**Parameters**
+
+<ParamField path="wsdlContent" type="string" required>
+  The WSDL file content.
+</ParamField>
+
+**Returns**
+
+<ResponseField name="collection" type="object">
+  The Bruno collection.
+</ResponseField>
