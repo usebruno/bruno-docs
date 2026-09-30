@@ -363,13 +363,25 @@
                 ]
               },
               {
-                "group": "Run Collections",
+                "group": "Commands",
                 "boost": 3,
                 "pages": [
-                  "bru-cli/commandOptions",
-                  "bru-cli/runCollection",
-                  "bru-cli/builtInReporters",
-                  "bru-cli/import"
+                  {
+                    "group": "bru run",
+                    "pages": [
+                      "bru-cli/run/overview",
+                      "bru-cli/run/options",
+                      "bru-cli/run/reports"
+                    ]
+                  },
+                  {
+                    "group": "bru import",
+                    "pages": ["bru-cli/import/overview", "bru-cli/import/options"]
+                  },
+                  {
+                    "group": "bru docs",
+                    "pages": ["bru-cli/docs/overview", "bru-cli/docs/options"]
+                  }
                 ]
               },
               {
@@ -581,7 +593,7 @@
                 "item": "Bruno CLI Examples",
                 "icon": "terminal",
                 "description": "Command examples for running collections",
-                "pages": ["bru-cli/runCollection"]
+                "pages": ["bru-cli/run/overview"]
               }
             ]
           }
@@ -1550,6 +1562,26 @@
     {
       "source": "/bru-cli/gitHubCLI",
       "destination": "/bru-cli/github-actions/overview",
+      "permanent": true
+    },
+    {
+      "source": "/bru-cli/runCollection",
+      "destination": "/bru-cli/run/overview",
+      "permanent": true
+    },
+    {
+      "source": "/bru-cli/commandOptions",
+      "destination": "/bru-cli/run/options",
+      "permanent": true
+    },
+    {
+      "source": "/bru-cli/builtInReporters",
+      "destination": "/bru-cli/run/reports",
+      "permanent": true
+    },
+    {
+      "source": "/bru-cli/import",
+      "destination": "/bru-cli/import/overview",
       "permanent": true
     },
     {

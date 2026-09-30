@@ -138,7 +138,7 @@ Subsequent pushes and pull requests to `main` trigger the pipeline automatically
 
 Because the pipeline publishes a JUnit report, every Bruno test and assertion appears in the build's **Tests** tab with pass/fail counts, duration, and failure messages. Azure DevOps also tracks these across builds, so you get flaky-test detection and pass-rate trends for free.
 
-Each `<testcase>` uses the collection path (for example `Users/Get Users`) as its `classname`, which keeps test identities stable across environments and runs. See [Generating Reports](/bru-cli/builtInReporters#classname-format) for details.
+Each `<testcase>` uses the collection path (for example `Users/Get Users`) as its `classname`, which keeps test identities stable across environments and runs. See [Generating Reports](/bru-cli/run/reports#classname-format) for details.
 
 ### Artifacts
 
@@ -243,7 +243,7 @@ steps:
 
 ## Learn More
 
-- [Command Options](/bru-cli/commandOptions) — the full list of `bru run` flags.
-- [Generating Reports](/bru-cli/builtInReporters) — JSON, JUnit, and HTML reporters.
+- [bru run options](/bru-cli/run/options) — the full list of `bru run` flags.
+- [Generating Reports](/bru-cli/run/reports) — JSON, JUnit, and HTML reporters.
 - [Azure Key Vault](/secrets-management/secret-managers/azure-key-vault/overview) — pull secrets straight from Key Vault instead of storing them as pipeline variables.
 - [Azure Pipelines documentation](https://learn.microsoft.com/azure/devops/pipelines/) — task reference and YAML schema.

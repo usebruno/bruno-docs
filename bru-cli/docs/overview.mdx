@@ -1,0 +1,131 @@
+---
+title: "bru docs"
+sidebarTitle: "Overview"
+description: "Generate standalone HTML API documentation from a collection."
+---
+
+`bru docs generate` produces the same standalone HTML API documentation as **Collection → Generate Documentation** in the desktop app. This lets teams keep generated docs in Git, review changes alongside the collection, and regenerate or deploy the artifact from release and CI pipelines.
+
+## Usage
+
+```bash
+bru docs generate [options]
+```
+
+`generate` is the only `docs` subcommand today. Run it from the collection root, the folder that contains `opencollection.yml` or `bruno.json`. For the full reference of every flag used below, see [Options](/bru-cli/docs/options).
+
+Without additional options, Bruno writes:
+
+```text
+<sanitized-collection-name>-documentation.html
+```
+
+to the current directory. The CLI creates parent directories when needed and overwrites an existing output file without prompting. A successful command prints the output path.
+
+<Info>
+  The CLI and desktop app use the same HTML generation and filtering
+  implementation. For the same collection and options, they produce the same
+  documentation.
+</Info>
+
+## Choose the output file
+
+Use `--output` or `-o` to write the HTML file somewhere other than the current directory:
+
+```bash copy
+bru docs generate --output docs/api.html
+```
+
+The short form:
+
+```bash copy
+bru docs generate -o docs/api.html
+```
+
+## Select environments
+
+Use `--all-envs` to embed every environment in the collection:
+
+```bash copy
+bru docs generate --all-envs
+```
+
+Use `--envs` to embed only selected collection environments. Separate names with commas and quote the value when an environment name contains a space:
+
+```bash copy
+bru docs generate --envs Production,Development
+
+bru docs generate --envs "Production,QA Env,Staging" -o docs/api.html
+```
+
+Use `--exclude-envs` to leave environments out. Combine it with `--all-envs` to start from the full set, or with `--envs` to start from a named list:
+
+```bash copy
+bru docs generate --all-envs --exclude-envs Local,Development
+
+bru docs generate --envs "Production,Staging,Local" --exclude-envs Local
+```
+
+`--exclude-envs` takes precedence. If the same environment name appears in both `--envs` and `--exclude-envs`, that environment is left out.
+
+The command exits with an error if a requested environment does not exist.
+
+## Filter requests by tags
+
+Use `--tags` to include requests carrying any matching tag:
+
+```bash copy
+bru docs generate --tags "Prod Ready,local"
+```
+
+Use `--exclude-tags` to remove requests carrying any matching tag:
+
+```bash copy
+bru docs generate --envs Prod --exclude-tags local
+```
+
+You can combine both filters. `--exclude-tags` takes precedence, the same way `--exclude-envs` does. If the same tag name appears in both `--tags` and `--exclude-tags`, requests with that tag are left out:
+
+```bash copy
+bru docs generate --tags "Prod Ready,v2,WIP" --exclude-tags "WIP,Internal"
+```
+
+Excluded requests do not remain in the embedded collection data, navigation, or search index of the generated documentation.
+
+Tags live in the request files themselves, so the same tags drive both this command and the [tag filters of `bru run`](/bru-cli/run/overview#filtering-requests-with-tags).
+
+## Include or omit the Git repository link
+
+For Git backed collections, the repository URL (`gitCollectionUrl`) is embedded by default, so readers can clone the collection from the generated documentation through **Open in Bruno**. You can make the default explicit with `--git-link`:
+
+```bash copy
+bru docs generate --git-link
+```
+
+Use `--no-git-link` to leave the repository URL out. Readers still get the full documentation, but without the clone link. This matters most when the repository is private and the documentation is published somewhere public, where a URL to a repo most readers cannot access is not useful:
+
+```bash copy
+bru docs generate --tags "Prod Ready,v2" --no-git-link
+```
+
+## CI example
+
+This command embeds every environment except `Local`, drops requests tagged `WIP` or `Internal`, leaves the repository URL out, and writes the file to a build directory you can publish or commit:
+
+```bash copy
+bru docs generate \
+  --all-envs \
+  --exclude-envs Local \
+  --exclude-tags "WIP,Internal" \
+  --no-git-link \
+  --output dist/docs/api.html
+```
+
+## Next steps
+
+- [Options](/bru-cli/docs/options) - the full reference for every `bru docs generate` flag
+
+- [Generated HTML Documentation](/html-docs/overview) - what readers get in the generated site and how to deploy it
+- [Generate docs from the app](/html-docs/generate) - the same options in the desktop app's generate modal
+- [Deploy and share](/html-docs/deploy) - publish the file for your team or API consumers
+- [bru run](/bru-cli/run/overview) - run the collection you just documented
