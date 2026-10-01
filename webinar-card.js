@@ -1,11 +1,13 @@
-// Floating registration card for the "Bruno v4 Live" webinar.
+// Floating registration card for the "Bruno 101 + Automation Deep Dive" webinar.
 // Desktop: card pinned bottom-right. Mobile: slim bar pinned to the bottom edge.
-// Auto-hides after the event ends; safe to delete after 2026-08-19.
+// Auto-hides once the event ends; safe to delete after 2026-10-28.
 (function () {
-  var KEY = "bruno-webinar-2026-08-19";
-  var ENDS = Date.parse("2026-08-19T16:00:00Z"); // 12:00 PM EDT
+  var KEY = "bruno-webinar-2026-10-28";
+  // Runs 11:00 AM - 12:00 PM EDT (3:00 - 4:00 PM GMT). UK clocks fall back on Oct 25,
+  // US not until Nov 1, so the UK time is an hour earlier than the usual BST pairing.
+  var ENDS = Date.parse("2026-10-28T16:00:00Z"); // 12:00 PM EDT
 
-  if (Date.now() > ENDS) return;
+  if (Date.now() >= ENDS) return;
 
   try {
     if (localStorage.getItem(KEY)) return;
@@ -70,9 +72,9 @@
       '<button type="button" aria-label="Dismiss webinar notification">&times;</button>' +
       '<div class="bru-eyebrow"><span class="bru-dot"></span>' +
       '<span class="bru-label"><span class="bru-wide">Live webinar</span>' +
-      '<span class="bru-narrow">v4 Webinar</span> &middot; Aug 19</span></div>' +
-      "<h4>Bruno v4 Live: AI, Scripting, Docs &amp; What’s New</h4>" +
-      "<p>11:00 AM EDT / 4:00 PM BST &middot; Zoom</p>" +
+      '<span class="bru-narrow">Bruno 101</span> &middot; Oct 28</span></div>' +
+      "<h4>Bruno 101 + Automation Deep Dive</h4>" +
+      "<p>11:00 AM EDT / 3:00 PM GMT &middot; Zoom</p>" +
       '<a class="bru-cta" href="https://www.usebruno.com/webinar" target="_blank" rel="noopener">' +
       "Register →</a>" +
       "</div>";
@@ -85,6 +87,16 @@
       } catch (e) {}
       el.remove();
     });
+
+    // A tab left open past the end time should lose the card too, not just on the
+    // next page load. setTimeout overflows past 2^31-1 ms (~24.8 days) and fires at
+    // once, so only arm it inside that window; earlier loads rely on the check above.
+    var wait = ENDS - Date.now();
+    if (wait > 0 && wait <= 2147483647) {
+      setTimeout(function () {
+        el.remove();
+      }, wait);
+    }
   };
 
   if (document.readyState === "loading") {
