@@ -69,7 +69,9 @@
       ],
       CLI: [
         { label: "Overview", href: "/bru-cli/overview" },
-        { label: "Run Collections", href: "/bru-cli/runCollection" },
+        { label: "bru run", href: "/bru-cli/run/overview" },
+        { label: "bru import", href: "/bru-cli/import/overview" },
+        { label: "bru docs", href: "/bru-cli/docs/overview" },
         { label: "Configuration", href: "/bru-cli/proxyConfiguration" },
         { label: "CI/CD", href: "/bru-cli/docker" },
       ],
@@ -126,7 +128,7 @@
           label: "Environment Variables",
           href: "/variables/environment-variables",
         },
-        { label: "Bruno CLI Examples", href: "/bru-cli/runCollection" },
+        { label: "Bruno CLI Examples", href: "/bru-cli/run/overview" },
       ],
     },
     v3: {

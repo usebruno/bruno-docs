@@ -1,11 +1,20 @@
 ---
-title: "Command Examples"
-sidebarTitle: "Command Examples"
+title: "bru run"
+sidebarTitle: "Overview"
+description: "Run collections, folders, and individual requests from the command line."
 ---
 
-Bruno CLI allows you to run your API collections with ease, either by directly executing requests or using external data sources.
+`bru run` executes the requests in a collection and reports the results of their tests and assertions. It is the command you will use most: locally to check a collection before you commit, and in CI to run the same collection against every environment.
 
-This guide explains how to run entire collections, specific folders, and how to use data sources like CSV and JSON files to drive your API tests. For the full reference of every flag used below, see [Command Options](/bru-cli/commandOptions).
+This page walks through the common ways to run a collection: whole collections, folders and files, data-driven runs from CSV and JSON files, environments, tag filters, and parallel execution. For the full reference of every flag used below, see [Options](/bru-cli/run/options). To write results to a file, see [Reports](/bru-cli/run/reports).
+
+## Usage
+
+```bash
+bru run [files or folders...] [options]
+```
+
+Run the command from the collection root, the folder that contains `opencollection.yml` or `bruno.json`. File and folder paths are relative to that folder. To print the options for your installed version, run `bru run -h`.
 
 <Warning>
   **v3.0.0 Breaking Change** Starting from Bruno CLI v3.0.0, the default runtime
@@ -35,6 +44,26 @@ For example, to run all requests in the **users** folder:
 ```bash copy
 bru run users
 ```
+
+## Running Specific Files and Folders
+
+You can pass any mix of request files and folders. Bruno CLI runs them in the order given:
+
+```bash copy
+# Run a single file
+bru run request.bru
+
+# Run multiple files
+bru run request1.bru request2.bru
+
+# Run multiple folders
+bru run <folder-1-name> <folder-2-name>
+
+# Mix of files and folders
+bru run <folder-1-name> request1.bru <folder-2-name> request2.bru
+```
+
+Add `-r` to run a folder recursively, including every nested folder inside it.
 
 ## Running a Collection with a CSV File
 
@@ -280,121 +309,11 @@ This is still experimental. The name will become `--cache-modules` once the defa
 - run: bru run --env ci --experimental-cache-modules --reporter-junit results.xml
 ```
 
-## Generate API Documentation
+## Next steps
 
-Bruno CLI can generate the same standalone HTML API documentation as **Collection → Generate Documentation** in the desktop app. This lets teams keep generated docs in Git, review changes alongside the collection, and regenerate or deploy the artifact from release and CI pipelines.
-
-Run the command from the collection root:
-
-```bash copy
-bru docs generate
-```
-
-Without additional options, Bruno writes:
-
-```text
-<sanitized-collection-name>-documentation.html
-```
-
-to the current directory. The CLI creates parent directories when needed and overwrites an existing output file without prompting. A successful command prints the output path.
-
-See [Generate API Documentation options](/bru-cli/commandOptions#generate-api-documentation-options) for the complete flag reference.
-
-### Choose the output file
-
-Use `--output` or `-o` to write the HTML file somewhere other than the current directory:
-
-```bash copy
-bru docs generate --output docs/api.html
-```
-
-The short form:
-
-```bash copy
-bru docs generate -o docs/api.html
-```
-
-### Select environments
-
-Use `--all-envs` to embed every environment in the collection:
-
-```bash copy
-bru docs generate --all-envs
-```
-
-Use `--envs` to embed only selected collection environments. Separate names with commas and quote the value when an environment name contains a space:
-
-```bash copy
-bru docs generate --envs Production,Development
-
-bru docs generate --envs "Production,QA Env,Staging" -o docs/api.html
-```
-
-Use `--exclude-envs` to leave environments out. Combine it with `--all-envs` to start from the full set, or with `--envs` to start from a named list:
-
-```bash copy
-bru docs generate --all-envs --exclude-envs Local,Development
-
-bru docs generate --envs "Production,Staging,Local" --exclude-envs Local
-```
-
-`--exclude-envs` takes precedence. If the same environment name appears in both `--envs` and `--exclude-envs`, that environment is left out.
-
-The command exits with an error if a requested environment does not exist.
-
-### Filter requests by tags
-
-Use `--tags` to include requests carrying any matching tag:
-
-```bash copy
-bru docs generate --tags "Prod Ready,local"
-```
-
-Use `--exclude-tags` to remove requests carrying any matching tag:
-
-```bash copy
-bru docs generate --envs Prod --exclude-tags local
-```
-
-You can combine both filters. `--exclude-tags` takes precedence, the same way `--exclude-envs` does. If the same tag name appears in both `--tags` and `--exclude-tags`, requests with that tag are left out:
-
-```bash copy
-bru docs generate --tags "Prod Ready,v2,WIP" --exclude-tags "WIP,Internal"
-```
-
-Excluded requests do not remain in the embedded collection data, navigation, or search index of the generated documentation.
-
-### Include or omit the Git repository link
-
-For Git backed collections, the repository URL (`gitCollectionUrl`) is embedded by default, so readers can clone the collection from the generated documentation through **Open in Bruno**. You can make the default explicit with `--git-link`:
-
-```bash copy
-bru docs generate --git-link
-```
-
-Use `--no-git-link` to leave the repository URL out. Readers still get the full documentation, but without the clone link. This matters most when the repository is private and the documentation is published somewhere public, where a URL to a repo most readers cannot access is not useful:
-
-```bash copy
-bru docs generate --tags "Prod Ready,v2" --no-git-link
-```
-
-### CI example
-
-This command embeds every environment except `Local`, drops requests tagged `WIP` or `Internal`, leaves the repository URL out, and writes the file to a build directory you can publish or commit:
-
-```bash copy
-bru docs generate \
-  --all-envs \
-  --exclude-envs Local \
-  --exclude-tags "WIP,Internal" \
-  --no-git-link \
-  --output dist/docs/api.html
-```
-
-<Info>
-  The CLI and desktop app use the same HTML generation and filtering
-  implementation. For the same collection and options, they produce the same
-  documentation.
-</Info>
-
-For details about the generated site and deployment options, see [Generated HTML Documentation](/html-docs/overview).
+- [Options](/bru-cli/run/options) - the full reference for every `bru run` flag
+- [Reports](/bru-cli/run/reports) - write JSON, JUnit, and HTML reports from a run
+- [Proxy & mTLS](/bru-cli/proxyConfiguration) - route requests through a proxy and configure client certificates
+- [Secret Managers](/bru-cli/secret-managers) - fetch secrets from an external secret manager at runtime
+- [bru import](/bru-cli/import/overview) - create a collection from an OpenAPI or WSDL specification
+- [bru docs](/bru-cli/docs/overview) - generate standalone HTML API documentation from the collection you just ran

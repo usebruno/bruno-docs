@@ -1,0 +1,170 @@
+---
+title: "bru import"
+sidebarTitle: "Overview"
+description: "Create a Bruno collection from an OpenAPI or WSDL specification."
+---
+
+`bru import` converts an API specification into a Bruno collection without opening the desktop app. Point it at a local file or a URL and it writes a ready-to-run collection, which makes it a good fit for CI pipelines that regenerate the collection whenever the spec changes.
+
+## Usage
+
+```bash
+bru import <type> [options]
+```
+
+`<type>` is the format of the specification you are importing:
+
+| Type      | Source                                            |
+| --------- | ------------------------------------------------- |
+| `openapi` | OpenAPI specification (YAML or JSON), file or URL |
+| `wsdl`    | WSDL file for a SOAP service, file or URL         |
+
+For the full reference of every flag used below, see [Options](/bru-cli/import/options).
+
+## Importing OpenAPI specifications
+
+### Collection format (`--collection-format`)
+
+When you import OpenAPI into a **directory** (`--output`), you choose how the collection is laid out on disk:
+
+| Value            | Result                                                                                                                                                            |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `opencollection` | [OpenCollection YAML](/opencollection-yaml/overview) layout (for example `opencollection.yml` and `.yml` requests). **This is the default** if you omit the flag. |
+| `bru`            | Classic Bruno **`.bru`** files and folder structure.                                                                                                              |
+
+Use one of:
+
+```bash
+--collection-format=bru
+--collection-format=opencollection
+```
+
+### Option 1: Import to a Bruno collection folder
+
+This imports the OpenAPI specification (YAML or JSON) and writes a collection under the output directory.
+
+**OpenCollection layout (default):**
+
+```bash copy
+bru import openapi \
+  --source <your-openapi.yaml> \
+  --output <preferred-location> \
+  --collection-name "Petstore API"
+```
+
+**Explicit OpenCollection layout:**
+
+```bash copy
+bru import openapi \
+  --source <your-openapi.yaml> \
+  --output <preferred-location> \
+  --collection-name "Petstore API" \
+  --collection-format=opencollection
+```
+
+**Classic `.bru` layout:**
+
+```bash copy
+bru import openapi \
+  --source <your-openapi.yaml> \
+  --output <preferred-location> \
+  --collection-name "Petstore API" \
+  --collection-format=bru
+```
+
+Where:
+
+- `<your-openapi.yaml>`: Path or URL to your OpenAPI spec (YAML or JSON)
+- `<preferred-location>`: Directory for the generated collection
+- `--collection-name`: Display name for the collection
+- `--collection-format`: Optional; `opencollection` (default) or `bru`
+
+You can also pass `-s` / `-o` / `-n` as shorthand for `--source`, `--output`, and `--collection-name`.
+
+### Option 2: Import to a single JSON file
+
+This imports the OpenAPI specification and writes one Bruno collection JSON file at the given path.
+
+```bash copy
+bru import openapi \
+  --source <your-openapi.yaml> \
+  --output-file <preferred-location>.json \
+  --collection-name "Petstore API"
+```
+
+Where:
+
+- `<your-openapi.yaml>`: Path or URL to your OpenAPI spec (YAML or JSON)
+- `<preferred-location>.json`: Path for the exported collection file
+- `--collection-name`: Custom name for the collection
+
+### Import from a URL
+
+`--source` accepts an `http://` or `https://` URL as well as a file path. The CLI fetches the spec, converts it, and writes the collection:
+
+```bash copy
+bru import openapi \
+  --source https://petstore3.swagger.io/api/v3/openapi.json \
+  --output ./petstore-api \
+  --collection-name "Petstore API"
+```
+
+Add `--insecure` when the URL is served with a self-signed certificate and you want to skip TLS verification.
+
+### Group requests by tag or path
+
+By default, imported requests are grouped into folders by their OpenAPI tags. Use `--group-by path` to build the folder structure from URL paths instead:
+
+```bash copy
+bru import openapi \
+  --source <your-openapi.yaml> \
+  --output <preferred-location> \
+  --group-by path
+```
+
+## Importing WSDL (SOAP APIs)
+
+This imports a WSDL file and generates a Bruno collection in the output directory.
+
+```bash copy
+bru import wsdl \
+  --source <your-service.wsdl> \
+  --output <preferred-location> \
+  --collection-name "SOAP Service"
+```
+
+Where:
+
+- `<your-service.wsdl>`: Path or URL to your WSDL file
+- `<preferred-location>`: Directory where the collection should be created
+- `--collection-name`: Optional name for the collection
+
+## Keep a collection in sync with the spec in CI
+
+Because the command is non-interactive, you can regenerate the collection on every change to the specification and run it in the same job:
+
+```yaml
+- name: Install Bruno CLI
+  run: npm install -g @usebruno/cli
+
+- name: Regenerate the collection from the OpenAPI spec
+  run: |
+    bru import openapi \
+      --source ./openapi.yaml \
+      --output ./collections/my-api \
+      --collection-name "My API"
+
+- name: Run the imported collection
+  working-directory: collections/my-api
+  run: bru run --env ci --reporter-junit results.xml
+```
+
+See [GitHub Actions](/bru-cli/github-actions/overview) for a complete workflow.
+
+## Next steps
+
+- [Options](/bru-cli/import/options) - the full reference for every `bru import` flag
+- [bru run](/bru-cli/run/overview) - run the collection you just imported
+- [bru docs](/bru-cli/docs/overview) - generate HTML API documentation from it
+- [Import collections in the app](/get-started/import-export-data/import-collections) - the same importers in the Bruno desktop app
+- [OpenCollection YAML](/opencollection-yaml/overview) - the default on-disk format for imported collections

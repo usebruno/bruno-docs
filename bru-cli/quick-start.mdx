@@ -106,7 +106,7 @@ Some requests may fail without an environment — that is expected. You will fix
 - CLI output lists all five requests in the collection.
 - An execution summary table is displayed at the end.
 
-More: [Command Examples](/bru-cli/runCollection)
+More: [Run Collections](/bru-cli/run/overview)
 
 ---
 
@@ -208,7 +208,7 @@ Assertions
 - Tests show **2/2** passed.
 - Assertions show **2/2** passed.
 
-More: [Command Options](/bru-cli/commandOptions)
+More: [bru run options](/bru-cli/run/options)
 
 ---
 
@@ -240,7 +240,7 @@ Open `results.html` in a browser for a visual summary. Use `results.json` for pr
 - HTML report opens in a browser and shows request results.
 - JSON and XML files contain test execution data.
 
-More: [Generating Reports](/bru-cli/builtInReporters)
+More: [Generating Reports](/bru-cli/run/reports)
 
 ---
 
@@ -340,7 +340,7 @@ Bruno CLI runs the request three times (once per row) and creates `results.html`
 Wrote html results to results.html
 ```
 
-Open `results.html` in your browser for a visual summary of all three iterations. See [Generating Reports](/bru-cli/builtInReporters) for JSON, JUnit, and other reporter options.
+Open `results.html` in your browser for a visual summary of all three iterations. See [Generating Reports](/bru-cli/run/reports) for JSON, JUnit, and other reporter options.
 
 **Success Criteria:**
 - `users.csv` or `users.json` exists in the collection folder with `title` and `msg` columns.
@@ -348,7 +348,7 @@ Open `results.html` in your browser for a visual summary of all three iterations
 - CLI run completes with **3 (3 Passed)** in the execution summary.
 - `results.html` is created and shows one result per data row.
 
-More: [Data Driven Testing](/testing/automate-test/data-driven-testing) · [Command Examples](/bru-cli/runCollection#running-a-collection-with-a-csv-file) · [Generating Reports](/bru-cli/builtInReporters)
+More: [Data Driven Testing](/testing/automate-test/data-driven-testing) · [Run Collections](/bru-cli/run/overview#running-a-collection-with-a-csv-file) · [Generating Reports](/bru-cli/run/reports)
 
 ---
 
@@ -395,7 +395,7 @@ bru run --env local --global-env Production \
 - `bru.getGlobalEnvVar()` returns values passed via `--global-env-var`.
 - No changes are required to environment files on disk.
 
-More: [Command Examples](/bru-cli/runCollection#passing-environment-variables)
+More: [Run Collections](/bru-cli/run/overview#passing-environment-variables)
 
 ---
 
@@ -431,7 +431,7 @@ bru run
 - `petstore-api` directory is created with `opencollection.yml` and request files.
 - `bru run` inside the imported collection executes without import errors.
 
-More: [Import Data](/bru-cli/import)
+More: [bru import](/bru-cli/import/overview)
 
 ---
 
@@ -473,9 +473,9 @@ Congratulations on completing the Bruno CLI Quick Start! You have learned how to
 
 **Next steps:**
 
-- [Command Options](/bru-cli/commandOptions) — full list of CLI flags
-- [Command Examples](/bru-cli/runCollection) — data-driven testing, tags, and parallel runs
+- [bru run options](/bru-cli/run/options) — full list of CLI flags
+- [Run Collections](/bru-cli/run/overview) — data-driven testing, tags, and parallel runs
 - [Data Driven Testing](/testing/automate-test/data-driven-testing) — CSV/JSON iteration in the app and CLI
-- [Generating Reports](/bru-cli/builtInReporters) — HTML, JSON, and JUnit reporters
+- [Generating Reports](/bru-cli/run/reports) — HTML, JSON, and JUnit reporters
 - [Proxy Configuration](/bru-cli/proxyConfiguration) — run collections behind a proxy
 - [Bruno Quick Start](/introduction/quick-start) — build the same collection in the Bruno app
