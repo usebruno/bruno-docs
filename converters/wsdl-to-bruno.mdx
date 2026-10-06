@@ -9,7 +9,7 @@ import ConvertersRun from '/snippets/converters-run.mdx';
 Convert a WSDL (Web Services Description Language) file into a Bruno collection folder of SOAP requests you can open in the app or run with the CLI. The converter creates one request per operation, with a SOAP envelope built from the XML schema and the `Content-Type` and `SOAPAction` headers already set.
 
 <Tip>
-  You do not need a script to import a WSDL file. The Bruno app imports one through **Import Collection** (see [Import collections](/get-started/import-export-data/import-collections#7-wsdl-web-services-description-language)), and the CLI does it in one command: `bru import wsdl --source <service.wsdl> --output <output-folder>` (see [Import Data](/bru-cli/import)). Use the script below when you want to process the collection in your own code.
+  You do not need a script to import a WSDL file. The Bruno app imports one through **Import Collection** (see [Import collections](/get-started/import-export-data/import-collections#7-wsdl-web-services-description-language)), and the CLI does it in one command: `bru import wsdl --source <service.wsdl> --output <output-folder>` (see [bru import](/bru-cli/import/overview)). Use the script below when you want to process the collection in your own code.
 </Tip>
 
 <Info>

@@ -108,7 +108,7 @@ jobs:
 - **`--env-var`** overrides environment variables at runtime, useful for injecting CI-specific values like the GitHub run ID and commit SHA.
 - **`--reporter-html`** generates an HTML report of the test results.
 
-For a full list of CLI options, see [Command Options](/bru-cli/commandOptions).
+For a full list of CLI options, see [bru run options](/bru-cli/run/options).
 
 ## Run the workflow
 
@@ -139,7 +139,7 @@ git push origin main
 run: bru run --env ci --experimental-cache-modules
 ```
 
-Do not enable the flag unless you see this RSS growth. See [Reduce CLI memory use on large runs](/bru-cli/runCollection#reduce-cli-memory-use-on-large-runs).
+Do not enable the flag unless you see this RSS growth. See [Reduce CLI memory use on large runs](/bru-cli/run/overview#reduce-cli-memory-use-on-large-runs).
   </Accordion>
 
   <Accordion title="Sandbox migration (Bruno CLI v3+)">
