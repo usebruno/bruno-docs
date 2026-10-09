@@ -1,0 +1,148 @@
+---
+title: "NestJS"
+sidebarTitle: "NestJS"
+---
+
+Import your Bruno collection as a NestJS module and serve it as API documentation from your own application.
+
+## Why this is useful
+
+The collection sits in the repository with the controllers it calls, so it is already kept current by the people changing the API:
+
+```text
+billing-service/
+├── src/
+│   ├── app.module.ts
+│   └── billing/
+├── collection/
+│   ├── collection.yml
+│   ├── Create Invoice.yml
+│   ├── Void Invoice.yml
+│   └── environments/
+│       ├── local.yml
+│       └── production.yml
+└── package.json
+```
+
+Importing one module publishes that folder as documentation:
+
+```text
+myapp.com/api/invoices  → your API
+myapp.com/docs          → your API docs
+```
+
+The docs are part of the Nest application, so they inherit its guards, its deployment, and its lifecycle.
+
+## Install
+
+```bash
+npm install @usebruno/api-docs-nestjs
+```
+
+## Import the module
+
+```ts
+import { Module } from '@nestjs/common'
+import { ApiDocsModule } from '@usebruno/api-docs-nestjs'
+
+@Module({
+  imports: [
+    ApiDocsModule.forRoot({
+      url: './collection'
+    })
+  ]
+})
+export class AppModule {}
+```
+
+Start the app and open `http://localhost:3000/docs`.
+
+The path in `url` is resolved relative to your app entry file, not the working directory. It can point at a collection folder or at a single bundled `collection.yml`, in either the `.bru` or OpenCollection `.yml` format.
+
+## Change the route
+
+Nest does not let a module be mounted from outside, so the route is set in the options:
+
+```ts
+ApiDocsModule.forRoot({
+  url: './collection',
+  route: '/api-reference'
+})
+```
+
+## Choose what gets published
+
+By default no environments are published and every request is included:
+
+```ts
+ApiDocsModule.forRoot({
+  url: './collection',
+  environments: { include: ['production'] },
+  tags: { include: ['public'], exclude: ['internal'] }
+})
+```
+
+Filtering happens on the server, so excluded environments and requests are absent from the response rather than hidden in the page. Use `environments: '*'` to publish all of them.
+
+## Customize the page
+
+Presentation options go under `ui` and are passed straight to the renderer:
+
+```ts
+ApiDocsModule.forRoot({
+  url: './collection',
+  environments: '*',
+  ui: {
+    theme: 'dark',
+    pageTitle: 'Billing API',
+    logo: '/logo.svg',
+    gitCollectionUrl: 'https://github.com/acme/billing-service'
+  }
+})
+```
+
+See the [configuration reference](/integrations/overview#configuration) for every option.
+
+## Put the docs behind your auth
+
+Apply your existing guard to the docs route the same way you would to any other:
+
+```ts
+import { MiddlewareConsumer, Module } from '@nestjs/common'
+import { ApiDocsModule } from '@usebruno/api-docs-nestjs'
+import { AuthMiddleware } from './auth.middleware'
+
+@Module({
+  imports: [
+    ApiDocsModule.forRoot({
+      url: './collection',
+      environments: { include: ['staging'] }
+    })
+  ]
+})
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthMiddleware).forRoutes('docs')
+  }
+}
+```
+
+## What the module serves
+
+| Route                   | Response                                       |
+| ----------------------- | ---------------------------------------------- |
+| `/docs/`                | The documentation page                         |
+| `/docs/shell.js`        | The boot script, cacheable                     |
+| `/docs/collection.yml`  | The assembled collection document, not cached  |
+
+Navigation inside the docs uses the URL hash, so `/docs/#/catalog/list-products` links straight to a request.
+
+<Info>
+  If the collection cannot be read at startup, the app still boots. The error is logged and the docs route serves it instead of the page, so a documentation problem never takes down your API.
+</Info>
+
+## Next steps
+
+- [Express](/integrations/express) and [Fastify](/integrations/fastify) integrations
+- [Generate a standalone HTML file](/html-docs/generate) from the same collection with **Generate Docs**
+- [Write better docs](/api-docs/overview) at the collection, folder, and request level so the published page has real descriptions
