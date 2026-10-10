@@ -51,7 +51,7 @@ const response = await bru.runRequest("auth/login");
 
 // Check if login was successful
 if (response.status === 200) {
-  const data = response.body;
+  const data = response.data;
   bru.setVar("authToken", data.token);
   console.log("Login successful, token saved");
 } else {
