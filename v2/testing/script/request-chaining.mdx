@@ -38,7 +38,7 @@ Returns a response object containing:
 - `status`: HTTP status code
 - `statusText`: HTTP status text
 - `headers`: Response headers object
-- `body`: Response body (automatically parsed if JSON)
+- `data`: Response body (automatically parsed if JSON)
 - `responseTime`: Response time in milliseconds
 
 ### Examples
@@ -51,7 +51,7 @@ const response = await bru.runRequest("auth/login");
 
 // Check if login was successful
 if (response.status === 200) {
-  const data = response.body;
+  const data = response.data;
   bru.setVar("authToken", data.token);
   console.log("Login successful, token saved");
 } else {
