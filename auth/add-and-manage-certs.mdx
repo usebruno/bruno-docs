@@ -11,6 +11,15 @@ Bruno supports custom Certificate Authority (CA) certificates and client certifi
   Global client certificates and per-certificate enable/disable are available in Bruno **v4.1.0+**.
 </Note>
 
+<iframe
+  className="w-full aspect-video rounded-xl"
+  src="https://www.youtube.com/embed/wZcdFPg0f_A?si=Ql209wbEeW85bluR"
+  title="CA and Client Certificates in Bruno"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+  referrerPolicy="strict-origin-when-cross-origin"
+  allowFullScreen
+/>
+
 ## Try it out
 
 Explore the [client-cert-badssl](https://github.com/bruno-collections/client-cert-badssl) sample collection to practice custom CA trust and client certificates against [badssl.com](https://badssl.com):
@@ -126,3 +135,7 @@ Behavior in the CLI:
 - Matching uses the same first-match-by-domain rules, so collection certificates take precedence for overlapping domains.
 
 See [Proxy & mTLS](/bru-cli/proxyConfiguration) for more CLI examples.
+
+## Resources
+
+- [Blog - How to Configure CA and Client Certificates in Bruno](https://blog.usebruno.com/ca-client-certificates-bruno)
