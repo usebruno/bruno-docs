@@ -2,7 +2,7 @@
 title: "Bruno SCIM API"
 ---
 
-The Bruno SCIM API provides a direct way to manage users and groups programmatically without requiring integration through identity provider applications like Okta or Microsoft Entra. This is ideal for organizations that want to build custom integrations.
+The Bruno SCIM API provides a direct way to manage users programmatically without requiring integration through identity provider applications like Okta or Microsoft Entra. This is ideal for organizations that want to build custom integrations.
 
 <Info>
 **Prerequisites**: Before using the Bruno SCIM API, you must first enable SCIM provisioning in Bruno and generate an API key. Follow the [Enabling SCIM Provisioning](./overview#enabling-scim-provisioning) section in the overview page to complete this setup and save your API key for use in the steps below.
@@ -26,7 +26,6 @@ Bruno provides a complete API collection to help you get started quickly:
 
 This collection includes:
 - **User management** endpoints (create, read, update, delete)
-- **Group management** endpoints (create, read, update, delete)
 - **Service provider configuration** endpoints
 - **Pre-configured environments** for testing
 - **Example requests and responses** for all operations
@@ -57,18 +56,6 @@ Bruno's SCIM implementation follows the SCIM 2.0 specification and supports the 
 | List Users | `GET` | `/Users` | Retrieve all users with pagination |
 | Filter Users | `GET` | `/Users?filter=...` | Search users by attributes |
 
-### Group Operations
-
-| Operation | HTTP Method | Endpoint | Description |
-|-----------|-------------|----------|-------------|
-| Create Group | `POST` | `/Groups` | Create a new user group |
-| Get Group | `GET` | `/Groups/{id}` | Retrieve group information by ID |
-| Update Group | `PUT` | `/Groups/{id}` | Update group attributes |
-| Patch Group | `PATCH` | `/Groups/{id}` | Partial group updates |
-| Delete Group | `DELETE` | `/Groups/{id}` | Remove group |
-| List Groups | `GET` | `/Groups` | Retrieve all groups with pagination |
-| Filter Groups | `GET` | `/Groups?filter=...` | Search groups by attributes |
-
 ## User Schema
 
 Bruno supports the following SCIM user attributes:
@@ -83,19 +70,7 @@ Bruno supports the following SCIM user attributes:
 - `name.givenName` - First name
 - `name.familyName` - Last name
 - `timezone` - User's timezone (IANA format, e.g., "America/Los_Angeles")
-- `groups` - Array of group memberships
 - `roles` - Array of role values. Used to provision License Manager administrators; see [Provisioning administrators](./overview#provisioning-administrators)
-
-## Group Schema
-
-Bruno supports the following SCIM group attributes:
-
-### Required Fields
-- `displayName` - Name of the group (must be unique)
-
-### Optional Fields
-- `members` - Array of users in the group
-- `externalId` - External system identifier for the group
 
 ## Example API Calls
 
@@ -120,8 +95,7 @@ Authorization: Bearer YOUR_TOKEN
     "primary": true
   }],
   "timezone": "America/New_York",
-  "active": true,
-  "groups": []
+  "active": true
 }
 ```
 
@@ -206,7 +180,7 @@ To page through all users, increase `startIndex` by `count` on each request unti
 
 #### Last activity (`meta.lastSeenAt`)
 
-`meta.lastSeenAt` is a Bruno-specific attribute that records the last time the user's Bruno app checked in with the license server, on license activation or a periodic license check. It is the same value shown in the **Last Active** column on the **Users** tab of the license portal. It is `null` if the user has never activated Bruno.
+`meta.lastSeenAt` is a Bruno-specific attribute containing the timestamp of the user's most recent license check-in, or `null` if none has been recorded.
 
 ### Filter Users
 
@@ -217,51 +191,9 @@ Filterable attributes: `userName`, `emails.value`, `id`, `externalId`, `active`,
 ```http
 # Find a user by email
 GET /Users?filter=userName eq "john.doe@company.com"
-
-# Users who have not been active since July 1, 2026
-GET /Users?filter=meta.lastSeenAt lt "2026-07-01T00:00:00Z"
-
-# Users who have never activated Bruno
-GET /Users?filter=not (meta.lastSeenAt pr)
 ```
 
 URL-encode the filter value when sending it from code or the command line.
-
-### Create a Group
-
-```http
-POST /Groups
-Authorization: Bearer YOUR_TOKEN
-
-{
-  "schemas": [
-    "urn:ietf:params:scim:schemas:core:2.0:Group"
-  ],
-  "displayName": "Engineering Team",
-  "members": []
-}
-```
-
-### Update User Group Membership
-
-```http
-PATCH /Users/{userId}
-Authorization: Bearer YOUR_TOKEN
-
-{
-  "schemas": [
-    "urn:ietf:params:scim:api:messages:2.0:PatchOp"
-  ],
-  "Operations": [{
-    "op": "Add",
-    "path": "groups",
-    "value": [{
-      "value": "{groupId}",
-      "display": "Engineering Team"
-    }]
-  }]
-}
-```
 
 ## Error Handling
 
@@ -294,7 +226,7 @@ The Bruno SCIM API implements rate limiting to ensure service stability:
 ### Performance
 - **Batch operations**: Use PATCH operations for bulk updates when possible
 - **Pagination**: Implement proper pagination for large result sets
-- **Caching**: Cache user and group data to reduce API calls
+- **Caching**: Cache user data to reduce API calls
 
 ### Error Handling
 - **Retry logic**: Implement exponential backoff for transient errors
