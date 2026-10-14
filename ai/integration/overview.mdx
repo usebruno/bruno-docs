@@ -17,3 +17,9 @@ See [Use cases](./use-cases) for common workflows (generating collections, writi
 - [VS Code](https://code.visualstudio.com) with GitHub Copilot - Popular editor with built-in AI code completion
 - [Codex](https://developers.openai.com/codex/) - OpenAI's coding agent; uses `AGENTS.md` for custom instructions
 - [Claude](https://claude.ai) - AI agent for writing code and automating workflows
+
+## MCP support
+
+Bruno does not currently provide an MCP (Model Context Protocol) server or MCP client integration.
+
+MCP is not needed for agents to work with Bruno. Collections are plain text files on your local filesystem, so any AI agent can read and edit them directly. Each integration works through the agent's own instruction file, such as `.cursor/rules` for [Cursor](/ai/integration/cursor), `AGENTS.md` for [Codex](/ai/integration/codex), or `.claude/CLAUDE.md` for [Claude](/ai/integration/claude).

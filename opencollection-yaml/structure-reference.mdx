@@ -264,3 +264,115 @@ docs: |-
   - email: User's email address
 ```
 
+## Collection Root File (`opencollection.yml`)
+
+The `opencollection.yml` file at the root of a collection replaces `bruno.json`. It holds the collection name, collection-level request defaults, configuration, and Bruno-specific extensions.
+
+```yaml
+opencollection: 1.0.0
+
+info:
+  name: My Collection
+  version: "1"
+
+request:            # Collection-level defaults inherited by requests
+  headers:
+    - name: X-Api-Version
+      value: "2"
+  auth:
+    type: bearer
+    bearer:
+      token: "{{token}}"
+  scripts:
+    - type: before-request
+      code: |-
+        console.log("runs before every request");
+
+config:             # Proxy, client certificates, and protobuf settings
+  protobuf:
+    protoFiles:
+      - type: file
+        path: ./protos/service.proto
+    importPaths:
+      - path: ./protos
+
+extensions:
+  bruno:            # Bruno-specific settings
+    ignore:
+      - node_modules
+      - .git
+    presets:
+      request:
+        type: http
+        url: https://api.example.com
+    scripts:
+      flow: sequential
+      additionalContextRoots:
+        - ../libs
+
+docs: |-
+  Collection-level documentation in Markdown.
+```
+
+| Section | Description |
+|---------|-------------|
+| `opencollection` | OpenCollection spec version |
+| `info` | Collection metadata: `name` and optional `version` |
+| `request` | Collection-level defaults: `headers`, `auth`, `variables`, and `scripts` (equivalent to `collection.bru` in the Bru format) |
+| `config` | Collection configuration: `proxy`, `clientCertificates`, and `protobuf` |
+| `extensions.bruno` | Bruno-specific settings: `ignore`, `presets`, and `scripts` (`flow`, `additionalContextRoots`) |
+| `docs` | Collection-level documentation in Markdown |
+
+### Mapping from `bruno.json`
+
+| `bruno.json` field | `opencollection.yml` equivalent |
+|--------------------|--------------------------------|
+| `name` | `info.name` |
+| `version` | `info.version` |
+| `ignore` | `extensions.bruno.ignore` |
+| `presets` | `extensions.bruno.presets` |
+| `scripts.flow` | `extensions.bruno.scripts.flow` |
+| `scripts.additionalContextRoots` | `extensions.bruno.scripts.additionalContextRoots` |
+| `proxy` | `config.proxy` |
+| `clientCertificates` | `config.clientCertificates` |
+| `protobuf` | `config.protobuf` |
+
+<Note>
+The `scripts.moduleWhitelist` and `scripts.filesystemAccess` settings from `bruno.json` have no equivalent in `opencollection.yml`. See [Whitelisting Modules](/testing/script/whitelisting-modules) for how these settings work in the Bru format.
+</Note>
+
+## Environment Files
+
+Environments are stored as `.yml` files in the `environments` folder of the collection (for example, `environments/development.yml`). Each file contains the environment name and its variables.
+
+```yaml
+name: development
+variables:
+  - name: host
+    value: http://localhost:8787
+    description: Base URL for the local server
+  - name: port
+    value:
+      type: number
+      data: "8080"
+  - name: legacyFlag
+    value: "true"
+    disabled: true
+  - secret: true
+    name: apiKey
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `name` | string | The display name of the environment |
+| `variables` | array | The environment's variables |
+
+Each entry in `variables` supports:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `name` | string | The variable name |
+| `value` | string or object | The value. Use an object with `type` (`number`, `boolean`, `object`) and `data` for typed values |
+| `description` | string | Optional description |
+| `disabled` | boolean | Set to `true` to disable the variable |
+| `secret` | boolean | Set to `true` to mark the variable as a secret. Secret values are not written to the file |
