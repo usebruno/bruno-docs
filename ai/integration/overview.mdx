@@ -11,6 +11,12 @@ You can configure Bruno to use any AI agent and editor of your choice.
 
 See [Use cases](./use-cases) for common workflows (generating collections, writing tests, CI/CD) and example prompts you can use with any supported agent.
 
+## MCP (Model Context Protocol)
+
+Bruno doesn't ship an MCP server or MCP client. You don't need one to use Bruno with an AI agent. Collections are plain-text files (`.bru` or [OpenCollection YAML](/opencollection-yaml/overview)) on your filesystem, so agents read and edit them directly. Agents can run requests and tests with the [Bruno CLI](/bru-cli/overview).
+
+For AI features inside the Bruno app, see [Bruno AI](/ai/bruno-ai/introduction).
+
 ## Supported Agents
 
 - [Cursor](https://cursor.com) - AI code editor with powerful automation for API development workflows
