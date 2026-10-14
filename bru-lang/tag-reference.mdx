@@ -176,11 +176,15 @@ body:multipart-form {
   apikey: secret
   @description('''Recipient phone number with country code''')
   numbers: +91998877665
+  @contentType(application/json)
+  metadata: {"tag":"v1"}
   ~message: hello
 }
 ```
 
 Use `@description` before a field to document what it represents. Descriptions are optional.
+
+Use `@contentType(<mime>)` before a field to set the `Content-Type` of that individual multipart part. This is preserved on save, export, and import; a blank or whitespace-only value is not serialized.
 ## body:graphql
 The request body as graphql
 ```bash

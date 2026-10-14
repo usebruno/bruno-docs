@@ -135,6 +135,28 @@ body:
 | `multipart-form` | Multipart form data |
 | `graphql` | GraphQL query |
 
+For `multipart-form`, each entry in `data` can carry a per-part `contentType` that Bruno preserves on import, save, and export:
+
+```yaml
+body:
+  type: multipart-form
+  data:
+    - name: metadata
+      type: text
+      value: '{"tag":"v1"}'
+      contentType: application/json
+    - name: avatar
+      type: file
+      value:
+        - /tmp/me.png
+      contentType: image/png
+    - name: plain
+      type: text
+      value: hello
+```
+
+An empty or whitespace-only `contentType` is omitted from the exported file.
+
 ### http.auth
 
 Authentication configuration. Credentials are specified directly under the `auth` object. Use `inherit` to inherit authentication from the parent folder or collection.
