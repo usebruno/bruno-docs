@@ -125,6 +125,108 @@ Authorization: Bearer YOUR_TOKEN
 }
 ```
 
+### List Users
+
+Retrieve the users in your subscription. Results are returned in pages, ordered by creation date (oldest first).
+
+```http
+GET /Users?startIndex=1&count=100
+Authorization: Bearer YOUR_TOKEN
+```
+
+**Query parameters**
+
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `startIndex` | `1` | 1-based index of the first result to return |
+| `count` | `100` | Number of results per page (maximum `200`) |
+| `filter` | - | SCIM filter expression. See [Filter Users](#filter-users) |
+| `attributes` | - | Comma-separated list of attributes to include in each user |
+| `excludedAttributes` | - | Comma-separated list of attributes to leave out of each user |
+
+<Info>
+By default, only **active** users are returned. To include deactivated users, add a filter on `active`, for example `filter=active eq true or active eq false`.
+</Info>
+
+**Example response**
+
+```json
+{
+  "schemas": ["urn:ietf:params:scim:api:messages:2.0:ListResponse"],
+  "totalResults": 2,
+  "itemsPerPage": 2,
+  "startIndex": 1,
+  "Resources": [
+    {
+      "schemas": ["urn:ietf:params:scim:schemas:core:2.0:User"],
+      "id": "673f2fc148b546efd5bbbbce",
+      "externalId": "emp-12345",
+      "userName": "john.doe@company.com",
+      "name": {
+        "formatted": "John Doe",
+        "givenName": "John",
+        "familyName": "Doe"
+      },
+      "displayName": "John Doe",
+      "active": true,
+      "emails": [{ "value": "john.doe@company.com", "type": "work", "primary": true }],
+      "meta": {
+        "resourceType": "User",
+        "created": "2025-01-07T07:46:38.482Z",
+        "lastModified": "2026-10-13T14:36:16.673Z",
+        "lastSeenAt": "2026-10-13T14:36:16.673Z",
+        "location": "https://license.usebruno.com/scim/v2/Users/673f2fc148b546efd5bbbbce"
+      }
+    },
+    {
+      "schemas": ["urn:ietf:params:scim:schemas:core:2.0:User"],
+      "id": "68e79210a79a31703985d98b",
+      "userName": "jane.smith@company.com",
+      "name": {
+        "formatted": "Jane Smith",
+        "givenName": "Jane",
+        "familyName": "Smith"
+      },
+      "displayName": "Jane Smith",
+      "active": true,
+      "emails": [{ "value": "jane.smith@company.com", "type": "work", "primary": true }],
+      "meta": {
+        "resourceType": "User",
+        "created": "2026-09-07T14:11:40.608Z",
+        "lastModified": "2026-09-07T14:11:40.608Z",
+        "lastSeenAt": null,
+        "location": "https://license.usebruno.com/scim/v2/Users/68e79210a79a31703985d98b"
+      }
+    }
+  ]
+}
+```
+
+To page through all users, increase `startIndex` by `count` on each request until you have retrieved `totalResults` users.
+
+#### Last activity (`meta.lastSeenAt`)
+
+`meta.lastSeenAt` is a Bruno-specific attribute that records the last time the user's Bruno app checked in with the license server, on license activation or a periodic license check. It is the same value shown in the **Last Active** column on the **Users** tab of the license portal. It is `null` if the user has never activated Bruno.
+
+### Filter Users
+
+Use the `filter` parameter to search users. Bruno supports the SCIM operators `eq`, `ne`, `co`, `sw`, `ew`, `pr`, `gt`, `ge`, `lt`, and `le`, combined with `and`, `or`, and `not`.
+
+Filterable attributes: `userName`, `emails.value`, `id`, `externalId`, `active`, `displayName`, `meta.created`, `meta.lastModified`, and `meta.lastSeenAt`.
+
+```http
+# Find a user by email
+GET /Users?filter=userName eq "john.doe@company.com"
+
+# Users who have not been active since July 1, 2026
+GET /Users?filter=meta.lastSeenAt lt "2026-07-01T00:00:00Z"
+
+# Users who have never activated Bruno
+GET /Users?filter=not (meta.lastSeenAt pr)
+```
+
+URL-encode the filter value when sending it from code or the command line.
+
 ### Create a Group
 
 ```http
