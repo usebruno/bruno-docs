@@ -10,6 +10,16 @@ After executing a request, the response panel provides detailed information on t
 
 ![Response Panel](/images/screenshots/send-request/res-data-and-cookie/res-data.webp)
 
+### Unresolved variables
+
+If a request references variables that Bruno can't resolve, the response panel shows an info card listing the unresolved variable names. Bruno checks the request URL, params, headers, body, auth, and variables read in scripts, including nested requests made with `bru.runRequest()`.
+
+- Short lists appear directly in the card. Longer lists appear in a popover.
+- You can copy the variable names or dismiss the card.
+- Bruno clears the card when you send the request again.
+
+The card doesn't appear when every variable resolves.
+
 ### Data Type Selector
 
 Bruno provides a powerful response format selector that allows you to view API responses in different formats, making it easier to inspect and analyze response data. This feature includes both an **Editor** view for viewing formatted code and a **Preview** view for visualizing the response content.
