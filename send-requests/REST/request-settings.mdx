@@ -45,8 +45,22 @@ Sets the timeout duration for the request in milliseconds.
 
 ### URL Encoding
 
-Controls whether URL parameters should be automatically encoded during request execution.
+Controls whether Bruno percent-encodes the request URL before sending it.
 
 **Options:**
-- **Enabled (true)**: Automatically encode URL parameters (default behavior)
-- **Disabled (false)**: Do not encode URL parameters, send raw values
+- **Enabled (true)**: Bruno encodes each path segment and each query parameter name and value. The scheme, host, and port are sent unchanged.
+- **Disabled (false)**: Bruno sends the URL exactly as you entered it.
+
+For example, with URL Encoding enabled, a `:` in the path or in a query value is sent as `%3A`, and a space is sent as `%20`. A `#` is treated as data and sent as `%23`. If your API expects these characters unencoded, disable URL Encoding for that request.
+
+**Default value:**
+- Requests created from the **New Request** dialog have URL Encoding enabled.
+- Requests created from a cURL command have URL Encoding disabled.
+- Requests with no saved `encodeUrl` value are treated as disabled.
+
+URL Encoding is a per-request setting. Bruno has no collection-level or global toggle for it, so set it on each request that needs it. The value is stored in the request file under `settings`:
+
+```yaml
+settings:
+  encodeUrl: false
+```
