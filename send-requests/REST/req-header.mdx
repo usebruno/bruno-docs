@@ -23,7 +23,30 @@ The headers that go on the wire match what this tab shows. Disabled runtime head
 
 Use **Bulk Edit** in the bottom-right of the tab to edit several headers as text.
 
-## Runtime (default) headers
+## Header precedence
+
+Headers resolve using the same inheritance order as other collection settings. When the same header name is defined at more than one level, Bruno uses this precedence:
+
+<div style={{ display: 'flex', justifyContent: 'center', fontFamily: 'sans-serif', marginTop: '2em', width: '100%' }}>
+  <div style={{ display: 'flex', alignItems: 'flex-start', position: 'relative', width: '420px' }}>
+    <div style={{ position: 'absolute', left: '-120px', top: 0, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', fontSize: '0.85em', color: '#555', textAlign: 'right', width: '120px' }}>
+      <div style={{ paddingRight: '10px' }}>↑ Higher Precedence</div>
+      <div style={{ paddingRight: '10px' }}>↓ Broader Scope</div>
+    </div>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '300px' }}>
+      <div style={{ fontWeight: 'bold', backgroundColor: '#e07f00', color: 'white', padding: '8px', width: '200px', borderRadius: '6px' }}>Request Headers</div>
+      <div style={{ marginTop: '6px', backgroundColor: '#e88f1a', color: 'white', padding: '8px', width: '240px', borderRadius: '6px' }}>Nearest Parent Folder Headers</div>
+      <div style={{ marginTop: '6px', backgroundColor: '#f4aa4a', color: 'black', padding: '8px', width: '270px', borderRadius: '6px' }}>Higher-level Folder Headers</div>
+      <div style={{ marginTop: '6px', backgroundColor: '#f8be70', color: 'black', padding: '8px', width: '300px', borderRadius: '6px' }}>Collection Headers</div>
+    </div>
+  </div>
+</div>
+
+- Request headers get the highest precedence.
+- Nested folders inherit from their parent folders; the nearest parent wins over higher-level folders.
+- Collection headers apply most broadly and lose to any folder or request header with the same name.
+
+## Inherit and Runtime (default) headers
 
 Default headers are sent with every request. You can see and disable some default headers in Bruno. `Host` is required by HTTP and cannot be disabled. Its checkbox is disabled.
 
