@@ -53,7 +53,7 @@ When you execute a request and receive a response, you can save it as an example
 
 Once saved, example requests appear as nested items under your main request in the sidebar.
 
-![Response Example](/images/screenshots/send-request/res-data-and-cookie/save-response-example.webp)
+![Response example view with Edit Example and Try](/images/screenshots/send-request/res-data-and-cookie/save-response-example.webp)
 
 ### Example Request Structure
 
@@ -68,7 +68,18 @@ Example requests have a **simplified interface** with only the essential tabs:
 - **Response** - View the saved response data
 - **Headers** - View the response headers received
 
+The example itself stays a saved snapshot. To re-send the request that produced it, use **Try**.
+
+## Try a response example
+
+**Try** button in the example view opens a live copy of the example's request so you can send it without rebuilding body, headers, params, or auth by hand.
+
+1. Open a saved example from the sidebar (nested under its parent request).
+2. In the example top bar, click **Try** (orange play button).
+3. Bruno opens a new **transient** request tab in the same collection, prefilled with the example's method, URL, params, headers, body, and auth.
+4. Review the prefilled request and click **Send** to see a live response.
+
 <Info>
-  Example requests are **read-only** by design. They serve as documentation and reference, not as executable requests.
+  The temporary tab is not written to disk. Opening, editing, or sending it never changes the original request or the saved example.
 </Info>
 
