@@ -28,11 +28,16 @@ You can view and interact with existing OAS files in Bruno using a SwaggerUI-lik
 
 ![create-open-api](/images/screenshots/open-api/create-open-option-spec.webp)
 
-2. Choose a name and location for your specification
+2. In the **Create API Spec** modal, choose a **Source**:
+   - **Blank Spec**: Start from an empty specification.
+   - **From Bruno Collection**: Generate the spec from an existing collection. Select **From workspace** to pick a collection in the current workspace, or **From file system** to browse to a collection folder that contains a `bruno.json` or `opencollection.yml`. If the collection has environments, select the environment whose variables Bruno uses in the spec.
+   - **From Spec URL**: Enter an `http` or `https` URL to a hosted spec. Bruno only accepts OpenAPI 3.x specifications and rejects Swagger 2.0. Bruno saves the file in the format the URL serves, so JSON stays `.json` and YAML stays `.yaml`.
+
+3. Enter a **Name** and **Location** for your specification. Bruno prefills the name from the collection name or the spec title, and prefills the location with the workspace's default API spec folder. Click **Browse** to choose a different folder.
 
 ![location-open-api](/images/screenshots/open-api/create-spec-location-modal.webp)
 
-3. Click on **Create** to generate OAS file.
+4. Click **Create** to generate the OAS file.
 
 ## Editing Your OAS File
 
