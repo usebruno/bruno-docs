@@ -19,6 +19,31 @@ Bruno helps you organize your API requests efficiently by grouping them into fol
 
 Your new folder is now ready to organize your requests!
 
+## Folder tags
+
+Define tags once on a folder and every request inside it inherits them. Use this for suites you already group by folder, such as smoke tests or regression runs, instead of tagging each request by hand.
+
+### Add tags to a folder
+
+1. Select the folder in the sidebar.
+2. Open the **Settings** tab.
+3. In the **Tags** section, type a tag and press Enter. The placeholder shows examples such as `smoke` or `regression`.
+4. Save. Each tag appears as a removable chip.
+
+![Folder Settings tab with Tags input and chips](/images/screenshots/v4/chores/folder-level-tags.webp)
+
+### How folder tags work
+
+- **Inherited by requests** — every request in the folder (and nested folders) picks up the folder's tags.
+- **Combined with request tags** — effective tags for a request are its own tags plus inherited folder tags.
+- **Runner filters** — Collection Runner **Include tags** / **Exclude tags** (and the matching [CLI tag filters](/bru-cli/run/overview#filtering-requests-with-tags)) match on effective tags, so folder tags count the same as request tags.
+- **Visual distinction** — on a request or nested folder, direct tags stay editable as chips; inherited tags show separately (expand **Inherited from parent**) and name the source folder.
+- **Persistence** — tags are stored in the folder config (`folder.bru` or `folder.yml`) and travel with the collection through Git.
+
+Nested folders inherit from their parents the same way. A request two levels down gets tags from every ancestor folder plus its own.
+
+For filtering runs by tags in the app, see [Tag-Based Request Filtering](/testing/automate-test/manual-test#tag-based-request-filtering).
+
 ## Ignore folders
 
 You can hide folders from a collection without deleting them. Ignoring a folder adds it to the collection's ignore config and removes it from the sidebar. This is useful for folders that should stay on disk (for example assets, fixtures, or generated files) but should not appear as part of the runnable collection.

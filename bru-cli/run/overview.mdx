@@ -242,7 +242,7 @@ During the run:
 
 ## Filtering Requests with Tags
 
-Bruno CLI supports filtering requests by tags, allowing you to run only specific subsets of your collection based on tag criteria.
+Bruno CLI supports filtering requests by tags, allowing you to run only specific subsets of your collection based on tag criteria. Filters match each request's **effective tags**: tags set on the request plus tags [inherited from parent folders](/get-started/bruno-basics/create-a-folder#folder-tags).
 
 ### Include Tags
 
@@ -267,6 +267,8 @@ You can combine include and exclude filters:
 ```bash copy
 bru run --tags=smoke,sanity --exclude-tags=skip,draft
 ```
+
+To define tags once for every request in a folder, see [Folder tags](/get-started/bruno-basics/create-a-folder#folder-tags).
 
 ## Parallel Execution and Progress Tracking
 
