@@ -71,7 +71,7 @@ These settings can be found in the OAuth2 configuration panel and provide signif
 
 ## Authentication Inheritance
 
-Once you configure OAuth2 at the collection or folder level, you can inherit the authentication at the request level without duplicating the configuration.
+Once you configure OAuth2 at the collection or folder level, you can inherit the authentication at the request level without duplicating the configuration. The same **Inherit** pattern works for other auth types; see [Inherit auth](/auth/overview#inherit-auth).
 
 ### How to Inherit Authentication
 
@@ -86,7 +86,7 @@ Bruno will automatically determine the source level:
 - **Inherit from Folder**: Uses the folder-level OAuth2 configuration (if available)
 </Warning>
 
-The token will be automatically added to your request according to the inherited configuration.
+The token will be automatically added to your request according to the inherited configuration. On the request Auth tab, Bruno also shows the effective auth read-only and a link to the source's Auth settings so you can confirm or edit without leaving the request. Details and UI: [Inherit auth](/auth/overview#inherit-auth).
 
 ### Inheritance Hierarchy
 

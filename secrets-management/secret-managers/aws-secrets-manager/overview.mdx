@@ -6,7 +6,15 @@ import { BrunoButton } from "/snippets/BrunoButton.jsx";
 
 [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/) is a secure and scalable service designed to store and retrieve sensitive information such as API keys, database credentials, and other secrets. 
 
-Bruno allows you to easily integrate with AWS Secrets Manager and securely access secrets during test execution without exposing them in test scripts or environment variables. 
+Bruno allows you to easily integrate with AWS Secrets Manager and securely access secrets during test execution without exposing them in test scripts or environment variables.
+
+<Info>
+  **How Bruno keeps AWS secrets safe**
+
+  - Secret values are **never written to disk** — only provider config and secret identifiers are saved.
+  - Secrets are fetched **on demand** into a per-environment, in-memory cache for the active session.
+  - The cache clears when you close the app or collection. Reopen Bruno and it will fetch secrets on demand.
+</Info>
 
 ## Try it out
 
