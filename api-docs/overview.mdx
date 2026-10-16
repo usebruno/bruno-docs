@@ -3,7 +3,7 @@ title: "API Documentation in Bruno"
 sidebarTitle: "Overview"
 ---
 
-Bruno has two distinct documentation features, and it helps to know which one you're looking for:
+Bruno has three distinct documentation features, and it helps to know which one you're looking for:
 
 <CardGroup cols={2}>
   <Card
@@ -19,6 +19,13 @@ Bruno has two distinct documentation features, and it helps to know which one yo
     href="/html-docs/overview"
   >
     Have Bruno build a standalone, interactive HTML documentation site from a collection — with a live playground, search, and code samples — that you can deploy anywhere.
+  </Card>
+  <Card
+    title="Serve Docs from Your App"
+    icon="server"
+    href="/integrations/overview"
+  >
+    Mount the same documentation on a route in your own Express, Fastify, or NestJS app, behind the authentication you already have.
   </Card>
 </CardGroup>
 
@@ -63,3 +70,9 @@ This lets non-technical teammates author documentation without writing raw Markd
 Bruno can automatically generate a standalone HTML documentation file for your entire collection — an interactive site with an environment switcher, full-text search, a try-it playground, and auto-generated code samples.
 
 [Learn about generated HTML docs](/html-docs/overview)
+
+## Serve Docs from Your App
+
+If your collection lives in the same repository as your service, you can serve it as documentation from your own application instead of publishing a separate file. Install a package, point it at the collection folder, and your app gains a `/docs` route that deploys with the server and sits behind your existing authentication.
+
+[Learn about integrations](/integrations/overview)

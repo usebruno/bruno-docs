@@ -1,0 +1,111 @@
+---
+title: "Configuration"
+sidebarTitle: "Configuration"
+---
+
+You configure docs the same way whether you mount them from Express, Fastify, NestJS, or load them in the browser with a script tag. Tell Bruno **where your collection comes from** using one of these options:
+
+- `collectionPath` — a folder or YAML file on disk next to your app
+- `url` — a public `https://` link to a hosted YAML file
+- `content` — the collection document already in memory
+
+Pick **one**. If you set more than one, Bruno uses this order:
+
+```text
+content  >  collectionPath  >  url
+```
+
+## Options
+
+| Key | Type | Default | Read by | Description |
+| --- | ---- | ------- | ------- | ----------- |
+| `collectionPath` | `string` | one source required | server & client | Local path to a collection folder or a bundled `opencollection.yml`. Collection folders are not supported on the client. |
+| `url` | `string` | one source required | server & client | Absolute `https://` URL of a hosted, bundled `opencollection.yml` (or `.yml`) file |
+| `content` | `object` or `string` | one source required | server & client | The document itself, as an object or a raw YAML/JSON string |
+| `environments` | `{ include?: string[], exclude?: string[] }` or `'*'` | none | server & client | Filter environments by name, or `'*'` for all. Shaped on the server; hidden on the client |
+| `tags` | `{ include?: string[], exclude?: string[] }` or `'*'` | `'*'` | server & client | Filter requests by tags, or `'*'` for all. Shaped on the server; hidden on the client |
+| `route` | `string` | `/docs` | server | Mount route |
+| `logo` | `string` | none | client | Logo in the docs header, as a URL or data URI |
+| `repositoryUrl` | `string` | none | client | Git URL behind the **Open in Bruno** button |
+| `theme` | `string` | `light` | client | Default theme |
+| `pageTitle` | `string` | `API Documentation` | client | Browser tab title |
+
+## Choosing a source
+
+### `collectionPath` — local folder or file
+
+Use this on the server when the collection lives next to your app:
+
+```js
+apiDocs({
+  collectionPath: './collection'
+})
+```
+
+Or point at a single bundled file:
+
+```js
+apiDocs({
+  collectionPath: './opencollection.yml'
+})
+```
+
+Collection folders are not supported in the browser. For [HTML / JS](/integrations/html), use `url` or `content` instead.
+
+### `url` — hosted YAML over HTTPS
+
+Use `url` when the collection document is already published as a public YAML file. Pass a full `https://` URL to that hosted file (not a collection folder):
+
+```js
+apiDocs({
+  url: 'https://cdn.example.com/docs/opencollection.yml'
+})
+```
+
+```js
+new Bruno.apiDocs('#bruno-api-docs', {
+  url: 'https://raw.githubusercontent.com/acme/payments/main/opencollection.yml'
+})
+```
+
+Relative paths like `/docs/collection.yml` only work when your own app already serves that file. Prefer an absolute `https://` URL when the file is hosted elsewhere.
+
+### `content` — inline document
+
+Pass the assembled document when you already have it in memory:
+
+```js
+apiDocs({
+  content: collectionObject
+})
+```
+
+## Complete example
+
+```js
+apiDocs({
+  collectionPath: './collection',
+  route: '/docs',
+  environments: { include: ['production'] },
+  tags: { include: ['public'] },
+  theme: 'dark',
+  pageTitle: 'Payments API',
+  logo: '/logo.svg',
+  repositoryUrl: 'https://github.com/acme/payment-service'
+})
+```
+
+## Filtering
+
+On the server, filters are applied before the document is sent. An excluded environment's values and an excluded request's auth details are never written into the response.
+
+- **Environments are opt-in.** If you do not set `environments`, none are published. Use `'*'` for all, or name the ones you want.
+- **Exclusion wins.** If a request matches both an include tag and an exclude tag, it is left out.
+
+<Warning>
+  Treat the published document as public to anyone who can reach the route. If an environment holds production credentials, do not include it.
+</Warning>
+
+## Feedback
+
+Integrations are in beta. For bugs, questions, or feature requests, open an issue on [usebruno/bruno-api-docs](https://github.com/usebruno/bruno-api-docs).
