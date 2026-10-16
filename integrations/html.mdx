@@ -10,14 +10,19 @@ This is the right choice when you are serving a static site, embedding docs in a
 ## Add the renderer to a page
 
 ```html
-<div id="bruno-api-docs"></div>
-<script src="https://cdn.usebruno.com/api-docs/api-docs.js"></script>
-<script>
-  new Bruno.apiDocs('#bruno-api-docs', {
-    url: '/docs/collection.yml',
-    theme: 'dark'
-  })
-</script>
+<head>
+  <link rel="stylesheet" href="https://cdn.usebruno.com/api-docs/api-docs.css">
+  <script src="https://cdn.usebruno.com/api-docs/api-docs.js"></script>
+</head>
+<body>
+  <div id="bruno-api-docs"></div>
+  <script>
+    new Bruno.apiDocs('#bruno-api-docs', {
+      url: 'https://cdn.example.com/docs/opencollection.yml',
+      theme: 'dark'
+    })
+  </script>
+</body>
 ```
 
 Three things are happening:
@@ -28,13 +33,15 @@ Three things are happening:
 
 ## Pointing at your collection
 
-The renderer needs the collection document, either fetched from a URL or handed over directly.
+The renderer needs the collection document, either fetched from a URL or handed over directly. Collection folders (`collectionPath`) are not supported in the browser; use a bundled `opencollection.yml` URL or inline `content`.
+
+Source precedence when more than one is set: `content` > `collectionPath` > `url`.
 
 <CodeGroup>
 
-```js Fetch from a URL
+```js Hosted YAML over HTTPS
 new Bruno.apiDocs('#bruno-api-docs', {
-  url: '/docs/collection.yml'
+  url: 'https://cdn.example.com/docs/opencollection.yml'
 })
 ```
 
@@ -46,7 +53,7 @@ new Bruno.apiDocs('#bruno-api-docs', {
 
 </CodeGroup>
 
-Use `url` when the file is served alongside your page, and `content` when your page already has the document, for example from a build step that inlined it.
+Use `url` with a full `https://` link to a hosted, bundled YAML file. Use `content` when your page already has the document, for example from a build step that inlined it. See [Configuration](/integrations/configuration) for every option.
 
 <Warning>
   With this approach the whole document reaches the browser. Filtering out environments and requests happens on the server, so publish a document that is already safe to hand over. The [framework packages](/integrations/overview#filtering-is-deletion-not-hiding) do that filtering for you.
@@ -54,20 +61,18 @@ Use `url` when the file is served alongside your page, and `content` when your p
 
 ## Options
 
-| Option              | Type      | Default             | Description                                        |
-| ------------------- | --------- | ------------------- | -------------------------------------------------- |
-| `url`               | `string`  | none                | Fetch the collection document from here            |
-| `content`           | `object` or `string` | none     | The document itself, as an object or YAML/JSON text |
-| `theme`             | `string`  | `light`             | Default theme                                      |
-| `pageTitle`         | `string`  | `API Documentation` | Browser tab title                                  |
-| `logo`              | `string`  | none                | Logo in the docs header, as a URL or data URI      |
-| `favicon`           | `string`  | none                | Tab favicon                                        |
-| `gitCollectionUrl`  | `string`  | none                | Repository URL behind the **Open in Bruno** button |
-| `showThemeSwitcher` | `boolean` | `true`              | Show or hide the theme switcher                    |
-| `customCss`         | `string`  | none                | Stylesheet that overrides the default styles       |
-| `proxyUrl`          | `string`  | none                | CORS proxy for playground requests                 |
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| `url` | `string` | one source required | Absolute `https://` URL of a hosted, bundled `opencollection.yml` |
+| `content` | `object` or `string` | one source required | The document itself, as an object or YAML/JSON text |
+| `environments` | `{ include?: string[], exclude?: string[] }` or `'*'` | none | Filter environments by name, or `'*'` for all (hiding in the client) |
+| `tags` | `{ include?: string[], exclude?: string[] }` or `'*'` | `'*'` | Filter requests by tags, or `'*'` for all (hiding in the client) |
+| `theme` | `string` | `light` | Default theme |
+| `pageTitle` | `string` | `API Documentation` | Browser tab title |
+| `logo` | `string` | none | Logo in the docs header, as a URL or data URI |
+| `repositoryUrl` | `string` | none | Git URL behind the **Open in Bruno** button |
 
-Exactly one source is required. Providing neither `url` nor `content`, or both, is an error.
+Tell Bruno where the collection comes from with either `url` (a public `https://` YAML file) or `content` (the document already in the page). Use one of them, not both.
 
 ## Full example
 
@@ -77,6 +82,7 @@ Exactly one source is required. Providing neither `url` nor `content`, or both, 
   <head>
     <meta charset="utf-8" />
     <title>Payments API</title>
+    <link rel="stylesheet" href="https://cdn.usebruno.com/api-docs/api-docs.css">
   </head>
   <body>
     <div id="bruno-api-docs"></div>
@@ -84,10 +90,10 @@ Exactly one source is required. Providing neither `url` nor `content`, or both, 
     <script src="https://cdn.usebruno.com/api-docs/api-docs.js"></script>
     <script>
       new Bruno.apiDocs('#bruno-api-docs', {
-        url: '/collection.yml',
+        url: 'https://cdn.example.com/docs/opencollection.yml',
         pageTitle: 'Payments API',
         logo: '/logo.svg',
-        gitCollectionUrl: 'https://github.com/acme/payments-collection'
+        repositoryUrl: 'https://github.com/acme/payments-collection'
       })
     </script>
   </body>
@@ -105,4 +111,9 @@ The renderer routes with the URL hash, so any page inside the docs can be linked
 ## Next steps
 
 - Serve the docs from your app instead, with [Express](/integrations/express), [Fastify](/integrations/fastify), or [NestJS](/integrations/nestjs)
+- Runnable samples: [Examples](/integrations/examples)
 - Build a single self-contained HTML file with [Generate Docs](/html-docs/generate) if you would rather not wire anything up
+
+## Feedback
+
+For bugs or feature requests, open an issue on [usebruno/bruno-api-docs](https://github.com/usebruno/bruno-api-docs).

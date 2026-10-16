@@ -14,7 +14,7 @@ orders-service/
 ├── src/
 │   └── app.js
 ├── collection/
-│   ├── collection.yml
+│   ├── opencollection.yml
 │   ├── List Orders.yml
 │   ├── Create Order.yml
 │   └── environments/
@@ -42,12 +42,12 @@ npm install @usebruno/api-docs-fastify
 
 ```js
 import Fastify from 'fastify'
-import apiDocs from '@usebruno/api-docs-fastify'
+import { apiDocs } from '@usebruno/api-docs-fastify'
 
 const app = Fastify()
 
 await app.register(apiDocs, {
-  url: './collection'
+  collectionPath: './collection'
 })
 
 await app.listen({ port: 3000 })
@@ -55,7 +55,7 @@ await app.listen({ port: 3000 })
 
 Start the app and open `http://localhost:3000/docs`.
 
-The path in `url` is resolved relative to your app entry file, not the working directory. It can point at a collection folder or at a single bundled `collection.yml`, in either the `.bru` or OpenCollection `.yml` format.
+The path in `collectionPath` is resolved relative to your app entry file, not the working directory. It can point at a collection folder or at a single bundled `opencollection.yml`, in either the `.bru` or OpenCollection `.yml` format.
 
 ## Change the route
 
@@ -65,13 +65,13 @@ Use Fastify's own `prefix`, or set `route` in the options:
 
 ```js Fastify prefix
 await app.register(apiDocs, {
-  url: './collection'
+  collectionPath: './collection'
 }, { prefix: '/api-reference' })
 ```
 
 ```js route option
 await app.register(apiDocs, {
-  url: './collection',
+  collectionPath: './collection',
   route: '/api-reference'
 })
 ```
@@ -80,11 +80,11 @@ await app.register(apiDocs, {
 
 ## Choose what gets published
 
-By default no environments are published and every request is included:
+By default no environments are published and every request is included (`tags` defaults to `'*'`):
 
 ```js
 await app.register(apiDocs, {
-  url: './collection',
+  collectionPath: './collection',
   environments: { include: ['production'] },
   tags: { include: ['public'], exclude: ['internal'] }
 })
@@ -94,22 +94,18 @@ Filtering happens on the server, so excluded environments and requests are absen
 
 ## Customize the page
 
-Presentation options go under `ui` and are passed straight to the renderer:
-
 ```js
 await app.register(apiDocs, {
-  url: './collection',
+  collectionPath: './collection',
   environments: '*',
-  ui: {
-    theme: 'dark',
-    pageTitle: 'Orders API',
-    logo: '/logo.svg',
-    gitCollectionUrl: 'https://github.com/acme/orders-service'
-  }
+  theme: 'dark',
+  pageTitle: 'Orders API',
+  logo: '/logo.svg',
+  repositoryUrl: 'https://github.com/acme/orders-service'
 })
 ```
 
-See the [configuration reference](/integrations/overview#configuration) for every option.
+See the [configuration reference](/integrations/configuration) for every option. For runnable samples, see [Examples](/integrations/examples).
 
 ## Put the docs behind your auth
 
@@ -120,7 +116,7 @@ await app.register(async (scope) => {
   scope.addHook('onRequest', requireLogin)
 
   await scope.register(apiDocs, {
-    url: './collection',
+    collectionPath: './collection',
     environments: { include: ['staging'] }
   })
 })
@@ -145,5 +141,10 @@ Navigation inside the docs uses the URL hash, so `/docs/#/catalog/list-products`
 ## Next steps
 
 - [Express](/integrations/express) and [NestJS](/integrations/nestjs) integrations
+- [Examples](/integrations/examples) — runnable samples from the [bruno-api-docs](https://github.com/usebruno/bruno-api-docs/tree/main/examples/integrations/nodejs/fastify) repo
 - [Generate a standalone HTML file](/html-docs/generate) from the same collection with **Generate Docs**
 - [Write better docs](/api-docs/overview) at the collection, folder, and request level so the published page has real descriptions
+
+## Feedback
+
+For bugs or feature requests, open an issue on [usebruno/bruno-api-docs](https://github.com/usebruno/bruno-api-docs).

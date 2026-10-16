@@ -15,7 +15,7 @@ billing-service/
 │   ├── app.module.ts
 │   └── billing/
 ├── collection/
-│   ├── collection.yml
+│   ├── opencollection.yml
 │   ├── Create Invoice.yml
 │   ├── Void Invoice.yml
 │   └── environments/
@@ -48,7 +48,7 @@ import { ApiDocsModule } from '@usebruno/api-docs-nestjs'
 @Module({
   imports: [
     ApiDocsModule.forRoot({
-      url: './collection'
+      collectionPath: './collection'
     })
   ]
 })
@@ -57,7 +57,7 @@ export class AppModule {}
 
 Start the app and open `http://localhost:3000/docs`.
 
-The path in `url` is resolved relative to your app entry file, not the working directory. It can point at a collection folder or at a single bundled `collection.yml`, in either the `.bru` or OpenCollection `.yml` format.
+The path in `collectionPath` is resolved relative to your app entry file, not the working directory. It can point at a collection folder or at a single bundled `opencollection.yml`, in either the `.bru` or OpenCollection `.yml` format.
 
 ## Change the route
 
@@ -65,18 +65,18 @@ Nest does not let a module be mounted from outside, so the route is set in the o
 
 ```ts
 ApiDocsModule.forRoot({
-  url: './collection',
+  collectionPath: './collection',
   route: '/api-reference'
 })
 ```
 
 ## Choose what gets published
 
-By default no environments are published and every request is included:
+By default no environments are published and every request is included (`tags` defaults to `'*'`):
 
 ```ts
 ApiDocsModule.forRoot({
-  url: './collection',
+  collectionPath: './collection',
   environments: { include: ['production'] },
   tags: { include: ['public'], exclude: ['internal'] }
 })
@@ -86,22 +86,18 @@ Filtering happens on the server, so excluded environments and requests are absen
 
 ## Customize the page
 
-Presentation options go under `ui` and are passed straight to the renderer:
-
 ```ts
 ApiDocsModule.forRoot({
-  url: './collection',
+  collectionPath: './collection',
   environments: '*',
-  ui: {
-    theme: 'dark',
-    pageTitle: 'Billing API',
-    logo: '/logo.svg',
-    gitCollectionUrl: 'https://github.com/acme/billing-service'
-  }
+  theme: 'dark',
+  pageTitle: 'Billing API',
+  logo: '/logo.svg',
+  repositoryUrl: 'https://github.com/acme/billing-service'
 })
 ```
 
-See the [configuration reference](/integrations/overview#configuration) for every option.
+See the [configuration reference](/integrations/configuration) for every option. For runnable samples, see [Examples](/integrations/examples).
 
 ## Put the docs behind your auth
 
@@ -115,7 +111,7 @@ import { AuthMiddleware } from './auth.middleware'
 @Module({
   imports: [
     ApiDocsModule.forRoot({
-      url: './collection',
+      collectionPath: './collection',
       environments: { include: ['staging'] }
     })
   ]
@@ -144,5 +140,10 @@ Navigation inside the docs uses the URL hash, so `/docs/#/catalog/list-products`
 ## Next steps
 
 - [Express](/integrations/express) and [Fastify](/integrations/fastify) integrations
+- [Examples](/integrations/examples) — runnable samples from the [bruno-api-docs](https://github.com/usebruno/bruno-api-docs/tree/main/examples/integrations/nodejs/nestjs) repo
 - [Generate a standalone HTML file](/html-docs/generate) from the same collection with **Generate Docs**
 - [Write better docs](/api-docs/overview) at the collection, folder, and request level so the published page has real descriptions
+
+## Feedback
+
+For bugs or feature requests, open an issue on [usebruno/bruno-api-docs](https://github.com/usebruno/bruno-api-docs).

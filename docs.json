@@ -432,6 +432,8 @@
                 "tag": "Beta",
                 "pages": [
                   "integrations/overview",
+                  "integrations/configuration",
+                  "integrations/examples",
                   "integrations/html",
                   "integrations/express",
                   "integrations/fastify",

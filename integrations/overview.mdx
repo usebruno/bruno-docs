@@ -16,25 +16,8 @@ myapp.com/docs         → your Bruno API docs
 The docs run in the same process as your API, behind the same authentication, and ship with the same deployment.
 
 <Info>
-  Integrations are in **beta**. Express, Fastify, and NestJS are supported today, with FastAPI and Django planned. Option names may still change before the stable release.
+  Integrations are in **beta**. Express, Fastify, and NestJS are supported. Both `.bru` and OpenCollection `.yml` formats are supported.
 </Info>
-
-## Why serve docs from your app
-
-<CardGroup cols={2}>
-  <Card title="One source of truth" icon="folder-tree">
-    The collection you already test with becomes the documentation. There is no second system to update when an endpoint changes.
-  </Card>
-  <Card title="Private docs behind your login" icon="lock">
-    The docs route sits inside your app, so whatever protects your API also protects your documentation.
-  </Card>
-  <Card title="Deploys with your server" icon="rocket">
-    No separate docs build or hosting step. Ship the app and the docs go with it.
-  </Card>
-  <Card title="Always in sync" icon="arrows-rotate">
-    The collection is read at startup, so every deployment publishes the collection as it exists in that commit.
-  </Card>
-</CardGroup>
 
 ### The collection already lives with your code
 
@@ -55,34 +38,16 @@ payment-service/
 └── package.json
 ```
 
-The collection is reviewed in the same pull requests as the code and versioned in the same commits. Serving it as documentation turns that existing artifact into a published API reference:
+The collection is reviewed in the same pull requests as the code and versioned in the same commits. Serving it as documentation turns that existing artifact into a published API reference.
 
-```text
-collection/  →  your app  →  /docs  →  API documentation
-```
+Every server package emits a host page like this:
 
-Both collection formats are supported: the `.bru` format and the OpenCollection `.yml` format.
-
-## How it works
-
-There are two pieces.
-
-**The server package** runs inside your app. It reads the collection from disk once at startup, applies your environment and tag filters, and serves the finished document along with a small HTML page.
-
-**The docs renderer** runs in the browser. It is loaded from Bruno's CDN and draws the documentation, including search, the environment switcher, and the interactive playground.
-
-```text
-SERVER SIDE                          BROWSER SIDE
-
-collection/
-    ↓
-Express / Fastify / NestJS
-    ↓
-filter + assemble document
-    ↓
-serve /docs  ─────────────────────→  Bruno docs renderer
-                                          ↓
-                                     API documentation
+```html
+<div id="bruno-api-docs"></div>
+<script src="https://cdn.usebruno.com/api-docs/api-docs.js"></script>
+<script>
+  new Bruno.apiDocs('#bruno-api-docs', { url: './collection.yml' })
+</script>
 ```
 
 Because the renderer is loaded from the CDN, the server package stays small and readers need network access to `cdn.usebruno.com`.
@@ -94,78 +59,28 @@ Because the renderer is loaded from the CDN, the server package stays small and 
     `app.use('/docs', apiDocs({ ... }))`
   </Card>
   <Card title="Fastify" icon="bolt" href="/integrations/fastify">
-    `app.register(apiDocs, { ... })`
+    `await app.register(apiDocs, { ... })`
   </Card>
   <Card title="NestJS" icon="cubes" href="/integrations/nestjs">
     `ApiDocsModule.forRoot({ ... })`
   </Card>
   <Card title="HTML / JavaScript" icon="code" href="/integrations/html">
-    Drop the renderer into any page with a script tag.
+    `new Bruno.apiDocs('#bruno-api-docs', { ... })`
   </Card>
 </CardGroup>
 
-## Configuration
+## Packages
 
-Every framework package accepts the same options object. The options fall into two groups, and the difference matters.
+| Package | npm | Import |
+| ------- | --- | ------ |
+| [Express](/integrations/express) | [`@usebruno/api-docs-express`](https://www.npmjs.com/package/@usebruno/api-docs-express) | `import { apiDocs } from '@usebruno/api-docs-express'` |
+| [Fastify](/integrations/fastify) | [`@usebruno/api-docs-fastify`](https://www.npmjs.com/package/@usebruno/api-docs-fastify) | `import { apiDocs } from '@usebruno/api-docs-fastify'` |
+| [NestJS](/integrations/nestjs) | [`@usebruno/api-docs-nestjs`](https://www.npmjs.com/package/@usebruno/api-docs-nestjs) | `import { ApiDocsModule } from '@usebruno/api-docs-nestjs'` |
 
-### Server options
+## Configuration and examples
 
-These decide **what data leaves your server**.
-
-| Option         | Type                                       | Default  | Description                                                                                               |
-| -------------- | ------------------------------------------ | -------- | --------------------------------------------------------------------------------------------------------- |
-| `url`          | `string`                                   | required | Path to the collection folder or to a single bundled `collection.yml`, resolved relative to your app entry file |
-| `route`        | `string`                                   | `/docs`  | Where the documentation is mounted                                                                        |
-| `environments` | `{ include?: string[], exclude?: string[] }` or `'*'` | none     | Which environments are published. Absent means none; `'*'` means all                                      |
-| `tags`         | `{ include?: string[], exclude?: string[] }` | none     | Which requests are published, matched against request tags                                                |
-
-### UI options
-
-These decide **how the documentation looks**. They are passed through to the renderer under the `ui` key and never affect what data is sent.
-
-| Option              | Type      | Default             | Description                                              |
-| ------------------- | --------- | ------------------- | -------------------------------------------------------- |
-| `theme`             | `string`  | `light`             | Default theme                                            |
-| `pageTitle`         | `string`  | `API Documentation` | Browser tab title                                        |
-| `logo`              | `string`  | none                | Logo in the docs header, as a URL or data URI            |
-| `favicon`           | `string`  | none                | Tab favicon                                              |
-| `gitCollectionUrl`  | `string`  | none                | Repository URL behind the **Open in Bruno** button       |
-| `showThemeSwitcher` | `boolean` | `true`              | Show or hide the theme switcher                          |
-| `customCss`         | `string`  | none                | Stylesheet that overrides the default styles             |
-| `proxyUrl`          | `string`  | none                | CORS proxy for playground requests                       |
-
-A complete example:
-
-```js
-apiDocs({
-  url: './collection',
-  route: '/docs',
-  environments: { include: ['production'] },
-  tags: { include: ['public'] },
-  ui: {
-    theme: 'dark',
-    pageTitle: 'Payments API',
-    logo: '/logo.svg'
-  }
-})
-```
-
-## Filtering is deletion, not hiding
-
-Filters are applied on the server, before the document is sent. An excluded environment's values and an excluded request's auth details are never written into the response at all, so a reader cannot recover them from the page source.
-
-```text
-collection → server filters → only published content → browser
-```
-
-Two rules are worth remembering:
-
-- **Environments are opt-in.** If you do not set `environments`, none are published. Use `'*'` for all, or name the ones you want.
-- **Exclusion wins.** If a request matches both an include tag and an exclude tag, it is left out.
-
-<Warning>
-  Treat the published document as public to anyone who can reach the route. If an environment holds production credentials, do not include it.
-</Warning>
+- [Configuration](/integrations/configuration) — every option, including `collectionPath`, hosted `https://` YAML via `url`, and filters
+- [Examples](/integrations/examples) — runnable samples from [bruno-api-docs/examples](https://github.com/usebruno/bruno-api-docs/tree/main/examples)
 
 ## A broken setup will not take down your app
 
@@ -182,3 +97,7 @@ If you do not want the docs inside your app, Bruno can build a single self-conta
 - [Deploy and share the file](/html-docs/deploy)
 
 Both paths render the same documentation from the same collection. Use an integration when the docs should live with the app and follow its authentication, and use the generated file when you want something you can hand over or host separately.
+
+## Feedback
+
+Integrations are developed in [usebruno/bruno-api-docs](https://github.com/usebruno/bruno-api-docs). For bugs, questions, or feature requests, [open an issue](https://github.com/usebruno/bruno-api-docs/issues) on that repository.
