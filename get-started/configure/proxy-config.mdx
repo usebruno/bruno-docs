@@ -111,3 +111,37 @@ Below are instructions on proxy settings at the collection level:
 3. Choose **inherit, enabled, or disabled**.
 4. Enter the **Hostname, Port, Protocol, Username, and Password** if needed.
 5. Click **Save** to apply the settings.
+
+## 8. Testing an API From Another Country
+
+Some APIs answer differently depending on the country the request comes from. They may redirect to a country-specific site, return content in another language, or show regional prices. To reproduce this from your own machine, send the request through a proxy in that country, then send it again without the proxy and compare the two responses.
+
+You need an HTTP proxy with an exit in the country you want to test.
+
+### Steps
+
+1. Open the collection settings and go to the **Proxy** tab.
+2. Set the mode to **Enabled**, choose the **HTTP** protocol, and enter the proxy's **Hostname** and **Port**. Fill in the username and password if the proxy needs them. Click **Save**.
+3. Send the request and note the response: status code, headers, body, and any redirect.
+4. Go back to the **Proxy** tab, set the mode to **Disabled**, and click **Save**. This turns off the proxy for the collection, including one inherited from Preferences. It does not affect a VPN or proxy configured outside Bruno.
+5. Send the same request again without changing anything else, and compare the two responses.
+
+If the responses differ, check that nothing else changed between the two requests, such as cookies, cached data, or redirect handling. When you are done, set the collection proxy back to the mode it was in before.
+
+<Tip>
+To check that requests go through the proxy, send a request to a service that returns your public IP address. With the proxy enabled, it returns the proxy's address instead of your own.
+</Tip>
+
+### Using Shellroute as the proxy
+
+[Shellroute](https://shellroute.com/docs/quickstart/) is an open-source command-line tool that runs a proxy on your machine and routes its traffic through an IP address in a country you choose. Install it, sign in with `shellroute login`, then start a proxy in a terminal:
+
+```bash
+shellroute proxy --country DE
+```
+
+Replace `DE` with the two-letter code of the country you want. You can also add a city, for example `--city Berlin`. The command prints the proxy address as `proxy_url`, for example `http://127.0.0.1:41900`. In Bruno, enter `127.0.0.1` as the **Hostname** and `41900` as the **Port**, or the values your output shows. No username or password is needed.
+
+Keep the terminal open while you test. When you are done, press **Ctrl+C** to stop the proxy.
+
+Any other HTTP proxy with an exit in the country you want works the same way.
