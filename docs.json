@@ -1443,6 +1443,13 @@
     "default": "system",
     "strict": false
   },
+  "navbar": {
+    "primary": {
+      "type": "button",
+      "label": "Download",
+      "href": "https://www.usebruno.com/downloads"
+    }
+  },
   "search": {
     "prompt": "Search documentation..."
   },

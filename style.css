@@ -357,11 +357,14 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
        (the old tab-row hairline is dropped with the row itself).
      - Search is pushed to the right end of the bar: the Algolia "Ask AI"
        and search triggers (see "Site search" below), icon-only below
-       1420px and fully labelled from 1520px; search opens the centred
+       1536px and fully labelled from 1640px; search opens the centred
        modal, Ask AI the assistant side panel. The old header
        links (API Reference, Blog, ...) are gone from docs.json's navbar
-       block — they could never share 1440px with the labelled clusters; a
-       Download button takes that corner later. */
+       block — they could never share 1440px with the labelled clusters.
+       The corner's only other occupant is the Download CTA
+       (docs.json `navbar.primary`, Mintlify's #topbar-cta-button), which
+       stays in flow at the row's end; the search corner is pinned to
+       its left by --bru-corner-right (see "Download CTA" below). */
   #navbar div:has(> div.nav-tabs) {
     position: absolute;
     top: 0;
@@ -409,12 +412,19 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
      z-20 div around it) is a flex sibling squeezed between two flex-1
      containers, so flex/margin games position it unpredictably — instead
      it is pulled out of the flex flow and pinned to the bar's right,
-     clear of the theme toggle at the row's end. Wide bars get a real
-     field with placeholder; below 1450px — where wordmark + clusters + a
+     clear of the theme toggle at the row's end — and of the Download
+     CTA when docs.json has one: --bru-corner-right is the distance from
+     the rail's right edge to the corner's right edge, 3.25rem for the
+     toggle alone, widened by the "Download CTA" block below when
+     #topbar-cta-button is rendered. Wide bars get a real field with
+     placeholder; below 1578px — where wordmark + clusters + CTA + a
      field can't coexist — it compresses to icon + shortcut. */
+  #navbar {
+    --bru-corner-right: 3.25rem;
+  }
   #navbar div[class*="z-20"]:has(#search-bar-entry) {
     position: absolute;
-    right: 3.25rem;
+    right: var(--bru-corner-right);
     top: 50%;
     transform: translateY(-50%);
   }
@@ -427,19 +437,20 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
      The corner compacts in tiers so it always clears the tab row, which
      ends at ~1075px on the hosted renderer (~1059px in dev — its fonts
      rasterize the row a hair narrower; the hosted number is the one the
-     tiers are sized against): under 1536px the assistant drops its
-     label (icon stays clickable) — labelled, field + assistant put the
-     wrapper's left edge at the row's end near 1527px, so 1536 keeps
-     ~22px of air; under 1450px the search field drops to icon + ⌘K;
-     under 1280px the ⌘K hint goes too, leaving two icon buttons whose
-     left edge clears the row by ~29px at this block's 1250px floor
-     (icon + ⌘K alone would land 1px from the row at exactly 1250). */
-  @media (max-width: 1535.98px) {
+     tiers are sized against): under 1664px the assistant drops its
+     label (icon stays clickable); under 1578px the search field drops
+     to icon + ⌘K; under 1408px the ⌘K hint goes too, leaving two icon
+     buttons. Each tier sits 8rem (128px) above where it was before the
+     Download CTA joined the corner: that is the labelled CTA (7.25rem)
+     plus its 0.5rem gap; the icon-only CTA under 1380px and the gap
+     squeeze under 1280px (both in the "Download CTA" block) keep the two
+     icon buttons clear of the row at the 1250px floor. */
+  @media (max-width: 1663.98px) {
     #assistant-entry span {
       display: none;
     }
   }
-  @media (max-width: 1449.98px) {
+  @media (max-width: 1577.98px) {
     #search-bar-entry {
       width: auto;
     }
@@ -447,7 +458,7 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
       display: none;
     }
   }
-  @media (max-width: 1279.98px) {
+  @media (max-width: 1407.98px) {
     #search-bar-entry span {
       display: none;
     }
@@ -463,7 +474,7 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
      clears the z-20 wrapper and the tab-row overlay. */
   #navbar #bru-search-tools {
     position: absolute;
-    right: 3.25rem;
+    right: var(--bru-corner-right);
     top: 0;
     bottom: 0;
     z-index: 21;
@@ -826,18 +837,25 @@ div.fixed.inset-0.z-40 [role="dialog"] {
    Trigger layout. The tab row is left-anchored and its last pill ends at
    ~1092px at every width from 1250px up, so the corner's budget is simply
    the viewport minus ~1108px (16px clearance); the tiers below keep the
-   two triggers inside it:
+   two triggers inside it, next to the Download CTA (see "Download CTA"
+   below: 7.25rem labelled, a 2.25rem icon square under 1380px, plus a
+   0.5rem gap, 3rem to the rail edge past it):
    - >= 1250px (single-bar desktop layout): #bru-search-tools is pinned to
-     the bar's right end (rule in the nav block above).
+     the bar's right end, left of the CTA (rule in the nav block above,
+     offset --bru-corner-right).
    - Otherwise: in flow at the end of the rail row (it is the row's last
-     child), where Mintlify's mobile search icon sat.
-   - < 1420px: both triggers are icon-only squares (the search widget's
+     child), where Mintlify's mobile search icon sat — the CTA, in flow
+     too, sits to its left from 1024px (Mintlify's lg).
+   - < 1536px: both triggers are icon-only squares (the search widget's
      opt-in iconOnlyTrigger look); Mintlify's own field compressed here
-     too. Corner width: 36 + 8 + 36 (+ 52 + 16 to the edge) = 148px.
-   - >= 1420px: the search trigger becomes the field Mintlify's was — icon,
-     "Search", ⌘K hint — at 12rem (corner 304px, fits from 1412px).
-   - >= 1520px: the field grows to 15rem and "Ask AI" shows its label
-     (corner 407px, fits from 1515px).
+     too. Corner width: 36 + 8 + 36 + 8 + CTA + 48: 172px with the icon
+     CTA (fits from 1280px), 252px labelled (fits from 1360px); in the
+     1250–1279px band the gaps shrink to 156px, leaving the corner's left
+     edge at 1078px at the floor, ~3px clear of the hosted pill end.
+   - >= 1536px: the search trigger becomes the field Mintlify's was — icon,
+     "Search", ⌘K hint — at 12rem (corner 408px, fits from 1516px).
+   - >= 1640px: the field grows to 15rem and "Ask AI" shows its label
+     (corner 511px, fits from 1619px).
 
    Fallback: Mintlify's search buttons are hidden only while the search
    widget is actually rendered — #navbar:has(#autocomplete .ais-Autocomplete)
@@ -943,15 +961,15 @@ div.fixed.inset-0.z-40 [role="dialog"] {
 #autocomplete .ais-AutocompleteDetachedSearchButtonClear {
   display: none;
 }
-/* From 1420px, the field look Mintlify's button had: icon, label, ⌘K
-   hint — 12rem, then 15rem from 1520px (see "Trigger layout" above). The
+/* From 1536px, the field look Mintlify's button had: icon, label, ⌘K
+   hint — 12rem, then 15rem from 1640px (see "Trigger layout" above). The
    label is the widget's own: the placeholder, or the last query once
    there is one (it then puts [hidden] on the placeholder and shows the
    query span). Keeping the placeholder up permanently is not an option —
    Mintlify's Tailwind preflight hides [hidden] with an !important rule
    inside a cascade layer, which beats anything this unlayered sheet can
    say. */
-@media (min-width: 1420px) {
+@media (min-width: 1536px) {
   #autocomplete .ais-AutocompleteDetachedSearchButton {
     width: 12rem;
     justify-content: flex-start;
@@ -975,14 +993,14 @@ div.fixed.inset-0.z-40 [role="dialog"] {
     font-weight: 600;
   }
 }
-@media (min-width: 1520px) {
+@media (min-width: 1640px) {
   #autocomplete .ais-AutocompleteDetachedSearchButton {
     width: 15rem;
   }
 }
 
 /* "Ask AI" trigger: matches the search trigger next to it (same 2.25rem
-   height, hairline ring, transparent, orange glyph). Below 1520px the
+   height, hairline ring, transparent, orange glyph). Below 1640px the
    label is visually hidden — still the button's accessible name — and the
    button is an icon-only square like the search trigger. */
 #assistant-trigger {
@@ -1023,7 +1041,7 @@ div.fixed.inset-0.z-40 [role="dialog"] {
 .dark #assistant-trigger:hover {
   background: rgb(255 169 77 / 0.1);
 }
-@media (max-width: 1519.98px) {
+@media (max-width: 1639.98px) {
   #assistant-trigger {
     width: 2.25rem;
     padding: 0;
@@ -1035,6 +1053,93 @@ div.fixed.inset-0.z-40 [role="dialog"] {
     overflow: hidden;
     clip: rect(0 0 0 0);
     white-space: nowrap;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Download CTA — docs.json `navbar.primary` (type "button")
+   ---------------------------------------------------------------------------
+   Mintlify renders the primary CTA as `li#topbar-cta-button > a` (a
+   documented hook, mintlify.com/docs/customize/custom-scripts) at the end
+   of the navbar's link list, in flow, with the theme toggle 3rem to its
+   right: an orange pill, "Download" + a chevron, 7.25rem wide at its
+   natural size. It stays in flow; everything pinned to the corner (the
+   search triggers, Mintlify's fallback search) moves left of it via
+   --bru-corner-right = 3rem + CTA width + 0.5rem gap, set here per tier
+   and read by the nav block above. The width is fixed rather than
+   measured so the hosted renderer's slightly wider fonts can't shift the
+   pinned corner into the pill.
+
+   1250px–1379px (single-bar layout, under the labelled CTA's budget — see
+   "Trigger layout" above): the pill becomes a 2.25rem icon square — the
+   same size and radius as the two triggers beside it — showing a
+   download-arrow glyph. The label is visually hidden, not removed, so
+   the link's accessible name stays "Download"; the chevron goes.
+   Below 1250px the CTA is in flow next to the triggers (Mintlify shows
+   it from lg = 1024px; under that it lives in the mobile ⋮ menu) and
+   keeps its label. */
+#topbar-cta-button a {
+  width: 7.25rem;
+  justify-content: center;
+  padding-left: 0;
+  padding-right: 0;
+}
+#navbar:has(#topbar-cta-button) {
+  --bru-corner-right: 10.75rem;
+}
+@media (min-width: 1250px) and (max-width: 1379.98px) {
+  #topbar-cta-button a {
+    width: 2.25rem;
+  }
+  #topbar-cta-button a > div {
+    margin-right: 0;
+  }
+  #topbar-cta-button a > div > span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+  #topbar-cta-button a > div > svg {
+    display: none;
+  }
+  #topbar-cta-button a > div::after {
+    content: "";
+    display: block;
+    width: 1rem;
+    height: 1rem;
+    background: #fff;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 15V3'/%3E%3Cpath d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'/%3E%3Cpath d='m7 10 5 5 5-5'/%3E%3C/svg%3E")
+      center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 15V3'/%3E%3Cpath d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'/%3E%3Cpath d='m7 10 5 5 5-5'/%3E%3C/svg%3E")
+      center / contain no-repeat;
+  }
+  #navbar:has(#topbar-cta-button) {
+    --bru-corner-right: 5.75rem;
+  }
+}
+/* At the single-bar floor the icon corner is still ~13px short on the
+   hosted renderer (whose tab row ends ~16px later than dev's — see the
+   nav block): take 1rem back from the three gaps between the pills —
+   trigger-to-trigger, triggers-to-CTA, CTA-to-theme-toggle — in the
+   1250–1279px band only, which is where the labelled corner would never
+   have fit anyway. The toggle gap is Tailwind's space-x-4: on the
+   rendered build it is margin-inline-end on the nav (v4); older builds
+   put margin-inline-start on the toggle's wrapper, so both are set. */
+@media (min-width: 1250px) and (max-width: 1279.98px) {
+  #bru-search-tools {
+    gap: 0.25rem;
+  }
+  #navbar nav.text-sm:has(#topbar-cta-button) {
+    margin-inline-end: 0.5rem;
+  }
+  #navbar nav.text-sm:has(#topbar-cta-button) + div {
+    margin-inline-start: 0;
+  }
+  #navbar:has(#topbar-cta-button) {
+    --bru-corner-right: 5rem;
   }
 }
 
