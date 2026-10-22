@@ -174,9 +174,9 @@ if (authMode === "none") {
 
 ### `req.getTags()`
 
-Get the current request tags as an array of strings. Useful for conditional logic, filtering, or organizing requests by tag.
+Get the current request's **effective tags** as an array of strings: tags set on the request plus tags [inherited from parent folders](/get-started/bruno-basics/create-a-folder#folder-tags). Useful for conditional logic, filtering, or organizing requests by tag.
 
-**Returns:** Array of strings representing the request tags.
+**Returns:** Array of strings representing the effective tags.
 
 ```javascript
 const tags = req.getTags();

@@ -12,6 +12,14 @@ Vault provides a centralized platform for storing and accessing secrets, and inc
 
 Bruno allows you to easily integrate Hashicorp Vault and access your secrets securely. With Bruno, you can securely store your Vault credentials and access them without exposing sensitive information.
 
+<Info>
+  **How Bruno keeps Vault secrets safe**
+
+  - Secret values are **never written to disk** — only provider config and secret identifiers are saved.
+  - Secrets are fetched **on demand** into a per-environment, in-memory cache for the active session.
+  - The cache clears when you close the app or collection. Reopen Bruno and it will fetch secrets on demand.
+</Info>
+
 <iframe
   className="w-full aspect-video rounded-xl"
   src="https://www.youtube.com/embed/BLmLUGTAUK4?si=_EIrHe1XEftIf9Gq"

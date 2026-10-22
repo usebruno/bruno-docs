@@ -6,7 +6,7 @@ sidebarTitle: "Overview"
 import { BrunoButton } from "/snippets/BrunoButton.jsx";
 
 Bruno allows you to send authentication details with your API requests.
-Authentication methods can be set on the request level or collection level, if you want all of your requests to use the same method.
+Authentication methods can be set on the request, folder, or collection. Use folder or collection auth when many requests share the same credentials, then set each request to **Inherit** (default).
 
 ## Try it out
 
@@ -38,6 +38,28 @@ If you enter your auth details to the `Auth` tab of your requests, we will autom
 - [Digest Auth](/auth/digest)
 - [NTLM](/auth/ntlm)
 - [Akamai EdgeGrid](/auth/akamai-edgegrid) <sup>Beta</sup>
+
+## Inherit auth
+
+When requests share the same authentication, configure it once on the **folder** or **collection**, then set each request's Auth type to **Inherit** if not set already. Bruno applies the parent auth automatically based on where the request lives:
+
+- A request inside a folder inherits from that folder (or a parent folder higher up).
+- If no folder auth is set, the request inherits from the collection.
+- The request's own Auth mode stays **Inherit**; viewing inherited values does not change it.
+
+### See what you inherit
+
+On a request set to **Inherit**, Bruno shows the effective auth read-only so you can see what is applied and where it comes from, without opening parent settings first.
+
+1. Open the request and go to the **Auth** tab.
+2. Confirm **Inherit** is selected.
+3. Read the banner (for example **Auth inherited from Collection: Basic Auth**). It names the source (collection or folder) and the resolved auth type.
+4. Review the credentials below the banner. Fields are read-only.
+5. Click the auth type link (for example **Basic Auth**) to jump to that source's Auth tab and edit there.
+
+![Request Auth set to Inherit, showing read-only Basic Auth from the collection](/images/screenshots/v4/chores/inherit-auth.webp)
+
+This cuts the time spent hunting through folder and collection settings when debugging shared auth. For OAuth2 inheritance details, see [Authentication Inheritance](/auth/oauth2-2.0/collection-level-configuration#authentication-inheritance).
 
 ## Resources
 

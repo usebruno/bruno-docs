@@ -3,7 +3,7 @@ title: "Create OpenAPI Specification (OAS)"
 sidebarTitle: "Create an OpenAPI Spec"
 ---
 
-Bruno provides a powerful interface for creating and managing OpenAPI Specifications (OAS). You can either design a new specification from scratch and view one as existing Open API spec.
+Bruno can open an existing OpenAPI Specification (OAS) and create a new one. A new spec can start blank, be generated from a Bruno collection, or be fetched from a URL hosting an OpenAPI spec.
 
 ## Viewing Existing OAS Files
 
@@ -24,15 +24,36 @@ You can view and interact with existing OAS files in Bruno using a SwaggerUI-lik
 
 ## Creating New OAS Files
 
-1. Select **Create API Spec**  from dropdown
+1. In the sidebar, click **+** next to **API Specs**.
+2. Select **Create API Spec**.
 
-![create-open-api](/images/screenshots/open-api/create-open-option-spec.webp)
+**Source** has three options: **Blank Spec**, **Bruno Collection**, and **Spec URL**. Every source includes **Name** and **Location**. **Location** is filled in for you: a named workspace uses its `apispec` folder, and the default workspace uses the default location from **Preferences** (or that workspace's `apispec` folder when no default location is set). Optionally, use **Browse** to select the location, then click **Create**.
 
-2. Choose a name and location for your specification
+| Source | Description |
+| --- | --- |
+| Blank Spec | Leave **Source** on **Blank Spec** and enter a **Name**. Bruno writes an empty `.yaml` file. |
+| Bruno Collection | Select **Bruno Collection** to generate an OpenAPI 3 spec from the requests in a collection. |
+| Spec URL | Select **Spec URL** and enter an `http` or `https` URL that returns an OpenAPI 3.x document (YAML or JSON). Bruno fetches the URL and checks that it is an OpenAPI 3.x specification. **Name** is filled from the spec's `info.title`. The saved file is `.json` when the response is JSON, and `.yaml` otherwise. |
 
-![location-open-api](/images/screenshots/open-api/create-spec-location-modal.webp)
+### Blank Spec
 
-3. Click on **Create** to generate OAS file.
+Leave **Source** on **Blank Spec** and enter a **Name**. Bruno writes an empty `.yaml` file.
+
+### Bruno Collection
+
+Select **Bruno Collection** to generate an OpenAPI 3 spec from the requests in a collection.
+
+**From workspace** lists the collections in the active workspace. Pick one from the dropdown. **Name** is filled from the collection name. When that collection has environments, an **Environment** field appears and the selected environment's variables are written into the spec.
+
+![Create API Spec from a collection in the workspace](/images/screenshots/v4/chores/create-api-spec-from-workspace-collection.webp)
+
+**From filesystem** browses for a collection folder on disk. Select **From filesystem**, click the folder field, and choose a folder that contains `bruno.json` or `opencollection.yml`. **Name** is filled from the folder name.
+
+### Spec URL
+
+Select **Spec URL** and enter an `http` or `https` URL that returns an OpenAPI 3.x document (YAML or JSON). Bruno fetches the URL and checks that it is an OpenAPI 3.x specification. **Name** is filled from the spec's `info.title`. The saved file is `.json` when the response is JSON, and `.yaml` otherwise.
+
+![Create API Spec from a hosted OpenAPI URL](/images/screenshots/v4/chores/create-api-spec-from-spec-url.webp)
 
 ## Editing Your OAS File
 
