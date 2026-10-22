@@ -733,8 +733,16 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
   }
   #navbar div[class*="lg:hidden"],
   #navbar button[class*="lg:hidden"],
-  div.fixed.inset-0.z-40[class*="lg:hidden"] {
+  div.fixed.inset-0.z-40.flex[class*="lg:hidden"] {
     display: flex;
+  }
+  /* The lg-gated fixed wrappers are not all flex: the sidebar drawer's
+     is (`flex items-stretch`), but the navbar ⋮ "More actions" popover
+     (where the Download CTA lives under lg) and both scrims are plain
+     blocks — forcing flex on the popover's wrapper stretched its card to
+     the full viewport height. Each gets its own native display back. */
+  div.fixed.inset-0.z-40:not(.flex)[class*="lg:hidden"] {
+    display: block;
   }
   #content-area {
     padding-left: 0.25rem;
