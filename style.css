@@ -744,6 +744,16 @@ div[class*="max-w-8xl"][class*="max-w-8xl"][class*="max-w-8xl"] {
   div.fixed.inset-0.z-40:not(.flex)[class*="lg:hidden"] {
     display: block;
   }
+  /* The mobile icon cluster also carries the ⋮ "More actions" button,
+     whose popover mirrors the navbar links — here only the Download CTA.
+     Mintlify shows the CTA inline from lg (1024px), which this range
+     keeps, so the ⋮ would just duplicate it: hidden here, back under
+     1024px where it is the CTA's only home. Matched by Mintlify's label
+     and, as a fallback, its size utilities. */
+  #navbar div[class*="lg:hidden"] > button[aria-label="More actions"],
+  #navbar div[class*="lg:hidden"] > button.h-7.w-5 {
+    display: none;
+  }
   #content-area {
     padding-left: 0.25rem;
     margin-left: 0;
