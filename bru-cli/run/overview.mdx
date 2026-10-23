@@ -65,6 +65,22 @@ bru run <folder-1-name> request1.bru <folder-2-name> request2.bru
 
 Add `-r` to run a folder recursively, including every nested folder inside it.
 
+## Printing a response body to the terminal
+
+`bru run` doesn't print response bodies by default. Bruno CLI does print `console.log()` output from pre-request and post-response scripts to the terminal. To see a response body, log it in the request's post-response script:
+
+```javascript copy
+console.log(JSON.stringify(res.getBody(), null, 2));
+```
+
+Then run the request:
+
+```bash copy
+bru run request.bru
+```
+
+The body appears in the terminal alongside the run results. To save full request and response details to a file instead, use a JSON report such as `--reporter-json results.json`. See [Reports](/bru-cli/run/reports).
+
 ## Running a Collection with a CSV File
 
 If you need to run a collection using data from a CSV file, specify the path to the file with the `--csv-file-path` option:
