@@ -1,0 +1,67 @@
+---
+title: "Examples"
+sidebarTitle: "Examples"
+---
+
+Runnable examples for every supported integration live in the [bruno-api-docs](https://github.com/usebruno/bruno-api-docs) repository. Clone the repo and run the sample that matches your stack.
+
+## Browse the examples
+
+
+| Example | What it shows | Link |
+| ------- | ------------- | ---- |
+| Express | Quickstart, auth, CSP, and embed | [nodejs/express](https://github.com/usebruno/bruno-api-docs/tree/main/examples/integrations/nodejs/express) |
+| Fastify | Quickstart, auth, CSP, and embed | [nodejs/fastify](https://github.com/usebruno/bruno-api-docs/tree/main/examples/integrations/nodejs/fastify) |
+| NestJS | Quickstart, auth, global prefix, Fastify adapter, CSP, and embed | [nodejs/nestjs](https://github.com/usebruno/bruno-api-docs/tree/main/examples/integrations/nodejs/nestjs) |
+| Standalone HTML | How a generated HTML page loads the CDN renderer | [standalone-html](https://github.com/usebruno/bruno-api-docs/tree/main/examples/standalone-html) |
+
+## Quickstart (Express)
+
+From [express/quickstart.js](https://github.com/usebruno/bruno-api-docs/blob/main/examples/integrations/nodejs/express/quickstart.js):
+
+```js
+const express = require('express')
+const { apiDocs } = require('@usebruno/api-docs-express')
+
+const app = express()
+const port = process.env.PORT ?? 3000
+
+app.get('/health', (req, res) => res.json({ ok: true }))
+
+// Path is relative to this file, not to where node was started
+app.use('/docs', apiDocs({ collectionPath: './api-collection' }))
+
+app.listen(port, () => console.log(`docs at http://localhost:${port}/docs/`))
+```
+
+## Hosted YAML over HTTPS
+
+Point `url` at a public `https://` YAML file when the collection is already hosted:
+
+```js
+app.use('/docs', apiDocs({
+  url: 'https://cdn.example.com/docs/opencollection.yml',
+  environments: '*'
+}))
+```
+
+```html
+<script>
+  new Bruno.apiDocs('#bruno-api-docs', {
+    url: 'https://cdn.example.com/docs/opencollection.yml',
+    theme: 'dark'
+  })
+</script>
+```
+
+## Framework guides
+
+- [Express](/integrations/express)
+- [Fastify](/integrations/fastify)
+- [NestJS](/integrations/nestjs)
+- [HTML / JavaScript](/integrations/html)
+- [Configuration](/integrations/configuration)
+
+## Feedback
+
+Found a bug in an example or need a new sample? Open an issue on [usebruno/bruno-api-docs](https://github.com/usebruno/bruno-api-docs).
