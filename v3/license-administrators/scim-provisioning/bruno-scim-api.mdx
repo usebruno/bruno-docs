@@ -180,9 +180,14 @@ By default, only **active** users are returned. To include deactivated users, ad
 
 To page through all users, increase `startIndex` by `count` on each request until you have retrieved `totalResults` users.
 
-#### Last activity (`meta.lastSeenAt`)
+#### User fields
 
-`meta.lastSeenAt` is a Bruno-specific attribute containing the timestamp of the user's most recent license check-in, or `null` if none has been recorded.
+| Field | Description |
+|-------|-------------|
+| `meta.created` | When the user was first provisioned in Bruno. Reactivating a deactivated user keeps the original date |
+| `meta.lastModified` | When the user record last changed. SCIM updates, deactivation, and reactivation all update it, as can other account events in Bruno. It may be later than your most recent SCIM request |
+| `meta.lastSeenAt` | Bruno-specific. The timestamp of the user's most recent license check-in, or `null` if none has been recorded |
+| `meta.location` | The full URL of this user resource. Use it for `GET`, `PUT`, `PATCH`, and `DELETE` requests on the user |
 
 ### Filter Users
 
