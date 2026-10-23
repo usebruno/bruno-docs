@@ -152,6 +152,35 @@ In the Vars tab you can select the type of each variable using the type dropdown
   **Backward compatibility:** Existing `.bru` files and environments that use plain string values continue to work without any changes or migration. The `@type(...)` annotation is only written when a non-string type is used.
 </Note>
 
+### Variable autocomplete
+
+Bruno suggests available variables as you type in request fields. Each suggestion shows an icon and label for its scope, such as global, collection, environment, folder, request, runtime, or process environment. If two scopes define a variable with the same name, each one appears with its own scope label.
+
+You can open the suggestion list in three ways:
+
+- Type `{{` followed by a character.
+- Type a single `{` in the URL bar, query and path params, headers, or auth fields. Bruno shows up to 50 matching variables.
+- Press `Ctrl Space` (`⌃ Space` on macOS) in any editor. You can remap or disable this shortcut under **Preferences** > **Keybindings**. See [Keybindings](/get-started/configure/keybindings).
+
+Select a suggestion to insert the full `{{variableName}}` reference. Bruno does not add duplicate closing braces.
+
+### Set a variable from selected text
+
+You can turn any selected text into a variable without opening the variable settings.
+
+1. Select text in a request editor, such as the URL, a header, or the body, or in the response pane.
+2. Right-click the selection and choose **Set as variable**.
+3. Enter a variable name.
+4. Click **Add to** and choose a scope: request, folder, collection, environment, or global environment.
+5. For environment and global environment scopes, optionally check **Secret** to store the value as a [secret](/secrets-management/secret-variables).
+6. Click **Set Variable**.
+
+If no environment is selected for the collection or global scope, click **Create One** in the scope list to create and select a new environment.
+
+If a variable with the same name already exists in the chosen scope, Bruno shows a warning and the button changes to **Overwrite**.
+
+When the selection comes from an editable field, Bruno replaces the selected text with the `{{variableName}}` reference. Selections from the response pane are saved as variables but not replaced.
+
 ### Environment Color Coding
 
 <Info>

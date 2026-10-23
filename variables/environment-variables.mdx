@@ -102,6 +102,50 @@ The search filters the variable list in real time. If you click on a variable ro
   The search feature is also available for [global environment variables](/variables/global-environment-variables).
 </Info>
 
+## Managing environments in the list
+
+The environment list in environment settings supports multi-select and bulk actions. The same actions are available for [global environments](/variables/global-environment-variables).
+
+### Select multiple environments
+
+- `Cmd`-click (macOS) or `Ctrl`-click (Windows/Linux) to add or remove an environment from the selection.
+- `Shift`-click to select a range.
+- Press `Esc` or click empty space in the list to clear the selection.
+
+Environments hidden by an active search stay selected but are excluded from actions.
+
+### Environment actions
+
+Open the row menu or right-click an environment to see these actions:
+
+- **Export**
+- **Rename**
+- **Duplicate**
+- **Select All**
+- **Delete**
+
+If you right-click an environment that is part of the selection, the action applies to all selected environments. Otherwise, it applies only to that environment. **Rename** and **Duplicate** are available only when one environment is selected.
+
+When you export, the export modal lists the selected environments and any environments they [inherit from](#inherit-from-a-parent-environment).
+
+When you delete, a confirmation modal lists the environments to remove. It warns you if the active environment is included.
+
+When you rename, clicking outside the input saves the new name.
+
+### Keyboard shortcuts
+
+These shortcuts work when the environment list has focus and you are not typing in an input.
+
+| Action | macOS | Windows / Linux |
+|---|---|---|
+| Select all | `⌘ A` | `Ctrl A` |
+| Delete selected | `⌘ Backspace` | `Delete` |
+| Clear selection | `Esc` | `Esc` |
+
+### Create an environment from search
+
+If your search matches no environments, Bruno offers to create an environment named after the search text. Bruno trims the name and shows an error if it is invalid or already exists.
+
 ## Default environment
 
 You can set a **default environment** for a collection so teammates and new sessions start with the right environment selected, without picking it manually every time.
