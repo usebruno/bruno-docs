@@ -157,6 +157,7 @@
                       "auth/oauth2-2.0/overview",
                       "auth/oauth2-2.0/collection-level-configuration",
                       "auth/oauth2-2.0/authorization-code",
+                      "auth/oauth2-2.0/implicit",
                       "auth/oauth2-2.0/client-credentials",
                       "auth/oauth2-2.0/password-credentials",
                       "auth/oauth2-2.0/system-browser"
