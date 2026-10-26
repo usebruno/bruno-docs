@@ -32,6 +32,8 @@ Use this path when you have an API spec in the workspace. Turn on [API Spec](/op
 
 Each operation and response status becomes a mock response with bodies derived from the schema where possible.
 
+Before Bruno creates the mock server, it validates the selected spec. The spec must be valid YAML or JSON, declare an `openapi` or `swagger` version, include an `info` object, and define at least one path. If any check fails, Bruno shows the error under the spec field and does not create the mock server.
+
 
 ![Create mock server linked to an API spec](/images/screenshots/v4/mock-severs/tutorial-openapi-create-mock.webp)
 
