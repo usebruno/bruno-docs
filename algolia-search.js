@@ -59,6 +59,17 @@
 //   widget has rendered. Escape closes the search modal if it is open
 //   (the widget only collapses the result list on Escape; Mintlify's modal
 //   closed, so that's what people expect), otherwise the assistant panel.
+// - Closing the search modal after a result is picked. A result row is a
+//   plain link, and the widget leaves a click on it to the browser. On
+//   the hosted docs Mintlify turns that click into a client-side
+//   navigation: the page changes underneath, but the modal (which lives
+//   in the navbar wrapper that survives navigation) stays open. So a
+//   plain click on a result closes the modal itself, and as a safety net
+//   any change of pathname while it is open closes it too. Enter on the
+//   highlighted row is unaffected: the widget navigates with
+//   window.location, a full load.
+// - Working around dropped characters on fast typing in the search box
+//   (an InstantSearch.js effect-ordering bug; see onSearchInput).
 // - window.bruAlgoliaSearch.focus() / .ask(message?), used by
 //   home-search.js for the home page's search CTA (and available for an
 //   "Ask AI" CTA: ask("question") opens the panel and sends it).
@@ -94,6 +105,7 @@
   var everRendered = false;
   var remounts = 0;
   var timer = 0;
+  var lastPath = location.pathname;
 
   // ---------------------------------------------------------------- DOM
 
@@ -135,6 +147,7 @@
         SPARKLE_SVG + '<span class="bru-ask-label">Ask AI</span>';
       triggerEl.addEventListener("click", toggleChat);
       searchEl = el("div", "autocomplete");
+      searchEl.addEventListener("input", onSearchInput);
       tools.appendChild(triggerEl);
       tools.appendChild(searchEl);
       panelEl = el("div", "assistant");
@@ -150,6 +163,31 @@
     if (panelEl.parentElement !== document.body)
       document.body.appendChild(panelEl);
     return true;
+  }
+
+  // Keystrokes typed in quick succession (two inside one paint frame) lose
+  // characters in the widget's search box: InstantSearch.js 4.117 (still
+  // in 4.121) mirrors the helper's query into the input's local state in
+  // a `useEffect`, and Preact runs a still-pending effect at the start of
+  // the component's next render. When that render is the second
+  // keystroke's, the effect's closure holds the first keystroke's query
+  // and writes it back over the newer state, so the controlled input
+  // snaps back and the second character is gone. The effect is harmless
+  // as long as it runs before the next keystroke, so after each `input`
+  // the instance is asked for a render (a microtask, queued behind the
+  // widget's own re-render): that re-renders the widget with fresh props
+  // and flushes the effect while it still agrees with the input.
+  // `false` keeps the render from touching the search status.
+  function onSearchInput(e) {
+    if (
+      !search ||
+      typeof search.scheduleRender !== "function" ||
+      !e.target ||
+      !e.target.classList ||
+      !e.target.classList.contains("ais-AutocompleteInput")
+    )
+      return;
+    search.scheduleRender(false);
   }
 
   function searchRendered() {
@@ -263,6 +301,18 @@
     return stripSuffix(value);
   }
 
+  // A plain left click on a result: let the link navigate (natively, or
+  // through Mintlify's client-side router on the hosted docs) and close
+  // the modal. Deferred so the modal is still in the DOM while the click
+  // finishes dispatching; Mintlify's document-level handler reads the
+  // link from it. Modifier clicks open a new tab/window and leave the
+  // modal as it is, like the context menu and middle click do.
+  function onHitClick(e) {
+    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey)
+      return;
+    setTimeout(closeSearch, 0);
+  }
+
   // Search result row. Rendered as a real link so modifier-clicks and the
   // context menu work; Enter on the active row goes through getURL().
   function hitTemplate(args, tools_) {
@@ -271,7 +321,7 @@
     var meta = [sectionOf(item.url), headingsOf(item)]
       .filter(Boolean)
       .join(" — ");
-    return html`<a class="bru-hit" href="${item.url}">
+    return html`<a class="bru-hit" href="${item.url}" onClick=${onHitClick}>
       <span
         class="bru-hit-title"
         dangerouslySetInnerHTML=${{ __html: highlightedTitle(item) }}
@@ -417,6 +467,12 @@
 
   function tick() {
     timer = 0;
+    if (location.pathname !== lastPath) {
+      // Client-side navigation (the observer fires as the page re-renders):
+      // a search modal left open would now sit over a different page.
+      lastPath = location.pathname;
+      closeSearch();
+    }
     if (!ensureContainers()) return; // Navbar not rendered yet; the observer retries.
     if (loadState === "idle") {
       loadState = "loading";
@@ -465,6 +521,20 @@
       return true;
     }
     return false;
+  }
+
+  // Close the search modal through the widget's own Cancel button (it
+  // keeps the query, so reopening shows the last search). Returns false
+  // when the modal isn't open.
+  function closeSearch() {
+    var cancel =
+      searchEl &&
+      searchEl.querySelector(
+        ".ais-AutocompleteDetachedContainer .ais-AutocompleteBackButton",
+      );
+    if (!cancel) return false;
+    cancel.click();
+    return true;
   }
 
   // The chat widget's render state: open, setOpen, focusInput,
@@ -525,18 +595,7 @@
     "keydown",
     function (e) {
       if (e.key === "Escape") {
-        var cancel =
-          searchEl &&
-          searchEl.querySelector(
-            ".ais-AutocompleteDetachedContainer .ais-AutocompleteBackButton",
-          );
-        if (cancel) {
-          cancel.click();
-          e.preventDefault();
-          e.stopImmediatePropagation();
-          return;
-        }
-        if (closeChat()) {
+        if (closeSearch() || closeChat()) {
           e.preventDefault();
           e.stopImmediatePropagation();
         }
