@@ -68,6 +68,8 @@
 //   any change of pathname while it is open closes it too. Enter on the
 //   highlighted row is unaffected: the widget navigates with
 //   window.location, a full load.
+// - Working around dropped characters on fast typing in the search box
+//   (an InstantSearch.js effect-ordering bug; see onSearchInput).
 // - window.bruAlgoliaSearch.focus() / .ask(message?), used by
 //   home-search.js for the home page's search CTA (and available for an
 //   "Ask AI" CTA: ask("question") opens the panel and sends it).
@@ -145,6 +147,7 @@
         SPARKLE_SVG + '<span class="bru-ask-label">Ask AI</span>';
       triggerEl.addEventListener("click", toggleChat);
       searchEl = el("div", "autocomplete");
+      searchEl.addEventListener("input", onSearchInput);
       tools.appendChild(triggerEl);
       tools.appendChild(searchEl);
       panelEl = el("div", "assistant");
@@ -160,6 +163,31 @@
     if (panelEl.parentElement !== document.body)
       document.body.appendChild(panelEl);
     return true;
+  }
+
+  // Keystrokes typed in quick succession (two inside one paint frame) lose
+  // characters in the widget's search box: InstantSearch.js 4.117 (still
+  // in 4.121) mirrors the helper's query into the input's local state in
+  // a `useEffect`, and Preact runs a still-pending effect at the start of
+  // the component's next render. When that render is the second
+  // keystroke's, the effect's closure holds the first keystroke's query
+  // and writes it back over the newer state, so the controlled input
+  // snaps back and the second character is gone. The effect is harmless
+  // as long as it runs before the next keystroke, so after each `input`
+  // the instance is asked for a render (a microtask, queued behind the
+  // widget's own re-render): that re-renders the widget with fresh props
+  // and flushes the effect while it still agrees with the input.
+  // `false` keeps the render from touching the search status.
+  function onSearchInput(e) {
+    if (
+      !search ||
+      typeof search.scheduleRender !== "function" ||
+      !e.target ||
+      !e.target.classList ||
+      !e.target.classList.contains("ais-AutocompleteInput")
+    )
+      return;
+    search.scheduleRender(false);
   }
 
   function searchRendered() {
