@@ -59,6 +59,15 @@
 //   widget has rendered. Escape closes the search modal if it is open
 //   (the widget only collapses the result list on Escape; Mintlify's modal
 //   closed, so that's what people expect), otherwise the assistant panel.
+// - Closing the search modal after a result is picked. A result row is a
+//   plain link, and the widget leaves a click on it to the browser. On
+//   the hosted docs Mintlify turns that click into a client-side
+//   navigation: the page changes underneath, but the modal (which lives
+//   in the navbar wrapper that survives navigation) stays open. So a
+//   plain click on a result closes the modal itself, and as a safety net
+//   any change of pathname while it is open closes it too. Enter on the
+//   highlighted row is unaffected: the widget navigates with
+//   window.location, a full load.
 // - window.bruAlgoliaSearch.focus() / .ask(message?), used by
 //   home-search.js for the home page's search CTA (and available for an
 //   "Ask AI" CTA: ask("question") opens the panel and sends it).
@@ -94,6 +103,7 @@
   var everRendered = false;
   var remounts = 0;
   var timer = 0;
+  var lastPath = location.pathname;
 
   // ---------------------------------------------------------------- DOM
 
@@ -263,6 +273,18 @@
     return stripSuffix(value);
   }
 
+  // A plain left click on a result: let the link navigate (natively, or
+  // through Mintlify's client-side router on the hosted docs) and close
+  // the modal. Deferred so the modal is still in the DOM while the click
+  // finishes dispatching; Mintlify's document-level handler reads the
+  // link from it. Modifier clicks open a new tab/window and leave the
+  // modal as it is, like the context menu and middle click do.
+  function onHitClick(e) {
+    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey)
+      return;
+    setTimeout(closeSearch, 0);
+  }
+
   // Search result row. Rendered as a real link so modifier-clicks and the
   // context menu work; Enter on the active row goes through getURL().
   function hitTemplate(args, tools_) {
@@ -271,7 +293,7 @@
     var meta = [sectionOf(item.url), headingsOf(item)]
       .filter(Boolean)
       .join(" — ");
-    return html`<a class="bru-hit" href="${item.url}">
+    return html`<a class="bru-hit" href="${item.url}" onClick=${onHitClick}>
       <span
         class="bru-hit-title"
         dangerouslySetInnerHTML=${{ __html: highlightedTitle(item) }}
@@ -417,6 +439,12 @@
 
   function tick() {
     timer = 0;
+    if (location.pathname !== lastPath) {
+      // Client-side navigation (the observer fires as the page re-renders):
+      // a search modal left open would now sit over a different page.
+      lastPath = location.pathname;
+      closeSearch();
+    }
     if (!ensureContainers()) return; // Navbar not rendered yet; the observer retries.
     if (loadState === "idle") {
       loadState = "loading";
@@ -465,6 +493,20 @@
       return true;
     }
     return false;
+  }
+
+  // Close the search modal through the widget's own Cancel button (it
+  // keeps the query, so reopening shows the last search). Returns false
+  // when the modal isn't open.
+  function closeSearch() {
+    var cancel =
+      searchEl &&
+      searchEl.querySelector(
+        ".ais-AutocompleteDetachedContainer .ais-AutocompleteBackButton",
+      );
+    if (!cancel) return false;
+    cancel.click();
+    return true;
   }
 
   // The chat widget's render state: open, setOpen, focusInput,
@@ -525,18 +567,7 @@
     "keydown",
     function (e) {
       if (e.key === "Escape") {
-        var cancel =
-          searchEl &&
-          searchEl.querySelector(
-            ".ais-AutocompleteDetachedContainer .ais-AutocompleteBackButton",
-          );
-        if (cancel) {
-          cancel.click();
-          e.preventDefault();
-          e.stopImmediatePropagation();
-          return;
-        }
-        if (closeChat()) {
+        if (closeSearch() || closeChat()) {
           e.preventDefault();
           e.stopImmediatePropagation();
         }
