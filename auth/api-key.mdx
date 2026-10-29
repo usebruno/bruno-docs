@@ -1,0 +1,27 @@
+---
+title: "API Key authentication"
+sidebarTitle: "API Key"
+---
+
+API Key authentication sends a key-value pair with your request so the server can identify the caller. The key name is often something like `X-API-KEY` or `apikey`, and the value is the secret issued by the API provider.
+
+Bruno can place the pair in a **request header** or as a **query parameter**, depending on what the API expects.
+
+## Configure API Key auth
+
+1. Open a request and go to the **Auth** tab.
+2. Select **API Key** from the Auth Type dropdown.
+3. Enter the **Key** (the header or query parameter name).
+4. Enter the **Value** (your API key). For extra security, store it in a [secret variable](/secrets-management/secret-variables) and reference it as `{{apiKey}}`.
+5. Under **Add To**, choose **Header** or **Query Param**.
+6. Send the request. Bruno attaches the key-value pair in the place you selected.
+
+| Field | Description |
+| ----- | ----------- |
+| **Key** | Name of the header or query parameter (for example `X-API-KEY`) |
+| **Value** | The API key string |
+| **Add To** | Where Bruno sends the pair: **Header** or **Query Param** |
+
+<Tip>
+  **Avoid repeating the same key on every request.** Configure API Key auth once on the **folder** or **collection** Auth tab. Leave each request set to **Inherit**, and Bruno applies those credentials automatically to every request under that folder or collection. See [Inherit auth](/auth/overview#inherit-auth).
+</Tip>
