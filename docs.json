@@ -194,6 +194,7 @@
                         "pages": [
                           "secrets-management/secret-managers/aws-secrets-manager/overview",
                           "secrets-management/secret-managers/aws-secrets-manager/adding-a-secret-provider",
+                          "secrets-management/secret-managers/aws-secrets-manager/cli-authentication",
                           "secrets-management/secret-managers/aws-secrets-manager/configuring-and-fetching-secrets",
                           "secrets-management/secret-managers/aws-secrets-manager/using-secrets"
                         ]

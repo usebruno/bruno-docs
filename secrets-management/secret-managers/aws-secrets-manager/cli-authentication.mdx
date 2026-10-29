@@ -1,0 +1,67 @@
+---
+title: "AWS CLI Authentication"
+sidebarTitle: "AWS CLI Authentication"
+---
+
+AWS CLI authentication lets Bruno talk to AWS Secrets Manager using your existing local AWS CLI profile. You do not enter Access Key ID or Secret Access Key in Bruno.
+
+## Prerequisites
+
+1. Install the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) on your machine.
+2. Configure at least one profile (for example with `aws configure` or SSO).
+3. Confirm the profile can read the secrets you need (Secrets Manager permissions on that account and region).
+
+```bash
+aws sts get-caller-identity --profile <profile-name>
+```
+
+## Add an AWS Secrets Manager account (Preferences)
+
+Create the provider once in Preferences. Environments then reuse that account.
+
+1. Open **Preferences** and go to **Secrets Management** (or **Secrets Manager**).
+2. Click **+ Add Secret Manager** (or **Add**).
+3. Select **AWS Secrets Manager**.
+4. Fill in the account fields:
+
+   | Field | What to enter |
+   | ----- | ------------- |
+   | **Name** | A label for this account (for example `Production Secrets` or `Staging Vault`) |
+   | **Auth Method** | **AWS CLI** |
+   | **Profile Name** | The AWS CLI profile to use |
+   | **Region** | The AWS region where your secrets live (for example `us-east-1`) |
+
+5. Click **Test Connection** to confirm Bruno can use that profile.
+6. Click **Add** to save the account.
+
+The account now appears in the Secrets Manager list and can be selected from any collection environment.
+
+## Attach the account to an environment
+
+1. Open your collection and go to **Environments**.
+2. Select the environment that should use AWS secrets (for example `dev`).
+3. Open the **External Secrets** tab.
+4. Choose **AWS Secrets Manager** and select the account you created in Preferences (or use **Add new account** if you still need to create one).
+
+## Fetch secrets by name or ARN
+
+1. In the **Secrets** table, add a row:
+
+   | Column | What to enter |
+   | ------ | ------------- |
+   | **Name** | The alias you will use in Bruno (for example `apiCredentials`) |
+   | **Secret Name / ARN** | The secret name or full ARN from AWS (for example `prod/api-key` or `arn:aws:secretsmanager:us-east-1:123456789012:secret:prod/api-key`) |
+
+2. Click **Save** if needed.
+3. Click **Fetch Secrets**.
+4. After a successful fetch, keys from that secret appear under **Secret Keys**. Values stay in the session’s in-memory cache and are not written to disk.
+
+Use **View all values** or **Clear all values** from the Secrets section when you need to inspect or reset the session cache. See [How Bruno keeps AWS secrets safe](/secrets-management/secret-managers/aws-secrets-manager/overview) for storage details.
+
+## Use the secrets
+
+Reference fetched keys the same way as other environment variables in headers, params, body, auth, and scripts. See [Using secrets in Bruno](./using-secrets).
+
+## Using secrets with Bruno CLI
+
+For CLI and CI usage, see [Secret Managers in the CLI](/bru-cli/secret-managers).
