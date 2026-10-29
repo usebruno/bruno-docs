@@ -3,112 +3,151 @@ title: "Response query"
 description: "Query and filter nested response data using dot notation, deep navigation, and array filtering"
 ---
 
-The `res` object available inside the [vars](../vars), [assertions](../../tests/assertions), [scripting](../getting-started), and [testing](../../tests/introduction) contexts can be invoked as a function to query nested response data.
+Call `res()` as a function to read values from the **HTTP response body** of the request you just sent. It works in [vars](../vars), [assertions](../../tests/assertions), [scripts](../getting-started), and [tests](../../tests/introduction).
 
-Think of it as `lodash.get()` on steroids.  
-
-If you're not familiar, [`lodash.get()`](https://lodash.com/docs/#get) is a utility function from the [Lodash](https://lodash.com/) library that lets you safely access nested properties in JavaScript objects.
+You do **not** assign the body to a variable first. Bruno already has it. `res('customer.address.city')` is like a safer nested get on that body (similar to [`lodash.get()`](https://lodash.com/docs/#get)).
 
 ```javascript
-res('order.total')
+// After the request returns JSON, query paths on the body:
+res('customer.address.city')  // → "bangalore"
 ```
 
 <Info>
 Response query filtering (including `[?]` with filter functions and object predicates) works in both **Safe Mode** and **Developer Mode**.
 </Info>
 
-## Examples
+## Sample response body
 
-```javascript
-const data = {
-  customer: {
-    address: {
-      city: "bangalore"
+All examples below assume this JSON is what the server returned (for example from `https://echo.usebruno.com`  or your own API):
+
+```json
+{
+  "customer": {
+    "address": {
+      "city": "bangalore"
     },
-    orders: [
+    "orders": [
       {
-        id: "order-1",
-        items: [
-          { id: 1, amount: 10 },
-          { id: 2, amount: 20 }
+        "id": "order-1",
+        "items": [
+          { "id": 1, "amount": 10 },
+          { "id": 2, "amount": 20 }
         ]
       },
       {
-        id: "order-2",
-        items: [
-          { id: 3, amount: 30 },
-          { id: 4, amount: 40 }
+        "id": "order-2",
+        "items": [
+          { "id": 3, "amount": 30 },
+          { "id": 4, "amount": 40 }
         ]
       }
     ]
-  },
-};
+  }
+}
 ```
 
-| Query | Output |
-|-----------------------------------------|------------------------------------|
-| res("customer.address.city") | bangalore |
-| res("customer.orders.items.amount") | [10, 20, 30, 40] |
-| res("customer.orders.items.amount[0]") | 10 |
-| res("..items.amount") | [10, 20, 30, 40] |
-| res("..amount") | [10, 20, 30, 40] |
-| res("..items.amount[0]") | 10 |
-| res("..items[0].amount") | 10 |
-| res("..items[5].amount") | undefined |
-| res("..id") | ["order-1", 1, 2, "order-2", 3, 4] |
-| res("customer.orders.foo") | undefined |
-| res("..customer.foo") | undefined |
-| res("..address") | [\{ city: "bangalore" \}] |
-| res("..address[0]") | \{ city: "bangalore" \} |
+In a test or post-response script against that response:
 
-## API
+```javascript
+test("city is bangalore", function () {
+  expect(res("customer.address.city")).to.equal("bangalore");
+});
 
-### Standard dot notation
+bru.setVar("firstAmount", res("customer.orders.items.amount[0]"));
+```
 
-**Example:**
+## Query cheat sheet
+
+| Query | Result |
+| ----- | ------ |
+| `res("customer.address.city")` | `"bangalore"` |
+| `res("customer.orders.items.amount")` | `[10, 20, 30, 40]` |
+| `res("customer.orders.items.amount[0]")` | `10` |
+| `res("..items.amount")` | `[10, 20, 30, 40]` |
+| `res("..amount")` | `[10, 20, 30, 40]` |
+| `res("..items.amount[0]")` | `10` |
+| `res("..items[0].amount")` | `10` |
+| `res("..items[5].amount")` | `undefined` |
+| `res("..id")` | `["order-1", 1, 2, "order-2", 3, 4]` |
+| `res("customer.orders.foo")` | `undefined` |
+| `res("..customer.foo")` | `undefined` |
+| `res("..address")` | `[{ city: "bangalore" }]` |
+| `res("..address[0]")` | `{ city: "bangalore" }` |
+
+## Query styles
+
+### Dot notation
+
+Walk the object path. When a step is an array, Bruno collects matching values from every element:
+
 ```javascript
 res('customer.orders.items.amount')
+// → [10, 20, 30, 40]
 ```
 
-### Deep navigation with double dots
+### Deep navigation (`..`)
 
-**Example:**
+Skip intermediate keys and find a property anywhere under the body:
+
 ```javascript
 res('..items.amount')
+// → [10, 20, 30, 40]
+
+res('..amount')
+// → [10, 20, 30, 40]
 ```
 
 ### Array indexing
 
-**Example:**
+Pick one element by index (`[0]` is the first):
+
 ```javascript
 res('..items[0].amount')
+// → 10
+
+res('customer.orders.items.amount[0]')
+// → 10
 ```
 
-### Array filtering with a filter function
+### Filter with a function
 
-Use `[?]` with a corresponding filter function to select matching items. `[?]` works with both standard dot notation and deep navigation (`..`).
+`[?]` keeps items where the function returns `true`. The argument is each object in that array:
 
-**Example:**
 ```javascript
-res('customer.orders.items[?].amount', i => i.amount > 20)
-res('..items[?].amount', i => i.amount > 20)
+res('customer.orders.items[?].amount', (item) => item.amount > 20)
+// → [30, 40]
+
+res('..items[?].amount', (item) => item.amount > 30)
+// → [40]
 ```
 
-### Array filtering with an object predicate
+### Filter with an object predicate
 
-Use `[?]` with an object to match items by property values. This is equivalent to `i => i.id === 2 && i.amount === 20`. `[?]` works with both standard dot notation and deep navigation (`..`).
+Match items by property equality (same as checking each field with `===`):
 
 ```javascript
 res('customer.orders.items[?]', { id: 2, amount: 20 })
+// → [{ id: 2, amount: 20 }]
+
 res('..items[?]', { id: 2, amount: 20 })
+// → [{ id: 2, amount: 20 }]
 ```
 
-### Array mapping with a mapper function
+### Map with a function
 
-Use `[?]` with a function that returns a transformed value to map over items. `[?]` works with both standard dot notation and deep navigation (`..`).
+If the function returns a non-boolean value, Bruno treats it as a mapper:
 
-**Example:**
 ```javascript
-res('customer.orders.items..amount[?]', amt => amt + 10)
-res('..items..amount[?]', amt => amt + 10)
+res('..items..amount[?]', (amount) => amount + 10)
+// → [20, 30, 40, 50]
+```
+
+## Common mistakes
+
+- **Do not** wrap the sample JSON in `const data = { ... }` and expect `res()` to read that variable. `res()` always reads the **live response body**.
+- Prefer `res('path')` for nested gets. Use `res.getBody()` when you need the whole object or normal JavaScript property access:
+
+```javascript
+const body = res.getBody();
+body.customer.address.city  // same as res('customer.address.city')
 ```
