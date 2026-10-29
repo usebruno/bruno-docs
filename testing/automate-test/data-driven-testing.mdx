@@ -27,17 +27,9 @@ The **Collection Runner** feature allows you to iterate over data files, making 
 
 ### Parallel execution
 
-**Run in parallel** sends iterations at the same time instead of waiting for each one to finish. It is available on Bruno Pro and Ultimate. 
+Bruno (Desktop app and CLI) supports parallel execution in collection runner. This allows you to run multiple iterations of a test at the same time, which can significantly speed up your test runs. Please refer [Using the bruno App](#using-the-bruno-app) section for more details. 
 
-### Report generation
-
-**Download Report** saves the run as an HTML file (`report.html`). Report generation is a Bruno Ultimate feature. 
-
-<Note>
-  CSV and JSON data files and parallel execution require [Bruno Pro or Ultimate](https://www.usebruno.com/pricing). Downloading the HTML test report requires [Bruno Ultimate](https://www.usebruno.com/pricing).
-</Note>
-
-
+Please find more details about parallel execution in [Bruno CLI](https://docs.usebruno.com/bru-cli/run/overview#parallel-execution) section.
 
 ## How request bodies and data files work together
 
@@ -117,9 +109,9 @@ Now you're ready to use the Collection Runner. You can access it in two ways:
 
 ![click-runner.webp](/images/screenshots/get-started/bruno-basics/run_collection/runner.webp)
 
-3. Click **Run Collection** to start the iterations.
+3. Click **Run Collection** to start the iterations. 
 
-Once the execution is complete, you can review the results for each individual request and check their statuses.
+You can also enable parallel execution by checking the **Run in parallel** checkbox. Once the execution is complete, you can review the results for each individual request and check their statuses.
 
 ![Request Results](/images/screenshots/collection-runner/data-driven-testing/4-req-result.webp)
 
