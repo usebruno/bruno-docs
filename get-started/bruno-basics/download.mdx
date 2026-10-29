@@ -144,71 +144,73 @@ Nightly builds are published automatically for early testing of upcoming feature
   <Tab title="Bruno CLI">
     The CLI nightly build is published as an npm tarball (`.tgz`). Installing it in an **isolated folder** keeps it separate from any globally installed version.
 
-    **1. Prepare a test folder**
+    <Steps>
+      <Step title="Prepare a test folder">
+        Download the `.tgz` file from the [nightly builds repository <strong><sup>↗</sup></strong>](https://github.com/usebruno/bruno-nightly-builds/releases) and keep the original filename unchanged. Then create a clean folder and move the file into it:
 
-    Download the `.tgz` file from the [nightly builds repository <strong><sup>↗</sup></strong>](https://github.com/usebruno/bruno-nightly-builds/releases) and keep the original filename unchanged. Then create a clean folder and move the file into it:
+        ```bash
+        mkdir cli-portable-nightly
+        mv usebruno-cli-*.tgz cli-portable-nightly/
+        cd cli-portable-nightly
+        ```
+      </Step>
 
-    ```bash
-    mkdir cli-portable-nightly
-    mv usebruno-cli-*.tgz cli-portable-nightly/
-    cd cli-portable-nightly
-    ```
+      <Step title="Install the bundle locally">
+        ```bash
+        npm init -y
+        npm install --offline ./usebruno-cli-<version>.tgz
+        ```
+      </Step>
 
-    **2. Install the bundle locally**
+      <Step title="Verify the installation">
+        ```bash
+        npx bru --version
+        # Expected output: the nightly version number, e.g. 3.5.0
+        ```
+      </Step>
 
-    ```bash
-    npm init -y
-    npm install --offline ./usebruno-cli-<version>.tgz
-    ```
+      <Step title="Run your collection using the local CLI">
+        The nightly binary is installed inside `cli-portable-nightly/node_modules/.bin/bru`. When you want to run a collection that lives in a **different folder**, you must use the full absolute path to that binary.
 
-    **3. Verify the installation**
+        Using `./node_modules/.bin/bru` only works from inside the `cli-portable-nightly` folder itself.
 
-    ```bash
-    npx bru --version
-    # Expected output: the nightly version number, e.g. 3.5.0
-    ```
+        ```bash
+        # Step into your collection folder
+        cd /path/to/your-collection
 
-    **4. Run your collection using the local CLI**
+        # macOS / Linux — use the absolute path to the nightly binary
+        /path/to/cli-portable-nightly/node_modules/.bin/bru run --env <name>
 
-    The nightly binary is installed inside `cli-portable-nightly/node_modules/.bin/bru`. When you want to run a collection that lives in a **different folder**, you must use the full absolute path to that binary. 
-    
-    Using `./node_modules/.bin/bru` only works from inside the `cli-portable-nightly` folder itself.
+        # Windows
+        C:\path\to\cli-portable-nightly\node_modules\.bin\bru run --env <name>
+        ```
 
-    ```bash
-    # Step into your collection folder
-    cd /path/to/your-collection
+        If you are not sure of the path, run `pwd` while inside `cli-portable-nightly` to get it:
 
-    # macOS / Linux — use the absolute path to the nightly binary
-    /path/to/cli-portable-nightly/node_modules/.bin/bru run --env <name>
+        ```bash
+        cd /path/to/cli-portable-nightly
+        pwd
+        # e.g. /Users/yourname/Downloads/cli-portable-nightly
+        ```
 
-    # Windows
-    C:\path\to\cli-portable-nightly\node_modules\.bin\bru run --env <name>
-    ```
+        Then use that output as the prefix:
 
-    If you are not sure of the path, run `pwd` while inside `cli-portable-nightly` to get it:
+        ```bash
+        cd /path/to/your-collection
+        /Users/yourname/Downloads/cli-portable-nightly/node_modules/.bin/bru run --env <name>
+        ```
 
-    ```bash
-    cd /path/to/cli-portable-nightly
-    pwd
-    # e.g. /Users/yourname/Downloads/cli-portable-nightly
-    ```
+        <Tip>
+          To avoid typing the full path every time, export it as a shell variable for your session:
 
-    Then use that output as the prefix:
-
-    ```bash
-    cd /path/to/your-collection
-    /Users/yourname/Downloads/cli-portable-nightly/node_modules/.bin/bru run --env <name>
-    ```
-
-    <Tip>
-      To avoid typing the full path every time, export it as a shell variable for your session:
-
-      ```bash
-      export NIGHTLY_BRU=/Users/yourname/Downloads/cli-portable-nightly/node_modules/.bin/bru
-      cd /path/to/your-collection
-      $NIGHTLY_BRU run --env <name>
-      ```
-    </Tip>
+          ```bash
+          export NIGHTLY_BRU=/Users/yourname/Downloads/cli-portable-nightly/node_modules/.bin/bru
+          cd /path/to/your-collection
+          $NIGHTLY_BRU run --env <name>
+          ```
+        </Tip>
+      </Step>
+    </Steps>
   </Tab>
 </Tabs>
 
