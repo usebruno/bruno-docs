@@ -150,6 +150,8 @@
                   "auth/aws-signature",
                   "auth/ntlm",
                   "auth/oauth1",
+                  "auth/api-key",
+                  "auth/wsse",
                   "auth/akamai-edgegrid",
                   {
                     "group": "OAuth 2.0",
@@ -192,6 +194,7 @@
                         "pages": [
                           "secrets-management/secret-managers/aws-secrets-manager/overview",
                           "secrets-management/secret-managers/aws-secrets-manager/adding-a-secret-provider",
+                          "secrets-management/secret-managers/aws-secrets-manager/cli-authentication",
                           "secrets-management/secret-managers/aws-secrets-manager/configuring-and-fetching-secrets",
                           "secrets-management/secret-managers/aws-secrets-manager/using-secrets"
                         ]
