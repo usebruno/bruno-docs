@@ -1658,3 +1658,9 @@ div.fixed.inset-0.z-40 [role="dialog"] {
   padding-top: 3.5px;
   padding-bottom: 3.5px;
 }
+
+/* OpenCollection wordmark on /opencollection-yaml/overview. The SVG is solid
+   black, so invert it in dark mode rather than shipping a second asset. */
+.dark .oc-logo {
+  filter: invert(1);
+}
