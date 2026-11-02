@@ -3,21 +3,32 @@ title: "Request History"
 sidebarTitle: "Request History"
 ---
 
-The History feature in Bruno allows you to view a detailed log of all the requests you've executed and worked with within your collections. This feature helps you track and revisit past actions, making it easier to manage and troubleshoot your workflow.
+The History feature in Bruno keeps a log of requests you have sent in a collection. Use it to reopen a past call, check its status and timing, and inspect the saved response without running the request again.
 
-## How It Works
+## How it works
 
-The History feature automatically tracks the actions and requests made within your collections. Each time you run a request or make changes, it is logged in the history, providing you with a comprehensive timeline of your interactions.
+Bruno records each send for the active collection. History entries show when the request ran, the method and URL, and the status code. Selecting an entry opens its details in the right pane.
 
-### View History Logs
+## View request history
 
-To view your history follow the below steps:
+1. Open a collection in Bruno.
+2. In the collection toolbar (top right, next to the environment selector), click the `···` menu.
+3. Select **History**.
 
-1. Navigate or create a request in Bruno.
-2. Click on the **History** feature icon (top right corner).
+![Open History from the collection ··· menu](/images/screenshots/get-started/history/navigate-history.webp)
 
-![navigate history](/images/screenshots/get-started/history/navigate-history.webp)
+4. Bruno opens a **History** tab with the request activity log for that collection.
+5. Select a row in the list to inspect that run. The right pane shows **Response**, **Headers**, **Timeline**, and **Tests** for the selected entry.
 
-3. You will have access to the complete request activity log.
+![History tab with request list and selected response](/images/screenshots/get-started/history/history_log.webp)
 
-![navigate history](/images/screenshots/get-started/history/history_log.webp)
+### What you see in the list
+
+| Column | Description |
+| ------ | ----------- |
+| **Time** | When the request was sent (for example, a few seconds ago or days ago) |
+| **Method** | HTTP method (`GET`, `POST`, and so on) |
+| **URL** | Request URL |
+| **Status** | Response status code |
+
+Use the refresh control to reload the list, or clear history when you want to remove past entries from this collection.
