@@ -77,6 +77,27 @@ You can use **Match** switcher between **All rules AND** and **Any rule OR** to 
 ![mock-server-request-logs](/images/screenshots/v4/mock-severs/mock-sever-request-dashboard.webp)
 
 
+**Operators**
+
+| Operator       | Behavior                                                                                                   |
+|----------------|------------------------------------------------------------------------------------------------------------|
+| **equals**     | Matches when the field value is exactly the same as **Value**.                                               |
+| **not equals** | Matches when the field value is different from **Value**.                                                    |
+| **contains**   | Matches when the field value includes **Value** as a substring.                                              |
+| **matches**    | Treats **Value** as a JavaScript regular expression and matches when the pattern is found in the field value. |
+
+The **matches** operator finds the pattern anywhere in the value. To match the whole value, anchor the pattern with `^` and `$`, for example `^user-[0-9]+$`. An invalid pattern never matches. Bruno compares every value as a string, so a rule on a numeric body field such as `age` with value `^3[0-9]$` matches `30` through `39`.
+
+**Example:** Match a query parameter with a regular expression
+
+To return a response only when the `id` query parameter is numeric, configure the rule as:
+
+| Target | Key | Operator | Value     |
+|--------|-----|----------|-----------|
+| Query  | id  | matches  | `^[0-9]+$` |
+
+A request to `/users?id=42` matches this rule. A request to `/users?id=abc` does not.
+
 **Example:** Match a request body
 
 Suppose you have multiple responses configured for the same `POST /users` endpoint. You can add different rules to each response and let Bruno select the appropriate response based on the incoming request body.
