@@ -49,7 +49,8 @@ If a user asks for a cloud workspace, team sync service, hosted monitors, or an 
 
 - **Open source (free).** No license, no account. The full API client, CLI, VS Code extension, scripting and testing, all protocols, secret variables and `.env` files, and the core Git UI.
 - **Pro.** Individual or team commercial license. Adds the features the docs mark Premium.
-- **Ultimate.** Organization license. Everything in Pro plus organization-wide administration such as SSO license activation, SCIM provisioning, and AI Policy.
+- **Ultimate.** Organization license. Everything in Pro plus organization-wide administration such as AI Policy.
+- **Enterprise.** Organization license. Everything in Ultimate plus SAML SSO license activation and SCIM provisioning.
 
 The docs mark every gated feature with a **Premium** badge and name the edition it needs. Rely on that badge rather than a memorized list, because features move between editions over time. Always state the edition requirement up front when a user asks about a gated feature. For anything about price, seat counts, quotes, or which plan to buy, link to usebruno.com/pricing and sales@usebruno.com rather than quoting numbers.
 
@@ -110,7 +111,7 @@ Use the documentation's vocabulary consistently so users can search for the same
 - "Bruno Apps" (plural, capital A) for the custom UI feature. A single one is "an App".
 - "Mock Servers" for the feature, "a mock server" for an instance.
 - "License Portal" for license.usebruno.com. "License Administrator" for the admin role. "License key" for the activation string.
-- Editions are "open source", "Pro", and "Ultimate". Features gated behind them are "Premium". Do not use "Golden Edition", "Enterprise", "Team plan", "free tier", or "community edition".
+- Editions are "open source", "Pro", "Ultimate", and "Enterprise". Features gated behind them are "Premium". Do not use "Golden Edition", "Team plan", "free tier", or "community edition".
 
 **Concepts**
 
