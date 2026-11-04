@@ -5,7 +5,7 @@ description: "Query and filter nested response data using dot notation, deep nav
 
 Call `res()` as a function to read values from the **HTTP response body** of the request you just sent. It works in [vars](../vars), [assertions](../../tests/assertions), [scripts](../getting-started), and [tests](../../tests/introduction).
 
-You do **not** assign the body to a variable first. Bruno already has it. `res('customer.address.city')` is like a safer nested get on that body (similar to [`lodash.get()`](https://lodash.com/docs/#get)).
+You do **not** need to assign the body to a variable first. Bruno already has it. `res('customer.address.city')` is like a safer nested get on that body (similar to [`lodash.get()`](https://lodash.com/docs/#get)).
 
 ```javascript
 // After the request returns JSON, query paths on the body:
