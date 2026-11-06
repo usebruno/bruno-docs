@@ -16,6 +16,70 @@ Bruno provides a powerful response format selector that allows you to view API r
 
 ![Data Type Selector](/images/screenshots/send-request/res-data-and-cookie/data-type-selector.webp)
 
+### Filter with JSONPath
+
+Large JSON responses are hard to scan by eye. **Filter with JSONPath** lets you focus the response pane on only the fields or array items you care about, without copying the body into a script or another tool.
+
+Use it when you want to:
+
+- Check one nested field after a send (for example a city, id, or amount)
+- Confirm a list of values across nested arrays
+- Debug payloads from echo or staging APIs before writing tests
+
+Click the filter (funnel) icon at the bottom of the response pane when the body is shown as JSON. The tooltip reads **Filter with JSONPath**.
+
+![Filter with JSONPath control on the response pane](/images/screenshots/v4/chores/filter-with-jsonpath.webp)
+
+#### How to use it
+
+1. Send a request that returns JSON.
+2. In the response pane, keep the format set to **JSON**.
+3. Click the filter icon and enter a [JSONPath](https://www.rfc-editor.org/info/rfc9535/) expression.
+4. Bruno updates the pane to show only the matched values. Clear the filter to see the full body again.
+
+#### Examples
+
+These examples use the same customer payload shown in the screenshot:
+
+```json
+{
+  "customer": {
+    "address": {
+      "city": "bangalore"
+    },
+    "orders": [
+      {
+        "id": "order-1",
+        "items": [
+          { "id": 1, "amount": 10 },
+          { "id": 2, "amount": 20 }
+        ]
+      },
+      {
+        "id": "order-2",
+        "items": [
+          { "id": 3, "amount": 30 },
+          { "id": 4, "amount": 40 }
+        ]
+      }
+    ]
+  }
+}
+```
+
+| JSONPath | What you get |
+| -------- | ------------ |
+| `$.customer.address.city` | `"bangalore"` |
+| `$.customer.orders[*].id` | `["order-1", "order-2"]` |
+| `$.customer.orders[0].items[*].amount` | `[10, 20]` |
+| `$.customer.orders[*].items[*].amount` | `[10, 20, 30, 40]` |
+| `$.customer.orders[*].items[?(@.amount > 20)]` | Items with `amount` greater than `20` |
+| `$.customer.orders[1].items[?(@.id == 4)].amount` | `[40]` |
+
+<Tip>
+  JSONPath in the response pane is for **inspecting** the body in the UI. To read the same fields in scripts, tests, or vars, use [Response query](/testing/script/response/response-query) (`res('customer.address.city')`).
+</Tip>
+
 ### Headers
 
 The request headers are displayed to show what was sent to the API. This can help in debugging and understanding the context of the request.

@@ -1,0 +1,25 @@
+---
+title: "WSSE authentication"
+sidebarTitle: "WSSE"
+---
+
+WSSE (Web Services Security) authentication proves the caller's identity with a username and password. Bruno builds the required WSSE token from those credentials and attaches it to the request, so you do not have to construct the header by hand.
+
+Use WSSE when an API documents UsernameToken / WSSE as its auth scheme (common on some SOAP and enterprise HTTP APIs).
+
+## Configure WSSE auth
+
+1. Open a request and go to the **Auth** tab.
+2. Select **WSSE Auth** from the Auth Type dropdown.
+3. Enter the **Username**.
+4. Enter the **Password**. For extra security, store it in a [secret variable](/secrets-management/secret-variables) and reference it (for example, `{{password}}`).
+5. Send the request. Bruno generates the WSSE credentials and adds them to the request for you.
+
+| Field | Description |
+| ----- | ----------- |
+| **Username** | WSSE username |
+| **Password** | WSSE password |
+
+<Tip>
+  **Avoid repeating the same key on every request.** Configure API Key auth once on the **folder** or **collection** Auth tab. Bruno applies those credentials automatically to every request under that folder or collection set to **Inherit**. See [Inherit auth](/auth/overview#inherit-auth).
+</Tip>
