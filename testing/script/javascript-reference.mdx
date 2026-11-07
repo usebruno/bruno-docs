@@ -1191,6 +1191,10 @@ console.log("Company:", company);
 req.setHeader("x-company-id", bru.getFolderVar("companyId"));
 ```
 
+<Note>
+  Folder variables are read-only in scripts. There is no `bru.setFolderVar()` method. To store a value from a script, use [`bru.setVar()`](#bru-setvar-key-value) for a runtime variable, [`bru.setCollectionVar()`](#bru-setcollectionvar-key-value) for a collection variable, or [`bru.setEnvVar()`](#bru-setenvvar-key-value) for an environment variable.
+</Note>
+
 ### `bru.getRequestVar(key)`
 
 Returns the value of a request-level variable. Request variables are defined within a specific request and are only accessible in that request's scripts.
@@ -1667,6 +1671,8 @@ See [JavaScript Sandbox](/get-started/configure/javascript-sandbox#detecting-san
 Executes another request in the collection by its path and returns its response. Useful for chaining dependent requests inside a single script without relying on collection runner order.
 
 The argument is the request's path relative to the collection root, without the `.bru` or `.yml` extension. For a request at the top of the collection, pass just the request name (for example, `"Login"`). For a request inside a folder, include the folder path using forward slashes (for example, `"Auth/Login"`).
+
+The path uses the folder and file names on disk, which can differ from the display names in the sidebar. To check a request's on-disk name, right-click the request in the sidebar and select **Info**. The **File Name (on filesystem)** field shows the name to use, without the extension. Do the same for each parent folder.
 
 If Bruno cannot find a request at that path, the promise rejects with `bru.runRequest: invalid request path - <resolved path>`. Wrap the call in `try/catch` to handle a mistyped name.
 
