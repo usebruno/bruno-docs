@@ -69,7 +69,7 @@ The CLI **does not auto-migrate**. If it finds a `secrets.json` but no `external
     {
       "environment": "Production",
       "secrets": [
-        { "name": "db", "path": "secret/db", "enabled": true }
+        { "name": "db", "path": "secret/data/db", "enabled": true }
       ]
     }
   ]
@@ -77,6 +77,8 @@ The CLI **does not auto-migrate**. If it finds a `secrets.json` but no `external
 ```
 
 Configuration lives at the collection root. All environments share the same vault connection; per-environment secret paths are listed in `data[].secrets`.
+
+Secret paths are sent to Vault as-is and start with your KV engine's mount path (`secret/` by default). KV v2 engines need the `data/` segment (`secret/data/db`); KV v1 engines do not (`secret/db`).
 
 ### Environment file (v4+)
 
