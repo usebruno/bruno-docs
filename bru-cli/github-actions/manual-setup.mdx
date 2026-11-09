@@ -133,10 +133,10 @@ git push origin main
 
 <AccordionGroup>
   <Accordion title="CLI process is OOM-killed on large collections (Bruno CLI v4+)">
-    Large `bru run` jobs can retain memory per request and exhaust a small CI VM. If the runner dies mid-collection, add `--experimental-cache-modules`:
+    Large `bru run` jobs can retain memory per request and exhaust a small CI VM. If the runner dies mid-collection, add `--cache-modules` with the developer sandbox:
 
 ```yaml
-run: bru run --env ci --experimental-cache-modules
+run: bru run --env ci --sandbox developer --cache-modules
 ```
 
 Do not enable the flag unless you see this RSS growth. See [Reduce CLI memory use on large runs](/bru-cli/run/overview#reduce-cli-memory-use-on-large-runs).
