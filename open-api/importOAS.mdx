@@ -52,7 +52,7 @@ After importing the OAS file, the sample collection will look like this:
 
 ## Import Settings
 
-Bruno provides flexible options for organizing your imported OpenAPI collection. You can choose how to group your API endpoints into folders during the import process.
+Bruno provides flexible options for organizing your imported OpenAPI collection. You can choose how to group your API endpoints into folders, how to name requests, and where to set authentication.
 
 ### Folder Arrangement Options
 
@@ -93,6 +93,23 @@ paths:
 **Tag Name Formatting**: BRU format supports alphanumeric characters, hyphens (-), and underscores (_) in tag names. When importing collections with tags containing spaces, Bruno automatically replaces them with underscores. For example, `User Management` becomes `User_Management`. To preserve original tag names, use the OpenCollection (YAML) format instead.
 </Info>
 
+### Naming requests
+
+By default, Bruno names each request from the operation's `summary`. Under **Advanced**, use the **Naming requests** dropdown to pick a different source:
+
+- **Summary** (default): the operation's `summary`
+- **operationId**: the operation's `operationId`
+- **Description**: the first line of the operation's `description`
+- **Path**: the HTTP method and path, for example `GET /users/{id}`
+
+If an operation doesn't have the selected field, Bruno falls back to summary, operationId, description, then method and path. Bruno strips Markdown from names, keeps them to a single line, and caps them at 100 characters.
+
+### Set authentication at collection level
+
+By default, Bruno copies the spec's security scheme onto every request. Under **Advanced**, turn on **Set authentication at collection level** to add the scheme to the collection instead. Requests and folders inherit it, so you update a token in one place. Operations that use a different scheme keep their own auth.
+
+Operations that need no authentication (`security: []` in the spec) are imported with **No Auth**, whether or not this option is on.
+
 ### Configuring Import Settings
 
 1. **Select Import Method**: Choose either file or URL import
@@ -102,7 +119,10 @@ paths:
 2. **Choose Folder Arrangement**: Select your preferred grouping method from the dropdown:
    - **Paths**: Group by URL path structure
    - **Tags** (default): Group by OpenAPI tags
-3. **Import**: Click the import button to create your collection
+3. **(Optional) Expand Advanced**: Choose a **Naming requests** source and turn on **Set authentication at collection level** if you want requests to inherit auth from the collection.
+4. **Import**: Click the import button to create your collection
+
+If you turn on **Check for Spec Updates**, Bruno saves your naming and authentication choices with the [OpenAPI Sync](/open-api/openapi-sync) connection and reuses them on every later sync.
 
 ![OpenAPI Import Dialog](/images/screenshots/open-api/openapi-import.webp)
 

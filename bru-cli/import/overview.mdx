@@ -122,6 +122,20 @@ bru import openapi \
   --group-by path
 ```
 
+### Set auth at collection level and choose request names
+
+By default, the CLI copies the spec's security scheme onto every request and names requests from each operation's `summary`. Use `--auth-placement collection` to set the scheme on the collection instead, so requests inherit it. Operations that use a different scheme keep their own auth. Use `--request-name-source` to name requests from `operationId`, `description`, or `path` (the method and path):
+
+```bash copy
+bru import openapi \
+  --source <your-openapi.yaml> \
+  --output <preferred-location> \
+  --auth-placement collection \
+  --request-name-source operationId
+```
+
+If an operation is missing the chosen field, the CLI tries the remaining fields in the order `summary`, `operationId`, `description`, `path`.
+
 ## Importing WSDL (SOAP APIs)
 
 This imports a WSDL file and generates a Bruno collection in the output directory.
