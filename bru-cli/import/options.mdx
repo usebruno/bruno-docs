@@ -30,6 +30,8 @@ The other commands document their options on their own pages: [bru run](/bru-cli
 | `--collection-format [string]`     | **OpenAPI folder import only:** `bru` (classic `.bru` files) or `opencollection` ([OpenCollection YAML](/opencollection-yaml/overview)). Default: `opencollection`. |
 | `--insecure`                       | Skip TLS verification when `--source` is an `https://` URL                                                                                                          |
 | `-g`, `--group-by [string]`        | OpenAPI only: group requests by `tags` or `path` (default: `tags`)                                                                                                  |
+| `--auth-placement [string]`        | OpenAPI only: `request` sets the spec's auth on each request, `collection` sets it on the collection so requests inherit it (default: `request`)                    |
+| `--request-name-source [string]`   | OpenAPI only: name requests from `summary`, `operationId`, `description`, or `path` (method and path). Default: `summary`. Missing fields fall back in that order. |
 
 Use `--output` to write a collection to a directory, or `--output-file` to write a single collection JSON export. For directory imports, `--collection-format` chooses between OpenCollection YAML (the default) and classic `.bru` files.
 
