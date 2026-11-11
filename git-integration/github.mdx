@@ -1,0 +1,70 @@
+---
+title: "Collaboration via GitHub"
+sidebarTitle: "GitHub"
+---
+
+GitHub is one of the most widely used Git hosting platforms for teams and open-source projects. It gives you repositories, pull requests, issues, and Actions in one place with Bruno collections stored alongside your code stay versioned with the same workflow your team already uses.
+
+Bruno's Git functionality works with GitHub the same way it works with other Git hosts. You can manage, collaborate on, and maintain API collections in a GitHub repository.
+
+## Configure GitHub
+
+You need to set up an SSH key with GitHub. While you can also use a personal access token over HTTPS, that usually means entering credentials on every operation. SSH is a more convenient and secure way to work with GitHub.
+
+### Create Repository on GitHub
+
+To get started, create a repository on GitHub:
+
+1. Log into your GitHub account (create one if you don't have one)
+2. Click the **+** button in the top-right and select **New repository**
+3. Fill in the required fields (Repository name, Description, Visibility)
+4. Click **Create repository**
+
+Once the repository exists, click the green **Code** button, choose **SSH**, and copy the URL. It looks similar to:
+
+```bash
+git@github.com:<username>/<repository-name>.git
+```
+
+### Configure SSH Key
+
+Follow these steps to configure an SSH key on your local system:
+
+#### 1. Generate SSH Key
+
+Open your terminal and execute:
+
+```bash
+ssh-keygen -t ed25519 -C "your_email@example.com" -f ~/.ssh/id_ed25519_github
+```
+
+#### 2. Add SSH Key to SSH Agent
+
+Add the SSH key to your SSH agent so it can be used for authentication:
+
+```bash
+ssh-add ~/.ssh/id_ed25519_github
+```
+
+#### 3. Add the SSH Key to Your GitHub Account
+
+1. Go to **GitHub** > **Settings** (click your avatar) > **SSH and GPG keys**
+2. Click **New SSH key**
+3. Give your key a title (e.g., "Bruno Development")
+4. Paste your `id_ed25519_github.pub` content
+5. Click **Add SSH key**
+
+## Use GitHub with Bruno
+
+1. Create a Collection inside Bruno (if you haven't already)
+2. Click on the **Git** icon and select **Initialize repo**
+3. Click on **main** and select **Remotes** from the dropdown
+4. Add **origin** as the name of the remote and paste your repository URL (copied previously)
+
+Now you can perform push, pull, and other Git operations directly from Bruno.
+
+For more detailed information about Git operations in Bruno, check out the [Collaboration via GUI documentation](/git-integration/using-gui/intro).
+
+<Tip>
+  Looking to search and import collections from GitHub inside Bruno? See the [GitHub provider](/git-providers/github) guide.
+</Tip>

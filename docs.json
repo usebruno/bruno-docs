@@ -286,6 +286,7 @@
                     ]
                   },
                   "git-integration/using-cli",
+                  "git-integration/github",
                   "git-integration/gitlab",
                   "git-integration/bitbucket",
                   "git-integration/azure-devops"
