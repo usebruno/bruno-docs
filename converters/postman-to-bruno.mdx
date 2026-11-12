@@ -8,6 +8,10 @@ import ConvertersRun from '/snippets/converters-run.mdx';
 
 Convert a Postman collection and environment into a Bruno collection folder you can open in the app or run with the CLI.
 
+<Tip>
+  Prefer the CLI for bulk migrations? From Bruno 4.4.0 onward you can run `bru import postman -s <collection.json> -o <dir>` without writing a script. See [bru import](/bru-cli/import/overview#importing-postman-collections). Use the script below when you want to convert in your own Node code.
+</Tip>
+
 Start by exporting the collection from Postman in the Collection v2.1 format and, if you use one, the environment. See [Postman migration](/get-started/import-export-data/postman-migration) for where to find the export buttons.
 
 ## Convert the collection and environment
