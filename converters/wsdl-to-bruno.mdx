@@ -6,15 +6,11 @@ sidebarTitle: "WSDL to Bruno"
 import ConvertersSetup from '/snippets/converters-setup.mdx';
 import ConvertersRun from '/snippets/converters-run.mdx';
 
-Convert a WSDL (Web Services Description Language) file into a Bruno collection folder of SOAP requests you can open in the app or run with the CLI. The converter creates one request per operation, with a SOAP envelope built from the XML schema and the `Content-Type` and `SOAPAction` headers already set.
+Convert a WSDL file into a Bruno collection of SOAP requests you can open in the app or run with the CLI.
 
 <Tip>
   You do not need a script to import a WSDL file. The Bruno app imports one through **Import Collection** (see [Import collections](/get-started/import-export-data/import-collections#7-wsdl-web-services-description-language)), and the CLI does it in one command: `bru import wsdl --source <service.wsdl> --output <output-folder>` (see [bru import](/bru-cli/import/overview)). Use the script below when you want to process the collection in your own code.
 </Tip>
-
-<Info>
-  WSDL import is available in Bruno v2.14.0 and later.
-</Info>
 
 ## Convert the WSDL
 
@@ -22,95 +18,33 @@ Convert a WSDL (Web Services Description Language) file into a Bruno collection 
 
 ### 1. Read the arguments
 
-Import the converter, the file writers from `@usebruno/filestore`, and Node's file helpers. Take the paths from the command line and print a usage line if any are missing. `format` is `'yml'` for OpenCollection YAML or `'bru'` for classic `.bru` files.
+Import the converter, `writeCollection` from `@usebruno/io`, and Node's file helpers. Take the paths from the command line and print a usage line if any are missing.
 
 ```javascript
 import { wsdlToBruno } from '@usebruno/converters';
-import { stringifyCollection, stringifyFolder, stringifyRequest, stringifyEnvironment } from '@usebruno/filestore';
-import { mkdir, readFile, writeFile } from 'fs/promises';
-import path from 'path';
+import { writeCollection } from '@usebruno/io';
+import { readFile } from 'fs/promises';
 
 const [inputFile, outputDir] = process.argv.slice(2);
 if (!inputFile || !outputDir) {
   console.error('Usage: node convert.mjs <service.wsdl> <output-folder>');
   process.exit(1);
 }
-
-const format = 'yml';
 ```
 
-### 2. Add the helpers
+### 2. Convert and write
 
-`safeName` strips characters that are not allowed in file names. `write` saves a file and creates any missing parent folders.
-
-```javascript
-const safeName = (name) => name.replace(/[<>:"/\\|?*\x00-\x1F]/g, '-');
-
-const write = async (file, content) => {
-  await mkdir(path.dirname(file), { recursive: true });
-  await writeFile(file, content);
-};
-```
-
-### 3. Convert
-
-`wsdlToBruno` resolves to the Bruno collection. See the [API Reference](./api-reference#wsdltobruno) for the full signature.
+`wsdlToBruno` resolves to the Bruno collection. Pass it to `writeCollection` to save an OpenCollection YAML folder. See the [API Reference](./api-reference#wsdltobruno) for the full signature.
 
 ```javascript
-const collection = await wsdlToBruno(await readFile(inputFile, 'utf8'));
-```
+const wsdlContent = await readFile(inputFile, 'utf8');
+const collection = await wsdlToBruno(wsdlContent);
+await writeCollection(collection, outputDir);
 
-### 4. Write the collection settings and environments
-
-`brunoConfig` holds the collection settings. For `.bru` collections it is written to `bruno.json`. For yml it is embedded in `opencollection.yml`. The collection root holds collection-level auth, headers, and scripts. Each environment gets its own file in the `environments` folder.
-
-```javascript
-const brunoConfig = { version: collection.version, name: collection.name, type: 'collection', ignore: ['node_modules', '.git'] };
-
-const root = stringifyCollection(collection.root || {}, brunoConfig, { format });
-if (format === 'yml') {
-  await write(path.join(outputDir, 'opencollection.yml'), root);
-} else {
-  await write(path.join(outputDir, 'bruno.json'), JSON.stringify(brunoConfig, null, 2));
-  await write(path.join(outputDir, 'collection.bru'), root);
-}
-
-for (const env of collection.environments || []) {
-  await write(path.join(outputDir, 'environments', `${safeName(env.name)}.${format}`), stringifyEnvironment(env, { format }));
-}
-```
-
-### 5. Write the folders and requests
-
-Each folder becomes a directory and each request a file. Folder-level auth, headers, and scripts go in `folder.yml` or `folder.bru`. A stack is used instead of recursion so deeply nested collections are safe.
-
-```javascript
-const stack = collection.items.map((item) => [item, outputDir]);
-while (stack.length) {
-  const [item, parent] = stack.pop();
-  if (item.type === 'folder') {
-    const folderDir = path.join(parent, safeName(item.name));
-    await mkdir(folderDir, { recursive: true });
-    if (item.root) await write(path.join(folderDir, `folder.${format}`), stringifyFolder(item.root, { format }));
-    for (const child of item.items || []) stack.push([child, folderDir]);
-  } else {
-    await write(path.join(parent, `${safeName(item.name)}.${format}`), stringifyRequest(item, { format }));
-  }
-}
-```
-
-### 6. Report
-
-Print where the collection was written.
-
-```javascript
 console.log(`Collection written to ${outputDir}`);
 ```
 
-
-### 7. Run the script
-
-Run the script with Node.js, passing the paths as arguments.
+### 3. Run the script
 
 <CodeGroup>
 ```bash convert.mjs
@@ -127,33 +61,26 @@ Where:
 - `<service.wsdl>`: The WSDL file
 - `<output-folder>`: The folder to create the Bruno collection in. It is created if it does not exist
 
-The output folder looks like this (with `format` set to `'bru'`, the files are `bruno.json`, `collection.bru`, `folder.bru`, and `.bru` requests instead):
+The output folder looks like this:
 
 ```text
 my-collection/
 ├── opencollection.yml
-└── CalculatorService/
+└── Calculator/
     ├── Add.yml
     └── Subtract.yml
 ```
 
-One folder per service, one file per operation.
-
 ### Full script
-
-The complete script, ready to copy. `convert.mjs` is an ES module with top-level `await`. `convert.js` is the same script as CommonJS, with the steps inside an async `main` function.
 
 <CodeGroup>
 ```javascript convert.mjs
-// Converts a WSDL file into a Bruno collection folder of SOAP requests.
+// Converts a WSDL file into a Bruno collection folder.
 // Usage: node convert.mjs <service.wsdl> <output-folder>
 
 import { wsdlToBruno } from '@usebruno/converters';
-import { stringifyCollection, stringifyFolder, stringifyRequest, stringifyEnvironment } from '@usebruno/filestore';
-import { mkdir, readFile, writeFile } from 'fs/promises';
-import path from 'path';
-
-// ---- Arguments ----
+import { writeCollection } from '@usebruno/io';
+import { readFile } from 'fs/promises';
 
 const [inputFile, outputDir] = process.argv.slice(2);
 if (!inputFile || !outputDir) {
@@ -161,73 +88,20 @@ if (!inputFile || !outputDir) {
   process.exit(1);
 }
 
-// 'yml' (OpenCollection YAML) or 'bru' (classic .bru files)
-const format = 'yml';
-
-// ---- Helpers ----
-
-// Strip characters not allowed in file names
-const safeName = (name) => name.replace(/[<>:"/\\|?*\x00-\x1F]/g, '-');
-
-// Write a file, creating parent folders as needed
-const write = async (file, content) => {
-  await mkdir(path.dirname(file), { recursive: true });
-  await writeFile(file, content);
-};
-
-// ---- Convert ----
-
-const collection = await wsdlToBruno(await readFile(inputFile, 'utf8'));
-
-// ---- Write the collection folder ----
-
-// Collection settings: bruno.json for .bru, embedded in opencollection.yml for yml
-const brunoConfig = { version: collection.version, name: collection.name, type: 'collection', ignore: ['node_modules', '.git'] };
-
-// Collection-level auth, headers, and scripts
-const root = stringifyCollection(collection.root || {}, brunoConfig, { format });
-if (format === 'yml') {
-  await write(path.join(outputDir, 'opencollection.yml'), root);
-} else {
-  await write(path.join(outputDir, 'bruno.json'), JSON.stringify(brunoConfig, null, 2));
-  await write(path.join(outputDir, 'collection.bru'), root);
-}
-
-// One file per environment
-for (const env of collection.environments || []) {
-  await write(path.join(outputDir, 'environments', `${safeName(env.name)}.${format}`), stringifyEnvironment(env, { format }));
-}
-
-// Folders become directories, requests become files. A stack avoids recursion on deep trees.
-const stack = collection.items.map((item) => [item, outputDir]);
-while (stack.length) {
-  const [item, parent] = stack.pop();
-  if (item.type === 'folder') {
-    const folderDir = path.join(parent, safeName(item.name));
-    await mkdir(folderDir, { recursive: true });
-    // Folder-level auth, headers, and scripts
-    if (item.root) await write(path.join(folderDir, `folder.${format}`), stringifyFolder(item.root, { format }));
-    for (const child of item.items || []) stack.push([child, folderDir]);
-  } else {
-    await write(path.join(parent, `${safeName(item.name)}.${format}`), stringifyRequest(item, { format }));
-  }
-}
-
-// ---- Report ----
+const wsdlContent = await readFile(inputFile, 'utf8');
+const collection = await wsdlToBruno(wsdlContent);
+await writeCollection(collection, outputDir);
 
 console.log(`Collection written to ${outputDir}`);
 ```
 
 ```javascript convert.js
-// Converts a WSDL file into a Bruno collection folder of SOAP requests.
+// Converts a WSDL file into a Bruno collection folder.
 // Usage: node convert.js <service.wsdl> <output-folder>
 
 const { wsdlToBruno } = require('@usebruno/converters');
-const { stringifyCollection, stringifyFolder, stringifyRequest, stringifyEnvironment } = require('@usebruno/filestore');
-const { mkdir, readFile, writeFile } = require('fs/promises');
-const path = require('path');
-
-// ---- Arguments ----
+const { writeCollection } = require('@usebruno/io');
+const { readFile } = require('fs/promises');
 
 const [inputFile, outputDir] = process.argv.slice(2);
 if (!inputFile || !outputDir) {
@@ -235,61 +109,10 @@ if (!inputFile || !outputDir) {
   process.exit(1);
 }
 
-// 'yml' (OpenCollection YAML) or 'bru' (classic .bru files)
-const format = 'yml';
-
-// ---- Helpers ----
-
-// Strip characters not allowed in file names
-const safeName = (name) => name.replace(/[<>:"/\\|?*\x00-\x1F]/g, '-');
-
-// Write a file, creating parent folders as needed
-const write = async (file, content) => {
-  await mkdir(path.dirname(file), { recursive: true });
-  await writeFile(file, content);
-};
-
-// CommonJS cannot use top-level await, so the steps run inside an async function
 async function main() {
-  // ---- Convert ----
-
-  const collection = await wsdlToBruno(await readFile(inputFile, 'utf8'));
-
-  // ---- Write the collection folder ----
-
-  // Collection settings: bruno.json for .bru, embedded in opencollection.yml for yml
-  const brunoConfig = { version: collection.version, name: collection.name, type: 'collection', ignore: ['node_modules', '.git'] };
-
-  // Collection-level auth, headers, and scripts
-  const root = stringifyCollection(collection.root || {}, brunoConfig, { format });
-  if (format === 'yml') {
-    await write(path.join(outputDir, 'opencollection.yml'), root);
-  } else {
-    await write(path.join(outputDir, 'bruno.json'), JSON.stringify(brunoConfig, null, 2));
-    await write(path.join(outputDir, 'collection.bru'), root);
-  }
-
-  // One file per environment
-  for (const env of collection.environments || []) {
-    await write(path.join(outputDir, 'environments', `${safeName(env.name)}.${format}`), stringifyEnvironment(env, { format }));
-  }
-
-  // Folders become directories, requests become files. A stack avoids recursion on deep trees.
-  const stack = collection.items.map((item) => [item, outputDir]);
-  while (stack.length) {
-    const [item, parent] = stack.pop();
-    if (item.type === 'folder') {
-      const folderDir = path.join(parent, safeName(item.name));
-      await mkdir(folderDir, { recursive: true });
-      // Folder-level auth, headers, and scripts
-      if (item.root) await write(path.join(folderDir, `folder.${format}`), stringifyFolder(item.root, { format }));
-      for (const child of item.items || []) stack.push([child, folderDir]);
-    } else {
-      await write(path.join(parent, `${safeName(item.name)}.${format}`), stringifyRequest(item, { format }));
-    }
-  }
-
-  // ---- Report ----
+  const wsdlContent = await readFile(inputFile, 'utf8');
+  const collection = await wsdlToBruno(wsdlContent);
+  await writeCollection(collection, outputDir);
 
   console.log(`Collection written to ${outputDir}`);
 }
@@ -301,32 +124,3 @@ main();
 ## Open the collection in the app or run it with the CLI
 
 <ConvertersRun />
-
-## Generated request structure
-
-Each SOAP operation in the collection has the following structure:
-
-### Request headers
-
-```
-Content-Type: text/xml; charset=utf-8
-SOAPAction: "http://example.com/ServiceName/OperationName"
-```
-
-### Request body
-
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-  <soap:Header>
-    <!-- Optional header elements -->
-  </soap:Header>
-  <soap:Body>
-    <OperationName xmlns="http://example.com/namespace">
-      <!-- Parameters based on WSDL schema -->
-      <Parameter1>value</Parameter1>
-      <Parameter2>value</Parameter2>
-    </OperationName>
-  </soap:Body>
-</soap:Envelope>
-```

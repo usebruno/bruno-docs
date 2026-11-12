@@ -1,10 +1,10 @@
 Install both packages:
 
 ```bash
-npm install @usebruno/converters @usebruno/filestore
+npm install @usebruno/converters @usebruno/io
 ```
 
-The converter returns a JavaScript object. Bruno needs a collection folder, so the script below converts the input and writes that folder in one go. It writes [OpenCollection YAML](/opencollection-yaml/overview) files by default. Change `format` to `'bru'` for `.bru` files instead.
+The converter returns a JavaScript object. Pass that object to `writeCollection` from `@usebruno/io` to write an [OpenCollection YAML](/opencollection-yaml/overview) folder Bruno can open.
 
 <Note>
   The script needs Node.js 18 or later.
