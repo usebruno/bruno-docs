@@ -148,6 +148,10 @@ The collection will be cloned and you can start using it immediately. Any change
 
 **Use this when:** You have an OpenAPI (Swagger) specification file and want to generate API requests from it.
 
+<Info>
+  **Naming requests**, **Set authentication at collection level**, and folder arrangement apply only when you import an OpenAPI specification as a collection. They do not apply to Postman, Insomnia, Bruno, Git, or WSDL imports.
+</Info>
+
 #### Import from OpenAPI File
 
 **Steps:**
@@ -166,10 +170,15 @@ The collection will be cloned and you can start using it immediately. Any change
      - **operationId**: use the operation's `operationId`
      - **Description**: use the first line or sentence of the description
      - **Path**: use the HTTP method and path (for example `GET /users/{id}`)
+   - Optionally turn on **Set authentication at collection level** so requests and folders inherit collection auth instead of each getting their own copy
 4. Click **Import**
 
 <Info>
-  If an operation does not have the field you selected, Bruno falls back through summary, operationId, description, then method and path. Names are cleaned to a single line, with markdown stripped and length capped so filenames stay within OS path limits.
+  If an operation does not have the naming field you selected, Bruno falls back through summary, operationId, description, then method and path. Names are cleaned to a single line, with markdown stripped and length capped so filenames stay within OS path limits.
+</Info>
+
+<Info>
+  With **Set authentication at collection level** on, Bruno places the spec's security scheme on the collection. Operations with a different scheme keep their own auth. `security: []` maps to auth mode **none**.
 </Info>
 
 #### Import from OpenAPI URL
@@ -179,12 +188,12 @@ The collection will be cloned and you can start using it immediately. Any change
 1. Open Bruno
 2. Click the **+** button in the top-left corner and select **Import Collection**.
 3. Enter the OpenAPI specification URL (e.g., `https://api.example.com/openapi.json`)
-4. Configure **Folder arrangement** and **Naming requests** the same way as file import
+4. Configure **Folder arrangement**, **Naming requests**, and **Set authentication at collection level** the same way as file import
 5. Click **Import**
 
 ![Import OpenAPI URL](/images/screenshots/get-started/import-export/import_collection/import-openapi-url-modal.webp)
 
-Bruno will automatically generate requests for all API endpoints defined in the specification. When you enable **Check for Spec Updates**, your naming choice is saved with the collection sync config and reused on later syncs.
+Bruno will automatically generate requests for all API endpoints defined in the specification. When you enable **Check for Spec Updates**, your naming and auth placement choices are saved with the collection sync config and reused on later syncs.
 
 **Learn more:** [OpenAPI Guide](/open-api/importOAS)
 

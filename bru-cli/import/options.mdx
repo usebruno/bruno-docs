@@ -34,6 +34,7 @@ The other commands document their options on their own pages: [bru run](/bru-cli
 | `--insecure`                       | Skip TLS verification when `--source` is an `https://` URL                                                                                                          |
 | `-g`, `--group-by [string]`        | OpenAPI only: group requests by `tags` or `path` (default: `tags`)                                                                                                  |
 | `--request-name-source [string]`   | OpenAPI only: how requests are named: `summary` (default), `operationId`, `description`, or `path`                                                                  |
+| `--auth-placement [string]`        | OpenAPI only: where to place auth: `request` (default) or `collection`                                                                                              |
 
 Use `--output` to write a collection to a directory, or `--output-file` to write a single collection JSON export (OpenAPI). Postman imports always write [OpenCollection YAML](/opencollection-yaml/overview). For OpenAPI directory imports, `--collection-format` chooses between OpenCollection YAML (the default) and classic `.bru` files.
 

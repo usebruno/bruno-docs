@@ -135,6 +135,9 @@ await writeCollection(collection, outputDir);
     <ParamField path="requestNameSource" type="string" default="summary">
       How requests are named: `"summary"` (default), `"operationId"`, `"description"`, or `"path"`. If the selected field is missing, Bruno falls back through summary, operationId, description, then method and path.
     </ParamField>
+    <ParamField path="authPlacement" type="string" default="request">
+      Where to place auth from the spec: `"request"` (default) writes auth on each request, `"collection"` sets the scheme on the collection and lets matching requests inherit it. Operations with a different scheme keep their own auth.
+    </ParamField>
   </Expandable>
 </ParamField>
 

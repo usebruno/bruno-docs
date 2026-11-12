@@ -190,6 +190,33 @@ bru import openapi \
 
 If an operation does not have the selected field, Bruno falls back through summary, operationId, description, then method and path. Derived names are cleaned to a single line, with markdown stripped and length capped.
 
+### Place auth on the collection with `--auth-placement`
+
+<Info>
+  `--auth-placement` applies only to OpenAPI imports. It does not affect Postman or WSDL imports.
+</Info>
+
+By default, Bruno writes a full auth block on each request (`--auth-placement request`). Pass `--auth-placement collection` to set the spec's security scheme on the collection and let requests inherit it:
+
+```bash copy
+bru import openapi \
+  --source <your-openapi.yaml> \
+  --output <preferred-location> \
+  --auth-placement collection
+```
+
+| Value | Result |
+| --- | --- |
+| `request` (default) | Auth on each request, same as today |
+| `collection` | Auth on the collection; matching requests and folders inherit it |
+
+With `collection`:
+
+- Operations that share the collection scheme inherit auth
+- If the spec has no global security but secured operations share one scheme, that scheme is promoted to the collection
+- Operations with a different scheme keep their own auth
+- `security: []` maps to auth mode **none**
+
 ## Importing WSDL (SOAP APIs)
 
 This imports a WSDL file and generates a Bruno collection in the output directory.
