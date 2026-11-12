@@ -34,7 +34,7 @@ if (!inputFile || !outputDir) {
 
 ### 2. Convert and write
 
-`openApiToBruno` accepts the specification as JSON or YAML and returns the Bruno collection. Pass `{ groupBy: 'path' }` as a second argument to group folders by path instead of tag. See the [API Reference](./api-reference#openapitobruno) for the full signature.
+`openApiToBruno` accepts the specification as JSON or YAML and returns the Bruno collection. Pass `{ groupBy: 'path' }` as a second argument to group folders by path instead of tag. Pass `{ requestNameSource: 'operationId' }` to name requests from `operationId` (also supports `summary`, `description`, and `path`). See the [API Reference](./api-reference#openapitobruno) for the full signature.
 
 ```javascript
 const openApiSpec = await readFile(inputFile, 'utf8');

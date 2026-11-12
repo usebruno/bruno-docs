@@ -132,6 +132,9 @@ await writeCollection(collection, outputDir);
     <ParamField path="groupBy" type="string" default="tags">
       How requests are grouped into folders: `"tags"` groups by operation tag, `"path"` groups by URL path.
     </ParamField>
+    <ParamField path="requestNameSource" type="string" default="summary">
+      How requests are named: `"summary"` (default), `"operationId"`, `"description"`, or `"path"`. If the selected field is missing, Bruno falls back through summary, operationId, description, then method and path.
+    </ParamField>
   </Expandable>
 </ParamField>
 

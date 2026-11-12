@@ -166,6 +166,30 @@ bru import openapi \
   --group-by path
 ```
 
+### Name requests with `--request-name-source`
+
+<Info>
+  `--request-name-source` applies only to OpenAPI imports. It does not affect Postman or WSDL imports.
+</Info>
+
+By default, Bruno names each request from the operation summary. Pass `--request-name-source` to prefer a different field:
+
+| Value | Result |
+| --- | --- |
+| `summary` (default) | Operation summary |
+| `operationId` | Operation `operationId` |
+| `description` | First line or sentence of the description |
+| `path` | Method and path, for example `GET /users/{id}` |
+
+```bash copy
+bru import openapi \
+  --source <your-openapi.yaml> \
+  --output <preferred-location> \
+  --request-name-source operationId
+```
+
+If an operation does not have the selected field, Bruno falls back through summary, operationId, description, then method and path. Derived names are cleaned to a single line, with markdown stripped and length capped.
+
 ## Importing WSDL (SOAP APIs)
 
 This imports a WSDL file and generates a Bruno collection in the output directory.
