@@ -12,11 +12,11 @@ import { PremiumBadge } from "/snippets/premium-badge.jsx";
 For users of Bruno Ultimate, you can take your secret management one step further and perform an integration with a secret vault.
 
 <Info>
-  **External secrets stay in memory, never on disk**
+  **How Bruno handles external secrets**
 
-  - Secret values are **never written to disk** - only provider config and secret identifiers are saved.
-  - Secrets are fetched **on demand** into a per-environment, in-memory cache for the active session.
-  - The cache clears when you close the app. Reopen Bruno and it will fetch secrets on demand.
+  - Secret values are **never saved on your machine**. Bruno only keeps provider settings and secret names.
+  - Secrets are fetched **when you need them** and kept in memory for that environment for the rest of the session. Later requests reuse them; a manual refresh pulls fresh values.
+  - Closing Bruno or the collection clears those values. Reopen the app and Bruno fetches secrets again on demand. Interpolation in requests keeps working as usual.
 </Info>
 
 Currently, we support integrations with:
@@ -25,3 +25,4 @@ Currently, we support integrations with:
 - [AWS Secrets Manager](/secrets-management/secret-managers/aws-secrets-manager/overview)
 - [Azure Key Vault](/secrets-management/secret-managers/azure-key-vault/overview)
 - [Google Cloud Secret Manager](/secrets-management/secret-managers/google-secret-manager/overview)
+- [1Password](/secrets-management/secret-managers/1password/overview)

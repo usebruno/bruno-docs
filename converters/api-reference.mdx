@@ -3,7 +3,33 @@ title: "API Reference"
 sidebarTitle: "API Reference"
 ---
 
-Each function is used in a complete, runnable script in its guide: [Postman](./postman-to-bruno), [Insomnia](./insomnia-to-bruno), [OpenAPI](./openapi-to-bruno), and [WSDL](./wsdl-to-bruno).
+Each converter is used in a complete, runnable script in its guide: [Postman](./postman-to-bruno), [Insomnia](./insomnia-to-bruno), [OpenAPI](./openapi-to-bruno), and [WSDL](./wsdl-to-bruno). After converting, call `writeCollection` from `@usebruno/io` to save the collection as OpenCollection YAML.
+
+## writeCollection
+
+Writes a Bruno collection object to disk as an OpenCollection YAML directory that Bruno can open.
+
+```javascript
+import { writeCollection } from '@usebruno/io';
+
+await writeCollection(collection, outputDir);
+```
+
+**Parameters**
+
+<ParamField path="collection" type="object" required>
+  The Bruno collection object returned by a `@usebruno/converters` function.
+</ParamField>
+
+<ParamField path="outputDir" type="string" required>
+  The folder to write. Created if it does not exist. Contains `opencollection.yml`, `folder.yml` per folder, one `.yml` per request (examples included), and `environments/<name>.yml`.
+</ParamField>
+
+**Returns**
+
+<ResponseField name="Promise&lt;void&gt;" type="Promise">
+  Resolves when the collection has been written.
+</ResponseField>
 
 ## postmanToBruno
 
@@ -15,6 +41,7 @@ Converts a Postman collection to a Bruno collection.
 
 ```javascript
 const { collection, issues } = await postmanToBruno(postmanCollection, options);
+await writeCollection(collection, outputDir);
 ```
 
 **Parameters**
@@ -70,6 +97,7 @@ Converts an Insomnia collection to a Bruno collection.
 
 ```javascript
 const collection = insomniaToBruno(insomniaCollection);
+await writeCollection(collection, outputDir);
 ```
 
 **Parameters**
@@ -90,6 +118,7 @@ Converts an OpenAPI 3.x or Swagger 2.0 specification to a Bruno collection.
 
 ```javascript
 const collection = openApiToBruno(openApiSpec, options);
+await writeCollection(collection, outputDir);
 ```
 
 **Parameters**
@@ -102,6 +131,12 @@ const collection = openApiToBruno(openApiSpec, options);
   <Expandable title="properties">
     <ParamField path="groupBy" type="string" default="tags">
       How requests are grouped into folders: `"tags"` groups by operation tag, `"path"` groups by URL path.
+    </ParamField>
+    <ParamField path="requestNameSource" type="string" default="summary">
+      How requests are named: `"summary"` (default), `"operationId"`, `"description"`, or `"path"`. If the selected field is missing, Bruno falls back through summary, operationId, description, then method and path.
+    </ParamField>
+    <ParamField path="authPlacement" type="string" default="request">
+      Where to place auth from the spec: `"request"` (default) writes auth on each request, `"collection"` sets the scheme on the collection and lets matching requests inherit it. Operations with a different scheme keep their own auth.
     </ParamField>
   </Expandable>
 </ParamField>
@@ -122,6 +157,7 @@ Converts a WSDL file to a Bruno collection of SOAP requests.
 
 ```javascript
 const collection = await wsdlToBruno(wsdlContent);
+await writeCollection(collection, outputDir);
 ```
 
 **Parameters**

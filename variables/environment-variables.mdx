@@ -32,6 +32,19 @@ Just like other variables you can use the `{{varName}}` syntax to use an environ
 
 ![Environment Variables location](/images/screenshots/variables/environment-variables.webp)
 
+## Set a variable from selected text
+
+You can save highlighted text as a variable without opening the full environment editor.
+
+1. Select text like the URL, headers, query or path params, request body, or response body.
+2. Right-click the selection and choose **Set as variable**.
+3. Enter a **variable name**.
+4. Choose **where** to save it (for example the active environment or another available scope).
+5. Confirm with **Set variable**.
+
+Bruno stores the selected value on that variable. You can then reuse it with `{{varName}}` across the collection.
+
+
 ## Inherit from a parent environment
 
 Use inheritance when DEV, STG, PRD, or role-based environments share most values. Define the common variables once on a parent, then override only what differs on the child.
