@@ -1187,8 +1187,9 @@ div.fixed.inset-0.z-40 [role="dialog"] {
 }
 
 /* Result rows — our own item template (algolia-search.js): the page title
-   with the widget's <mark> highlighting, then a meta line with the section
-   (from the URL path) and the page's headings. */
+   with the widget's <mark> highlighting, a meta line with the section
+   (from the URL path) and the page's headings, then up to two lines of the
+   matching content snippet. */
 #autocomplete .bru-hit {
   display: block;
   min-width: 0;
@@ -1219,6 +1220,31 @@ div.fixed.inset-0.z-40 [role="dialog"] {
 }
 .dark #autocomplete .bru-hit-meta {
   color: rgb(156 163 175);
+}
+#autocomplete .bru-hit-snippet {
+  display: -webkit-box;
+  margin-top: 0.125rem;
+  overflow: hidden;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: rgb(55 65 81);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow-wrap: anywhere;
+}
+.dark #autocomplete .bru-hit-snippet {
+  color: rgb(209 213 219);
+}
+#autocomplete .bru-hit-snippet mark {
+  padding: 0 0.05em;
+  border-radius: 0.125rem;
+  background: rgb(242 153 74 / 0.22);
+  color: inherit;
+  font-weight: 600;
+}
+.dark #autocomplete .bru-hit-snippet mark {
+  background: rgb(255 169 77 / 0.25);
 }
 
 /* Assistant panel (chat widget, side-panel layout). Tokens are RGB
