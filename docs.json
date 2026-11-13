@@ -217,6 +217,15 @@
                           "secrets-management/secret-managers/google-secret-manager/configuring-and-fetching-secrets",
                           "secrets-management/secret-managers/google-secret-manager/using-secrets"
                         ]
+                      },
+                      {
+                        "group": "1Password",
+                        "pages": [
+                          "secrets-management/secret-managers/1password/overview",
+                          "secrets-management/secret-managers/1password/adding-a-secret-provider",
+                          "secrets-management/secret-managers/1password/configuring-and-fetching-secrets",
+                          "secrets-management/secret-managers/1password/using-secrets"
+                        ]
                       }
                     ]
                   }
