@@ -293,12 +293,61 @@
   }
 
   // The widget escapes hit strings and turns its highlight tags into
-  // <mark>, so _highlightResult values are safe to render as HTML.
+  // <mark>, so _highlightResult and _snippetResult values are safe to
+  // render as HTML.
   function highlightedTitle(item) {
     var hl = item._highlightResult && item._highlightResult.title;
     var value =
       hl && hl.value ? hl.value : escapeHtml(item.title || item.url || "");
     return stripSuffix(value);
+  }
+
+  // The matching passage of the record's content, highlighted like the
+  // title. The Crawler splits each page into one record per section, and
+  // a section's content starts with its own heading, which the meta line
+  // already shows; when the snippet starts there (no leading ellipsis),
+  // that heading is dropped. The comparison walks the snippet's HTML,
+  // skipping the widget's <mark> tags, so a highlighted heading word
+  // still matches; a <mark> left open at the cut is reopened.
+  function snippetOf(item) {
+    var sr = item._snippetResult && item._snippetResult.content;
+    var value = sr && sr.value ? String(sr.value).trim() : "";
+    var headers = item.headers || [];
+    var heading = headers.length
+      ? escapeHtml(
+          String(headers[headers.length - 1])
+            .replace(/[​‌﻿]/g, "")
+            .trim(),
+        ).toLowerCase()
+      : "";
+    if (!value || !heading) return value;
+    var i = 0;
+    var j = 0;
+    var inMark = false;
+    while (i < value.length && j < heading.length) {
+      if (value.startsWith("<mark>", i)) {
+        inMark = true;
+        i += 6;
+      } else if (value.startsWith("</mark>", i)) {
+        inMark = false;
+        i += 7;
+      } else if (value[i].toLowerCase() === heading[j]) {
+        i++;
+        j++;
+      } else {
+        return value; // Doesn't start with the heading.
+      }
+    }
+    if (j < heading.length) return value;
+    if (value.startsWith("</mark>", i)) {
+      inMark = false;
+      i += 7;
+    }
+    // Stop mid-word ("OAuth" vs "OAuth2 …") and it isn't the heading.
+    if (/^(?:<mark>)?[\p{L}\p{N}_]/u.test(value.slice(i))) return value;
+    var rest = value.slice(i).replace(/^[\s:.\-–—]+/, "");
+    if (!rest || rest === "…") return value; // Nothing but the heading.
+    return (inMark ? "<mark>" : "") + rest;
   }
 
   // A plain left click on a result: let the link navigate (natively, or
@@ -321,12 +370,19 @@
     var meta = [sectionOf(item.url), headingsOf(item)]
       .filter(Boolean)
       .join(" — ");
+    var snippet = snippetOf(item);
     return html`<a class="bru-hit" href="${item.url}" onClick=${onHitClick}>
       <span
         class="bru-hit-title"
         dangerouslySetInnerHTML=${{ __html: highlightedTitle(item) }}
       ></span>
       ${meta ? html`<span class="bru-hit-meta">${meta}</span>` : null}
+      ${snippet
+        ? html`<span
+            class="bru-hit-snippet"
+            dangerouslySetInnerHTML=${{ __html: snippet }}
+          ></span>`
+        : null}
     </a>`;
   }
 
@@ -400,6 +456,10 @@
               hitsPerPage: 8,
               attributesToRetrieve: ["title", "url", "headers"],
               attributesToHighlight: ["title"],
+              // ~24 words of the matching passage (no need to retrieve
+              // the whole `content`; the snippet comes back regardless).
+              attributesToSnippet: ["content:24"],
+              snippetEllipsisText: "…",
             },
             templates: { item: hitTemplate },
           },
