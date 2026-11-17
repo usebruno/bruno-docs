@@ -64,6 +64,10 @@
         { label: "Git & Collaboration", href: "/git-integration/overview" },
         { label: "AI", href: "/ai/bruno-ai/introduction" },
         { label: "Apps", href: "/apps/overview" },
+        {
+          label: "Integrations",
+          href: "/integrations/backstage/overview",
+        },
         { label: "Settings", href: "/get-started/configure/settings" },
         { label: "Debugging", href: "/debugging/timeline" },
       ],

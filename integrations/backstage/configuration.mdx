@@ -1,0 +1,155 @@
+---
+title: "Configuration reference"
+sidebarTitle: "Configuration"
+description: "app-config keys, permissions, Git hosts, frontend extensions, and security for the Bruno Backstage plugin."
+---
+
+## app-config.yaml
+
+| Key | Type | Default | Read by | Description |
+|---|---|---|---|---|
+| `bruno.allowRuntimeWrites` | boolean | `false` | backend & frontend | Enables **Add directly to catalog**, plus Edit and Delete for UI-added collections. When `false`, the wizard offers only the pull-request flow. |
+| `bruno.cacheTtlSeconds` | number | `1800` | backend | How long a collection's manifest and default branch are treated as fresh before Git is checked again |
+| `bruno.failureTtlSeconds` | number | `60` | backend | How long a read error is cached before retrying |
+| `bruno.collections` | array | `[]` | backend | Collections declared by the platform team |
+| `catalog.import.entityFilename` | string | `catalog-info.yaml` | frontend | File name used by the pull-request flow |
+| `catalog.import.pullRequestBranchName` | string | `backstage-integration` | frontend | Branch name used by the pull-request flow |
+
+### `bruno.collections[]`
+
+| Key | Type | Required | Description |
+|---|---|---|---|
+| `type` | `'url'` | yes | Only `url` is supported |
+| `name` | string | yes | Entity name (Backstage naming rules) |
+| `url` | string | yes | URL of the folder that holds `bruno.json` or `opencollection.yml` |
+| `title` | string | no | Display title (default: from the collection) |
+| `owner` | string | no | User or group ref, for example `group:default/team-payments` |
+| `partOf` | string or string[] | no | API refs this collection covers |
+
+```yaml
+bruno:
+  allowRuntimeWrites: false
+  collections:
+    - type: url
+      name: payments
+      url: https://github.com/acme/apis/tree/main/collections/payments
+      owner: group:default/team-payments
+      partOf: [api:default/payments-api]
+```
+
+## catalog-info.yaml fields
+
+| Field | Required | Description |
+|---|---|---|
+| `spec.type` | yes | Must be `collection` |
+| `spec.url` | no* | Collection folder URL. If omitted, the folder containing `catalog-info.yaml` is used. Required for local file locations. |
+| `spec.owner` | no | User or group ref. Default kind: `Group` |
+| `spec.partOf` | no | API refs. Default kind: `API` |
+| `metadata.title`, `description`, `version` | no | Filled from the collection when not set |
+| `spec.definition`, `spec.requestCount` | generated | Written by the plugin. Do not set by hand. |
+
+## Permissions
+
+| Permission | Type | Guards |
+|---|---|---|
+| `bruno.collection.create` | basic | Adding a collection directly from the wizard |
+| `bruno.collection.update` | resource (`catalog-entity`) | Editing a UI-added collection |
+| `bruno.collection.delete` | resource (`catalog-entity`) | Deleting a UI-added collection |
+
+Resource permissions support catalog conditions (for example, only the entity's owner).
+
+<Warning>
+  Unless `permission.enabled: true` is set with a policy, everyone is allowed. With `bruno.allowRuntimeWrites: true`, any signed-in user could add, edit, and delete UI-added collections.
+</Warning>
+
+## Supported Git hosts
+
+| Host | Read collections | Pull-request flow |
+|---|---|---|
+| GitHub, GitHub Enterprise | Yes | Yes |
+| GitLab, self-hosted GitLab | Yes (needs `integrations.gitlab`) | Download only |
+| Bitbucket Cloud | Yes (needs `integrations.bitbucketCloud`) | Download only |
+| Bitbucket Server, Azure DevOps, Gitea, Gerrit | No | No |
+
+URL formats:
+
+- GitHub: `/<owner>/<repo>/tree/<ref>/<path>`
+- GitLab: `/<group>/.../<project>/-/tree/<ref>/<path>`
+- Bitbucket Cloud: `/<workspace>/<repo>/src/<ref>/<path>`
+
+Branch names containing `/` are not supported in Beta.
+
+## Frontend extensions (new frontend system)
+
+All are on by default. Turn one off under `app.extensions`, for example `- entity-card:bruno/collections: false`.
+
+| Extension ID | Adds |
+|---|---|
+| `page:bruno/bruno-dashboard-page` | Bruno dashboard at `/bruno` |
+| `page:bruno/add-bruno-entity-page` | Add Bruno Collection wizard at `/bruno/add` |
+| `entity-card:bruno/collections` | Bruno Collections card on API entities |
+| `entity-card:bruno/bruno-collection-related-apis` | Associated APIs card on Bruno entities |
+| `entity-content:bruno/collection-docs` | API Docs tab on Bruno entities |
+| `entity-icon-link:bruno/fetch-in-bruno` | Open Collection link |
+| `entity-icon-link:bruno/edit-ui-collection` | Edit Entity (UI-added only) |
+| `entity-icon-link:bruno/delete-ui-collection` | Delete Entity (UI-added only) |
+
+Optional: add Bruno to `entity-card:org/ownership` `ownedKinds` to list collections in ownership cards.
+
+## Security model
+
+**Reads**
+
+Collection files are read server-side with the host's `integrations.*` credentials. There is no per-user read path and no new API key.
+
+**No egress of collection content**
+
+Collection content stays in the customer network. The backend's only outbound calls go to the SCM host.
+
+**CDN exception**
+
+The API Docs tab loads the docs renderer's static scripts and styles from Bruno's public CDN in the user's browser. Collection content is never sent there. Enterprises that block the CDN can plan for a self-hosted renderer (GA candidate).
+
+**Writes to Git**
+
+Pull requests use the user's own SCM token in the browser. The token is never sent to the plugin backend; commits are attributed to the real user.
+
+**Writes to Backstage**
+
+Direct adds are off by default (`bruno.allowRuntimeWrites`). Create, update, and delete go through the permission framework. Stored rows record `created_by`.
+
+**Docs route**
+
+Authenticated with Backstage's limited-access cookie and reads the entity as the requesting user, so catalog read policies apply. CSP restricts framing to the app's own origin. Collection YAML is safely escaped into the page.
+
+**Secrets**
+
+The generated OpenCollection document comes from files in Git. Secrets Bruno keeps out of Git (`.env`, secret environment values) are never read.
+
+## Open in Bruno
+
+**Open Collection** opens `https://fetch.usebruno.com/?url=<repository URL>` in a new tab, which hands the repo to Bruno desktop or offers the download.
+
+Beta passes the repository root. Sub-folder and branch are not passed yet.
+
+## Future configuration (GA candidates)
+
+These keys are proposed; names are final when each ticket lands.
+
+| Key | Default | Description |
+|---|---|---|
+| `bruno.playground.enabled` | `false` | Shows the playground in the API Docs tab |
+| `bruno.playground.backendChannel.enabled` | `false` | Offers execution through the Backstage backend |
+| `bruno.playground.backendChannel.allowedHosts` | `[]` | API hosts the backend may call |
+| `bruno.docs.rendererUrl` | Bruno CDN | Self-hosted docs renderer location |
+| `bruno.schedule.frequency` | 30 min | How often config and UI-added collections are refreshed |
+
+Future permission: `bruno.playground.use` (basic) for the playground and backend execution channel.
+
+## Resources
+
+- [Overview](./overview) — why Bruno + Backstage
+- [Getting started](./getting-started) — install steps
+- [Add a collection](./add-a-collection) — registration paths
+- Plugin repository: [usebruno/bruno-backstage-plugin](https://github.com/usebruno/bruno-backstage-plugin)
+- Community discussion: [Possible Bruno Backstage Plugin #2884](https://github.com/usebruno/bruno/discussions/2884)

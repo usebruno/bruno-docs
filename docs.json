@@ -338,6 +338,21 @@
                 ]
               },
               {
+                "group": "Integrations",
+                "pages": [
+                  {
+                    "group": "Backstage",
+                    "tag": "Beta",
+                    "pages": [
+                      "integrations/backstage/overview",
+                      "integrations/backstage/integration",
+                      "integrations/backstage/add-a-collection",
+                      "integrations/backstage/configuration"
+                    ]
+                  }
+                ]
+              },
+              {
                 "group": "Settings",
                 "pages": [
                   "get-started/configure/settings",
