@@ -19,3 +19,13 @@ Explore our sample [gRPC collection](https://github.com/bruno-collections/gRPC-a
 2. Choose a location to store the collection locally and start exploring gRPC feature 
 
 <BrunoButton collectionUrl="https://github.com/bruno-collections/gRPC-api-collection" width={160} height={40} />
+
+## Automation limitations
+
+gRPC requests are designed for interactive use in the Bruno app. Automated runs skip them:
+
+- The Collection Runner skips gRPC requests during folder and collection runs.
+- Bruno CLI (`bru run`) does not execute gRPC requests.
+- `bru.runRequest()` only executes HTTP and GraphQL requests. Calling a gRPC request from a script resolves with `{ status: 'skipped' }`. See the [JavaScript reference](/testing/script/javascript-reference#brurunrequestrequestpathname).
+
+To automate a workflow that depends on a gRPC call, trigger the gRPC request manually in the app, or expose the same operation over HTTP for automated runs.
