@@ -107,16 +107,16 @@ If a user is created before their role value is available, they are provisioned 
 2. Find the app registration linked to your enterprise application (same name) and open it
 3. Go to **App roles** → **Create app role**
 4. Fill in:
-   - **Display name**: any name, e.g. `bruno_admin` (cosmetic only, not sent to Bruno)
+   - **Display name**: the name of the admin role. This guide uses `bruno-license-admin`
    - **Allowed member types**: `Users/Groups`
-   - **Value**: the role identifier Bruno will receive, e.g. `bruno-license-admin` — this exact string is what must match your Admin Role Mapping configuration in Bruno
+   - **Value**: the role identifier sent to Bruno. Set it to the same string as the Display name, `bruno-license-admin` in this guide. This is what must match the Admin Role Mapping configuration in Bruno
    - **Description**: optional
 5. Enable the role and click **Apply**
 
 ![Create app role in Entra ID](/images/screenshots/sso-scim-management/entra/entra-scim-9.webp)
 
 <Warning>
-The **Value** field, not the display name, is what's sent to Bruno as `roles[].value`. Matching is exact and case-sensitive.
+**Use the same string for Display name and Value.** [`SingleAppRoleAssignment`](https://learn.microsoft.com/entra/identity/app-provisioning/functions-for-customizing-application-data#singleapproleassignment) resolves the assigned app role to a single role name string, which is sent to Bruno as `roles[].value`. Keeping both fields identical ensures the string matches your Admin Role Mapping and keeps the [provisioning logs](https://learn.microsoft.com/entra/identity/app-provisioning/check-status-user-account-provisioning) easy to read when troubleshooting. Matching is exact and case-sensitive.
 </Warning>
 
 ### Add the roles attribute mapping
@@ -141,9 +141,9 @@ The **Value** field, not the display name, is what's sent to Bruno as `roles[].v
 ### Configure Admin Role Mapping in Bruno
 
 1. In the Bruno License Manager portal, go to **Settings → SCIM → Admin Role Mapping**
-2. Enter the App Role **Value** you defined above, e.g. `bruno-license-admin`
-3. Multiple values are supported, comma-separated (e.g. `bruno-license-admin, bruno_admin`) — any match grants admin access
-4. Values must exactly match the App Role **Value** field in Entra (case-sensitive)
+2. Enter the App Role string you defined above, e.g. `bruno-license-admin`
+3. Multiple values are supported, comma-separated (e.g. `bruno-license-admin, bruno_admin`) — any match grants admin access. If your App Role's Display name and Value differ, enter both
+4. Values must exactly match what Entra sends in `roles[].value` (case-sensitive). To confirm the exact string, run [on-demand provisioning](https://learn.microsoft.com/entra/identity/app-provisioning/provision-on-demand) for one user and read the `roles[primary eq "True"].value` row in the result
 5. Click **Save**
 
 ![Configure Admin Role Mapping in Bruno](/images/screenshots/sso-scim-management/entra/entra-scim-11.webp)
