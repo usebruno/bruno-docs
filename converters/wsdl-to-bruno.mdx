@@ -16,6 +16,14 @@ Convert a WSDL (Web Services Description Language) file into a Bruno collection 
   WSDL import is available in Bruno v2.14.0 and later.
 </Info>
 
+## External schema references
+
+Bruno resolves `xsd:import` and `xsd:include` references that point to local files through `schemaLocation`. Bruno follows nested import and include chains. It resolves each `schemaLocation` relative to the file that declares it. The generated request bodies include types defined across all referenced files.
+
+- Referenced files must be local `.xsd` or `.wsdl` files, up to 10 MB each.
+- Bruno does not fetch remote (`http://` or `https://`) schema locations.
+- Keep the referenced files at the relative paths the WSDL expects before you import it.
+
 ## Convert the WSDL
 
 <ConvertersSetup />
