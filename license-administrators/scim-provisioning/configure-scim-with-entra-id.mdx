@@ -116,7 +116,7 @@ If a user is created before their role value is available, they are provisioned 
 ![Create app role in Entra ID](/images/screenshots/sso-scim-management/entra/entra-scim-9.webp)
 
 <Warning>
-**Set the Display name and Value to the same string.** Microsoft's [`SingleAppRoleAssignment` reference](https://learn.microsoft.com/entra/identity/app-provisioning/functions-for-customizing-application-data#singleapproleassignment) describes the output only as a "role name string" and does not specify which field it comes from, and we have seen tenants where the Display name was sent. Keeping both identical means the mapping matches either way. Matching is exact and case-sensitive.
+**Use the same string for Display name and Value.** [`SingleAppRoleAssignment`](https://learn.microsoft.com/entra/identity/app-provisioning/functions-for-customizing-application-data#singleapproleassignment) resolves the assigned app role to a single role name string, which is sent to Bruno as `roles[].value`. Keeping both fields identical ensures the string matches your Admin Role Mapping and keeps the [provisioning logs](https://learn.microsoft.com/entra/identity/app-provisioning/check-status-user-account-provisioning) easy to read when troubleshooting. Matching is exact and case-sensitive.
 </Warning>
 
 ### Add the roles attribute mapping
