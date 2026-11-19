@@ -1495,6 +1495,11 @@
       "permanent": true
     },
     {
+      "source": "/get-started/history",
+      "destination": "/send-requests/history",
+      "permanent": true
+    },
+    {
       "source": "/agents/introduction",
       "destination": "/ai/integration/overview",
       "permanent": true
