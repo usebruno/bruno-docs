@@ -32,6 +32,8 @@ Keep the spec in the workspace so the mock can stay linked to it.
 3. Optionally open **Advanced settings** to set the **port** and **response delay (ms)**.
 4. Click **Create**.
 
+Before Bruno creates the mock server, it validates the selected spec. The spec must be valid YAML or JSON, declare an `openapi` or `swagger` version, include an `info` object, and define at least one path. If any check fails, Bruno shows the error under the spec field and does not create the mock server.
+
 ![Create Mock Server dialog with API Spec as the source](/images/screenshots/v4/mock-severs/tutorial-openapi-create-mock.webp)
 
 
