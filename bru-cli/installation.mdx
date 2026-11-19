@@ -31,6 +31,37 @@ To install the Bruno CLI, use the node package manager of your choice:
     ```
   </Tab>
 </Tabs>
+Verify the installation:
+
+```bash
+bru --version
+```
+
+### Troubleshooting `command not found: bru`
+
+If your shell reports `command not found: bru` after a global install, the package manager's global bin folder is not on your `PATH`.
+
+1. Find the global bin folder for the package manager you used:
+
+   ```bash
+   # npm (the binary is in <prefix>/bin on macOS and Linux, or <prefix> on Windows)
+   npm prefix -g
+
+   # yarn
+   yarn global bin
+
+   # pnpm
+   pnpm bin -g
+   ```
+
+2. Add that folder to your `PATH`. For example, in `~/.zshrc` or `~/.bashrc`:
+
+   ```bash
+   export PATH="$(yarn global bin):$PATH"
+   ```
+
+3. Open a new terminal, or run `source ~/.zshrc`, and check `bru --version` again.
+
 For more details, visit the official [NPM Page for Bruno CLI <strong><sup>↗</sup></strong>](https://www.npmjs.com/package/@usebruno/cli)
 
 ## Docker

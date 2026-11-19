@@ -36,6 +36,10 @@ Frontend and integration teams often need a stable API before the real backend i
 
 Mock responses are stored with your collection, not in a hosted service. Closing Bruno stops every running mock; restarting Bruno does **not** auto-start them - you start each server deliberately so a background port is never claimed silently.
 
+Each mock server listens on the loopback address `127.0.0.1` only. Other devices, containers, or VMs on your network can't reach it, and there is no setting to bind it to `0.0.0.0` or another interface.
+
+Mock servers run inside the Bruno desktop app. Bruno CLI can't start or stop them. To run a collection with `bru run` against a mock, start the mock in the app first. Then point your environment's base URL at `http://localhost:<port>` on the same machine.
+
 The Request Log is **in-memory only** (most recent 500 entries per server). It is a debugging aid, not an audit log.
 
 ## Share feedback
