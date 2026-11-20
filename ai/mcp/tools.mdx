@@ -4,7 +4,7 @@ sidebarTitle: "Tools"
 description: "Read, run, and write tools exposed by the Bruno MCP server."
 ---
 
-Collections are identified by absolute path. Requests are identified by path within the collection (for example `users/get-user.bru`).
+Collections are identified by absolute path. Requests are identified by path within the collection (for example `users/get-user.yml`).
 
 Every tool is marked as read-only or destructive, so clients that ask for approval can prompt before writes.
 
@@ -53,7 +53,6 @@ Do not point the assistant at production responses or cookies you would not past
 
 ## How writes behave
 
-- Changes are written straight to the collection files with **no undo**. Keep collections in Git.
 - `.bru` files change only where edited. A `.yml` request is rewritten in full (as the Bruno app does), so YAML comments in request files are lost. `.yml` environments and `workspace.yml` keep their comments.
 - Secret values are never written to files. A secret variable is saved by name only. The value is passed per run through variables.
 - Writes stay inside the collection. Paths outside it, or inside `environments/`, `.git`, or `node_modules`, are refused.
@@ -77,8 +76,8 @@ Do not point the assistant at production responses or cookies you would not past
 
 ## Resources
 
-- [Setup](./setup). Install with `npx` and connect clients.
-- [Overview](./overview). Why Bruno MCP exists.
+- [Setup](./setup): Install with `npx` and connect clients.
+- [Overview](./overview): Why Bruno MCP exists.
 - Package: [`@usebruno/mcp`](https://www.npmjs.com/package/@usebruno/mcp)
 - Repository: [usebruno/bruno-mcp](https://github.com/usebruno/bruno-mcp)
 - [Bruno CLI](/bru-cli/overview)
