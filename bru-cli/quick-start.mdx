@@ -399,9 +399,11 @@ More: [Run Collections](/bru-cli/run/overview#passing-environment-variables)
 
 ---
 
-## 9. Import an OpenAPI specification
+## 9. Import a collection or API specification
 
-**Objective:** Create a Bruno collection from an OpenAPI spec using the CLI.
+**Objective:** Create a Bruno collection from Postman, OpenAPI, or WSDL using the CLI.
+
+### OpenAPI
 
 Bruno CLI can import OpenAPI documents directly into a collection folder — useful for bootstrapping collections or CI pipelines that sync with API specs:
 
@@ -420,6 +422,16 @@ Converting OpenAPI specification to Bruno format...
 Bruno collection created at ./petstore-api
 ```
 
+### Postman (Bruno CLI 4.4.0+)
+
+Import a Postman Collection v2.1 JSON export into an OpenCollection folder:
+
+```bash
+bru import postman \
+  -s ./my-api.postman_collection.json \
+  -o ./collections/my-api
+```
+
 Navigate into the new collection and run it:
 
 ```bash
@@ -428,7 +440,7 @@ bru run
 ```
 
 **Success Criteria:**
-- `petstore-api` directory is created with `opencollection.yml` and request files.
+- The output directory is created with `opencollection.yml` and request files.
 - `bru run` inside the imported collection executes without import errors.
 
 More: [bru import](/bru-cli/import/overview)

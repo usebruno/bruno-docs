@@ -35,13 +35,17 @@ There are two ways to connect to OpenAPI Sync:
 
 ### New Import
 
-1. Import collection with OpenAPI spec file or URL.
+1. Import collection with OpenAPI spec file or URL. In **Advanced**, set **Folder arrangement**, **Naming requests**, and optionally **Set authentication at collection level** if you want something other than the defaults.
 
 ![Import new collection with OpenAPI Sync](/images/screenshots/open-api/openapi-sync/import-new-collection-openapi-sync.webp)
 
 2. Enable option **Check for Spec Updates** to automatically connect to OpenAPI Sync.
 
 ![Enable Check for Spec Updates on import](/images/screenshots/open-api/openapi-sync/enable-check-for-spec-updates.webp)
+
+<Info>
+  When sync is enabled, Bruno saves your **Naming requests** choice as `requestNameSource` and **Set authentication at collection level** as `authPlacement` (`request` or `collection`) in the collection OpenAPI sync config (alongside folder grouping). Later syncs reuse those choices. With `authPlacement: collection`, re-sync does not overwrite collection auth, and inheriting requests stay on inherit. See [Import an OpenAPI Spec](/open-api/importOAS#import-settings).
+</Info>
 
 If you have the same endpoints in your OpenAPI spec and collection, you don't need to sync. If the endpoints don't match, then you have to perform **Initial Sync** changes with the collection.
 
