@@ -24,6 +24,41 @@ Prompt variables are highlighted in blue in the Bruno UI.
 
 ![Prompt Variable Syntax](/images/screenshots/variables/prompt-var.webp)
 
+## Fixed Values (Dropdowns)
+
+Instead of a free-text field, you can constrain a prompt to a **fixed list of values**. Bruno then shows a **dropdown** in the prompt dialog, so you pick from the allowed values rather than typing them — fewer typos, and one click for common choices like regions, environments, or feature flags.
+
+### Single-select
+
+Add a single pipe (`|`) after the prompt message, followed by a comma-separated list of values:
+
+`{{?Environment|dev,stage,prod}}`
+
+This renders a single-select dropdown offering `dev`, `stage`, and `prod`. The value you pick is substituted into the request.
+
+### Multi-select
+
+Use a double pipe (`||`) to allow selecting **several** values at once:
+
+`{{?Regions||us,eu,ap}}`
+
+This renders a multi-select dropdown. The values you choose are joined with a comma (`,`) before being substituted — e.g. selecting `us` and `ap` interpolates as `us,ap`.
+
+### Default Selection
+
+Prefix a value with an asterisk (`*`) to preselect it by default when the dialog opens:
+
+```
+{{?Environment|dev,*stage,prod}}    single-select, defaults to stage
+{{?Regions||*us,eu,*ap}}            multi-select, defaults to us and ap
+```
+
+For a single-select prompt, only the first starred value is used as the default. For a multi-select prompt, every starred value is preselected. The `*` is only a marker — it is stripped from both the displayed option and the interpolated value.
+
+<Note>
+  The values are trimmed and empty entries are ignored, so `{{?Env| dev , stage }}` is equivalent to `{{?Env|dev,stage}}`. A prompt with no non-empty values (e.g. `{{?Env|}}`) falls back to a free-text field.
+</Note>
+
 ## Using Prompt Variables
 
 You can use prompt variables anywhere markup variables are supported in Bruno, including:
