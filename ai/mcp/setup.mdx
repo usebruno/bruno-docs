@@ -1,0 +1,112 @@
+---
+title: "Installation and setup of Bruno MCP"
+sidebarTitle: "Installation"
+description: "Install Bruno MCP and connect it to Claude Code, Cursor, Claude Desktop, and other MCP clients."
+---
+
+<Note>
+  **`@usebruno/mcp` is not on npm yet.** Until it is published, build from source as shown below. When the package ships, setup becomes `npx -y @usebruno/mcp` and these build steps move to a contributing guide.
+</Note>
+
+## Build from source
+
+```bash
+git clone https://github.com/usebruno/bruno-mcp && cd bruno-mcp
+npm install && npm run build
+```
+
+Point your MCP client at the absolute path of `dist/index.js`.
+
+## Connect a client
+
+Restart the client after you change its MCP config. If the client cannot find `node` (common with nvm), set `command` to the full path of the Node binary.
+
+### Claude Code
+
+```bash
+claude mcp add bruno --scope user -- node /abs/path/to/dist/index.js
+```
+
+### Cursor
+
+Add the server to `~/.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "bruno": {
+      "command": "node",
+      "args": ["/abs/path/to/dist/index.js"]
+    }
+  }
+}
+```
+
+### Claude Desktop
+
+On macOS, edit `~/Library/Application Support/Claude/claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "bruno": {
+      "command": "node",
+      "args": ["/abs/path/to/dist/index.js"]
+    }
+  }
+}
+```
+
+Other MCP clients use the same pattern: run `node` with the absolute path to `dist/index.js`.
+
+### After npm publish
+
+When `@usebruno/mcp` is available, you can start the server with:
+
+```bash
+npx -y @usebruno/mcp
+```
+
+Client configs would then use that command instead of a local `dist/index.js` path. Check the [bruno-mcp repository](https://github.com/usebruno/bruno-mcp) for the published package name and flags.
+
+## How it finds collections
+
+The first source that returns collections wins:
+
+1. **Flags** — `--collection <path>` and `--workspace <path>` (both repeatable). A workspace adds every collection listed in its `workspace.yml`.
+2. **Current folder** — walks up from the folder the client starts the server in, looking for `workspace.yml`, `bruno.json`, or `opencollection.yml`.
+3. **Bruno app** — workspaces and collections last opened in the Bruno app, plus its default workspace.
+
+You can also give the assistant any collection's absolute path directly. It does not need to be discovered first.
+
+### Flags
+
+| Flag | Effect |
+| --- | --- |
+| `--collection <path>`, `-c` | Expose this collection. Repeatable. |
+| `--workspace <path>`, `-w` | Expose every collection in this workspace. Repeatable. |
+| `--no-cwd-discovery` | Skip step 2 (current folder). |
+| `--no-auto-discovery` | Skip step 3 (Bruno app). Only flagged or current-folder collections are exposed. |
+| `--verbose` | Debug logs to stderr. |
+
+Example with an explicit collection:
+
+```json
+{
+  "mcpServers": {
+    "bruno": {
+      "command": "node",
+      "args": [
+        "/abs/path/to/dist/index.js",
+        "--collection",
+        "/abs/path/to/my-collection"
+      ]
+    }
+  }
+}
+```
+
+## Next steps
+
+- [Tools](./tools) — what the assistant can read, run, and write
+- [Overview](./overview) — why Bruno MCP exists and example prompts

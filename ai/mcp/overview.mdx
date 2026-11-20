@@ -1,0 +1,74 @@
+---
+title: "Bruno MCP Server"
+sidebarTitle: "Overview"
+description: "Use the Bruno MCP server so AI assistants can read, run, and edit Bruno collections on your machine."
+---
+
+<Note>
+  Bruno MCP is in active development. The package is not on npm yet. Until it is published, install by building from source. See [Setup](./setup).
+</Note>
+
+[Bruno MCP](https://github.com/usebruno/bruno-mcp) is a [Model Context Protocol](https://modelcontextprotocol.io) (MCP) server that lets AI assistants work with Bruno collections on your machine. Connect it once in Claude Code, Cursor, Claude Desktop, or any other MCP client. The assistant can then list collections, inspect requests and environments, run them through the Bruno CLI, and create or edit collection files.
+
+Nothing is sent to Bruno's servers. The server reads collections from disk. Requests go only to the APIs your collection calls.
+
+## What is MCP?
+
+The Model Context Protocol is an open standard for connecting AI clients to tools and data on the user's side. An MCP **server** exposes tools (and sometimes resources). An MCP **client** (the IDE or chat app) calls those tools when the model needs them.
+
+Without MCP, an assistant only sees what you paste into chat or what the editor already indexed. With MCP, it can take structured actions: list files of a known shape, run a CLI, write a validated request definition, and return results the model can reason about.
+
+## Why Bruno fits MCP naturally
+
+Bruno collections are plain files on disk (`.bru` or OpenCollection YAML). That already works well with AI agents that can read a repo. MCP goes further:
+
+| Without MCP | With Bruno MCP |
+| --- | --- |
+| The assistant guesses folder layout and file syntax | Tools return structured request and environment data |
+| Running a request means inventing curl or asking you to click Send | `execute_request` / `run_collection` run through the Bruno CLI |
+| Edits are free-form text the assistant might format wrong | Write tools create and update requests with known fields |
+| Secrets and auth headers may leak into chat context | Credentials are masked; secret env values are redacted |
+
+Bruno stays local-first and Git-friendly. MCP does not move your collections to the cloud. It gives the assistant a safer, clearer API over the same files you already version-control.
+
+## What you can do
+
+- Ask questions about an API from its collection ("Which endpoints need auth?")
+- Run a request or a whole collection and get the results explained
+- Write requests for endpoints in the codebase that the collection does not cover yet
+- Probe edge cases, find a bug, fix the code, then add a request with tests that guards against it
+- Add assertions and test scripts to existing requests
+- Update environment variables, such as a base URL
+
+## Example prompts
+
+- "List the requests in the payments collection that use POST."
+- "Run the orders folder against staging and summarize the failures."
+- "Add Bruno requests for the endpoints in `src/routes` that the collection does not cover."
+- "Add a test to Create order that checks the total is price times quantity."
+- "Set `baseUrl` in the staging environment to `https://api.example.com`."
+
+## Requirements
+
+- Node.js **20.12** or later
+- A Bruno collection in `.bru` or OpenCollection YAML (`.yml`)
+- An MCP client (Claude Code, Cursor, Claude Desktop, and others)
+
+The Bruno CLI (`bru`) is bundled with the MCP server, so you do not install it separately. The Bruno desktop app is optional. It is used only to discover recently opened collections.
+
+## Security at a glance
+
+- Runs locally over stdio on your machine
+- Request headers that carry credentials (`Authorization`, `Cookie`, `X-Api-Key`, and similar) are masked
+- Secret environment and `.env` values are removed wherever they appear
+- Response headers and bodies are returned in full (including `Set-Cookie`). Do not point the assistant at production data you would not paste into a chat
+- Write tools change files on disk with no undo. Keep collections in Git
+
+See [Tools](./tools) for the full tool list, write behavior, and limitations.
+
+## Next steps
+
+- [Setup](./setup) — build from source and connect Claude Code, Cursor, or Claude Desktop
+- [Tools](./tools) — read, run, and write tools the assistant can call
+- [Bruno CLI](/bru-cli/overview) — the CLI the MCP server uses to execute requests
+- [Model Context Protocol](https://modelcontextprotocol.io) — the open standard

@@ -324,6 +324,15 @@
                       "ai/integration/claude",
                       "ai/integration/devin"
                     ]
+                  },
+                  {
+                    "group": "Bruno MCP",
+                    "tag": "Beta",
+                    "pages": [
+                      "ai/mcp/overview",
+                      "ai/mcp/setup",
+                      "ai/mcp/tools"
+                    ]
                   }
                 ]
               },
