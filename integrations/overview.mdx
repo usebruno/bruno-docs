@@ -1,0 +1,103 @@
+---
+title: "Serve API Docs from Your App"
+sidebarTitle: "Overview"
+---
+
+Bruno integrations let you serve your API documentation from inside your own application, on a route you choose.
+
+Install one package, point it at the Bruno collection that already lives in your repository, and your app gains a documentation page:
+
+```text
+myapp.com/api/users    → your API
+myapp.com/api/orders   → your API
+myapp.com/docs         → your Bruno API docs
+```
+
+The docs run in the same process as your API, behind the same authentication, and ship with the same deployment.
+
+<Info>
+  Integrations are in **beta**. Express, Fastify, and NestJS are supported. Both `.bru` and OpenCollection `.yml` formats are supported.
+</Info>
+
+### The collection already lives with your code
+
+Most teams keep their Bruno collection in the same repository as the service it tests:
+
+```text
+payment-service/
+├── src/
+│   └── server.js
+├── tests/
+├── collection/
+│   ├── opencollection.yml
+│   ├── Create Payment.yml
+│   ├── Get Payment.yml
+│   └── environments/
+│       ├── local.yml
+│       └── production.yml
+└── package.json
+```
+
+The collection is reviewed in the same pull requests as the code and versioned in the same commits. Serving it as documentation turns that existing artifact into a published API reference.
+
+Every server package emits a host page like this:
+
+```html
+<div id="bruno-api-docs"></div>
+<script src="https://cdn.usebruno.com/api-docs/api-docs.js"></script>
+<script>
+  new Bruno.apiDocs('#bruno-api-docs', { url: './collection.yml' })
+</script>
+```
+
+Because the renderer is loaded from the CDN, the server package stays small and readers need network access to `cdn.usebruno.com`.
+
+## Choose your integration
+
+<CardGroup cols={2}>
+  <Card title="Express" icon="node-js" href="/integrations/express">
+    `app.use('/docs', apiDocs({ ... }))`
+  </Card>
+  <Card title="Fastify" icon="bolt" href="/integrations/fastify">
+    `await app.register(apiDocs, { ... })`
+  </Card>
+  <Card title="NestJS" icon="cubes" href="/integrations/nestjs">
+    `ApiDocsModule.forRoot({ ... })`
+  </Card>
+  <Card title="HTML / JavaScript" icon="code" href="/integrations/html">
+    `new Bruno.apiDocs('#bruno-api-docs', { ... })`
+  </Card>
+</CardGroup>
+
+## Packages
+
+| Package | npm | Import |
+| ------- | --- | ------ |
+| [Express](/integrations/express) | [`@usebruno/api-docs-express`](https://www.npmjs.com/package/@usebruno/api-docs-express) | `import { apiDocs } from '@usebruno/api-docs-express'` |
+| [Fastify](/integrations/fastify) | [`@usebruno/api-docs-fastify`](https://www.npmjs.com/package/@usebruno/api-docs-fastify) | `import { apiDocs } from '@usebruno/api-docs-fastify'` |
+| [NestJS](/integrations/nestjs) | [`@usebruno/api-docs-nestjs`](https://www.npmjs.com/package/@usebruno/api-docs-nestjs) | `import { ApiDocsModule } from '@usebruno/api-docs-nestjs'` |
+
+## Configuration and examples
+
+- [Configuration](/integrations/configuration) — every option, including `collectionPath`, hosted `https://` YAML via `url`, and filters
+- [Examples](/integrations/examples) — runnable samples from [bruno-api-docs/examples](https://github.com/usebruno/bruno-api-docs/tree/main/examples)
+
+## A broken setup will not take down your app
+
+If the collection path is wrong, a file is unreadable, or an option is not recognized, the app still boots. The error is logged at startup and the docs route serves the error message instead of the page. Your API keeps running.
+
+Everything else is decided at startup too. The collection is read and filtered once, and each request after that is served from memory with an ETag, so the docs route adds no file system work to your running server.
+
+## Prefer a standalone file?
+
+If you do not want the docs inside your app, Bruno can build a single self-contained HTML file from the same collection instead. That file needs no server and can be hosted anywhere.
+
+- [Generate documentation in the app](/html-docs/generate) using **Generate Docs** in Collection Settings
+- [Generate it from the CLI](/bru-cli/runCollection#generate-api-documentation) in a release or CI pipeline
+- [Deploy and share the file](/html-docs/deploy)
+
+Both paths render the same documentation from the same collection. Use an integration when the docs should live with the app and follow its authentication, and use the generated file when you want something you can hand over or host separately.
+
+## Feedback
+
+Integrations are developed in [usebruno/bruno-api-docs](https://github.com/usebruno/bruno-api-docs). For bugs, questions, or feature requests, [open an issue](https://github.com/usebruno/bruno-api-docs/issues) on that repository.
