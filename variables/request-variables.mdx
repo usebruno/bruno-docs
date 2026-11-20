@@ -1,26 +1,68 @@
 ---
 title: "Request Variables"
+sidebarTitle: "Request Variables"
+description: "Set Pre Request and Post Response variables on a request's Vars tab."
 ---
 
-Request variables are variables that are scoped to a specific request. They are useful for storing variables that is used in a specific request.
+Request variables are scoped to a specific request. Use them for values that belong to that request only, not the whole collection or environment.
 
-## Creating a Request Variable
-* Go to the Request
-* Go to Vars Tab
-* Add your variable name, value, and an optional description for what the variable represents in the Pre Request Vars section
-* Save your changes
+The **Vars** tab has two sections:
+
+- **Pre Request** runs before the request is sent.
+- **Post Response** runs after the response is received.
+
+<Warning>
+  Request variables are scoped to the request and cannot be accessed outside of it. This keeps values separated between requests.
+</Warning>
+
+## Creating a Pre Request variable
+
+1. Open the request and go to the **Vars** tab.
+2. In **Pre Request Vars**, add the variable name, value, and an optional description.
+3. Save your changes.
+
+You can use strings, numbers, or any valid JavaScript literal.
 
 ![Request Variables](/images/screenshots/variables/request-variables.webp)
 
-## Using a Request Variable
-You can use the `{{varName}}` syntax to use a request variable in a request.
+## Using a request variable
+
+Use the `{{varName}}` syntax to reference a Pre Request variable in the URL, headers, body, or other request fields.
 
 ![Request Variables Usage](/images/screenshots/variables/request-variables-usage.webp)
 
-#### Access Request Variable inside scripts
-You can also use the `bru.getRequestVar()` function to get the value of a request variable and use it inside your scripts.
+### Access request variables in scripts
+
+Use `bru.getRequestVar()` to read a Pre Request variable in scripts:
 
 ```javascript
 let source = bru.getRequestVar("source");
 let destination = bru.getRequestVar("destination");
 ```
+
+<Note>
+  `bru.getRequestVar()` only reads Pre Request Vars defined on the current request's own Vars tab. It does not read variables defined on a folder or collection.
+
+  To read a variable defined at any other scope (global, collection, environment, folder, or runtime), use `bru.getVar("name")`, which walks the full precedence chain described in the [Variables overview](/variables/overview#variable-precedence-and-scope). For a scope-specific getter, use `bru.getCollectionVar()`, `bru.getFolderVar()`, or `bru.getEnvVar()`.
+</Note>
+
+## Post Response variables
+
+In **Vars** → **Post Response**, you can write any valid JavaScript expression. The `res` object is available, so you can parse the [response object](/testing/script/response/response-object) and set variables declaratively instead of writing a full script.
+
+For parsing the response body, use [response query](/testing/script/response/response-query) (for example `res('customer.address.city')`). Response variables will be available to see in [Runtime variables](/variables/runtime-variables) section.
+
+![Post Response Vars](/images/screenshots/script/set-vars.webp)
+
+## Deleting a request variable
+
+Request variables are stored in the request file. To delete one, remove the row from the **Vars** tab:
+
+1. Open the request.
+2. Go to the **Vars** tab.
+3. Click the delete icon on the variable row (Pre Request or Post Response).
+4. Save the request.
+
+<Note>
+  `bru.deleteVar()` and `bru.deleteAllVars()` remove **runtime variables** only. They do not delete request variables defined on the Vars tab.
+</Note>

@@ -23,6 +23,20 @@ Additionally, Process Environment Variables can be defined in an external enviro
 
 - [Process Environment Variables](./process-env)
 
+### Creating Variables Inline
+
+When you type an undefined `{{variable}}` in a request, Bruno highlights it and shows a tooltip. You can create the variable directly from this tooltip instead of navigating to the scope where it should live:
+
+1. Hover over the undefined variable to open the tooltip.
+2. Select the scope for the variable:
+   - **Request**: available when you are inside a request.
+   - **Collection**: always available.
+   - **Environment** and **Global**: available when an active environment exists. If none is active, you can create one from the same tooltip.
+3. Enter the value. For the Environment and Global scopes, you can mark the variable as a **Secret** to mask its value.
+4. Click outside the tooltip to save the variable.
+
+Once a variable is defined, its name in the tooltip becomes a link that navigates to the scope where it is defined.
+
 ### Variable Precedence and Scope
 
 When a variable is accessed, the following precedence is used to determine which value is used:
