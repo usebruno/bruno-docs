@@ -14,7 +14,7 @@ Every tool is marked as read-only or destructive, so clients that ask for approv
 | --- | --- |
 | `list_collections` | Lists collections with path and environments. Optional search, or `workspacePath` to list one workspace. |
 | `list_requests` | Lists requests across folders with type, method, and URL. Optional search and method filters. |
-| `get_request` | Full request definition: headers, params, body, auth, scripts, tests, assertions, docs. |
+| `get_request` | Full request definition (headers, params, body, auth, scripts, tests, assertions, docs). |
 | `list_folders` | Folder tree with request counts. Optional depth. |
 | `get_collection_stats` | Counts by method and type, folders, environments, size on disk. |
 | `list_environments` | Environments with variable counts and whether they hold secrets. |
@@ -31,7 +31,7 @@ Every tool is marked as read-only or destructive, so clients that ask for approv
 
 | Tool | What it does |
 | --- | --- |
-| `write_request` | Creates or edits a request: name, method, URL, headers, body, auth, assertions. Several requests can be written in one call. |
+| `write_request` | Creates or edits a request (name, method, URL, headers, body, auth, assertions). Several requests can be written in one call. |
 | `delete_request` | Deletes requests. Requires `confirm: true`. |
 | `move_request` | Moves or copies a request to another folder or collection, converting between `.bru` and `.yml`. Never overwrites. |
 | `add_test_script` | Appends to or replaces a request's pre-request, post-response, or tests script. 50 KB per script. |
@@ -77,7 +77,8 @@ Do not point the assistant at production responses or cookies you would not past
 
 ## Resources
 
-- [Setup](./setup) — install and connect clients
-- [Overview](./overview) — why Bruno MCP exists
+- [Setup](./setup). Install with `npx` and connect clients.
+- [Overview](./overview). Why Bruno MCP exists.
+- Package: [`@usebruno/mcp`](https://www.npmjs.com/package/@usebruno/mcp)
 - Repository: [usebruno/bruno-mcp](https://github.com/usebruno/bruno-mcp)
 - [Bruno CLI](/bru-cli/overview)
