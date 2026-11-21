@@ -1,0 +1,241 @@
+---
+title: "Backstage Integration"
+sidebarTitle: "Integration"
+description: "Install the Bruno Backstage plugin and register kind: Bruno in your catalog."
+---
+
+The Bruno Backstage plugin brings your Git-hosted Bruno collections into the Backstage Software Catalog. It registers collections as `kind: Bruno` entities, links them to the APIs they cover, and displays Bruno API Docs inside Backstage.
+
+This guide walks through installing the frontend and backend plugins, configuring Git access, and verifying the integration.
+
+<Note>
+  **Already using Backstage?** Install the Bruno packages into your existing Backstage application. You don't need to clone or deploy the Bruno demo repository.
+
+  The [Bruno Backstage plugin repository](https://github.com/usebruno/bruno-backstage-plugin) is for plugin development and demonstration.
+</Note>
+
+## How it works
+
+<Steps>
+  <Step title="Register a collection">
+    Add a `kind: Bruno` descriptor with a `catalog-info.yaml`, an entry in `app-config.yaml`, or the **Add Bruno Collection** wizard. Point `spec.url` at the folder that holds `bruno.json` or `opencollection.yml`, and optionally link APIs with `spec.partOf`.
+  </Step>
+  <Step title="Backstage reads from Git">
+    The plugin backend uses your existing `integrations.*` credentials to read the collection. It builds an OpenCollection document into `spec.definition` and keeps metadata such as request count in sync on the catalog processing loop.
+  </Step>
+  <Step title="Collections appear in the portal">
+    The Bruno dashboard lists every `kind: Bruno` entity. Linked APIs show a **Bruno Collections** card, and each collection page shows ownership, related APIs, and an **API Docs** tab.
+  </Step>
+  <Step title="Open docs or Bruno">
+    Developers read Bruno docs inside Backstage, or use **Open Collection** to hand the repository off to the Bruno desktop app when they need to send or edit requests.
+  </Step>
+</Steps>
+
+<Note>
+  In Beta, the API Docs tab is read-only. Executing API requests directly inside Backstage is planned for a future release.
+</Note>
+
+## Prerequisites
+
+- A Backstage app on the **new backend system**
+- Frontend: **new frontend system**, or **legacy frontend** (legacy wiring is in progress for Beta)
+- Access to configure the frontend, backend, and `app-config.yaml`
+- SCM access configured under `integrations.*` for the hosts that hold your collections
+- Built and tested on **Backstage 1.54** (see the compatibility table published with the Beta release)
+
+<Note>
+  The installation steps below target the new frontend system. Legacy frontend support is in progress for Beta.
+</Note>
+
+## Packages
+
+| Package | Installed in | Role |
+|---|---|---|
+| `@usebruno/backstage-plugin-bruno` | `packages/app` | Dashboard, wizard, entity cards, API Docs tab |
+| `@usebruno/backstage-plugin-bruno-backend` | `packages/backend` | Catalog module + `/api/bruno` routes |
+| `@usebruno/backstage-plugin-bruno-common` | (dependency) | Shared types, permissions, descriptor builder |
+
+A typical Backstage app looks like this. Run install commands from the **root** of your existing application:
+
+```text
+my-backstage-app/
+├── packages/
+│   ├── app/                 # frontend → packages/app
+│   │   └── src/App.tsx
+│   └── backend/             # backend → packages/backend
+│       └── src/index.ts
+├── app-config.yaml
+└── package.json
+```
+
+Translations: `import { brunoTranslationRef } from '@usebruno/backstage-plugin-bruno/alpha'`
+
+## 1. Install the backend
+
+```bash
+yarn --cwd packages/backend add @usebruno/backstage-plugin-bruno-backend
+```
+
+```ts
+// packages/backend/src/index.ts
+import { catalogModuleBruno } from '@usebruno/backstage-plugin-bruno-backend';
+
+backend.add(import('@usebruno/backstage-plugin-bruno-backend')); // /api/bruno routes
+backend.add(catalogModuleBruno); // kind: Bruno in the catalog
+```
+
+Both lines are required:
+
+- **Backend plugin** — exposes `/api/bruno` routes used by the frontend
+- **Catalog module** — lets Backstage process `kind: Bruno` entities
+
+Without the catalog module, `kind: Bruno` entities are rejected.
+
+## 2. Install the frontend
+
+### New frontend system
+
+```bash
+yarn --cwd packages/app add @usebruno/backstage-plugin-bruno
+```
+
+```tsx
+// packages/app/src/App.tsx
+import brunoPlugin, {
+  brunoAppModule,
+  brunoCatalogModule,
+} from '@usebruno/backstage-plugin-bruno';
+
+export default createApp({
+  features: [
+    brunoPlugin, // omit if app.packages feature discovery is on
+    brunoAppModule, // kind:bruno icon
+    brunoCatalogModule, // Bruno icon in catalog lists and links
+    // Keep your existing features here.
+  ],
+});
+```
+
+### Legacy frontend system
+
+Legacy export names are finalized during Beta. Wire routes and entity page slots roughly as follows:
+
+```tsx
+// packages/app/src/App.tsx
+<Route path="/bruno" element={<BrunoDashboardPage />} />
+<Route path="/bruno/add" element={<AddBrunoCollectionPage />} />
+```
+
+```tsx
+// packages/app/src/components/catalog/EntityPage.tsx
+// On API entity Overview:
+<EntityBrunoCollectionsCard />
+
+// On kind: Bruno entity:
+<EntityLayout.Route path="/" title="Overview">
+  <EntityAboutCard />
+  <EntityBrunoRelatedApisCard />
+</EntityLayout.Route>
+<EntityLayout.Route path="/collection-docs" title="API Docs">
+  <EntityBrunoApiDocsContent />
+</EntityLayout.Route>
+```
+
+## 3. Allow Bruno in the catalog and configure Git
+
+```yaml
+# app-config.yaml
+catalog:
+  rules:
+    - allow: [Component, System, API, Resource, Location, Bruno] # required
+
+integrations:
+  github:
+    - host: github.com
+      token: ${GITHUB_TOKEN}
+```
+
+<Note>
+  If your app already defines `catalog.rules`, add `Bruno` to the existing allow list instead of replacing the whole block.
+</Note>
+
+Public GitHub repos work without a token, but are rate limited to 60 requests per hour. Private repos, GitLab, and Bitbucket Cloud always need an `integrations` entry.
+
+A GitHub fine-grained token needs read access to **Contents**, **Metadata**, and **Commit statuses**.
+
+See [Configuration](./configuration) for supported Git hosts, URL formats, and access requirements.
+
+### Optional: GitHub pull-request creation
+
+The **Add Bruno Collection** wizard can open a GitHub pull request with the generated descriptor. To enable that:
+
+1. Configure a GitHub OAuth app under `auth.providers.github`.
+2. Add `@backstage/plugin-auth-backend-module-github-provider` to the backend.
+3. Ensure the user can create branches and pull requests in the target repo.
+
+Users can sign in to Backstage with any provider; they only authorize GitHub when they submit a pull request. Without this setup, PR creation fails and only **Download** works.
+
+## 4. Start and verify
+
+```bash
+yarn start
+```
+
+Open the frontend (typically `http://localhost:3000`) and check that:
+
+1. The **Bruno dashboard** is available at `/bruno`
+2. **Add Bruno Collection** is available at `/bruno/add`
+3. The catalog accepts `kind: Bruno` entities
+4. The backend starts without Bruno plugin registration errors
+
+<Note>
+  The Backstage backend usually runs on port `7007`. A `404` at `http://localhost:7007/` alone does not mean the backend is down.
+</Note>
+
+## 5. Add your first collection
+
+After install, register a collection from Git. For example, with a folder at `https://github.com/acme/apis/tree/main/collections/payments`:
+
+```yaml
+apiVersion: usebruno.com/v1alpha1
+kind: Bruno
+metadata:
+  name: payments-collection
+  title: Payments API
+spec:
+  type: collection
+  url: https://github.com/acme/apis/tree/main/collections/payments
+  owner: group:default/team-payments
+  partOf:
+    - api:default/payments-api
+```
+
+Commit the descriptor and register its location in Backstage, or use the wizard to generate it.
+
+<Note>
+  Committing `catalog-info.yaml` does not register it by itself. Backstage must discover or import the location before the entity is processed.
+</Note>
+
+See [Add a collection](./add-a-collection) for the wizard, `catalog-info.yaml`, and `app-config.yaml` paths.
+
+## What you get after install
+
+| Surface | Where | Purpose |
+|---|---|---|
+| **Bruno dashboard** | Sidebar → Bruno (`/bruno`) | Catalog table of `kind: Bruno` with filters and **Add Bruno Collection** |
+| **Bruno Collections card** | API entity Overview | Collections that are `partOf` this API |
+| **Associated APIs card** | Bruno entity Overview | APIs this collection covers |
+| **API Docs tab** | Bruno entity (`/collection-docs`) | Bruno docs renderer (read-only in Beta) |
+| **Open Collection** | Bruno entity About card | Opens Bruno via `https://fetch.usebruno.com/?url=...` |
+
+Collections refresh on the catalog processing loop using conditional requests (ETag / latest-commit). There is no separate Sync button; use the catalog's native refresh to force an update.
+
+<Note>
+  In Beta, **Open Collection** passes the repository root to Bruno. Opening a specific collection subfolder or branch is not supported yet.
+</Note>
+
+## Next steps
+
+- [Add a collection](./add-a-collection) using `catalog-info.yaml`, `app-config.yaml`, or the wizard
+- [Configuration reference](./configuration) for keys, permissions, and supported Git hosts
+- [Plugin repository](https://github.com/usebruno/bruno-backstage-plugin) — source and demo app
