@@ -27,6 +27,10 @@ Bruno gRPC interface provides an intuitive way to interact with gRPC services. T
 2. Select **gRPC** as your request type
 3. Enter the **service endpoint** in the URL field (e.g., `https://grpcb.in/`)
 
+<Note>
+If your gRPC server is hosted under a URL subpath (for example, behind a reverse proxy at `https://api.example.com/grpc`), include the subpath in the URL. Bruno prefixes every method call and reflection request with that subpath. The host is case-insensitive, but the subpath is case-sensitive.
+</Note>
+
 ![Create gRPC Request](/images/screenshots/send-request/grpc/2-create-grpc-req.webp)
 
 ### Step 2: Configure the Request

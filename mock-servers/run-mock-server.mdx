@@ -159,7 +159,8 @@ The newest Request Log entry auto-expands the inspector, making it easy to debug
 
 ## How the running server behaves
 
-- **CORS** is enabled by default. Browser apps can call the mock without extra setup. `OPTIONS` preflight returns `204` with the correct headers.
+- **CORS** is enabled by default. Browser apps can call the mock without extra setup, including requests that send custom headers such as `x-api-key`. Preflights allow any requested header and method.
+- `OPTIONS` requests that match an `OPTIONS` mock route return that mock response. Other `OPTIONS` requests, including CORS preflights, return an empty `204` with the CORS headers. Bruno records these automatically handled requests in the **[Request Log](#request-log-tab)**.
 - Trailing slashes are normalised (`/users/` and `/users` both match).
 - Unmatched paths return **404** with a JSON payload: method and path tried, a hint to create a matching mock response, and a truncated list of registered routes.
 - Transport-level headers such as `transfer-encoding` and `content-encoding` are stripped from replies.
