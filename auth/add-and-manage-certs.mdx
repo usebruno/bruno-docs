@@ -50,7 +50,7 @@ Bruno resolves client certificates from two places:
 | Level | Where you configure it | Path style | Scope |
 | --- | --- | --- | --- |
 | **Global** | Preferences → Client Certificates | Absolute file paths | Shared across all collections |
-| **Collection** | Collection Settings → Client Certificates | Paths relative to the collection | That collection only |
+| **Collection** | Collection Settings → Settings → Client certificates | Paths relative to the collection | That collection only |
 
 Global certificates are inherited by default. You configure them once and reuse them across many collections. Collection certificates still work the same way as before for collection specific overrides.
 
@@ -92,7 +92,7 @@ Disabling a certificate excludes it from resolution. It does not delete the entr
 
 ### Add a collection client certificate
 
-1. Open the collection → **Collection Settings** → **Client Certificates**.
+1. Open the collection → **Collection Settings** → **Settings** → **Client certificates**.
 2. Click **+ Add Certificate**.
 3. Enter the **Domain**.
 4. Choose **Cert & Key** or **PFX**.

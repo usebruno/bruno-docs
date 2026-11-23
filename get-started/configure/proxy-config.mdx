@@ -46,11 +46,11 @@ Below are steps for configuring your proxy settings at different levels within B
 Bruno provides four options for proxy mode:
 
 - **Off**: Disables proxy usage.
-- **On**: Enables proxy and routes requests through a manually configured proxy.
+- **Custom**: Enables proxy and routes requests through a manually configured proxy.
 - **System Proxy**: Uses the system-wide proxy settings.
 - **PAC**: Uses a [Proxy Auto-Configuration (PAC)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Proxy_servers_and_tunneling/Proxy_Auto-Configuration_PAC_file) file to determine the proxy for each request.
 
-Select **On** if you want to configure a custom proxy, or **PAC** if your network uses a PAC file for automatic proxy configuration.
+Select **Custom** if you want to configure a custom proxy, or **PAC** if your network uses a PAC file for automatic proxy configuration.
 
 <Tip>
 Bruno automatically detects and uses the system proxy configuration, including PAC (Proxy Auto-Config) settings configured at the operating system level.
@@ -76,7 +76,7 @@ Fill in the required fields:
 
 If your proxy requires authentication:
 
-1. Check the **Auth** checkbox.
+1. Check the **Proxy authentication** checkbox.
 2. Enter the **Username**.
 3. Enter the **Password** (Click the eye icon to reveal the password if needed).
 
@@ -98,17 +98,17 @@ There may be instances in which your collection needs to use a different proxy t
 Below are instructions on proxy settings at the collection level:
 
 1. Open the collection settings.
-2. Navigate to the **Proxy** tab.
+2. Go to the **Settings** tab and select **Proxy** in its sidebar.
 
 ![collection-proxy](/images/screenshots/get-started/config/proxy/3-collection-proxy.webp)
 
 ### **Choose the Configuration Mode:**
 
-- **inherit**: Uses the main proxy settings from Preferences.
-- **Enabled**: Enables a custom proxy for this collection.
-- **Disabled**: Disables the proxy for this collection.
+- **Inherit**: Uses the proxy settings from Preferences.
+- **Custom**: Enables a custom proxy for this collection.
+- **Off**: Disables the proxy for this collection.
 
-3. Choose **inherit, enabled, or disabled**.
+3. Choose **Inherit**, **Custom**, or **Off** under **Proxy mode**.
 4. Enter the **Hostname, Port, Protocol, Username, and Password** if needed.
 5. Click **Save** to apply the settings.
 
@@ -120,10 +120,10 @@ You need an HTTP proxy with an exit in the country you want to test.
 
 ### Steps
 
-1. Open the collection settings and go to the **Proxy** tab.
-2. Set the mode to **Enabled**, choose the **HTTP** protocol, and enter the proxy's **Hostname** and **Port**. Fill in the username and password if the proxy needs them. Click **Save**.
+1. Open the collection settings, go to the **Settings** tab, and select **Proxy**.
+2. Set **Proxy mode** to **Custom**, choose the **HTTP** protocol, and enter the proxy's **Hostname** and **Port**. Fill in the username and password if the proxy needs them. Click **Save**.
 3. Send the request and note the response: status code, headers, body, and any redirect.
-4. Go back to the **Proxy** tab, set the mode to **Disabled**, and click **Save**. This turns off the proxy for the collection, including one inherited from Preferences. It does not affect a VPN or proxy configured outside Bruno.
+4. Go back to the **Proxy** settings, set **Proxy mode** to **Off**, and click **Save**. This turns off the proxy for the collection, including one inherited from Preferences. It does not affect a VPN or proxy configured outside Bruno.
 5. Send the same request again without changing anything else, and compare the two responses.
 
 If the responses differ, check that nothing else changed between the two requests, such as cookies, cached data, or redirect handling. When you are done, set the collection proxy back to the mode it was in before.
