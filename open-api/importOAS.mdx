@@ -33,7 +33,7 @@ Bruno offers two ways to import OpenAPI specifications:
 ![select-openapi-file](/images/screenshots/get-started/import-export/import_collection/import-modal.webp)
 
 5. Browse and select your OpenAPI specification file (`.yaml` or `.json`)
-6. Configure the import settings (see [Import Settings](#import-settings) below)
+6. Configure the import settings (see [Import Settings](#configuring-import-settings) below)
 7. Click **Import** to create the collection
 
 ### Importing from a URL
@@ -49,6 +49,21 @@ Bruno offers two ways to import OpenAPI specifications:
 After importing the OAS file, the sample collection will look like this:
 
 ![import-collection-oas](/images/screenshots/open-api/import-collection-oas.webp)
+
+
+## Configuring Import Settings
+
+1. **Select Import Method**: Choose either file or URL import
+2. **Choose Folder Arrangement**: Select your preferred grouping method from the dropdown:
+   - **Paths**: Group by URL path structure
+   - **Tags** (default): Group by OpenAPI tags
+3. Optionally enable **Check for Spec Updates** to connect [OpenAPI Sync](/open-api/openapi-sync) on import
+4. **Expand Advanced** and configure:
+   - **Naming requests** (Summary, operationId, Description, or Path)
+   - **Inherit authentication from collection folder** (optional)
+5. Click **Import** to create your collection
+
+![Import OpenAPI collection settings](/images/screenshots/open-api/import-openapi-collection-settings.webp)
 
 ## Import Settings
 
@@ -112,9 +127,9 @@ When **Check for Spec Updates** is enabled, Bruno saves the naming choice as `re
 
 Bulk Import shows the same **Naming requests** dropdown in its Advanced section when the selection includes an OpenAPI spec. One choice applies to every OpenAPI spec in the batch.
 
-### Set authentication at collection level
+### Inherit authentication from collection folder
 
-In the import modal, expand **Advanced** and turn on **Set authentication at collection level** if you want one auth config for the collection instead of a copy on every request.
+In the import modal, expand **Advanced** and turn on **Inherit authentication from collection folder** if you want one auth config for the collection instead of a copy on every request.
 
 | Switch | Result |
 | --- | --- |
@@ -135,22 +150,6 @@ With the switch on:
 When sync is enabled, Bruno saves the choice as `authPlacement` (`request` or `collection`) in the OpenAPI sync config. Later syncs follow that value. Missing or unknown values use `request`.
 
 Bulk Import shows the same switch in its Advanced section when the selection includes an OpenAPI spec. One choice applies to every OpenAPI spec in the batch.
-
-### Configuring Import Settings
-
-1. **Select Import Method**: Choose either file or URL import
-
-![import-openapi-url](/images/screenshots/get-started/import-export/import_collection/import-openapi-url-modal.webp)
-
-2. **Choose Folder Arrangement**: Select your preferred grouping method from the dropdown:
-   - **Paths**: Group by URL path structure
-   - **Tags** (default): Group by OpenAPI tags
-3. **Expand Advanced** and configure:
-   - **Naming requests** (Summary, operationId, Description, or Path)
-   - **Set authentication at collection level** (optional)
-4. **Import**: Click the import button to create your collection
-
-![OpenAPI Import Dialog](/images/screenshots/open-api/openapi-import.webp)
 
 ## Example OpenAPI Specifications
 
