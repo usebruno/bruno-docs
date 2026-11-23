@@ -100,6 +100,14 @@ Use a PAT when you want predictable, documented access for Bruno on your machine
 
 ![pat-connected](/images/screenshots/git-providers/github-integration/09-pat-connected.webp)
 
+<Warning>
+  The GitHub **PAT** (and GitHub CLI login under Git providers) is only for **provider** features: searching, filtering, and importing **private** or **organization** repositories in Bruno.
+
+  **Push**, **pull**, **fetch**, and other Git operations use your **machine's Git login** (SSH key or HTTPS credentials configured for Git), not this provider token. Connecting a PAT does not authorize Git push/pull by itself.
+
+  Set up SSH (recommended) or HTTPS Git auth by following [Collaboration via GitHub](/git-integration/github), then use push and pull from Bruno's Git UI as usual.
+</Warning>
+
 <Info>
     Advanced options are available to configure the enterprise GitHub API URL.
 </Info>
@@ -165,6 +173,7 @@ After saving, org-scoped search and private repos on that host should resolve ag
 | ---- | ----------- |
 | Import a **public** repo by search | **GitHub** tab, scope **All of GitHub**, no login |
 | Import **private** or **org** repos | Enable **GitHub** under **Git providers** + **PAT** (recommended) or **GitHub CLI** |
+| **Push / pull** after clone | Machine Git auth (SSH or HTTPS). See [Collaboration via GitHub](/git-integration/github). The provider PAT is not used for push/pull. |
 | **Enterprise** GitHub host | Same + **Advanced** → set **API URL** to your server’s API base |
 | Any Git URL without search | **Git repository** tab + paste URL |
 
@@ -172,7 +181,8 @@ After saving, org-scoped search and private repos on that host should resolve ag
 
 ## Resources
 
-- [Git integration overview](/git-integration/overview) — init, remotes, commit, push, pull.  
-- [Collaboration via GUI — Provider](/git-integration/using-gui/provider) — remotes and Git workflow with a GitHub remote.  
+- [Collaboration via GitHub](/git-integration/github) — SSH setup and push/pull with a GitHub remote.
+- [Git integration overview](/git-integration/overview) — init, remotes, commit, push, pull.
+- [Collaboration via GUI — Provider](/git-integration/using-gui/provider) — remotes and Git workflow with a GitHub remote.
 - [Fetch in Bruno](/git-integration/embed-bruno-collection) — one-click open for a GitHub repo from a README or site.
 - [Blog - Git Provider Integration for Effortless Collection Import in Bruno](https://blog.usebruno.com/git-providers-support-in-bruno)
