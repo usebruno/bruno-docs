@@ -25,9 +25,12 @@ There are two ways to connect to OpenAPI Sync:
 
 ![Click context menu and select OpenAPI Sync](/images/screenshots/open-api/openapi-sync/click-context-menu-openapi-sync.webp)
 
-3. You have two options:
-   - **Add URL** – Enter the remote OpenAPI spec URL, or
-   - **Upload file** – Upload an OpenAPI spec file from your machine.
+3. Choose where the spec comes from:
+   - **Workspace** (default): Select an API spec that is already in your workspace's API Specs section.
+   - **URL**: Enter the remote OpenAPI spec URL.
+   - **File**: Upload an OpenAPI spec file from your machine.
+
+OpenAPI Sync supports OpenAPI 3.x specs. Bruno rejects Swagger 2.0 specs when you connect them.
 
 ![Enter URL or upload file and connect](/images/screenshots/open-api/openapi-sync/enter-url-file-connect-openapisync.webp)
 
@@ -155,6 +158,24 @@ OpenAPI Sync checks for spec updates automatically **every 5 minutes**. You can 
 2. Select **Edit connection settings**.
 
 ![Edit connection settings – auto check for updates](/images/screenshots/open-api/openapi-sync/auto-check-update-settings.webp)
+
+In the connection settings you can change the spec source (**Workspace**, **URL** or **File**), enable or disable automatic checks, disconnect sync and adjust when Bruno looks for spec updates.
+
+## Inspect Spec
+
+To view and inspect the OpenAPI spec:
+
+1. Click **View spec** on the top right-hand side of the OpenAPI Sync UI.
+
+![view openapu spec](/images/screenshots/open-api/openapi-sync/view-openapi-spec.webp)
+
+Its **read only** SwaggerUI-like interface to the OpenAPI spec.
+
+Please share your feedback or report issues [here](https://github.com/usebruno/bruno/discussions/7401).
+
+## Resources
+
+- [Blog - How to Sync API Collections with OpenAPI Specifications Using Bruno OpenAPI Sync](https://blog.usebruno.com/keep-your-api-collections-in-sync-with-openapi-sync)ck-update-settings.webp)
 
 In the connection settings you can enable or disable automatic checks, disconnect sync and adjust when Bruno looks for spec updates.
 
