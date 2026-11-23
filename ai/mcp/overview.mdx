@@ -1,0 +1,93 @@
+---
+title: "Bruno MCP Server"
+sidebarTitle: "Overview"
+description: "Use the Bruno MCP server so AI assistants can read, run, and edit Bruno collections on your machine."
+---
+
+[MCP](https://modelcontextprotocol.io) (Model Context Protocol) is an open standard that lets AI assistants call tools and read data on your machine, instead of guessing from chat alone.
+
+[Bruno MCP](https://github.com/usebruno/bruno-mcp) is the MCP server for Bruno. Connect it once in Cursor, VS Code, Claude Code, Claude Desktop, or any other MCP client. The assistant can list collections, inspect requests and environments, run them through the Bruno CLI, and create or edit collection files. 
+
+<div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '10px', margin: '16px 0' }}>
+  <a
+    href="https://cursor.com/install-mcp?name=bruno&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkB1c2VicnVuby9tY3AiXX0%3D"
+    style={{ display: 'inline-flex', alignItems: 'center', lineHeight: 0, border: 'none', textDecoration: 'none', boxShadow: 'none' }}
+  >
+    <img
+      src="https://cursor.com/deeplink/mcp-install-dark.svg"
+      alt="Install Bruno MCP in Cursor"
+      height="32"
+      style={{ display: 'block', height: '30px', width: 'auto', border: '1px solid #ffffff', outline: 'none', boxShadow: 'none', borderRadius: '6px', cursor: 'pointer' }}
+    />
+  </a>
+  <a
+    href="https://vscode.dev/redirect?url=vscode%3Amcp%2Finstall%3F%257B%2522name%2522%253A%2522bruno%2522%252C%2522type%2522%253A%2522stdio%2522%252C%2522command%2522%253A%2522npx%2522%252C%2522args%2522%253A%255B%2522-y%2522%252C%2522%2540usebruno%252Fmcp%2522%255D%257D"
+    style={{ display: 'inline-flex', alignItems: 'center', lineHeight: 0, border: 'none', textDecoration: 'none', boxShadow: 'none' }}
+  >
+    <img
+      src="https://img.shields.io/badge/VS_Code-Install_Bruno_MCP-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white"
+      alt="Install Bruno MCP in VS Code"
+      height="32"
+      style={{ display: 'block', height: '26px', width: 'auto', border: '1px solid #ffffff', outline: 'none', boxShadow: 'none', borderRadius: '6px', cursor: 'pointer' }}
+    />
+  </a>
+</div>
+
+<Note>
+  [Bruno](https://usebruno.com/downloads) is an open source, offline-first API client. Collections live as plain text files in a folder, versioned with Git. Bruno MCP brings that same philosophy to AI workflows.
+</Note>
+
+## Why Bruno fits MCP naturally
+
+Bruno collections are plain files on disk (`.bru` or [OpenCollection YAML](https://docs.usebruno.com/opencollection-yaml/overview)). That already works well with AI agents that can read a repo. MCP goes further.
+
+| Without MCP | With Bruno MCP |
+| --- | --- |
+| The assistant guesses folder layout and file syntax | Tools return structured request and environment data |
+| Running a request means inventing curl or asking you to click Send | `execute_request` / `run_collection` run through the Bruno CLI |
+| Edits are free-form text the assistant might format wrong | Write tools create and update requests with known fields |
+| Secrets and auth headers may leak into chat context | Secret env values are redacted |
+
+Bruno stays local-first and Git-friendly. MCP does not move your collections to the cloud. It gives the assistant a safer, clearer API over the same files you already version-control.
+
+## What you can do
+
+- Ask questions about an API from its collection ("Which endpoints need auth?")
+- Run a request or a whole collection and get the results explained
+- Write requests for endpoints in the codebase that the collection does not cover yet
+- Probe edge cases, find a bug, fix the code, then add a request with tests that guards against it
+- Add assertions and test scripts to existing requests
+- Update environment variables, such as a base URL
+
+## Example prompts
+
+- "Create an API collection for the product codebase"
+- "List the requests in the payments collection that use POST."
+- "Run the orders folder against staging and summarize the failures."
+- "Add Bruno requests for the endpoints in `src/routes` that the collection does not cover."
+- "Add a test to Create order that checks the total is price times quantity."
+- "Set `baseUrl` in the staging environment to `https://api.example.com`."
+
+## Requirements
+
+- Node.js **20.12** or later
+- A Bruno collection in `.bru` or OpenCollection YAML (`.yml`)
+- An MCP client (Claude Code, Cursor, VS Code, Claude Desktop, Codex, and others)
+
+The package is [`@usebruno/mcp`](https://www.npmjs.com/package/@usebruno/mcp) on npm. Clients typically start it with `npx -y @usebruno/mcp`. The [Bruno CLI](https://docs.usebruno.com/bru-cli/overview) is bundled with the MCP server, so you do not install it separately.
+
+## Security at a glance
+
+- Runs locally over stdio on your machine
+- Request headers that carry credentials (`Authorization`, `Cookie`, `X-Api-Key`, and similar) are masked
+- Secret environment variables are masked by default
+
+
+See [Tools](./tools) for the full tool list, write behavior, and limitations.
+
+## Next steps
+
+- [Setup](./setup). Connect Cursor, VS Code, Claude Code, and other clients.
+- [Tools](./tools) - Read, run, and write tools the assistant can call.
+- [Bruno CLI](/bru-cli/overview) - The CLI the MCP server uses to execute requests.
+- [Model Context Protocol](https://modelcontextprotocol.io) - The open standard.

@@ -98,7 +98,7 @@ Use a PAT when you want predictable, documented access for Bruno on your machine
 
 4. You should see a **connected** state (eg **Connected as @your-username via Personal Access Token**) with options to **Refresh** or **Clear token** when you need to rotate credentials.
 
-![pat-conncted](/images/screenshots/git-providers/github-integration/09-pat-connected.webp)
+![pat-connected](/images/screenshots/git-providers/github-integration/09-pat-connected.webp)
 
 <Info>
     Advanced options are available to configure the enterprise GitHub API URL.
@@ -121,22 +121,28 @@ You can add multiple GitHub account (up to 5 users) to your workspace by enterin
 
 ---
 
-## GitHub CLI
+## GitHub CLI (`gh`)
 
-You can authenticate with GitHub CLI if you prefer not to paste a PAT:
+You can authenticate with the [GitHub CLI](https://cli.github.com/) if you prefer not to paste a PAT. Bruno reuses the login from `gh` on your machine, which is useful when you already use the CLI for day-to-day GitHub work.
+
+### Option A: Install and connect from Bruno
 
 1. In **Preferences** → **Git providers** → **GitHub**, open the **GitHub CLI** tab.
 
 ![git-cli](/images/screenshots/git-providers/github-integration/11-git-cli.webp)
 
-2. Click on **Install** button to install GitHub CLI and authenticate with it in Bruno.
+
+2. Click **Install** to install GitHub CLI 
+
+3. Authenticate when prompted. You should see a **connected** state (for example **Connected as @your-username via GitHub CLI**) with options to **Refresh** or **Sign out**.
 
 ![authenticate-cli](/images/screenshots/git-providers/github-integration/12-authenticate-cli.webp)
 
-3. You should see a **connected** state (eg **Connected as @your-username via GitHub CLI**) with options to **Refresh** or **Clear token** when you need to rotate credentials.
 
 
-We still **recommend a PAT** for straightforward setup, rotation, and use in environments where the CLI is not installed.
+After you are connected, return to **Import collection** → **GitHub** and search private or org-scoped repos the same way as with a PAT.
+
+We still **recommend a PAT** for straightforward setup, rotation, and use in environments where the CLI is not installed. For creating remotes and cloning with `gh` before opening Bruno, see [Collaboration via GitHub](/git-integration/github#use-the-github-cli-gh).
 
 ---
 

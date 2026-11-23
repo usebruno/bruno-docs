@@ -1,0 +1,83 @@
+---
+title: "Bruno MCP tools"
+sidebarTitle: "Tools"
+description: "Read, run, and write tools exposed by the Bruno MCP server."
+---
+
+Collections are identified by absolute path. Requests are identified by path within the collection (for example `users/get-user.yml`).
+
+Every tool is marked as read-only or destructive, so clients that ask for approval can prompt before writes.
+
+## Read
+
+| Tool | What it does |
+| --- | --- |
+| `list_collections` | Lists collections with path and environments. Optional search, or `workspacePath` to list one workspace. |
+| `list_requests` | Lists requests across folders with type, method, and URL. Optional search and method filters. |
+| `get_request` | Full request definition (headers, params, body, auth, scripts, tests, assertions, docs). |
+| `list_folders` | Folder tree with request counts. Optional depth. |
+| `get_collection_stats` | Counts by method and type, folders, environments, size on disk. |
+| `list_environments` | Environments with variable counts and whether they hold secrets. |
+| `get_environment` | One environment's variables. Secret values come back as `<redacted>`. |
+
+## Run
+
+| Tool | What it does |
+| --- | --- |
+| `execute_request` | Runs one request with optional environment and variable overrides. Returns status, headers, full body, assertion and test results. Times out after 120 seconds. |
+| `run_collection` | Runs the collection or selected requests and folders. Supports iterations, a CSV/JSON `dataFile`, parallel, bail, `timeoutSeconds` (default 600). Returns a pass/fail summary per request, without headers or bodies. |
+
+## Write
+
+| Tool | What it does |
+| --- | --- |
+| `write_request` | Creates or edits a request (name, method, URL, headers, body, auth, assertions). Several requests can be written in one call. |
+| `delete_request` | Deletes requests. Requires `confirm: true`. |
+| `move_request` | Moves or copies a request to another folder or collection, converting between `.bru` and `.yml`. Never overwrites. |
+| `add_test_script` | Appends to or replaces a request's pre-request, post-response, or tests script. 50 KB per script. |
+| `remove_script` | Clears one script from a request. |
+| `set_environment_variable` | Adds or changes a variable. Changing a secret variable requires `overwriteSecret: true`. |
+| `remove_environment_variable` | Deletes a variable. |
+| `create_collection` | Creates an empty collection (`yml` by default, or `bru`) in a new or empty folder. Optional `baseUrl`, description, and `workspacePath` to add it to a workspace. |
+
+## What the assistant sees
+
+| Data | Behavior |
+| --- | --- |
+| Credential request headers (`Authorization`, `Cookie`, `X-Api-Key`, and similar) | Masked |
+| Secret environment and `.env` values | Removed wherever they appear |
+| Non-secret environment values | Returned as stored |
+| Response headers and bodies | Returned in full, including `Set-Cookie`. Bodies are not truncated |
+
+Do not point the assistant at production responses or cookies you would not paste into a chat.
+
+## How writes behave
+
+- `.bru` files change only where edited. A `.yml` request is rewritten in full (as the Bruno app does), so YAML comments in request files are lost. `.yml` environments and `workspace.yml` keep their comments.
+- Secret values are never written to files. A secret variable is saved by name only. The value is passed per run through variables.
+- Writes stay inside the collection. Paths outside it, or inside `environments/`, `.git`, or `node_modules`, are refused.
+- A batch is checked in full before anything is written, so one bad item means no changes. A disk error partway through is not rolled back. The result lists what was written.
+
+## Limitations
+
+- Runs locally over stdio. The collection must be on the same machine, and requests are sent from that machine. There is no hosted or shared team server.
+- Requests run through the Bruno CLI, not the app. Bruno global environments, app-only cookies, and auth flows that need a browser window are not available.
+- Each `execute_request` call is a separate run, so variables set by scripts (`bru.setVar`) do not carry to the next call. Run dependent requests together with `run_collection`.
+- `write_request` edits HTTP and GraphQL requests only. gRPC and WebSocket requests can be read and run, not edited.
+- Environments can be edited but not created.
+
+## Example prompts
+
+- "List the requests in the payments collection that use POST."
+- "Run the orders folder against staging and summarize the failures."
+- "Add Bruno requests for the endpoints in `src/routes` that the collection does not cover."
+- "Add a test to Create order that checks the total is price times quantity."
+- "Set `baseUrl` in the staging environment to `https://api.example.com`."
+
+## Resources
+
+- [Setup](./setup): Install with `npx` and connect clients.
+- [Overview](./overview): Why Bruno MCP exists.
+- Package: [`@usebruno/mcp`](https://www.npmjs.com/package/@usebruno/mcp)
+- Repository: [usebruno/bruno-mcp](https://github.com/usebruno/bruno-mcp)
+- [Bruno CLI](/bru-cli/overview)

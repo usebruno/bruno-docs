@@ -65,6 +65,22 @@ bru run <folder-1-name> request1.bru <folder-2-name> request2.bru
 
 Add `-r` to run a folder recursively, including every nested folder inside it.
 
+## Printing a response body to the terminal
+
+`bru run` doesn't print response bodies by default. Bruno CLI does print `console.log()` output from pre-request and post-response scripts to the terminal. To see a response body, log it in the request's post-response script:
+
+```javascript copy
+console.log(JSON.stringify(res.getBody(), null, 2));
+```
+
+Then run the request:
+
+```bash copy
+bru run req-name.yml
+```
+
+The body appears in the terminal alongside the run results. To save full request and response details to a file instead, use a JSON report such as `--reporter-json results.json`. See [Reports](/bru-cli/run/reports).
+
 ## Running a Collection with a CSV File
 
 If you need to run a collection using data from a CSV file, specify the path to the file with the `--csv-file-path` option:
@@ -284,31 +300,35 @@ bru run --iteration-count 2 --parallel
 
 ## Reduce CLI memory use on large runs
 
-If you are seeing unbounded RSS (Resident Set Size) growth or OOM (Out of Memory) kills, you can use the `--experimental-cache-modules` flag to attempt to reduce the memory usage. It will share evaluated script modules across requests in a `bru run`.
+If you are seeing unbounded RSS (Resident Set Size) growth or OOM (Out of Memory) kills, you can use the `--cache-modules` flag to attempt to reduce the memory usage. It will share evaluated script modules across requests in a `bru run`.
 
 If you are **not** seeing unbounded RSS growth or OOM kills, leave the default as-is.
 
-### `--experimental-cache-modules`
+### `--cache-modules`
 
-Pass this flag on `bru run` when it runs out of memory:
+Pass this flag on `bru run` together with `--sandbox developer` when the run runs out of memory:
 
 ```bash copy
-bru run --experimental-cache-modules
+bru run --sandbox developer --cache-modules
 ```
+
+Module caching only works in the developer sandbox. If you pass `--cache-modules` with any other sandbox, the CLI prints `--cache-modules requires --sandbox developer; ignoring flag` and runs without caching.
 
 The flag does two things:
 
 - Shares `globalThis` across script VMs so module identity stays consistent.
 - Caches each evaluated module instead of rebuilding the module graph from scratch on every script.
 
-That avoids the heap climb caused by re-creating the graph for every request. The flag is **experimental** because the approach can change script behavior in edge cases. Use it only when you hit the high-RSS issue.
+That avoids the heap climb caused by re-creating the graph for every request. The approach can change script behavior in edge cases, so use it only when you hit the high-RSS issue.
 
-This is still experimental. The name will become `--cache-modules` once the default CLI run is confirmed to stay unchanged with this caching on.
+<Note>
+`--experimental-cache-modules` is deprecated. It still enables module caching, but the CLI prints a deprecation warning. Use `--cache-modules` instead.
+</Note>
 
 ### CI example
 
 ```yaml
-- run: bru run --env ci --experimental-cache-modules --reporter-junit results.xml
+- run: bru run --env ci --sandbox developer --cache-modules --reporter-junit results.xml
 ```
 
 ## Next steps

@@ -272,8 +272,7 @@
                       "testing/script/response/response-object",
                       "testing/script/response/response-query"
                     ]
-                  },
-                  "testing/script/vars"
+                  }
                 ]
               },
               {
@@ -295,6 +294,7 @@
                     ]
                   },
                   "git-integration/using-cli",
+                  "git-integration/github",
                   "git-integration/gitlab",
                   "git-integration/bitbucket",
                   "git-integration/azure-devops"
@@ -331,6 +331,15 @@
                       "ai/integration/codex",
                       "ai/integration/claude",
                       "ai/integration/devin"
+                    ]
+                  },
+                  {
+                    "group": "Bruno MCP",
+                    "tag": "Beta",
+                    "pages": [
+                      "ai/mcp/overview",
+                      "ai/mcp/setup",
+                      "ai/mcp/tools"
                     ]
                   }
                 ]
@@ -1504,6 +1513,11 @@
       "permanent": true
     },
     {
+      "source": "/get-started/history",
+      "destination": "/send-requests/history",
+      "permanent": true
+    },
+    {
       "source": "/agents/introduction",
       "destination": "/ai/integration/overview",
       "permanent": true
@@ -1750,12 +1764,17 @@
     },
     {
       "source": "/scripting/vars.html",
-      "destination": "/testing/script/vars",
+      "destination": "/variables/request-variables",
       "permanent": true
     },
     {
       "source": "/scripting/vars",
-      "destination": "/testing/script/vars",
+      "destination": "/variables/request-variables",
+      "permanent": true
+    },
+    {
+      "source": "/testing/script/vars",
+      "destination": "/variables/request-variables",
       "permanent": true
     },
     {

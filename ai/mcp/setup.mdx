@@ -1,0 +1,197 @@
+---
+title: "Installation and setup"
+sidebarTitle: "Installation"
+description: "Install Bruno MCP with npx and connect it to Claude Code, Cursor, VS Code, Claude Desktop, and other MCP clients."
+---
+
+Bruno MCP works with Claude Code, Cursor, VS Code, Claude Desktop, Codex, and other MCP clients. Pick a path below.
+
+<Note>
+Requires **Node.js 20.12** or later. The server is published on npm as [`@usebruno/mcp`](https://www.npmjs.com/package/@usebruno/mcp). MCP clients run it with `npx`, so there is nothing to install up front.
+</Note>
+
+## Let your AI assistant set it up
+
+Copy and send this message to your agent (Claude Code, Codex, Cursor, or any other MCP client).
+
+```text
+Set up Bruno MCP for me so you can work with my Bruno API collections:
+
+1. Add the Bruno MCP server to your MCP config. It runs with `npx -y @usebruno/mcp`.
+2. Let me know when it's ready and whether I need to restart anything.
+```
+
+## Set up from your terminal
+
+```bash
+npx @usebruno/mcp setup
+```
+
+It finds the MCP clients on your machine (Claude Code, Claude Desktop, Cursor, VS Code, Codex), lets you pick some or all of them, and adds Bruno MCP to each. Existing servers are kept. A client that already has `bruno` is left as is.
+
+To skip the prompt (for example in a script).
+
+```bash
+npx @usebruno/mcp setup --all
+npx @usebruno/mcp setup --client cursor --client codex
+```
+
+## Claude Code
+
+```bash
+claude mcp add bruno -- npx -y @usebruno/mcp
+
+# optional: pin a collection
+claude mcp add bruno -- npx -y @usebruno/mcp --collection /path/to/collection
+```
+
+Verify with `claude mcp list`, then open a new session.
+
+## Cursor
+
+### One-click install
+
+[![Install in Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=bruno&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkB1c2VicnVuby9tY3AiXX0%3D)
+
+### Manual config
+
+Add to `~/.cursor/mcp.json`.
+
+```json
+{
+  "mcpServers": {
+    "bruno": {
+      "command": "npx",
+      "args": ["-y", "@usebruno/mcp"]
+    }
+  }
+}
+```
+
+Reload Cursor, or toggle the server in **Settings > MCP**.
+
+## VS Code
+
+### One-click install
+
+[![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_Bruno_MCP-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](https://vscode.dev/redirect?url=vscode%3Amcp%2Finstall%3F%257B%2522name%2522%253A%2522bruno%2522%252C%2522type%2522%253A%2522stdio%2522%252C%2522command%2522%253A%2522npx%2522%252C%2522args%2522%253A%255B%2522-y%2522%252C%2522%2540usebruno%252Fmcp%2522%255D%257D)
+
+### Manual config
+
+Add to `~/.copilot/mcp-config.json`.
+
+```json
+{
+  "mcpServers": {
+    "bruno": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@usebruno/mcp"],
+      "tools": ["*"]
+    }
+  }
+}
+```
+
+Reload the window (**Developer: Reload Window**).
+
+## Codex
+
+```bash
+codex mcp add bruno -- npx -y @usebruno/mcp
+```
+
+Or add to `~/.codex/config.toml`.
+
+```toml
+[mcp_servers.bruno]
+command = "npx"
+args = ["-y", "@usebruno/mcp"]
+```
+
+Check it with `codex mcp list`, then start a new session.
+
+## Claude Desktop
+
+Add the same `bruno` entry to
+
+- **macOS** `~/Library/Application Support/Claude/claude_desktop_config.json`
+- **Windows** `%APPDATA%\Claude\claude_desktop_config.json`
+
+```json
+{
+  "mcpServers": {
+    "bruno": {
+      "command": "npx",
+      "args": ["-y", "@usebruno/mcp"]
+    }
+  }
+}
+```
+
+Fully quit Claude Desktop (⌘Q on macOS) and reopen it.
+
+Collections are discovered automatically. To pin one, append `"--collection", "/path/to/collection"` to `args` (see [Options](#options)).
+
+## MCP Inspector
+
+```bash
+npx @modelcontextprotocol/inspector npx -y @usebruno/mcp
+```
+
+## How it finds collections
+
+At startup the server resolves which collections to expose. The first non-empty source wins.
+
+1. **Explicit flags.** `--collection` / `--workspace` (both repeatable). A workspace expands to its member collections.
+2. **CWD walk-up.** Looks for `bruno.json` / `opencollection.yml` / `workspace.yml` walking up from the working directory the client spawned the server in.
+3. **Bruno desktop preferences** (on by default, use `--no-auto-discovery` to disable). Uses `lastOpenedWorkspaces`, `lastOpenedCollections`, and the default workspace from `preferences.json`.
+   - macOS `~/Library/Application Support/bruno/preferences.json`
+   - Windows `%APPDATA%/bruno/preferences.json`
+   - Linux `~/.config/bruno/preferences.json`
+
+You can also give the assistant any collection's absolute path directly. It does not need to be discovered first.
+
+## Options
+
+Options are passed as CLI flags when the client spawns the server.
+
+```
+Usage: bruno-mcp [--collection <path>] [--workspace <path>]
+                 [--no-cwd-discovery] [--no-auto-discovery] [--inherit-env] [--verbose]
+```
+
+| Flag | Description |
+| --- | --- |
+| `--collection <path>`, `-c` | Bruno collection directory. Repeatable. |
+| `--workspace <path>`, `-w` | Bruno workspace directory. Repeatable. Expands to member collections. |
+| `--no-cwd-discovery` | Disable the CWD walk-up step. |
+| `--no-auto-discovery` | Disable the Bruno desktop preferences fallback. |
+| `--inherit-env` | Pass the server's whole environment, including variables from your shell startup files, to requests as `{{process.env.*}}`. Off by default. Requests only see system variables (`PATH`, `HOME`, proxies, CA certificates, Vault address) plus the collection's own `.env` file, so an agent-written request cannot read secrets from your shell. Turn it on if your environments resolve external secrets with credentials from the shell (`VAULT_TOKEN`, `AWS_*`). |
+| `--verbose` | Log debug info to stderr. |
+| `--help`, `-h` | Show help. |
+
+`npx @usebruno/mcp setup` is the install command in [Set up from your terminal](#set-up-from-your-terminal). It takes `--client <id>` (`claude-code`, `claude-desktop`, `cursor`, `vscode`, `codex`, repeatable) and `--all`.
+
+Example with an explicit collection.
+
+```json
+{
+  "mcpServers": {
+    "bruno": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@usebruno/mcp",
+        "--collection",
+        "/path/to/my-collection"
+      ]
+    }
+  }
+}
+```
+
+## Next steps
+
+- [Tools](./tools) - What the assistant can read, run, and write.
+- [Overview](./overview) - Why Bruno MCP exists and example prompts.
