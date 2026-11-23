@@ -925,6 +925,7 @@ Here are all available environment-related methods:
 | bru.deleteEnvVar(key)           | Deletes a specific environment variable and persists the change. |
 | bru.getAllEnvVars()             | Retrieves all environment variables as an object.             |
 | bru.deleteAllEnvVars()          | Deletes all environment variables in the current environment. |
+| bru.getGlobalEnvName()          | Retrieves the active global environment name.                 |
 | bru.getGlobalEnvVar(key)        | Get a global environment variable.                            |
 | bru.setGlobalEnvVar(key, value) | Set a global environment variable and persist it to disk.     |
 | bru.deleteGlobalEnvVar(key)     | Deletes a specific global environment variable and persists the change. |
@@ -1007,6 +1008,15 @@ Removes every variable from the currently selected environment. Use with caution
 ```javascript
 // Reset the environment state at the start of a clean test suite
 bru.deleteAllEnvVars();
+```
+
+### `bru.getGlobalEnvName()`
+
+Retrieves the name of the active global environment. Returns `undefined` if no global environment is selected.
+
+```javascript
+const globalEnvName = bru.getGlobalEnvName();
+console.log("Current global environment:", globalEnvName);
 ```
 
 ### `bru.getGlobalEnvVar(key)`
