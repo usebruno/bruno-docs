@@ -23,3 +23,16 @@ Follow these steps to use NTLM authentication:
    - **Domain**: Your Windows domain name
 
 ![ntlm-auth](/images/screenshots/auth/ntlm-auth.webp)
+
+## How Bruno handles NTLM requests
+
+NTLM requests run through Bruno's standard request pipeline. Your TLS settings, custom CA certificates, client certificates, and proxy configuration all apply to NTLM requests, and the full handshake is visible in the **Timeline** tab.
+
+Because NTLM authenticates the connection rather than the individual request, Bruno keeps the entire handshake on a single connection.
+
+### Redirect behavior
+
+When a server redirects an NTLM-authenticated request:
+
+- **Same origin**: Bruno renegotiates the NTLM handshake on the new connection and follows the redirect.
+- **Different host**: Bruno follows the redirect without authenticating, so the response is the target's `401` challenge. To renegotiate NTLM with the other host, enable the request's `forwardAuthorizationHeader` setting.

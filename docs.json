@@ -263,8 +263,7 @@
                       "testing/script/response/response-object",
                       "testing/script/response/response-query"
                     ]
-                  },
-                  "testing/script/vars"
+                  }
                 ]
               },
               {
@@ -1505,6 +1504,11 @@
       "permanent": true
     },
     {
+      "source": "/get-started/history",
+      "destination": "/send-requests/history",
+      "permanent": true
+    },
+    {
       "source": "/agents/introduction",
       "destination": "/ai/integration/overview",
       "permanent": true
@@ -1751,12 +1755,17 @@
     },
     {
       "source": "/scripting/vars.html",
-      "destination": "/testing/script/vars",
+      "destination": "/variables/request-variables",
       "permanent": true
     },
     {
       "source": "/scripting/vars",
-      "destination": "/testing/script/vars",
+      "destination": "/variables/request-variables",
+      "permanent": true
+    },
+    {
+      "source": "/testing/script/vars",
+      "destination": "/variables/request-variables",
       "permanent": true
     },
     {
