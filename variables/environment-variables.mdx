@@ -34,15 +34,17 @@ Just like other variables you can use the `{{varName}}` syntax to use an environ
 
 ## Set a variable from selected text
 
-You can save highlighted text as a variable without opening the full environment editor.
+You can save highlighted text as a variable without opening the full environment editor. This works in CodeMirror fields across the UI (URL, headers, params, request body, response body, and similar), not only in API responses.
 
-1. Select text like the URL, headers, query or path params, request body, or response body.
+1. Select the text you want to store.
 2. Right-click the selection and choose **Set as variable**.
 3. Enter a **variable name**.
-4. Choose **where** to save it (for example the active environment or another available scope).
-5. Confirm with **Set variable**.
+4. Choose **where** to save it (global environment, collection environment, or collection variable). Optionally mark it as a **Secret**.
+5. Confirm with **Set Variable**.
 
-Bruno stores the selected value on that variable. You can then reuse it with `{{varName}}` across the collection.
+![Set as variable from selected response text](/images/screenshots/variables/set-as-variable.webp)
+
+Bruno stores the selected value on that variable. You can then reuse it with `{{varName}}` across the collection. For autocomplete while typing `{{...}}`, see [Variable autocomplete](/variables/overview#variable-autocomplete).
 
 
 ## Inherit from a parent environment
