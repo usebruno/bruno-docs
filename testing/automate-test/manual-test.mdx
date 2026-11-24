@@ -29,13 +29,13 @@ Follow these steps to run your collection, view the results, and optionally down
 
 ![select-run.webp](/images/screenshots/get-started/bruno-basics/run_collection/run_collection.webp)
 
-3. Click **Run Collection** to initiate the test.
+3. Configure the run if needed (delay, tags, iterations, **Run in parallel**), then click **Run**.
 
-![click-runner.webp](/images/screenshots/get-started/bruno-basics/run_collection/runner.webp)
+![Collection Runner configuration](/images/screenshots/get-started/bruno-basics/run_collection/collection-runner-configure.webp)
 
-4. Once the test run is complete, a test report will be automatically generated.
+4. Once the test run is complete, review the results (and download a report when available).
 
-![generate-test-report.webp](/images/screenshots/testing/3-generate-test-report.webp)
+![Parallel run results](/images/screenshots/get-started/bruno-basics/run_collection/collection-runner-parallel-results.webp)
 
 ### Download Test Report <PremiumBadge noLink />
 
@@ -45,7 +45,7 @@ After the test report is generated, you can download it as an HTML document (`re
 
 1. Click the **Download Report** button to save the report.
 
-![details-test-reports.webp](/images/screenshots/testing/4-details-test-reports.webp)
+![Parallel run results](/images/screenshots/get-started/bruno-basics/run_collection/collection-runner-parallel-results.webp)
 
 ## Managing Request Execution
 
@@ -61,10 +61,10 @@ When running a collection in the Bruno app, you can filter requests by tags:
 
 2. **Add tags to a folder (optional)**: Open a folder and go to the **Settings** tab to add folder-level tags. Folder tags cascade to every request and subfolder inside that folder, so you can define shared tags once instead of tagging each request individually. See [Folder tags](/get-started/bruno-basics/create-a-folder#folder-tags).
 3. **Go to Collection Runner**: Open the collection runner to start filtering requests.
-4. **Use tag filter options**: Use the tag filter options to include or exclude requests based on their tags.
+4. **Use tag filter options**: Use **Include Tags** and **Exclude Tags** to filter requests.
 5. **Run filtered collection**: Only requests matching your tag criteria will be executed.
 
-![click-runner.webp](/images/screenshots/get-started/bruno-basics/run_collection/runner.webp)
+![Collection Runner with tag filters](/images/screenshots/get-started/bruno-basics/run_collection/collection-runner-configure.webp)
 
 #### Inherited tags
 
@@ -80,15 +80,15 @@ Learn more about tag filtering in Bruno CLI in the [CLI tag filtering documentat
 
 ### Reordering Request Execution
 
-You can reorder, select, and deselect requests by enabling the **Configure requests to run** option in the Collection Runner. This feature allows you to:
+In the Collection Runner, the right-hand list lets you select, deselect, and reorder requests for the run:
 
 - **Select specific requests** to execute while ignoring others
 - **Reorder requests** to control the execution sequence
 - **Customize test runs** without modifying the collection structure
 
-By default, the Collection Runner executes all requests in the collection. When you enable request configuration, only the selected requests will be executed.
+By default, all requests in the collection are selected. Only checked requests are executed.
 
-![click-runner.webp](/images/screenshots/get-started/bruno-basics/run_collection/runner.webp)
+![Select and reorder requests in the Collection Runner](/images/screenshots/get-started/bruno-basics/run_collection/collection-runner-configure.webp)
 
 ## View Test Report
 

@@ -19,6 +19,10 @@ There are 7 types of variables you can create:
 - [Runtime Variables](./runtime-variables)
 - [Prompt Variables](./prompt-variables)
 
+<Tip>
+  To save a value quickly, select text in the URL, headers, body, or response, right-click, and choose **Set as variable**. Pick a name and where to store it. See [Set a variable from selected text](/variables/environment-variables#set-a-variable-from-selected-text).
+</Tip>
+
 Additionally, Process Environment Variables can be defined in an external environment configuration file:
 
 - [Process Environment Variables](./process-env)
@@ -165,6 +169,34 @@ In the Vars tab you can select the type of each variable using the type dropdown
 <Note>
   **Backward compatibility:** Existing `.bru` files and environments that use plain string values continue to work without any changes or migration. The `@type(...)` annotation is only written when a non-string type is used.
 </Note>
+
+### Variable autocomplete
+
+Bruno suggests variables as you type so you can insert `{{name}}` without memorizing every name.
+
+**How to open the list**
+
+| Surface | Trigger |
+| --- | --- |
+| Plain inputs (URL, query and path params, headers, auth fields) | Type `{` |
+| Code editors (JSON/XML/text bodies, GraphQL, scripts, tests) and environment value fields | Type `{{`, or use the shortcut |
+| Any interpolation-capable field | Shortcut: `⌥ Space` (macOS) or `Ctrl Space` (Windows/Linux). Remap under [Preferences → Keybindings](/get-started/configure/keybindings) |
+
+When keybindings are disabled, the shortcut stops firing. Typing `{` or `{{` still opens the list as usual.
+
+![Variable autocomplete in the URL bar](/images/screenshots/variables/variable-autocomplete.webp)
+
+**What each suggestion shows**
+
+- Variable name
+- Current resolved value (truncated if long). Secrets and `process.env` values are masked. Variables with no value yet (for example random/dynamic) show blank.
+- A color-coded scope icon (global environment, collection, environment, folder, request, runtime, process.env, external secrets, dynamic, OAuth2 credentials, and similar)
+
+**Inserting a variable**
+
+Arrow keys move through the list. **Enter** or a click inserts the highlighted item as `{{name}}`, without duplicating braces you already typed and adding a closing `}}` when needed. **Esc** or clicking outside closes the list without inserting.
+
+The list, navigation, and insertion behave the same across the URL bar, headers, params, body editors, and scripts. Only the trigger differs
 
 ### Environment Color Coding
 

@@ -22,6 +22,24 @@ You can view and interact with existing OAS files in Bruno using a SwaggerUI-lik
 
 ![view-open-api](/images/screenshots/open-api/after-import-openapi-spec.webp)
 
+## Manage an API Spec from the sidebar
+
+Once a spec is listed under **API Specs**, right-click it (or click its actions icon) for the same style of menu collections use.
+
+![API Spec sidebar context menu](/images/screenshots/open-api/api-spec-context-menu.webp)
+
+| Action | What it does |
+| --- | --- |
+| **Generate Collection** | Opens the import location step with the spec already loaded. No file or URL prompt. The collection name prefills from the spec title. |
+| **Create Mock Server** | Opens Create Mock Server with the source set to **API Spec** and this spec selected. Hidden when Mock Server is turned off under Preferences. |
+| **Clone** | Asks for a name and location (both prefilled), then adds a copy to the sidebar. |
+| **Rename** | Updates the display name in the workspace only. The file path on disk stays the same, so [OpenAPI Sync](/open-api/openapi-sync) connections that point at this file keep working. |
+| **Reveal in Finder** / **File Explorer** / **File Manager** | Opens the folder that contains the spec file (label depends on your OS). |
+| **Remove** | Unlinks the spec from the workspace. The file stays on disk. |
+| **Delete** | Removes the spec from the workspace and deletes the file from disk after confirmation. |
+
+Delete and Remove close any open view of that spec. Rename and Clone do not.
+
 ## Creating New OAS Files
 
 1. Select **Create API Spec** from the dropdown (or click **+** next to **API Specs** in the sidebar).

@@ -45,7 +45,10 @@ Below are the default keyboard shortcuts. macOS equivalents replace `Ctrl` with 
 |---|---|---|
 | Send request | `⌘ Enter` | `Ctrl Enter` |
 | Change orientation | `⌘ J` | `Ctrl J` |
+| Open variable autocomplete | `⌥ Space` | `Ctrl Space` |
 | Prettify body | `⌥ ⇧ F` | `Alt Shift F` |
+
+**Open variable autocomplete** opens the variable suggestion list at the caret in any interpolation-capable field (URL, headers, params, body, scripts, and more). In plain inputs you can also type `{`. In code editors use `{{` or this shortcut. Selecting an item inserts `{{name}}`. See [Variable autocomplete](/variables/overview#variable-autocomplete).
 
 The **Prettify** shortcut formats the request body when your cursor is in the body editor. It works for HTTP, GraphQL, gRPC, and WebSocket requests, and for response example bodies.
 
@@ -107,3 +110,5 @@ To clear a shortcut while editing, press `Backspace` or `Delete`, then enter a n
 ## Disabling keybindings
 
 Use the toggle at the top of the keybindings panel to enable or disable all keyboard shortcuts at once. When disabled, the shortcut table is grayed out and no shortcuts are active.
+
+When keybindings are disabled, **Open variable autocomplete** stops firing. Typing `{` in plain inputs and `{{` in code editors still opens the variable list as usual.

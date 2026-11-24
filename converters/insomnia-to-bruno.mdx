@@ -16,276 +16,117 @@ Start by exporting the collection from Insomnia. Both the JSON export from Insom
 
 ### 1. Read the arguments
 
-Import the converter, the file writers from `@usebruno/filestore`, and Node's file helpers. Take the paths from the command line and print a usage line if any are missing. `format` is `'yml'` for OpenCollection YAML or `'bru'` for classic `.bru` files.
+Import the converter, `writeCollection` from `@usebruno/io`, and Node's file helpers. Take the paths from the command line and print a usage line if any are missing.
 
 ```javascript
 import { insomniaToBruno } from '@usebruno/converters';
-import { stringifyCollection, stringifyFolder, stringifyRequest, stringifyEnvironment } from '@usebruno/filestore';
-import { mkdir, readFile, writeFile } from 'fs/promises';
-import path from 'path';
+import { writeCollection } from '@usebruno/io';
+import { readFile } from 'fs/promises';
 
 const [inputFile, outputDir] = process.argv.slice(2);
 if (!inputFile || !outputDir) {
-  console.error('Usage: node convert.mjs <insomnia-export> <output-folder>');
+  console.error('Usage: node convert.mjs <insomnia-export.json> <output-folder>');
   process.exit(1);
 }
-
-const format = 'yml';
 ```
 
-### 2. Add the helpers
+### 2. Convert and write
 
-`safeName` strips characters that are not allowed in file names. `write` saves a file and creates any missing parent folders.
-
-```javascript
-const safeName = (name) => name.replace(/[<>:"/\\|?*\x00-\x1F]/g, '-');
-
-const write = async (file, content) => {
-  await mkdir(path.dirname(file), { recursive: true });
-  await writeFile(file, content);
-};
-```
-
-### 3. Convert
-
-`insomniaToBruno` accepts the export as JSON or YAML text and returns the Bruno collection. See the [API Reference](./api-reference#insomniatobruno) for the full signature.
+`insomniaToBruno` returns the Bruno collection. Pass it to `writeCollection` to save an OpenCollection YAML folder. See the [API Reference](./api-reference#insomniatobruno) for the full signature.
 
 ```javascript
-const collection = insomniaToBruno(await readFile(inputFile, 'utf8'));
-```
+const raw = await readFile(inputFile, 'utf8');
+const insomniaCollection = inputFile.endsWith('.yaml') || inputFile.endsWith('.yml')
+  ? raw
+  : JSON.parse(raw);
 
-### 4. Write the collection settings and environments
+const collection = insomniaToBruno(insomniaCollection);
+await writeCollection(collection, outputDir);
 
-`brunoConfig` holds the collection settings. For `.bru` collections it is written to `bruno.json`. For yml it is embedded in `opencollection.yml`. The collection root holds collection-level auth, headers, and scripts. Each environment gets its own file in the `environments` folder.
-
-```javascript
-const brunoConfig = { version: collection.version, name: collection.name, type: 'collection', ignore: ['node_modules', '.git'] };
-
-const root = stringifyCollection(collection.root || {}, brunoConfig, { format });
-if (format === 'yml') {
-  await write(path.join(outputDir, 'opencollection.yml'), root);
-} else {
-  await write(path.join(outputDir, 'bruno.json'), JSON.stringify(brunoConfig, null, 2));
-  await write(path.join(outputDir, 'collection.bru'), root);
-}
-
-for (const env of collection.environments || []) {
-  await write(path.join(outputDir, 'environments', `${safeName(env.name)}.${format}`), stringifyEnvironment(env, { format }));
-}
-```
-
-### 5. Write the folders and requests
-
-Each folder becomes a directory and each request a file. Folder-level auth, headers, and scripts go in `folder.yml` or `folder.bru`. A stack is used instead of recursion so deeply nested collections are safe.
-
-```javascript
-const stack = collection.items.map((item) => [item, outputDir]);
-while (stack.length) {
-  const [item, parent] = stack.pop();
-  if (item.type === 'folder') {
-    const folderDir = path.join(parent, safeName(item.name));
-    await mkdir(folderDir, { recursive: true });
-    if (item.root) await write(path.join(folderDir, `folder.${format}`), stringifyFolder(item.root, { format }));
-    for (const child of item.items || []) stack.push([child, folderDir]);
-  } else {
-    await write(path.join(parent, `${safeName(item.name)}.${format}`), stringifyRequest(item, { format }));
-  }
-}
-```
-
-### 6. Report
-
-Print where the collection was written.
-
-```javascript
 console.log(`Collection written to ${outputDir}`);
 ```
 
-
-### 7. Run the script
-
-Run the script with Node.js, passing the paths as arguments.
+### 3. Run the script
 
 <CodeGroup>
 ```bash convert.mjs
-node convert.mjs <insomnia-export> <output-folder>
+node convert.mjs <insomnia-export.json> <output-folder>
 ```
 
 ```bash convert.js
-node convert.js <insomnia-export> <output-folder>
+node convert.js <insomnia-export.json> <output-folder>
 ```
 </CodeGroup>
 
 Where:
 
-- `<insomnia-export>`: The export file from Insomnia, JSON (v4) or YAML (v5)
+- `<insomnia-export.json>`: The collection exported from Insomnia (JSON or YAML)
 - `<output-folder>`: The folder to create the Bruno collection in. It is created if it does not exist
 
-The output folder looks like this (with `format` set to `'bru'`, the files are `bruno.json`, `collection.bru`, `folder.bru`, and `.bru` requests instead):
+The output folder looks like this:
 
 ```text
 my-collection/
 ├── opencollection.yml
 ├── environments/
-│   └── Base.yml
-└── Users/
-    ├── List users.yml
-    └── Create user.yml
+│   └── Base Environment.yml
+├── Users/
+│   ├── folder.yml
+│   ├── List users.yml
+│   └── Create user.yml
+└── Ping.yml
 ```
 
-One folder per Insomnia folder, one file per request, and any Insomnia environments under `environments`.
-
 ### Full script
-
-The complete script, ready to copy. `convert.mjs` is an ES module with top-level `await`. `convert.js` is the same script as CommonJS, with the steps inside an async `main` function.
 
 <CodeGroup>
 ```javascript convert.mjs
 // Converts an Insomnia export into a Bruno collection folder.
-// Usage: node convert.mjs <insomnia-export> <output-folder>
+// Usage: node convert.mjs <insomnia-export.json> <output-folder>
 
 import { insomniaToBruno } from '@usebruno/converters';
-import { stringifyCollection, stringifyFolder, stringifyRequest, stringifyEnvironment } from '@usebruno/filestore';
-import { mkdir, readFile, writeFile } from 'fs/promises';
-import path from 'path';
-
-// ---- Arguments ----
+import { writeCollection } from '@usebruno/io';
+import { readFile } from 'fs/promises';
 
 const [inputFile, outputDir] = process.argv.slice(2);
 if (!inputFile || !outputDir) {
-  console.error('Usage: node convert.mjs <insomnia-export> <output-folder>');
+  console.error('Usage: node convert.mjs <insomnia-export.json> <output-folder>');
   process.exit(1);
 }
 
-// 'yml' (OpenCollection YAML) or 'bru' (classic .bru files)
-const format = 'yml';
+const raw = await readFile(inputFile, 'utf8');
+const insomniaCollection = inputFile.endsWith('.yaml') || inputFile.endsWith('.yml')
+  ? raw
+  : JSON.parse(raw);
 
-// ---- Helpers ----
-
-// Strip characters not allowed in file names
-const safeName = (name) => name.replace(/[<>:"/\\|?*\x00-\x1F]/g, '-');
-
-// Write a file, creating parent folders as needed
-const write = async (file, content) => {
-  await mkdir(path.dirname(file), { recursive: true });
-  await writeFile(file, content);
-};
-
-// ---- Convert ----
-
-const collection = insomniaToBruno(await readFile(inputFile, 'utf8'));
-
-// ---- Write the collection folder ----
-
-// Collection settings: bruno.json for .bru, embedded in opencollection.yml for yml
-const brunoConfig = { version: collection.version, name: collection.name, type: 'collection', ignore: ['node_modules', '.git'] };
-
-// Collection-level auth, headers, and scripts
-const root = stringifyCollection(collection.root || {}, brunoConfig, { format });
-if (format === 'yml') {
-  await write(path.join(outputDir, 'opencollection.yml'), root);
-} else {
-  await write(path.join(outputDir, 'bruno.json'), JSON.stringify(brunoConfig, null, 2));
-  await write(path.join(outputDir, 'collection.bru'), root);
-}
-
-// One file per environment
-for (const env of collection.environments || []) {
-  await write(path.join(outputDir, 'environments', `${safeName(env.name)}.${format}`), stringifyEnvironment(env, { format }));
-}
-
-// Folders become directories, requests become files. A stack avoids recursion on deep trees.
-const stack = collection.items.map((item) => [item, outputDir]);
-while (stack.length) {
-  const [item, parent] = stack.pop();
-  if (item.type === 'folder') {
-    const folderDir = path.join(parent, safeName(item.name));
-    await mkdir(folderDir, { recursive: true });
-    // Folder-level auth, headers, and scripts
-    if (item.root) await write(path.join(folderDir, `folder.${format}`), stringifyFolder(item.root, { format }));
-    for (const child of item.items || []) stack.push([child, folderDir]);
-  } else {
-    await write(path.join(parent, `${safeName(item.name)}.${format}`), stringifyRequest(item, { format }));
-  }
-}
-
-// ---- Report ----
+const collection = insomniaToBruno(insomniaCollection);
+await writeCollection(collection, outputDir);
 
 console.log(`Collection written to ${outputDir}`);
 ```
 
 ```javascript convert.js
 // Converts an Insomnia export into a Bruno collection folder.
-// Usage: node convert.js <insomnia-export> <output-folder>
+// Usage: node convert.js <insomnia-export.json> <output-folder>
 
 const { insomniaToBruno } = require('@usebruno/converters');
-const { stringifyCollection, stringifyFolder, stringifyRequest, stringifyEnvironment } = require('@usebruno/filestore');
-const { mkdir, readFile, writeFile } = require('fs/promises');
-const path = require('path');
-
-// ---- Arguments ----
+const { writeCollection } = require('@usebruno/io');
+const { readFile } = require('fs/promises');
 
 const [inputFile, outputDir] = process.argv.slice(2);
 if (!inputFile || !outputDir) {
-  console.error('Usage: node convert.js <insomnia-export> <output-folder>');
+  console.error('Usage: node convert.js <insomnia-export.json> <output-folder>');
   process.exit(1);
 }
 
-// 'yml' (OpenCollection YAML) or 'bru' (classic .bru files)
-const format = 'yml';
-
-// ---- Helpers ----
-
-// Strip characters not allowed in file names
-const safeName = (name) => name.replace(/[<>:"/\\|?*\x00-\x1F]/g, '-');
-
-// Write a file, creating parent folders as needed
-const write = async (file, content) => {
-  await mkdir(path.dirname(file), { recursive: true });
-  await writeFile(file, content);
-};
-
-// CommonJS cannot use top-level await, so the steps run inside an async function
 async function main() {
-  // ---- Convert ----
+  const raw = await readFile(inputFile, 'utf8');
+  const insomniaCollection = inputFile.endsWith('.yaml') || inputFile.endsWith('.yml')
+    ? raw
+    : JSON.parse(raw);
 
-  const collection = insomniaToBruno(await readFile(inputFile, 'utf8'));
-
-  // ---- Write the collection folder ----
-
-  // Collection settings: bruno.json for .bru, embedded in opencollection.yml for yml
-  const brunoConfig = { version: collection.version, name: collection.name, type: 'collection', ignore: ['node_modules', '.git'] };
-
-  // Collection-level auth, headers, and scripts
-  const root = stringifyCollection(collection.root || {}, brunoConfig, { format });
-  if (format === 'yml') {
-    await write(path.join(outputDir, 'opencollection.yml'), root);
-  } else {
-    await write(path.join(outputDir, 'bruno.json'), JSON.stringify(brunoConfig, null, 2));
-    await write(path.join(outputDir, 'collection.bru'), root);
-  }
-
-  // One file per environment
-  for (const env of collection.environments || []) {
-    await write(path.join(outputDir, 'environments', `${safeName(env.name)}.${format}`), stringifyEnvironment(env, { format }));
-  }
-
-  // Folders become directories, requests become files. A stack avoids recursion on deep trees.
-  const stack = collection.items.map((item) => [item, outputDir]);
-  while (stack.length) {
-    const [item, parent] = stack.pop();
-    if (item.type === 'folder') {
-      const folderDir = path.join(parent, safeName(item.name));
-      await mkdir(folderDir, { recursive: true });
-      // Folder-level auth, headers, and scripts
-      if (item.root) await write(path.join(folderDir, `folder.${format}`), stringifyFolder(item.root, { format }));
-      for (const child of item.items || []) stack.push([child, folderDir]);
-    } else {
-      await write(path.join(parent, `${safeName(item.name)}.${format}`), stringifyRequest(item, { format }));
-    }
-  }
-
-  // ---- Report ----
+  const collection = insomniaToBruno(insomniaCollection);
+  await writeCollection(collection, outputDir);
 
   console.log(`Collection written to ${outputDir}`);
 }

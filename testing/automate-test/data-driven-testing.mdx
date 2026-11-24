@@ -27,9 +27,17 @@ The **Collection Runner** feature allows you to iterate over data files, making 
 
 ### Parallel execution
 
-Bruno (Desktop app and CLI) supports parallel execution in collection runner. This allows you to run multiple iterations of a test at the same time, which can significantly speed up your test runs. Please refer [Using the Bruno App](#using-the-bruno-app) section for more details. 
+Bruno (Desktop app and CLI) can run iterations side by side instead of one by one. In the Collection Runner, turn on **Run in parallel**, then set how many iterations run at once with the concurrency control.
 
-Please find more details about parallel execution in [Bruno CLI](https://docs.usebruno.com/bru-cli/run/overview#parallel-execution) section.
+![Run in parallel with concurrency](/images/screenshots/get-started/bruno-basics/run_collection/collection-runner-parallel-concurrency.webp)
+
+<Info>
+  The concurrency value is the maximum number of iterations running in parallel at any given time. For example, if you have 1,000 iterations and set this to 100, up to 100 will run simultaneously. Whenever one iteration finishes, another starts in its place, keeping up to 100 running until all iterations are complete.
+
+  Running more iterations in parallel may slow down your system. Lower this value if you experience performance issues.
+</Info>
+
+Higher iteration counts are supported in both serial and parallel mode. For large data files or large response bodies, keep concurrency lower so the UI stays responsive. See [Using the Bruno App](#using-the-bruno-app) below, and [Bruno CLI parallel execution](/bru-cli/run/overview#parallel-execution) for the CLI.
 
 ## How request bodies and data files work together
 
@@ -100,18 +108,20 @@ Now you're ready to use the Collection Runner. You can access it in two ways:
 
 ### Using the Bruno App
 
-1. Click on the runner icon in the right-hand navbar.
+1. Click the Collection Runner icon in the top bar, or choose **Run** from the collection **`···`** menu.
 
 ![runner icon](/images/screenshots/get-started/bruno-basics/run_collection/runnericon.webp)
 
+2. Under **Run with Parameters**, select a CSV or JSON file. Set **Iterations** if you are not driving count from the file alone.
 
-2. Select the file type: CSV or JSON and upload your data file.
+![Run in parallel with concurrency](/images/screenshots/get-started/bruno-basics/run_collection/collection-runner-parallel-concurrency.webp)
 
-![click-runner.webp](/images/screenshots/get-started/bruno-basics/run_collection/runner.webp)
+3. Optionally turn on **Run in parallel** and set concurrency (how many iterations run at once).
+4. Click **Run** to start the iterations.
 
-3. Click **Run Collection** to start the iterations. 
+When the run finishes, review each iteration in the results table (**View Iteration**) or download a report.
 
-You can also enable parallel execution by checking the **Run in parallel** checkbox. Once the execution is complete, you can review the results for each individual request and check their statuses.
+![Parallel run results](/images/screenshots/get-started/bruno-basics/run_collection/collection-runner-parallel-results.webp)
 
 ![Request Results](/images/screenshots/collection-runner/data-driven-testing/4-req-result.webp)
 

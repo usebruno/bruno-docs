@@ -33,7 +33,7 @@ Bruno offers two ways to import OpenAPI specifications:
 ![select-openapi-file](/images/screenshots/get-started/import-export/import_collection/import-modal.webp)
 
 5. Browse and select your OpenAPI specification file (`.yaml` or `.json`)
-6. Configure the import settings (see [Import Settings](#import-settings) below)
+6. Configure the import settings (see [Import Settings](#configuring-import-settings) below)
 7. Click **Import** to create the collection
 
 ### Importing from a URL
@@ -49,6 +49,21 @@ Bruno offers two ways to import OpenAPI specifications:
 After importing the OAS file, the sample collection will look like this:
 
 ![import-collection-oas](/images/screenshots/open-api/import-collection-oas.webp)
+
+
+## Configuring Import Settings
+
+1. **Select Import Method**: Choose either file or URL import
+2. **Choose Folder Arrangement**: Select your preferred grouping method from the dropdown:
+   - **Paths**: Group by URL path structure
+   - **Tags** (default): Group by OpenAPI tags
+3. Optionally enable **Check for Spec Updates** to connect [OpenAPI Sync](/open-api/openapi-sync) on import
+4. **Expand Advanced** and configure:
+   - **Naming requests** (Summary, operationId, Description, or Path)
+   - **Inherit authentication from collection folder** (optional)
+5. Click **Import** to create your collection
+
+![Import OpenAPI collection settings](/images/screenshots/open-api/import-openapi-collection-settings.webp)
 
 ## Import Settings
 
@@ -93,18 +108,48 @@ paths:
 **Tag Name Formatting**: BRU format supports alphanumeric characters, hyphens (-), and underscores (_) in tag names. When importing collections with tags containing spaces, Bruno automatically replaces them with underscores. For example, `User Management` becomes `User_Management`. To preserve original tag names, use the OpenCollection (YAML) format instead.
 </Info>
 
-### Configuring Import Settings
+### Naming requests
 
-1. **Select Import Method**: Choose either file or URL import
+In the import modal, expand **Advanced** and choose **Naming requests**. This controls how requests in the generated collection are named.
 
-![import-openapi-url](/images/screenshots/get-started/import-export/import_collection/import-openapi-url-modal.webp)
+| Option | What Bruno uses |
+| --- | --- |
+| **Summary** (default) | The operation summary |
+| **operationId** | The operation's `operationId` |
+| **Description** | The first line or sentence of the description (never the whole description) |
+| **Path** | The HTTP method and path, for example `GET /users/{id}` |
 
-2. **Choose Folder Arrangement**: Select your preferred grouping method from the dropdown:
-   - **Paths**: Group by URL path structure
-   - **Tags** (default): Group by OpenAPI tags
-3. **Import**: Click the import button to create your collection
+<Info>
+  If an operation does not have the selected field, Bruno falls back through summary, operationId, description, then method and path. Every derived name is single-line, markdown-free, and length-capped so filenames stay within OS path limits. Duplicate names still go through Bruno's existing de-duplication.
+</Info>
 
-![OpenAPI Import Dialog](/images/screenshots/open-api/openapi-import.webp)
+When **Check for Spec Updates** is enabled, Bruno saves the naming choice as `requestNameSource` in the collection's OpenAPI sync config (next to folder grouping). Later syncs reuse that choice.
+
+Bulk Import shows the same **Naming requests** dropdown in its Advanced section when the selection includes an OpenAPI spec. One choice applies to every OpenAPI spec in the batch.
+
+### Inherit authentication from collection folder
+
+In the import modal, expand **Advanced** and turn on **Inherit authentication from collection folder** if you want one auth config for the collection instead of a copy on every request.
+
+| Switch | Result |
+| --- | --- |
+| **Off** (default) | Auth is written on each request, same as today (`authPlacement: request`) |
+| **On** | The spec's security scheme is set on the collection. Requests and folders inherit it (`authPlacement: collection`) |
+
+With the switch on:
+
+- Operations that share the collection scheme show **Auth: Inherit**
+- If the spec has no global security but its secured operations share one scheme, that scheme is promoted to the collection
+- Operations with a different scheme keep their own auth
+- `security: []` maps to auth mode **none**
+
+<Info>
+  On import, the spec's security scheme is added to the collection. Operations with a different scheme keep their own auth. Re-sync updates URLs, params, and bodies without overwriting collection auth or inheritance.
+</Info>
+
+When sync is enabled, Bruno saves the choice as `authPlacement` (`request` or `collection`) in the OpenAPI sync config. Later syncs follow that value. Missing or unknown values use `request`.
+
+Bulk Import shows the same switch in its Advanced section when the selection includes an OpenAPI spec. One choice applies to every OpenAPI spec in the batch.
 
 ## Example OpenAPI Specifications
 
