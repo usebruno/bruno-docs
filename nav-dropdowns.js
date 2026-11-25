@@ -100,7 +100,7 @@
         },
         { label: "Send Requests", href: "/vs-code-extension/send-req" },
       ],
-      Formats: [
+      More: [
         { label: "Overview", href: "/reference/overview" },
         { label: "OpenAPI", href: "/open-api/overview" },
         { label: "OpenCollection YAML", href: "/opencollection-yaml/overview" },
