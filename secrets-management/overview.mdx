@@ -14,7 +14,7 @@ There are two ways in which developers share bruno collections:
 In both these cases we want to ensure that the secrets are stripped out of the collection before it is shared.
 
 <Tip>
-Bruno stores secrets on your local machine. The location depends on the OS. The secrets are encrypted using OS level encryption when available or falls back to AES256 encryption.
+  **Secret variables** are stored on your local machine (encrypted with OS-level encryption when available, otherwise AES-256). **External secret managers** are different: values stay in memory for the session only and are never written to disk. See [Secret Managers](/secrets-management/secret-managers/overview).
 </Tip>
 
 ## Solution

@@ -1,0 +1,24 @@
+---
+title: "1Password"
+sidebarTitle: "Overview"
+---
+
+import { PremiumBadge } from "/snippets/premium-badge.jsx";
+
+[1Password](https://1password.com/) stores credentials in vaults as items and fields. Bruno integrates with 1Password so you can resolve `op://vault/item/field` references in requests without copying secret values into environment files or git.
+
+# 1Password Secret Manager
+
+<Info>
+  **How Bruno keeps 1Password secrets safe**
+
+  - Secret values are **never saved on your machine**. Bruno only keeps the account name, Service Account token configuration, and non-secret `op://` references.
+  - Secrets are fetched **when you need them** (Fetch Secrets or on send) and kept in memory for that environment for the rest of the session. Later requests reuse them; a manual refresh pulls fresh values.
+  - Closing Bruno or the collection clears those values. Reopen the app and Bruno fetches secrets again on demand. Interpolation in requests keeps working as usual.
+</Info>
+
+This guide covers:
+
+- [Integrating 1Password](./adding-a-secret-provider) in Preferences
+- [Configuring and fetching secrets](./configuring-and-fetching-secrets) on an environment
+- [Using secrets in Bruno](./using-secrets) in requests, scripts, and the CLI

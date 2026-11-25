@@ -1191,6 +1191,10 @@ console.log("Company:", company);
 req.setHeader("x-company-id", bru.getFolderVar("companyId"));
 ```
 
+<Note>
+  Folder variables are read-only in scripts. There is no `bru.setFolderVar()` method. To store a value from a script, use [`bru.setVar()`](#bru-setvar-key-value) for a runtime variable, [`bru.setCollectionVar()`](#bru-setcollectionvar-key-value) for a collection variable, or [`bru.setEnvVar()`](#bru-setenvvar-key-value) for an environment variable.
+</Note>
+
 ### `bru.getRequestVar(key)`
 
 Returns the value of a request-level variable. Request variables are defined within a specific request and are only accessible in that request's scripts.
@@ -1633,6 +1637,8 @@ const path = require("path");
 
 const csvData = fs.readFileSync(path.join(__dirname, "data.json"), "utf8");
 ```
+
+The path uses the folder and file names on disk, which can differ from the display names in the sidebar. To check a request's on-disk name, right-click the request in the sidebar and select **Info**. The **File Name (on filesystem)** field shows the name to use, without the extension. Do the same for each parent folder.
 
 | Script context | `__dirname` | `__filename` |
 | -------------- | ----------- | ------------ |

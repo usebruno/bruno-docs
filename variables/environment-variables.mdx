@@ -32,6 +32,21 @@ Just like other variables you can use the `{{varName}}` syntax to use an environ
 
 ![Environment Variables location](/images/screenshots/variables/environment-variables.webp)
 
+## Set a variable from selected text
+
+You can save highlighted text as a variable without opening the full environment editor. This works in CodeMirror fields across the UI (URL, headers, params, request body, response body, and similar), not only in API responses.
+
+1. Select the text you want to store.
+2. Right-click the selection and choose **Set as variable**.
+3. Enter a **variable name**.
+4. Choose **where** to save it (global environment, collection environment, or collection variable). Optionally mark it as a **Secret**.
+5. Confirm with **Set Variable**.
+
+![Set as variable from selected response text](/images/screenshots/variables/set-as-variable.webp)
+
+Bruno stores the selected value on that variable. You can then reuse it with `{{varName}}` across the collection. For autocomplete while typing `{{...}}`, see [Variable autocomplete](/variables/overview#variable-autocomplete).
+
+
 ## Inherit from a parent environment
 
 Use inheritance when DEV, STG, PRD, or role-based environments share most values. Define the common variables once on a parent, then override only what differs on the child.
