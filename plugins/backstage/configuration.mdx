@@ -85,14 +85,19 @@ All are on by default. Turn one off under `app.extensions`, for example `- entit
 
 | Extension ID | Adds |
 |---|---|
-| `page:bruno/bruno-dashboard-page` | Bruno dashboard at `/bruno` |
-| `page:bruno/add-bruno-entity-page` | Add Bruno Collection wizard at `/bruno/add` |
+| `page:bruno` | Bruno dashboard at `/bruno` |
+| `page:bruno/add` | Add Bruno Collection wizard at `/bruno/add` |
 | `entity-card:bruno/collections` | Bruno Collections card on API entities |
-| `entity-card:bruno/bruno-collection-related-apis` | Associated APIs card on Bruno entities |
-| `entity-content:bruno/collection-docs` | API Docs tab on Bruno entities |
-| `entity-icon-link:bruno/fetch-in-bruno` | Open Collection link |
-| `entity-icon-link:bruno/edit-ui-collection` | Edit Entity (UI-added only) |
-| `entity-icon-link:bruno/delete-ui-collection` | Delete Entity (UI-added only) |
+| `entity-card:bruno/collection-info` | Bruno card, with Open in Bruno, on Bruno entities |
+| `entity-card:bruno/related-apis` | Associated APIs card on Bruno entities |
+| `entity-content:bruno/collection` | Collection tab (`/collection`) on Bruno entities |
+| `entity-content:bruno/api-collection` | Collection tab (`/collection`) on API entities |
+| `entity-context-menu-item:bruno/edit-ui-collection` | Edit Entity in the ⋮ menu (UI-added collections only) |
+| `entity-context-menu-item:bruno/delete-ui-collection` | Delete entity in the ⋮ menu (UI-added collections only) |
+
+<Note>
+  `entity-icon-link:bruno/fetch-in-bruno` no longer exists. **Open in Bruno** now lives on the Bruno card (`entity-card:bruno/collection-info`).
+</Note>
 
 Optional: add Bruno to `entity-card:org/ownership` `ownedKinds` to list collections in ownership cards.
 
@@ -108,7 +113,7 @@ Collection content stays in the customer network. The backend's only outbound ca
 
 **CDN exception**
 
-The API Docs tab loads the docs renderer's static scripts and styles from Bruno's public CDN in the user's browser. Collection content is never sent there. Enterprises that block the CDN can plan for a self-hosted renderer (GA candidate).
+The **Collection** tab loads the docs renderer's static scripts and styles from Bruno's public CDN in the user's browser. Collection content is never sent there. Enterprises that block the CDN can plan for a self-hosted renderer.
 
 **Writes to Git**
 
@@ -128,7 +133,7 @@ The generated OpenCollection document comes from files in Git. Secrets Bruno kee
 
 ## Open in Bruno
 
-**Open Collection** opens `https://fetch.usebruno.com/?url=<repository URL>` in a new tab, which hands the repo to Bruno desktop or offers the download.
+**Open in Bruno** (on the Bruno card) opens `https://fetch.usebruno.com/?url=<repository URL>` in a new tab, which hands the repo to Bruno desktop or offers the download.
 
 Beta passes the repository root. Sub-folder and branch are not passed yet.
 
@@ -138,7 +143,7 @@ These keys are proposed; names are final when each ticket lands.
 
 | Key | Default | Description |
 |---|---|---|
-| `bruno.playground.enabled` | `false` | Shows the playground in the API Docs tab |
+| `bruno.playground.enabled` | `false` | Shows the playground in the **Collection** tab |
 | `bruno.playground.backendChannel.enabled` | `false` | Offers execution through the Backstage backend |
 | `bruno.playground.backendChannel.allowedHosts` | `[]` | API hosts the backend may call |
 | `bruno.docs.rendererUrl` | Bruno CDN | Self-hosted docs renderer location |
@@ -149,7 +154,7 @@ Future permission: `bruno.playground.use` (basic) for the playground and backend
 ## Resources
 
 - [Overview](./overview) — why Bruno + Backstage
-- [Getting started](./getting-started) — install steps
+- [Integration](./integration) — install steps
 - [Add a collection](./add-a-collection) — registration paths
 - Plugin repository: [usebruno/bruno-backstage-plugin](https://github.com/usebruno/bruno-backstage-plugin)
 - Community discussion: [Possible Bruno Backstage Plugin #2884](https://github.com/usebruno/bruno/discussions/2884)

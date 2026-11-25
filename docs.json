@@ -356,21 +356,6 @@
                 ]
               },
               {
-                "group": "Integrations",
-                "pages": [
-                  {
-                    "group": "Backstage",
-                    "tag": "Beta",
-                    "pages": [
-                      "integrations/backstage/overview",
-                      "integrations/backstage/integration",
-                      "integrations/backstage/add-a-collection",
-                      "integrations/backstage/configuration"
-                    ]
-                  }
-                ]
-              },
-              {
                 "group": "Settings",
                 "pages": [
                   "get-started/configure/settings",
@@ -559,6 +544,21 @@
                   "bru-lang/samples",
                   "bru-lang/syntax-highlighting",
                   "bru-lang/yaml-migration"
+                ]
+              },
+              {
+                "group": "Plugins",
+                "pages": [
+                  {
+                    "group": "Backstage",
+                    "tag": "Beta",
+                    "pages": [
+                      "plugins/backstage/overview",
+                      "plugins/backstage/integration",
+                      "plugins/backstage/add-a-collection",
+                      "plugins/backstage/configuration"
+                    ]
+                  }
                 ]
               }
             ]

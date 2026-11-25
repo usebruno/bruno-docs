@@ -64,10 +64,6 @@
         { label: "Git & Collaboration", href: "/git-integration/overview" },
         { label: "AI", href: "/ai/bruno-ai/introduction" },
         { label: "Apps", href: "/apps/overview" },
-        {
-          label: "Integrations",
-          href: "/integrations/backstage/overview",
-        },
         { label: "Settings", href: "/get-started/configure/settings" },
         { label: "Debugging", href: "/debugging/timeline" },
       ],
@@ -110,6 +106,7 @@
         { label: "OpenCollection YAML", href: "/opencollection-yaml/overview" },
         { label: "Converters", href: "/converters/overview" },
         { label: "Bru Lang", href: "/bru-lang/overview" },
+        { label: "Plugins", href: "/plugins/backstage/overview" },
       ],
       Licensing: [
         { label: "Overview", href: "/license-overview" },
