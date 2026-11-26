@@ -100,12 +100,16 @@
         },
         { label: "Send Requests", href: "/vs-code-extension/send-req" },
       ],
-      Formats: [
+      More: [
         { label: "Overview", href: "/reference/overview" },
         { label: "OpenAPI", href: "/open-api/overview" },
         { label: "OpenCollection YAML", href: "/opencollection-yaml/overview" },
         { label: "Converters", href: "/converters/overview" },
         { label: "Bru Lang", href: "/bru-lang/overview" },
+        {
+          label: "Backstage Integration",
+          href: "/integrations/backstage/overview",
+        },
       ],
       Licensing: [
         { label: "Overview", href: "/license-overview" },

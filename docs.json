@@ -499,7 +499,7 @@
             ]
           },
           {
-            "tab": "Formats",
+            "tab": "More",
             "icon": "shapes",
             "groups": [
               {
@@ -544,6 +544,16 @@
                   "bru-lang/samples",
                   "bru-lang/syntax-highlighting",
                   "bru-lang/yaml-migration"
+                ]
+              },
+              {
+                "group": "Backstage Integration",
+                "tag": "Beta",
+                "pages": [
+                  "integrations/backstage/overview",
+                  "integrations/backstage/integration",
+                  "integrations/backstage/add-a-collection",
+                  "integrations/backstage/configuration"
                 ]
               }
             ]
