@@ -547,18 +547,13 @@
                 ]
               },
               {
-                "group": "Plugins",
+                "group": "Backstage Integration",
+                "tag": "Beta",
                 "pages": [
-                  {
-                    "group": "Backstage",
-                    "tag": "Beta",
-                    "pages": [
-                      "plugins/backstage/overview",
-                      "plugins/backstage/integration",
-                      "plugins/backstage/add-a-collection",
-                      "plugins/backstage/configuration"
-                    ]
-                  }
+                  "integrations/backstage/overview",
+                  "integrations/backstage/integration",
+                  "integrations/backstage/add-a-collection",
+                  "integrations/backstage/configuration"
                 ]
               }
             ]

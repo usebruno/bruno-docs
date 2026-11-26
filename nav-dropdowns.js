@@ -106,7 +106,10 @@
         { label: "OpenCollection YAML", href: "/opencollection-yaml/overview" },
         { label: "Converters", href: "/converters/overview" },
         { label: "Bru Lang", href: "/bru-lang/overview" },
-        { label: "Plugins", href: "/plugins/backstage/overview" },
+        {
+          label: "Backstage Integration",
+          href: "/integrations/backstage/overview",
+        },
       ],
       Licensing: [
         { label: "Overview", href: "/license-overview" },
