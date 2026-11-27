@@ -1,0 +1,48 @@
+---
+title: "How to Use OAuth2 for the Implicit Grant Type"
+sidebarTitle: "Implicit"
+---
+
+The Implicit grant type returns the token directly from the authorization endpoint, without a separate token request. Use it only when your Identity Provider (IdP) requires it. For new integrations, prefer [Authorization Code](/auth/oauth2-2.0/authorization-code) with PKCE.
+
+You can configure OAuth2 at the collection, folder, and request level.
+
+## OAuth2 configuration
+
+1. Go to **Collection Settings** and navigate to the **Auth** tab.
+2. Select `OAuth 2.0` as the auth method and set the grant type to `Implicit`.
+3. Fill in the following fields:
+
+- **Callback URL**: Also known as **Redirect URI**. It must match a redirect URI registered with your IdP.
+- **Use system browser for OAuth**: Completes the login in your default browser instead of Bruno's built-in browser. See [System Browser Support](/auth/oauth2-2.0/system-browser).
+- **Authorization URL**: The IdP's authorization endpoint, often named **/auth** or **/authorize**.
+- **Client ID**: The IdP-supplied client identifier.
+- **Scope**: The requested scope(s) for the access.
+- **State**: A random value or data to pass through the flow.
+
+The Implicit grant type has no **Access Token URL** or **Client Secret** field.
+
+## Token configuration
+
+- **Token Source**: Choose which token Bruno adds to requests. Select **Access Token** or **ID Token**.
+- **Token ID**: The identifier for the stored token. The default is `credentials`. Reference the token with `{{$oauth2.<tokenId>.access_token}}`.
+- **Add token to**:
+  - **Headers**: Adds the token to request headers with a configurable **Header Prefix** (default: `Bearer`).
+  - **URL**: Adds the token as a query parameter with a configurable **URL Query Key** (default: `access_token`).
+
+## Advanced options
+
+- **Auto fetch token**: Bruno fetches a new token when the current one expires.
+- **Additional parameters**: Add custom headers or query parameters to the authorization request. See [Additional Parameters](/auth/oauth2-2.0/collection-level-configuration#additional-parameters).
+
+<Info>
+  The Implicit flow doesn't issue refresh tokens. When a token expires, Bruno must fetch a new one through the authorization endpoint.
+</Info>
+
+## Get the token
+
+Click **Get Access Token**. Bruno opens the authorization URL, you sign in with your IdP, and Bruno reads the token from the redirect.
+
+<Tip>
+  Click **Clear Cache** to remove the stored token and request a new one. Read more about [using tokens](/auth/oauth2-2.0/collection-level-configuration#using-oauth2-tokens) in scripts and variables.
+</Tip>

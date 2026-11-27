@@ -39,6 +39,16 @@ Explore the [client-cert-badssl](https://github.com/bruno-collections/client-cer
 
 ![Custom CA Certificate](/images/screenshots/auth/customcacert.webp)
 
+### Default trust store
+
+Without a custom CA, Bruno trusts these certificates:
+
+- Your operating system's certificate store. On Windows, this is the Windows certificate store.
+- The root certificates bundled with Node.js.
+- Any certificates in the file set by the `NODE_EXTRA_CA_CERTS` environment variable.
+
+When you add a custom CA, the **Keep Default CA Certificates** option controls whether Bruno also trusts the default certificates. Turn it off to trust only your custom CA and `NODE_EXTRA_CA_CERTS`. In the CLI, `--ignore-truststore` does the same.
+
 <Warning>
   Disabling SSL/TLS verification can unblock a failing request quickly, but it hides real trust problems and is not recommended for production or shared collections. Prefer adding a custom CA instead.
 </Warning>
